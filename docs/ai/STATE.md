@@ -1,7 +1,7 @@
 # Current State
 
 **Last updated:** 2026-03-23
-**Active phase:** Phase 2 — Security / Policy Hardening (not started)
+**Active phase:** Phase 1.6 — Operational Monitoring (complete)
 
 ---
 
@@ -15,6 +15,8 @@
 | OpenClaw gateway | Operational (WSL Ubuntu-E) | `/home/akca/.openclaw/` |
 | Telegram channel | Connected, real user validated | User ID `8654710624` |
 | WSL bridge wrappers | Operational | `/home/akca/bin/oc-bridge-*` |
+| System health engine | Operational | `bin\oc-system-health.ps1` |
+| Web dashboard | Operational (manual start) | via `bin\start-dashboard.ps1` on :8002 |
 
 ## Completed Phases
 
@@ -29,6 +31,7 @@
 | Phase 1.5-F | Exit Verification (local) | Closed |
 | Phase TG-1R | OpenClaw Telegram Wiring | Closed |
 | Phase 1.5-TG-R | Real Telegram Closure | **FULLY SEALED** |
+| Phase 1.6 | Operational Monitoring | Closed |
 
 ## Canonical Caller Path
 
@@ -50,6 +53,7 @@ Telegram user (8654710624)
 | OpenClawStartupPreflight | AtBoot | Stale recovery + layout validation |
 | OpenClawWmcpServer | AtLogOn | windows-mcp HTTP server on :8001 |
 | WSLKeepAlive | AtLogOn | Keep WSL Ubuntu-E instance alive |
+| OpenClawDashboard | AtLogOn | Web dashboard HTTP server on :8002 |
 
 ## Known Operational Notes
 

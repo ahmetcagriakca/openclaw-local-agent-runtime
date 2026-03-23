@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OpenClaw System Monitor</title>
+<style>
+  :root {
+    --bg: #0d1117; --card: #161b22; --border: #30363d;
+    --text: #c9d1d9; --muted: #8b949e; --heading: #f0f6fc;
+    --green: #3fb950; --yellow: #d29922; --red: #f85149; --gray: #484f58;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+         background: var(--bg); color: var(--text); min-height: 100vh; padding: 1rem; }
+  .header { text-align: center; padding: 1.5rem 0 1rem; }
+  .header h1 { color: var(--heading); font-size: 1.5rem; margin-bottom: 0.5rem; }
+  .header .meta { color: var(--muted); font-size: 0.85rem; }
+  .badge { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 1rem;
+           font-weight: 600; font-size: 0.85rem; text-transform: uppercase; }
+  .badge-ok { background: var(--green); color: #000; }
+  .badge-degraded { background: var(--yellow); color: #000; }
+  .badge-error { background: var(--red); color: #fff; }
+  .badge-skipped { background: var(--gray); color: #fff; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+          gap: 1rem; max-width: 960px; margin: 1.5rem auto; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 0.5rem;
+          padding: 1rem; }
+  .card-title { font-size: 0.9rem; color: var(--muted); margin-bottom: 0.5rem;
+                text-transform: uppercase; letter-spacing: 0.05em; }
+  .card-status { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.25rem; }
+  .card-detail { color: var(--muted); font-size: 0.85rem; }
+  .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 0.5rem; }
+  .dot-ok { background: var(--green); }
+  .dot-degraded { background: var(--yellow); }
+  .dot-error { background: var(--red); }
+  .dot-skipped { background: var(--gray); }
+  .task-list { list-style: none; margin-top: 0.5rem; }
+  .task-list li { font-size: 0.8rem; padding: 0.15rem 0; color: var(--muted); }
+  .task-list li .dot { width: 8px; height: 8px; }
+  .history { max-width: 960px; margin: 2rem auto; }
+  .history h2 { color: var(--heading); font-size: 1rem; margin-bottom: 0.75rem; }
+  .history table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+  .history th { text-align: left; color: var(--muted); padding: 0.4rem 0.5rem;
+                border-bottom: 1px solid var(--border); }
+  .history td { padding: 0.35rem 0.5rem; border-bottom: 1px solid var(--border); }
+  .footer { text-align: center; color: var(--muted); font-size: 0.75rem; padding: 2rem 0 1rem; }
+  .status-text-ok { color: var(--green); }
+  .status-text-degraded { color: var(--yellow); }
+  .status-text-error { color: var(--red); }
+  .status-text-skipped { color: var(--gray); }
+  #error-banner { display: none; text-align: center; color: var(--red); padding: 0.5rem;
+                  font-size: 0.85rem; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>OpenClaw System Monitor</h1>
+  <div class="meta">
+    Last check: <span id="timestamp">—</span> &nbsp;|&nbsp;
+    Overall: <span id="overall-badge" class="badge badge-ok">—</span>
+  </div>
+</div>
+
+<div id="error-banner"></div>
+
+<div class="grid" id="cards"></div>
+
+<div class="history">
+  <h2>Recent History</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Time</th><th>Overall</th><th>WMCP</th><th>WSL</th>
+        <th>OpenClaw</th><th>Runtime</th><th>Bridge</th><th>Tasks</th>
+      </tr>
+    </thead>
+    <tbody id="history-body"></tbody>
+  </table>
+</div>
+
+<div class="footer">
+  Auto-refreshes every 30s &nbsp;|&nbsp; OpenClaw Local Agent Runtime
+</div>
+
+<script>
+const API_HEALTH = '/api/health';
+const API_HISTORY = '/api/history';
+const REFRESH_MS = 30000;
+
+const COMPONENT_LABELS = {
+  wmcp: 'WMCP Server (port 8001)',
+  wsl: 'WSL Instance (Ubuntu-E)',
+  openclaw: 'OpenClaw Gateway',
+  runtime: 'oc Runtime',
+  bridge: 'Bridge',
+  scheduledTasks: 'Scheduled Tasks'
+};
+
+function dotClass(s) { return 'dot dot-' + (s || 'skipped'); }
+function badgeClass(s) { return 'badge badge-' + (s || 'skipped'); }
+function textClass(s) { return 'status-text-' + (s || 'skipped'); }
+function taskDotClass(state) {
+  if (state === 'Ready' || state === 'Running') return 'dot dot-ok';
+  if (state === 'Disabled') return 'dot dot-error';
+  return 'dot dot-skipped';
+}
+
+function formatTime(iso) {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  return d.toLocaleString();
+}
+
+function renderCards(data) {
+  const el = document.getElementById('cards');
+  el.innerHTML = '';
+  const c = data.components || {};
+  for (const [key, val] of Object.entries(c)) {
+    const card = document.createElement('div');
+    card.className = 'card';
+    let inner = `<div class="card-title">${COMPONENT_LABELS[key] || key}</div>`;
+    inner += `<div class="card-status"><span class="${dotClass(val.status)}"></span>`;
+    inner += `<span class="${textClass(val.status)}">${(val.status || '').toUpperCase()}</span></div>`;
+    inner += `<div class="card-detail">${val.detail || ''}</div>`;
+    if (key === 'scheduledTasks' && val.tasks) {
+      inner += '<ul class="task-list">';
+      for (const [tn, ts] of Object.entries(val.tasks)) {
+        inner += `<li><span class="${taskDotClass(ts)}"></span>${tn}: ${ts}</li>`;
+      }
+      inner += '</ul>';
+    }
+    card.innerHTML = inner;
+    el.appendChild(card);
+  }
+}
+
+function renderOverall(data) {
+  document.getElementById('timestamp').textContent = formatTime(data.timestamp);
+  const badge = document.getElementById('overall-badge');
+  badge.textContent = (data.overall || '—').toUpperCase();
+  badge.className = badgeClass(data.overall);
+}
+
+function renderHistory(lines) {
+  const tbody = document.getElementById('history-body');
+  tbody.innerHTML = '';
+  const recent = lines.slice(-10).reverse();
+  for (const line of recent) {
+    try {
+      const h = JSON.parse(line);
+      const tr = document.createElement('tr');
+      const fields = ['timestamp','overall','wmcp','wsl','openclaw','runtime','bridge','tasks'];
+      for (const f of fields) {
+        const td = document.createElement('td');
+        if (f === 'timestamp') {
+          td.textContent = formatTime(h[f]);
+        } else if (f === 'tasks') {
+          td.textContent = h[f] || '—';
+        } else {
+          td.textContent = (h[f] || '—').toUpperCase();
+          td.className = textClass(h[f]);
+        }
+        tr.appendChild(td);
+      }
+      tbody.appendChild(tr);
+    } catch(e) {}
+  }
+}
+
+async function refresh() {
+  const banner = document.getElementById('error-banner');
+  try {
+    const resp = await fetch(API_HEALTH);
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const data = await resp.json();
+    renderOverall(data);
+    renderCards(data);
+    banner.style.display = 'none';
+  } catch(e) {
+    banner.textContent = 'Failed to load health data: ' + e.message;
+    banner.style.display = 'block';
+  }
+  try {
+    const resp = await fetch(API_HISTORY);
+    if (resp.ok) {
+      const text = await resp.text();
+      const lines = text.trim().split('\n').filter(l => l.trim());
+      renderHistory(lines);
+    }
+  } catch(e) {}
+}
+
+refresh();
+setInterval(refresh, REFRESH_MS);
+</script>
+</body>
+</html>

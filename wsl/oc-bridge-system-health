@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+# oc-bridge-system-health - Run system health check and format for Telegram.
+# Same pattern as existing wsl/oc-bridge-* scripts.
+set -euo pipefail
+
+PWSH="/mnt/c/Program Files/PowerShell/7/pwsh.exe"
+HEALTH_WIN='C:\Users\AKCA\oc\bin\oc-system-health.ps1'
+
+RAW=$("$PWSH" -NoProfile -ExecutionPolicy Bypass -File "$HEALTH_WIN" 2>/dev/null) || RAW='{"overall":"error","components":{}}'
+
+# Use Python to format the JSON into a Telegram-friendly message
+python3 -c "
+import json, sys
+
+data = json.loads(sys.stdin.read())
+overall = data.get('overall', 'error')
+ts = data.get('timestamp', '?')
+c = data.get('components', {})
+
+icons = {'ok': '✅', 'degraded': '⚠️', 'error': '❌', 'skipped': '⏭️'}
+overall_icons = {'ok': '🟢', 'degraded': '🟡', 'error': '🔴'}
+
+lines = [f'{overall_icons.get(overall, \"🔴\")} System Status: {overall.upper()}', '']
+
+labels = {
+    'wmcp': 'WMCP Server',
+    'wsl': 'WSL Instance',
+    'openclaw': 'OpenClaw',
+    'runtime': 'Runtime',
+    'bridge': 'Bridge',
+    'scheduledTasks': 'Tasks',
+}
+
+for key, label in labels.items():
+    comp = c.get(key, {})
+    s = comp.get('status', 'error')
+    d = comp.get('detail', '')
+    icon = icons.get(s, '❌')
+    lines.append(f'{label}: {icon} {s.upper()} — {d}')
+
+lines.append('')
+lines.append(f'Last check: {ts[:19].replace(\"T\", \" \")} UTC')
+print('\n'.join(lines))
+" <<< "$RAW"

@@ -4,14 +4,13 @@
 
 ---
 
-## Push repo to GitHub
+## Register dashboard scheduled task and begin Phase 2
 
-**Goal:** Source of truth moves from chat to openclaw-local-agent-runtime repo.
+**Goal:** Complete Phase 1.6 operational setup, then proceed to Phase 2-A.
 
 **Steps:**
-1. Verify git status — no sensitive files staged
-2. git commit -m "Initial commit: Phase 1.5 sealed runtime + bridge + telegram"
-3. Create GitHub repo openclaw-local-agent-runtime (private)
-4. git remote add origin <url> && git push -u origin main
+1. Register dashboard scheduled task: `pwsh -File bin\register-dashboard-task.ps1` (elevated)
+2. Verify all monitoring paths: dashboard on :8002, watchdog snapshot cycle, Telegram /health
+3. Proceed to Phase 2-A: first security hardening task (B-001: task-level authorization design)
 
 **After this:** Update NEXT.md to first Phase 2 task.

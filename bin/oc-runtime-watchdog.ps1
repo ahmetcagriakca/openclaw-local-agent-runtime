@@ -316,5 +316,16 @@ $summary = [ordered]@{
 
 Write-WatchdogLog -Level 'info' -Message ('Watchdog finished. Status: ' + $overallStatus + '. Repairs: ' + $repairs.Count)
 
+# -- 9. System health snapshot (Phase 1.6 additive) ----------------------------
+try {
+    $healthSnapshotScript = Join-Path (Split-Path -Parent $PSCommandPath) 'oc-health-snapshot.ps1'
+    if (Test-Path -LiteralPath $healthSnapshotScript) {
+        & pwsh -NoProfile -ExecutionPolicy Bypass -File $healthSnapshotScript 2>&1 | Out-Null
+        Write-WatchdogLog -Level 'info' -Message 'Health snapshot written.'
+    }
+} catch {
+    Write-WatchdogLog -Level 'warn' -Message ('Health snapshot failed: ' + $_.Exception.Message)
+}
+
 $summary | ConvertTo-Json -Depth 10
 exit 0

@@ -11,7 +11,7 @@ AUDIT_LOG_PATH = os.path.join(
 def log_agent_run(session_id: str, agent_id: str, user_id: str,
                   user_message: str, tool_calls: list, response: str,
                   status: str, turns_used: int, duration_ms: int,
-                  approvals: list = None):
+                  approvals: list = None, artifacts: list = None):
     """Append an audit entry for an agent run."""
     entry = {
         "ts": datetime.now(timezone.utc).isoformat(),
@@ -21,6 +21,8 @@ def log_agent_run(session_id: str, agent_id: str, user_id: str,
         "userMessage": user_message[:500],
         "toolCalls": tool_calls,
         "approvals": approvals or [],
+        "artifactCount": len(artifacts) if artifacts else 0,
+        "artifactTypes": list(set(a["type"] for a in artifacts)) if artifacts else [],
         "response": response[:1000] if response else None,
         "turnsUsed": turns_used,
         "totalDurationMs": duration_ms,

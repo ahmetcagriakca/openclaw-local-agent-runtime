@@ -224,6 +224,163 @@ Write-Output "Screenshot saved: $path"
         },
         "powershell_template": "Stop-Process -Name '{process_name}' -Force -ErrorAction SilentlyContinue; Write-Output 'Closed: {process_name}'",
         "risk": "high"
+    },
+    {
+        "name": "lock_screen",
+        "description": "Lock the Windows workstation screen",
+        "parameters": {"type": "object", "properties": {}, "required": []},
+        "powershell": "rundll32.exe user32.dll,LockWorkStation; Write-Output 'Screen locked'",
+        "risk": "medium"
+    },
+    {
+        "name": "system_shutdown",
+        "description": "Shutdown the computer. CRITICAL — requires explicit approval.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "delay_seconds": {
+                    "type": "integer",
+                    "description": "Delay in seconds before shutdown (default: 30, minimum: 10)"
+                }
+            },
+            "required": []
+        },
+        "powershell_template": "Write-Output 'Shutdown scheduled in {delay_seconds} seconds...'; shutdown /s /t {delay_seconds}",
+        "defaults": {"delay_seconds": 30},
+        "risk": "critical"
+    },
+    {
+        "name": "system_restart",
+        "description": "Restart the computer. CRITICAL — requires explicit approval.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "delay_seconds": {
+                    "type": "integer",
+                    "description": "Delay in seconds before restart (default: 30, minimum: 10)"
+                }
+            },
+            "required": []
+        },
+        "powershell_template": "Write-Output 'Restart scheduled in {delay_seconds} seconds...'; shutdown /r /t {delay_seconds}",
+        "defaults": {"delay_seconds": 30},
+        "risk": "critical"
+    },
+    {
+        "name": "submit_runtime_task",
+        "description": "Submit a predefined task to the oc runtime system (e.g. create_note, notepad_then_ready)",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "task_name": {
+                    "type": "string",
+                    "description": "Task definition name (e.g. 'create_note', 'notepad_then_ready')"
+                },
+                "arguments": {
+                    "type": "string",
+                    "description": "JSON string of task arguments (e.g. '{\"filename\":\"test.txt\",\"content\":\"hello\"}')"
+                }
+            },
+            "required": ["task_name"]
+        },
+        "powershell_template": "& 'C:\\Users\\AKCA\\oc\\wsl\\oc-bridge-submit' '{task_name}' '{arguments}'",
+        "defaults": {"arguments": "{}"},
+        "risk": "medium"
+    },
+    {
+        "name": "check_runtime_task",
+        "description": "Check the status of a runtime task by its task ID",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "task_id": {
+                    "type": "string",
+                    "description": "Task ID (e.g. 'task-20260323-143022-001')"
+                }
+            },
+            "required": ["task_id"]
+        },
+        "powershell_template": "& 'C:\\Users\\AKCA\\oc\\wsl\\oc-bridge-status' '{task_id}'",
+        "risk": "low"
+    },
+    {
+        "name": "mcp_status",
+        "description": "Check if the WMCP (windows-mcp) server is running and healthy",
+        "parameters": {"type": "object", "properties": {}, "required": []},
+        "powershell": "try { $r = Invoke-RestMethod 'http://localhost:8001/openapi.json' -TimeoutSec 5; Write-Output \"WMCP OK: $($r.info.title) on port 8001\" } catch { Write-Output \"WMCP DOWN: $($_.Exception.Message)\" }",
+        "risk": "low"
+    },
+    {
+        "name": "mcp_restart",
+        "description": "Restart the WMCP (windows-mcp) server. Kills existing process and restarts.",
+        "parameters": {"type": "object", "properties": {}, "required": []},
+        "powershell": "Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -and ($_.CommandLine -like '*mcpo*' -or $_.CommandLine -like '*windows-mcp*') } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force }; Start-Sleep 2; Start-Process -WindowStyle Hidden powershell -ArgumentList '-NoProfile -ExecutionPolicy Bypass -File C:\\Users\\AKCA\\oc\\bin\\start-wmcp-server.ps1'; Start-Sleep 10; try { $r = Invoke-RestMethod 'http://localhost:8001/openapi.json' -TimeoutSec 5; Write-Output \"WMCP restarted OK: $($r.info.title)\" } catch { Write-Output 'WMCP restart may still be starting...' }",
+        "risk": "high"
+    },
+    {
+        "name": "find_in_files",
+        "description": "Search for text content inside files recursively",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "path": {
+                    "type": "string",
+                    "description": "Root directory to search"
+                },
+                "text": {
+                    "type": "string",
+                    "description": "Text to search for inside files"
+                },
+                "file_pattern": {
+                    "type": "string",
+                    "description": "File pattern to search in (e.g. '*.txt', '*.ps1'). Default: all files."
+                }
+            },
+            "required": ["path", "text"]
+        },
+        "powershell_template": "Get-ChildItem -LiteralPath '{path}' -Recurse -File -Filter '{file_pattern}' -ErrorAction SilentlyContinue | Select-String -Pattern '{text}' -SimpleMatch | Select-Object -First 20 Path, LineNumber, Line | Format-Table -AutoSize | Out-String",
+        "defaults": {"file_pattern": "*"},
+        "risk": "low"
+    },
+    {
+        "name": "get_process_details",
+        "description": "Get detailed information about a specific running process by name or PID",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "Process name (e.g. 'chrome', 'notepad')"
+                }
+            },
+            "required": ["name"]
+        },
+        "powershell_template": "Get-Process -Name '{name}' -ErrorAction SilentlyContinue | Select-Object Name, Id, CPU, WorkingSet64, StartTime, Path | Format-List | Out-String",
+        "risk": "low"
+    },
+    {
+        "name": "get_network_info",
+        "description": "Get network adapter information, IP addresses, and connectivity status",
+        "parameters": {"type": "object", "properties": {}, "required": []},
+        "powershell": "Get-NetIPAddress -AddressFamily IPv4 | Where-Object { $_.IPAddress -ne '127.0.0.1' } | Select-Object InterfaceAlias, IPAddress, PrefixLength | Format-Table -AutoSize | Out-String; Write-Output '---'; Test-Connection -ComputerName 8.8.8.8 -Count 1 -Quiet | ForEach-Object { if ($_) { Write-Output 'Internet: Connected' } else { Write-Output 'Internet: Disconnected' } }",
+        "risk": "low"
+    },
+    {
+        "name": "list_scheduled_tasks",
+        "description": "List Windows scheduled tasks filtered by name pattern. Default: OpenClaw tasks.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "filter": {
+                    "type": "string",
+                    "description": "Task name filter (e.g. 'OpenClaw*'). Default: all OpenClaw tasks."
+                }
+            },
+            "required": []
+        },
+        "powershell_template": "Get-ScheduledTask | Where-Object {{ $_.TaskName -like '{filter}' }} | Select-Object TaskName, State | Format-Table -AutoSize | Out-String",
+        "defaults": {"filter": "OpenClaw*"},
+        "risk": "low"
     }
 ]
 
@@ -268,6 +425,8 @@ def build_command(tool: dict, params: dict) -> str:
 
         for key, value in merged.items():
             cmd = cmd.replace(f"{{{key}}}", str(value))
+        # Unescape doubled braces: {{ -> { and }} -> }
+        cmd = cmd.replace("{{", "{").replace("}}", "}")
         return cmd
 
     raise ValueError(f"Tool {tool['name']} has no command definition")

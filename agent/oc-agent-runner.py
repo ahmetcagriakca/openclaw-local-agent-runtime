@@ -18,6 +18,7 @@ from services.mcp_client import MCPClient
 from services.tool_catalog import get_tools_for_openai, get_tool, build_command
 from services.risk_engine import RiskEngine
 from services.approval_service import ApprovalService
+from services.artifact_store import ArtifactStore
 
 SYSTEM_PROMPT = """You are a Windows automation assistant for the OpenClaw system.
 You help the user manage their Windows computer through specialized tools.
@@ -31,11 +32,12 @@ Rules:
 - Never try to work around tool restrictions
 - IMPORTANT: When the user asks you to do something, call the tool directly. Do NOT ask for confirmation — the system has its own approval mechanism for dangerous operations. Just call the tool and the system will handle risk assessment and approval.
 
-You have access to tools for: system information, process listing, file operations,
-clipboard, application management, screenshots, and system health checks.
+You have access to tools for: system information, process management, file operations,
+clipboard, application management, screenshots, system health checks, network info,
+scheduled tasks, MCP server management, runtime task submission, screen lock,
+system shutdown/restart (with approval), and content search.
 
-You do NOT have access to: direct PowerShell execution, system shutdown/restart,
-file deletion, or registry modification."""
+You do NOT have access to: direct PowerShell execution, file deletion, or registry modification."""
 
 
 def run_agent(message: str, agent_id: str, user_id: str, session_id: str, max_turns: int):
@@ -44,9 +46,10 @@ def run_agent(message: str, agent_id: str, user_id: str, session_id: str, max_tu
     tool_log = []
     approval_log = []
 
-    # Initialize risk engine and approval service
+    # Initialize services
     risk_engine = RiskEngine()
     approval_service = ApprovalService(timeout_seconds=60)
+    artifact_store = ArtifactStore(session_id)
 
     # Initialize provider
     try:
@@ -205,6 +208,11 @@ def run_agent(message: str, agent_id: str, user_id: str, session_id: str, max_tu
                 tool_entry["durationMs"] = int((time.time() - tool_start) * 1000)
                 tool_log.append(tool_entry)
 
+                # Create typed artifact from tool result
+                artifact_store.add_from_tool_result(
+                    tc.name, tc.params, result_text, tool_entry.get("success", False)
+                )
+
                 # Add tool result to conversation (OpenAI format)
                 messages.append({
                     "role": "tool",
@@ -225,7 +233,12 @@ def run_agent(message: str, agent_id: str, user_id: str, session_id: str, max_tu
     if final_text is None:
         final_text = "Islem tamamlandi ancak ozet olusturulamadi."
 
+    # Add final text response as artifact
+    artifact_store.add("text_response", {"message": final_text})
+    artifact_store.save_session()
+
     total_duration = int((time.time() - start_time) * 1000)
+    artifacts = artifact_store.get_all()
 
     # Audit log
     try:
@@ -234,7 +247,7 @@ def run_agent(message: str, agent_id: str, user_id: str, session_id: str, max_tu
             session_id=session_id, agent_id=agent_id, user_id=user_id,
             user_message=message, tool_calls=tool_log, response=final_text,
             status="completed", turns_used=turns_used, duration_ms=total_duration,
-            approvals=approval_log
+            approvals=approval_log, artifacts=artifacts
         )
     except Exception:
         pass  # Audit is best-effort
@@ -244,7 +257,7 @@ def run_agent(message: str, agent_id: str, user_id: str, session_id: str, max_tu
         "agentId": agent_id,
         "sessionId": session_id,
         "response": final_text,
-        "artifacts": [{"type": "text_response", "data": {"message": final_text}}],
+        "artifacts": artifacts,
         "toolCalls": tool_log,
         "turnsUsed": turns_used,
         "totalDurationMs": total_duration

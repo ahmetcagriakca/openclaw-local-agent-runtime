@@ -33,12 +33,14 @@ def run_agent_with_config(message: str, agent_id: str, user_id: str,
                           session_id: str, max_turns: int = 10,
                           tool_policy: str = None,
                           system_prompt_override: str = None,
-                          working_set=None) -> dict:
+                          working_set=None,
+                          expansion_broker=None) -> dict:
     """Run agent with optional tool filtering, prompt override, and working set enforcement.
 
     tool_policy: specialist name ("analyst", "executor") or None for all tools
     system_prompt_override: custom system prompt, or None for default
     working_set: WorkingSet instance for filesystem enforcement, or None to skip
+    expansion_broker: ExpansionBroker for scope deny expansion hints, or None
     """
     start_time = time.time()
     tool_log = []
@@ -163,7 +165,8 @@ def run_agent_with_config(message: str, agent_id: str, user_id: str,
                         from context.working_set_enforcer import enforce_working_set
                         from services.tool_catalog import get_tool_governance
                         gov = get_tool_governance(tc.name)
-                        enforcement = enforce_working_set(tc.name, tc.params, working_set, gov or {})
+                        enforcement = enforce_working_set(tc.name, tc.params, working_set, gov or {},
+                                                         expansion_broker=expansion_broker)
                         if not enforcement.allowed:
                             result_text = enforcement.message
                             tool_entry["success"] = False

@@ -68,6 +68,23 @@ class ExpansionBroker:
             record["denyReason"] = deny_reason
 
         self.requests.append(record)
+
+        # D-055: Telemetry events
+        from context.policy_telemetry import emit_policy_event
+        emit_policy_event("working_set_expansion_requested", {
+            "role": role, "stage_id": stage_id,
+            "mission_id": self.mission_id,
+            "requested_files": requested_files or [],
+            "reason": reason
+        })
+        emit_policy_event("working_set_expansion_decided", {
+            "role": role, "stage_id": stage_id,
+            "mission_id": self.mission_id,
+            "decision": decision,
+            "deny_reason": deny_reason,
+            "remaining_budget": record["budgetImpact"]["remainingAfter"]
+        })
+
         return record
 
     def get_expansion_history(self, role: str = None,

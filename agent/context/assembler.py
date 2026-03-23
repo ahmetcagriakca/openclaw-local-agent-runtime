@@ -157,6 +157,8 @@ class ContextAssembler:
 
     def _log_consumption(self, artifact_id, role, stage_id, tier,
                          reread=False, original_request=None):
+        from context.policy_telemetry import emit_policy_event
+
         record = {
             "artifactId": artifact_id,
             "role": role,
@@ -169,3 +171,17 @@ class ContextAssembler:
             record["originalRequestedTier"] = original_request
             record["downgradedFrom"] = original_request
         self.consumption_log.append(record)
+
+        # D-055: Telemetry emit
+        if reread:
+            emit_policy_event("context_reread", {
+                "artifact_id": artifact_id, "role": role,
+                "stage_id": stage_id, "original_requested_tier": original_request,
+                "downgraded_to": tier, "mission_id": self.mission_id
+            })
+        else:
+            emit_policy_event("context_read", {
+                "artifact_id": artifact_id, "role": role,
+                "stage_id": stage_id, "tier": tier,
+                "mission_id": self.mission_id
+            })

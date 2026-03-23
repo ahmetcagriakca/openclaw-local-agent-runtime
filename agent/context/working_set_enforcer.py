@@ -45,13 +45,31 @@ def extract_path_from_params(tool_name: str, tool_params: dict) -> str | None:
     return raw
 
 
+def _expansion_hint(working_set: WorkingSet, expansion_broker) -> str:
+    """Build expansion budget hint for deny messages."""
+    if not expansion_broker:
+        return ""
+    role = working_set.role
+    role_max = {"developer": 8, "tester": 3, "reviewer": 5, "analyst": 999, "architect": 999}
+    max_allowed = role_max.get(role, 0)
+    if max_allowed == 0:
+        return ""
+    prior = sum(
+        1 for r in expansion_broker.requests
+        if r["requestingRole"] == role and r["decision"] == "granted"
+    )
+    remaining = max(0, max_allowed - prior)
+    return f" To request access, provide a reason via expansion request. Remaining expansion budget: {remaining}/{max_allowed}."
+
+
 def _telemetry_base(tool_name: str, working_set: WorkingSet) -> dict:
     """Common telemetry fields."""
     return {"tool": tool_name, "role": working_set.role, "stage_id": working_set.stage_id}
 
 
 def enforce_working_set(tool_name: str, tool_params: dict,
-                        working_set: WorkingSet, tool_governance: dict) -> EnforcementResult:
+                        working_set: WorkingSet, tool_governance: dict,
+                        expansion_broker=None) -> EnforcementResult:
     """Check if a tool call is allowed by the working set.
 
     Called BEFORE risk engine, AFTER tool gateway.
@@ -86,15 +104,35 @@ def enforce_working_set(tool_name: str, tool_params: dict,
 
     # Mutation surface check (D-045)
     surface = tool_governance.get("mutationSurface", "none")
+    role = working_set.role
+
+    # D-055: mutation_surface_mismatch — role vs surface authorization
+    if surface == "system" and role != "remote-operator":
+        msg = f"POLICY: Tool '{tool_name}' has system mutation surface, requires remote-operator role (current: {role})."
+        emit_policy_event("mutation_surface_mismatch", {
+            **base, "expected_role": "remote-operator",
+            "mutation_surface": "system", "resolved_path": resolved
+        })
+        return EnforcementResult(allowed=False, message=msg)
+
+    if surface == "code" and role not in ("developer", "remote-operator", "executor"):
+        msg = f"POLICY: Tool '{tool_name}' has code mutation surface, requires developer role (current: {role})."
+        emit_policy_event("mutation_surface_mismatch", {
+            **base, "expected_role": "developer",
+            "mutation_surface": "code", "resolved_path": resolved
+        })
+        return EnforcementResult(allowed=False, message=msg)
+
     if surface == "code":
-        return _check_write_authorization(resolved, tool_name, working_set, base)
+        return _check_write_authorization(resolved, tool_name, working_set, base, expansion_broker)
 
     # Read authorization
-    return _check_read_authorization(resolved, tool_name, working_set, base)
+    return _check_read_authorization(resolved, tool_name, working_set, base, expansion_broker)
 
 
 def _check_read_authorization(resolved: str, tool_name: str,
-                               working_set: WorkingSet, base: dict) -> EnforcementResult:
+                               working_set: WorkingSet, base: dict,
+                               expansion_broker=None) -> EnforcementResult:
     """Check if a read operation is authorized."""
     files = working_set.files
     budget = working_set.budget
@@ -104,11 +142,13 @@ def _check_read_authorization(resolved: str, tool_name: str,
         if not is_path_within(resolved, files.directory_list) and \
            not is_path_under_directory(resolved, files.directory_list):
             msg = f"POLICY: Directory '{resolved}' is not in the allowed directory list."
+            msg += _expansion_hint(working_set, expansion_broker)
             emit_policy_event("policy_denied", {**base, "reason": "directory_scope", "resolved_path": resolved})
             return EnforcementResult(allowed=False, message=msg)
         if not budget.consume_directory_read():
             msg = "POLICY: Directory read budget exhausted for this stage."
             emit_policy_event("budget_exhausted", {**base, "budget_type": "directory_read", "resolved_path": resolved})
+            emit_policy_event("policy_soft_denied", {**base, "reason": "budget_exhausted", "budget_type": "directory_read"})
             return EnforcementResult(allowed=False, message=msg)
         emit_policy_event("filesystem_tool_allowed", {**base, "resolved_path": resolved})
         return EnforcementResult(allowed=True)
@@ -120,17 +160,20 @@ def _check_read_authorization(resolved: str, tool_name: str,
         if not budget.consume_file_read():
             msg = "POLICY: File read budget exhausted for this stage."
             emit_policy_event("budget_exhausted", {**base, "budget_type": "file_read", "resolved_path": resolved})
+            emit_policy_event("policy_soft_denied", {**base, "reason": "budget_exhausted", "budget_type": "file_read"})
             return EnforcementResult(allowed=False, message=msg)
         emit_policy_event("filesystem_tool_allowed", {**base, "resolved_path": resolved})
         return EnforcementResult(allowed=True)
 
     msg = f"POLICY: File '{resolved}' is not in the allowed read set."
+    msg += _expansion_hint(working_set, expansion_broker)
     emit_policy_event("policy_denied", {**base, "reason": "read_scope", "resolved_path": resolved})
     return EnforcementResult(allowed=False, message=msg)
 
 
 def _check_write_authorization(resolved: str, tool_name: str,
-                                working_set: WorkingSet, base: dict) -> EnforcementResult:
+                                working_set: WorkingSet, base: dict,
+                                expansion_broker=None) -> EnforcementResult:
     """Check if a write operation is authorized."""
     files = working_set.files
 
@@ -141,5 +184,6 @@ def _check_write_authorization(resolved: str, tool_name: str,
         return EnforcementResult(allowed=True)
 
     msg = f"POLICY: File '{resolved}' is not in the allowed write set."
+    msg += _expansion_hint(working_set, expansion_broker)
     emit_policy_event("policy_denied", {**base, "reason": "write_scope", "resolved_path": resolved, "surface": "code"})
     return EnforcementResult(allowed=False, message=msg)

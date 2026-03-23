@@ -1,7 +1,7 @@
 # Current State
 
 **Last updated:** 2026-03-23
-**Active phase:** Phase 3-B — Core Agent Runner (complete)
+**Active phase:** Phase 3-C — Risk Engine + Approval Service (complete)
 **Note:** Phase 2 deferred — single-user localhost, security hardening not urgent
 
 ---
@@ -20,7 +20,9 @@
 | Web dashboard | Operational (manual start) | via `bin\start-dashboard.ps1` on :8002 |
 | WSL Guardian | Operational | `bin\oc-wsl-guardian.ps1` — active WSL + OpenClaw monitor |
 | Telegram notifications | Operational | `bin\oc-health-notify.ps1` — alerts, startup reports, recovery |
-| Agent Runner | Operational (GPT-4o) | `agent/oc-agent-runner.py` |
+| Agent Runner | Operational (GPT-4o, risk-gated) | `agent/oc-agent-runner.py` |
+| Risk Engine | Operational | `agent/services/risk_engine.py` |
+| Approval Service | Operational (Telegram) | `agent/services/approval_service.py` |
 
 ## Completed Phases
 
@@ -39,6 +41,7 @@
 | Phase 1.7 | Proactive Notifications | Closed |
 | Phase 3-A | Agent-MCP Architecture Design Freeze | **FROZEN** |
 | Phase 3-B | Core Agent Runner | Closed |
+| Phase 3-C | Risk Engine + Approval Service | Closed |
 
 ## Canonical Caller Path
 

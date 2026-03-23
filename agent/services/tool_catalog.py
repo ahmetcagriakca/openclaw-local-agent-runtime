@@ -208,6 +208,22 @@ Write-Output "Screenshot saved: $path"
         },
         "powershell": "& 'C:\\Users\\AKCA\\oc\\bin\\oc-system-health.ps1'",
         "risk": "low"
+    },
+    {
+        "name": "close_application",
+        "description": "Close a running application by name. REQUIRES APPROVAL — this is a destructive operation.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "process_name": {
+                    "type": "string",
+                    "description": "Process name to close (e.g. 'notepad', 'chrome', 'calc')"
+                }
+            },
+            "required": ["process_name"]
+        },
+        "powershell_template": "Stop-Process -Name '{process_name}' -Force -ErrorAction SilentlyContinue; Write-Output 'Closed: {process_name}'",
+        "risk": "high"
     }
 ]
 

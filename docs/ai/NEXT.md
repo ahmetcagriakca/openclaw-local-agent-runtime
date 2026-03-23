@@ -4,16 +4,15 @@
 
 ---
 
-## Phase 3-C: Risk Engine + Approval Service
+## Phase 3-D: Full Tool Catalog + Typed Artifacts
 
-**Goal:** Phase 3-B complete. Add risk classification and user approval flow for medium/high risk tool calls.
+**Goal:** Phase 3-C complete. Expand tool catalog, add typed artifact output, and integrate with OpenClaw routing for end-to-end Telegram flow.
 
 **Steps:**
-1. Implement risk engine — classify tool calls by risk level (low/medium/high)
-2. Implement approval service — Telegram-based approval flow for medium/high risk
-3. Integrate approval service with agent runner
-4. Add approval timeout and auto-deny for unresponded requests
-5. Test: medium-risk tool (write_file) requires user approval via Telegram
-6. Test: low-risk tool (get_system_info) executes without approval
+1. Expand tool catalog with remaining tools from Phase 3-A design
+2. Implement typed artifact store (file_created, task_submitted, approval_needed)
+3. Integrate agent with OpenClaw routing (Telegram -> agent -> response)
+4. Add agent-registry.json for agent configuration
+5. Test: full Telegram end-to-end flow
 
-**After this:** Phase 3-D (Multi-agent routing + Mission Controller).
+**After this:** Phase 3-E (Multi-provider support — Claude, Ollama).

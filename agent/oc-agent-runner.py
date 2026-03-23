@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 """OpenClaw Agent Runner — AI-powered Windows automation via MCP tools."""
+import sys, io
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
+sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8")
 import argparse
 import json
 import os
@@ -13,6 +16,8 @@ sys.path.insert(0, agent_dir)
 from providers.gpt_provider import GPTProvider
 from services.mcp_client import MCPClient
 from services.tool_catalog import get_tools_for_openai, get_tool, build_command
+from services.risk_engine import RiskEngine
+from services.approval_service import ApprovalService
 
 SYSTEM_PROMPT = """You are a Windows automation assistant for the OpenClaw system.
 You help the user manage their Windows computer through specialized tools.
@@ -37,6 +42,11 @@ def run_agent(message: str, agent_id: str, user_id: str, session_id: str, max_tu
     """Run the agent for a single message."""
     start_time = time.time()
     tool_log = []
+    approval_log = []
+
+    # Initialize risk engine and approval service
+    risk_engine = RiskEngine()
+    approval_service = ApprovalService(timeout_seconds=60)
 
     # Initialize provider
     try:
@@ -133,11 +143,60 @@ def run_agent(message: str, agent_id: str, user_id: str, session_id: str, max_tu
                     tool_entry["risk"] = tool_def.get("risk", "medium")
                     try:
                         command = build_command(tool_def, tc.params)
-                        mcp_result = mcp.execute_powershell(command)
-                        result_text = mcp_result["output"] if mcp_result["success"] else f"Error: {mcp_result['error']}"
-                        tool_entry["success"] = mcp_result["success"]
-                        if not mcp_result["success"]:
-                            tool_entry["error"] = mcp_result["error"]
+
+                        # Risk classification
+                        risk_result = risk_engine.classify(tc.name, tool_def.get("risk", "medium"), command)
+                        tool_entry["risk"] = risk_result["risk"]
+                        tool_entry["riskAction"] = risk_result["action"]
+
+                        if risk_result["action"] == "reject":
+                            # BLOCKED — never execute
+                            result_text = f"BLOCKED: {risk_result['reason']}"
+                            tool_entry["success"] = False
+                            tool_entry["error"] = result_text
+                            tool_entry["blocked"] = True
+
+                        elif risk_result["action"] in ("require_approval", "require_approval_confirmed"):
+                            # Request Telegram approval
+                            approval = approval_service.request_approval(
+                                tool_name=tc.name,
+                                tool_params=tc.params,
+                                risk=risk_result["risk"],
+                                powershell_command=command,
+                                session_id=session_id
+                            )
+                            tool_entry["approvalId"] = approval["approvalId"]
+                            tool_entry["approvalMethod"] = approval["method"]
+                            approval_log.append({
+                                "approvalId": approval["approvalId"],
+                                "tool": tc.name,
+                                "risk": risk_result["risk"],
+                                "approved": approval["approved"],
+                                "method": approval["method"]
+                            })
+
+                            if not approval["approved"]:
+                                result_text = f"DENIED: Tool call '{tc.name}' was denied ({approval['method']})"
+                                tool_entry["success"] = False
+                                tool_entry["error"] = result_text
+                                tool_entry["approved"] = False
+                            else:
+                                tool_entry["approved"] = True
+                                mcp_result = mcp.execute_powershell(command)
+                                result_text = mcp_result["output"] if mcp_result["success"] else f"Error: {mcp_result['error']}"
+                                tool_entry["success"] = mcp_result["success"]
+                                if not mcp_result["success"]:
+                                    tool_entry["error"] = mcp_result["error"]
+
+                        else:
+                            # auto_execute — proceed normally
+                            tool_entry["approved"] = True
+                            mcp_result = mcp.execute_powershell(command)
+                            result_text = mcp_result["output"] if mcp_result["success"] else f"Error: {mcp_result['error']}"
+                            tool_entry["success"] = mcp_result["success"]
+                            if not mcp_result["success"]:
+                                tool_entry["error"] = mcp_result["error"]
+
                     except Exception as e:
                         result_text = f"Error executing tool: {e}"
                         tool_entry["success"] = False
@@ -174,7 +233,8 @@ def run_agent(message: str, agent_id: str, user_id: str, session_id: str, max_tu
         log_agent_run(
             session_id=session_id, agent_id=agent_id, user_id=user_id,
             user_message=message, tool_calls=tool_log, response=final_text,
-            status="completed", turns_used=turns_used, duration_ms=total_duration
+            status="completed", turns_used=turns_used, duration_ms=total_duration,
+            approvals=approval_log
         )
     except Exception:
         pass  # Audit is best-effort

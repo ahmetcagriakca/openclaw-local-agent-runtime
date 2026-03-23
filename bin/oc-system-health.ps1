@@ -29,11 +29,12 @@ try {
 
 # --- 2. WSL Instance ----------------------------------------------------------
 try {
-    $wslOut = & wsl --list --running 2>&1 | Out-String
-    if ($wslOut -match 'Ubuntu-E') {
+    # wsl --list outputs UTF-16LE; use [Console]::OutputEncoding or test with a direct command
+    $wslTest = & wsl -d Ubuntu-E -- echo ok 2>&1 | Out-String
+    if ($wslTest -match 'ok') {
         $components['wsl'] = @{ status = 'ok'; detail = 'Ubuntu-E running' }
     } else {
-        $components['wsl'] = @{ status = 'error'; detail = 'Ubuntu-E not in running list' }
+        $components['wsl'] = @{ status = 'error'; detail = 'Ubuntu-E not responding' }
     }
 } catch {
     $components['wsl'] = @{ status = 'error'; detail = 'wsl command failed' }

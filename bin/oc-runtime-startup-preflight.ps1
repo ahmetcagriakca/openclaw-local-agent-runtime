@@ -288,5 +288,16 @@ $stateFile = [ordered]@{
 $statePath = Join-Path $config.LogsPath 'preflight-state.json'
 Save-OcJson -Path $statePath -Object $stateFile
 
+# ── 10. System health snapshot (Phase 1.6 — immediate snapshot at boot) ───────
+try {
+    $healthSnapshotScript = Join-Path (Split-Path -Parent $PSCommandPath) 'oc-health-snapshot.ps1'
+    if (Test-Path -LiteralPath $healthSnapshotScript) {
+        & pwsh -NoProfile -ExecutionPolicy Bypass -File $healthSnapshotScript 2>&1 | Out-Null
+        Write-PreflightLog -Level 'info' -Message 'Health snapshot written at boot.'
+    }
+} catch {
+    Write-PreflightLog -Level 'warn' -Message ('Health snapshot failed at boot: ' + $_.Exception.Message)
+}
+
 $summary | ConvertTo-Json -Depth 10
 exit 0

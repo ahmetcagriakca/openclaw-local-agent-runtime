@@ -112,32 +112,100 @@ class ContextAssembler:
             "cache_stats": self.summary_cache.stats()
         }
 
+    # D-041: Artifact type x role tier matrix
+    _TIER_MATRIX = {
+        ("requirements_brief", "product-owner"): "D",
+        ("requirements_brief", "analyst"): "D",
+        ("requirements_brief", "architect"): "D",
+        ("requirements_brief", "project-manager"): "B",
+        ("requirements_brief", "developer"): "B",
+        ("requirements_brief", "tester"): "C",
+        ("requirements_brief", "reviewer"): "B",
+        ("requirements_brief", "manager"): "B",
+
+        ("analysis_report", "product-owner"): "A",
+        ("analysis_report", "architect"): "D",
+        ("analysis_report", "project-manager"): "B",
+        ("analysis_report", "developer"): "A",
+        ("analysis_report", "tester"): "A",
+        ("analysis_report", "reviewer"): "B",
+        ("analysis_report", "manager"): "B",
+
+        ("discovery_map", "product-owner"): "A",
+        ("discovery_map", "architect"): "D",
+        ("discovery_map", "project-manager"): "A",
+        ("discovery_map", "developer"): "C",
+        ("discovery_map", "tester"): "C",
+        ("discovery_map", "reviewer"): "B",
+        ("discovery_map", "manager"): "A",
+
+        ("technical_design", "product-owner"): "A",
+        ("technical_design", "analyst"): "B",
+        ("technical_design", "project-manager"): "D",
+        ("technical_design", "developer"): "C",
+        ("technical_design", "tester"): "C",
+        ("technical_design", "reviewer"): "C",
+        ("technical_design", "manager"): "B",
+
+        ("work_plan", "product-owner"): "A",
+        ("work_plan", "analyst"): "A",
+        ("work_plan", "architect"): "A",
+        ("work_plan", "developer"): "C",
+        ("work_plan", "tester"): "A",
+        ("work_plan", "reviewer"): "A",
+        ("work_plan", "manager"): "B",
+
+        ("code_delivery", "tester"): "D",
+        ("code_delivery", "reviewer"): "D",
+        ("code_delivery", "manager"): "B",
+
+        ("test_report", "developer"): "C",
+        ("test_report", "reviewer"): "D",
+        ("test_report", "manager"): "D",
+
+        ("review_decision", "developer"): "C",
+        ("review_decision", "manager"): "D",
+    }
+
+    # Fallback: if no specific (artifactType, role) mapping exists
+    _ROLE_DEFAULT_TIER = {
+        "product-owner": "B",
+        "analyst": "D",
+        "architect": "D",
+        "project-manager": "B",
+        "developer": "C",
+        "tester": "C",
+        "reviewer": "C",
+        "manager": "B",
+        "remote-operator": "D"
+    }
+
     def build_context_for_role(self, role: str, skill: str, stage_id: str,
                                artifact_ids: list,
                                tier_overrides: dict = None) -> list:
-        """Build context package for a role using D-041 default tier matrix.
+        """Build context package for a role using D-041 artifact x role tier matrix.
 
+        Priority: explicit override > matrix lookup > role default > "B" fallback.
         Returns list of (artifactId, content, tier) tuples.
         """
-        # D-041 default tiers per role
-        role_defaults = {
-            "product-owner": "B",
-            "analyst": "D",
-            "architect": "D",
-            "project-manager": "B",
-            "developer": "C",
-            "tester": "C",
-            "reviewer": "C",
-            "manager": "B",
-            "remote-operator": "D"
-        }
-
-        default_tier = role_defaults.get(role, "B")
         overrides = tier_overrides or {}
 
         context_package = []
         for aid in artifact_ids:
-            tier = overrides.get(aid, default_tier)
+            artifact = self.artifacts.get(aid)
+            if not artifact:
+                continue
+
+            artifact_type = artifact.get("type", "unknown")
+
+            # Priority: explicit override > matrix > role default > "B"
+            if aid in overrides:
+                tier = overrides[aid]
+            elif (artifact_type, role) in self._TIER_MATRIX:
+                tier = self._TIER_MATRIX[(artifact_type, role)]
+            else:
+                tier = self._ROLE_DEFAULT_TIER.get(role, "B")
+
             content = self.get_artifact(aid, tier, role, stage_id)
             context_package.append((aid, content, tier))
 

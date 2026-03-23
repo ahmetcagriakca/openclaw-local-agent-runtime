@@ -77,6 +77,16 @@ class MissionController:
             stage_id = stage.get("id", f"stage-{i+1}")
             specialist = stage.get("specialist", "analyst")
 
+            # Skip stages that failed during planning validation
+            if stage.get("status") == "failed":
+                mission["status"] = "failed"
+                mission["error"] = stage.get("error", f"Stage {stage_id} failed during planning")
+                mission["finishedAt"] = datetime.now(timezone.utc).isoformat()
+                self._save_mission(mission)
+                self._emit_mission_summary(mission_id, mission, assembler,
+                                           expansion_broker, "failed")
+                return mission
+
             # D-053: Fail-closed — working set must exist in mission mode
             working_set = stage.get("working_set")
             if working_set is None:
@@ -180,18 +190,29 @@ class MissionController:
 
         provider, _ = create_provider(self.planner_agent_id)
 
-        planning_prompt = """You are a mission planner for a Windows automation system. Break the user's request into sequential stages. Each stage is executed by a specialist agent.
+        planning_prompt = """You are a mission planner. Break the user's goal into sequential stages, each assigned to one specialist role.
 
-Available specialists:
-- "analyst": Can read files, search content, get system info, check processes, network — READ ONLY operations
-- "executor": Can write files, open apps, manage clipboard, submit tasks — WRITE/ACTION operations
+AVAILABLE ROLES:
+1. product-owner — Structures user intent into requirements. No tools.
+2. analyst — Analyzes feasibility, discovers repo structure. Read-only tools.
+3. architect — Produces technical design from requirements + discovery. Read-only.
+4. project-manager — Creates work breakdown with task assignments. No tools.
+5. developer — Implements code changes in assigned file scope. Write access.
+6. tester — Verifies code against acceptance criteria. Read-only.
+7. reviewer — Evaluates code quality and design compliance. Read-only.
+8. manager — Oversees process, produces summaries, handles recovery. No tools.
+9. remote-operator — Executes system mutations (restart, app launch). All tools.
 
-Rules:
-- Use "analyst" for any information gathering, research, or read operations
-- Use "executor" for any write, create, launch, or modification operations
-- Keep stages minimal — don't over-plan
-- Each stage should have a clear, single objective
-- Later stages can reference results from earlier stages
+RULES:
+- For TRIVIAL tasks (1 file, simple read/check): use analyst only, or developer + tester.
+- For SIMPLE tasks: use analyst -> developer -> tester -> reviewer.
+- For MEDIUM tasks: use product-owner -> analyst -> architect -> developer -> tester -> reviewer -> manager.
+- For COMPLEX tasks: use all roles in sequence.
+- remote-operator is ONLY for system operations (restart, app control, clipboard, URLs).
+- NEVER assign developer to read-only discovery tasks.
+- NEVER assign product-owner or project-manager to file operations.
+- Keep stages minimal — don't over-plan.
+- Each stage should have a clear, single objective.
 
 Respond ONLY with a JSON object, no markdown, no explanation:
 {
@@ -199,6 +220,7 @@ Respond ONLY with a JSON object, no markdown, no explanation:
     {
       "id": "stage-1",
       "specialist": "analyst",
+      "skill": "repository_discovery",
       "objective": "What this stage should accomplish",
       "instruction": "Specific instruction for the specialist agent"
     }
@@ -227,16 +249,41 @@ Respond ONLY with a JSON object, no markdown, no explanation:
         plan = json.loads(text)
 
         # Validate and enrich stages
+        from mission.role_registry import resolve_role, get_role
+        from mission.skill_contracts import validate_role_skill
+
         for stage in plan.get("stages", []):
             stage["status"] = "pending"
             stage["result"] = None
             stage["artifacts"] = []
             stage["error"] = None
             stage["duration_ms"] = 0
+
+            # Resolve role alias (executor → remote-operator, etc.)
+            raw_specialist = stage.get("specialist", "analyst")
+            canonical_role = resolve_role(raw_specialist)
+            stage["specialist"] = canonical_role
+
+            # Validate role exists
+            role_def = get_role(canonical_role)
+            if not role_def:
+                stage["status"] = "failed"
+                stage["error"] = f"POLICY: Unknown role '{canonical_role}'"
+                continue
+
+            # Validate (role, skill) combination
+            skill = stage.get("skill", "")
+            if skill:
+                allowed, reason = validate_role_skill(canonical_role, skill)
+                if not allowed:
+                    stage["status"] = "failed"
+                    stage["error"] = f"POLICY: {reason}"
+                    continue
+
             # D-053: Assign default working set per specialist role
             stage["working_set"] = self._build_default_working_set(
                 stage.get("id", "unknown"),
-                stage.get("specialist", "analyst")
+                canonical_role
             )
 
         return plan
@@ -356,28 +403,83 @@ Respond ONLY with a JSON object, no markdown, no explanation:
             event_data["failure_reason"] = mission.get("error", "unknown")
         emit_policy_event(event_type, event_data)
 
-    # D-048: Working set templates per role. "executor" aliased to "remote-operator".
-    # Sprint 3 will add 7 more roles here.
+    # D-048: Working set templates per role — 9 governed roles.
     _WORKING_SET_TEMPLATES = {
+        "product-owner": {
+            "max_file_reads": 0,
+            "max_directory_reads": 0,
+            "max_expansions": 0,
+            "generated_outputs": [],
+            "forbidden_directories": [r"C:\Windows\System32", r"C:\Program Files"],
+            "forbidden_patterns": [r"\.ps1$", r"\.env$", r"allowlist\.json$"]
+        },
         "analyst": {
-            "max_file_reads": 20,
+            "max_file_reads": 30,
+            "max_directory_reads": 15,
+            "max_expansions": 999,
+            "generated_outputs": [],
+            "forbidden_directories": [r"C:\Windows\System32", r"C:\Program Files"],
+            "forbidden_patterns": [r"\.env$", r"allowlist\.json$"]
+        },
+        "architect": {
+            "max_file_reads": 15,
             "max_directory_reads": 10,
+            "max_expansions": 999,
+            "generated_outputs": [],
+            "forbidden_directories": [r"C:\Windows\System32", r"C:\Program Files"],
+            "forbidden_patterns": [r"\.env$", r"allowlist\.json$"]
+        },
+        "project-manager": {
+            "max_file_reads": 0,
+            "max_directory_reads": 0,
+            "max_expansions": 0,
+            "generated_outputs": [],
+            "forbidden_directories": [r"C:\Windows\System32", r"C:\Program Files"],
+            "forbidden_patterns": [r"\.ps1$", r"\.env$", r"allowlist\.json$"]
+        },
+        "developer": {
+            "max_file_reads": 20,
+            "max_directory_reads": 5,
+            "max_expansions": 8,
+            "generated_outputs": ["logs/artifacts/"],
+            "forbidden_directories": [r"C:\Windows\System32", r"C:\Program Files"],
+            "forbidden_patterns": [r"\.env$", r"allowlist\.json$"]
+        },
+        "tester": {
+            "max_file_reads": 15,
+            "max_directory_reads": 5,
             "max_expansions": 3,
             "generated_outputs": [],
             "forbidden_directories": [r"C:\Windows\System32", r"C:\Program Files"],
-            "forbidden_patterns": [r"\.env$", r"credentials", r"\.key$"]
+            "forbidden_patterns": [r"\.env$", r"allowlist\.json$"]
+        },
+        "reviewer": {
+            "max_file_reads": 12,
+            "max_directory_reads": 3,
+            "max_expansions": 5,
+            "generated_outputs": [],
+            "forbidden_directories": [r"C:\Windows\System32", r"C:\Program Files"],
+            "forbidden_patterns": [r"\.env$", r"allowlist\.json$"]
+        },
+        "manager": {
+            "max_file_reads": 0,
+            "max_directory_reads": 0,
+            "max_expansions": 0,
+            "generated_outputs": [],
+            "forbidden_directories": [r"C:\Windows\System32", r"C:\Program Files"],
+            "forbidden_patterns": [r"\.ps1$", r"\.env$", r"allowlist\.json$"]
         },
         "remote-operator": {
             "max_file_reads": 10,
             "max_directory_reads": 5,
             "max_expansions": 2,
-            "generated_outputs": ["results"],
-            "forbidden_directories": [r"C:\Windows\System32", r"C:\Program Files"],
-            "forbidden_patterns": [r"\.env$", r"credentials", r"\.key$"]
+            "generated_outputs": ["results/"],
+            "forbidden_directories": [],
+            "forbidden_patterns": []
         },
     }
 
-    # D-048: "executor" → "remote-operator" alias
+    # D-048: Alias resolution uses role_registry
     _ROLE_ALIASES = {
         "executor": "remote-operator",
     }

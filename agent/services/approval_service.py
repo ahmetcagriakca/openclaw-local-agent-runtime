@@ -109,11 +109,15 @@ class ApprovalService:
                 "respondedAt": None
             }
 
-        # Poll approval file for status change
+        # Record the send timestamp to only check newer Telegram messages
+        send_time = int(time.time())
+
+        # Poll: check both file changes AND Telegram replies
         deadline = time.time() + self.timeout
         while time.time() < deadline:
-            time.sleep(2)  # Check every 2 seconds
+            time.sleep(3)  # Check every 3 seconds
 
+            # Check 1: file-based approval (from oc-approve CLI)
             try:
                 with open(record_path, "r", encoding="utf-8") as f:
                     current = json.load(f)
@@ -121,7 +125,6 @@ class ApprovalService:
                 if current.get("status") in ("approved", "denied"):
                     approved = current["status"] == "approved"
 
-                    # Send confirmation to Telegram
                     result_emoji = "\u2705" if approved else "\u274c"
                     self._send_telegram(f"{result_emoji} {apv_id}: {'Approved' if approved else 'Denied'}")
 
@@ -133,6 +136,27 @@ class ApprovalService:
                     }
             except Exception:
                 pass
+
+            # Check 2: Telegram reply (peek without consuming — no offset)
+            if self.bot_token:
+                reply = self._peek_telegram_reply(apv_id, send_time)
+                if reply is not None:
+                    approved = reply == "approve"
+                    record["status"] = "approved" if approved else "denied"
+                    record["decision"] = f"telegram_{reply}"
+                    record["decidedAt"] = datetime.now(timezone.utc).isoformat()
+                    with open(record_path, "w", encoding="utf-8") as f:
+                        json.dump(record, f, ensure_ascii=False, indent=2)
+
+                    result_emoji = "\u2705" if approved else "\u274c"
+                    self._send_telegram(f"{result_emoji} {apv_id}: {'Approved' if approved else 'Denied'}")
+
+                    return {
+                        "approved": approved,
+                        "approvalId": apv_id,
+                        "method": "telegram_reply",
+                        "respondedAt": record["decidedAt"]
+                    }
 
         # Timeout — auto-deny
         record["status"] = "denied"
@@ -149,6 +173,55 @@ class ApprovalService:
             "method": "timeout",
             "respondedAt": record["decidedAt"]
         }
+
+    def _peek_telegram_reply(self, apv_id: str, after_unix: int) -> str | None:
+        """Peek at recent Telegram messages for approve/deny reply.
+
+        Uses getUpdates WITHOUT offset — does not consume messages.
+        OpenClaw can still see and process the same messages.
+
+        Returns: "approve" | "deny" | None
+        """
+        try:
+            import requests
+            url = f"https://api.telegram.org/bot{self.bot_token}/getUpdates"
+            # No offset — just get recent messages without consuming
+            resp = requests.get(url, params={"limit": 20, "timeout": 0}, timeout=5)
+            data = resp.json()
+
+            if not data.get("ok"):
+                return None
+
+            for update in data.get("result", []):
+                msg = update.get("message", {})
+                msg_date = msg.get("date", 0)
+
+                # Only check messages sent after our approval request
+                if msg_date < after_unix:
+                    continue
+
+                text = (msg.get("text") or "").strip().lower()
+                chat_id = str(msg.get("chat", {}).get("id", ""))
+
+                # Only from the right chat
+                if chat_id != str(self.chat_id):
+                    continue
+
+                apv_lower = apv_id.lower()
+                if f"approve {apv_lower}" in text or f"yes {apv_lower}" in text:
+                    return "approve"
+                if f"deny {apv_lower}" in text or f"no {apv_lower}" in text:
+                    return "deny"
+
+                # Simple yes/no (convenience — only safe with single pending)
+                if text in ("yes", "evet", "approve", "onayla"):
+                    return "approve"
+                if text in ("no", "hayir", "deny", "reddet"):
+                    return "deny"
+
+            return None
+        except Exception:
+            return None
 
     def _send_telegram(self, message: str):
         """Send a message via Telegram Bot API (one-way, no polling)."""

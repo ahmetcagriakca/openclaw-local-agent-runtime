@@ -34,7 +34,7 @@ for p in python_paths:
 if not python_exe:
     python_exe = "python.exe"
 
-agent_script = "/mnt/c/Users/AKCA/oc/agent/oc-agent-runner.py"
+agent_script = "C:\\Users\\AKCA\\oc\\agent\\oc-agent-runner.py"
 
 cmd = [
     python_exe, agent_script,
@@ -45,8 +45,22 @@ cmd = [
     "--max-turns", "10"
 ]
 
+env = os.environ.copy()
+# Ensure API key passes through WSL to Windows
+if "OPENAI_API_KEY" not in env:
+    try:
+        key_result = subprocess.run(
+            ["cmd.exe", "/c", "echo", "%OPENAI_API_KEY%"],
+            capture_output=True, text=True, timeout=5
+        )
+        key = key_result.stdout.strip()
+        if key and key != "%OPENAI_API_KEY%":
+            env["OPENAI_API_KEY"] = key
+    except Exception:
+        pass
+
 try:
-    r = subprocess.run(cmd, capture_output=True, text=True, timeout=180)
+    r = subprocess.run(cmd, capture_output=True, text=True, timeout=180, env=env)
 
     if r.stdout.strip():
         try:

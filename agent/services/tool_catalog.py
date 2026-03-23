@@ -39,7 +39,7 @@ Write-Output "Uptime: $($uptime.Days)d $($uptime.Hours)h $($uptime.Minutes)m"
             },
             "required": []
         },
-        "powershell_template": "Get-Process | Sort-Object CPU -Descending | Select-Object -First {top_n} Name, Id, @{{N='CPU(s)';E={{[math]::Round($_.CPU,1)}}}}, @{{N='RAM(MB)';E={{[math]::Round($_.WorkingSet64/1MB,1)}}}} | Format-Table -AutoSize | Out-String",
+        "powershell_template": "Get-Process | Sort-Object CPU -Descending | Select-Object -First {top_n} Name, Id, CPU, WorkingSet64 | Format-Table -AutoSize | Out-String",
         "defaults": {"top_n": 15},
         "risk": "low"
     },

@@ -171,3 +171,59 @@ Project: OpenClaw Local Agent Runtime. Repo: openclaw-local-agent-runtime.
 **Phase:** 1.6 | **Status:** Active
 
 Passive `sleep infinity` keepalive replaced by active guardian (`oc-wsl-guardian.ps1`). Checks WSL + OpenClaw every 30s, auto-restarts if down, sends Telegram alerts on state changes. Scheduled task `OpenClawWslGuardian` replaces `WSLKeepAlive`.
+
+---
+
+## D-022: Agent architecture — registry-based, multi-agent extensible
+
+**Phase:** 3-A | **Status:** Frozen
+
+Agent Runner is the first entry in an Agent Registry, not a singleton. Every component designed as first-of-many: registry for agents, role-scoped policies for tools, service interfaces for approval, typed artifacts for output, table-driven routing. Single Claude agent implemented first; patterns support specialist agents without architectural rewrites.
+
+---
+
+## D-023: run_powershell restricted — denied to general-assistant
+
+**Phase:** 3-A | **Status:** Frozen
+
+`run_powershell` is NOT available to `general-assistant` agent. Reserved for future `executor` role only, requiring policy check + risk escalation + approval. Agent uses named tools (`get_system_info`, `read_file`, etc.) instead. Prevents shell escape bypassing the entire tool catalog.
+
+---
+
+## D-024: Tool access — role-scoped via Tool Gateway
+
+**Phase:** 3-A | **Status:** Frozen
+
+All tool access mediated by Tool Gateway. LLM only sees tools allowed by its role's policy. Tool Gateway checks policy, classifies risk, routes to approval if needed, executes via MCP, logs to audit. New agents get different policies through the same gateway.
+
+---
+
+## D-025: Approval — service interface with correlation IDs
+
+**Phase:** 3-A | **Status:** Frozen
+
+Approval is a decoupled service, not embedded in agent logic. Each request gets a unique approval ID. User approves by ID, not "yes/no". Supports concurrent approvals for multi-agent future. File-based storage for Phase 3-B, upgradeable later.
+
+---
+
+## D-026: Artifacts — typed output, handoff contracts for multi-agent
+
+**Phase:** 3-A | **Status:** Frozen
+
+Every agent invocation returns a standardized envelope with typed artifacts (`text_response`, `file_created`, `task_submitted`, `error`, `approval_needed`). This envelope is the handoff contract — Mission Controller will read these to decide next steps in multi-agent missions.
+
+---
+
+## D-027: Routing — deterministic table, not context-guessed
+
+**Phase:** 3-A | **Status:** Frozen
+
+Request routing uses explicit pattern-matching rules (`routing-rules.json`). First match wins, agent is the default fallback. No LLM-based intent guessing at the routing layer.
+
+---
+
+## D-028: Framework — direct SDK calls, no LangChain
+
+**Phase:** 3-A | **Status:** Active
+
+Start with direct Anthropic SDK calls. Evaluate LangChain ONLY if adding a 3rd+ provider becomes painful. Avoids unnecessary abstraction layers for single-provider start.

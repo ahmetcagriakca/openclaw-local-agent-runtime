@@ -1,7 +1,8 @@
 # Current State
 
 **Last updated:** 2026-03-23
-**Active phase:** Phase 1.7 — Proactive Notifications (complete)
+**Active phase:** Phase 3-A — Agent-MCP Architecture Design Freeze (complete)
+**Note:** Phase 2 deferred — single-user localhost, security hardening not urgent
 
 ---
 
@@ -35,6 +36,7 @@
 | Phase 1.5-TG-R | Real Telegram Closure | **FULLY SEALED** |
 | Phase 1.6 | Operational Monitoring | Closed |
 | Phase 1.7 | Proactive Notifications | Closed |
+| Phase 3-A | Agent-MCP Architecture Design Freeze | **FROZEN** |
 
 ## Canonical Caller Path
 

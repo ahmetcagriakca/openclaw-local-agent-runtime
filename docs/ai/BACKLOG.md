@@ -43,6 +43,18 @@
 | B-023 | Corrupted runtime recovery | Beyond stuck-task policy |
 | B-024 | Deterministic redeploy | Reproducible from repo |
 
+## Phase 3 — Agent-MCP System
+
+| ID | Item | Notes |
+|----|------|-------|
+| B-029 | Core agent runner | Phase 3-B: Claude provider, MCP client, basic tool gateway |
+| B-030 | Risk engine + approval service | Phase 3-C: deterministic risk, Telegram approval flow |
+| B-031 | Full tool catalog + typed artifacts | Phase 3-D: 18 named tools, artifact store, audit |
+| B-032 | Multi-provider support | Phase 3-E: OpenAI, Ollama providers |
+| B-033 | Multi-agent foundation / mission controller | Phase 3-F: hub-and-spoke, specialist agents |
+| B-034 | Agent-to-agent delegation protocol | Phase 3-F: typed artifact handoff contracts |
+| B-035 | Persistent mission state | Phase 3-F: multi-stage mission tracking |
+
 ## Cleanup (no phase gate)
 
 | ID | Item | Notes |

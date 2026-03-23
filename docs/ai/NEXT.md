@@ -4,14 +4,18 @@
 
 ---
 
-## Phase 2-A: Task-level authorization design
+## Phase 3-B: Core Agent Runner with Claude
 
-**Goal:** Phase 1.7 complete. Proceed to Phase 2-A: first security hardening task (B-001: task-level authorization design).
+**Goal:** Phase 3-A design freeze complete. Implement the first working agent that handles requests end-to-end via Telegram.
 
 **Steps:**
-1. Design source-to-task authorization matrix
-2. Define policy format and enforcement point
-3. Implement in Bridge validation pipeline
-4. Update DECISIONS.md with new frozen decision
+1. Create `agent/` directory with Python project structure
+2. Implement `agent/oc-agent-runner.py` (main orchestrator)
+3. Implement `agent/providers/claude_provider.py` (Anthropic SDK)
+4. Implement `agent/services/mcp_client.py` (MCP HTTP client)
+5. Implement `agent/services/tool_gateway.py` (basic policy check)
+6. Create `wsl/oc-agent-run` (WSL-Windows bridge)
+7. Create config files (`agent-registry.json`, `agent-config.json`)
+8. Test: "CPU kullanimi kac?" works end-to-end via Telegram
 
-**After this:** Continue Phase 2 backlog items (B-002 through B-011).
+**After this:** Phase 3-C (Risk Engine + Approval Service).

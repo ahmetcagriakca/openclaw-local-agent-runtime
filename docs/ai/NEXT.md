@@ -4,18 +4,16 @@
 
 ---
 
-## Phase 3-B: Core Agent Runner with Claude
+## Phase 3-C: Risk Engine + Approval Service
 
-**Goal:** Phase 3-A design freeze complete. Implement the first working agent that handles requests end-to-end via Telegram.
+**Goal:** Phase 3-B complete. Add risk classification and user approval flow for medium/high risk tool calls.
 
 **Steps:**
-1. Create `agent/` directory with Python project structure
-2. Implement `agent/oc-agent-runner.py` (main orchestrator)
-3. Implement `agent/providers/claude_provider.py` (Anthropic SDK)
-4. Implement `agent/services/mcp_client.py` (MCP HTTP client)
-5. Implement `agent/services/tool_gateway.py` (basic policy check)
-6. Create `wsl/oc-agent-run` (WSL-Windows bridge)
-7. Create config files (`agent-registry.json`, `agent-config.json`)
-8. Test: "CPU kullanimi kac?" works end-to-end via Telegram
+1. Implement risk engine — classify tool calls by risk level (low/medium/high)
+2. Implement approval service — Telegram-based approval flow for medium/high risk
+3. Integrate approval service with agent runner
+4. Add approval timeout and auto-deny for unresponded requests
+5. Test: medium-risk tool (write_file) requires user approval via Telegram
+6. Test: low-risk tool (get_system_info) executes without approval
 
-**After this:** Phase 3-C (Risk Engine + Approval Service).
+**After this:** Phase 3-D (Multi-agent routing + Mission Controller).

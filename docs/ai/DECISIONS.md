@@ -222,8 +222,8 @@ Request routing uses explicit pattern-matching rules (`routing-rules.json`). Fir
 
 ---
 
-## D-028: Framework — direct SDK calls, no LangChain
+## D-028: Framework — direct SDK calls, GPT-4o first provider
 
-**Phase:** 3-A | **Status:** Active
+**Phase:** 3-A/3-B | **Status:** Active
 
-Start with direct Anthropic SDK calls. Evaluate LangChain ONLY if adding a 3rd+ provider becomes painful. Avoids unnecessary abstraction layers for single-provider start.
+Direct SDK calls, no LangChain. GPT-4o is the first provider (OpenAI SDK). Claude added when API credits are available. Provider abstraction in `agent/providers/base.py` supports swapping without rewrites. Evaluate LangChain ONLY if adding a 3rd+ provider becomes painful.

@@ -1,0 +1,70 @@
+#!/usr/bin/env python3
+"""Bridge from OpenClaw (WSL) to Agent Runner (Windows)."""
+import json
+import os
+import subprocess
+import sys
+import time
+
+message = sys.argv[1] if len(sys.argv) > 1 else None
+agent = sys.argv[2] if len(sys.argv) > 2 else "gpt-general"
+user_id = sys.argv[3] if len(sys.argv) > 3 else "8654710624"
+
+if not message:
+    print("usage: oc-agent-run <message> [agent] [userId]", file=sys.stderr)
+    sys.exit(2)
+
+session_id = f"sess-{int(time.time())}-{os.getpid()}"
+
+# Find Python on Windows side
+python_paths = [
+    "/mnt/c/Users/AKCA/AppData/Local/Python/pythoncore-3.14-64/python.exe",
+    "/mnt/c/Users/AKCA/AppData/Local/Programs/Python/Python314/python.exe",
+    "/mnt/c/Users/AKCA/AppData/Local/Programs/Python/Python312/python.exe",
+    "/mnt/c/Python314/python.exe",
+    "/mnt/c/Python312/python.exe",
+]
+
+python_exe = None
+for p in python_paths:
+    if os.path.exists(p):
+        python_exe = p
+        break
+
+if not python_exe:
+    python_exe = "python.exe"
+
+agent_script = "/mnt/c/Users/AKCA/oc/agent/oc-agent-runner.py"
+
+cmd = [
+    python_exe, agent_script,
+    "--message", message,
+    "--agent", agent,
+    "--user-id", user_id,
+    "--session-id", session_id,
+    "--max-turns", "10"
+]
+
+try:
+    r = subprocess.run(cmd, capture_output=True, text=True, timeout=180)
+
+    if r.stdout.strip():
+        try:
+            result = json.loads(r.stdout)
+            if result.get("status") == "completed" and result.get("response"):
+                print(result["response"])
+            else:
+                print(r.stdout)
+        except json.JSONDecodeError:
+            print(r.stdout)
+
+    if r.stderr.strip():
+        print(r.stderr, file=sys.stderr)
+
+    sys.exit(r.returncode)
+except subprocess.TimeoutExpired:
+    print("Agent timed out after 180 seconds", file=sys.stderr)
+    sys.exit(1)
+except Exception as e:
+    print(f"Error running agent: {e}", file=sys.stderr)
+    sys.exit(1)

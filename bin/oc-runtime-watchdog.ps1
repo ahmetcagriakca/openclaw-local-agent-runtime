@@ -327,5 +327,16 @@ try {
     Write-WatchdogLog -Level 'warn' -Message ('Health snapshot failed: ' + $_.Exception.Message)
 }
 
+# -- 10. Proactive Telegram notifications (Phase 1.7) --------------------------
+try {
+    $healthNotifyScript = Join-Path (Split-Path -Parent $PSCommandPath) 'oc-health-notify.ps1'
+    if (Test-Path -LiteralPath $healthNotifyScript) {
+        & pwsh -NoProfile -ExecutionPolicy Bypass -File $healthNotifyScript -Mode watchdog 2>&1 | Out-Null
+        Write-WatchdogLog -Level 'info' -Message 'Health notification check completed.'
+    }
+} catch {
+    Write-WatchdogLog -Level 'warn' -Message ('Health notification failed: ' + $_.Exception.Message)
+}
+
 $summary | ConvertTo-Json -Depth 10
 exit 0

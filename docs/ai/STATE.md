@@ -1,7 +1,7 @@
 # Current State
 
 **Last updated:** 2026-03-23
-**Active phase:** Phase 1.6 — Operational Monitoring (complete)
+**Active phase:** Phase 1.7 — Proactive Notifications (complete)
 
 ---
 
@@ -18,6 +18,7 @@
 | System health engine | Operational | `bin\oc-system-health.ps1` |
 | Web dashboard | Operational (manual start) | via `bin\start-dashboard.ps1` on :8002 |
 | WSL Guardian | Operational | `bin\oc-wsl-guardian.ps1` — active WSL + OpenClaw monitor |
+| Telegram notifications | Operational | `bin\oc-health-notify.ps1` — alerts, startup reports, recovery |
 
 ## Completed Phases
 
@@ -33,6 +34,7 @@
 | Phase TG-1R | OpenClaw Telegram Wiring | Closed |
 | Phase 1.5-TG-R | Real Telegram Closure | **FULLY SEALED** |
 | Phase 1.6 | Operational Monitoring | Closed |
+| Phase 1.7 | Proactive Notifications | Closed |
 
 ## Canonical Caller Path
 

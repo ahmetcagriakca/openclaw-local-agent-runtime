@@ -299,5 +299,16 @@ try {
     Write-PreflightLog -Level 'warn' -Message ('Health snapshot failed at boot: ' + $_.Exception.Message)
 }
 
+# ── 11. Startup Telegram notification (Phase 1.7) ─────────────────────────────
+try {
+    $healthNotifyScript = Join-Path (Split-Path -Parent $PSCommandPath) 'oc-health-notify.ps1'
+    if (Test-Path -LiteralPath $healthNotifyScript) {
+        & pwsh -NoProfile -ExecutionPolicy Bypass -File $healthNotifyScript -Mode startup 2>&1 | Out-Null
+        Write-PreflightLog -Level 'info' -Message 'Startup notification sent.'
+    }
+} catch {
+    Write-PreflightLog -Level 'warn' -Message ('Startup notification failed: ' + $_.Exception.Message)
+}
+
 $summary | ConvertTo-Json -Depth 10
 exit 0

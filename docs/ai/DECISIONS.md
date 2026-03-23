@@ -222,8 +222,8 @@ Request routing uses explicit pattern-matching rules (`routing-rules.json`). Fir
 
 ---
 
-## D-028: Framework — direct SDK calls, GPT-4o first provider
+## D-028: Framework — direct SDK calls, multi-provider
 
-**Phase:** 3-A/3-B | **Status:** Active
+**Phase:** 3-A/3-B/3-E | **Status:** Active
 
-Direct SDK calls, no LangChain. GPT-4o is the first provider (OpenAI SDK). Claude added when API credits are available. Provider abstraction in `agent/providers/base.py` supports swapping without rewrites. Evaluate LangChain ONLY if adding a 3rd+ provider becomes painful.
+Direct SDK calls, no LangChain. Three providers implemented: GPT-4o (active), Claude (ready, needs API key), Ollama (ready, needs local server). Provider factory in `agent/providers/factory.py` selects provider from `agent-config.json`. Each provider converts OpenAI tool format internally. LangChain not needed — 3 providers added without it.

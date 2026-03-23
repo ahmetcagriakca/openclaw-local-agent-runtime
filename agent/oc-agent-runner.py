@@ -13,7 +13,7 @@ import time
 agent_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, agent_dir)
 
-from providers.gpt_provider import GPTProvider
+from providers.factory import create_provider
 from services.mcp_client import MCPClient
 from services.tool_catalog import get_tools_for_openai, get_tool, build_command
 from services.risk_engine import RiskEngine
@@ -51,15 +51,16 @@ def run_agent(message: str, agent_id: str, user_id: str, session_id: str, max_tu
     approval_service = ApprovalService(timeout_seconds=60)
     artifact_store = ArtifactStore(session_id)
 
-    # Initialize provider
+    # Initialize provider from agent config
     try:
-        provider = GPTProvider()
+        provider, agent_config = create_provider(agent_id)
+        max_turns = agent_config.get("maxTurns", max_turns)
     except Exception as e:
         return {
             "status": "error",
             "agentId": agent_id,
             "sessionId": session_id,
-            "error": f"Failed to initialize GPT provider: {e}",
+            "error": f"Failed to initialize provider: {e}",
             "artifacts": [{"type": "error", "data": {"error": str(e), "recoverable": False}}]
         }
 

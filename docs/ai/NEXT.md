@@ -4,15 +4,15 @@
 
 ---
 
-## Phase 3-E: Multi-Provider (Claude + Ollama)
+## Phase 3-F: Multi-Agent Foundation
 
-**Goal:** Phase 3-D complete. Add Claude and Ollama as alternative LLM providers, selectable via agent config.
+**Goal:** Phase 3-E complete. Design and implement Mission Controller for multi-agent orchestration.
 
 **Steps:**
-1. Implement `agent/providers/claude_provider.py` (Anthropic SDK)
-2. Implement `agent/providers/ollama_provider.py` (local HTTP API)
-3. Create `agent/agent-registry.json` for provider selection
-4. Update agent runner to select provider from registry
-5. Test: same request works with GPT-4o, Claude, and Ollama
+1. Create Mission Controller (hub-and-spoke orchestration)
+2. Define specialist agent roles (analyst, developer, tester, reviewer)
+3. Implement mission state persistence
+4. Agent-to-agent handoff via typed artifacts
+5. Test: multi-stage mission with sequential agent execution
 
-**After this:** Phase 3-F (Multi-Agent Foundation — Mission Controller).
+**After this:** Phase 4 (Reproducibility / DR) or additional improvements.

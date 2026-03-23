@@ -17,16 +17,16 @@
       "maxTokens": 4096,
       "maxTurns": 10,
       "timeoutSeconds": 120,
-      "enabled": false
+      "enabled": true
     },
     "ollama-general": {
       "provider": "ollama",
-      "model": "llama3.1",
+      "model": "qwen2.5:7b",
       "baseUrl": "http://localhost:11434",
       "maxTokens": 4096,
       "maxTurns": 10,
       "timeoutSeconds": 180,
-      "enabled": false
+      "enabled": true
     }
   }
 }

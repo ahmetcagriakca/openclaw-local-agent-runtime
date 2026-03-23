@@ -59,6 +59,8 @@ if "OPENAI_API_KEY" not in env:
     except Exception:
         pass
 
+env["PYTHONIOENCODING"] = "utf-8"
+
 try:
     r = subprocess.run(cmd, capture_output=True, text=True, timeout=180, env=env)
 

@@ -64,6 +64,21 @@ class MissionController:
         all_artifacts = []
         for i, stage in enumerate(mission["stages"]):
             mission["currentStage"] = i + 1
+
+            # D-053: Fail-closed — working set must exist in mission mode
+            working_set = stage.get("working_set")
+            if working_set is None:
+                stage["status"] = "failed"
+                stage["error"] = (
+                    f"POLICY: Stage {stage.get('id', i+1)} cannot start "
+                    f"without a working set in mission mode."
+                )
+                mission["status"] = "failed"
+                mission["error"] = stage["error"]
+                mission["finishedAt"] = datetime.now(timezone.utc).isoformat()
+                self._save_mission(mission)
+                return mission
+
             stage["status"] = "running"
             self._save_mission(mission)
 
@@ -159,6 +174,11 @@ Respond ONLY with a JSON object, no markdown, no explanation:
             stage["artifacts"] = []
             stage["error"] = None
             stage["duration_ms"] = 0
+            # D-053: Assign default working set per specialist role
+            stage["working_set"] = self._build_default_working_set(
+                stage.get("id", "unknown"),
+                stage.get("specialist", "analyst")
+            )
 
         return plan
 
@@ -192,16 +212,74 @@ Respond ONLY with a JSON object, no markdown, no explanation:
         # Run the agent (reuse existing agent runner)
         from oc_agent_runner_lib import run_agent_with_config
 
+        # Pass working set to agent runner for enforcement
+        working_set = stage.get("working_set")
+
         result = run_agent_with_config(
             message=full_instruction,
             agent_id=agent_id,
             user_id=user_id,
             session_id=f"{mission_id}-{stage.get('id', 'stage')}",
             max_turns=10,
-            tool_policy=specialist
+            tool_policy=specialist,
+            working_set=working_set
         )
 
         return result
+
+    def _build_default_working_set(self, stage_id: str, specialist: str):
+        """Build a default working set for a specialist role.
+
+        D-053: Every mission stage must have a working set.
+        Default sets are permissive — future sprints will narrow these
+        based on discovery map and skill contracts.
+        """
+        from context.working_set import WorkingSet, FileAccess, ReadBudget
+
+        # Default paths — permissive for now, will be narrowed in Sprint 3+
+        oc_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        results_dir = os.path.join(oc_root, "results")
+
+        if specialist == "executor":
+            files = FileAccess(
+                read_only=[],
+                read_write=[],
+                creatable=[],
+                generated_outputs=[results_dir],
+                directory_list=[oc_root, results_dir]
+            )
+            budget = ReadBudget(
+                max_file_reads=10, max_directory_reads=5, max_expansions=2,
+                remaining_file_reads=10, remaining_directory_reads=5,
+                remaining_expansions=2
+            )
+        else:
+            # analyst and other read-only roles
+            files = FileAccess(
+                read_only=[],
+                read_write=[],
+                creatable=[],
+                generated_outputs=[],
+                directory_list=[oc_root, results_dir]
+            )
+            budget = ReadBudget(
+                max_file_reads=20, max_directory_reads=10, max_expansions=3,
+                remaining_file_reads=20, remaining_directory_reads=10,
+                remaining_expansions=3
+            )
+
+        return WorkingSet(
+            stage_id=stage_id,
+            role=specialist,
+            skill="",
+            files=files,
+            budget=budget,
+            forbidden_directories=[
+                r"C:\Windows\System32",
+                r"C:\Program Files",
+            ],
+            forbidden_patterns=[r"\.env$", r"credentials", r"\.key$"]
+        )
 
     def _get_specialist_agent(self, specialist: str) -> str:
         """Map specialist role to agent ID from config."""

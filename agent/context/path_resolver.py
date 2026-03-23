@@ -4,8 +4,19 @@ import re
 
 
 def resolve_canonical(raw_path: str, base_dir: str = None) -> str | None:
-    """Resolve to canonical absolute path. Returns None if resolution fails."""
+    """Resolve to canonical absolute path. Returns None if resolution fails.
+
+    D-058 hardening:
+    - Null byte injection → None
+    - UNC paths (\\\\server\\...) → None
+    """
     try:
+        # D-058: Reject null bytes
+        if '\x00' in raw_path:
+            return None
+        # D-058: Reject UNC paths
+        if raw_path.startswith('\\\\'):
+            return None
         if base_dir and not os.path.isabs(raw_path):
             raw_path = os.path.join(base_dir, raw_path)
         resolved = os.path.realpath(os.path.normpath(raw_path))

@@ -27,6 +27,16 @@ def main():
                         help="Run as multi-agent mission (breaks task into stages)")
     args = parser.parse_args()
 
+    # D-057: Startup metadata gate — validate tool catalog governance
+    from services.tool_catalog import validate_catalog_governance
+    errors = validate_catalog_governance()
+    if errors:
+        print("FATAL: Tool catalog governance validation failed:", file=sys.stderr)
+        for e in errors:
+            print(f"  - {e}", file=sys.stderr)
+        print("Runtime cannot start. Fix tool catalog metadata.", file=sys.stderr)
+        sys.exit(1)
+
     session_id = args.session_id or f"sess-{int(time.time())}-{os.getpid()}"
 
     if args.mission:

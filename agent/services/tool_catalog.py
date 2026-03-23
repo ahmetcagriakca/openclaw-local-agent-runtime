@@ -24,7 +24,13 @@ Write-Output "RAM: $ramUsed/$ramTotal GB"
 Write-Output "Disk: $($disk -join ', ')"
 Write-Output "Uptime: $($uptime.Days)d $($uptime.Hours)h $($uptime.Minutes)m"
 """,
-        "risk": "low"
+        "risk": "low",
+        "governance": {
+            "filesystemTouching": False,
+            "mutationSurface": "none",
+            "workingSetScopeRequired": False,
+            "requiresPathResolution": False
+        }
     },
     {
         "name": "list_processes",
@@ -41,7 +47,13 @@ Write-Output "Uptime: $($uptime.Days)d $($uptime.Hours)h $($uptime.Minutes)m"
         },
         "powershell_template": "Get-Process | Sort-Object CPU -Descending | Select-Object -First {top_n} Name, Id, CPU, WorkingSet64 | Format-Table -AutoSize | Out-String",
         "defaults": {"top_n": 15},
-        "risk": "low"
+        "risk": "low",
+        "governance": {
+            "filesystemTouching": False,
+            "mutationSurface": "none",
+            "workingSetScopeRequired": False,
+            "requiresPathResolution": False
+        }
     },
     {
         "name": "read_file",
@@ -57,7 +69,13 @@ Write-Output "Uptime: $($uptime.Days)d $($uptime.Hours)h $($uptime.Minutes)m"
             "required": ["path"]
         },
         "powershell_template": "if (Test-Path -LiteralPath '{path}') {{ Get-Content -LiteralPath '{path}' -Raw }} else {{ Write-Error 'File not found: {path}' }}",
-        "risk": "low"
+        "risk": "low",
+        "governance": {
+            "filesystemTouching": True,
+            "mutationSurface": "none",
+            "workingSetScopeRequired": True,
+            "requiresPathResolution": True
+        }
     },
     {
         "name": "write_file",
@@ -77,7 +95,13 @@ Write-Output "Uptime: $($uptime.Days)d $($uptime.Hours)h $($uptime.Minutes)m"
             "required": ["filename", "content"]
         },
         "powershell_template": "$p = Join-Path 'C:\\Users\\AKCA\\oc\\results' '{filename}'; Set-Content -LiteralPath $p -Value '{content}' -Encoding UTF8; Write-Output \"Written: $p\"",
-        "risk": "medium"
+        "risk": "medium",
+        "governance": {
+            "filesystemTouching": True,
+            "mutationSurface": "code",
+            "workingSetScopeRequired": True,
+            "requiresPathResolution": True
+        }
     },
     {
         "name": "list_directory",
@@ -93,7 +117,13 @@ Write-Output "Uptime: $($uptime.Days)d $($uptime.Hours)h $($uptime.Minutes)m"
             "required": ["path"]
         },
         "powershell_template": "Get-ChildItem -LiteralPath '{path}' | Select-Object Mode, Length, LastWriteTime, Name | Format-Table -AutoSize | Out-String",
-        "risk": "low"
+        "risk": "low",
+        "governance": {
+            "filesystemTouching": True,
+            "mutationSurface": "none",
+            "workingSetScopeRequired": True,
+            "requiresPathResolution": True
+        }
     },
     {
         "name": "search_files",
@@ -113,7 +143,13 @@ Write-Output "Uptime: $($uptime.Days)d $($uptime.Hours)h $($uptime.Minutes)m"
             "required": ["path", "pattern"]
         },
         "powershell_template": "Get-ChildItem -LiteralPath '{path}' -Recurse -Filter '{pattern}' -ErrorAction SilentlyContinue | Select-Object FullName, Length, LastWriteTime | Format-Table -AutoSize | Out-String",
-        "risk": "low"
+        "risk": "low",
+        "governance": {
+            "filesystemTouching": True,
+            "mutationSurface": "none",
+            "workingSetScopeRequired": True,
+            "requiresPathResolution": True
+        }
     },
     {
         "name": "get_clipboard",
@@ -124,7 +160,13 @@ Write-Output "Uptime: $($uptime.Days)d $($uptime.Hours)h $($uptime.Minutes)m"
             "required": []
         },
         "powershell": "Get-Clipboard -Format Text",
-        "risk": "low"
+        "risk": "low",
+        "governance": {
+            "filesystemTouching": False,
+            "mutationSurface": "none",
+            "workingSetScopeRequired": False,
+            "requiresPathResolution": False
+        }
     },
     {
         "name": "set_clipboard",
@@ -140,7 +182,13 @@ Write-Output "Uptime: $($uptime.Days)d $($uptime.Hours)h $($uptime.Minutes)m"
             "required": ["text"]
         },
         "powershell_template": "Set-Clipboard -Value '{text}'; Write-Output 'Clipboard updated'",
-        "risk": "medium"
+        "risk": "medium",
+        "governance": {
+            "filesystemTouching": False,
+            "mutationSurface": "system",
+            "workingSetScopeRequired": False,
+            "requiresPathResolution": False
+        }
     },
     {
         "name": "open_application",
@@ -157,7 +205,13 @@ Write-Output "Uptime: $($uptime.Days)d $($uptime.Hours)h $($uptime.Minutes)m"
             "required": ["app_name"]
         },
         "powershell_template": "Start-Process '{app_name}'; Write-Output 'Launched: {app_name}'",
-        "risk": "medium"
+        "risk": "medium",
+        "governance": {
+            "filesystemTouching": False,
+            "mutationSurface": "system",
+            "workingSetScopeRequired": False,
+            "requiresPathResolution": False
+        }
     },
     {
         "name": "open_url",
@@ -173,7 +227,13 @@ Write-Output "Uptime: $($uptime.Days)d $($uptime.Hours)h $($uptime.Minutes)m"
             "required": ["url"]
         },
         "powershell_template": "Start-Process '{url}'; Write-Output 'Opened: {url}'",
-        "risk": "medium"
+        "risk": "medium",
+        "governance": {
+            "filesystemTouching": False,
+            "mutationSurface": "system",
+            "workingSetScopeRequired": False,
+            "requiresPathResolution": False
+        }
     },
     {
         "name": "take_screenshot",
@@ -196,7 +256,13 @@ $graphics.Dispose()
 $bitmap.Dispose()
 Write-Output "Screenshot saved: $path"
 """,
-        "risk": "low"
+        "risk": "low",
+        "governance": {
+            "filesystemTouching": False,
+            "mutationSurface": "none",
+            "workingSetScopeRequired": False,
+            "requiresPathResolution": False
+        }
     },
     {
         "name": "get_system_health",
@@ -207,7 +273,13 @@ Write-Output "Screenshot saved: $path"
             "required": []
         },
         "powershell": "& 'C:\\Users\\AKCA\\oc\\bin\\oc-system-health.ps1'",
-        "risk": "low"
+        "risk": "low",
+        "governance": {
+            "filesystemTouching": False,
+            "mutationSurface": "none",
+            "workingSetScopeRequired": False,
+            "requiresPathResolution": False
+        }
     },
     {
         "name": "close_application",
@@ -223,14 +295,26 @@ Write-Output "Screenshot saved: $path"
             "required": ["process_name"]
         },
         "powershell_template": "Stop-Process -Name '{process_name}' -Force -ErrorAction SilentlyContinue; Write-Output 'Closed: {process_name}'",
-        "risk": "high"
+        "risk": "high",
+        "governance": {
+            "filesystemTouching": False,
+            "mutationSurface": "system",
+            "workingSetScopeRequired": False,
+            "requiresPathResolution": False
+        }
     },
     {
         "name": "lock_screen",
         "description": "Lock the Windows workstation screen",
         "parameters": {"type": "object", "properties": {}, "required": []},
         "powershell": "rundll32.exe user32.dll,LockWorkStation; Write-Output 'Screen locked'",
-        "risk": "medium"
+        "risk": "medium",
+        "governance": {
+            "filesystemTouching": False,
+            "mutationSurface": "system",
+            "workingSetScopeRequired": False,
+            "requiresPathResolution": False
+        }
     },
     {
         "name": "system_shutdown",
@@ -247,7 +331,13 @@ Write-Output "Screenshot saved: $path"
         },
         "powershell_template": "Write-Output 'Shutdown scheduled in {delay_seconds} seconds...'; shutdown /s /t {delay_seconds}",
         "defaults": {"delay_seconds": 30},
-        "risk": "critical"
+        "risk": "critical",
+        "governance": {
+            "filesystemTouching": False,
+            "mutationSurface": "system",
+            "workingSetScopeRequired": False,
+            "requiresPathResolution": False
+        }
     },
     {
         "name": "system_restart",
@@ -264,7 +354,13 @@ Write-Output "Screenshot saved: $path"
         },
         "powershell_template": "Write-Output 'Restart scheduled in {delay_seconds} seconds...'; shutdown /r /t {delay_seconds}",
         "defaults": {"delay_seconds": 30},
-        "risk": "critical"
+        "risk": "critical",
+        "governance": {
+            "filesystemTouching": False,
+            "mutationSurface": "system",
+            "workingSetScopeRequired": False,
+            "requiresPathResolution": False
+        }
     },
     {
         "name": "submit_runtime_task",
@@ -285,7 +381,13 @@ Write-Output "Screenshot saved: $path"
         },
         "powershell_template": "& 'C:\\Users\\AKCA\\oc\\wsl\\oc-bridge-submit' '{task_name}' '{arguments}'",
         "defaults": {"arguments": "{}"},
-        "risk": "medium"
+        "risk": "medium",
+        "governance": {
+            "filesystemTouching": False,
+            "mutationSurface": "system",
+            "workingSetScopeRequired": False,
+            "requiresPathResolution": False
+        }
     },
     {
         "name": "check_runtime_task",
@@ -301,21 +403,39 @@ Write-Output "Screenshot saved: $path"
             "required": ["task_id"]
         },
         "powershell_template": "& 'C:\\Users\\AKCA\\oc\\wsl\\oc-bridge-status' '{task_id}'",
-        "risk": "low"
+        "risk": "low",
+        "governance": {
+            "filesystemTouching": False,
+            "mutationSurface": "none",
+            "workingSetScopeRequired": False,
+            "requiresPathResolution": False
+        }
     },
     {
         "name": "mcp_status",
         "description": "Check if the WMCP (windows-mcp) server is running and healthy",
         "parameters": {"type": "object", "properties": {}, "required": []},
         "powershell": "try { $r = Invoke-RestMethod 'http://localhost:8001/openapi.json' -TimeoutSec 5; Write-Output \"WMCP OK: $($r.info.title) on port 8001\" } catch { Write-Output \"WMCP DOWN: $($_.Exception.Message)\" }",
-        "risk": "low"
+        "risk": "low",
+        "governance": {
+            "filesystemTouching": False,
+            "mutationSurface": "none",
+            "workingSetScopeRequired": False,
+            "requiresPathResolution": False
+        }
     },
     {
         "name": "mcp_restart",
         "description": "Restart the WMCP (windows-mcp) server. Kills existing process and restarts.",
         "parameters": {"type": "object", "properties": {}, "required": []},
         "powershell": "Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -and ($_.CommandLine -like '*mcpo*' -or $_.CommandLine -like '*windows-mcp*') } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force }; Start-Sleep 2; Start-Process -WindowStyle Hidden powershell -ArgumentList '-NoProfile -ExecutionPolicy Bypass -File C:\\Users\\AKCA\\oc\\bin\\start-wmcp-server.ps1'; Start-Sleep 10; try { $r = Invoke-RestMethod 'http://localhost:8001/openapi.json' -TimeoutSec 5; Write-Output \"WMCP restarted OK: $($r.info.title)\" } catch { Write-Output 'WMCP restart may still be starting...' }",
-        "risk": "high"
+        "risk": "high",
+        "governance": {
+            "filesystemTouching": False,
+            "mutationSurface": "system",
+            "workingSetScopeRequired": False,
+            "requiresPathResolution": False
+        }
     },
     {
         "name": "find_in_files",
@@ -340,7 +460,13 @@ Write-Output "Screenshot saved: $path"
         },
         "powershell_template": "Get-ChildItem -LiteralPath '{path}' -Recurse -File -Filter '{file_pattern}' -ErrorAction SilentlyContinue | Select-String -Pattern '{text}' -SimpleMatch | Select-Object -First 20 Path, LineNumber, Line | Format-Table -AutoSize | Out-String",
         "defaults": {"file_pattern": "*"},
-        "risk": "low"
+        "risk": "low",
+        "governance": {
+            "filesystemTouching": True,
+            "mutationSurface": "none",
+            "workingSetScopeRequired": True,
+            "requiresPathResolution": True
+        }
     },
     {
         "name": "get_process_details",
@@ -356,14 +482,26 @@ Write-Output "Screenshot saved: $path"
             "required": ["name"]
         },
         "powershell_template": "Get-Process -Name '{name}' -ErrorAction SilentlyContinue | Select-Object Name, Id, CPU, WorkingSet64, StartTime, Path | Format-List | Out-String",
-        "risk": "low"
+        "risk": "low",
+        "governance": {
+            "filesystemTouching": False,
+            "mutationSurface": "none",
+            "workingSetScopeRequired": False,
+            "requiresPathResolution": False
+        }
     },
     {
         "name": "get_network_info",
         "description": "Get network adapter information, IP addresses, and connectivity status",
         "parameters": {"type": "object", "properties": {}, "required": []},
         "powershell": "Get-NetIPAddress -AddressFamily IPv4 | Where-Object { $_.IPAddress -ne '127.0.0.1' } | Select-Object InterfaceAlias, IPAddress, PrefixLength | Format-Table -AutoSize | Out-String; Write-Output '---'; Test-Connection -ComputerName 8.8.8.8 -Count 1 -Quiet | ForEach-Object { if ($_) { Write-Output 'Internet: Connected' } else { Write-Output 'Internet: Disconnected' } }",
-        "risk": "low"
+        "risk": "low",
+        "governance": {
+            "filesystemTouching": False,
+            "mutationSurface": "none",
+            "workingSetScopeRequired": False,
+            "requiresPathResolution": False
+        }
     },
     {
         "name": "list_scheduled_tasks",
@@ -380,7 +518,13 @@ Write-Output "Screenshot saved: $path"
         },
         "powershell_template": "Get-ScheduledTask | Where-Object {{ $_.TaskName -like '{filter}' }} | Select-Object TaskName, State | Format-Table -AutoSize | Out-String",
         "defaults": {"filter": "OpenClaw*"},
-        "risk": "low"
+        "risk": "low",
+        "governance": {
+            "filesystemTouching": False,
+            "mutationSurface": "none",
+            "workingSetScopeRequired": False,
+            "requiresPathResolution": False
+        }
     }
 ]
 
@@ -430,3 +574,41 @@ def build_command(tool: dict, params: dict) -> str:
         return cmd
 
     raise ValueError(f"Tool {tool['name']} has no command definition")
+
+
+# --- Governance helpers (Sprint 0) ---
+
+def get_tool_governance(name: str) -> dict | None:
+    """Return governance metadata for a tool. None if tool not found."""
+    tool = get_tool(name)
+    if not tool:
+        return None
+    return tool.get("governance", {})
+
+
+def is_filesystem_touching(name: str) -> bool:
+    """Check if a tool touches the filesystem."""
+    gov = get_tool_governance(name)
+    return gov.get("filesystemTouching", False) if gov else False
+
+
+def get_mutation_surface(name: str) -> str:
+    """Get mutation surface of a tool: 'none', 'code', or 'system'."""
+    gov = get_tool_governance(name)
+    return gov.get("mutationSurface", "none") if gov else "none"
+
+
+def validate_catalog_governance() -> list[str]:
+    """Startup check: every tool must have complete governance metadata."""
+    required_fields = ["filesystemTouching", "mutationSurface",
+                       "workingSetScopeRequired", "requiresPathResolution"]
+    errors = []
+    for tool in TOOL_CATALOG:
+        gov = tool.get("governance")
+        if not gov:
+            errors.append(f"{tool['name']}: missing governance block")
+            continue
+        for field in required_fields:
+            if field not in gov:
+                errors.append(f"{tool['name']}: missing governance.{field}")
+    return errors

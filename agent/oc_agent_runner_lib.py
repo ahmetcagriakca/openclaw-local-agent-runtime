@@ -32,11 +32,13 @@ You do NOT have access to: direct PowerShell execution, file deletion, or regist
 def run_agent_with_config(message: str, agent_id: str, user_id: str,
                           session_id: str, max_turns: int = 10,
                           tool_policy: str = None,
-                          system_prompt_override: str = None) -> dict:
-    """Run agent with optional tool filtering and prompt override.
+                          system_prompt_override: str = None,
+                          working_set=None) -> dict:
+    """Run agent with optional tool filtering, prompt override, and working set enforcement.
 
     tool_policy: specialist name ("analyst", "executor") or None for all tools
     system_prompt_override: custom system prompt, or None for default
+    working_set: WorkingSet instance for filesystem enforcement, or None to skip
     """
     start_time = time.time()
     tool_log = []
@@ -155,6 +157,29 @@ def run_agent_with_config(message: str, agent_id: str, user_id: str,
                     tool_entry["error"] = result_text
                 else:
                     tool_entry["risk"] = tool_def.get("risk", "medium")
+
+                    # Working set enforcement (before risk engine)
+                    if working_set:
+                        from context.working_set_enforcer import enforce_working_set
+                        from services.tool_catalog import get_tool_governance
+                        gov = get_tool_governance(tc.name)
+                        enforcement = enforce_working_set(tc.name, tc.params, working_set, gov or {})
+                        if not enforcement.allowed:
+                            result_text = enforcement.message
+                            tool_entry["success"] = False
+                            tool_entry["error"] = result_text
+                            tool_entry["policyDenied"] = True
+                            tool_entry["durationMs"] = int((time.time() - tool_start) * 1000)
+                            tool_log.append(tool_entry)
+                            artifact_store.add_from_tool_result(
+                                tc.name, tc.params, result_text, False)
+                            messages.append({
+                                "role": "tool",
+                                "tool_call_id": tc.id,
+                                "content": result_text
+                            })
+                            continue
+
                     try:
                         command = build_command(tool_def, tc.params)
 

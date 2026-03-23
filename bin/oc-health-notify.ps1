@@ -20,6 +20,21 @@ $snapshotPath = Join-Path $logsPath 'health-snapshot.json'
 $notifyStatePath = Join-Path $logsPath 'notification-state.json'
 $notifyScript = Join-Path $scriptRoot 'oc-telegram-notify.ps1'
 
+# Emoji constants — constructed via ConvertFromUtf32 to avoid PowerShell BMP encoding errors
+$Emoji = @{
+    GreenCircle  = [char]::ConvertFromUtf32(0x1F7E2)
+    YellowCircle = [char]::ConvertFromUtf32(0x1F7E1)
+    RedCircle    = [char]::ConvertFromUtf32(0x1F534)
+    Clipboard    = [char]::ConvertFromUtf32(0x1F4CB)
+    CheckMark    = [char]::ConvertFromUtf32(0x2705)
+    CrossMark    = [char]::ConvertFromUtf32(0x274C)
+    Warning      = [char]::ConvertFromUtf32(0x26A0)
+    SkipForward  = [char]::ConvertFromUtf32(0x23ED)
+    Bullet       = [char]::ConvertFromUtf32(0x2022)
+    EmDash       = [char]::ConvertFromUtf32(0x2014)
+    VariantSel   = [char]0xFE0F
+}
+
 # --- Component labels and icons -----------------------------------------------
 $componentLabels = [ordered]@{
     wmcp           = 'WMCP Server'
@@ -32,20 +47,20 @@ $componentLabels = [ordered]@{
 
 function Get-StatusIcon([string]$s) {
     switch ($s) {
-        'ok'       { return [char]0x2705 }  # ✅
-        'degraded' { return [char]0x26A0 + [char]0xFE0F }  # ⚠️
-        'error'    { return [char]0x274C }  # ❌
-        'skipped'  { return [char]0x23ED + [char]0xFE0F }  # ⏭️
+        'ok'       { return $Emoji.CheckMark }
+        'degraded' { return $Emoji.Warning + $Emoji.VariantSel }
+        'error'    { return $Emoji.CrossMark }
+        'skipped'  { return $Emoji.SkipForward + $Emoji.VariantSel }
         default    { return '?' }
     }
 }
 
 function Get-OverallIcon([string]$s) {
     switch ($s) {
-        'ok'       { return [char]0x1F7E2 }  # 🟢
-        'degraded' { return [char]0x1F7E1 }  # 🟡
-        'error'    { return [char]0x1F534 }  # 🔴
-        default    { return [char]0x1F534 }
+        'ok'       { return $Emoji.GreenCircle }
+        'degraded' { return $Emoji.YellowCircle }
+        'error'    { return $Emoji.RedCircle }
+        default    { return $Emoji.RedCircle }
     }
 }
 
@@ -69,7 +84,7 @@ function Build-ComponentLines($components, [bool]$issuesOnly = $false, [bool]$he
         if ($issuesOnly -and ($s -eq 'ok')) { continue }
         if ($healthyOnly -and ($s -ne 'ok')) { continue }
 
-        $lines += "$label`: $icon $($s.ToUpper()) $(if($d){[char]0x2014 + ' ' + $d})"
+        $lines += "$label`: $icon $($s.ToUpper()) $(if($d){$Emoji.EmDash + ' ' + $d})"
     }
     return $lines
 }
@@ -121,7 +136,7 @@ try {
         $overallIcon = Get-OverallIcon $currentOverall
         $allLines = Build-ComponentLines $components
         $body = @(
-            [char]0x1F4CB + " <b>System Startup Report</b>"
+            "$($Emoji.Clipboard) <b>System Startup Report</b>"
             ""
             "Overall: $overallIcon $($currentOverall.ToUpper())"
             ""
@@ -145,16 +160,16 @@ try {
             $healthyLines = Build-ComponentLines $components -healthyOnly $true
 
             $body = @(
-                [char]0x1F534 + " <b>System Health Alert</b>"
+                "$($Emoji.RedCircle) <b>System Health Alert</b>"
                 ""
                 "Overall: $overallIcon $($currentOverall.ToUpper())"
                 ""
                 "Issues:"
             )
-            foreach ($l in $issueLines) { $body += [char]0x2022 + " $l" }
+            foreach ($l in $issueLines) { $body += "$($Emoji.Bullet) $l" }
             $body += ""
             $body += "Healthy:"
-            foreach ($l in $healthyLines) { $body += [char]0x2022 + " $l" }
+            foreach ($l in $healthyLines) { $body += "$($Emoji.Bullet) $l" }
             $body += @("", "Time: $timestamp UTC")
             $messageText = $body -join "`n"
         }
@@ -167,13 +182,13 @@ try {
             $issueLines = Build-ComponentLines $components -issuesOnly $true
 
             $body = @(
-                [char]0x26A0 + [char]0xFE0F + " <b>System Health " + [char]0x2014 + " Issue Persists</b> (alert #$consecutiveAlertCount)"
+                "$($Emoji.Warning)$($Emoji.VariantSel) <b>System Health $($Emoji.EmDash) Issue Persists</b> (alert #$consecutiveAlertCount)"
                 ""
                 "Overall: $overallIcon $($currentOverall.ToUpper())"
                 ""
                 "Issues:"
             )
-            foreach ($l in $issueLines) { $body += [char]0x2022 + " $l" }
+            foreach ($l in $issueLines) { $body += "$($Emoji.Bullet) $l" }
             $body += @("", "Duration: ~$durationMinutes minutes ($consecutiveAlertCount consecutive alerts)")
             $body += @("", "Time: $timestamp UTC")
             $messageText = $body -join "`n"
@@ -184,9 +199,9 @@ try {
             $durationMinutes = $consecutiveAlertCount * 15
 
             $body = @(
-                [char]0x1F7E2 + " <b>System Health Recovered</b>"
+                "$($Emoji.GreenCircle) <b>System Health Recovered</b>"
                 ""
-                "Overall: " + [char]0x1F7E2 + " OK " + [char]0x2014 + " All components healthy"
+                "Overall: $($Emoji.GreenCircle) OK $($Emoji.EmDash) All components healthy"
                 ""
                 "Previous issue duration: ~$durationMinutes minutes ($consecutiveAlertCount alerts)"
                 ""
@@ -207,16 +222,16 @@ try {
                 $healthyLines = Build-ComponentLines $components -healthyOnly $true
 
                 $body = @(
-                    [char]0x1F534 + " <b>System Health Alert</b>"
+                    "$($Emoji.RedCircle) <b>System Health Alert</b>"
                     ""
                     "Overall: $overallIcon $($currentOverall.ToUpper())"
                     ""
                     "Issues:"
                 )
-                foreach ($l in $issueLines) { $body += [char]0x2022 + " $l" }
+                foreach ($l in $issueLines) { $body += "$($Emoji.Bullet) $l" }
                 $body += ""
                 $body += "Healthy:"
-                foreach ($l in $healthyLines) { $body += [char]0x2022 + " $l" }
+                foreach ($l in $healthyLines) { $body += "$($Emoji.Bullet) $l" }
                 $body += @("", "Time: $timestamp UTC")
                 $messageText = $body -join "`n"
             }

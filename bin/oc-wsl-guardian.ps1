@@ -22,6 +22,14 @@ $logsPath = $config.LogsPath
 $guardianLog = 'wsl-guardian.log'
 $guardianStatePath = Join-Path $logsPath 'wsl-guardian-state.json'
 
+# Emoji constants — constructed via ConvertFromUtf32 to avoid PowerShell BMP encoding errors
+$Emoji = @{
+    GreenCircle = [char]::ConvertFromUtf32(0x1F7E2)
+    RedCircle   = [char]::ConvertFromUtf32(0x1F534)
+    CheckMark   = [char]::ConvertFromUtf32(0x2705)
+    CrossMark   = [char]::ConvertFromUtf32(0x274C)
+}
+
 # --- State variables ---
 $wslPreviousStatus = 'unknown'
 $openclawPreviousStatus = 'unknown'
@@ -142,9 +150,9 @@ try {
 
                 # Telegram notification
                 if ($wslPreviousStatus -ne 'error') {
-                    $resultText = if ($wslRecovered) { [char]0x2705 + ' Recovered' } else { [char]0x274C + ' Failed to recover' }
+                    $resultText = if ($wslRecovered) { $Emoji.CheckMark + ' Recovered' } else { $Emoji.CrossMark + ' Failed to recover' }
                     Send-TelegramMessage -Text (@(
-                        [char]0x1F534 + " ALERT: WSL Ubuntu-E is DOWN"
+                        $Emoji.RedCircle + " ALERT: WSL Ubuntu-E is DOWN"
                         ""
                         "Time: $($now.ToString('yyyy-MM-dd HH:mm:ss')) UTC"
                         "Component: WSL Ubuntu-E"
@@ -160,7 +168,7 @@ try {
                     [math]::Round(($now - [DateTime]::Parse($wslLastDownUtc)).TotalSeconds)
                 } else { '?' }
                 Send-TelegramMessage -Text (@(
-                    [char]0x1F7E2 + " RECOVERED: WSL Ubuntu-E is back up"
+                    $Emoji.GreenCircle + " RECOVERED: WSL Ubuntu-E is back up"
                     ""
                     "Time: $($now.ToString('yyyy-MM-dd HH:mm:ss')) UTC"
                     "Component: WSL Ubuntu-E"
@@ -201,9 +209,9 @@ try {
 
                     # Telegram notification
                     if ($openclawPreviousStatus -ne 'error') {
-                        $resultText = if ($ocRecovered) { [char]0x2705 + ' Recovered' } else { [char]0x274C + ' Failed to recover' }
+                        $resultText = if ($ocRecovered) { $Emoji.CheckMark + ' Recovered' } else { $Emoji.CrossMark + ' Failed to recover' }
                         Send-TelegramMessage -Text (@(
-                            [char]0x1F534 + " ALERT: OpenClaw Gateway is DOWN"
+                            $Emoji.RedCircle + " ALERT: OpenClaw Gateway is DOWN"
                             ""
                             "Time: $($now.ToString('yyyy-MM-dd HH:mm:ss')) UTC"
                             "Component: OpenClaw Gateway"
@@ -219,7 +227,7 @@ try {
                         [math]::Round(($now - [DateTime]::Parse($openclawLastDownUtc)).TotalSeconds)
                     } else { '?' }
                     Send-TelegramMessage -Text (@(
-                        [char]0x1F7E2 + " RECOVERED: OpenClaw Gateway is back up"
+                        $Emoji.GreenCircle + " RECOVERED: OpenClaw Gateway is back up"
                         ""
                         "Time: $($now.ToString('yyyy-MM-dd HH:mm:ss')) UTC"
                         "Component: OpenClaw Gateway"

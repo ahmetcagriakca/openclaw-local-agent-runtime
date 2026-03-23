@@ -184,22 +184,34 @@ class MissionController:
                 all_artifacts.extend(stage["artifacts"])
 
                 # Store stage output in Assembler with D-047 header
+                # 6C-1: Use typed artifact from skill contract
                 canonical_role = self._ROLE_ALIASES.get(specialist, specialist)
+                stage_skill = stage.get("skill", "")
+                artifact_type = self._resolve_artifact_type(stage_skill)
+
+                stage_artifact_data = {
+                    "response": stage["result"],
+                    "stage_id": stage_id,
+                    "specialist": specialist,
+                    "tool_calls": stage["tool_call_count"],
+                    "raw_artifacts": stage["artifacts"]
+                }
+
                 artifact_id = assembler.store_artifact(
-                    artifact_type="stage_output",
-                    data={
-                        "response": stage["result"],
-                        "stage_id": stage_id,
-                        "specialist": specialist,
-                        "tool_calls": stage["tool_call_count"],
-                        "raw_artifacts": stage["artifacts"]
-                    },
+                    artifact_type=artifact_type,
+                    data=stage_artifact_data,
                     stage_id=stage_id,
                     role=canonical_role,
-                    skill="",
+                    skill=stage_skill,
                     input_artifact_ids=list(mission["completedArtifactIds"])
                 )
                 mission["completedArtifactIds"].append(artifact_id)
+
+                # 6C-1: Schema validation (non-blocking warning)
+                if artifact_type != "stage_output":
+                    self._validate_artifact_schema(
+                        artifact_type, stage_artifact_data,
+                        mission_id, stage_id, canonical_role)
 
                 # 5C-1: Track completion in state machine
                 completed_roles.add(role)
@@ -532,7 +544,9 @@ Respond ONLY with a JSON object, no markdown:
                     context += f"- [{art_type}]: {json.dumps(art_data)[:200]}\n"
 
         full_instruction = instruction + context
-        agent_id = self._get_specialist_agent(specialist)
+        # 6C-2: Agent selection from role registry
+        agent_id = self._select_agent_for_role(specialist, mission_id,
+                                                stage.get("id", ""))
         working_set = stage.get("working_set")
 
         result = run_agent_with_config(
@@ -787,16 +801,84 @@ Respond ONLY with a JSON object, no markdown:
             forbidden_patterns=template["forbidden_patterns"]
         )
 
-    def _get_specialist_agent(self, specialist: str) -> str:
-        """Map specialist role to agent ID from config."""
-        # Phase 3-F: both specialists use the same provider,
-        # differentiated by system prompt and tool policy.
-        # Future: each specialist can use a different provider/model.
-        mapping = {
-            "analyst": "gpt-general",
-            "executor": "gpt-general",
-        }
-        return mapping.get(specialist, "gpt-general")
+    # 6C-1: Resolve artifact type from skill contract
+    def _resolve_artifact_type(self, skill_name: str) -> str:
+        """Map skill to its output artifact type via skill contract."""
+        if not skill_name:
+            return "stage_output"
+        from mission.skill_contracts import get_skill_contract
+        contract = get_skill_contract(skill_name)
+        if contract and contract.get("outputArtifact"):
+            return contract["outputArtifact"]
+        return "stage_output"
+
+    def _validate_artifact_schema(self, artifact_type, data,
+                                   mission_id, stage_id, role):
+        """6C-1: Non-blocking schema validation with telemetry warning."""
+        try:
+            from artifacts.schema_validator import validate_artifact_data
+            from context.policy_telemetry import emit_policy_event
+            errors = validate_artifact_data(artifact_type, data)
+            if errors:
+                emit_policy_event("artifact_validation_warning", {
+                    "mission_id": mission_id,
+                    "stage_id": stage_id,
+                    "artifact_type": artifact_type,
+                    "errors": errors[:5],
+                    "role": role
+                })
+        except Exception:
+            pass  # validation is best-effort
+
+    # 6C-2: Model/provider selection from role registry
+    _MODEL_TO_AGENT = {
+        "claude-sonnet": "claude-general",
+        "claude-opus": "claude-general",
+        "gpt-4o": "gpt-general",
+        "ollama-local": "ollama-general",
+    }
+
+    def _select_agent_for_role(self, role_name: str,
+                                mission_id: str = "",
+                                stage_id: str = "") -> str:
+        """D-043: Select provider/agent based on role registry.
+
+        Claude for high-leverage roles, GPT-4o for mechanical roles,
+        Ollama for compression. Falls back to gpt-general if provider
+        unavailable.
+        """
+        from mission.role_registry import get_role, resolve_role
+        from context.policy_telemetry import emit_policy_event
+
+        canonical = resolve_role(role_name)
+        role_def = get_role(canonical)
+
+        if not role_def:
+            return "gpt-general"
+
+        preferred = role_def.get("preferredModel", "gpt-4o")
+        agent_name = self._MODEL_TO_AGENT.get(preferred, "gpt-general")
+
+        # Verify agent exists in config; fallback if not
+        fallback_used = False
+        try:
+            from providers.factory import create_provider
+            create_provider(agent_name)
+        except Exception:
+            fallback_used = agent_name != "gpt-general"
+            agent_name = "gpt-general"
+
+        if mission_id:
+            emit_policy_event("model_selected", {
+                "mission_id": mission_id,
+                "stage_id": stage_id,
+                "role": canonical,
+                "preferred_model": preferred,
+                "selected_agent": agent_name,
+                "fallback_used": fallback_used
+            })
+
+        return agent_name
 
     def _generate_summary(self, goal: str, stages: list, artifacts: list) -> str:
         """Generate a human-readable mission summary."""

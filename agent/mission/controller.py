@@ -55,10 +55,11 @@ class MissionController:
         }
         self._save_mission(mission)
 
-        # Step 1: Plan the mission
+        # Step 1: Plan the mission (complexity-routed)
         try:
-            plan = self._plan_mission(goal, mission_id)
+            plan, complexity = self._plan_mission(goal, mission_id)
             mission["stages"] = plan["stages"]
+            mission["complexity"] = complexity
             mission["status"] = "executing"
             self._save_mission(mission)
         except Exception as e:
@@ -102,6 +103,12 @@ class MissionController:
                 self._emit_mission_summary(mission_id, mission, assembler,
                                            expansion_broker, "failed")
                 return mission
+
+            # 4-4: Enrich working set from discovery_map for downstream roles
+            if specialist in ("developer", "tester", "reviewer"):
+                working_set = self._enrich_working_set_from_discovery(
+                    working_set, specialist, assembler)
+                stage["working_set"] = working_set
 
             stage["status"] = "running"
             self._save_mission(mission)
@@ -184,59 +191,74 @@ class MissionController:
 
         return mission
 
-    def _plan_mission(self, goal: str, mission_id: str) -> dict:
-        """Use planner LLM to break goal into stages."""
+    def _plan_mission(self, goal: str, mission_id: str) -> tuple[dict, str]:
+        """Plan mission with complexity-routed stage template.
+
+        Returns (plan_dict, complexity_class).
+        """
         from providers.factory import create_provider
+        from mission.complexity_router import classify_complexity
+        from mission.role_registry import resolve_role, get_role
+        from mission.skill_contracts import validate_role_skill
+        from context.policy_telemetry import emit_policy_event
 
         provider, _ = create_provider(self.planner_agent_id)
 
-        planning_prompt = """You are a mission planner. Break the user's goal into sequential stages, each assigned to one specialist role.
+        # Step 1: Complexity classification (Tier 0 deterministic first)
+        classification = classify_complexity(goal, provider)
+        complexity = classification["complexity"]
+        template = classification["stage_template"]
 
-AVAILABLE ROLES:
-1. product-owner — Structures user intent into requirements. No tools.
-2. analyst — Analyzes feasibility, discovers repo structure. Read-only tools.
-3. architect — Produces technical design from requirements + discovery. Read-only.
-4. project-manager — Creates work breakdown with task assignments. No tools.
-5. developer — Implements code changes in assigned file scope. Write access.
-6. tester — Verifies code against acceptance criteria. Read-only.
-7. reviewer — Evaluates code quality and design compliance. Read-only.
-8. manager — Oversees process, produces summaries, handles recovery. No tools.
-9. remote-operator — Executes system mutations (restart, app launch). All tools.
+        emit_policy_event("complexity_classified", {
+            "mission_id": mission_id,
+            "complexity": complexity,
+            "tier_used": classification["tier_used"],
+            "role_count": classification["role_count"],
+            "message_preview": goal[:100]
+        })
 
-RULES:
-- For TRIVIAL tasks (1 file, simple read/check): use analyst only, or developer + tester.
-- For SIMPLE tasks: use analyst -> developer -> tester -> reviewer.
-- For MEDIUM tasks: use product-owner -> analyst -> architect -> developer -> tester -> reviewer -> manager.
-- For COMPLEX tasks: use all roles in sequence.
-- remote-operator is ONLY for system operations (restart, app control, clipboard, URLs).
-- NEVER assign developer to read-only discovery tasks.
-- NEVER assign product-owner or project-manager to file operations.
-- Keep stages minimal — don't over-plan.
-- Each stage should have a clear, single objective.
+        # Step 2: Build constrained planner prompt
+        role_sequence = " -> ".join(s["specialist"] for s in template)
+        template_lines = "\n".join(
+            f"Stage {i+1}: {s['specialist']} (skill: {s['skill']})"
+            for i, s in enumerate(template)
+        )
 
-Respond ONLY with a JSON object, no markdown, no explanation:
-{
+        constrained_prompt = f"""You are a mission planner.
+
+TASK COMPLEXITY: {complexity}
+REQUIRED ROLE SEQUENCE: {role_sequence}
+
+You MUST use exactly these roles in this order:
+{template_lines}
+
+For each stage, provide a specific instruction based on the user's goal.
+Do NOT add or remove roles from the sequence.
+Do NOT change the role order.
+
+Respond ONLY with a JSON object, no markdown:
+{{
   "stages": [
-    {
+    {{
       "id": "stage-1",
-      "specialist": "analyst",
-      "skill": "repository_discovery",
-      "objective": "What this stage should accomplish",
-      "instruction": "Specific instruction for the specialist agent"
-    }
+      "specialist": "{template[0]['specialist']}",
+      "skill": "{template[0]['skill']}",
+      "objective": "...",
+      "instruction": "Specific instruction for this role"
+    }}
   ]
-}"""
+}}"""
 
+        # Step 3: LLM fills in instructions
         messages = [
-            {"role": "system", "content": planning_prompt},
+            {"role": "system", "content": constrained_prompt},
             {"role": "user", "content": goal}
         ]
 
-        response = provider.chat(messages, tools=[], max_tokens=1000)
+        response = provider.chat(messages, tools=[], max_tokens=2000)
 
         # Parse JSON response
         text = response.text or ""
-        # Strip markdown code fences if present
         text = text.strip()
         if text.startswith("```"):
             text = text.split("\n", 1)[1] if "\n" in text else text[3:]
@@ -247,31 +269,31 @@ Respond ONLY with a JSON object, no markdown, no explanation:
             text = text[4:].strip()
 
         plan = json.loads(text)
+        stages = plan.get("stages", [])
+
+        # Step 4: Force template if planner deviated
+        if len(stages) != len(template):
+            stages = self._force_template(template, goal, stages)
+            plan["stages"] = stages
 
         # Validate and enrich stages
-        from mission.role_registry import resolve_role, get_role
-        from mission.skill_contracts import validate_role_skill
-
-        for stage in plan.get("stages", []):
+        for stage in stages:
             stage["status"] = "pending"
             stage["result"] = None
             stage["artifacts"] = []
             stage["error"] = None
             stage["duration_ms"] = 0
 
-            # Resolve role alias (executor → remote-operator, etc.)
             raw_specialist = stage.get("specialist", "analyst")
             canonical_role = resolve_role(raw_specialist)
             stage["specialist"] = canonical_role
 
-            # Validate role exists
             role_def = get_role(canonical_role)
             if not role_def:
                 stage["status"] = "failed"
                 stage["error"] = f"POLICY: Unknown role '{canonical_role}'"
                 continue
 
-            # Validate (role, skill) combination
             skill = stage.get("skill", "")
             if skill:
                 allowed, reason = validate_role_skill(canonical_role, skill)
@@ -280,13 +302,74 @@ Respond ONLY with a JSON object, no markdown, no explanation:
                     stage["error"] = f"POLICY: {reason}"
                     continue
 
-            # D-053: Assign default working set per specialist role
             stage["working_set"] = self._build_default_working_set(
                 stage.get("id", "unknown"),
                 canonical_role
             )
 
-        return plan
+        return plan, complexity
+
+    def _force_template(self, template: list, goal: str,
+                        attempted_stages: list) -> list:
+        """When planner deviates from template, force template with best-effort instructions."""
+        forced = []
+        for i, t in enumerate(template):
+            instruction = f"Perform {t['skill']} for: {goal}"
+            for attempted in attempted_stages:
+                if attempted.get("specialist") == t["specialist"]:
+                    instruction = attempted.get("instruction", instruction)
+                    break
+            forced.append({
+                "id": f"stage-{i+1}",
+                "specialist": t["specialist"],
+                "skill": t["skill"],
+                "instruction": instruction
+            })
+        return forced
+
+    def _enrich_working_set_from_discovery(self, working_set, role, assembler):
+        """Populate working set with file targets from discovery_map artifact."""
+        if not assembler:
+            return working_set
+
+        from artifacts.schema_validator import extract_working_set_from_discovery
+
+        # Find discovery_map artifacts
+        discovery_artifacts = [
+            aid for aid, art in assembler.artifacts.items()
+            if art.get("type") == "discovery_map"
+        ]
+        if not discovery_artifacts:
+            return working_set
+
+        latest_id = discovery_artifacts[-1]
+        discovery_data = assembler.artifacts[latest_id].get("data", {})
+        file_targets = extract_working_set_from_discovery(discovery_data)
+
+        role_targets = file_targets.get(role)
+        if not role_targets:
+            return working_set
+
+        # Enrich — add discovered files to existing working set
+        if hasattr(working_set, 'files'):
+            existing_ro = set(working_set.files.read_only)
+            new_ro = set(role_targets.get("readOnly", []))
+            working_set.files.read_only = list(existing_ro | new_ro)
+
+            if role == "developer":
+                existing_rw = set(working_set.files.read_write)
+                new_rw = set(role_targets.get("readWrite", []))
+                working_set.files.read_write = list(existing_rw | new_rw)
+
+                existing_c = set(working_set.files.creatable)
+                new_c = set(role_targets.get("creatable", []))
+                working_set.files.creatable = list(existing_c | new_c)
+
+            existing_dirs = set(working_set.files.directory_list)
+            new_dirs = set(role_targets.get("directoryList", []))
+            working_set.files.directory_list = list(existing_dirs | new_dirs)
+
+        return working_set
 
     def _execute_stage(self, stage: dict, previous_artifacts: list,
                        mission_id: str, user_id: str,

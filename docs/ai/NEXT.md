@@ -4,15 +4,16 @@
 
 ---
 
-## Phase 3-F: Multi-Agent Foundation
+## Phase 3-F Complete
 
-**Goal:** Phase 3-E complete. Design and implement Mission Controller for multi-agent orchestration.
+Multi-agent foundation operational. Mission Controller orchestrates analyst + executor specialists via hub-and-spoke pattern with sequential stage execution and typed artifact handoff.
 
-**Steps:**
-1. Create Mission Controller (hub-and-spoke orchestration)
-2. Define specialist agent roles (analyst, developer, tester, reviewer)
-3. Implement mission state persistence
-4. Agent-to-agent handoff via typed artifacts
-5. Test: multi-stage mission with sequential agent execution
+## Potential Next
+
+- More specialist roles (developer, tester, reviewer)
+- Parallel stage execution
+- OpenClaw auto-routing to missions (complex requests → mission mode)
+- Per-specialist provider/model selection
+- Mission resume/recovery after crash
 
 **After this:** Phase 4 (Reproducibility / DR) or additional improvements.

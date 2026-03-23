@@ -20,7 +20,8 @@
 | Web dashboard | Operational (manual start) | via `bin\start-dashboard.ps1` on :8002 |
 | WSL Guardian | Operational | `bin\oc-wsl-guardian.ps1` — active WSL + OpenClaw monitor |
 | Telegram notifications | Operational | `bin\oc-health-notify.ps1` — alerts, startup reports, recovery |
-| Agent Runner | Operational (GPT-4o active, Claude/Ollama ready) | `agent/oc-agent-runner.py` |
+| Agent Runner | Operational (multi-agent missions + 3 providers + 24 tools) | `agent/oc-agent-runner.py` |
+| Mission Controller | Operational (sequential, analyst + executor specialists) | `agent/mission/controller.py` |
 | Risk Engine | Operational | `agent/services/risk_engine.py` |
 | Approval Service | Operational (Telegram) | `agent/services/approval_service.py` |
 | Artifact Store | Operational | `agent/services/artifact_store.py` |
@@ -45,6 +46,7 @@
 | Phase 3-C | Risk Engine + Approval Service | Closed |
 | Phase 3-D | Full Tool Catalog + Typed Artifacts | Closed |
 | Phase 3-E | Multi-Provider Support | Closed |
+| Phase 3-F | Multi-Agent Foundation | Closed |
 
 ## Canonical Caller Path
 

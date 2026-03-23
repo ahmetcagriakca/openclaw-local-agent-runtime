@@ -222,6 +222,30 @@ Request routing uses explicit pattern-matching rules (`routing-rules.json`). Fir
 
 ---
 
+## D-029: Multi-agent uses hub-and-spoke
+
+**Phase:** 3-F | **Status:** Frozen
+
+All agent handoffs go through Mission Controller. Agents never call each other directly. Controller owns success/failure, stage sequencing, and artifact collection. Prevents circular dependencies and makes debugging deterministic.
+
+---
+
+## D-030: Specialists differentiated by system prompt + tool policy
+
+**Phase:** 3-F | **Status:** Frozen
+
+Specialist agents (analyst, executor) use the same underlying LLM provider but receive different system prompts and filtered tool sets. This avoids config explosion while enforcing role boundaries. Future: each specialist can use a different provider/model.
+
+---
+
+## D-031: Sequential stage execution in Phase 3-F
+
+**Phase:** 3-F | **Status:** Active
+
+Mission stages execute sequentially (A → B → C). Each stage receives artifacts from all previous stages as context. Parallel execution deferred — requires concurrency control, conflict resolution, and artifact merge logic.
+
+---
+
 ## D-028: Framework — direct SDK calls, multi-provider
 
 **Phase:** 3-A/3-B/3-E | **Status:** Active

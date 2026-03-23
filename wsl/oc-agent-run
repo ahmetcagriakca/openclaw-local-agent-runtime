@@ -9,9 +9,10 @@ import time
 message = sys.argv[1] if len(sys.argv) > 1 else None
 agent = sys.argv[2] if len(sys.argv) > 2 else "gpt-general"
 user_id = sys.argv[3] if len(sys.argv) > 3 else "8654710624"
+mission_mode = sys.argv[4] if len(sys.argv) > 4 else ""
 
 if not message:
-    print("usage: oc-agent-run <message> [agent] [userId]", file=sys.stderr)
+    print("usage: oc-agent-run <message> [agent] [userId] [mission]", file=sys.stderr)
     sys.exit(2)
 
 session_id = f"sess-{int(time.time())}-{os.getpid()}"
@@ -45,6 +46,14 @@ cmd = [
     "--max-turns", "10"
 ]
 
+# Mission mode: triggered by 4th arg "mission" or message starting with "mission:"
+if mission_mode == "mission" or (message and message.lower().startswith("mission:")):
+    if message.lower().startswith("mission:"):
+        # Strip prefix and update message in cmd
+        message = message[8:].strip()
+        cmd[cmd.index("--message") + 1] = message
+    cmd.append("--mission")
+
 env = os.environ.copy()
 # Ensure API key passes through WSL to Windows
 if "OPENAI_API_KEY" not in env:
@@ -62,7 +71,7 @@ if "OPENAI_API_KEY" not in env:
 env["PYTHONIOENCODING"] = "utf-8"
 
 try:
-    r = subprocess.run(cmd, capture_output=True, text=True, timeout=180, env=env)
+    r = subprocess.run(cmd, capture_output=True, text=True, timeout=300, env=env)
 
     if r.stdout.strip():
         try:
@@ -79,7 +88,7 @@ try:
 
     sys.exit(r.returncode)
 except subprocess.TimeoutExpired:
-    print("Agent timed out after 180 seconds", file=sys.stderr)
+    print("Agent timed out after 300 seconds", file=sys.stderr)
     sys.exit(1)
 except Exception as e:
     print(f"Error running agent: {e}", file=sys.stderr)

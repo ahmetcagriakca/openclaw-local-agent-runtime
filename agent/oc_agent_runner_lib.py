@@ -7,6 +7,7 @@ from services.mcp_client import MCPClient
 from services.tool_catalog import get_tools_for_openai, get_tool, build_command
 from services.risk_engine import RiskEngine
 from services.approval_service import ApprovalService
+from services.approval_store import ApprovalStore
 from services.artifact_store import ArtifactStore
 
 DEFAULT_SYSTEM_PROMPT = """You are a Windows automation assistant for the OpenClaw system.
@@ -49,6 +50,7 @@ def run_agent_with_config(message: str, agent_id: str, user_id: str,
     # Initialize services
     risk_engine = RiskEngine()
     approval_service = ApprovalService(timeout_seconds=60)
+    approval_store = ApprovalStore()  # 5C-4: Parallel audit store
     artifact_store = ArtifactStore(session_id)
 
     # Initialize provider from agent config
@@ -198,35 +200,77 @@ def run_agent_with_config(message: str, agent_id: str, user_id: str,
                             tool_entry["blocked"] = True
 
                         elif risk_result["action"] in ("require_approval", "require_approval_confirmed"):
-                            approval = approval_service.request_approval(
-                                tool_name=tc.name,
-                                tool_params=tc.params,
-                                risk=risk_result["risk"],
-                                powershell_command=command,
-                                session_id=session_id
-                            )
-                            tool_entry["approvalId"] = approval["approvalId"]
-                            tool_entry["approvalMethod"] = approval["method"]
-                            approval_log.append({
-                                "approvalId": approval["approvalId"],
-                                "tool": tc.name,
-                                "risk": risk_result["risk"],
-                                "approved": approval["approved"],
-                                "method": approval["method"]
-                            })
+                            # 5C-4: Parallel approval store — idempotency + audit
+                            import hashlib
+                            params_str = json.dumps(tc.params, sort_keys=True)
+                            params_hash = hashlib.sha256(params_str.encode()).hexdigest()
 
-                            if not approval["approved"]:
-                                result_text = f"DENIED: Tool call '{tc.name}' was denied ({approval['method']})"
-                                tool_entry["success"] = False
-                                tool_entry["error"] = result_text
-                                tool_entry["approved"] = False
-                            else:
+                            # Check if already approved with same params
+                            existing_approval = approval_store.check_idempotency(params_hash)
+                            if existing_approval:
+                                # Same params already approved — skip approval flow
                                 tool_entry["approved"] = True
+                                tool_entry["approvalId"] = existing_approval
+                                tool_entry["approvalMethod"] = "idempotent_reuse"
                                 mcp_result = mcp.execute_powershell(command)
                                 result_text = mcp_result["output"] if mcp_result["success"] else f"Error: {mcp_result['error']}"
                                 tool_entry["success"] = mcp_result["success"]
                                 if not mcp_result["success"]:
                                     tool_entry["error"] = mcp_result["error"]
+                            else:
+                                # Record in approval store (parallel)
+                                store_record = approval_store.request_approval(
+                                    mission_id=session_id,
+                                    stage_id="direct",
+                                    role=tool_policy or "unknown",
+                                    tool_call_id=tc.id if hasattr(tc, 'id') else "unknown",
+                                    tool=tc.name,
+                                    params=tc.params,
+                                    risk=risk_result["risk"],
+                                    reason=f"Risk {risk_result['risk']}: {tc.name}",
+                                    timeout_seconds=300
+                                )
+
+                                # Existing approval flow (unchanged)
+                                approval = approval_service.request_approval(
+                                    tool_name=tc.name,
+                                    tool_params=tc.params,
+                                    risk=risk_result["risk"],
+                                    powershell_command=command,
+                                    session_id=session_id
+                                )
+                                tool_entry["approvalId"] = approval["approvalId"]
+                                tool_entry["approvalMethod"] = approval["method"]
+                                approval_log.append({
+                                    "approvalId": approval["approvalId"],
+                                    "tool": tc.name,
+                                    "risk": risk_result["risk"],
+                                    "approved": approval["approved"],
+                                    "method": approval["method"]
+                                })
+
+                                # 5C-4: Record decision in store
+                                if approval["approved"]:
+                                    approval_store.approve(
+                                        store_record.approvalId,
+                                        decided_by=approval.get("method", "operator"))
+                                else:
+                                    approval_store.deny(
+                                        store_record.approvalId,
+                                        decided_by=approval.get("method", "operator"))
+
+                                if not approval["approved"]:
+                                    result_text = f"DENIED: Tool call '{tc.name}' was denied ({approval['method']})"
+                                    tool_entry["success"] = False
+                                    tool_entry["error"] = result_text
+                                    tool_entry["approved"] = False
+                                else:
+                                    tool_entry["approved"] = True
+                                    mcp_result = mcp.execute_powershell(command)
+                                    result_text = mcp_result["output"] if mcp_result["success"] else f"Error: {mcp_result['error']}"
+                                    tool_entry["success"] = mcp_result["success"]
+                                    if not mcp_result["success"]:
+                                        tool_entry["error"] = mcp_result["error"]
 
                         else:
                             tool_entry["approved"] = True

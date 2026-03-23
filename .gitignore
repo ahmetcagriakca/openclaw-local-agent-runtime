@@ -19,6 +19,10 @@ config/.env
 .vscode/
 *.code-workspace
 
+# Python bytecode
+__pycache__/
+*.pyc
+
 # OS artifacts
 Thumbs.db
 Desktop.ini

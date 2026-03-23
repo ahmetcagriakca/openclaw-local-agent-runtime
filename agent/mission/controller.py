@@ -4,6 +4,8 @@ import os
 import time
 from datetime import datetime, timezone
 
+from mission.mission_state import MissionState, MissionStatus
+
 MISSIONS_DIR = os.path.join(
     os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
     "logs", "missions"
@@ -24,12 +26,13 @@ class MissionController:
         """Execute a multi-agent mission.
 
         1. Plan: break goal into stages
-        2. Execute: run each stage with appropriate specialist
+        2. Execute: run each stage with appropriate specialist (state-driven)
         3. Collect: gather artifacts via Context Assembler
         4. Report: return final result with structured summary
         """
         from context.assembler import ContextAssembler
         from context.expansion_broker import ExpansionBroker
+        from mission.role_registry import resolve_role
 
         mission_id = f"mission-{datetime.now(timezone.utc).strftime('%Y%m%d%H%M%S')}-{os.getpid()}"
         start_time = time.time()
@@ -38,7 +41,14 @@ class MissionController:
         assembler = ContextAssembler(mission_id)
         expansion_broker = ExpansionBroker(mission_id)
 
-        # Initialize mission state
+        # 5C-1: Initialize mission state machine
+        mission_state = MissionState(mission_id)
+        mission_state.transition_to(MissionStatus.PLANNING, "mission started")
+
+        # Reset per-mission gate flags
+        self._gate_1_checked = False
+
+        # Initialize mission dict
         mission = {
             "missionId": mission_id,
             "goal": goal,
@@ -61,31 +71,53 @@ class MissionController:
             mission["stages"] = plan["stages"]
             mission["complexity"] = complexity
             mission["status"] = "executing"
+            mission_state.transition_to(MissionStatus.READY,
+                                        f"planned {len(plan['stages'])} stages")
             self._save_mission(mission)
         except Exception as e:
             mission["status"] = "failed"
             mission["error"] = f"Planning failed: {e}"
             mission["finishedAt"] = datetime.now(timezone.utc).isoformat()
+            mission_state.transition_to(MissionStatus.FAILED,
+                                        f"planning failed: {e}")
             self._save_mission(mission)
+            self._persist_mission_state(mission_state)
             self._emit_mission_summary(mission_id, mission, assembler,
-                                       expansion_broker, "failed")
+                                       expansion_broker, "failed",
+                                       mission_state=mission_state)
             return mission
 
-        # Step 2: Execute each stage sequentially
+        # Step 2: Execute stages with state-driven while loop
+        mission_state.transition_to(MissionStatus.RUNNING, "executing stages")
         all_artifacts = []
-        for i, stage in enumerate(mission["stages"]):
-            mission["currentStage"] = i + 1
-            stage_id = stage.get("id", f"stage-{i+1}")
+        completed_roles = set()
+        failure_reason = None
+        current_stage_index = 0
+
+        while current_stage_index < len(mission["stages"]):
+            stage = mission["stages"][current_stage_index]
+            mission["currentStage"] = current_stage_index + 1
+            stage_id = stage.get("id", f"stage-{current_stage_index+1}")
             specialist = stage.get("specialist", "analyst")
+            role = resolve_role(specialist)
+
+            # 5C-1: Track current position in state machine
+            mission_state.current_stage_index = current_stage_index
+            mission_state.pending_stage_id = stage_id
 
             # Skip stages that failed during planning validation
             if stage.get("status") == "failed":
+                failure_reason = stage.get("error",
+                                           f"Stage {stage_id} failed during planning")
                 mission["status"] = "failed"
-                mission["error"] = stage.get("error", f"Stage {stage_id} failed during planning")
+                mission["error"] = failure_reason
                 mission["finishedAt"] = datetime.now(timezone.utc).isoformat()
+                mission_state.transition_to(MissionStatus.FAILED, failure_reason)
                 self._save_mission(mission)
+                self._persist_mission_state(mission_state)
                 self._emit_mission_summary(mission_id, mission, assembler,
-                                           expansion_broker, "failed")
+                                           expansion_broker, "failed",
+                                           mission_state=mission_state)
                 return mission
 
             # D-053: Fail-closed — working set must exist in mission mode
@@ -96,12 +128,16 @@ class MissionController:
                     f"POLICY: Stage {stage_id} cannot start "
                     f"without a working set in mission mode."
                 )
+                failure_reason = stage["error"]
                 mission["status"] = "failed"
-                mission["error"] = stage["error"]
+                mission["error"] = failure_reason
                 mission["finishedAt"] = datetime.now(timezone.utc).isoformat()
+                mission_state.transition_to(MissionStatus.FAILED, failure_reason)
                 self._save_mission(mission)
+                self._persist_mission_state(mission_state)
                 self._emit_mission_summary(mission_id, mission, assembler,
-                                           expansion_broker, "failed")
+                                           expansion_broker, "failed",
+                                           mission_state=mission_state)
                 return mission
 
             # 4-4: Enrich working set from discovery_map for downstream roles
@@ -130,6 +166,12 @@ class MissionController:
                     artifact_context=artifact_context,
                     expansion_broker=expansion_broker
                 )
+
+                # Check if stage itself reported failure
+                if result and result.get("status") == "error":
+                    raise Exception(result.get("error",
+                                               "Stage reported failure"))
+
                 stage["status"] = "completed"
                 stage["result"] = result.get("response", "")
                 stage["artifacts"] = result.get("artifacts", [])
@@ -159,24 +201,111 @@ class MissionController:
                 )
                 mission["completedArtifactIds"].append(artifact_id)
 
+                # 5C-1: Track completion in state machine
+                completed_roles.add(role)
+                mission_state.last_completed_stage_id = stage_id
+
             except Exception as e:
-                stage["status"] = "failed"
-                stage["error"] = str(e)
+                # 5C-3: Recovery triage — NOT immediate abort
+                from context.policy_telemetry import emit_policy_event
+                error_context = str(e)
+
+                emit_policy_event("stage_failed", {
+                    "mission_id": mission_id,
+                    "stage_id": stage_id,
+                    "role": role,
+                    "error": error_context[:500]
+                })
+
+                recovery = self._handle_stage_failure(
+                    stage, error_context, mission_state, assembler,
+                    mission_id, user_id, all_artifacts, expansion_broker)
+
+                if recovery["action"] == "retry_stage":
+                    # Re-run same index
+                    continue
+                elif recovery["action"] in ("abort", "escalate"):
+                    stage["status"] = "failed"
+                    stage["error"] = error_context
+                    failure_reason = (f"Stage {stage_id} failed: "
+                                      f"{recovery.get('reason', error_context)}")
+                    if mission_state.status != MissionStatus.FAILED:
+                        mission_state.transition_to(MissionStatus.FAILED,
+                                                    failure_reason)
+                    mission["status"] = "failed"
+                    mission["error"] = failure_reason
+                    mission["finishedAt"] = datetime.now(timezone.utc).isoformat()
+                    self._save_mission(mission)
+                    self._persist_mission_state(mission_state)
+                    self._emit_mission_summary(
+                        mission_id, mission, assembler,
+                        expansion_broker, "failed",
+                        mission_state=mission_state)
+                    return mission
+                elif recovery["action"] == "retry_from":
+                    target = recovery.get("target_stage", "stage-1")
+                    target_index = self._find_stage_index(
+                        mission["stages"], target)
+                    if target_index is not None:
+                        current_stage_index = target_index
+                        mission_state.transition_to(
+                            MissionStatus.READY,
+                            f"Retrying from {target}")
+                        mission_state.transition_to(
+                            MissionStatus.RUNNING,
+                            "resuming execution")
+                        continue
+                    else:
+                        failure_reason = (f"Could not find target "
+                                          f"stage: {target}")
+                        mission_state.transition_to(
+                            MissionStatus.FAILED, failure_reason)
+                        mission["status"] = "failed"
+                        mission["error"] = failure_reason
+                        mission["finishedAt"] = (
+                            datetime.now(timezone.utc).isoformat())
+                        self._save_mission(mission)
+                        self._persist_mission_state(mission_state)
+                        self._emit_mission_summary(
+                            mission_id, mission, assembler,
+                            expansion_broker, "failed",
+                            mission_state=mission_state)
+                        return mission
+
+            # 5C-2: Gate checks after stage completion
+            gate_action = self._check_gates_and_loops(
+                role, completed_roles, assembler, stages=mission["stages"],
+                current_index=current_stage_index,
+                mission_state=mission_state, mission_id=mission_id)
+
+            if gate_action == "abort":
+                failure_reason = "Quality gate forced abort"
                 mission["status"] = "failed"
-                mission["error"] = f"Stage {i+1} failed: {e}"
+                mission["error"] = failure_reason
                 mission["finishedAt"] = datetime.now(timezone.utc).isoformat()
                 self._save_mission(mission)
+                self._persist_mission_state(mission_state)
                 self._emit_mission_summary(mission_id, mission, assembler,
-                                           expansion_broker, "failed")
+                                           expansion_broker, "failed",
+                                           mission_state=mission_state)
                 return mission
 
+            # Both "proceed" and "stages_modified" → increment
+            current_stage_index += 1
             self._save_mission(mission)
+            self._persist_mission_state(mission_state)
 
         # Step 3: Generate final summary
         try:
-            summary = self._generate_summary(goal, mission["stages"], all_artifacts)
+            summary = self._generate_summary(goal, mission["stages"],
+                                             all_artifacts)
         except Exception:
             summary = "Mission completed but summary generation failed."
+
+        # 5C-1: Terminal state
+        if mission_state.status == MissionStatus.RUNNING:
+            mission_state.transition_to(MissionStatus.COMPLETED,
+                                        "all stages done")
 
         mission["status"] = "completed"
         mission["summary"] = summary
@@ -184,10 +313,12 @@ class MissionController:
         mission["finishedAt"] = datetime.now(timezone.utc).isoformat()
         mission["totalDurationMs"] = int((time.time() - start_time) * 1000)
         self._save_mission(mission)
+        self._persist_mission_state(mission_state)
 
         # D-055: Structured mission summary
         self._emit_mission_summary(mission_id, mission, assembler,
-                                   expansion_broker, "completed")
+                                   expansion_broker, "completed",
+                                   mission_state=mission_state)
 
         return mission
 
@@ -431,8 +562,20 @@ Respond ONLY with a JSON object, no markdown:
                 parts.append(content)
         return "\n\n".join(parts)
 
+    def _persist_mission_state(self, mission_state: MissionState):
+        """5C-1: Persist mission state machine to disk."""
+        state_path = os.path.join(MISSIONS_DIR,
+                                  f"{mission_state.mission_id}-state.json")
+        try:
+            with open(state_path, "w", encoding="utf-8") as f:
+                json.dump(mission_state.to_dict(), f, indent=2,
+                          ensure_ascii=False)
+        except Exception:
+            pass
+
     def _emit_mission_summary(self, mission_id: str, mission: dict,
-                               assembler, expansion_broker, status: str):
+                               assembler, expansion_broker, status: str,
+                               mission_state: MissionState = None):
         """D-055: Generate and save per-mission structured summary."""
         from context.policy_telemetry import emit_policy_event
 
@@ -454,15 +597,36 @@ Respond ONLY with a JSON object, no markdown:
             "consumptionByTier": consumption.get("by_tier", {})
         }
 
+        # 5C-1: State machine info in summary
+        if mission_state:
+            summary["stateTransitions"] = mission_state.transition_log
+            summary["finalState"] = mission_state.status.value
+            summary["attemptCounters"] = mission_state.attempt_counters
+
+        # 5C-2: Feedback loop stats (populated if feedback was used)
+        if hasattr(self, '_feedback_loop') and self._feedback_loop:
+            summary["feedbackLoopStats"] = self._feedback_loop.get_stats()
+        summary["gatesChecked"] = {
+            "gate_1": getattr(self, '_gate_1_checked', False),
+            "gate_2": getattr(self, '_gate_2_checked', False),
+            "gate_3": getattr(self, '_gate_3_checked', False),
+        }
+
         for stage in mission.get("stages", []):
             pd_count = stage.get("policy_deny_count", 0)
-            summary["stages"].append({
+            stage_entry = {
                 "stageId": stage.get("id", "unknown"),
                 "role": stage.get("specialist", "unknown"),
                 "status": stage.get("status", "unknown"),
                 "toolCalls": stage.get("tool_call_count", 0),
                 "policyDenies": pd_count
-            })
+            }
+            if stage.get("is_rework"):
+                stage_entry["isRework"] = True
+                stage_entry["reworkCycle"] = stage.get("rework_cycle", 0)
+            if stage.get("is_recovery"):
+                stage_entry["isRecovery"] = True
+            summary["stages"].append(stage_entry)
             summary["totalPolicyDenies"] += pd_count
 
         # Save to disk
@@ -482,6 +646,9 @@ Respond ONLY with a JSON object, no markdown:
             "total_expansion_requests": summary["totalExpansionRequests"],
             "total_policy_denies": summary["totalPolicyDenies"]
         }
+        if mission_state:
+            event_data["final_state"] = mission_state.status.value
+            event_data["state_transitions"] = len(mission_state.transition_log)
         if status == "failed":
             event_data["failure_reason"] = mission.get("error", "unknown")
         emit_policy_event(event_type, event_data)
@@ -649,6 +816,325 @@ Respond ONLY with a JSON object, no markdown:
 
         response = provider.chat(messages, tools=[], max_tokens=500)
         return response.text or "Mission completed."
+
+    # ── 5C-2: Quality Gate + Feedback Loop Integration ──────────────
+
+    def _check_gates_and_loops(self, role, completed_roles, assembler,
+                               stages, current_index, mission_state,
+                               mission_id):
+        """Check quality gates after specific roles complete.
+
+        Returns: "proceed" | "abort" | "stages_modified"
+        """
+        from mission.quality_gates import check_gate_1, check_gate_2, check_gate_3
+        from mission.feedback_loops import FeedbackLoop
+        from context.policy_telemetry import emit_policy_event
+
+        # Lazy-init feedback loop for this mission
+        if not hasattr(self, '_feedback_loop') or self._feedback_loop is None:
+            self._feedback_loop = FeedbackLoop(mission_id)
+        feedback = self._feedback_loop
+
+        GATE_1_AFTER = {"product-owner", "analyst", "architect",
+                        "project-manager"}
+
+        # GATE 1: After all planning roles done
+        if (not getattr(self, '_gate_1_checked', False)
+                and role in GATE_1_AFTER
+                and GATE_1_AFTER.issubset(completed_roles)):
+
+            gate_result = check_gate_1({}, assembler)
+            emit_policy_event("quality_gate_checked", {
+                "mission_id": mission_state.mission_id,
+                "gate": "gate_1",
+                "passed": gate_result.passed,
+                "blocking": gate_result.blocking_issues,
+                "recommendation": gate_result.recommendation
+            })
+            self._gate_1_checked = True
+
+            if not gate_result.passed:
+                if gate_result.recommendation == "abort":
+                    mission_state.transition_to(
+                        MissionStatus.FAILED,
+                        f"Gate 1 failed: {gate_result.blocking_issues}")
+                    return "abort"
+                # Gate 1 fail with rework → recovery stage
+                recovery_stage = self._create_recovery_stage(
+                    stages[current_index], "gate_1_failed")
+                stages.insert(current_index + 1, recovery_stage)
+                return "stages_modified"
+
+        # GATE 2: After tester completes
+        if role == "tester":
+            gate_result = check_gate_2({}, assembler)
+            emit_policy_event("quality_gate_checked", {
+                "mission_id": mission_state.mission_id,
+                "gate": "gate_2",
+                "passed": gate_result.passed,
+                "blocking": gate_result.blocking_issues,
+                "recommendation": gate_result.recommendation
+            })
+            self._gate_2_checked = True
+
+            if not gate_result.passed:
+                test_data = self._get_latest_artifact_data(
+                    "test_report", assembler)
+                loop_result = feedback.evaluate_test_result(test_data)
+
+                if loop_result["action"] == "rework":
+                    mission_state.transition_to(
+                        MissionStatus.WAITING_REWORK,
+                        f"Gate 2 fail, dev-test rework cycle "
+                        f"{loop_result.get('cycle', 0)}")
+                    rework_stages = self._create_rework_stages(
+                        stages[current_index], loop_result,
+                        "developer", "tester")
+                    for j, rs in enumerate(rework_stages):
+                        stages.insert(current_index + 1 + j, rs)
+                    mission_state.transition_to(
+                        MissionStatus.RUNNING,
+                        "rework stages inserted")
+                    return "stages_modified"
+
+                elif loop_result["action"] == "escalate":
+                    mission_state.transition_to(
+                        MissionStatus.FAILED,
+                        f"Gate 2 escalated: {loop_result.get('reason', '')}")
+                    recovery_stage = self._create_recovery_stage(
+                        stages[current_index], "gate_2_escalated")
+                    stages.insert(current_index + 1, recovery_stage)
+                    mission_state.transition_to(
+                        MissionStatus.RUNNING,
+                        "recovery stage inserted")
+                    return "stages_modified"
+
+        # GATE 3: After reviewer completes
+        if role == "reviewer":
+            gate_result = check_gate_3({}, assembler)
+            emit_policy_event("quality_gate_checked", {
+                "mission_id": mission_state.mission_id,
+                "gate": "gate_3",
+                "passed": gate_result.passed,
+                "blocking": gate_result.blocking_issues,
+                "recommendation": gate_result.recommendation
+            })
+            self._gate_3_checked = True
+
+            if not gate_result.passed:
+                review_data = self._get_latest_artifact_data(
+                    "review_decision", assembler)
+                loop_result = feedback.evaluate_review_result(review_data)
+
+                if loop_result["action"] == "rework":
+                    mission_state.transition_to(
+                        MissionStatus.WAITING_REVIEW,
+                        f"Gate 3 fail, dev-review rework cycle "
+                        f"{loop_result.get('cycle', 0)}")
+                    rework_stages = self._create_rework_stages(
+                        stages[current_index], loop_result,
+                        "developer", "reviewer")
+                    for j, rs in enumerate(rework_stages):
+                        stages.insert(current_index + 1 + j, rs)
+                    mission_state.transition_to(
+                        MissionStatus.RUNNING,
+                        "rework stages inserted")
+                    return "stages_modified"
+
+                elif loop_result["action"] == "escalate":
+                    mission_state.transition_to(
+                        MissionStatus.FAILED,
+                        f"Gate 3 escalated: {loop_result.get('reason', '')}")
+                    recovery_stage = self._create_recovery_stage(
+                        stages[current_index], "gate_3_escalated")
+                    stages.insert(current_index + 1, recovery_stage)
+                    mission_state.transition_to(
+                        MissionStatus.RUNNING,
+                        "recovery stage inserted")
+                    return "stages_modified"
+
+        return "proceed"
+
+    def _create_rework_stages(self, failed_stage, loop_result, *roles):
+        """Create rework stages for feedback loop."""
+        rework = []
+        skill_map = {
+            "developer": "targeted_code_change",
+            "tester": "test_validation",
+            "reviewer": "quality_review"
+        }
+        for role in roles:
+            stage_id = failed_stage.get("id",
+                                        failed_stage.get("stage_id", "unknown"))
+            cycle = loop_result.get("cycle", 0)
+            focus = loop_result.get("bugs",
+                                    loop_result.get("must_fix", []))
+            rework.append({
+                "id": f"{stage_id}-rework-{role}-c{cycle}",
+                "specialist": role,
+                "skill": skill_map.get(role, ""),
+                "instruction": (
+                    f"Rework based on feedback: "
+                    f"{loop_result.get('reason', '')}. "
+                    f"Focus on: {focus}"),
+                "is_rework": True,
+                "rework_cycle": cycle,
+                "status": "pending",
+                "result": None,
+                "artifacts": [],
+                "error": None,
+                "duration_ms": 0,
+                "working_set": self._build_default_working_set(
+                    f"{stage_id}-rework-{role}-c{cycle}", role)
+            })
+        return rework
+
+    def _create_recovery_stage(self, failed_stage, failure_reason=""):
+        """Create manager recovery_triage stage."""
+        stage_id = failed_stage.get("id",
+                                    failed_stage.get("stage_id", "unknown"))
+        recovery_id = f"{stage_id}-recovery"
+        return {
+            "id": recovery_id,
+            "specialist": "manager",
+            "skill": "recovery_triage",
+            "instruction": (
+                f"Diagnose failure: {failure_reason}. "
+                f"Failed stage: {stage_id}. "
+                f"Decide: retry_stage | abort | escalate_to_operator"),
+            "is_recovery": True,
+            "status": "pending",
+            "result": None,
+            "artifacts": [],
+            "error": None,
+            "duration_ms": 0,
+            "working_set": self._build_default_working_set(
+                recovery_id, "manager")
+        }
+
+    def _get_latest_artifact_data(self, artifact_type, assembler):
+        """Get data dict of the latest artifact of given type."""
+        if not assembler:
+            return {}
+        matching = [
+            (aid, art) for aid, art in assembler.artifacts.items()
+            if art.get("type") == artifact_type
+        ]
+        if not matching:
+            return {}
+        _latest_id, latest_art = matching[-1]
+        return latest_art.get("data", {})
+
+    # ── 5C-3: Recovery Triage Integration ─────────────────────────
+
+    def _handle_stage_failure(self, failed_stage, error_context,
+                              mission_state, assembler,
+                              mission_id, user_id, all_artifacts,
+                              expansion_broker):
+        """D-056: First reflex is recovery_triage, NOT restart.
+
+        Returns: {"action": "retry_stage"|"abort"|"escalate"|"retry_from",
+                  "reason": ..., ...}
+        """
+        from context.policy_telemetry import emit_policy_event
+
+        stage_id = failed_stage.get("id",
+                                    failed_stage.get("stage_id", "unknown"))
+
+        # Check retry budget
+        attempt = mission_state.increment_stage_attempt(stage_id)
+        if not mission_state.can_retry_stage(stage_id):
+            emit_policy_event("recovery_triage_decision", {
+                "mission_id": mission_state.mission_id,
+                "stage_id": stage_id,
+                "action": "abort",
+                "reason": f"Max attempts ({attempt}) exceeded"
+            })
+            return {"action": "abort",
+                    "reason": "max_attempts_exceeded"}
+
+        # Transition to FAILED for recovery
+        if mission_state.status != MissionStatus.FAILED:
+            mission_state.transition_to(
+                MissionStatus.FAILED,
+                f"Stage {stage_id} failed, attempt {attempt}")
+
+        # Try to invoke Manager recovery_triage
+        try:
+            recovery_stage = self._create_recovery_stage(
+                failed_stage, error_context)
+
+            recovery_result = self._execute_stage(
+                recovery_stage, all_artifacts, mission_id, user_id,
+                expansion_broker=expansion_broker)
+
+            # Parse recovery decision from result
+            recovery_data = {}
+            if recovery_result and isinstance(recovery_result, dict):
+                # Try to extract structured decision from response
+                response_text = recovery_result.get("response", "")
+                # Best-effort JSON parse from response
+                try:
+                    import re
+                    json_match = re.search(r'\{[^}]*"recovery_action"[^}]*\}',
+                                           response_text)
+                    if json_match:
+                        recovery_data = json.loads(json_match.group())
+                except (json.JSONDecodeError, AttributeError):
+                    pass
+
+            action = recovery_data.get("recovery_action", "abort")
+
+            emit_policy_event("recovery_triage_decision", {
+                "mission_id": mission_state.mission_id,
+                "stage_id": stage_id,
+                "action": action,
+                "diagnosis": str(
+                    recovery_data.get("diagnosis", ""))[:200]
+            })
+
+            if action == "retry_stage":
+                mission_state.transition_to(
+                    MissionStatus.READY,
+                    f"Recovery: retry {stage_id}")
+                mission_state.transition_to(
+                    MissionStatus.RUNNING,
+                    "resuming after recovery")
+                return {"action": "retry_stage", "stage_id": stage_id}
+
+            elif action == "escalate_to_operator":
+                return {"action": "escalate",
+                        "reason": recovery_data.get("diagnosis", "")}
+
+            elif action == "retry_from":
+                return {"action": "retry_from",
+                        "target_stage": recovery_data.get(
+                            "target_stage", "stage-1"),
+                        "reason": recovery_data.get("diagnosis", "")}
+
+            else:
+                return {"action": "abort",
+                        "reason": recovery_data.get(
+                            "diagnosis", "Recovery chose abort")}
+
+        except Exception as recovery_error:
+            # Recovery itself failed — safe abort
+            emit_policy_event("recovery_triage_decision", {
+                "mission_id": mission_state.mission_id,
+                "stage_id": stage_id,
+                "action": "abort",
+                "reason": f"Recovery failed: {str(recovery_error)[:200]}"
+            })
+            return {"action": "abort",
+                    "reason": f"Recovery triage itself failed: "
+                              f"{recovery_error}"}
+
+    def _find_stage_index(self, stages, target_stage_id):
+        """Find index of stage by ID."""
+        for i, s in enumerate(stages):
+            if s.get("id") == target_stage_id:
+                return i
+        return None
 
     def _save_mission(self, mission: dict):
         """Save mission state to disk."""

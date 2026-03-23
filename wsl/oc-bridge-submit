@@ -1,0 +1,24 @@
+#!/usr/bin/env python3
+"""oc-bridge-submit - Submit a task through the frozen Bridge contract."""
+import json, os, subprocess, sys, time
+task_name = sys.argv[1] if len(sys.argv) > 1 else None
+if not task_name:
+    print("usage: oc-bridge-submit <taskName> [json_args] [sourceUserId]", file=sys.stderr)
+    sys.exit(2)
+args_json = sys.argv[2] if len(sys.argv) > 2 else "{}"
+user_id = sys.argv[3] if len(sys.argv) > 3 else "8654710624"
+try:
+    arguments = json.loads(args_json)
+except json.JSONDecodeError:
+    arguments = {}
+req = json.dumps({
+    "operation": "submit_task",
+    "taskName": task_name,
+    "arguments": arguments,
+    "source": "telegram",
+    "sourceUserId": user_id,
+    "requestId": f"tg-{int(time.time())}-{os.getpid()}",
+    "approvalStatus": "preapproved",
+})
+r = subprocess.run(["/home/akca/bin/oc-bridge-call", req], capture_output=False)
+sys.exit(r.returncode)

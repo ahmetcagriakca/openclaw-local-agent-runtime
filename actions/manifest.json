@@ -1,0 +1,289 @@
+{
+    "version":  1,
+    "actionsRoot":  "C:\\Users\\AKCA\\oc\\actions",
+    "defaults":  {
+                     "enabled":  true,
+                     "approvalRequired":  true,
+                     "timeoutSec":  30,
+                     "riskLevel":  "medium"
+                 },
+    "actions":  [
+                    {
+                        "name":  "notepad_test",
+                        "description":  "Opens Notepad and writes test text.",
+                        "scriptPath":  "C:\\Users\\AKCA\\oc\\actions\\notepad-test.ps1",
+                        "enabled":  true,
+                        "approvalRequired":  true,
+                        "riskLevel":  "medium",
+                        "timeoutSec":  20,
+                        "parameters":  [
+
+                                       ]
+                    },
+                    {
+                        "name":  "open_app",
+                        "description":  "Opens an allowed application. Supports launch_return (default) and launch_wait_exit modes.",
+                        "scriptPath":  "C:\\Users\\AKCA\\oc\\actions\\open-app.ps1",
+                        "enabled":  true,
+                        "approvalRequired":  true,
+                        "riskLevel":  "medium",
+                        "timeoutSec":  20,
+                        "parameters":  [
+                                           {
+                                               "name":  "app",
+                                               "type":  "string",
+                                               "required":  true,
+                                               "description":  "Allowed application name."
+                                           },
+                                           {
+                                               "name":  "executionMode",
+                                               "type":  "string",
+                                               "required":  false,
+                                               "description":  "launch_return (default): succeed on launch. launch_wait_exit: wait for process exit."
+                                           }
+                                       ]
+                    },
+                    {
+                        "name":  "write_file",
+                        "description":  "Writes a file under oc-results.",
+                        "scriptPath":  "C:\\Users\\AKCA\\oc\\actions\\write-file.ps1",
+                        "enabled":  true,
+                        "approvalRequired":  true,
+                        "riskLevel":  "medium",
+                        "timeoutSec":  20,
+                        "parameters":  [
+                                           {
+                                               "name":  "filename",
+                                               "type":  "string",
+                                               "required":  true,
+                                               "description":  "File name to write. Path is not allowed; file name only."
+                                           },
+                                           {
+                                               "name":  "content",
+                                               "type":  "string",
+                                               "required":  true,
+                                               "description":  "File content."
+                                           }
+                                       ]
+                    },
+                    {
+                        "name":  "enqueue_task",
+                        "description":  "Queue a predefined background task.",
+                        "scriptPath":  "C:\\Users\\AKCA\\oc\\actions\\enqueue-task.ps1",
+                        "enabled":  true,
+                        "approvalRequired":  false,
+                        "riskLevel":  "medium",
+                        "timeoutSec":  15,
+                        "parameters":  [
+                                           {
+                                               "name":  "taskName",
+                                               "type":  "string",
+                                               "required":  true,
+                                               "description":  "Task definition name."
+                                           },
+                                           {
+                                               "name":  "inputJson",
+                                               "type":  "string",
+                                               "required":  false,
+                                               "description":  "Task input as JSON string."
+                                           },
+                                           {
+                                               "name":  "priority",
+                                               "type":  "number",
+                                               "required":  false,
+                                               "description":  "Queue priority from 1 to 9."
+                                           }
+                                       ]
+                    },
+                    {
+                        "name":  "get_task",
+                        "description":  "Return one task snapshot as JSON.",
+                        "scriptPath":  "C:\\Users\\AKCA\\oc\\actions\\get-task.ps1",
+                        "enabled":  true,
+                        "approvalRequired":  false,
+                        "riskLevel":  "low",
+                        "timeoutSec":  10,
+                        "parameters":  [
+                                           {
+                                               "name":  "taskId",
+                                               "type":  "string",
+                                               "required":  true,
+                                               "description":  "Task id."
+                                           }
+                                       ]
+                    },
+                    {
+                        "name":  "list_tasks",
+                        "description":  "List recent tasks.",
+                        "scriptPath":  "C:\\Users\\AKCA\\oc\\actions\\list-tasks.ps1",
+                        "enabled":  true,
+                        "approvalRequired":  false,
+                        "riskLevel":  "low",
+                        "timeoutSec":  10,
+                        "parameters":  [
+                                           {
+                                               "name":  "status",
+                                               "type":  "string",
+                                               "required":  false,
+                                               "description":  "Optional task status filter."
+                                           },
+                                           {
+                                               "name":  "limit",
+                                               "type":  "number",
+                                               "required":  false,
+                                               "description":  "Maximum number of tasks to return."
+                                           }
+                                       ]
+                    },
+                    {
+                        "name":  "get_task_output",
+                        "description":  "Return task step output log text.",
+                        "scriptPath":  "C:\\Users\\AKCA\\oc\\actions\\get-task-output.ps1",
+                        "enabled":  true,
+                        "approvalRequired":  false,
+                        "riskLevel":  "low",
+                        "timeoutSec":  15,
+                        "parameters":  [
+                                           {
+                                               "name":  "taskId",
+                                               "type":  "string",
+                                               "required":  true,
+                                               "description":  "Task id."
+                                           },
+                                           {
+                                               "name":  "stepIndex",
+                                               "type":  "number",
+                                               "required":  false,
+                                               "description":  "Optional 1-based step index."
+                                           }
+                                       ]
+                    },
+                    {
+                        "name":  "task_healthcheck",
+                        "description":  "Return runtime health and queue counters.",
+                        "scriptPath":  "C:\\Users\\AKCA\\oc\\actions\\task-healthcheck.ps1",
+                        "enabled":  true,
+                        "approvalRequired":  false,
+                        "riskLevel":  "low",
+                        "timeoutSec":  10,
+                        "parameters":  [
+
+                                       ]
+                    },
+                    {
+                        "name":  "get_task_artifacts",
+                        "description":  "Return task artifact paths as JSON.",
+                        "scriptPath":  "C:\\Users\\AKCA\\oc\\actions\\get-task-artifacts.ps1",
+                        "enabled":  true,
+                        "approvalRequired":  false,
+                        "riskLevel":  "low",
+                        "timeoutSec":  10,
+                        "parameters":  [
+                                           {
+                                               "name":  "taskId",
+                                               "type":  "string",
+                                               "required":  true,
+                                               "description":  "Task id."
+                                           }
+                                       ]
+                    },
+                    {
+                        "name":  "get_task_events",
+                        "description":  "Return task event journal entries as JSON.",
+                        "scriptPath":  "C:\\Users\\AKCA\\oc\\actions\\get-task-events.ps1",
+                        "enabled":  true,
+                        "approvalRequired":  false,
+                        "riskLevel":  "low",
+                        "timeoutSec":  10,
+                        "parameters":  [
+                                           {
+                                               "name":  "taskId",
+                                               "type":  "string",
+                                               "required":  true,
+                                               "description":  "Task id."
+                                           },
+                                           {
+                                               "name":  "limit",
+                                               "type":  "number",
+                                               "required":  false,
+                                               "description":  "Maximum number of events to return."
+                                           }
+                                       ]
+                    },
+                    {
+                        "name":  "wait_task",
+                        "description":  "Wait until a task reaches a terminal state.",
+                        "scriptPath":  "C:\\Users\\AKCA\\oc\\actions\\wait-task.ps1",
+                        "enabled":  true,
+                        "approvalRequired":  false,
+                        "riskLevel":  "low",
+                        "timeoutSec":  130,
+                        "parameters":  [
+                                           {
+                                               "name":  "taskId",
+                                               "type":  "string",
+                                               "required":  true,
+                                               "description":  "Task id."
+                                           },
+                                           {
+                                               "name":  "timeoutSeconds",
+                                               "type":  "number",
+                                               "required":  false,
+                                               "description":  "Maximum seconds to wait."
+                                           },
+                                           {
+                                               "name":  "pollSeconds",
+                                               "type":  "number",
+                                               "required":  false,
+                                               "description":  "Polling interval in seconds."
+                                           }
+                                       ]
+                    },
+                    {
+                        "name":  "cancel_task",
+                        "description":  "Cancel a queued or running task.",
+                        "scriptPath":  "C:\\Users\\AKCA\\oc\\actions\\cancel-task.ps1",
+                        "enabled":  true,
+                        "approvalRequired":  false,
+                        "riskLevel":  "medium",
+                        "timeoutSec":  10,
+                        "parameters":  [
+                                           {
+                                               "name":  "taskId",
+                                               "type":  "string",
+                                               "required":  true,
+                                               "description":  "Task id to cancel."
+                                           }
+                                       ]
+                    },
+                    {
+                        "name":  "retry_task",
+                        "description":  "Retry a failed or dead-lettered task.",
+                        "scriptPath":  "C:\\Users\\AKCA\\oc\\actions\\retry-task.ps1",
+                        "enabled":  true,
+                        "approvalRequired":  false,
+                        "riskLevel":  "medium",
+                        "timeoutSec":  15,
+                        "parameters":  [
+                                           {
+                                               "name":  "taskId",
+                                               "type":  "string",
+                                               "required":  true,
+                                               "description":  "Original task id to retry."
+                                           },
+                                           {
+                                               "name":  "priority",
+                                               "type":  "number",
+                                               "required":  false,
+                                               "description":  "Override priority (1-9)."
+                                           },
+                                           {
+                                               "name":  "maxRetries",
+                                               "type":  "number",
+                                               "required":  false,
+                                               "description":  "Max retry chain depth (default 3)."
+                                           }
+                                       ]
+                    }
+                ]
+}

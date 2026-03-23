@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -euo pipefail
+if [ "$#" -lt 1 ]; then
+  echo "usage: oc-bridge-call <json_request>" >&2
+  exit 2
+fi
+REQUEST_JSON="$1"
+PWSH="/mnt/c/Program Files/PowerShell/7/pwsh.exe"
+BRIDGE_WIN='C:\Users\AKCA\oc\bridge\oc-bridge.ps1'
+exec "$PWSH" -NoProfile -ExecutionPolicy Bypass -File "$BRIDGE_WIN" -RequestJson "$REQUEST_JSON"

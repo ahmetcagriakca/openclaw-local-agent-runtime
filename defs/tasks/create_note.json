@@ -1,0 +1,22 @@
+{
+  "taskName": "create_note",
+  "description": "Create a note file under oc-results.",
+  "enqueueEnabled": true,
+  "approvalPolicy": "preapproved",
+  "defaultPriority": 5,
+  "steps": [
+    {
+      "id": "step-01-write-file",
+      "action": "write_file",
+      "approved": true,
+      "timeoutSec": 30,
+      "map": {
+        "filename": "$input.filename",
+        "content": "$input.content"
+      },
+      "artifacts": [
+        "${paths.ocResults}\\${input.filename}"
+      ]
+    }
+  ]
+}

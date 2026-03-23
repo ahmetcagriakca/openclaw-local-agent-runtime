@@ -1,0 +1,17 @@
+#!/usr/bin/env python3
+"""oc-bridge-cancel - Cancel a task through the frozen Bridge contract."""
+import json, os, subprocess, sys, time
+task_id = sys.argv[1] if len(sys.argv) > 1 else None
+if not task_id:
+    print("usage: oc-bridge-cancel <taskId> [sourceUserId]", file=sys.stderr)
+    sys.exit(2)
+user_id = sys.argv[2] if len(sys.argv) > 2 else "8654710624"
+req = json.dumps({
+    "operation": "cancel_task",
+    "taskId": task_id,
+    "source": "telegram",
+    "sourceUserId": user_id,
+    "requestId": f"tg-{int(time.time())}-{os.getpid()}",
+})
+r = subprocess.run(["/home/akca/bin/oc-bridge-call", req], capture_output=False)
+sys.exit(r.returncode)

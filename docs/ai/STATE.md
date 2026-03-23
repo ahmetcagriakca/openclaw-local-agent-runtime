@@ -1,0 +1,59 @@
+# Current State
+
+**Last updated:** 2026-03-23
+**Active phase:** Phase 2 — Security / Policy Hardening (not started)
+
+---
+
+## System Status
+
+| Component | Status | Location |
+|-----------|--------|----------|
+| oc runtime | Operational | `C:\Users\AKCA\oc\bin\` |
+| Bridge | Operational, validated | `C:\Users\AKCA\oc\bridge\oc-bridge.ps1` |
+| WMCP server | Operational (manual start) | via `bin\start-wmcp-server.ps1` |
+| OpenClaw gateway | Operational (WSL Ubuntu-E) | `/home/akca/.openclaw/` |
+| Telegram channel | Connected, real user validated | User ID `8654710624` |
+| WSL bridge wrappers | Operational | `/home/akca/bin/oc-bridge-*` |
+
+## Completed Phases
+
+| Phase | Scope | Status |
+|-------|-------|--------|
+| Phase 1 | Runtime Stabilization | Closed |
+| Phase 1.5-A | Architecture Freeze | Closed |
+| Phase 1.5-B | Legacy Cleanup | Closed |
+| Phase 1.5-C | Bridge Contract Freeze | Closed |
+| Phase 1.5-D | Security Baseline Freeze | Closed |
+| Phase 1.5-E | Bridge Implementation | Closed |
+| Phase 1.5-F | Exit Verification (local) | Closed |
+| Phase TG-1R | OpenClaw Telegram Wiring | Closed |
+| Phase 1.5-TG-R | Real Telegram Closure | **FULLY SEALED** |
+
+## Canonical Caller Path
+
+```
+Telegram user (8654710624)
+  -> OpenClaw (WSL Ubuntu-E)
+  -> /home/akca/bin/oc-bridge-submit (Python)
+  -> /home/akca/bin/oc-bridge-call (Bash)
+  -> pwsh.exe -File bridge/oc-bridge.ps1 (Windows)
+  -> oc-task-enqueue.ps1 (runtime)
+```
+
+## Scheduled Tasks (Windows)
+
+| Task | Trigger | Purpose |
+|------|---------|---------|
+| OpenClawTaskWorker | AtLogOn | Ephemeral -RunOnce worker |
+| OpenClawRuntimeWatchdog | Every 15min | Health + stuck task + worker kick |
+| OpenClawStartupPreflight | AtBoot | Stale recovery + layout validation |
+| OpenClawWmcpServer | AtLogOn | windows-mcp HTTP server on :8001 |
+| WSLKeepAlive | AtLogOn | Keep WSL Ubuntu-E instance alive |
+
+## Known Operational Notes
+
+- WMCP `local-mcp-12345` API key is a known temporary localhost-only credential
+- Bridge wrapper sourceUserId is hardcoded to single user (Phase 2 scope to make dynamic)
+- OpenClaw exec-approvals prompt on first use of each bridge wrapper
+- `telegram/oc-telegram-bot.py` is superseded by OpenClaw path — removed from repo

@@ -1,0 +1,29 @@
+{
+  "taskName": "notepad_then_ready",
+  "description": "Notepad acar, sonra 'hazirim' dosyasi yazar.",
+  "enqueueEnabled": true,
+  "approvalPolicy": "preapproved",
+  "defaultPriority": 5,
+  "steps": [
+    {
+      "id": "step-01-open-notepad",
+      "action": "open_app",
+      "approved": true,
+      "timeoutSec": 15,
+      "map": {
+        "app": "notepad",
+        "executionMode": "launch_return"
+      }
+    },
+    {
+      "id": "step-02-write-ready",
+      "action": "write_file",
+      "approved": true,
+      "timeoutSec": 15,
+      "map": {
+        "filename": "hazirim.txt",
+        "content": "hazirim"
+      }
+    }
+  ]
+}

@@ -163,3 +163,11 @@ OpenClaw Telegram → WSL wrappers → oc-bridge-call → pwsh.exe bridge/oc-bri
 **Phase:** Post-1.5 | **Status:** Active
 
 Project: OpenClaw Local Agent Runtime. Repo: openclaw-local-agent-runtime.
+
+---
+
+## D-021: WSL Guardian replaces WSLKeepAlive
+
+**Phase:** 1.6 | **Status:** Active
+
+Passive `sleep infinity` keepalive replaced by active guardian (`oc-wsl-guardian.ps1`). Checks WSL + OpenClaw every 30s, auto-restarts if down, sends Telegram alerts on state changes. Scheduled task `OpenClawWslGuardian` replaces `WSLKeepAlive`.

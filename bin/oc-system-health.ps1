@@ -40,6 +40,19 @@ try {
     $components['wsl'] = @{ status = 'error'; detail = 'wsl command failed' }
 }
 
+# Enhance WSL detail with guardian state if available
+$guardianStatePath = Join-Path $repoRoot 'logs' 'wsl-guardian-state.json'
+if (Test-Path -LiteralPath $guardianStatePath) {
+    try {
+        $gState = Get-Content -Raw -LiteralPath $guardianStatePath | ConvertFrom-Json
+        $wslRestarts = $gState.wsl.restartCount
+        $ocRestarts = $gState.openclaw.restartCount
+        if ($wslRestarts -gt 0 -or $ocRestarts -gt 0) {
+            $components['wsl']['detail'] += " (WSL restarts: $wslRestarts, OC restarts: $ocRestarts)"
+        }
+    } catch { }
+}
+
 # --- 3. OpenClaw Gateway ------------------------------------------------------
 try {
     $pgrepOut = & wsl -d Ubuntu-E -- pgrep -fa openclaw 2>&1 | Out-String
@@ -106,7 +119,8 @@ $taskNames = @(
     'OpenClawRuntimeWatchdog',
     'OpenClawStartupPreflight',
     'OpenClawWmcpServer',
-    'WSLKeepAlive'
+    'OpenClawWslGuardian',
+    'OpenClawDashboard'
 )
 $taskStates = [ordered]@{}
 $okCount = 0

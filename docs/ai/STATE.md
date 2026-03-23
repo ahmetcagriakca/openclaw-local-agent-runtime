@@ -17,6 +17,7 @@
 | WSL bridge wrappers | Operational | `/home/akca/bin/oc-bridge-*` |
 | System health engine | Operational | `bin\oc-system-health.ps1` |
 | Web dashboard | Operational (manual start) | via `bin\start-dashboard.ps1` on :8002 |
+| WSL Guardian | Operational | `bin\oc-wsl-guardian.ps1` — active WSL + OpenClaw monitor |
 
 ## Completed Phases
 
@@ -52,7 +53,7 @@ Telegram user (8654710624)
 | OpenClawRuntimeWatchdog | Every 15min | Health + stuck task + worker kick |
 | OpenClawStartupPreflight | AtBoot | Stale recovery + layout validation |
 | OpenClawWmcpServer | AtLogOn | windows-mcp HTTP server on :8001 |
-| WSLKeepAlive | AtLogOn | Keep WSL Ubuntu-E instance alive |
+| OpenClawWslGuardian | AtLogOn | WSL + OpenClaw active guardian (30s check, auto-restart, Telegram alerts) |
 | OpenClawDashboard | AtLogOn | Web dashboard HTTP server on :8002 |
 
 ## Known Operational Notes

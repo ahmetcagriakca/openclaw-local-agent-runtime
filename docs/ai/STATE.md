@@ -13,12 +13,14 @@
 | oc runtime | Operational | `C:\Users\AKCA\oc\bin\` |
 | Bridge | Operational, validated | `C:\Users\AKCA\oc\bridge\oc-bridge.ps1` |
 | WMCP server | Operational (manual start) | via `bin\start-wmcp-server.ps1` |
-| OpenClaw gateway | Operational (WSL Ubuntu-E) | `/home/akca/.openclaw/` |
+| OpenClaw gateway | Operational (systemd managed, auto-restart) | `/home/akca/.openclaw/` via `openclaw.service` |
+| WSL VM | Bounded (6GB RAM, 4GB swap, 30min idle timeout) | `C:\Users\AKCA\.wslconfig` |
+| OpenClaw keepalive | Operational (20s health loop) | `wsl-openclaw-keepalive.service` |
 | Telegram channel | Connected, real user validated | User ID `8654710624` |
 | WSL bridge wrappers | Operational | `/home/akca/bin/oc-bridge-*` |
 | System health engine | Operational | `bin\oc-system-health.ps1` |
 | Web dashboard | Operational (manual start) | via `bin\start-dashboard.ps1` on :8002 |
-| WSL Guardian | Operational | `bin\oc-wsl-guardian.ps1` — active WSL + OpenClaw monitor |
+| WSL Guardian | Operational (L2 — VM-level monitor) | `bin\oc-wsl-guardian.ps1` — Windows-side WSL + OpenClaw monitor |
 | Telegram notifications | Operational | `bin\oc-health-notify.ps1` — alerts, startup reports, recovery |
 | Agent Runner | Operational (multi-agent missions + 3 providers + 24 tools) | `agent/oc-agent-runner.py` |
 | Mission Controller | Operational (9 governed roles, quality gates, state machine) | `agent/mission/controller.py` |
@@ -169,5 +171,6 @@ Telegram user (8654710624)
 - Bridge wrapper sourceUserId is hardcoded to single user (Phase 2 scope to make dynamic)
 - OpenClaw exec-approvals prompt on first use of each bridge wrapper
 - `telegram/oc-telegram-bot.py` is superseded by OpenClaw path — removed from repo
+- WSL stability: two-layer monitoring (L1: systemd keepalive 20s, L2: WSL Guardian 30s) — see `docs/phase-reports/WSL-OPENCLAW-STABILITY-HARDENING.md`
 - build_command string template debt — currently generates PowerShell via string concatenation (Phase 4.5 item)
 - Approval flow uses Telegram yes/no — strict `approve <id>` / `deny <id>` deferred to Sprint 6D

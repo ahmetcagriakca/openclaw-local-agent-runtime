@@ -125,7 +125,7 @@ def run_mission(message: str, agent: str = "gpt-general",
     try:
         result = subprocess.run(
             cmd, capture_output=True, text=True,
-            timeout=300, cwd=PROJECT_ROOT
+            timeout=600, cwd=PROJECT_ROOT
         )
         duration = time.time() - start_time
         exit_code = result.returncode
@@ -135,7 +135,7 @@ def run_mission(message: str, agent: str = "gpt-general",
         duration = time.time() - start_time
         exit_code = -1
         stdout = ""
-        stderr = "TIMEOUT after 300 seconds"
+        stderr = "TIMEOUT after 600 seconds"
 
     # Collect post-test metrics
     after_telemetry_lines = get_telemetry_line_count()

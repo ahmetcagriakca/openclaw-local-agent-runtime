@@ -762,7 +762,8 @@ Respond ONLY with a JSON object, no markdown:
         """
         from context.working_set import WorkingSet, FileAccess, ReadBudget
 
-        oc_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        # controller.py is at agent/mission/controller.py → 3x dirname = project root
+        oc_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
         results_dir = os.path.join(oc_root, "results")
 
         # D-048: Resolve alias

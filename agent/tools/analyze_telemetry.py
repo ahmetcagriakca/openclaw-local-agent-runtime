@@ -9,7 +9,7 @@ import json
 import os
 import sys
 from collections import Counter, defaultdict
-from datetime import datetime
+from datetime import datetime, timezone
 
 # Paths
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -233,7 +233,7 @@ def analyze_missions(summaries: list[dict]) -> dict:
 def generate_report(telemetry: dict, missions: dict, as_json: bool = False) -> str:
     """Generate human-readable or JSON report."""
     combined = {
-        "generatedAt": datetime.utcnow().isoformat(),
+        "generatedAt": datetime.now(timezone.utc).isoformat(),
         "telemetry": telemetry,
         "missions": missions,
     }

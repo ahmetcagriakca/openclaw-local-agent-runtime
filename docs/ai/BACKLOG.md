@@ -1,6 +1,6 @@
 # Backlog
 
-**Last updated:** 2026-03-23
+**Last updated:** 2026-03-24
 
 ---
 
@@ -34,6 +34,46 @@
 | B-019 | Intent mapping refinement | OpenClaw conversation quality |
 | B-020 | Standard task library | Common task definitions |
 
+## Phase 3 — Agent-MCP System (Done)
+
+| ID | Item | Status | Notes |
+|----|------|--------|-------|
+| B-029 | Core agent runner | **Done** | Phase 3-B: GPT provider, MCP client, basic tool gateway |
+| B-030 | Risk engine + approval service | **Done** | Phase 3-C: deterministic risk, Telegram approval flow |
+| B-031 | Full tool catalog + typed artifacts | **Done** | Phase 3-D: 24 named tools, artifact store, audit |
+| B-032 | Multi-provider support | **Done** | Phase 3-E: OpenAI, Claude, Ollama providers |
+| B-033 | Multi-agent foundation / mission controller | **Done** | Phase 3-F: hub-and-spoke, specialist agents |
+| B-034 | Agent-to-agent delegation protocol | **Done** | Phase 3-F: typed artifact handoff contracts |
+| B-035 | Persistent mission state | **Done** | Phase 3-F: multi-stage mission tracking |
+
+## Phase 4 — Agent Governance (Done)
+
+| ID | Sprint | Status | Scope |
+|----|--------|--------|-------|
+| Sprint 0+1 | Governance Enforcer | **Done** | Working Set, Path Resolver, Policy Telemetry |
+| Sprint 1H+2 | Governance Context | **Done** | Context Assembler, Expansion Broker, Summary Cache |
+| Sprint 2C | Integration Completion | **Done** | Artifact Identity, Summary Cache fixes |
+| Sprint 3 | Role Expansion | **Done** | 9 roles, 10 skill contracts, 2 feedback loops |
+| Sprint 4 | Complexity Router | **Done** | 4-tier routing, discovery governance |
+| Sprint 5 | Quality Gates + State Machine | **Done** | 3 gates, 10-state machine, approval store |
+| Sprint 5C | Controller Integration | **Done** | State machine, gates, recovery, approval store wired |
+| Sprint 6 | Integration Test Suite | **Done** | 110/110 tests pass |
+| Sprint 6C | Closure Hardening | **Done** | Typed artifacts + model wiring from role registry |
+
+## Phase 4.5 — Agent Governance Tuning (Planned)
+
+| ID | Item | Notes |
+|----|------|-------|
+| B-036 | Structured artifact extraction | Sprint 6D: LLM response → typed artifact parser |
+| B-037 | Strict approval enforcement | Sprint 6D: approve `<id>` / deny `<id>` |
+| B-038 | Crash resume | resume_mission(mission_id) |
+| B-039 | Tier C scoped extraction | Partial content delivery by role |
+| B-040 | Token budget enforcement | Real-time per-role tracking |
+| B-041 | E2E all complexity levels | Medium (7 roles), Complex (8 roles) |
+| B-042 | Cost tuning from telemetry | Per-role token budgets from actual usage |
+| B-043 | Prompt refinement for schema compliance | LLM output→schema mapping improvements |
+| B-044 | build_command string template debt | Replace string concatenation with templates |
+
 ## Phase 4 — Reproducibility / DR
 
 | ID | Item | Notes |
@@ -42,18 +82,6 @@
 | B-022 | Backup / restore | Runtime state recovery |
 | B-023 | Corrupted runtime recovery | Beyond stuck-task policy |
 | B-024 | Deterministic redeploy | Reproducible from repo |
-
-## Phase 3 — Agent-MCP System
-
-| ID | Item | Notes |
-|----|------|-------|
-| B-029 | Core agent runner | Phase 3-B: Claude provider, MCP client, basic tool gateway |
-| B-030 | Risk engine + approval service | Phase 3-C: deterministic risk, Telegram approval flow |
-| B-031 | Full tool catalog + typed artifacts | Phase 3-D: 18 named tools, artifact store, audit |
-| B-032 | Multi-provider support | Phase 3-E: OpenAI, Ollama providers |
-| B-033 | Multi-agent foundation / mission controller | Phase 3-F: hub-and-spoke, specialist agents |
-| B-034 | Agent-to-agent delegation protocol | Phase 3-F: typed artifact handoff contracts |
-| B-035 | Persistent mission state | Phase 3-F: multi-stage mission tracking |
 
 ## Cleanup (no phase gate)
 

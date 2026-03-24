@@ -1,6 +1,6 @@
 # Architectural Decisions
 
-**Last updated:** 2026-03-23
+**Last updated:** 2026-03-24
 
 All decisions below are frozen. Reopening requires explicit phase gate approval.
 
@@ -251,3 +251,219 @@ Mission stages execute sequentially (A → B → C). Each stage receives artifac
 **Phase:** 3-A/3-B/3-E | **Status:** Active
 
 Direct SDK calls, no LangChain. Three providers implemented: GPT-4o (active), Claude (ready, needs API key), Ollama (ready, needs local server). Provider factory in `agent/providers/factory.py` selects provider from `agent-config.json`. Each provider converts OpenAI tool format internally. LangChain not needed — 3 providers added without it.
+
+---
+
+## D-032: 7-tier execution ladder
+
+**Phase:** 3-G | **Status:** Frozen
+
+Deterministic → Ollama → GPT/Sonnet → MCP → Opus → remote → computer-use. Each tier escalates cost and capability. Lower tiers attempted first.
+
+---
+
+## D-033: Remote control = quarantined last resort
+
+**Phase:** 3-G | **Status:** Frozen
+
+Remote control is disabled by default, quarantined as last resort. Requires explicit operator enablement.
+
+---
+
+## D-034: 10 cost governance rules
+
+**Phase:** 3-G | **Status:** Frozen
+
+Cost budgets per complexity class: trivial $0.05, simple $0.50, medium $2.00, complex $5.00, XL $15.00. Prevents runaway LLM spending.
+
+---
+
+## D-035: Cost budget per complexity class
+
+**Phase:** 3-G | **Status:** Frozen
+
+Each complexity tier has a hard dollar ceiling. Mission aborts if cumulative token cost exceeds the tier budget.
+
+---
+
+## D-036: READ ONCE, DISTRIBUTE MANY
+
+**Phase:** 4 | **Status:** Frozen
+
+Governing principle for context economy. A file is read once by the discovering role (analyst), then distributed as typed artifacts to downstream roles. No re-discovery.
+
+---
+
+## D-037: Discovery restricted to Analyst/Architect
+
+**Phase:** 4 | **Status:** Frozen
+
+Only Analyst and Architect have broad filesystem discovery rights. All other roles consume typed artifacts from upstream stages.
+
+---
+
+## D-038: Downstream roles consume typed artifacts
+
+**Phase:** 4 | **Status:** Frozen
+
+Developer, Tester, Reviewer, Manager receive pre-packaged artifacts (discovery_map, technical_design, etc.) rather than re-reading the filesystem.
+
+---
+
+## D-039: Role vs Skill model
+
+**Phase:** 4 | **Status:** Frozen
+
+Roles own skills, skills define contracts. Each role has allowedSkills and forbiddenSkills. Each skill contract specifies inputArtifact, outputArtifact, and tool requirements.
+
+---
+
+## D-040: Context Assembler — 5-tier delivery
+
+**Phase:** 4 | **Status:** Frozen
+
+5 delivery tiers: A (metadata only), B (summary), C (scoped/partial), D (full content), E (full + neighbors). Each role gets the cheapest sufficient tier per the artifact×role matrix.
+
+---
+
+## D-041: Artifact×Role tier matrix
+
+**Phase:** 4 | **Status:** Frozen
+
+Matrix maps (artifact_type, requesting_role) → delivery tier. Analyst gets Tier D for discovery_map; Manager gets Tier B for code_delivery. Prevents context bloat.
+
+---
+
+## D-042: Reread escalation policy
+
+**Phase:** 4 | **Status:** Frozen
+
+Second full read of the same artifact auto-downgrades to summary tier. Prevents context window waste from redundant reads.
+
+---
+
+## D-043: Claude priority lanes
+
+**Phase:** 4 | **Status:** Frozen
+
+Three Claude priority lanes: architecture_synthesis (#1), quality_review (#2), recovery_triage (#3). High-leverage cognitive tasks routed to Claude; mechanical tasks stay on GPT-4o.
+
+---
+
+## D-044: Developer forbidden from controlled_execution
+
+**Phase:** 4 | **Status:** Frozen
+
+Developer role cannot use controlled_execution skill. Prevents code-writing role from also executing arbitrary system commands.
+
+---
+
+## D-045: Two-surface mutation model
+
+**Phase:** 4 | **Status:** Frozen
+
+Code surface: developer + write_file (bounded to working set). System surface: remote-operator + all operational tools. No role spans both surfaces.
+
+---
+
+## D-046: Single Working Set Enforcer middleware
+
+**Phase:** 4 | **Status:** Frozen
+
+Working Set Enforcer runs as middleware before the risk engine. Validates all file paths against the stage's declared working set. Fail-closed: path outside working set = blocked.
+
+---
+
+## D-047: Artifact identity header
+
+**Phase:** 4 | **Status:** Frozen
+
+Every artifact carries identity metadata: artifactId, contentHash, lineage (parent artifacts), compression pointers. Enables deduplication and provenance tracking.
+
+---
+
+## D-048: Canonical role name remote-operator
+
+**Phase:** 4 | **Status:** Frozen
+
+`remote-operator` is the canonical name. `executor` retired as alias. All code and docs use `remote-operator`.
+
+---
+
+## D-049: Canonical path enforcement
+
+**Phase:** 4 | **Status:** Frozen
+
+Path validation pipeline: normalize → resolve → symlink check → compare against working set. Fail-closed: any step failure = path rejected. Prevents path traversal attacks.
+
+---
+
+## D-050: Tool governance from mandatory catalog metadata
+
+**Phase:** 4 | **Status:** Frozen
+
+Tool access governance derived from tool catalog metadata (risk level, mutation surface, filesystem impact), not hardcoded lists. Adding a new tool automatically inherits governance.
+
+---
+
+## D-051: Developer write authorization target-bound
+
+**Phase:** 4 | **Status:** Frozen
+
+Developer can only write to paths declared as readWrite, creatable, or generatedOutputs in the stage's working set. All other paths are read-only or forbidden.
+
+---
+
+## D-052: Source of truth hierarchy
+
+**Phase:** 4 | **Status:** Frozen
+
+Consolidated design document v3 is the master reference. Sprint reports are implementation evidence. docs/ai/ state files are living summaries. Conflicts resolved by hierarchy: consolidated > sprint > state files.
+
+---
+
+## D-053: Mission mode fail-closed on missing working set
+
+**Phase:** 4 | **Status:** Frozen
+
+If working_set is None, the stage cannot start. Mission Controller must provide a working set for every stage. Prevents unbounded filesystem access.
+
+---
+
+## D-054: Premium escalation per-stage only
+
+**Phase:** 4 | **Status:** Frozen
+
+Premium model escalation (e.g., to Opus) happens per-stage, not per-mission. A single complex stage can escalate without affecting other stages' model selection.
+
+---
+
+## D-055: 20 mandatory telemetry event types
+
+**Phase:** 4 | **Status:** Frozen
+
+Policy telemetry emits 20 standardized event types covering tool calls, working set checks, context delivery, gate results, and state transitions. All events are append-only to JSONL.
+
+---
+
+## D-056: Recovery default = recovery_triage not restart
+
+**Phase:** 4 | **Status:** Frozen
+
+When a stage fails, the default recovery action is recovery_triage (analyst diagnoses the failure), not blindly restarting the failed stage. Prevents infinite retry loops.
+
+---
+
+## D-057: Startup metadata gate
+
+**Phase:** 4 | **Status:** Frozen
+
+At runtime startup, all tools are validated against their catalog metadata. A broken tool (missing command, invalid schema) prevents the runtime from starting. Fail-fast, not fail-at-call-time.
+
+---
+
+## D-058: Windows path hardening — 9-case test corpus
+
+**Phase:** 4 | **Status:** Frozen
+
+Path resolver tested against 9 edge cases: UNC paths, mixed separators, relative escapes, symlinks, junction points, null bytes, very long paths, reserved device names, trailing dots/spaces. All must be rejected or normalized correctly.

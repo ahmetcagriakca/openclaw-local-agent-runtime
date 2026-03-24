@@ -1,6 +1,6 @@
 # Collaboration Protocol
 
-**Last updated:** 2026-03-23
+**Last updated:** 2026-03-24
 
 ---
 
@@ -26,6 +26,23 @@ Every work session ends with:
 - BACKLOG delta
 - DECISION delta
 - NEXT update
+
+---
+
+## Sprint Protocol (Phase 4+)
+
+Phase 4 sprints follow exit criteria documents:
+- Each sprint produces a report in `docs/phase-reports/`
+- Every sprint requires test count + 0 failure evidence
+- Sprint reports include: executive summary, changes made, test evidence, file manifest
+
+---
+
+## Design Freeze Protocol
+
+- Section-level amendments (L-A1, L-A2) for incremental freezes within a phase
+- Amendment creates new frozen section without reopening existing frozen sections
+- Consolidated design document (v3) is the master reference for all 58 decisions
 
 ---
 

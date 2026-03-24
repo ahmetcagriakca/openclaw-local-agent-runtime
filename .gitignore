@@ -35,5 +35,11 @@ Desktop.ini
 # Bootstrap deployer (generated artifact)
 oc-task-runtime-bootstrap-v3.4.ps1
 
+# Policy telemetry (runtime generated)
+logs/policy-telemetry.jsonl
+
+# Mission state (runtime generated)
+logs/missions/
+
 # Legacy archive
 olds/

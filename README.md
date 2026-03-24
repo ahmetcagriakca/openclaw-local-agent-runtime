@@ -1,13 +1,20 @@
 # OpenClaw Local Agent Runtime
 
-Personal AI-powered Windows automation system with Telegram integration. An AI agent (GPT-4o) interprets natural language requests, selects from 24 specialized tools, executes them via MCP on Windows, and returns formatted responses — all controllable from Telegram.
+Personal AI-powered Windows automation system with Telegram integration. 9 governed agent roles orchestrated by Mission Controller with quality gates, feedback loops, and artifact-driven context economy. Supports GPT-4o, Claude, and Ollama providers with 24 specialized tools executed via MCP on Windows.
 
 ## Architecture
 
 ```
 User (Telegram)
   -> OpenClaw (WSL Ubuntu-E, conversation gateway)
-  -> Agent Runner (Windows, GPT-4o + 24 tools)
+  -> Agent Runner (Windows, multi-provider)
+     Single-agent: GPT-4o/Claude/Ollama + 24 tools
+     Mission mode: MissionController
+       -> Complexity Router (trivial→complex)
+       -> 9 Governed Roles (PO→Analyst→Architect→PM→Dev→Tester→Reviewer→Manager)
+       -> Quality Gates (3) + Feedback Loops (2)
+       -> Context Assembler (5-tier delivery)
+       -> Working Set Enforcer (bounded filesystem)
      -> Risk Engine (deterministic risk classification)
      -> Approval Service (Telegram approval for high-risk ops)
      -> MCP Client -> WMCP Server (localhost:8001) -> PowerShell
@@ -22,24 +29,62 @@ Legacy path (predefined tasks):
 
 | Component | Location | Purpose |
 |-----------|----------|---------|
-| Agent Runner | `agent/oc-agent-runner.py` | GPT-4o orchestrator with multi-turn tool calling |
+| Agent Runner | `agent/oc-agent-runner.py` | Multi-provider orchestrator with multi-turn tool calling |
+| Mission Controller | `agent/mission/controller.py` | 9-role mission orchestration with state machine |
+| Role Registry | `agent/mission/role_registry.py` | 9 canonical roles with tool policies and budgets |
+| Skill Contracts | `agent/mission/skill_contracts.py` | 10 skill contracts with typed input/output |
+| Quality Gates | `agent/mission/quality_gates.py` | 3 gates validating artifacts between stage groups |
+| Feedback Loops | `agent/mission/feedback_loops.py` | 2 feedback loops for rework detection |
+| Complexity Router | `agent/mission/complexity_router.py` | 4-tier routing (trivial→complex) |
+| Mission State Machine | `agent/mission/mission_state.py` | 10-state mission lifecycle |
+| Context Assembler | `agent/context/assembler.py` | 5-tier artifact delivery (metadata→full+neighbors) |
+| Working Set Enforcer | `agent/context/working_set_enforcer.py` | Bounded filesystem access per stage |
+| Policy Telemetry | `agent/context/policy_telemetry.py` | 20 mandatory telemetry event types |
 | Tool Catalog | `agent/services/tool_catalog.py` | 24 named tools mapped to PowerShell commands |
 | Risk Engine | `agent/services/risk_engine.py` | Deterministic risk classification + blocked patterns |
 | Approval Service | `agent/services/approval_service.py` | Telegram-based approval for high-risk operations |
+| Approval Store | `agent/services/approval_store.py` | Persistent approval records |
 | Artifact Store | `agent/services/artifact_store.py` | Typed output (12 artifact types) |
+| Schema Validator | `agent/artifacts/schema_validator.py` | Artifact schema validation |
 | MCP Client | `agent/services/mcp_client.py` | HTTP client for windows-mcp server |
-| GPT Provider | `agent/providers/gpt_provider.py` | OpenAI GPT-4o with provider abstraction |
+| Provider Factory | `agent/providers/factory.py` | Multi-provider: GPT-4o, Claude, Ollama |
 | Bridge | `bridge/oc-bridge.ps1` | Stateless adapter for legacy task system |
 | oc runtime | `bin/` | Task queue, worker, watchdog, health engine |
 | WSL Guardian | `bin/oc-wsl-guardian.ps1` | Active WSL + OpenClaw monitor with auto-restart |
 
+## 9 Governed Roles
+
+| Role | Default Skill | Tool Policy | Model | Discovery |
+|------|---------------|-------------|-------|-----------|
+| product-owner | requirement_structuring | no_tools | gpt-4o | forbidden |
+| analyst | repository_discovery | read_only (14 tools) | claude-sonnet | primary |
+| architect | architecture_synthesis | read_only (14 tools) | claude-sonnet | primary |
+| project-manager | work_breakdown | no_tools | gpt-4o | forbidden |
+| developer | targeted_code_change | dev (14 tools) | claude-sonnet | forbidden |
+| tester | test_validation | test tools | claude-sonnet | forbidden |
+| reviewer | quality_review | review tools | claude-sonnet | forbidden |
+| manager | summary_compression | no_tools | gpt-4o | forbidden |
+| remote-operator | controlled_execution | operational | gpt-4o | forbidden |
+
+## Quality Gates
+
+| Gate | Runs After | Runs Before | Validates |
+|------|-----------|-------------|-----------|
+| Gate 1 | PO, Analyst, Architect, PM | Developer | Requirements + Design artifacts |
+| Gate 2 | Developer, Tester | Reviewer | Code delivery + Test report |
+| Gate 3 | All stages | Final | All artifact schemas validated |
+
 ## Repository Structure
 
 ```
-agent/                 AI agent system (Phase 3)
+agent/                 AI agent system (Phase 3-4)
   oc-agent-runner.py     Main orchestrator
-  providers/             LLM provider abstraction (GPT-4o, extensible)
+  oc_agent_runner_lib.py Agent orchestration logic
+  providers/             LLM providers (GPT-4o, Claude, Ollama)
   services/              MCP client, tool catalog, risk engine, approval, artifacts, audit
+  mission/               Controller, roles, skills, gates, loops, state machine, router
+  context/               Context Assembler, Working Set, Path Resolver, Telemetry
+  artifacts/             Schema Validator
 bin/                   Runtime scripts (worker, watchdog, enqueue, health, dashboard, etc.)
 bridge/                Bridge entrypoint + allowlist
 wsl/                   WSL-side wrappers (oc-agent-run, oc-approve, bridge wrappers)
@@ -48,9 +93,10 @@ defs/tasks/            Task definitions
 config/                Environment variable templates
 logs/                  Audit logs, approval records, session artifacts
 results/               Agent output files (screenshots, generated files)
-docs/ai/               Living project state (STATE, NEXT, DECISIONS)
+dashboard/             Web-based system monitor (port 8002)
+docs/ai/               Living project state (STATE, NEXT, DECISIONS, BACKLOG, PROTOCOL)
 docs/architecture/     Frozen design documents
-docs/phase-reports/    Completed phase reports
+docs/phase-reports/    Completed phase reports (Phase 1 through Phase 4 Sprint 6C)
 ```
 
 ## Tool Catalog (24 Tools)
@@ -99,19 +145,26 @@ docs/phase-reports/    Completed phase reports
 - Windows 11 with WSL2 (Ubuntu)
 - Python 3.14+ on Windows
 - OpenAI API key (`OPENAI_API_KEY` environment variable)
-- OpenClaw installed in WSL
+- Optional: Anthropic API key (`ANTHROPIC_API_KEY`) for Claude provider
 
-### Run Agent
+### Run Agent (Single-agent mode)
 
 ```powershell
 # Install dependencies
-pip install openai requests
+pip install -r agent/requirements.txt
 
 # Test agent (from PowerShell with OPENAI_API_KEY set)
 python agent/oc-agent-runner.py -m "CPU ve RAM kullanımı ne?"
 python agent/oc-agent-runner.py -m "en çok CPU kullanan 5 process ne?"
 python agent/oc-agent-runner.py -m "ekran görüntüsü al"
-python agent/oc-agent-runner.py -m "OpenClaw scheduled task'ları listele"
+```
+
+### Run Agent (Mission mode)
+
+```powershell
+# Mission mode — breaks complex goals into governed stages
+python agent/oc-agent-runner.py --mission -m "tool_catalog.py'ye yeni tool ekle"
+python agent/oc-agent-runner.py --mission -m "dashboard'a CPU grafik ekle"
 ```
 
 ### Approve High-Risk Operations
@@ -157,12 +210,17 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File bin\start-dashboard.ps1
 | 3-B | Core Agent Runner (GPT-4o + MCP) |
 | 3-C | Risk Engine + Telegram Approval Service |
 | 3-D | Full Tool Catalog (24 tools) + Typed Artifacts |
+| 3-E | Multi-Provider Support (GPT, Claude, Ollama) |
+| 3-F | Multi-Agent Foundation (hub-and-spoke, 2 specialists) |
+| 4 | Agent Governance (9 roles, quality gates, state machine, context economy) |
 
-**Next:** Phase 3-E — Multi-Provider (Claude + Ollama)
+**Next:** Phase 4.5 — Operational Tuning (structured extraction, strict approval, crash resume)
 
 ## Documentation
 
 - `docs/ai/STATE.md` — Current system state and component status
 - `docs/ai/NEXT.md` — Next phase plan
-- `docs/ai/DECISIONS.md` — Architectural decisions (frozen)
-- `docs/phase-reports/` — Detailed phase completion reports
+- `docs/ai/DECISIONS.md` — 58 architectural decisions (frozen)
+- `docs/ai/BACKLOG.md` — Backlog items by phase
+- `docs/ai/PROTOCOL.md` — Collaboration protocol
+- `docs/phase-reports/` — Detailed phase and sprint completion reports

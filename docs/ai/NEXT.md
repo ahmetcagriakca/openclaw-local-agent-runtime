@@ -1,19 +1,35 @@
 # Next Step
 
-**Last updated:** 2026-03-23
+**Last updated:** 2026-03-24
 
 ---
 
-## Phase 3-F Complete
+## Phase 4 Complete
 
-Multi-agent foundation operational. Mission Controller orchestrates analyst + executor specialists via hub-and-spoke pattern with sequential stage execution and typed artifact handoff.
+9 governed roles, 10 skill contracts, 3 quality gates, 2 feedback loops, 10-state mission state machine, complexity router, 350+ tests, 0 failures.
 
-## Potential Next
+## Immediate (Post-Phase 4)
 
-- More specialist roles (developer, tester, reviewer)
-- Parallel stage execution
-- OpenClaw auto-routing to missions (complex requests → mission mode)
-- Per-specialist provider/model selection
-- Mission resume/recovery after crash
+1. GitHub push — source of truth moves to repo
+2. Sprint 6D — Final Seal:
+   - Structured artifact extraction (LLM response parser)
+   - Strict approval enforcement (approve `<id>` / deny `<id>`)
+3. docs/ai/ state files updated to Phase 4 (this update)
 
-**After this:** Phase 4 (Reproducibility / DR) or additional improvements.
+## Short-term (Operational Tuning)
+
+4. E2E with all complexity levels (medium 7 roles, complex 8 roles)
+5. Cost tuning — per-role token budgets from telemetry
+6. Prompt refinement — LLM output→schema compliance
+
+## Medium-term (Phase 4.5)
+
+7. Approval migration — Telegram yes/no → strict approve `<id>`
+8. Crash resume — `resume_mission(mission_id)`
+9. Tier C scoped extraction
+10. Token budget enforcement — real-time tracking
+11. build_command string template debt cleanup
+
+## Deferred (Phase 2 — Security Hardening)
+
+12. B-001→B-011 (task auth, encryption, rate limits, audit integrity)

@@ -69,6 +69,7 @@
 | Phase 4 Sprint 5C | Controller Integration (state machine, gates, recovery, approval store) | Closed |
 | Phase 4 Sprint 6 | Integration Test Suite (110/110 pass) | Closed |
 | Phase 4 Sprint 6C | Closure Hardening (typed artifacts + model wiring) | Closed |
+| Phase 4 Sprint 6D | Final Seal (structured extraction + strict approval) | Closed |
 
 ## Agent System (Phase 3-4)
 
@@ -173,4 +174,4 @@ Telegram user (8654710624)
 - `telegram/oc-telegram-bot.py` is superseded by OpenClaw path — removed from repo
 - WSL stability: two-layer monitoring (L1: systemd keepalive 20s, L2: WSL Guardian 30s) — see `docs/phase-reports/WSL-OPENCLAW-STABILITY-HARDENING.md`
 - build_command string template debt — currently generates PowerShell via string concatenation (Phase 4.5 item)
-- Approval flow uses Telegram yes/no — strict `approve <id>` / `deny <id>` deferred to Sprint 6D
+- Approval flow uses strict `approve <id>` / `deny <id>` format (Sprint 6D). Simple "yes/no" deprecated — accepted only with single pending approval

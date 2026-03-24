@@ -59,13 +59,14 @@
 | Sprint 5C | Controller Integration | **Done** | State machine, gates, recovery, approval store wired |
 | Sprint 6 | Integration Test Suite | **Done** | 110/110 tests pass |
 | Sprint 6C | Closure Hardening | **Done** | Typed artifacts + model wiring from role registry |
+| Sprint 6D | Final Seal | **Done** | Structured extraction + strict approval enforcement |
 
 ## Phase 4.5 — Agent Governance Tuning (Planned)
 
 | ID | Item | Notes |
 |----|------|-------|
-| B-036 | Structured artifact extraction | Sprint 6D: LLM response → typed artifact parser |
-| B-037 | Strict approval enforcement | Sprint 6D: approve `<id>` / deny `<id>` |
+| B-036 | Structured artifact extraction | **Done** — Sprint 6D: LLM response → typed artifact parser |
+| B-037 | Strict approval enforcement | **Done** — Sprint 6D: approve `<id>` / deny `<id>` |
 | B-038 | Crash resume | resume_mission(mission_id) |
 | B-039 | Tier C scoped extraction | Partial content delivery by role |
 | B-040 | Token budget enforcement | Real-time per-role tracking |

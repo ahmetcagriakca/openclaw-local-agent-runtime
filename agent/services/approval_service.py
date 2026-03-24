@@ -90,8 +90,8 @@ class ApprovalService:
                 f"Tool: <code>{tool_name}</code>\n"
                 f"Parameters: <code>{json.dumps(tool_params, ensure_ascii=False)}</code>\n"
                 f"Risk: <b>{risk.upper()}</b>\n\n"
-                f"To approve: <code>approve {apv_id}</code>\n"
-                f"To deny: <code>deny {apv_id}</code>\n\n"
+                f"\u2705 Approve: <code>approve {apv_id}</code>\n"
+                f"\u274c Deny: <code>deny {apv_id}</code>\n\n"
                 f"Auto-deny in {self.timeout} seconds."
             )
             self._send_telegram(message)
@@ -177,51 +177,94 @@ class ApprovalService:
     def _peek_telegram_reply(self, apv_id: str, after_unix: int) -> str | None:
         """Peek at recent Telegram messages for approve/deny reply.
 
-        Uses getUpdates WITHOUT offset — does not consume messages.
-        OpenClaw can still see and process the same messages.
+        STRICT MODE (6D):
+        - "approve <id>" or "deny <id>" -> always accepted
+        - Simple "yes"/"no" -> only if exactly 1 pending approval
+          (backward compat with deprecation warning)
+        - Multiple pending + "yes" -> rejected (returns None)
 
         Returns: "approve" | "deny" | None
         """
         try:
             import requests
             url = f"https://api.telegram.org/bot{self.bot_token}/getUpdates"
-            # No offset — just get recent messages without consuming
             resp = requests.get(url, params={"limit": 20, "timeout": 0}, timeout=5)
             data = resp.json()
 
             if not data.get("ok"):
                 return None
 
+            # Count current pending approvals
+            pending_count = self._count_pending_approvals()
+
             for update in data.get("result", []):
                 msg = update.get("message", {})
                 msg_date = msg.get("date", 0)
 
-                # Only check messages sent after our approval request
                 if msg_date < after_unix:
                     continue
 
                 text = (msg.get("text") or "").strip().lower()
                 chat_id = str(msg.get("chat", {}).get("id", ""))
 
-                # Only from the right chat
                 if chat_id != str(self.chat_id):
                     continue
 
                 apv_lower = apv_id.lower()
+
+                # STRICT: ID-based approve/deny (always accepted)
                 if f"approve {apv_lower}" in text or f"yes {apv_lower}" in text:
                     return "approve"
                 if f"deny {apv_lower}" in text or f"no {apv_lower}" in text:
                     return "deny"
 
-                # Simple yes/no (convenience — only safe with single pending)
+                # BACKWARD COMPAT: Simple yes/no
                 if text in ("yes", "evet", "approve", "onayla"):
-                    return "approve"
-                if text in ("no", "hayir", "deny", "reddet"):
-                    return "deny"
+                    if pending_count <= 1:
+                        self._send_telegram(
+                            f"\u26a0\ufe0f DEPRECATION: Plain '{text}' accepted for {apv_id}. "
+                            f"Please use 'approve {apv_id}' format in the future."
+                        )
+                        return "approve"
+                    else:
+                        self._send_telegram(
+                            f"\u274c Ambiguous: {pending_count} pending approvals. "
+                            f"Please specify: 'approve {apv_id}' or 'deny {apv_id}'"
+                        )
+                        return None
+
+                if text in ("no", "hayir", "hayır", "deny", "reddet"):
+                    if pending_count <= 1:
+                        self._send_telegram(
+                            f"\u26a0\ufe0f DEPRECATION: Plain '{text}' accepted for {apv_id}. "
+                            f"Please use 'deny {apv_id}' format in the future."
+                        )
+                        return "deny"
+                    else:
+                        self._send_telegram(
+                            f"\u274c Ambiguous: {pending_count} pending approvals. "
+                            f"Please specify: 'approve {apv_id}' or 'deny {apv_id}'"
+                        )
+                        return None
 
             return None
         except Exception:
             return None
+
+    def _count_pending_approvals(self) -> int:
+        """Count current pending approval files."""
+        import glob
+        pattern = os.path.join(APPROVALS_DIR, "apv-*.json")
+        count = 0
+        for path in glob.glob(pattern):
+            try:
+                with open(path, "r", encoding="utf-8") as f:
+                    record = json.load(f)
+                if record.get("status") == "pending":
+                    count += 1
+            except Exception:
+                pass
+        return count
 
     def _send_telegram(self, message: str):
         """Send a message via Telegram Bot API (one-way, no polling)."""

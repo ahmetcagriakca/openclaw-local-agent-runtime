@@ -197,6 +197,12 @@ class MissionController:
                     "raw_artifacts": stage["artifacts"]
                 }
 
+                # 6D-1: Extract structured fields from LLM response
+                from mission.artifact_extractor import extract_artifact_fields
+                extracted = extract_artifact_fields(
+                    artifact_type, stage.get("result", ""))
+                stage_artifact_data.update(extracted)
+
                 artifact_id = assembler.store_artifact(
                     artifact_type=artifact_type,
                     data=stage_artifact_data,

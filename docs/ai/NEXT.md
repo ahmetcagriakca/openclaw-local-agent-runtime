@@ -11,10 +11,8 @@
 ## Immediate (Post-Phase 4)
 
 1. GitHub push — source of truth moves to repo
-2. Sprint 6D — Final Seal:
-   - Structured artifact extraction (LLM response parser)
-   - Strict approval enforcement (approve `<id>` / deny `<id>`)
-3. docs/ai/ state files updated to Phase 4 (this update)
+2. ~~Sprint 6D — Final Seal~~ **DONE** (structured extraction + strict approval)
+3. ~~docs/ai/ state files updated to Phase 4~~ **DONE**
 
 ## Short-term (Operational Tuning)
 
@@ -24,7 +22,7 @@
 
 ## Medium-term (Phase 4.5)
 
-7. Approval migration — Telegram yes/no → strict approve `<id>`
+7. ~~Approval migration — Telegram yes/no → strict approve `<id>`~~ **DONE** (Sprint 6D)
 8. Crash resume — `resume_mission(mission_id)`
 9. Tier C scoped extraction
 10. Token budget enforcement — real-time tracking

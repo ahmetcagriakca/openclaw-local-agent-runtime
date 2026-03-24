@@ -4,7 +4,7 @@ import os
 import json
 import time
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from mission.mission_state import MissionState, MissionStatus
 from mission.quality_gates import check_gate_1, check_gate_2, check_gate_3

@@ -7,7 +7,7 @@ import unittest
 from unittest.mock import patch, MagicMock
 
 # Add agent dir to path
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from mission.artifact_extractor import extract_artifact_fields
 

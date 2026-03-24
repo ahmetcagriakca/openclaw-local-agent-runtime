@@ -738,3 +738,53 @@ Security boundaries are explicit.
 Recovery is conservative.
 The external control surface is task-centric.
 All future work must preserve these constraints.
+
+---
+
+## 19. Agent System Architecture (Phase 3-4)
+
+This section documents the AI agent layer added in Phases 3 and 4, which sits above the oc runtime task system.
+
+### 19.1 Overview
+
+The agent system provides AI-powered automation where an LLM interprets user requests, selects from 24 named tools, and executes them via MCP on Windows. In mission mode, a Mission Controller orchestrates 9 governed specialist roles through quality gates and feedback loops.
+
+### 19.2 Execution Modes
+
+| Mode | Entry | Description |
+|------|-------|-------------|
+| Single-agent | `oc-agent-runner.py -m "..."` | One LLM + tools, direct execution |
+| Mission | `oc-agent-runner.py --mission -m "..."` | MissionController + 9 roles + gates |
+
+### 19.3 Key Components
+
+| Component | Location | Purpose |
+|-----------|----------|---------|
+| Agent Runner | `agent/oc-agent-runner.py` | CLI entry point |
+| Mission Controller | `agent/mission/controller.py` | Multi-agent orchestrator |
+| Role Registry | `agent/mission/role_registry.py` | 9 role definitions |
+| Skill Contracts | `agent/mission/skill_contracts.py` | 10 machine-readable contracts |
+| Complexity Router | `agent/mission/complexity_router.py` | Tier 0/2 classification |
+| Quality Gates | `agent/mission/quality_gates.py` | 3 gates between stages |
+| Feedback Loops | `agent/mission/feedback_loops.py` | Dev↔Tester, Dev↔Reviewer |
+| Mission State | `agent/mission/mission_state.py` | 10-state formal machine |
+| Artifact Extractor | `agent/mission/artifact_extractor.py` | 3-tier structured field extraction |
+| Context Assembler | `agent/context/assembler.py` | 5-tier artifact delivery |
+| Working Set Enforcer | `agent/context/working_set_enforcer.py` | Bounded filesystem access |
+| Policy Telemetry | `agent/context/policy_telemetry.py` | 20 event types, JSONL |
+
+### 19.4 Design References
+
+Detailed agent architecture is documented in:
+- `docs/ai/DECISIONS.md` — 58 frozen decisions (D-001→D-058)
+- `docs/ai/PHASE-4-DESIGN-INDEX.md` — Phase 4 design document index
+- Phase 4 Sprint Reports in `docs/phase-reports/`
+
+### 19.5 Relationship to oc runtime
+
+The agent system is a CONSUMER of oc runtime, not a replacement.
+- Agent Runner calls MCP tools which execute PowerShell via WMCP
+- Mission mode uses the same tool catalog and risk engine
+- oc runtime task queue remains the canonical execution layer for
+  predefined tasks (Bridge path)
+- Agent path is for interactive AI-driven requests (Telegram/CLI path)

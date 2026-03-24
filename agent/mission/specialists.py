@@ -10,6 +10,12 @@ OUTPUT: Produce a requirements_brief with:
 - requirements array (each with id, description, priority, acceptance_criteria)
 - constraints, out_of_scope, open_questions
 
+IMPORTANT: Include a structured JSON block in your response wrapped in ```json ... ``` markers.
+Example:
+```json
+{"title": "...", "summary": "...", "requirements": [{"id": "REQ-1", "description": "...", "priority": "high", "acceptance_criteria": "..."}], "constraints": [], "out_of_scope": [], "open_questions": []}
+```
+
 CONSTRAINTS:
 - You have NO tool access. Work only from the user message.
 - Do NOT attempt to read files or explore the repository.
@@ -81,6 +87,12 @@ CONSTRAINTS:
 
 OUTPUT: Produce code_delivery with touched_files, self_test_notes, and any blockers encountered.
 
+IMPORTANT: Include a structured JSON block in your response wrapped in ```json ... ``` markers.
+Example:
+```json
+{"touched_files": ["agent/services/tool_catalog.py"], "self_test_notes": "Verified changes compile", "blockers": []}
+```
+
 CONSTRAINTS:
 - You may ONLY write to files explicitly assigned in your working set (readWrite, creatable, generatedOutputs).
 - You may NOT create files outside your assigned targets.
@@ -95,6 +107,12 @@ OUTPUT: Produce test_report with:
 - criteria_results array (each criterion: pass/fail/blocked + evidence)
 - bugs array (severity, file, reproduction_steps)
 - verdict: pass | conditional_pass | fail
+
+IMPORTANT: Include a structured JSON block in your response wrapped in ```json ... ``` markers.
+Example:
+```json
+{"verdict": "pass", "criteria_results": [{"criterion": "...", "status": "pass", "evidence": "..."}], "bugs": []}
+```
 
 CONSTRAINTS:
 - You may ONLY read files in the delivered scope (code_delivery files).
@@ -111,6 +129,12 @@ OUTPUT: Produce review_decision with:
 - findings array (severity, file, description, recommendation)
 - design_compliance: assessed | not_assessed
 - security_concerns: none | list
+
+IMPORTANT: Include a structured JSON block in your response wrapped in ```json ... ``` markers.
+Example:
+```json
+{"decision": "approve", "findings": [], "design_compliance": "assessed", "security_concerns": "none"}
+```
 
 CONSTRAINTS:
 - You may read delivered files and design-referenced files only.

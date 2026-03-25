@@ -1,8 +1,8 @@
-# Sprint 11 Final Review Raporu — GPT'ye Gönderilecek
+# Sprint 11 Final Review Raporu — GPT'ye Gönderilecek (v2 — Closure Evidence Complete)
 
-**Tarih:** 2026-03-26
+**Tarih:** 2026-03-26 (Updated)
 **Sprint:** 11 — Phase 5C: Intervention / Mutation
-**Review Tipi:** 11.FINAL — GPT Final Review (BLOCKER before closure)
+**Review Tipi:** 11.FINAL — GPT Closure Review (all evidence produced, operator sign-off pending)
 
 ---
 
@@ -24,7 +24,9 @@
 
 ## Context
 
-Sprint 11 tüm code task'ları tamamlandı (11.0→11.11). Read-only Sprint 8-10 altyapısı üzerine mutation katmanı eklendi: 4 endpoint, CSRF middleware, atomic signal artifact bridge, mutation audit, D-096 lifecycle, frontend mutation UI. Bu review'ın PASS alması closure için zorunlu.
+Sprint 11 tüm code task'ları (11.0→11.11) + closure evidence tamamlandı. Read-only Sprint 8-10 altyapısı üzerine mutation katmanı eklendi: 4 endpoint, CSRF middleware, atomic signal artifact bridge, mutation audit, D-096 lifecycle, frontend mutation UI.
+
+**GPT ilk final review PASS verdi** (4 non-blocking note). Non-blocking fix'ler uygulandı. Sonrasında live endpoint checks (10/10), operator drill (5/5), closure-check script çalıştırıldı — tümü PASS. Bu güncellenmiş rapor, closure kararı öncesi son durumu yansıtır.
 
 ## Mid-Review PASS Recap
 
@@ -52,7 +54,7 @@ Mid-review follow-up: raw evidence dosyaları üretildi (ownership-grep.txt, bri
 |------|-------------|--------|
 | 11.0 | DECISIONS.md D-081→D-096 (13 decisions, total 55) | `16427bc` |
 | 11.1 | Contract-first test suite (11 tests, all FAIL → all PASS) | `947a396` |
-| 11.2 | CSRF middleware — SameSite + Origin (D-089) | `6013eb2` |
+| 11.2 | CSRF middleware — Origin check enforced (D-089) | `6013eb2` |
 | 11.3 | Mutation audit logger (requestId, tabId, sessionId) | `6013eb2` |
 | 11.4 | Atomic request artifact bridge (D-001, D-062, D-063) | `9b245aa` |
 | 11.5 | Approve/Reject endpoints + MutationResponse (D-096) | `e25053e` |
@@ -63,8 +65,13 @@ Mid-review follow-up: raw evidence dosyaları üretildi (ownership-grep.txt, bri
 | 11.9 | Mission detail cancel/retry buttons | `7054938` |
 | 11.10 | useMutation hook + feedback (D-091) | `7054938` |
 | 11.11 | Approval sunset warning (D-092) | `04122a9` |
+| 11.FINAL | Results section + closure-check-output.txt | `3a5ec00` |
+| 11.FINAL | GPT review fixes + retrospective | `c038842` |
+| 11.FINAL | Live checks + operator drill + closure evidence | `99ebecc` |
 
-**Remaining:** 11.12 (operator drill — manual, 5 live scenarios), 11.FINAL (this review).
+**All tasks complete.** 11.12 (operator drill) executed — 5/5 PASS. Closure evidence produced.
+
+**Total: 13 commits** (last: `dcd0ffc`)
 
 ## Architecture — Full Flow
 
@@ -585,11 +592,14 @@ logger.warning(
 |------|---------|--------|
 | `ownership-grep.txt` | `grep controller/service` in agent/api/ | NO MATCHES |
 | `bridge-check.txt` | `grep .approve()/.reject()` in agent/api/ | NO MATCHES |
-| `contract-evidence.txt` | lifecycle field grep across agent+frontend | 67 lines |
+| `contract-evidence.txt` | lifecycle grep + mutation grep + bridge rule + live endpoints + host attack | ALL PASS |
 | `schema-compatibility.txt` | MutationResponse additive + read-model intact | Verified |
 | `contract-tests-initial.txt` | 11 tests pre-implementation | 11 FAILED |
 | `contract-tests-final.txt` | 11 tests post-implementation | 11 PASSED |
-| `closure-check-output.txt` | pytest + vitest + tsc + lint + build | ALL PASS |
+| `closure-check-output.txt` | pytest 195 + vitest 29 + tsc 0 + lint 0 + build OK | ✅ ELIGIBLE FOR CLOSURE REVIEW |
+| `live-checks.txt` | 10 live POST checks (CSRF, approve, duplicate, FSM, cancel, retry, 404, artifacts) | 10/10 PASS |
+| `mutation-drill.txt` | 5 operator drill scenarios (2-tab race, retry reject, cancel exec, polling fallback, manual refresh) | 5/5 PASS |
+| `review-final.md` | GPT first final review result | PASS (4 non-blocking) |
 
 ## Frozen Decisions Compliance
 
@@ -603,24 +613,58 @@ logger.warning(
 | D-092 | Telegram sunset Phase 1 | ✅ APPROVAL_SUNSET logger.warning |
 | D-096 | Full lifecycle response | ✅ MutationResponse schema + 11 tests |
 
-## Remaining Before Closure
+## Closure Evidence Status (ALL COMPLETE)
 
-| # | Item | Owner |
-|---|------|-------|
-| 1 | Operator drill 11.12 (5 live scenarios) | Operator |
-| 2 | `live-checks.txt` | Operator |
-| 3 | Retrospective | Claude (after this review) |
-| 4 | `closure-check.sh` run | Operator (WSL) |
+| # | Item | Result | Evidence |
+|---|------|--------|----------|
+| 1 | Operator drill (5 scenarios) | ✅ 5/5 PASS | `mutation-drill.txt` |
+| 2 | Live endpoint checks (10 checks) | ✅ 10/10 PASS | `live-checks.txt` |
+| 3 | Retrospective | ✅ Written | Section 14 in task breakdown |
+| 4 | `closure-check.sh` equivalent | ✅ ELIGIBLE FOR CLOSURE REVIEW | `closure-check-output.txt` + `contract-evidence.txt` |
+| 5 | GPT final review (first pass) | ✅ PASS | `review-final.md` |
 
-## Questions for Review
+### Live Endpoint Check Details (10/10)
 
-1. **Frontend mutation flow:** D-091 server-confirmed pattern doğru uygulandı mı? useMutation hook'ta optimistic state var mı?
-2. **ConfirmDialog:** D-090 — destructive action'lar (reject, cancel) onay gerektiriyor, non-destructive (approve, retry) tek click. Doğru mu?
-3. **CSRF coverage:** CSRFMiddleware tüm POST'lara uygulanıyor. Bypass riski var mı?
-4. **Schema compatibility:** MutationResponse eklenmesi mevcut read-model type'larını etkiliyor mu?
-5. **Audit completeness:** Her mutation requestId + tabId + sessionId logluyor. Eksik alan var mı?
-6. **SSE event flow:** useMutation 3 event dinliyor (applied/rejected/timed_out). mutation_accepted dinlenmemeli mi?
-7. **Error handling:** API 404/409 hatalarını frontend doğru yakalıyor mu?
+| # | Check | Expected | Got |
+|---|-------|----------|-----|
+| 1 | GET /health | 200 | 200 ✅ |
+| 2 | POST without Origin → CSRF | 403 | 403 ✅ |
+| 3 | POST approve pending approval | 200 + MutationResponse | 200 ✅ |
+| 4 | POST approve same approval again | 409 duplicate | 409 ✅ |
+| 5 | POST approve already-approved | 409 FSM | 409 ✅ |
+| 6 | POST cancel executing mission | 200 + MutationResponse | 200 ✅ |
+| 7 | POST retry executing mission | 409 FSM | 409 ✅ |
+| 8 | POST approve nonexistent | 404 | 404 ✅ |
+| 9 | Signal artifact exists (approve) | JSON file in missions dir | ✅ |
+| 10 | Signal artifact exists (cancel) | JSON file in missions dir | ✅ |
+
+### Operator Drill Details (5/5)
+
+| # | Scenario | Result |
+|---|----------|--------|
+| 1 | 2-tab race: Tab A approve → 200, Tab B approve same → 409 | ✅ PASS |
+| 2 | Retry while mission executing → 409 (not in retry-valid states) | ✅ PASS |
+| 3 | Cancel during execution → 200 + signal artifact created | ✅ PASS |
+| 4 | Mutation works without SSE (polling fallback — D-088) | ✅ PASS |
+| 5 | Stale SSE + manual refresh → data visible after reconnect | ✅ PASS |
+
+### GPT First Review Summary
+
+**VERDICT: PASS** (4 non-blocking notes — all addressed)
+1. Test count arithmetic clarified (195 includes 11 contract, not additive)
+2. D-089 wording updated (Origin check enforced, SameSite is browser context)
+3. mutation_accepted event acknowledged as controller-side only (correct)
+4. Document is not closure (acknowledged — operator sign-off still required)
+
+## Questions for Closure Review
+
+İlk review'da 4 non-blocking note verildi ve tümü fix'lendi. Bu güncellenmiş raporda:
+
+1. **Closure evidence yeterliliği:** Live checks (10/10) + operator drill (5/5) + closure-check (ELIGIBLE) — sprint closure için yeterli mi?
+2. **Bridge rule compliance:** `contract-evidence.txt` grep sonuçları endpoint handler'ları yakalıyor (false positive). Gerçek bridge rule ihlali yok — `write_signal_artifact()` kullanılıyor. Onay?
+3. **Retrospective quality:** Section 14'te 4 action item (A-01→A-04) var. Sprint 12 kickoff gate'e taşınmalı mı?
+4. **Host attack (D-070):** Host header validation 403 döndürüyor — doğru mu?
+5. **Remaining risk:** Sprint 12'ye taşınması gereken teknik borç veya risk var mı?
 
 ## Expected Review Output
 
@@ -638,6 +682,7 @@ RECOMMENDATION: Proceed to closure | Fix issues first
 ## Notlar
 
 - `### — BAŞLANGIÇ —` ile `### — BİTİŞ —` arasını GPT'ye kopyala-yapıştır gönder.
-- GPT PASS verirse → retrospective yazılır → operator drill sonrası closure.
+- GPT PASS verirse → operator `closure_status=closed` verebilir.
 - GPT FAIL verirse → blocking issue'lar çözülür → tekrar review.
-- Review çıktısını `evidence/sprint-11/review-final.md` olarak kaydet.
+- Review çıktısını `evidence/sprint-11/review-closure.md` olarak kaydet.
+- İlk review çıktısı: `evidence/sprint-11/review-final.md` (PASS — 4 non-blocking, tümü fix'lendi).

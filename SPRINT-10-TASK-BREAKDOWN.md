@@ -377,9 +377,11 @@ useSSEInvalidation('mission_updated', refresh);
 4. Tüm 5 page'de SSE integration çalışıyor
 5. `usePolling` hâlâ import edilebilir ve çalışır (removed değil)
 
+**Uygulama notu:** `useSSEInvalidation` ayrı dosya yerine `SSEContext.tsx` içinde implement edildi. SSEProvider context pattern daha clean — ayrı hook dosyası gereksiz. `usePolling` interval'ı değiştirilmedi, SSE connected iken invalidation yeterli.
+
 ---
 
-### Task 10.7 — Debouncing + Multi-Tab
+### Task 10.7
 
 | Alan | Değer |
 |------|-------|
@@ -504,19 +506,22 @@ curl -N http://127.0.0.1:8003/api/v1/events/stream | head -20 > evidence/sprint-
 | `agent/api/sse_api.py` | Created | 10.3 |
 | `agent/api/server.py` | Modified | 10.3 (lifespan + watcher + SSE) |
 | `agent/tests/test_sse.py` | Created | 10.8 |
+| `agent/tests/conftest.py` | Created | 10.8 (pytest-anyio conflict fix) |
 | `frontend/src/hooks/useSSE.ts` | Created | 10.4 |
 | `frontend/src/components/ConnectionIndicator.tsx` | Created | 10.5 |
+| `frontend/src/hooks/SSEContext.tsx` | Created | 10.5 (SSEProvider + useSSEInvalidation) |
 | `frontend/src/components/Layout.tsx` | Modified | 10.5 (indicator swap) |
 | `frontend/src/pages/MissionListPage.tsx` | Modified | 10.6 |
 | `frontend/src/pages/MissionDetailPage.tsx` | Modified | 10.6 |
 | `frontend/src/pages/HealthPage.tsx` | Modified | 10.6 |
 | `frontend/src/pages/ApprovalsPage.tsx` | Modified | 10.6 |
 | `frontend/src/pages/TelemetryPage.tsx` | Modified | 10.6 |
-| `frontend/src/hooks/usePolling.ts` | Modified | 10.6 (interval adjustment) |
+| `frontend/src/hooks/usePolling.ts` | Preserved | 10.6 (fallback, not modified) |
+| `frontend/src/App.tsx` | Modified | 10.6 (SSEProvider wrapper) |
 | `frontend/src/__tests__/useSSE.test.tsx` | Created | 10.8 |
 | `frontend/src/__tests__/ConnectionIndicator.test.tsx` | Created | 10.8 |
 
-**Total:** 8 created, 8 modified.
+**Total:** 12 created, 8 modified.
 
 ---
 

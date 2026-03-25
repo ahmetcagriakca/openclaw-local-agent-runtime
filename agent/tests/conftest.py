@@ -10,6 +10,3 @@ def pytest_configure(config):
             config.pluginmanager.unregister(plugin)
     except Exception:
         pass
-
-# test_sprint_5c.py has module-level sys.exit() - exclude from collection
-collect_ignore = ["test_sprint_5c.py"]

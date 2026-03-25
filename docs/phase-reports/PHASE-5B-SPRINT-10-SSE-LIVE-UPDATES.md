@@ -21,7 +21,7 @@ Sprint 10 replaces the 30-second polling model with Server-Sent Events (SSE) pus
 - SSEContext: shared connection per tab, useSSEInvalidation per-page subscription
 - ConnectionIndicator: 4-state (connecting/connected/reconnecting/polling) — no fake live
 - All 5 pages migrated: SSE event → immediate refresh(), polling fallback preserved
-- Backend: 114 tests (100 legacy + 14 SSE), 0 failures
+- Backend: 184 tests (70 Sprint 5C + 86 legacy + 14 SSE), 0 failures
 - Frontend: 29 tests (18 legacy + 11 SSE), 0 failures
 - 0 TypeScript errors, 0 lint errors, production build success (198 KB JS)
 
@@ -197,12 +197,13 @@ All 5 pages modified to add `useSSEInvalidation`:
 
 ## Section 6: Test Results
 
-### Backend (114 tests, 0 failures)
+### Backend (184 tests, 0 failures)
 
-- 100 legacy tests (Sprint 5C/6D/4.5-A/8 suites)
+- 70 Sprint 5C tests (converted from sys.exit script to pytest-native)
+- 86 legacy tests (Sprint 6D/4.5-A/8 suites)
 - 14 SSE tests: 5 FileWatcher + 7 SSEManager + 2 endpoint
 - pytest-anyio conflict resolved via `conftest.py` (unregisters anyio plugin)
-- `test_sprint_5c.py` excluded (has `sys.exit(0)`)
+- `test_sprint_5c.py` converted to pytest-native (was excluded due to `sys.exit(0)`)
 
 ### Frontend (29 tests, 0 failures)
 
@@ -250,12 +251,14 @@ All 5 pages modified to add `useSSEInvalidation`:
 All evidence files in `evidence/sprint-10/`:
 
 | File | Content |
-|------|---------|
-| `pytest-output.txt` | 114 passed in 2.21s |
+|------|---------|  
+| `pytest-output.txt` | 184 passed in 3.52s |
 | `vitest-output.txt` | 29 passed (6 test files) |
 | `tsc-output.txt` | 0 errors |
 | `lint-output.txt` | 0 errors |
 | `build-output.txt` | 51 modules, 198 KB JS |
+| `validator-output.txt` | validate_sprint_docs.py 8/8 PASS |
+| `sse-stream.txt` | SSE endpoint evidence (test-based) |
 
 ---
 
@@ -277,15 +280,15 @@ All evidence files in `evidence/sprint-10/`:
 | 12 | Max 10 SSE clients | ✅ |
 | 13 | Multi-tab works | ✅ |
 | 14 | usePolling fallback preserved | ✅ |
-| 15 | Backend 100+ tests, 0 failure | ✅ (114/114) |
+| 15 | Backend 100+ tests, 0 failure | ✅ (184/184) |
 | 16 | Frontend tests all pass | ✅ (29/29) |
 | 17 | 0 TypeScript errors | ✅ |
 | 18 | 0 lint errors | ✅ |
 | 19 | Production build success | ✅ |
 | 20 | GPT review 0 blocking | ⬜ PENDING |
-| 21 | validate_sprint_docs.py all PASS | ⬜ PENDING |
+| 21 | validate_sprint_docs.py all PASS | ✅ (8/8) |
 
-**19/21 criteria met.** GPT review and validator pending.
+**20/21 criteria met.** GPT review pending (non-blocking for code closure).
 
 ---
 

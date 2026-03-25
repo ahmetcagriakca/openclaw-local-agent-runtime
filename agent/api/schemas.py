@@ -228,6 +228,24 @@ class CapabilitiesResponse(BaseModel):
     capabilities: dict[str, CapabilityEntry] = Field(default_factory=dict)
 
 
+# ── Mutation Response (D-096: Full Lifecycle) ────────────────────
+
+class MutationResponse(BaseModel):
+    """D-096 mutation response contract.
+
+    API always returns lifecycleState=requested.
+    Subsequent states (accepted/applied/rejected/timed_out) via SSE only.
+    """
+    requestId: str
+    lifecycleState: str = "requested"
+    targetId: str
+    requestedAt: str
+    acceptedAt: Optional[str] = None
+    appliedAt: Optional[str] = None
+    rejectedReason: Optional[str] = None
+    timeoutAt: Optional[str] = None
+
+
 # ── Error ────────────────────────────────────────────────────────
 
 class APIError(BaseModel):

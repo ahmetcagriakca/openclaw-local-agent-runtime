@@ -92,11 +92,15 @@ class TestMutationContract01_LifecycleRequested(unittest.TestCase):
             self.assertIsNone(body["appliedAt"])
 
 
-class TestMutationContract02_SSEAcceptedApplied(unittest.TestCase):
-    """Test 2: requested → accepted → applied (SSE events with requestId)."""
+class TestMutationContract02_SSEMutationRequested(unittest.TestCase):
+    """Test 2: API emits mutation_requested SSE with requestId correlation.
 
-    def test_sse_mutation_accepted_and_applied(self):
-        """After approve, SSE emits mutation_accepted + mutation_applied with matching requestId."""
+    D-096 ordering: artifact persisted → SSE mutation_requested → HTTP response.
+    mutation_accepted / mutation_applied are controller-side (runtime consumer).
+    """
+
+    def test_sse_mutation_requested_emitted(self):
+        """After approve, _emit_mutation_requested called with correct args."""
         with tempfile.TemporaryDirectory() as tmpdir:
             tmppath = Path(tmpdir)
             approvals_dir = tmppath / "approvals"
@@ -108,24 +112,22 @@ class TestMutationContract02_SSEAcceptedApplied(unittest.TestCase):
             apv_file.write_text(json.dumps(_approval_json("apv-001")),
                                 encoding="utf-8")
 
-            collected_events = []
-            original_broadcast = None
+            # Mock the SSE emit function to capture calls
+            emit_calls = []
+            _original_emit = None
 
-            async def _capture_broadcast(event_type, data=None):
-                collected_events.append({"event": event_type, "data": data})
-                if original_broadcast:
-                    await original_broadcast(event_type, data)
+            async def _mock_emit(request, request_id, target_id, mutation_type):
+                emit_calls.append({
+                    "requestId": request_id,
+                    "targetId": target_id,
+                    "type": mutation_type,
+                })
 
             with patch("api.server.APPROVALS_DIR", approvals_dir), \
-                 patch("api.server.MISSIONS_DIR", tmppath / "missions"):
+                 patch("api.server.MISSIONS_DIR", tmppath / "missions"), \
+                 patch("api.approval_mutation_api._emit_mutation_requested",
+                       _mock_emit):
                 client = _make_test_client()
-
-                # Patch SSE manager broadcast to capture events
-                sse_mgr = getattr(client.app.state, "sse_manager", None)
-                if sse_mgr:
-                    original_broadcast = sse_mgr.broadcast
-                    sse_mgr.broadcast = _capture_broadcast
-
                 resp = client.post(
                     "/api/v1/approvals/apv-001/approve",
                     headers={"Origin": "http://localhost:3000"},
@@ -135,17 +137,12 @@ class TestMutationContract02_SSEAcceptedApplied(unittest.TestCase):
             request_id = resp.json().get("requestId")
             self.assertIsNotNone(request_id)
 
-            # Verify SSE events contain mutation_accepted and mutation_applied
-            event_types = [e["event"] for e in collected_events]
-            self.assertIn("mutation_accepted", event_types,
-                          "mutation_accepted SSE event not emitted")
-            self.assertIn("mutation_applied", event_types,
-                          "mutation_applied SSE event not emitted")
-
-            # Verify requestId correlation
-            for evt in collected_events:
-                if evt["event"] in ("mutation_accepted", "mutation_applied"):
-                    self.assertEqual(evt["data"]["requestId"], request_id)
+            # Verify _emit_mutation_requested was called
+            self.assertEqual(len(emit_calls), 1,
+                             "mutation_requested emit not called exactly once")
+            self.assertEqual(emit_calls[0]["requestId"], request_id)
+            self.assertEqual(emit_calls[0]["targetId"], "apv-001")
+            self.assertEqual(emit_calls[0]["type"], "approve")
 
 
 class TestMutationContract03_SSERejected(unittest.TestCase):
@@ -279,41 +276,57 @@ class TestMutationContract07_AuditLogFields(unittest.TestCase):
     """Test 7: audit log fields present after mutation."""
 
     def test_audit_log_contains_required_fields(self):
-        """After approve, mission-control-api.log contains audit entry."""
+        """After approve, audit logger emits structured entry with required fields."""
+        import logging as _logging
+
         with tempfile.TemporaryDirectory() as tmpdir:
             tmppath = Path(tmpdir)
             approvals_dir = tmppath / "approvals"
             approvals_dir.mkdir()
             missions_dir = tmppath / "missions" / "m-001"
             missions_dir.mkdir(parents=True)
-            log_path = tmppath / "mission-control-api.log"
 
             apv_file = approvals_dir / "apv-001.json"
             apv_file.write_text(json.dumps(_approval_json("apv-001")),
                                 encoding="utf-8")
 
-            with patch("api.server.APPROVALS_DIR", approvals_dir), \
-                 patch("api.server.MISSIONS_DIR", tmppath / "missions"), \
-                 patch("api.server.API_LOG_PATH", log_path):
-                client = _make_test_client()
-                resp = client.post(
-                    "/api/v1/approvals/apv-001/approve",
-                    headers={
-                        "Origin": "http://localhost:3000",
-                        "X-Tab-Id": "tab-123",
-                        "X-Session-Id": "sess-456",
-                    },
-                )
+            # Capture audit log output
+            captured_logs = []
+            handler = _logging.Handler()
+            handler.emit = lambda record: captured_logs.append(record.getMessage())
+            audit_logger = _logging.getLogger("mcc.mutation.audit")
+            audit_logger.addHandler(handler)
+
+            try:
+                with patch("api.server.APPROVALS_DIR", approvals_dir), \
+                     patch("api.server.MISSIONS_DIR", tmppath / "missions"):
+                    client = _make_test_client()
+                    resp = client.post(
+                        "/api/v1/approvals/apv-001/approve",
+                        headers={
+                            "Origin": "http://localhost:3000",
+                            "X-Tab-Id": "tab-123",
+                            "X-Session-Id": "sess-456",
+                        },
+                    )
+            finally:
+                audit_logger.removeHandler(handler)
 
             self.assertEqual(resp.status_code, 200)
 
-            # Verify audit log has required fields
-            self.assertTrue(log_path.exists(), "Audit log not created")
-            log_content = log_path.read_text(encoding="utf-8")
-            required_fields = ["requestId", "operation", "targetId"]
+            # Verify audit log entry has required fields
+            audit_entries = [l for l in captured_logs if "MUTATION_AUDIT" in l]
+            self.assertGreater(len(audit_entries), 0, "No MUTATION_AUDIT entry")
+
+            audit_json_str = audit_entries[0].replace("MUTATION_AUDIT ", "")
+            audit_data = json.loads(audit_json_str)
+            required_fields = ["requestId", "operation", "targetId",
+                               "tabId", "sessionId"]
             for field in required_fields:
-                self.assertIn(field, log_content,
+                self.assertIn(field, audit_data,
                               f"Audit log missing field: {field}")
+            self.assertEqual(audit_data["tabId"], "tab-123")
+            self.assertEqual(audit_data["sessionId"], "sess-456")
 
 
 class TestMutationContract08_AtomicArtifactCreated(unittest.TestCase):

@@ -1,6 +1,6 @@
 # Architectural Decisions
 
-**Last updated:** 2026-03-25
+**Last updated:** 2026-03-26
 
 All decisions below are frozen unless marked otherwise.
 Reopening requires explicit phase gate approval + operator sign-off.
@@ -407,6 +407,126 @@ Example: `policy-telemetry.jsonl:48231`, `mission-abc123.json:1711288380`
 
 ---
 
+## Phase 5A-2 Decisions (Sprint 9 — Read-Only UI)
+
+### D-081: CSS Framework — Tailwind CSS Utility-First
+
+**Phase:** 5A-2 (Sprint 9) | **Status:** Frozen
+
+CSS framework olarak Tailwind CSS utility-first yaklaşımı. Component library kullanılmaz; tüm UI Tailwind utility class'ları ile yazılır. **Trade-off:** Daha verbose JSX, ancak runtime CSS bloat yok, design token tutarlılığı sağlanır.
+
+---
+
+### D-082: Type Generation — Manual TS Types from Frozen Pydantic Schemas
+
+**Phase:** 5A-2 (Sprint 9) | **Status:** Frozen
+
+Backend Pydantic schema'ları (D-067) frozen olduğu için frontend TypeScript type'ları manuel yazılır. Otomatik code-gen araçları (openapi-typescript vb.) eklenmez. **Trade-off:** Schema değişikliğinde her iki taraf güncellenmeli; ancak dependency chain basit kalır.
+
+---
+
+### D-083: Polling — Global 30s + Manual Refresh, Page Visibility Pause
+
+**Phase:** 5A-2 (Sprint 9) | **Status:** Frozen
+
+Başlangıç veri fetch stratejisi: 30s global polling interval + manual refresh butonu. Tab arka plandayken polling durur (Page Visibility API). Sprint 10 SSE ile augment edilir, polling fallback olarak kalır. **Trade-off:** 30s stale window kabul edilir; real-time SSE zaten sonraki sprint'te gelir.
+
+---
+
+### D-084: Error Boundary — Per-Panel Isolation, Per-Route Wrap
+
+**Phase:** 5A-2 (Sprint 9) | **Status:** Frozen
+
+Her dashboard paneli kendi ErrorBoundary'sine sahip. Bir panel crash olursa diğerleri etkilenmez. Route seviyesinde de ErrorBoundary var. **Trade-off:** Daha fazla boilerplate, ancak partial degradation mümkün — tek panel hatası tüm UI'ı çökertmez.
+
+---
+
+## Phase 5B Decisions (Sprint 10 — SSE Live Updates)
+
+### D-085: File Watcher — Manual mtime Polling 1s, Pure Python os.stat
+
+**Phase:** 5B (Sprint 10) | **Status:** Frozen
+
+Dosya değişiklik algılama: watchdog/inotify yerine 1s interval ile `os.stat()` mtime polling. Pure Python, cross-platform. **Trade-off:** 1s gecikme ve CPU overhead (dosya başına stat call), ancak zero dependency ve Windows/WSL2 uyumlu.
+
+---
+
+### D-086: SSE Events — Per-Entity Invalidation Signal, Not Per-Field
+
+**Phase:** 5B (Sprint 10) | **Status:** Frozen
+
+SSE event'leri entity seviyesinde invalidation sinyali gönderir (örn: `mission_updated`), field-level diff göndermez. Client SSE event'i aldığında ilgili entity'yi yeniden fetch eder. **Trade-off:** Daha fazla HTTP request, ancak SSE payload basit kalır ve partial state riski yok.
+
+**Sprint 11 Extension — Mutation SSE Event Types:**
+
+| Event Type | Trigger | Data |
+|-----------|---------|------|
+| `mutation_requested` | API signal artifact persisted | `{ requestId, targetId, type }` |
+| `mutation_accepted` | Controller consumed signal, validation passed | `{ requestId, targetId, type }` |
+| `mutation_applied` | Controller completed state transition | `{ requestId, targetId, type, newState }` |
+| `mutation_rejected` | Controller validation failed | `{ requestId, targetId, reason }` |
+| `mutation_timed_out` | Controller did not process within 10s | `{ requestId, targetId }` |
+
+---
+
+### D-087: SSE Auth — Localhost-Only, D-070 Extension, No Extra Token
+
+**Phase:** 5B (Sprint 10) | **Status:** Frozen
+
+SSE endpoint'i D-070 (localhost-only binding + Host header validation) ile korunur. Ek SSE token veya authentication mekanizması eklenmez. **Trade-off:** Multi-user senaryoda yetersiz, ancak single-operator localhost için yeterli.
+
+---
+
+### D-088: SSE Reconnect — Backoff + Polling Fallback
+
+**Phase:** 5B (Sprint 10) | **Status:** Frozen
+
+SSE bağlantı koptuğunda: 1s→2s→4s→8s→16s→30s exponential backoff ile yeniden bağlan. 3 ardışık fail → polling fallback moduna geç. Last-Event-ID persistence ile missed event'leri yakala. 60s heartbeat timeout → connection dead sayılır. **Trade-off:** Karmaşık reconnect logic, ancak SSE kaybında UI dark olmaz.
+
+---
+
+## Phase 5C Decisions (Sprint 11 — Intervention / Mutation)
+
+### D-089: CSRF — SameSite=Strict + Origin Header Check
+
+**Phase:** 5C (Sprint 11) | **Status:** Frozen
+
+Localhost + single-operator + modern browser → SameSite=Strict cookie + Origin header validation. Mutation endpoint'leri valid Origin olmadan reject → 403. Double-submit cookie gereksiz karmaşıklık. **Trade-off:** Eski browser'larda daha az koruma. Kabul edilir: sistem localhost-only (D-070).
+
+---
+
+### D-090: Mutation Confirm — Confirmation Dialog for Destructive Actions
+
+**Phase:** 5C (Sprint 11) | **Status:** Frozen
+
+Destructive action'lar (cancel, reject) → confirmation dialog gerektirir. Non-destructive (approve, retry) → single click. Undo mekanizması yok — mutation'lar irreversible. **Trade-off:** UX friction artışı, ancak yanlışlıkla destructive action riski ortadan kalkar.
+
+---
+
+### D-091: Mutation UI — Server-Confirmed, No Optimistic UI
+
+**Phase:** 5C (Sprint 11) | **Status:** Frozen
+
+Mutation request → server response bekle → SSE event ile state change confirm → UI refresh. Optimistic state update yok. 100-500ms gecikme kabul edilir — operator dashboard, real-time trading değil. **Trade-off:** Daha yavaş UX, ancak yanlış state gösterme riski sıfır.
+
+---
+
+### D-092: Approval Sunset Phase 1
+
+**Phase:** 5C (Sprint 11) | **Status:** Frozen
+
+Dashboard `approve <id>` / `reject <id>` ana kanal olur. Telegram yes/no hâlâ çalışır ancak deprecation warning loglar. Tam kaldırma Sprint 12'de (D-095). **Trade-off:** Geçiş döneminde iki kanal aktif; ancak backward compatibility korunur.
+
+---
+
+### D-096: Mutation Response Contract — Full Lifecycle
+
+**Phase:** 5C (Sprint 11) | **Status:** Frozen
+
+Her mutation endpoint D-096 lifecycle döner: `{ requestId, lifecycleState, targetId, requestedAt, acceptedAt, appliedAt, rejectedReason, timeoutAt }`. Lifecycle: `requested → accepted → applied | rejected | timed_out`. API response daima `lifecycleState=requested` döner. Sonraki state'ler yalnızca SSE ile gelir. Client requestId ile SSE event'lerini correlate eder. Fire-and-forget yasak.
+
+---
+
 ## Phase 5 Freeze Addendum (Sprint 7→8 arası)
 
 ### Blocking Fix Closures
@@ -425,7 +545,10 @@ Sprint 8 bu belge FROZEN olmadan başlamaz.
 
 *Architectural Decisions — OpenClaw Local Agent Runtime*
 *D-001 → D-020: Phase 1/1.5 (frozen)*
-*D-021 → D-058: Phase 4 (GAP — extraction pending)*
+*D-021 → D-058: Phase 4 (GAP — extraction pending, Sprint 12 Task 0)*
 *D-059 → D-076: Phase 5 (frozen)*
 *D-077, D-078, D-079, D-080: Phase 4.5-C / 5A-1 (frozen)*
+*D-081 → D-084: Phase 5A-2 / Sprint 9 (frozen)*
+*D-085 → D-088: Phase 5B / Sprint 10 (frozen)*
+*D-089 → D-092, D-096: Phase 5C / Sprint 11 (frozen)*
 *BF-1 → BF-4: Phase 5 Freeze Addendum (frozen)*

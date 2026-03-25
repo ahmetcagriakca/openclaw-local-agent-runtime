@@ -1,9 +1,10 @@
 # Current State
 
 **Last updated:** 2026-03-25
-**Active phase:** Phase 4.5-C (Sprint 7 — Operational Tuning)
-**Note:** Phase 4.5-B complete (E2E validated, 129 tests). Phase 2 deferred — single-user localhost, security hardening not urgent.
-**Persistence:** State is file-persisted (state.json, mission.json). Resume not yet implemented (planned Phase 4.5 item #8).
+**Active phase:** Phase 5A-1 COMPLETE (Sprint 8 — Backend Read Model)
+**Note:** Sprint 7 (4.5-C) + Sprint 8 (5A-1) complete. Phase 2 deferred — single-user localhost, security hardening not urgent.
+**Persistence:** State is file-persisted (state.json, mission.json). Resume not yet implemented.
+**API:** Mission Control API on 127.0.0.1:8003 (FastAPI + Uvicorn). Schemas FROZEN (D-067).
 
 ---
 
@@ -163,9 +164,10 @@ Telegram user (8654710624)
 
 ## Test Evidence
 
-- 129 tests across Sprint 5C (70) + Sprint 6D (41) + Phase 4.5-A (18) — 0 failures
+- 170 tests across Sprint 5C (70) + Sprint 6D (41) + Phase 4.5-A (18) + Sprint 8 API (41) — 0 failures
 - 110 integration tests in Sprint 6 (110/110 pass)
-- Sprint 7: 129 tests, 0 failures (regression verified)
+- Sprint 7: 129 tests, 0 failures
+- Sprint 8: 170 tests (129 legacy + 41 API), 0 failures
 
 ## Known Operational Notes
 

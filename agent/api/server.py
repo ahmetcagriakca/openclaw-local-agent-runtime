@@ -22,6 +22,7 @@ from api.capabilities import CapabilityChecker
 from api.schemas import APIError
 from api.file_watcher import FileWatcher
 from api.sse_manager import SSEManager
+from api.csrf_middleware import CSRFMiddleware
 from utils.atomic_write import atomic_write_json
 
 # ── Paths ────────────────────────────────────────────────────────
@@ -184,6 +185,7 @@ app = FastAPI(
 )
 
 # D-070: CORS — only localhost:3000 (React dev)
+# Sprint 11: POST added for mutation endpoints
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -191,9 +193,12 @@ app.add_middleware(
         "http://127.0.0.1:3000",
     ],
     allow_credentials=False,
-    allow_methods=["GET"],
+    allow_methods=["GET", "POST"],
     allow_headers=["*"],
 )
+
+# D-089: CSRF — Origin header validation for POST requests
+app.add_middleware(CSRFMiddleware)
 
 
 # D-070: Host header validation middleware

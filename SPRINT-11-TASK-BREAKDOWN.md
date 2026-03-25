@@ -657,7 +657,7 @@ Sprint 11 delivered the full mutation layer: 4 endpoints (approve, reject, cance
 | `04122a9` | Sprint 11 Task 11.11: Approval sunset warning D-092 |
 | `3a5ec00` | Sprint 11 Results: Section 15 + closure-check-output.txt |
 | `c038842` | Sprint 11 Final: GPT review fixes + retrospective |
-| `TBD` | Sprint 11 Closure: live-checks + operator drill + closure-check evidence |
+| `99ebecc` | Sprint 11 Closure: live-checks + operator drill + closure-check evidence |
 
 ### Known Issues / Open Items
 

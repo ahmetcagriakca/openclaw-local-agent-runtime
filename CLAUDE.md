@@ -79,6 +79,7 @@ config/capabilities.json           — capability manifest (auto-generated)
 - Atomic writes: temp → fsync → os.replace(). No raw json.dump to file.
 - Source precedence: state.json > mission.json (status), summary > telemetry (forensics).
 - Capability detection via config/capabilities.json, not heuristics.
+- **Her sprint sonunda tüm çalışmalar (kod, doküman, evidence) git commit + push yapılır. Sprint, push yapılmadan kapatılmış sayılmaz.**
 
 ## Build & Test
 

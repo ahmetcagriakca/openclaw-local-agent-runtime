@@ -11,6 +11,7 @@ import type {
   TelemetryListResponse,
   HealthApiResponse,
   CapabilityListResponse,
+  MutationResponse,
 } from '../types/api'
 
 const BASE = '/api/v1'
@@ -75,3 +76,60 @@ export function getCapabilities(): Promise<CapabilityListResponse> {
 }
 
 export { ApiError }
+
+// ── Mutation POST helpers (Sprint 11) ───────────────────────────
+
+async function apiPost<T>(path: string): Promise<T> {
+  const res = await fetch(`${BASE}${path}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Tab-Id': getTabId(),
+      'X-Session-Id': getSessionId(),
+    },
+  })
+  if (!res.ok) {
+    let body: unknown
+    try {
+      body = await res.json()
+    } catch {
+      body = await res.text()
+    }
+    throw new ApiError(res.status, body)
+  }
+  return res.json() as Promise<T>
+}
+
+let _tabId: string | null = null
+function getTabId(): string {
+  if (!_tabId) {
+    _tabId = sessionStorage.getItem('tabId') ?? `tab-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+    sessionStorage.setItem('tabId', _tabId)
+  }
+  return _tabId
+}
+
+let _sessionId: string | null = null
+function getSessionId(): string {
+  if (!_sessionId) {
+    _sessionId = localStorage.getItem('sessionId') ?? `sess-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+    localStorage.setItem('sessionId', _sessionId)
+  }
+  return _sessionId
+}
+
+export function approveApproval(id: string): Promise<MutationResponse> {
+  return apiPost<MutationResponse>(`/approvals/${encodeURIComponent(id)}/approve`)
+}
+
+export function rejectApproval(id: string): Promise<MutationResponse> {
+  return apiPost<MutationResponse>(`/approvals/${encodeURIComponent(id)}/reject`)
+}
+
+export function cancelMission(id: string): Promise<MutationResponse> {
+  return apiPost<MutationResponse>(`/missions/${encodeURIComponent(id)}/cancel`)
+}
+
+export function retryMission(id: string): Promise<MutationResponse> {
+  return apiPost<MutationResponse>(`/missions/${encodeURIComponent(id)}/retry`)
+}

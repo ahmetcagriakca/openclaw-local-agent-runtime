@@ -195,3 +195,16 @@ export interface APIError {
   detail: string | null
   timestamp: string
 }
+
+// ── Mutation Response (D-096) ───────────────────────────────────
+
+export interface MutationResponse {
+  requestId: string
+  lifecycleState: string
+  targetId: string
+  requestedAt: string
+  acceptedAt: string | null
+  appliedAt: string | null
+  rejectedReason: string | null
+  timeoutAt: string | null
+}

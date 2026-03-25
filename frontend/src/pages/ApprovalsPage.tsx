@@ -1,12 +1,17 @@
 /**
- * ApprovalsPage — read-only approval list + SSE invalidation.
- * Empty state explicit: "No pending approvals".
+ * ApprovalsPage — approval list + mutation buttons (Sprint 11).
+ * D-090: reject requires confirmation dialog.
+ * D-091: server-confirmed, no optimistic UI.
+ * D-092: approval sunset Phase 1 — dashboard approve/reject is primary channel.
  */
-import { getApprovals } from '../api/client'
+import { useState, useCallback } from 'react'
+import { getApprovals, approveApproval, rejectApproval } from '../api/client'
 import { usePolling } from '../hooks/usePolling'
+import { useMutation } from '../hooks/useMutation'
 import { useSSEInvalidation } from '../hooks/SSEContext'
 import { FreshnessIndicator } from '../components/FreshnessIndicator'
 import { DataQualityBadge } from '../components/DataQualityBadge'
+import { ConfirmDialog } from '../components/ConfirmDialog'
 
 const STATUS_COLOR: Record<string, string> = {
   approved: 'text-green-400',
@@ -18,8 +23,82 @@ const STATUS_COLOR: Record<string, string> = {
 export function ApprovalsPage() {
   const { data, error, loading, refresh, lastFetchedAt } = usePolling(getApprovals)
 
-  // SSE: refresh on approval changes
-  useSSEInvalidation('approval_changed', refresh)
+  // SSE: refresh on approval changes + mutation events
+  useSSEInvalidation(['approval_changed', 'mutation_applied', 'mutation_rejected'], refresh)
+
+  // Track which approval is being mutated
+  const [activeApprovalId, setActiveApprovalId] = useState<string | null>(null)
+  const [activeAction, setActiveAction] = useState<'approve' | 'reject' | null>(null)
+  const [confirmRejectId, setConfirmRejectId] = useState<string | null>(null)
+  const [toast, setToast] = useState<{ type: 'success' | 'error' | 'timeout'; message: string } | null>(null)
+
+  const clearToast = useCallback(() => setToast(null), [])
+
+  const approveMutation = useMutation({
+    mutationFn: () => approveApproval(activeApprovalId!),
+    onSuccess: () => {
+      setActiveApprovalId(null)
+      setActiveAction(null)
+      setToast({ type: 'success', message: 'Approval approved successfully' })
+      refresh()
+    },
+    onError: (reason) => {
+      setActiveApprovalId(null)
+      setActiveAction(null)
+      setToast({ type: 'error', message: reason })
+    },
+    onTimeout: () => {
+      setActiveApprovalId(null)
+      setActiveAction(null)
+      setToast({ type: 'timeout', message: 'Operation timed out — try manual refresh' })
+    },
+  })
+
+  const rejectMutation = useMutation({
+    mutationFn: () => rejectApproval(activeApprovalId!),
+    onSuccess: () => {
+      setActiveApprovalId(null)
+      setActiveAction(null)
+      setToast({ type: 'success', message: 'Approval rejected' })
+      refresh()
+    },
+    onError: (reason) => {
+      setActiveApprovalId(null)
+      setActiveAction(null)
+      setToast({ type: 'error', message: reason })
+    },
+    onTimeout: () => {
+      setActiveApprovalId(null)
+      setActiveAction(null)
+      setToast({ type: 'timeout', message: 'Operation timed out — try manual refresh' })
+    },
+  })
+
+  const handleApprove = (id: string) => {
+    setActiveApprovalId(id)
+    setActiveAction('approve')
+    approveMutation.reset()
+    // Delay to let state update, then mutate
+    setTimeout(() => approveMutation.mutate(), 0)
+  }
+
+  const handleRejectClick = (id: string) => {
+    // D-090: destructive — show confirmation dialog
+    setConfirmRejectId(id)
+  }
+
+  const handleRejectConfirm = () => {
+    if (confirmRejectId) {
+      setActiveApprovalId(confirmRejectId)
+      setActiveAction('reject')
+      setConfirmRejectId(null)
+      rejectMutation.reset()
+      setTimeout(() => rejectMutation.mutate(), 0)
+    }
+  }
+
+  const isBusy = (id: string) =>
+    activeApprovalId === id && (activeAction === 'approve' || activeAction === 'reject')
 
   return (
     <div className="space-y-4">
@@ -83,9 +162,35 @@ export function ApprovalsPage() {
                   </span>
                   <DataQualityBadge quality={data.meta.dataQuality} />
                 </div>
-                {a.risk && (
-                  <span className="text-xs text-gray-400">Risk: {a.risk}</span>
-                )}
+                <div className="flex items-center gap-2">
+                  {a.status === 'pending' && (
+                    <>
+                      <button
+                        onClick={() => handleApprove(a.id)}
+                        disabled={isBusy(a.id)}
+                        className="flex items-center gap-1.5 rounded bg-green-700 px-3 py-1.5 text-sm font-medium text-white hover:bg-green-600 disabled:opacity-50"
+                      >
+                        {isBusy(a.id) && activeAction === 'approve' && (
+                          <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                        )}
+                        Approve
+                      </button>
+                      <button
+                        onClick={() => handleRejectClick(a.id)}
+                        disabled={isBusy(a.id)}
+                        className="flex items-center gap-1.5 rounded bg-red-700 px-3 py-1.5 text-sm font-medium text-white hover:bg-red-600 disabled:opacity-50"
+                      >
+                        {isBusy(a.id) && activeAction === 'reject' && (
+                          <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                        )}
+                        Reject
+                      </button>
+                    </>
+                  )}
+                  {a.risk && (
+                    <span className="text-xs text-gray-400">Risk: {a.risk}</span>
+                  )}
+                </div>
               </div>
               <div className="mt-2 flex flex-wrap gap-4 text-xs text-gray-400">
                 {a.missionId && <span>Mission: {a.missionId}</span>}
@@ -95,6 +200,34 @@ export function ApprovalsPage() {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* D-090: Reject confirmation dialog */}
+      <ConfirmDialog
+        open={confirmRejectId !== null}
+        title="Reject Approval"
+        message={`Are you sure you want to reject approval ${confirmRejectId}? This action is irreversible.`}
+        confirmLabel="Reject"
+        variant="danger"
+        loading={rejectMutation.status === 'loading'}
+        onConfirm={handleRejectConfirm}
+        onCancel={() => setConfirmRejectId(null)}
+      />
+
+      {/* Toast notification */}
+      {toast && (
+        <div
+          className={`fixed bottom-4 right-4 z-40 flex items-center gap-2 rounded-lg px-4 py-3 text-sm font-medium shadow-lg ${
+            toast.type === 'success'
+              ? 'border border-green-600/50 bg-green-950/90 text-green-300'
+              : toast.type === 'timeout'
+                ? 'border border-yellow-600/50 bg-yellow-950/90 text-yellow-300'
+                : 'border border-red-600/50 bg-red-950/90 text-red-300'
+          }`}
+        >
+          <span>{toast.message}</span>
+          <button onClick={clearToast} className="ml-2 text-xs opacity-70 hover:opacity-100">✕</button>
         </div>
       )}
     </div>

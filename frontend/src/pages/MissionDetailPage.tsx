@@ -1,22 +1,27 @@
 /**
- * MissionDetailPage — single mission detail with stage timeline + SSE.
+ * MissionDetailPage — single mission detail with stage timeline + SSE + mutation.
  * 404 → explicit "Mission not found". Deny forensics visible.
+ * Sprint 11: cancel/retry buttons added (D-090, D-091).
  */
 import { useCallback, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { getMission } from '../api/client'
+import { getMission, cancelMission, retryMission } from '../api/client'
 import { usePolling } from '../hooks/usePolling'
+import { useMutation } from '../hooks/useMutation'
 import { useSSEInvalidation } from '../hooks/SSEContext'
 import { DataQualityBadge } from '../components/DataQualityBadge'
 import { FreshnessIndicator } from '../components/FreshnessIndicator'
 import { MissionStateBadge } from '../components/MissionStateBadge'
 import { StageTimeline } from '../components/StageTimeline'
 import { StageCard } from '../components/StageCard'
+import { ConfirmDialog } from '../components/ConfirmDialog'
 import { ApiError } from '../api/client'
 
 export function MissionDetailPage() {
   const { id } = useParams<{ id: string }>()
   const [selectedStage, setSelectedStage] = useState<number | null>(null)
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false)
+  const [toast, setToast] = useState<{ type: 'success' | 'error' | 'timeout'; message: string } | null>(null)
 
   const fetcher = useCallback(() => {
     if (!id) return Promise.reject(new Error('No mission ID'))
@@ -25,8 +30,31 @@ export function MissionDetailPage() {
 
   const { data, error, loading, refresh, lastFetchedAt } = usePolling(fetcher)
 
-  // SSE: refresh on mission_updated (all — filtering by missionId happens server-side or is acceptable)
-  useSSEInvalidation('mission_updated', refresh)
+  // SSE: refresh on mission_updated + mutation events
+  useSSEInvalidation(['mission_updated', 'mutation_applied', 'mutation_rejected'], refresh)
+
+  const cancelMut = useMutation({
+    mutationFn: () => cancelMission(id!),
+    onSuccess: () => {
+      setToast({ type: 'success', message: 'Cancel request sent — awaiting controller' })
+      refresh()
+    },
+    onError: (reason) => setToast({ type: 'error', message: reason }),
+    onTimeout: () => setToast({ type: 'timeout', message: 'Cancel timed out — try manual refresh' }),
+  })
+
+  const retryMut = useMutation({
+    mutationFn: () => retryMission(id!),
+    onSuccess: () => {
+      setToast({ type: 'success', message: 'Retry request sent — awaiting controller' })
+      refresh()
+    },
+    onError: (reason) => setToast({ type: 'error', message: reason }),
+    onTimeout: () => setToast({ type: 'timeout', message: 'Retry timed out — try manual refresh' }),
+  })
+
+  const CANCEL_STATES = new Set(['pending', 'planning', 'executing', 'gate_check', 'rework', 'approval_wait'])
+  const RETRY_STATES = new Set(['failed', 'aborted', 'timed_out'])
 
   const is404 = error instanceof ApiError && error.status === 404
 
@@ -83,12 +111,38 @@ export function MissionDetailPage() {
                 <MissionStateBadge state={mission.state} />
                 <DataQualityBadge quality={data.meta.dataQuality} />
               </div>
-              <button
-                onClick={refresh}
-                className="rounded bg-gray-700 px-3 py-1.5 text-sm hover:bg-gray-600"
-              >
-                Refresh
-              </button>
+              <div className="flex items-center gap-2">
+                {CANCEL_STATES.has(mission.state) && (
+                  <button
+                    onClick={() => setShowCancelConfirm(true)}
+                    disabled={cancelMut.status === 'loading'}
+                    className="flex items-center gap-1.5 rounded bg-red-700 px-3 py-1.5 text-sm font-medium text-white hover:bg-red-600 disabled:opacity-50"
+                  >
+                    {cancelMut.status === 'loading' && (
+                      <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                    )}
+                    Cancel
+                  </button>
+                )}
+                {RETRY_STATES.has(mission.state) && (
+                  <button
+                    onClick={() => retryMut.mutate()}
+                    disabled={retryMut.status === 'loading'}
+                    className="flex items-center gap-1.5 rounded bg-blue-700 px-3 py-1.5 text-sm font-medium text-white hover:bg-blue-600 disabled:opacity-50"
+                  >
+                    {retryMut.status === 'loading' && (
+                      <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                    )}
+                    Retry
+                  </button>
+                )}
+                <button
+                  onClick={refresh}
+                  className="rounded bg-gray-700 px-3 py-1.5 text-sm hover:bg-gray-600"
+                >
+                  Refresh
+                </button>
+              </div>
             </div>
             {mission.goal && (
               <p className="mt-2 text-sm text-gray-300">{mission.goal}</p>
@@ -144,6 +198,37 @@ export function MissionDetailPage() {
             </div>
           )}
         </>
+      )}
+
+      {/* D-090: Cancel confirmation dialog */}
+      <ConfirmDialog
+        open={showCancelConfirm}
+        title="Cancel Mission"
+        message={`Are you sure you want to cancel mission ${id}? This action is irreversible.`}
+        confirmLabel="Cancel Mission"
+        variant="danger"
+        loading={cancelMut.status === 'loading'}
+        onConfirm={() => {
+          setShowCancelConfirm(false)
+          cancelMut.mutate()
+        }}
+        onCancel={() => setShowCancelConfirm(false)}
+      />
+
+      {/* Toast notification */}
+      {toast && (
+        <div
+          className={`fixed bottom-4 right-4 z-40 flex items-center gap-2 rounded-lg px-4 py-3 text-sm font-medium shadow-lg ${
+            toast.type === 'success'
+              ? 'border border-green-600/50 bg-green-950/90 text-green-300'
+              : toast.type === 'timeout'
+                ? 'border border-yellow-600/50 bg-yellow-950/90 text-yellow-300'
+                : 'border border-red-600/50 bg-red-950/90 text-red-300'
+          }`}
+        >
+          <span>{toast.message}</span>
+          <button onClick={() => setToast(null)} className="ml-2 text-xs opacity-70 hover:opacity-100">✕</button>
+        </div>
       )}
     </div>
   )

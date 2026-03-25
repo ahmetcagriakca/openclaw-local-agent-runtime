@@ -9,12 +9,12 @@ Windows 11 + WSL2 Ubuntu-E + Python 3.14 + PowerShell.
 
 ## Current State
 
-- Phase 4.5-C: COMPLETED (Sprint 7 — operational tuning, 10/10 tasks)
-- Phase 5A-1: COMPLETED (Sprint 8 — backend read model, 17/17 tasks, 170 tests)
-- Phase 5A-2: COMPLETED (Sprint 9 — React read-only UI, 10/10 tasks, 18 frontend tests)
-- Phase 5B: COMPLETED (Sprint 10 — SSE live updates, 8/8 tasks, 114 backend + 29 frontend tests)
-- Phase 5C: NEXT (Sprint 11 — intervention)
-- Frozen decisions: D-059 → D-088 (29 decisions)
+- Phase 4.5-C: implementation_status=done, closure_status=closed (Sprint 7)
+- Phase 5A-1: implementation_status=done, closure_status=closed (Sprint 8)
+- Phase 5A-2: implementation_status=done, closure_status=closed (Sprint 9)
+- Phase 5B: implementation_status=done, closure_status=closed (Sprint 10)
+- Phase 5C: implementation_status=not_started (Sprint 11 — intervention)
+- Frozen decisions: D-059 → D-088 (29 decisions, D-081→D-088 pending DECISIONS.md write)
 
 ## Last Completed Sprint
 
@@ -28,16 +28,20 @@ Outputs:
 - SSEContext + useSSEInvalidation: shared connection, per-page subscription
 - ConnectionIndicator: 4-state (connecting/connected/reconnecting/polling)
 - All 5 pages: SSE invalidation + polling fallback preserved
-- Backend 114 tests, Frontend 29 tests, 0 failures
+- Backend 184 tests, Frontend 29 tests, 0 failures
 - Decisions: D-085 (polling watcher), D-086 (per-entity events), D-087 (localhost SSE), D-088 (backoff + fallback)
 
 ## Key Reference Docs
 
 - `docs/ai/STATE.md` — current system state
 - `docs/ai/DECISIONS.md` — frozen decisions D-001 → D-058
+- `docs/ai/PROCESS-GATES.md` — sprint governance rules (v3)
+- `docs/ai/DECISION-DEBT-BURNDOWN.md` — debt payment plan
+- `docs/ai/SPRINT-12-CLOSURE-GATE.md` — Phase 5 scoreboard
 - `docs/ai/NEXT.md` — roadmap
 - `docs/ai/BACKLOG.md` — backlog
 - `docs/ai/PROTOCOL.md` — sprint + freeze protocols
+- `tools/sprint-closure-check.sh` — closure evidence generator
 
 ## Architecture Quick Reference
 
@@ -86,7 +90,7 @@ config/capabilities.json           — capability manifest (auto-generated)
 ## Build & Test
 
 ```bash
-# Backend tests (114 total, includes 14 SSE)
+# Backend tests (184 total: 70 sprint-5c + 86 legacy + 14 SSE + 14 api)
 cd agent && python -m pytest tests/ -v
 
 # Frontend (requires Node.js 20 — portable at C:\Users\AKCA\node20\)

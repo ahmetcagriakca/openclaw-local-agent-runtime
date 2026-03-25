@@ -1,10 +1,14 @@
 """Telegram-based approval service for high-risk tool calls.
 
-SUNSET NOTICE (D-063):
+SUNSET NOTICE (D-063, D-092):
     This strict-ID-based implementation is valid until Phase 5C (Sprint 11).
     Per decision D-063, the approval mechanism will migrate to a service layer
     with structured request/response contracts. Do not extend this module with
     new approval patterns — design them for the future service layer instead.
+
+    D-092 Phase 1 (Sprint 11): Dashboard approve/reject is now the primary
+    channel. Telegram yes/no continues to work but logs deprecation warning.
+    Full removal planned for Sprint 12 (D-095).
 
 Approval flow:
 1. Write pending approval to logs/approvals/apv-XXX.json
@@ -14,12 +18,16 @@ Approval flow:
 
 The user approves by running: oc-approve apv-XXX
 Or from Telegram via OpenClaw: "approve apv-XXX"
+Or from Dashboard (Sprint 11+): Approve/Reject buttons
 """
 import json
+import logging
 import os
 import time
 import subprocess
 from datetime import datetime, timezone
+
+logger = logging.getLogger("mcc.approval.sunset")
 
 APPROVALS_DIR = os.path.join(
     os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
@@ -151,6 +159,15 @@ class ApprovalService:
                     record["status"] = "approved" if approved else "denied"
                     record["decision"] = f"telegram_{reply}"
                     record["decidedAt"] = datetime.now(timezone.utc).isoformat()
+
+                    # D-092: Deprecation warning for Telegram-based approval
+                    logger.warning(
+                        "APPROVAL_SUNSET D-092: Telegram %s used for %s. "
+                        "Dashboard approve/reject is the primary channel. "
+                        "Telegram approval will be removed in Sprint 12 (D-095).",
+                        reply, apv_id,
+                    )
+
                     with open(record_path, "w", encoding="utf-8") as f:
                         json.dump(record, f, ensure_ascii=False, indent=2)
 

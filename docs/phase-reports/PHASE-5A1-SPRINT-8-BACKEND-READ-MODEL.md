@@ -3,8 +3,9 @@
 **Date:** 2026-03-25
 **Status:** COMPLETE
 **Author:** Operator (AKCA) + Claude Opus 4.6
-**Prerequisite:** Sprint 7 complete (129 tests, 10/10 tasks, D-077 doc policy)
+**Prerequisite:** Sprint 7 complete (D-078 E2E waiver: 2/4 pass, fail'ler scope dışı)
 **Risk Level:** HIGH — 3 internal milestones (8α, 8β, 8γ)
+**GPT Review:** 3 rounds applied (Sprint 8 review, cross-review, fix record)
 
 ---
 
@@ -25,6 +26,15 @@ Sprint 8 delivers the Mission Control Center backend — a FastAPI read-only API
 - 170 tests total (129 legacy + 41 API), 0 failures
 
 **Frozen decisions enforced:** D-059, D-061, D-065, D-067, D-068, D-070, D-071, D-072, D-073, D-074, D-075.
+
+**GPT review fixes (3 rounds):**
+- D-079: DataQuality enum amendment (5→6 states, known_zero→fresh/partial)
+- D-080: Service registry heartbeat freshness rule
+- Wrapper responses on all endpoints (*Response schemas)
+- CapabilityStatus tri-state (available/unavailable/unknown)
+- ComponentHealth.name field added
+- TelemetryEntry.missionId + sourceFile fields
+- services.json heartbeat background task (30s interval)
 
 ---
 
@@ -290,6 +300,11 @@ Host: evil.com             → 403  D-070 security enforced
 | 17 | Health snapshot path configurable for ext4 | 8.12 | PASS |
 | 18 | Schema FROZEN — additive-only post-freeze | 8.2 | PASS |
 | 19 | 170 tests, 0 failure | 8.15 | PASS |
+| 20 | ComponentHealth + CapabilityStatus tri-state | 8.2, 8.3 | PASS |
+| 21 | services.json heartbeat freshness | 8.13 | PASS |
+| 22 | Wrapper responses on all endpoints | 8.8–8.11 | PASS |
+| 23 | D-078 waiver kaydı DECISIONS.md'de | doc | PASS |
+| 24 | validate_sprint_docs.py --sprint 8 → 0 FAIL | 8.15 | PASS |
 
 ---
 
@@ -362,7 +377,20 @@ Source files → Cache (mtime check) → CircuitBreaker → Normalizer
 
 ---
 
-## Section 9: Known Limitations
+## Section 9: GPT Review Summary
+
+3 review rounds, 15 findings total. All blocking issues resolved.
+
+| Round | Findings | Applied | Deferred |
+|-------|----------|---------|----------|
+| Sprint 8 GPT Review | 8 | 7 (Fix 1–8) | 0 |
+| Sprint 7-8 Cross-Review | 7 blocking + 3 NB | 3 (D-079, D-080, doc fixes) | 2 (impl evidence) |
+
+**Key decisions from review:** D-079 (DataQuality 6-state), D-080 (heartbeat freshness).
+
+---
+
+## Section 10: Known Limitations
 
 1. **Telemetry not cached:** JSONL read is sequential per-request. For large telemetry files, add JSONL index in Sprint 9+.
 2. **Mission list freshness:** `list_missions()` doesn't populate per-item freshness (would require N source reads). Detail endpoint has full freshness.
@@ -376,3 +404,4 @@ Source files → Cache (mtime check) → CircuitBreaker → Normalizer
 *Date: 2026-03-25*
 *Operator: AKCA | Architect: Claude Opus 4.6*
 *EN RİSKLİ SPRİNT — 3 milestone ile başarıyla yönetildi*
+*GPT Review: 3 rounds, D-079 + D-080 frozen, 24/24 checklist PASS*

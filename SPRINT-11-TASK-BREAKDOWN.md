@@ -568,7 +568,47 @@ No separate phase report. This document's Results section is sufficient.
 
 ## Section 14: Retrospective
 
-(Produced at sprint end — minimum content per PROCESS-GATES.md Section 13)
+### Net Judgment
+
+Sprint 11 iyi gitti. Read-only → mutation geçişi contract-first yaklaşımla sağlam yapıldı. 11 test önce FAIL, endpoint'ler sonra yazıldı, 11/11 PASS. v3 süreç kuralları (two-axis status, evidence-based closure, review gate) ilk kez tam uygulandı.
+
+### What Went Well
+
+- **Contract-first testing:** 11 test önce yazıp hepsinin FAIL olduğunu kanıtlamak, sonra implementasyonu yapıp PASS'a çevirmek güvenilir bir döngü oluşturdu.
+- **Atomic signal artifact pattern:** D-001 ihlali sıfır — API hiçbir yerde controller/service çağırmıyor. grep evidence bunu kanıtlıyor.
+- **Mid-review gate:** Backend bitince frontend'e geçmeden GPT review zorunluluğu, frontend'te geri dönüş riskini azalttı.
+- **Evidence-first closure:** Her claim'in yanında raw grep/test output var. "Code inspection" ifadesi mid-review patch'iyle elimination edildi.
+
+### What Broke
+
+- **Commit granularity:** 11.7+11.8+11.9+11.10 tek commit'e sıkıştı (4 task, 1 commit). Kural "1 task = minimum 1 commit" ama tightly coupled frontend task'larda bunu ayrıştırmak pratik olmadı.
+- **Test count aritmetiği:** "195 + 29 + 11 = 224" yazdık ama 11 contract test zaten 195'in içinde. GPT bunu yakaladı. Evidence'da tutarsız sayı kirli görüntü yaratır.
+- **D-089 dil uyumsuzluğu:** Decision "SameSite=Strict + Origin" diyor ama implementasyonda SameSite cookie config yok, sadece Origin middleware var. Karar metni ile uygulama dili arasında boşluk kaldı. GPT bunu da yakaladı.
+
+### Root Cause
+
+- Commit granularity: Frontend component'lerin birbirine bağımlılığı (ConfirmDialog → useMutation → buttons) atomik commit'i zorlaştırıyor. Planlama aşamasında "ortak component" task'ları ile "sayfa task'ları" ayrılmalıydı.
+- Test count: Rapor yazarken manual hesap yerine `pytest --co -q | tail -1` çıktısı kullanılmalıydı (v3 kural 21 zaten bunu söylüyor — uygulamadık).
+- D-089: Karar yazarken "SameSite=Strict" browser davranışı varsayımı, middleware'de enforce edilen "Origin check" ile karıştırıldı. Karar ile implementasyon arasındaki gap freeze sırasında yakalanmalıydı.
+
+### Actions
+
+| # | Action | Owner | Deadline | Output |
+|---|--------|-------|----------|--------|
+| A-01 | Sprint 12'de frontend task'ları "shared component" ve "page integration" olarak ayrı commit'le | Copilot | Sprint 12 kickoff | Commit plan in task doc |
+| A-02 | Test count raporda her zaman `pytest --co -q \| tail -1` ve `vitest list \| wc -l` çıktısından alınsın, manual hesap yapılmasın | Copilot | Sprint 12 | Process rule |
+| A-03 | D-089 karar metnini düzelt: "Origin header check enforced; SameSite depends on browser cookie context" | Claude | Sprint 12 Task 0 | DECISIONS.md patch |
+| A-04 | Sprint 12 kickoff gate'ine ekle: "Evidence sayıları raw command output'tan alınmalı, manual toplamdan değil" | Claude | Sprint 12 kickoff | PROCESS-GATES.md patch |
+
+### Carried to Next Sprint
+
+- A-01 → Sprint 12 task doc commit planı
+- A-03 → Sprint 12 Task 0 DECISIONS.md update
+- A-04 → Sprint 12 kickoff gate eklentisi
+
+### Stop Rules
+
+Yok. Tekrarlayan hata yok (3 consecutive sprint kuralı tetiklenmedi).
 
 ---
 
@@ -587,10 +627,10 @@ Sprint 11 delivered the full mutation layer: 4 endpoints (approve, reject, cance
 
 | Suite | Count | Status |
 |-------|-------|--------|
-| Backend (all) | 195 | ✅ ALL PASS |
-| Contract tests (Sprint 11) | 11 | ✅ ALL PASS |
+| Backend (all, includes contract tests) | 195 | ✅ ALL PASS |
+| └ of which: contract tests (Sprint 11) | 11 | ✅ ALL PASS |
 | Frontend (all) | 29 | ✅ ALL PASS |
-| **Total** | **224** | **0 failures** |
+| **Total** | **224** (195 backend + 29 frontend) | **0 failures** |
 
 ### Build Artifacts
 
@@ -631,7 +671,7 @@ Sprint 11 delivered the full mutation layer: 4 endpoints (approve, reject, cance
 | Rule | Status | Evidence |
 |------|--------|----------|
 | D-001: API writes signal artifact only | ✅ | ownership-grep.txt — NO MATCHES |
-| D-089: CSRF Origin validation | ✅ | Test 9 PASS (403 without Origin) |
+| D-089: CSRF Origin check enforced | ✅ | Test 9 PASS (403 without Origin). SameSite=Strict depends on browser cookie context — no explicit cookie config in API; Origin validation is the enforced layer. |
 | D-090: Destructive confirm dialog | ✅ | ConfirmDialog.tsx + reject/cancel use it |
 | D-091: Server-confirmed, no optimistic | ✅ | useMutation waits for SSE, no local state |
 | D-092: Telegram sunset warning | ✅ | approval_service.py APPROVAL_SUNSET log |

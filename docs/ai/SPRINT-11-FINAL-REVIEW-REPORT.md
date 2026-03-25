@@ -43,7 +43,7 @@ Mid-review follow-up: raw evidence dosyaları üretildi (ownership-grep.txt, bri
 3. **D-090 compliance** — Destructive actions (reject, cancel) require confirmation
 4. **D-092 compliance** — Approval sunset warning on Telegram path
 5. **End-to-end flow** — API → artifact → SSE → UI feedback chain
-6. **Test coverage** — 195 backend + 29 frontend + 11 contract = 224 total
+6. **Test coverage** — 195 backend (includes 11 contract) + 29 frontend = 224 total
 7. **Schema compatibility** — MutationResponse additive-only (D-067 safe)
 
 ## Completed Tasks
@@ -597,7 +597,7 @@ logger.warning(
 |----|----------|------------|
 | D-001 | Single execution owner = runtime | ✅ API writes artifact only |
 | D-067 | Schema freeze (additive-only) | ✅ MutationResponse is new, read-models untouched |
-| D-089 | CSRF SameSite + Origin | ✅ CSRFMiddleware on all POST |
+| D-089 | CSRF Origin check enforced | ✅ CSRFMiddleware on all POST. SameSite depends on browser cookie context — Origin validation is the enforced layer. |
 | D-090 | Confirm dialog for destructive | ✅ Reject + Cancel use ConfirmDialog |
 | D-091 | Server-confirmed, no optimistic | ✅ useMutation waits for SSE |
 | D-092 | Telegram sunset Phase 1 | ✅ APPROVAL_SUNSET logger.warning |

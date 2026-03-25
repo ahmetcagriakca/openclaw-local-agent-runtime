@@ -1,0 +1,57 @@
+=== mutation response schema ===
+C:\Users\AKCA\oc\agent\api\approval_mutation_api.py:20:from api.schemas import APIError, MutationResponse
+C:\Users\AKCA\oc\agent\api\approval_mutation_api.py:87:    response_model=MutationResponse,
+C:\Users\AKCA\oc\agent\api\approval_mutation_api.py:146:    return MutationResponse(
+C:\Users\AKCA\oc\agent\api\approval_mutation_api.py:157:    response_model=MutationResponse,
+C:\Users\AKCA\oc\agent\api\approval_mutation_api.py:216:    return MutationResponse(
+C:\Users\AKCA\oc\agent\api\mission_mutation_api.py:21:from api.schemas import APIError, MutationResponse
+C:\Users\AKCA\oc\agent\api\mission_mutation_api.py:76:    response_model=MutationResponse,
+C:\Users\AKCA\oc\agent\api\mission_mutation_api.py:141:    return MutationResponse(
+C:\Users\AKCA\oc\agent\api\mission_mutation_api.py:152:    response_model=MutationResponse,
+C:\Users\AKCA\oc\agent\api\mission_mutation_api.py:217:    return MutationResponse(
+C:\Users\AKCA\oc\agent\api\schemas.py:233:class MutationResponse(BaseModel):
+
+=== existing read-model response schemas ===
+C:\Users\AKCA\oc\agent\api\approval_api.py:4:from api.schemas import ApprovalListResponse, ApprovalEntry, APIError
+C:\Users\AKCA\oc\agent\api\approval_api.py:9:@router.get("/approvals", response_model=ApprovalListResponse)
+C:\Users\AKCA\oc\agent\api\approval_api.py:13:    return ApprovalListResponse(meta=meta, approvals=approvals)
+C:\Users\AKCA\oc\agent\api\health_api.py:7:    HealthResponse, ComponentHealth, CapabilitiesResponse,
+C:\Users\AKCA\oc\agent\api\health_api.py:14:@router.get("/health", response_model=HealthResponse)
+C:\Users\AKCA\oc\agent\api\health_api.py:49:    return HealthResponse(meta=meta, status=overall, components=components)
+C:\Users\AKCA\oc\agent\api\health_api.py:52:@router.get("/capabilities", response_model=CapabilitiesResponse)
+C:\Users\AKCA\oc\agent\api\health_api.py:57:    return CapabilitiesResponse(meta=meta, capabilities=caps)
+C:\Users\AKCA\oc\agent\api\mission_api.py:5:    MissionDetailResponse, MissionListResponse,
+C:\Users\AKCA\oc\agent\api\mission_api.py:12:@router.get("/missions", response_model=MissionListResponse)
+C:\Users\AKCA\oc\agent\api\mission_api.py:16:    return MissionListResponse(meta=meta, missions=missions)
+C:\Users\AKCA\oc\agent\api\mission_api.py:19:@router.get("/missions/{mission_id}", response_model=MissionDetailResponse,
+C:\Users\AKCA\oc\agent\api\mission_api.py:28:    return MissionDetailResponse(meta=meta, mission=mission)
+C:\Users\AKCA\oc\agent\api\schemas.py:188:class MissionDetailResponse(BaseModel):
+C:\Users\AKCA\oc\agent\api\schemas.py:194:class MissionListResponse(BaseModel):
+C:\Users\AKCA\oc\agent\api\schemas.py:206:class HealthResponse(BaseModel):
+C:\Users\AKCA\oc\agent\api\schemas.py:213:class ApprovalListResponse(BaseModel):
+C:\Users\AKCA\oc\agent\api\schemas.py:219:class TelemetryResponse(BaseModel):
+C:\Users\AKCA\oc\agent\api\schemas.py:225:class CapabilitiesResponse(BaseModel):
+C:\Users\AKCA\oc\agent\api\telemetry_api.py:6:from api.schemas import TelemetryResponse
+C:\Users\AKCA\oc\agent\api\telemetry_api.py:11:@router.get("/telemetry", response_model=TelemetryResponse)
+C:\Users\AKCA\oc\agent\api\telemetry_api.py:17:    return TelemetryResponse(meta=meta, events=events)
+C:\Users\AKCA\oc\agent\tests\test_api.py:5:- Fix 3: Wrapper responses (MissionListResponse, etc.)
+C:\Users\AKCA\oc\agent\tests\test_api.py:85:        from api.schemas import (MissionListResponse, MissionDetailResponse,
+C:\Users\AKCA\oc\agent\tests\test_api.py:86:                                  HealthResponse, ApprovalListResponse,
+C:\Users\AKCA\oc\agent\tests\test_api.py:87:                                  TelemetryResponse, CapabilitiesResponse,
+C:\Users\AKCA\oc\agent\tests\test_api.py:90:        for cls in [MissionListResponse, HealthResponse,
+C:\Users\AKCA\oc\agent\tests\test_api.py:91:                    ApprovalListResponse, TelemetryResponse,
+C:\Users\AKCA\oc\agent\tests\test_api.py:92:                    CapabilitiesResponse, StageListResponse]:
+C:\Users\AKCA\oc\agent\tests\test_api.py:419:        """GPT Fix 3: health returns HealthResponse with meta."""
+C:\Users\AKCA\oc\agent\tests\test_api.py:435:        """GPT Fix 3: missions list returns MissionListResponse."""
+C:\Users\AKCA\oc\frontend\src\api\client.ts:6:  MissionListResponse,
+C:\Users\AKCA\oc\frontend\src\api\client.ts:7:  MissionDetailResponse,
+C:\Users\AKCA\oc\frontend\src\api\client.ts:10:  ApprovalListResponse,
+C:\Users\AKCA\oc\frontend\src\api\client.ts:44:export function getMissions(): Promise<MissionListResponse> {
+C:\Users\AKCA\oc\frontend\src\api\client.ts:45:  return apiGet<MissionListResponse>('/missions')
+C:\Users\AKCA\oc\frontend\src\api\client.ts:48:export function getMission(id: string): Promise<MissionDetailResponse> {
+C:\Users\AKCA\oc\frontend\src\api\client.ts:49:  return apiGet<MissionDetailResponse>(`/missions/${encodeURIComponent(id)}`)
+C:\Users\AKCA\oc\frontend\src\api\client.ts:60:export function getApprovals(): Promise<ApprovalListResponse> {
+C:\Users\AKCA\oc\frontend\src\api\client.ts:61:  return apiGet<ApprovalListResponse>('/approvals')
+C:\Users\AKCA\oc\frontend\src\types\api.ts:155:export interface MissionDetailResponse {
+C:\Users\AKCA\oc\frontend\src\types\api.ts:160:export interface MissionListResponse {
+C:\Users\AKCA\oc\frontend\src\types\api.ts:176:export interface ApprovalListResponse {

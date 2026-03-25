@@ -151,7 +151,7 @@ class MutationResponse(BaseModel):
 | CSRF Origin validation | `csrf_middleware.py` — POST without valid Origin → 403 | Test 9 PASS |
 | Duplicate mutation prevention | `mutation_bridge.has_pending_signal()` → 409 | Test 5, 10 PASS |
 | FSM state validation | Approve/reject only on "pending", cancel on active states | Test 3, 6 PASS |
-| No direct controller call | API writes file only, `write_signal_artifact()` | Code inspection |
+| No direct controller call | API writes file only, `write_signal_artifact()` | Preliminary grep validation (raw evidence at final closure) |
 | Audit trail | Every mutation logged with requestId + operator info | Test 7 PASS |
 | Host header validation | Existing D-070 middleware (unchanged) | Sprint 8 tests |
 
@@ -212,13 +212,65 @@ NON-BLOCKING NOTES: (list or "none")
 RECOMMENDATION: Proceed to frontend tasks | Fix issues first
 ```
 
+## Ownership Judgment Note
+
+Mid-review ownership judgment is based on current code structure and preliminary grep validation; final closure requires raw negative evidence files in the closure packet and will not rely on narrative inspection text alone.
+
+## FOLLOW-UP PATCHES FOR FINAL REVIEW
+
+These items are non-blocking for 11.MID PASS, but mandatory before 11.FINAL closure assessment.
+
+### 1) Ownership / bridge negative evidence must move from inspection text to raw evidence
+Current mid-review judgment is accepted, but final closure cannot rely on "code inspection" wording alone.
+
+Required final evidence:
+- `evidence/sprint-11/ownership-grep.txt`
+- `evidence/sprint-11/bridge-check.txt`
+
+Required checks:
+- no direct controller execution from API layer
+- no direct service execution bypassing atomic request artifact bridge
+- mutation API writes artifact only; runtime/controller remains sole executor
+
+### 2) Mutation lifecycle raw evidence must be preserved
+Final closure must include raw evidence for:
+- `mutation_requested`
+- `mutation_accepted`
+- `mutation_applied`
+- `mutation_rejected`
+- `mutation_timed_out`
+- `requestId`
+- `lifecycleState`
+
+Required final evidence:
+- `evidence/sprint-11/contract-evidence.txt`
+
+### 3) Additive-only compatibility must be checked explicitly
+D-067 compatibility must not be assumed.
+
+Required final evidence:
+- `evidence/sprint-11/schema-compatibility.txt`
+
+Required checks:
+- no breaking change to existing read-model response contracts
+- mutation response introduced as additive schema
+- existing frontend read paths remain valid
+
+### 4) Manual operator drill remains the real closure gate
+Mid-review PASS does not waive:
+- two-tab race verification
+- cancel during active execution
+- retry while pending
+- timeout recovery
+- SSE correlation verification
+
 ### — BİTİŞ —
 
 ---
 
 ## Notlar
 
-- Bu mesajı olduğu gibi GPT'ye gönder.
+- `### — BAŞLANGIÇ —` ile `### — BİTİŞ —` arasını GPT'ye kopyala-yapıştır gönder.
 - GPT'nin PASS vermesi durumunda 11.7+ frontend task'larına geçilir.
 - GPT FAIL verirse blocking issue'lar çözülene kadar frontend'e geçilmez.
 - Review çıktısını `evidence/sprint-11/review-mid.md` olarak kaydet.

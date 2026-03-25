@@ -1,0 +1,67 @@
+=== mutation lifecycle fields ===
+C:\Users\AKCA\oc\agent\api\approval_mutation_api.py:6:D-096 lifecycle: API writes signal artifact → returns lifecycleState=requested.
+C:\Users\AKCA\oc\agent\api\approval_mutation_api.py:70:async def _emit_mutation_requested(request: Request, request_id: str,
+C:\Users\AKCA\oc\agent\api\approval_mutation_api.py:72:    """Best-effort SSE emit for mutation_requested (D-096 ordering rule)."""
+C:\Users\AKCA\oc\agent\api\approval_mutation_api.py:76:            await sse_mgr.broadcast("mutation_requested", {
+C:\Users\AKCA\oc\agent\api\approval_mutation_api.py:77:                "requestId": request_id,
+C:\Users\AKCA\oc\agent\api\approval_mutation_api.py:82:        logger.warning("Failed to emit mutation_requested SSE: %s", e)
+C:\Users\AKCA\oc\agent\api\approval_mutation_api.py:114:                   f"(requestId={existing})",
+C:\Users\AKCA\oc\agent\api\approval_mutation_api.py:138:    await _emit_mutation_requested(request, request_id, apv_id, "approve")
+C:\Users\AKCA\oc\agent\api\approval_mutation_api.py:147:        requestId=request_id,
+C:\Users\AKCA\oc\agent\api\approval_mutation_api.py:148:        lifecycleState="requested",
+C:\Users\AKCA\oc\agent\api\approval_mutation_api.py:184:                   f"(requestId={existing})",
+C:\Users\AKCA\oc\agent\api\approval_mutation_api.py:208:    await _emit_mutation_requested(request, request_id, apv_id, "reject")
+C:\Users\AKCA\oc\agent\api\approval_mutation_api.py:217:        requestId=request_id,
+C:\Users\AKCA\oc\agent\api\approval_mutation_api.py:218:        lifecycleState="requested",
+C:\Users\AKCA\oc\agent\api\mission_mutation_api.py:6:D-096 lifecycle: API writes signal artifact → returns lifecycleState=requested.
+C:\Users\AKCA\oc\agent\api\mission_mutation_api.py:59:async def _emit_mutation_requested(request: Request, request_id: str,
+C:\Users\AKCA\oc\agent\api\mission_mutation_api.py:61:    """Best-effort SSE emit for mutation_requested."""
+C:\Users\AKCA\oc\agent\api\mission_mutation_api.py:65:            await sse_mgr.broadcast("mutation_requested", {
+C:\Users\AKCA\oc\agent\api\mission_mutation_api.py:66:                "requestId": request_id,
+C:\Users\AKCA\oc\agent\api\mission_mutation_api.py:71:        logger.warning("Failed to emit mutation_requested SSE: %s", e)
+C:\Users\AKCA\oc\agent\api\mission_mutation_api.py:109:                   f"(requestId={existing})",
+C:\Users\AKCA\oc\agent\api\mission_mutation_api.py:133:    await _emit_mutation_requested(request, request_id, mission_id, "cancel")
+C:\Users\AKCA\oc\agent\api\mission_mutation_api.py:142:        requestId=request_id,
+C:\Users\AKCA\oc\agent\api\mission_mutation_api.py:143:        lifecycleState="requested",
+C:\Users\AKCA\oc\agent\api\mission_mutation_api.py:185:                   f"(requestId={existing})",
+C:\Users\AKCA\oc\agent\api\mission_mutation_api.py:209:    await _emit_mutation_requested(request, request_id, mission_id, "retry")
+C:\Users\AKCA\oc\agent\api\mission_mutation_api.py:218:        requestId=request_id,
+C:\Users\AKCA\oc\agent\api\mission_mutation_api.py:219:        lifecycleState="requested",
+C:\Users\AKCA\oc\agent\api\mutation_audit.py:4:timestamp, source, operation, targetId, outcome, requestId, tabId, sessionId.
+C:\Users\AKCA\oc\agent\api\mutation_audit.py:41:        "requestId": request_id,
+C:\Users\AKCA\oc\agent\api\mutation_bridge.py:11:    "requestId": "req-uuid",
+C:\Users\AKCA\oc\agent\api\mutation_bridge.py:53:        Tuple of (requestId, requestedAt ISO string, artifact Path).
+C:\Users\AKCA\oc\agent\api\mutation_bridge.py:62:        "requestId": request_id,
+C:\Users\AKCA\oc\agent\api\mutation_bridge.py:80:        "Signal artifact written: type=%s target=%s requestId=%s path=%s",
+C:\Users\AKCA\oc\agent\api\mutation_bridge.py:95:    Returns the existing requestId if found, None otherwise.
+C:\Users\AKCA\oc\agent\api\mutation_bridge.py:109:                return data.get("requestId")
+C:\Users\AKCA\oc\agent\api\schemas.py:236:    API always returns lifecycleState=requested.
+C:\Users\AKCA\oc\agent\api\schemas.py:239:    requestId: str
+C:\Users\AKCA\oc\agent\api\schemas.py:240:    lifecycleState: str = "requested"
+C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:7: 1. POST mutation → lifecycleState=requested
+C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:62:    """Test 1: POST mutation → lifecycleState=requested, requestedAt populated, acceptedAt null."""
+C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:65:        """POST /api/v1/approvals/{id}/approve → 200 + lifecycleState=requested."""
+C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:88:            self.assertEqual(body["lifecycleState"], "requested")
+C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:89:            self.assertIn("requestId", body)
+C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:96:    """Test 2: API emits mutation_requested SSE with requestId correlation.
+C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:98:    D-096 ordering: artifact persisted → SSE mutation_requested → HTTP response.
+C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:99:    mutation_accepted / mutation_applied are controller-side (runtime consumer).
+C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:102:    def test_sse_mutation_requested_emitted(self):
+C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:103:        """After approve, _emit_mutation_requested called with correct args."""
+C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:121:                    "requestId": request_id,
+C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:128:                 patch("api.approval_mutation_api._emit_mutation_requested",
+C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:137:            request_id = resp.json().get("requestId")
+C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:140:            # Verify _emit_mutation_requested was called
+C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:142:                             "mutation_requested emit not called exactly once")
+C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:143:            self.assertEqual(emit_calls[0]["requestId"], request_id)
+C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:151:    def test_sse_mutation_rejected_with_reason(self):
+C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:152:        """Reject on already-approved approval → mutation_rejected SSE with reason."""
+C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:174:            # Should still return 200 with lifecycleState=requested,
+C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:175:            # then SSE mutation_rejected later. Or might return 409/422.
+C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:180:                self.assertIn("requestId", body)
+C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:187:        """Mutation that is not processed within timeout → mutation_timed_out SSE."""
+C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:209:            self.assertEqual(body["lifecycleState"], "requested")
+C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:323:            required_fields = ["requestId", "operation", "targetId",
+C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:367:            self.assertIn("requestId", artifact_data)
+C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:463:            self.assertEqual(body["lifecycleState"], "requested")
+C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:464:            self.assertIn("requestId", body)

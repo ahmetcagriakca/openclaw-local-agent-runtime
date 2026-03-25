@@ -656,15 +656,55 @@ logger.warning(
 3. mutation_accepted event acknowledged as controller-side only (correct)
 4. Document is not closure (acknowledged — operator sign-off still required)
 
+## Retrospective Summary
+
+### Net Judgment
+
+Sprint 11 went well. Read-only → mutation transition was solidly built with contract-first approach. 11 tests written first (all FAIL), endpoints implemented after, 11/11 PASS. v3 process rules fully applied for the first time.
+
+### What Went Well
+
+- **Contract-first testing:** 11 tests FAIL → implement → 11 PASS cycle.
+- **Atomic signal artifact pattern:** Zero D-001 violations. API never calls controller/service directly.
+- **Mid-review gate:** GPT review before frontend reduced rework risk.
+- **Evidence-first closure:** Every claim backed by raw output.
+
+### What Broke
+
+- **Commit granularity:** 11.7+11.8+11.9+11.10 in single commit (4 tasks, 1 commit). Tightly coupled frontend tasks.
+- **Test count arithmetic:** "195 + 29 + 11 = 224" but 11 contract tests already in 195. GPT caught it.
+- **D-089 language mismatch:** Decision says "SameSite=Strict + Origin" but only Origin middleware exists.
+- **Turkish content in documents:** Retrospective and report sections were written in Turkish. All repo documents must be English.
+- **GPT review report not proactively prepared:** Report only created on operator request. Should be automatic before every review gate.
+
+### Actions (6 items)
+
+| # | Action | Owner | Deadline | Output |
+|---|--------|-------|----------|--------|
+| A-01 | Separate frontend tasks into "shared component" and "page integration" with distinct commits | Copilot | Sprint 12 kickoff | Commit plan in task doc |
+| A-02 | Test counts from raw command output only (`pytest --co -q \| tail -1`, `vitest list \| wc -l`) | Copilot | Sprint 12 | Process rule |
+| A-03 | Fix D-089 text: "Origin header check enforced; SameSite depends on browser cookie context" | Claude | Sprint 12 Task 0 | DECISIONS.md patch |
+| A-04 | Add to Sprint 12 kickoff gate: "Evidence counts must come from raw command output" | Claude | Sprint 12 kickoff | PROCESS-GATES.md patch |
+| A-05 | All repository documents must be in English. Turkish is chat-only. Added to copilot-instructions Section 1. | Claude | Immediate | copilot-instructions.md v3.1 |
+| A-06 | GPT review report proactively prepared before every review gate. Added to copilot-instructions Section 12. | Claude | Immediate | copilot-instructions.md v3.1 |
+
+### Carried to Next Sprint
+
+- A-01 → Sprint 12 task doc commit plan
+- A-03 → Sprint 12 Task 0 DECISIONS.md update
+- A-04 → Sprint 12 kickoff gate addition
+- A-05 and A-06 → Applied immediately to copilot-instructions.md (v3.1)
+
 ## Questions for Closure Review
 
-İlk review'da 4 non-blocking note verildi ve tümü fix'lendi. Bu güncellenmiş raporda:
+All 4 non-blocking notes from first review were addressed. Updated questions:
 
-1. **Closure evidence yeterliliği:** Live checks (10/10) + operator drill (5/5) + closure-check (ELIGIBLE) — sprint closure için yeterli mi?
-2. **Bridge rule compliance:** `contract-evidence.txt` grep sonuçları endpoint handler'ları yakalıyor (false positive). Gerçek bridge rule ihlali yok — `write_signal_artifact()` kullanılıyor. Onay?
-3. **Retrospective quality:** Section 14'te 4 action item (A-01→A-04) var. Sprint 12 kickoff gate'e taşınmalı mı?
-4. **Host attack (D-070):** Host header validation 403 döndürüyor — doğru mu?
-5. **Remaining risk:** Sprint 12'ye taşınması gereken teknik borç veya risk var mı?
+1. **Closure evidence sufficiency:** Live checks (10/10) + operator drill (5/5) + closure-check (ELIGIBLE) — sufficient for sprint closure?
+2. **Bridge rule compliance:** `contract-evidence.txt` grep catches endpoint handler names (false positive). No actual bridge rule violation — all endpoints use `write_signal_artifact()`. Confirm?
+3. **Retrospective quality:** 6 action items (A-01→A-06). A-05 and A-06 applied immediately. A-01, A-03, A-04 carried to Sprint 12. Adequate?
+4. **Host attack (D-070):** Host header validation returns 403 — correct?
+5. **Remaining risk:** Any technical debt or risk to carry to Sprint 12?
+6. **Process improvements:** A-05 (English-only documents) and A-06 (proactive review reports) added to copilot-instructions v3.1. Sufficient hardening?
 
 ## Expected Review Output
 

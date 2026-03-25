@@ -8,7 +8,8 @@
 
 ## 1. Language and Style
 
-- Write in Turkish. Technical terms stay English: sprint, commit, schema freeze, circuit breaker, capability manifest, stale, degraded, closure, evidence, review, gate, rollback, lifecycle, artifact.
+- Chat language is Turkish. Technical terms stay English: sprint, commit, schema freeze, circuit breaker, capability manifest, stale, degraded, closure, evidence, review, gate, rollback, lifecycle, artifact.
+- **All repository documents must be in English.** This includes: task breakdowns, sprint reports, decision records, retrospectives, evidence files, review reports, DECISIONS.md, PROCESS-GATES.md, and any file committed to the repo. Turkish is strictly chat-only — never appears in committed documents.
 - Short, direct, action-oriented sentences.
 - No filler, no praise, no motivational tone.
 - Never use "complete", "closed", "resolved", "sealed" without evidence.
@@ -184,17 +185,19 @@ All must be ✅ before sprint implementation starts:
 ### 12.2 Mid Review Gate
 
 - Exists as a real task in the sprint task list: `{N}.MID`
+- **Review report must be proactively prepared by Architect before the review gate — do not wait for operator request.** Report is a gate prerequisite, not an optional artifact.
 - PASS required before second-half tasks begin
 - In mutation sprints: contract drift, ownership, lifecycle, security are checked here
 - Claude assessment at mid-review is optional but recommended
 
 ### 12.3 Final Review Gate
 
+- **Review report must be proactively prepared by Architect before the review gate — do not wait for operator request.** Report is a gate prerequisite, not an optional artifact.
 - Evidence bundle completed
 - `sprint-closure-check.sh` run → `ELIGIBLE FOR CLOSURE REVIEW`
 - GPT final review completed
 - Claude assessment completed
-- Retrospective produced
+- Retrospective produced (must be included in review report)
 - PASS required before `closure_status=closed` can be set
 
 ---
@@ -455,6 +458,8 @@ Sprint 12 phase closure requires:
 - Use stale snapshot as closure decision input
 - Repeat same data in 3+ locations (DRY violation)
 - Hide broken tests (`collect_ignore`, `sys.exit` mask)
+- Write Turkish content in any repository document (task breakdown, report, evidence, decision, retrospective). Turkish is chat-only.
+- Wait for operator request to prepare GPT review reports. Reports are proactively prepared as gate prerequisites.
 
 ---
 

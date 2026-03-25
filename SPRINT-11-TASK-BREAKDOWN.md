@@ -570,45 +570,51 @@ No separate phase report. This document's Results section is sufficient.
 
 ### Net Judgment
 
-Sprint 11 iyi gitti. Read-only → mutation geçişi contract-first yaklaşımla sağlam yapıldı. 11 test önce FAIL, endpoint'ler sonra yazıldı, 11/11 PASS. v3 süreç kuralları (two-axis status, evidence-based closure, review gate) ilk kez tam uygulandı.
+Sprint 11 went well. Read-only → mutation transition was solidly built with contract-first approach. 11 tests written first (all FAIL), endpoints implemented after, 11/11 PASS. v3 process rules (two-axis status, evidence-based closure, review gate) fully applied for the first time.
 
 ### What Went Well
 
-- **Contract-first testing:** 11 test önce yazıp hepsinin FAIL olduğunu kanıtlamak, sonra implementasyonu yapıp PASS'a çevirmek güvenilir bir döngü oluşturdu.
-- **Atomic signal artifact pattern:** D-001 ihlali sıfır — API hiçbir yerde controller/service çağırmıyor. grep evidence bunu kanıtlıyor.
-- **Mid-review gate:** Backend bitince frontend'e geçmeden GPT review zorunluluğu, frontend'te geri dönüş riskini azalttı.
-- **Evidence-first closure:** Her claim'in yanında raw grep/test output var. "Code inspection" ifadesi mid-review patch'iyle elimination edildi.
+- **Contract-first testing:** Writing 11 tests first, proving they all FAIL, then implementing endpoints to reach PASS created a reliable development cycle.
+- **Atomic signal artifact pattern:** Zero D-001 violations — API never calls controller/service directly. Grep evidence proves this.
+- **Mid-review gate:** Requiring GPT review before moving from backend to frontend reduced rework risk on frontend tasks.
+- **Evidence-first closure:** Every claim backed by raw grep/test output. "Code inspection" language eliminated via mid-review patch.
 
 ### What Broke
 
-- **Commit granularity:** 11.7+11.8+11.9+11.10 tek commit'e sıkıştı (4 task, 1 commit). Kural "1 task = minimum 1 commit" ama tightly coupled frontend task'larda bunu ayrıştırmak pratik olmadı.
-- **Test count aritmetiği:** "195 + 29 + 11 = 224" yazdık ama 11 contract test zaten 195'in içinde. GPT bunu yakaladı. Evidence'da tutarsız sayı kirli görüntü yaratır.
-- **D-089 dil uyumsuzluğu:** Decision "SameSite=Strict + Origin" diyor ama implementasyonda SameSite cookie config yok, sadece Origin middleware var. Karar metni ile uygulama dili arasında boşluk kaldı. GPT bunu da yakaladı.
+- **Commit granularity:** Tasks 11.7+11.8+11.9+11.10 squeezed into single commit (4 tasks, 1 commit). Rule says "1 task = minimum 1 commit" but tightly coupled frontend tasks made separation impractical.
+- **Test count arithmetic:** Wrote "195 + 29 + 11 = 224" but 11 contract tests are already included in 195. GPT caught this. Inconsistent numbers in evidence create noise.
+- **D-089 language mismatch:** Decision says "SameSite=Strict + Origin" but implementation has no SameSite cookie config — only Origin middleware exists. Gap between decision text and implementation language remained. GPT caught this too.
+- **Turkish content in documents:** Retrospective and some report sections were written in Turkish. All repository documents (task breakdowns, reports, evidence, decisions) must be in English. Turkish is chat-only language.
+- **GPT review report not proactively prepared:** Review report was only created when explicitly requested by operator. Report preparation should be automatic before every GPT review gate.
 
 ### Root Cause
 
-- Commit granularity: Frontend component'lerin birbirine bağımlılığı (ConfirmDialog → useMutation → buttons) atomik commit'i zorlaştırıyor. Planlama aşamasında "ortak component" task'ları ile "sayfa task'ları" ayrılmalıydı.
-- Test count: Rapor yazarken manual hesap yerine `pytest --co -q | tail -1` çıktısı kullanılmalıydı (v3 kural 21 zaten bunu söylüyor — uygulamadık).
-- D-089: Karar yazarken "SameSite=Strict" browser davranışı varsayımı, middleware'de enforce edilen "Origin check" ile karıştırıldı. Karar ile implementasyon arasındaki gap freeze sırasında yakalanmalıydı.
+- Commit granularity: Frontend component interdependency (ConfirmDialog → useMutation → buttons) makes atomic commits difficult. Planning phase should separate "shared component" tasks from "page integration" tasks.
+- Test count: Manual arithmetic used instead of `pytest --co -q | tail -1` raw output (v3 rule 21 already mandates this — was not followed).
+- D-089: "SameSite=Strict" was a browser behavior assumption mixed with the enforced "Origin check" in middleware. Gap between decision and implementation should have been caught during freeze.
+- Turkish content: No explicit rule existed separating chat language (Turkish) from document language (English). Rule now added to copilot-instructions (Section 1).
+- Report preparation: No explicit rule required proactive report generation before review gates. Architect waited for operator request instead of treating report preparation as a gate prerequisite.
 
 ### Actions
 
 | # | Action | Owner | Deadline | Output |
 |---|--------|-------|----------|--------|
-| A-01 | Sprint 12'de frontend task'ları "shared component" ve "page integration" olarak ayrı commit'le | Copilot | Sprint 12 kickoff | Commit plan in task doc |
-| A-02 | Test count raporda her zaman `pytest --co -q \| tail -1` ve `vitest list \| wc -l` çıktısından alınsın, manual hesap yapılmasın | Copilot | Sprint 12 | Process rule |
-| A-03 | D-089 karar metnini düzelt: "Origin header check enforced; SameSite depends on browser cookie context" | Claude | Sprint 12 Task 0 | DECISIONS.md patch |
-| A-04 | Sprint 12 kickoff gate'ine ekle: "Evidence sayıları raw command output'tan alınmalı, manual toplamdan değil" | Claude | Sprint 12 kickoff | PROCESS-GATES.md patch |
+| A-01 | In Sprint 12, separate frontend tasks into "shared component" and "page integration" with distinct commits | Copilot | Sprint 12 kickoff | Commit plan in task doc |
+| A-02 | Test counts in reports must always come from `pytest --co -q \| tail -1` and `vitest list \| wc -l` raw output, never manual arithmetic | Copilot | Sprint 12 | Process rule |
+| A-03 | Fix D-089 decision text: "Origin header check enforced; SameSite depends on browser cookie context" | Claude | Sprint 12 Task 0 | DECISIONS.md patch |
+| A-04 | Add to Sprint 12 kickoff gate: "Evidence counts must come from raw command output, not manual totals" | Claude | Sprint 12 kickoff | PROCESS-GATES.md patch |
+| A-05 | All repository documents must be in English. Turkish is chat-only. Rule added to copilot-instructions Section 1. | Claude | Immediate | copilot-instructions.md patch |
+| A-06 | GPT review report must be proactively prepared before every review gate — not waiting for operator request. Rule added to copilot-instructions Section 12. | Claude | Immediate | copilot-instructions.md patch |
 
 ### Carried to Next Sprint
 
-- A-01 → Sprint 12 task doc commit planı
+- A-01 → Sprint 12 task doc commit plan
 - A-03 → Sprint 12 Task 0 DECISIONS.md update
-- A-04 → Sprint 12 kickoff gate eklentisi
+- A-04 → Sprint 12 kickoff gate addition
 
 ### Stop Rules
 
-Yok. Tekrarlayan hata yok (3 consecutive sprint kuralı tetiklenmedi).
+None. No recurring error across 3 consecutive sprints (stop rule threshold not triggered).
 
 ---
 

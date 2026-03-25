@@ -1,0 +1,218 @@
+"""OpenClaw Mission Control API — FastAPI server.
+
+D-061: FastAPI from day 1.
+D-070: Localhost security (Host validation, CORS, 127.0.0.1 binding).
+D-074: Startup sequence (config → FS validation → cache warm → normalizer → serve).
+"""
+import logging
+import os
+import signal
+import sys
+from contextlib import asynccontextmanager
+from datetime import datetime, timezone
+from logging.handlers import RotatingFileHandler
+from pathlib import Path
+
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+
+from api.normalizer import MissionNormalizer
+from api.capabilities import CapabilityChecker
+from api.schemas import APIError
+from utils.atomic_write import atomic_write_json
+
+# ── Paths ────────────────────────────────────────────────────────
+
+# __file__ = agent/api/server.py → dirname×3 = oc root
+OC_ROOT = Path(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+MISSIONS_DIR = OC_ROOT / "logs" / "missions"
+TELEMETRY_PATH = OC_ROOT / "logs" / "policy-telemetry.jsonl"
+CAPABILITIES_PATH = OC_ROOT / "config" / "capabilities.json"
+APPROVALS_DIR = OC_ROOT / "logs" / "approvals"
+SERVICES_PATH = OC_ROOT / "logs" / "services.json"
+API_LOG_PATH = OC_ROOT / "logs" / "mission-control-api.log"
+
+PORT = int(os.environ.get("MCC_PORT", "8003"))
+
+# ── Logging (D-073: 10MB / 5 files / 14 days) ───────────────────
+
+def _setup_logging():
+    API_LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
+    handler = RotatingFileHandler(
+        str(API_LOG_PATH), maxBytes=10 * 1024 * 1024,
+        backupCount=5, encoding="utf-8")
+    handler.setFormatter(logging.Formatter(
+        "%(asctime)s %(levelname)s %(name)s: %(message)s"))
+    logger = logging.getLogger("mcc")
+    logger.setLevel(logging.INFO)
+    logger.addHandler(handler)
+    return logger
+
+logger = _setup_logging()
+
+# ── Shared State ─────────────────────────────────────────────────
+
+normalizer: MissionNormalizer | None = None
+capability_checker: CapabilityChecker | None = None
+
+# ── Services.json (8.13) ────────────────────────────────────────
+
+HEARTBEAT_INTERVAL_S = 30
+_service_started_at: str = ""
+
+
+def _register_service(status: str = "running"):
+    """Write/update services.json with heartbeat — GPT Fix 6.
+
+    Atomic read-modify-write: read → update own key → atomic write.
+    Heartbeat freshness: lastHeartbeatAt checked for liveness.
+    """
+    global _service_started_at
+    import json as _json
+
+    services = {}
+    if SERVICES_PATH.exists():
+        try:
+            services = _json.loads(
+                SERVICES_PATH.read_text(encoding="utf-8"))
+        except Exception:
+            services = {}
+
+    if not _service_started_at:
+        _service_started_at = datetime.now(timezone.utc).isoformat()
+
+    services["mission-control-api"] = {
+        "status": status,
+        "port": PORT,
+        "pid": os.getpid(),
+        "startedAt": _service_started_at,
+        "lastHeartbeatAt": datetime.now(timezone.utc).isoformat(),
+        "heartbeatIntervalS": HEARTBEAT_INTERVAL_S,
+    }
+    try:
+        atomic_write_json(SERVICES_PATH, services)
+    except Exception as e:
+        logger.warning(f"Failed to write services.json: {e}")
+
+
+# ── Lifespan (D-074 startup sequence) ───────────────────────────
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    global normalizer, capability_checker
+
+    logger.info("MCC startup: config load")
+
+    # Step 1: FS validation
+    MISSIONS_DIR.mkdir(parents=True, exist_ok=True)
+    APPROVALS_DIR.mkdir(parents=True, exist_ok=True)
+    logger.info("MCC startup: FS validated")
+
+    # Step 2: Cache warm + normalizer init
+    normalizer = MissionNormalizer(
+        missions_dir=MISSIONS_DIR,
+        telemetry_path=TELEMETRY_PATH,
+        capabilities_path=CAPABILITIES_PATH,
+        approvals_dir=APPROVALS_DIR,
+    )
+    logger.info("MCC startup: normalizer ready")
+
+    # Step 3: Capability checker
+    capability_checker = CapabilityChecker(CAPABILITIES_PATH)
+    logger.info("MCC startup: capabilities loaded")
+
+    # Step 4: Register service
+    _register_service("running")
+    logger.info(f"MCC startup: serving on 127.0.0.1:{PORT}")
+
+    # Step 5: Start heartbeat background task (GPT Fix 6)
+    import asyncio
+    heartbeat_task = asyncio.create_task(_heartbeat_loop())
+
+    yield
+
+    # Shutdown
+    heartbeat_task.cancel()
+    try:
+        await heartbeat_task
+    except asyncio.CancelledError:
+        pass
+    _register_service("stopped")
+    logger.info("MCC shutdown")
+
+
+async def _heartbeat_loop():
+    """GPT Fix 6: Periodic heartbeat update to services.json."""
+    import asyncio
+    while True:
+        await asyncio.sleep(HEARTBEAT_INTERVAL_S)
+        try:
+            _register_service("running")
+        except Exception as e:
+            logger.warning(f"Heartbeat failed: {e}")
+
+
+# ── App ──────────────────────────────────────────────────────────
+
+app = FastAPI(
+    title="OpenClaw Mission Control",
+    version="1.0.0",
+    lifespan=lifespan,
+)
+
+# D-070: CORS — only localhost:3000 (React dev)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+    ],
+    allow_credentials=False,
+    allow_methods=["GET"],
+    allow_headers=["*"],
+)
+
+
+# D-070: Host header validation middleware
+@app.middleware("http")
+async def validate_host(request: Request, call_next):
+    host = request.headers.get("host", "")
+    allowed = {"localhost", "127.0.0.1",
+               f"localhost:{PORT}", f"127.0.0.1:{PORT}",
+               "testserver"}  # FastAPI TestClient
+    if host not in allowed:
+        return JSONResponse(
+            status_code=403,
+            content={"error": "forbidden", "detail": "Invalid Host header"},
+        )
+    return await call_next(request)
+
+
+# ── Import routers ──────────────────────────────────────────────
+
+from api.mission_api import router as mission_router
+from api.approval_api import router as approval_router
+from api.telemetry_api import router as telemetry_router
+from api.health_api import router as health_router
+
+app.include_router(mission_router, prefix="/api/v1")
+app.include_router(approval_router, prefix="/api/v1")
+app.include_router(telemetry_router, prefix="/api/v1")
+app.include_router(health_router, prefix="/api/v1")
+
+
+# ── Main ────────────────────────────────────────────────────────
+
+def main():
+    import uvicorn
+    uvicorn.run(
+        "api.server:app",
+        host="127.0.0.1",
+        port=PORT,
+        log_level="info",
+    )
+
+
+if __name__ == "__main__":
+    main()

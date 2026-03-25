@@ -18,6 +18,8 @@
 | B-036 | ops/wsl/ versioned templates | Sprint 7 | 5 files created |
 | B-037 | Capability manifest auto-gen | Sprint 7 | D-071 atomic write |
 | B-038 | Sprint-End Doc Policy + validation script | Sprint 7 | D-077 frozen |
+| B-056 | DataQuality enum amendment (5→6 state) | Pre-Sprint 8 | D-079 frozen |
+| B-057 | Service registry freshness rule | Pre-Sprint 8 | D-080 frozen |
 
 ---
 
@@ -26,7 +28,7 @@
 | ID | Item | Notes |
 |----|------|-------|
 | B-039 | FastAPI + Uvicorn setup (D-061) | Foundation |
-| B-040 | Pydantic schemas freeze (D-067) | /api/v1/ contract |
+| B-040 | Pydantic schemas freeze (D-067) | `/api/v1/` contract |
 | B-041 | MissionNormalizer (D-065) | Aggregation + precedence + cache |
 | B-042 | IncrementalFileCache | File watcher + cache invalidation |
 | B-043 | Per-source circuit breaker (D-072) | Fault isolation |
@@ -68,8 +70,6 @@
 | B-010 | WMCP credential replacement | Replace local-mcp-12345 |
 | B-011 | Transport encryption | mTLS or equivalent |
 
----
-
 ## Phase 3 — Productization
 
 | ID | Item | Notes |
@@ -84,8 +84,6 @@
 | B-019 | Intent mapping refinement | OpenClaw conversation quality |
 | B-020 | Standard task library | Common task definitions |
 
----
-
 ## Phase 4 — Reproducibility / DR
 
 | ID | Item | Notes |
@@ -95,8 +93,6 @@
 | B-023 | Corrupted runtime recovery | Beyond stuck-task policy |
 | B-024 | Deterministic redeploy | Reproducible from repo |
 
----
-
 ## Cleanup (no phase gate)
 
 | ID | Item | Notes |
@@ -105,3 +101,8 @@
 | B-026 | Dead-letter retention policy | No auto-purge defined |
 | B-027 | Task directory retention policy | No auto-purge defined |
 | B-028 | Stale .bak files | Bootstrap-created backups |
+
+---
+
+*Backlog — OpenClaw Local Agent Runtime*
+*Last updated: 2026-03-25*

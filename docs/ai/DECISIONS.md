@@ -2,15 +2,14 @@
 
 **Last updated:** 2026-03-25
 
-All decisions below are frozen unless marked otherwise. Reopening requires explicit phase gate approval + operator sign-off.
+All decisions below are frozen unless marked otherwise.
+Reopening requires explicit phase gate approval + operator sign-off.
 
 ---
 
 ## Phase 1 / 1.5 Decisions (D-001 → D-020)
 
----
-
-## D-001: Single Execution Owner = oc runtime
+### D-001: Single Execution Owner = oc runtime
 
 **Phase:** 1.5-A | **Status:** Frozen
 
@@ -18,7 +17,7 @@ oc runtime is the only component that may queue, execute, retry, cancel, or repo
 
 ---
 
-## D-002: Terminology — orchestration vs conversation flow
+### D-002: Terminology — orchestration vs conversation flow
 
 **Phase:** 1.5-A | **Status:** Frozen
 
@@ -26,7 +25,7 @@ oc runtime is the only component that may queue, execute, retry, cancel, or repo
 
 ---
 
-## D-003: Worker model — ephemeral -RunOnce
+### D-003: Worker model — ephemeral -RunOnce
 
 **Phase:** 1.5-A | **Status:** Frozen
 
@@ -34,7 +33,7 @@ Each invocation claims pending tickets, processes them, exits. Persistent poll l
 
 ---
 
-## D-004: Bridge = stateless translation + auth gate
+### D-004: Bridge = stateless translation + auth gate
 
 **Phase:** 1.5-A | **Status:** Frozen
 
@@ -42,7 +41,7 @@ No persistent state. One request = one API call = one response. Exception: termi
 
 ---
 
-## D-005: External surface is task-centric
+### D-005: External surface is task-centric
 
 **Phase:** 1.5-A | **Status:** Frozen
 
@@ -50,7 +49,7 @@ Bridge contract uses task names and task IDs. No intent vocabulary at Bridge bou
 
 ---
 
-## D-006: Raw action invocation forbidden externally
+### D-006: Raw action invocation forbidden externally
 
 **Phase:** 1.5-A | **Status:** Frozen
 
@@ -58,7 +57,7 @@ oc-run-action.ps1 forbidden as external integration path. Runner is the only leg
 
 ---
 
-## D-007: Polling-only for Phase 1.5
+### D-007: Polling-only for Phase 1.5
 
 **Phase:** 1.5-A | **Status:** Frozen
 
@@ -66,7 +65,7 @@ No callbacks, notifications, or webhooks. OpenClaw owns poll timing.
 
 ---
 
-## D-008: Stuck task policy — fail-closed + dead-letter + no auto-retry
+### D-008: Stuck task policy — fail-closed + dead-letter + no auto-retry
 
 **Phase:** 1.5-A | **Status:** Frozen
 
@@ -74,7 +73,7 @@ Stuck tasks fail, write lastError, move to dead-letter. No auto-retry anywhere.
 
 ---
 
-## D-009: Duplicate task creation accepted in Phase 1.5
+### D-009: Duplicate task creation accepted in Phase 1.5
 
 **Phase:** 1.5-A | **Status:** Frozen
 
@@ -82,7 +81,7 @@ requestId is audit/correlation only, not dedupe.
 
 ---
 
-## D-010: Retry not exposed externally in Phase 1.5
+### D-010: Retry not exposed externally in Phase 1.5
 
 **Phase:** 1.5-C | **Status:** Frozen
 
@@ -90,7 +89,7 @@ retry_task is operator-only. User retry = new submit_task.
 
 ---
 
-## D-011: External Bridge operations (Phase 1.5)
+### D-011: External Bridge operations (Phase 1.5)
 
 **Phase:** 1.5-C | **Status:** Frozen
 
@@ -98,7 +97,7 @@ Four operations: submit_task, get_task_status, cancel_task, get_health.
 
 ---
 
-## D-012: Approval model — definition-level preapproval
+### D-012: Approval model — definition-level preapproval
 
 **Phase:** 1.5-C | **Status:** Frozen
 
@@ -106,7 +105,7 @@ Runtime enforces approvalPolicy at task definition level. No policyContext. Brid
 
 ---
 
-## D-013: Allowlist fail-closed startup
+### D-013: Allowlist fail-closed startup
 
 **Phase:** 1.5-D | **Status:** Frozen
 
@@ -114,7 +113,7 @@ Missing/empty/unparseable allowlist = Bridge refuses to start (exit 2).
 
 ---
 
-## D-014: Five-step validation order
+### D-014: Five-step validation order
 
 **Phase:** 1.5-D | **Status:** Frozen
 
@@ -122,7 +121,7 @@ Structural → Operation → Allowlist → Field-level → Approval pre-validati
 
 ---
 
-## D-015: Operator exception — local/manual/admin-only
+### D-015: Operator exception — local/manual/admin-only
 
 **Phase:** 1.5-A | **Status:** Frozen
 
@@ -130,7 +129,7 @@ Not part of Bridge external contract. Must not become shadow integration path.
 
 ---
 
-## D-016: Health response sanitized
+### D-016: Health response sanitized
 
 **Phase:** 1.5-D | **Status:** Frozen
 
@@ -138,7 +137,7 @@ Only health field (ok/degraded/error) plus wrapper fields. All runtime internals
 
 ---
 
-## D-017: Minimum audit — 10 fields per request
+### D-017: Minimum audit — 10 fields per request
 
 **Phase:** 1.5-D | **Status:** Frozen
 
@@ -146,7 +145,7 @@ timestamp, requestId, source, sourceUserId, operation, taskName, approvalStatus,
 
 ---
 
-## D-018: Bridge physical form — stateless single-invocation script
+### D-018: Bridge physical form — stateless single-invocation script
 
 **Phase:** 1.5-E | **Status:** Frozen
 
@@ -154,7 +153,7 @@ bridge/oc-bridge.ps1, invoked once per request, produces response, exits.
 
 ---
 
-## D-019: Canonical caller path — OpenClaw via WSL wrappers
+### D-019: Canonical caller path — OpenClaw via WSL wrappers
 
 **Phase:** TG-1R | **Status:** Frozen
 
@@ -162,7 +161,7 @@ OpenClaw Telegram → WSL wrappers → oc-bridge-call → pwsh.exe bridge/oc-bri
 
 ---
 
-## D-020: Project identity
+### D-020: Project identity
 
 **Phase:** Post-1.5 | **Status:** Active
 
@@ -189,9 +188,7 @@ Project: OpenClaw Local Agent Runtime. Repo: openclaw-local-agent-runtime.
 
 ## Phase 5 Decisions (D-059 → D-076)
 
----
-
-## D-059: Read-only first, Controller sole executor
+### D-059: Read-only first, Controller sole executor
 
 **Phase:** 5 (design) | **Status:** Frozen
 
@@ -199,7 +196,7 @@ Phase 5A–5B read-only. Mission Controller remains the sole executor — UI obs
 
 ---
 
-## D-060: Polling → SSE, No WebSocket
+### D-060: Polling → SSE, No WebSocket
 
 **Phase:** 5B (Sprint 10) | **Status:** Frozen
 
@@ -207,37 +204,37 @@ Frontend starts with 2s polling (Sprint 9), upgrades to SSE (Sprint 10). WebSock
 
 ---
 
-## D-061: FastAPI from day 1
+### D-061: FastAPI from day 1
 
 **Phase:** 5A-1 (Sprint 8) | **Status:** Frozen
 
 FastAPI + Uvicorn for all phases. No Flask, no custom HTTP. Decision is irreversible — all API work builds on this stack.
 
-Trade-off: Heavier initial setup vs. consistent foundation. async-native from start.
+**Trade-off:** Heavier initial setup vs. consistent foundation. async-native from start.
 
 ---
 
-## D-062: Intervention via atomic file signal
+### D-062: Intervention via atomic file signal
 
 **Phase:** 5C (Sprint 11) | **Status:** Frozen
 
 UI writes intervention request as atomic JSON file. Controller polls for intervention signals between stages. No direct process communication.
 
-Trade-off: Higher latency (poll interval) vs. crash-safe, no IPC complexity.
+**Trade-off:** Higher latency (poll interval) vs. crash-safe, no IPC complexity.
 
 ---
 
-## D-063: Approval via service layer
+### D-063: Approval via service layer
 
 **Phase:** 5C (Sprint 11) | **Status:** Frozen
 
 Current strict-ID approval service sunsets in Phase 5C. New approval flow: UI → API → ApprovalService → atomic file → Controller reads. Structured request/response contract.
 
-Trade-off: Migration effort vs. clean contract for future multi-approver support.
+**Trade-off:** Migration effort vs. clean contract for future multi-approver support.
 
 ---
 
-## D-064: Port assignment — API 8003, React 3000
+### D-064: Port assignment — API 8003, React 3000
 
 **Phase:** 5A (Sprint 8) | **Status:** Frozen
 
@@ -245,17 +242,17 @@ Mission Control API on port 8003, React dev server on 3000. Env override support
 
 ---
 
-## D-065: Normalized API — MissionNormalizer
+### D-065: Normalized API — MissionNormalizer
 
 **Phase:** 5A-1 (Sprint 8) | **Status:** Frozen
 
 API does not expose raw files. MissionNormalizer reads multiple sources (state.json, mission JSON, telemetry JSONL, summary), applies precedence rules, caches result, returns normalized response.
 
-Precedence: state > mission (for status), summary > telemetry (for forensics).
+**Precedence:** state > mission (for status), summary > telemetry (for forensics).
 
 ---
 
-## D-066: Legacy dashboard lives until 5D
+### D-066: Legacy dashboard lives until 5D
 
 **Phase:** 5D (Sprint 12) | **Status:** Frozen
 
@@ -263,35 +260,36 @@ Legacy health dashboard on port 8002 runs in parallel until Sprint 12 evaluation
 
 ---
 
-## D-067: Schema frozen after 5A-1, additive-only
+### D-067: Schema frozen after 5A-1, additive-only
 
 **Phase:** 5A-1 (Sprint 8) | **Status:** Frozen
 
-API response schemas freeze at Sprint 8 exit. Post-freeze: additive fields only, no removal, no type change. Versioned as /api/v1/.
+API response schemas freeze at Sprint 8 exit. Post-freeze: additive fields only, no removal, no type change. Versioned as `/api/v1/`.
 
 ---
 
-## D-068: Unknown ≠ zero, 6 data states
+### D-068: Unknown ≠ zero, data quality states
 
-**Phase:** 5A–5B (Sprint 8–9) | **Status:** Frozen
+**Phase:** 5A–5B (Sprint 8–9) | **Status:** Frozen (amended by D-079)
 
-Every response has a DataQuality indicator with one of 6 states: fresh, partial, stale, degraded, unknown, not_reached. UI must distinguish all six. Rendering unknown as zero, empty, pass, or green is forbidden.
+Every data point has a quality state. UI must distinguish all states. Rendering unknown as zero, empty, pass, or green is forbidden.
 
-Priority when multiple conditions: degraded > stale > partial > fresh.
+**Original (5 states):** `known_zero`, `unknown`, `not_reached`, `stale`, `degraded`.
+**Amended (D-079, 6 states):** `fresh`, `partial`, `stale`, `degraded`, `unknown`, `not_reached`.
 
-Impacted: All API responses, all UI components, all normalizer logic.
+**Impacted:** All API responses, all UI components, all normalizer logic.
 
 ---
 
-## D-069: No control without acknowledgement
+### D-069: No control without acknowledgement
 
 **Phase:** 5C (Sprint 11) | **Status:** Frozen
 
-Every mutation request follows lifecycle: requested → accepted → applied | rejected | timed_out. No fire-and-forget commands.
+Every mutation request follows lifecycle: `requested → accepted → applied | rejected | timed_out`. No fire-and-forget commands.
 
 ---
 
-## D-070: DNS rebinding protection
+### D-070: DNS rebinding protection
 
 **Phase:** 5A-1 (Sprint 8) | **Status:** Frozen
 
@@ -299,7 +297,7 @@ FastAPI validates Host header. Explicit CORS config. Server binds to 127.0.0.1 o
 
 ---
 
-## D-071: Atomic file writes system-wide
+### D-071: Atomic file writes system-wide
 
 **Phase:** 4.5-C → 5 (Sprint 7+) | **Status:** Frozen
 
@@ -307,7 +305,7 @@ All JSON file writes use atomic pattern: write to temp file → fsync → os.rep
 
 ---
 
-## D-072: Per-source circuit breaker + per-panel error boundary
+### D-072: Per-source circuit breaker + per-panel error boundary
 
 **Phase:** 5A (Sprint 8–9) | **Status:** Frozen
 
@@ -315,7 +313,7 @@ Backend: per-source circuit breaker (state file, mission file, telemetry). If on
 
 ---
 
-## D-073: Log rotation — 10MB / 5 files / 14 days
+### D-073: Log rotation — 10MB / 5 files / 14 days
 
 **Phase:** 5A-1 (Sprint 8) | **Status:** Frozen
 
@@ -323,7 +321,7 @@ API logs: 10MB max per file, keep 5 rotated files, 14-day retention. Consistent 
 
 ---
 
-## D-074: Startup sequence + ownership matrix
+### D-074: Startup sequence + ownership matrix
 
 **Phase:** 5A-1 (Sprint 8) | **Status:** Frozen
 
@@ -331,7 +329,7 @@ Explicit startup order: config load → file system validation → cache warm �
 
 ---
 
-## D-075: All state on ext4, cross-OS via API
+### D-075: All state on ext4, cross-OS via API
 
 **Phase:** 5A-1 (Sprint 8) | **Status:** Frozen
 
@@ -339,62 +337,95 @@ All persistent state files live on ext4 (WSL2 filesystem). Windows access exclus
 
 ---
 
-## D-076: SSE event ID = {source}:{offset}
+### D-076: SSE event ID = `{source}:{offset}`
 
 **Phase:** 5B (Sprint 10) | **Status:** Frozen
 
-Event ID format: {source_file}:{byte_offset} (JSONL) or {source_file}:{mtime_ms} (JSON). Restart-safe via Last-Event-ID. Monotonic. Dedupe by same source:offset → skip.
+Event ID format: `{source_file}:{byte_offset}` (JSONL) or `{source_file}:{mtime_ms}` (JSON). Restart-safe via Last-Event-ID. Monotonic. Dedupe by same source:offset → skip.
 
 Example: `policy-telemetry.jsonl:48231`, `mission-abc123.json:1711288380`
 
 ---
 
-## Phase 4.5-C / Sprint 7 Decisions (D-077, D-078)
+## Phase 4.5-C / Sprint 7-8 Decisions (D-077 → D-080)
 
----
-
-## D-077: Sprint-End Documentation Policy
+### D-077: Sprint-End Documentation Policy
 
 **Phase:** 4.5-C (Sprint 7) | **Status:** Frozen
 
-Context: Sprint kapanışlarında döküman güncellemeleri atlanıyor veya tutarsız yapılıyor. SESSION-HANDOFF, STATE.md, DECISIONS.md gibi dosyalar stale kalıyor.
+**Context:** Sprint kapanışlarında döküman güncellemeleri atlanıyor veya tutarsız yapılıyor. SESSION-HANDOFF, STATE.md, DECISIONS.md gibi dosyalar stale kalıyor.
 
-Decision: Her sprint kapanışında zorunlu döküman güncellemesi. `tools/validate_sprint_docs.py` script'i ile enforce edilir. Validation pass olmadan sprint "done" sayılmaz.
+**Decision:** Her sprint kapanışında zorunlu döküman güncellemesi. `tools/validate_sprint_docs.py` script'i ile enforce edilir. Validation pass olmadan sprint "done" sayılmaz.
 
-Zorunlu dökümanlar: STATE.md, NEXT.md, DECISIONS.md, BACKLOG.md, SESSION-HANDOFF.md, capabilities.json, sprint plan doc. Koşullu: phase report, ops docs.
+**Zorunlu dökümanlar:** STATE.md, NEXT.md, DECISIONS.md, BACKLOG.md, SESSION-HANDOFF.md, capabilities.json, sprint plan doc. Koşullu: phase report, ops docs.
 
-Validation kontrolleri: freshness (stale tarih), required sections, capability autoGenerated flag, open checkboxes, test count regression.
+**Validation kontrolleri:** freshness (stale tarih), required sections, capability autoGenerated flag, open checkboxes, test count regression.
 
-Trade-off: Sprint kapanış süresi artar (~15 dk) vs. döküman tutarlılığı ve session handoff kalitesi garanti altına alınır.
+**Trade-off:** Sprint kapanış süresi artar (~15 dk) vs. döküman tutarlılığı ve session handoff kalitesi garanti altına alınır.
 
-Enforce: `python tools/validate_sprint_docs.py --sprint N` → exit 0 gerekli.
+**Enforce:** `python tools/validate_sprint_docs.py --sprint N` → exit 0 gerekli.
 
-Rollback: Script devre dışı bırakılabilir ama policy kuralları elle uygulanmaya devam eder.
+**Rollback:** Script devre dışı bırakılabilir ama policy kuralları elle uygulanmaya devam eder.
 
 ---
 
-## D-078: Sprint 7 E2E Partial Pass Waiver
+### D-078: Sprint 7 E2E Partial Pass Waiver
 
 **Phase:** 4.5-C → 5A-1 | **Status:** Frozen
 
-Context: Sprint 7 E2E 2/4 pass. T-OT-3: LLM kalitesi (Sprint 7 scope dışı). T-OT-4: `_save_mission()` non-atomic write crash (pre-existing bug, Sprint 8 BF olarak planlandı).
+**Context:** Sprint 7 E2E 2/4 pass. T-OT-3: LLM kalitesi (Sprint 7 scope dışı). T-OT-4: `_save_mission()` non-atomic write crash (pre-existing bug, Sprint 8 BF olarak planlandı).
 
-Decision: Sprint 7 E2E partial pass kabul edilir. Sprint 7 code değişiklikleri (denyForensics, agentUsed, gateResults) başarılı mission'larda doğrulandı. Her iki fail Sprint 7 scope'u dışında.
+**Decision:** Sprint 7 E2E partial pass kabul edilir. Sprint 7 code değişiklikleri (denyForensics, agentUsed, gateResults) başarılı mission'larda doğrulandı. Her iki fail Sprint 7 scope'u dışında.
 
-Trade-off: E2E %50 ile Sprint 8'e geçiş. Risk kabul edilir çünkü fail root cause'ları Sprint 7 code'unda değil.
+**Trade-off:** E2E %50 ile Sprint 8'e geçiş. Risk kabul edilir çünkü fail root cause'ları Sprint 7 code'unda değil.
 
-Rollback: Fail root cause'u Sprint 7'de olduğu kanıtlanırsa Sprint 8 durdurulur.
+**Rollback:** Fail root cause'u Sprint 7'de olduğu kanıtlanırsa Sprint 8 durdurulur.
+
+---
+
+### D-079: DataQuality Enum Amendment (D-068 update)
+
+**Phase:** 5A-1 (Sprint 8) | **Status:** Frozen
+
+**Context:** D-068 "5 state" dondurdu. Sprint 8 schema tasarımında `known_zero` semantik olarak yanlış kullanılıyordu (value state, quality state değil) ve `partial` (bazı kaynaklar mevcut, bazıları eksik) durumu eksikti.
+
+**Decision:** D-068 ilkesi korunur. State listesi güncellenir: `known_zero` kaldırıldı, `fresh` ve `partial` eklendi. 6 state: `fresh`, `partial`, `stale`, `degraded`, `unknown`, `not_reached`. Öncelik: `degraded > stale > partial > fresh`.
+
+**Trade-off:** Frozen decision state sayısı değişti. İlke ve güvenlik garantisi aynı, temsil kapasitesi arttı.
+
+---
+
+### D-080: Service Registry Freshness Rule
+
+**Phase:** 5A-1 (Sprint 8) | **Status:** Frozen
+
+**Context:** `services.json` startup/shutdown model'i crash durumunda stale "running" bırakır. Fake live üretir.
+
+**Decision:** Service registration heartbeat-based freshness ile korunur. Her service `lastHeartbeatAt` + `heartbeatIntervalS` yazar. Canlılık: `lastHeartbeatAt + (heartbeatIntervalS × 2) > now`. Threshold aşımı → stale → health `degraded`.
+
+**Impacted:** `agent/api/server.py`, `agent/api/health_api.py`
 
 ---
 
 ## Phase 5 Freeze Addendum (Sprint 7→8 arası)
 
-> 4 blocking fix'in yazılı closure'ı `docs/ai/PHASE-5-FREEZE-ADDENDUM.md` dosyasında.
-> Sprint 8 bu belge FROZEN olmadan başlamaz.
->
-> | BF | Konu | Referans |
-> |---|------|----------|
-> | BF-1 | Response freshness semantics | Freeze Addendum Section 1 |
-> | BF-2 | Startup ownership matrix | Freeze Addendum Section 2 |
-> | BF-3 | Migration boundary inventory (D-075) | Freeze Addendum Section 3 |
-> | BF-4 | Source precedence table (D-065) | Freeze Addendum Section 4 |
+### Blocking Fix Closures
+
+4 blocking fix'in yazılı closure'ı `docs/ai/PHASE-5-FREEZE-ADDENDUM.md` dosyasında.
+Sprint 8 bu belge FROZEN olmadan başlamaz.
+
+| BF | Konu | Referans |
+|----|------|----------|
+| BF-1 | Response freshness semantics | Freeze Addendum Section 1 |
+| BF-2 | Startup ownership matrix | Freeze Addendum Section 2 |
+| BF-3 | Migration boundary inventory (D-075) | Freeze Addendum Section 3 |
+| BF-4 | Source precedence table (D-065) | Freeze Addendum Section 4 |
+
+---
+
+*Architectural Decisions — OpenClaw Local Agent Runtime*
+*D-001 → D-020: Phase 1/1.5 (frozen)*
+*D-021 → D-058: Phase 4 (GAP — extraction pending)*
+*D-059 → D-076: Phase 5 (frozen)*
+*D-077, D-078, D-079, D-080: Phase 4.5-C / 5A-1 (frozen)*
+*BF-1 → BF-4: Phase 5 Freeze Addendum (frozen)*

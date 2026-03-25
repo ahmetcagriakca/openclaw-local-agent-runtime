@@ -1,8 +1,8 @@
 # Sprint 11 — Phase 5C: Intervention — Task Breakdown
 
 **Date:** 2026-03-26
-**implementation_status:** not_started
-**closure_status:** not_started
+**implementation_status:** done
+**closure_status:** evidence_pending
 **Author:** Operator (AKCA) + Claude Opus 4.6
 **Prerequisite:** Sprint 10 closure_status=closed
 **Risk Level:** HIGH — read-only → read-write transition, mutation safety critical
@@ -411,21 +411,21 @@ Backend + frontend running. 5 live scenarios:
 
 | # | Criterion | Task | Status |
 |---|----------|------|--------|
-| 1 | 4 mutation endpoints working | 11.5, 11.6 | ⬜ |
-| 2 | CSRF evidence present | 11.2 | ⬜ |
-| 3 | requestId lifecycle evidence (requested→applied) | 11.1, 11.5 | ⬜ |
-| 4 | SSE mutation event correlation working | 11.10 | ⬜ |
-| 5 | 2-tab race test PASS | 11.12 | ⬜ |
-| 6 | cancel/retry live drill PASS | 11.12 | ⬜ |
+| 1 | 4 mutation endpoints working | 11.5, 11.6 | ✅ approve/reject/cancel/retry all return MutationResponse |
+| 2 | CSRF evidence present | 11.2 | ✅ Test 9 PASS + ownership-grep.txt |
+| 3 | requestId lifecycle evidence (requested→applied) | 11.1, 11.5 | ✅ contract-evidence.txt (67 lines) |
+| 4 | SSE mutation event correlation working | 11.10 | ✅ useMutation hook + Test 2 PASS |
+| 5 | 2-tab race test PASS | 11.12 | ⬜ Operator drill pending |
+| 6 | cancel/retry live drill PASS | 11.12 | ⬜ Operator drill pending |
 | 7 | Validator PASS | 11.FINAL | ⬜ |
-| 8 | GPT mid-review 0 blocking | 11.MID | ⬜ |
+| 8 | GPT mid-review 0 blocking | 11.MID | ✅ PASS |
 | 9 | GPT final review 0 blocking | 11.FINAL | ⬜ |
 | 10 | Claude assessment 0 blocking | 11.FINAL | ⬜ |
-| 11 | Contract-first tests all PASS | 11.1→11.6 | ⬜ |
-| 12 | Operator drill 5/5 PASS | 11.12 | ⬜ |
+| 11 | Contract-first tests all PASS | 11.1→11.6 | ✅ 11/11 PASS |
+| 12 | Operator drill 5/5 PASS | 11.12 | ⬜ Operator drill pending |
 | 13 | Closure packet complete | 11.FINAL | ⬜ |
 | 14 | Retrospective produced with actions | 11.FINAL | ⬜ |
-| 15 | No direct service/method call in API layer | 11.4 | ⬜ |
+| 15 | No direct service/method call in API layer | 11.4 | ✅ ownership-grep.txt + bridge-check.txt NO MATCHES |
 
 ---
 
@@ -433,34 +433,34 @@ Backend + frontend running. 5 live scenarios:
 
 | Evidence | Command | File | Status |
 |----------|---------|------|--------|
-| Backend tests | `pytest tests/ -v` | closure-check-output.txt | ⬜ |
-| Frontend tests | `npx vitest run` | closure-check-output.txt | ⬜ |
-| TypeScript | `npx tsc --noEmit` | closure-check-output.txt | ⬜ |
-| Lint | `npm run lint` | closure-check-output.txt | ⬜ |
-| Build | `npm run build` | closure-check-output.txt | ⬜ |
+| Backend tests | `pytest tests/ -v` | closure-check-output.txt | ✅ 195 passed |
+| Frontend tests | `npx vitest run` | closure-check-output.txt | ✅ 29 passed |
+| TypeScript | `npx tsc --noEmit` | closure-check-output.txt | ✅ 0 errors |
+| Lint | `npm run lint` | closure-check-output.txt | ✅ 0 errors |
+| Build | `npm run build` | closure-check-output.txt | ✅ 206KB JS |
 | Validator | `validate_sprint_docs.py --sprint 11` | closure-check-output.txt | ⬜ |
-| Contract grep: events | `grep -rn 'mutation_requested\|mutation_accepted\|mutation_applied\|mutation_rejected\|mutation_timed_out' agent/api/` | contract-evidence.txt | ⬜ |
-| Contract grep: lifecycle | `grep -rn 'requestId\|lifecycleState' agent/api/schemas.py` | contract-evidence.txt | ⬜ |
-| Contract grep: no direct exec | `grep -rn 'def approve\|def reject\|def cancel_mission\|def retry_mission' agent/api/` → expect CLEAN | contract-evidence.txt | ⬜ |
-| Mutation curl | live endpoint POST tests | contract-evidence.txt | ⬜ |
-| CSRF check | `curl -X POST without Origin → 403` | contract-evidence.txt | ⬜ |
-| Operator drill | 5 scenario manual test | mutation-drill.txt | ⬜ |
-| GPT mid review | review summary | review-mid.md | ⬜ |
+| Contract grep: events | `grep -rn 'mutation_requested\|...' agent/api/` | contract-evidence.txt | ✅ 67 lines |
+| Contract grep: lifecycle | `grep -rn 'requestId\|lifecycleState' agent/api/schemas.py` | contract-evidence.txt | ✅ |
+| Contract grep: no direct exec | `grep -rn 'def approve\|...' agent/api/` | contract-evidence.txt | ✅ |
+| Mutation curl | live endpoint POST tests | contract-evidence.txt | ⬜ Live test pending |
+| CSRF check | `curl -X POST without Origin → 403` | contract-evidence.txt | ✅ Test 9 |
+| Operator drill | 5 scenario manual test | mutation-drill.txt | ⬜ Operator pending |
+| GPT mid review | review summary | review-mid.md | ✅ PASS |
 | GPT final review | review summary | review-final.md | ⬜ |
-| Ownership negative grep | `grep -rnE 'from.*controller\|import.*controller\|from.*service\|import.*service' agent/api/` | ownership-grep.txt | ⬜ |
-| Bridge negative grep | `grep -rnE '\.approve\(\|\.reject\(\|\.cancel_mission\(\|\.retry_mission\(' agent/api/` | bridge-check.txt | ⬜ |
-| Schema additive compatibility | MutationResponse additive check + read-model schemas intact | schema-compatibility.txt | ⬜ |
-| Full lifecycle event set | `grep -rnE 'mutation_requested\|mutation_accepted\|...\|requestId\|lifecycleState' agent/ frontend/` | contract-evidence.txt | ⬜ |
-| Live endpoint checks | approval/cancel/retry endpoint POST verification | live-checks.txt | ⬜ |
+| Ownership negative grep | `grep -rnE '...' agent/api/` | ownership-grep.txt | ✅ NO MATCHES |
+| Bridge negative grep | `grep -rnE '...' agent/api/` | bridge-check.txt | ✅ NO MATCHES |
+| Schema additive compatibility | MutationResponse additive check | schema-compatibility.txt | ✅ |
+| Full lifecycle event set | `grep -rnE '...' agent/ frontend/` | contract-evidence.txt | ✅ 67 lines |
+| Live endpoint checks | approval/cancel/retry endpoint POST verification | live-checks.txt | ⬜ Live test pending |
 
 ### 11.FINAL Raw Evidence Checklist
 
-- [ ] `evidence/sprint-11/ownership-grep.txt` saved
-- [ ] `evidence/sprint-11/bridge-check.txt` saved
-- [ ] `evidence/sprint-11/schema-compatibility.txt` saved
-- [ ] `evidence/sprint-11/contract-evidence.txt` includes full lifecycle event set
-- [ ] `evidence/sprint-11/mutation-drill.txt` saved
-- [ ] `evidence/sprint-11/live-checks.txt` includes approval/cancel/retry endpoint checks
+- [x] `evidence/sprint-11/ownership-grep.txt` saved — NO MATCHES
+- [x] `evidence/sprint-11/bridge-check.txt` saved — NO MATCHES
+- [x] `evidence/sprint-11/schema-compatibility.txt` saved
+- [x] `evidence/sprint-11/contract-evidence.txt` includes full lifecycle event set (67 lines)
+- [ ] `evidence/sprint-11/mutation-drill.txt` saved — operator pending
+- [ ] `evidence/sprint-11/live-checks.txt` includes approval/cancel/retry endpoint checks — live test pending
 
 ### 11.FINAL Additional Acceptance Criteria
 
@@ -474,7 +474,11 @@ Backend + frontend running. 5 live scenarios:
 
 | Planned | Actual | Reason |
 |---------|--------|--------|
-| (Copilot updates during sprint) | | |
+| 11.2 + 11.3 separate commits | Combined into one commit (`6013eb2`) | Both small, no dependency conflict, parallel tasks |
+| 11.5 + 11.6 separate commits | Combined into one commit (`e25053e`) | Same pattern, shared MutationResponse schema |
+| 11.7-11.10 separate commits | Combined into one commit (`7054938`) | ConfirmDialog, useMutation, buttons, feedback are tightly coupled |
+| Test 2: SSE accepted/applied | Changed to mutation_requested mock | accepted/applied are controller-side, not API-side |
+| Test 7: file-based audit check | Changed to logging capture | Audit uses Python logging, not direct file write |
 
 ---
 
@@ -482,7 +486,30 @@ Backend + frontend running. 5 live scenarios:
 
 | File | Type | Task |
 |------|------|------|
-| (Generated from actual repo state at closure) | | |
+| `docs/ai/DECISIONS.md` | Modified | 11.0 — D-081→D-096 (13 decisions, total 55) |
+| `agent/tests/test_mutation_contracts.py` | Created | 11.1 — 11 contract-first tests |
+| `agent/api/csrf_middleware.py` | Created | 11.2 — D-089 Origin validation |
+| `agent/api/mutation_audit.py` | Created | 11.3 — Structured MUTATION_AUDIT logger |
+| `agent/api/mutation_bridge.py` | Created | 11.4 — Atomic signal artifact writer |
+| `agent/api/approval_mutation_api.py` | Created | 11.5 — POST approve/reject endpoints |
+| `agent/api/mission_mutation_api.py` | Created | 11.6 — POST cancel/retry endpoints |
+| `agent/api/schemas.py` | Modified | 11.5 — MutationResponse (D-096) added |
+| `agent/api/server.py` | Modified | 11.2, 11.5, 11.6 — CSRF middleware + mutation routers + CORS POST |
+| `agent/services/approval_service.py` | Modified | 11.11 — D-092 sunset deprecation warning |
+| `frontend/src/components/ConfirmDialog.tsx` | Created | 11.7 — D-090 confirmation dialog |
+| `frontend/src/hooks/useMutation.ts` | Created | 11.10 — D-091 server-confirmed mutation hook |
+| `frontend/src/types/api.ts` | Modified | 11.10 — MutationResponse type added |
+| `frontend/src/api/client.ts` | Modified | 11.10 — apiPost + mutation functions + tabId/sessionId |
+| `frontend/src/pages/ApprovalsPage.tsx` | Modified | 11.8 — Approve/Reject buttons + toast |
+| `frontend/src/pages/MissionDetailPage.tsx` | Modified | 11.9 — Cancel/Retry buttons + toast |
+| `docs/ai/SPRINT-11-MID-REVIEW-REPORT.md` | Created | 11.MID — GPT review report |
+| `evidence/sprint-11/closure-check-output.txt` | Created | 11.FINAL — pytest+vitest+tsc+lint+build |
+| `evidence/sprint-11/contract-tests-initial.txt` | Created | 11.1 — 11 FAILED (pre-implementation) |
+| `evidence/sprint-11/contract-tests-final.txt` | Created | 11.6 — 11 PASSED (post-implementation) |
+| `evidence/sprint-11/ownership-grep.txt` | Created | 11.MID — NO MATCHES |
+| `evidence/sprint-11/bridge-check.txt` | Created | 11.MID — NO MATCHES |
+| `evidence/sprint-11/contract-evidence.txt` | Created | 11.MID — 67 lifecycle field matches |
+| `evidence/sprint-11/schema-compatibility.txt` | Created | 11.MID — additive check |
 
 ---
 
@@ -542,6 +569,73 @@ No separate phase report. This document's Results section is sufficient.
 ## Section 14: Retrospective
 
 (Produced at sprint end — minimum content per PROCESS-GATES.md Section 13)
+
+---
+
+## Section 15: Results
+
+### Status
+
+- **implementation_status:** done
+- **closure_status:** evidence_pending
+
+### Summary
+
+Sprint 11 delivered the full mutation layer: 4 endpoints (approve, reject, cancel, retry), CSRF middleware, atomic signal artifact bridge, mutation audit logger, D-096 lifecycle response, and frontend mutation UI (ConfirmDialog, useMutation hook, approve/reject/cancel/retry buttons with feedback). Approval sunset warning (D-092) added to Telegram path.
+
+### Test Counts
+
+| Suite | Count | Status |
+|-------|-------|--------|
+| Backend (all) | 195 | ✅ ALL PASS |
+| Contract tests (Sprint 11) | 11 | ✅ ALL PASS |
+| Frontend (all) | 29 | ✅ ALL PASS |
+| **Total** | **224** | **0 failures** |
+
+### Build Artifacts
+
+| Check | Result |
+|-------|--------|
+| TypeScript (tsc --noEmit) | 0 errors |
+| ESLint | 0 errors |
+| Vite build | 206KB JS, success |
+| Backend pytest | 195 passed, 0 failed |
+| Frontend vitest | 29 passed, 0 failed |
+
+### Commit Log (9 commits)
+
+| Commit | Message |
+|--------|---------|
+| `16427bc` | Sprint 11 Task 11.0: DECISIONS.md debt burn-down D-081→D-096 |
+| `947a396` | Sprint 11 Task 11.1: Contract-first mutation test suite (11 tests, all FAIL) |
+| `6013eb2` | Sprint 11 Task 11.2+11.3: CSRF middleware (D-089) + mutation audit logger |
+| `9b245aa` | Sprint 11 Task 11.4: Atomic request artifact bridge (D-001, D-062, D-063) |
+| `e25053e` | Sprint 11 Task 11.5+11.6: Approve/Reject/Cancel/Retry endpoints + MutationResponse (D-096) |
+| `25da086` | Sprint 11 Task 11.MID: GPT mid-review report prepared |
+| `42c05f3` | Sprint 11 Task 11.MID: Apply 4 review patches — evidence hardening |
+| `7054938` | Sprint 11 Task 11.7+11.8+11.9+11.10: ConfirmDialog, mutation buttons, useMutation hook, feedback |
+| `04122a9` | Sprint 11 Task 11.11: Approval sunset warning D-092 |
+
+### Known Issues / Open Items
+
+| # | Issue | Owner | Deadline |
+|---|-------|-------|----------|
+| 1 | Operator drill (11.12) not yet executed — requires live backend+frontend | Operator | Before 11.FINAL |
+| 2 | `live-checks.txt` not yet produced — requires running server | Operator | Before 11.FINAL |
+| 3 | GPT final review pending | GPT | Before closure |
+| 4 | Retrospective not yet produced | Claude | After 11.FINAL |
+| 5 | `closure-check.sh` not yet run (requires bash/WSL) | Operator | Before closure |
+
+### Architecture Compliance
+
+| Rule | Status | Evidence |
+|------|--------|----------|
+| D-001: API writes signal artifact only | ✅ | ownership-grep.txt — NO MATCHES |
+| D-089: CSRF Origin validation | ✅ | Test 9 PASS (403 without Origin) |
+| D-090: Destructive confirm dialog | ✅ | ConfirmDialog.tsx + reject/cancel use it |
+| D-091: Server-confirmed, no optimistic | ✅ | useMutation waits for SSE, no local state |
+| D-092: Telegram sunset warning | ✅ | approval_service.py APPROVAL_SUNSET log |
+| D-096: Full lifecycle response | ✅ | MutationResponse schema + 11/11 tests |
 
 ---
 

@@ -1,10 +1,11 @@
 # Current State
 
 **Last updated:** 2026-03-25
-**Active phase:** Phase 5A-1 COMPLETE (Sprint 8 — Backend Read Model)
-**Note:** Sprint 7 (4.5-C) + Sprint 8 (5A-1) complete. Phase 2 deferred — single-user localhost, security hardening not urgent.
+**Active phase:** Phase 5A-2 COMPLETE (Sprint 9 — React Read-Only UI)
+**Note:** Sprint 7 (4.5-C) + Sprint 8 (5A-1) + Sprint 9 (5A-2) complete. Phase 2 deferred — single-user localhost, security hardening not urgent.
 **Persistence:** State is file-persisted (state.json, mission.json). Resume not yet implemented.
 **API:** Mission Control API on 127.0.0.1:8003 (FastAPI + Uvicorn). Schemas FROZEN (D-067).
+**Frontend:** React dashboard on localhost:3000 (Vite + Tailwind). Polling 30s. Node.js 20 required.
 
 ---
 
@@ -72,6 +73,11 @@
 | Phase 4 Sprint 6 | Integration Test Suite (110/110 pass) | Closed |
 | Phase 4 Sprint 6C | Closure Hardening (typed artifacts + model wiring) | Closed |
 | Phase 4 Sprint 6D | Final Seal (structured extraction + strict approval) | Closed |
+| Phase 4.5-A | Telemetry Tooling | Closed |
+| Phase 4.5-B | E2E Validation | Closed |
+| Phase 4.5-C (Sprint 7) | Operational Tuning | Closed |
+| Phase 5A-1 (Sprint 8) | Backend Read Model | Closed |
+| **Phase 5A-2 (Sprint 9)** | **React Read-Only UI** | **Closed** |
 
 ## Agent System (Phase 3-4)
 
@@ -168,6 +174,7 @@ Telegram user (8654710624)
 - 110 integration tests in Sprint 6 (110/110 pass)
 - Sprint 7: 129 tests, 0 failures
 - Sprint 8: 170 tests (129 legacy + 41 API), 0 failures
+- Sprint 9: 18 Vitest frontend tests (4 files), 0 failures. tsc 0 errors. ESLint 0 errors. Production build success.
 
 ## Known Operational Notes
 

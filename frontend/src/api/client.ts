@@ -1,0 +1,77 @@
+/**
+ * Typed API client — all endpoints from Sprint 8.
+ * Base URL: /api/v1 (Vite proxy handles → :8003).
+ */
+import type {
+  MissionListResponse,
+  MissionDetailResponse,
+  StageListResponse,
+  StageDetail,
+  ApprovalListResponse,
+  TelemetryListResponse,
+  HealthApiResponse,
+  CapabilityListResponse,
+} from '../types/api'
+
+const BASE = '/api/v1'
+
+class ApiError extends Error {
+  constructor(
+    public status: number,
+    public body: unknown,
+  ) {
+    super(`API error ${status}`)
+    this.name = 'ApiError'
+  }
+}
+
+async function apiGet<T>(path: string): Promise<T> {
+  const res = await fetch(`${BASE}${path}`)
+  if (!res.ok) {
+    let body: unknown
+    try {
+      body = await res.json()
+    } catch {
+      body = await res.text()
+    }
+    throw new ApiError(res.status, body)
+  }
+  return res.json() as Promise<T>
+}
+
+// ── Named endpoint functions ────────────────────────────────────
+
+export function getMissions(): Promise<MissionListResponse> {
+  return apiGet<MissionListResponse>('/missions')
+}
+
+export function getMission(id: string): Promise<MissionDetailResponse> {
+  return apiGet<MissionDetailResponse>(`/missions/${encodeURIComponent(id)}`)
+}
+
+export function getStages(missionId: string): Promise<StageListResponse> {
+  return apiGet<StageListResponse>(`/missions/${encodeURIComponent(missionId)}/stages`)
+}
+
+export function getStage(missionId: string, idx: number): Promise<StageDetail> {
+  return apiGet<StageDetail>(`/missions/${encodeURIComponent(missionId)}/stages/${idx}`)
+}
+
+export function getApprovals(): Promise<ApprovalListResponse> {
+  return apiGet<ApprovalListResponse>('/approvals')
+}
+
+export function getTelemetry(missionId?: string): Promise<TelemetryListResponse> {
+  const qs = missionId ? `?mission_id=${encodeURIComponent(missionId)}` : ''
+  return apiGet<TelemetryListResponse>(`/telemetry${qs}`)
+}
+
+export function getHealth(): Promise<HealthApiResponse> {
+  return apiGet<HealthApiResponse>('/health')
+}
+
+export function getCapabilities(): Promise<CapabilityListResponse> {
+  return apiGet<CapabilityListResponse>('/capabilities')
+}
+
+export { ApiError }

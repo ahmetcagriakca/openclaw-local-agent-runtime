@@ -9,26 +9,25 @@ Windows 11 + WSL2 Ubuntu-E + Python 3.14 + PowerShell.
 
 ## Current State
 
-- Phase 4.5-B: COMPLETED (E2E validated, oc_root bug fixed, 129 tests, 0 failures)
-- Phase 4.5-C: READY (Sprint 7 — operational tuning, 10 tasks)
-- Phase 5: DESIGNED (Sprint 8–12 — Mission Control Center, 64 tasks)
-- Frozen decisions: D-059 → D-076 (17 decisions)
+- Phase 4.5-C: COMPLETED (Sprint 7 — operational tuning, 10/10 tasks)
+- Phase 5A-1: COMPLETED (Sprint 8 — backend read model, 17/17 tasks, 170 tests)
+- Phase 5A-2: COMPLETED (Sprint 9 — React read-only UI, 10/10 tasks, 18 frontend tests)
+- Phase 5B: NEXT (Sprint 10 — live updates / SSE)
+- Frozen decisions: D-059 → D-084 (25 decisions)
 
-## Active Sprint
+## Last Completed Sprint
 
-Sprint 7 — Phase 4.5-C: Operational Tuning
+Sprint 9 — Phase 5A-2: React Read-Only UI
 
-Tasks:
-1. P0.5: controller.py → `_aggregate_deny_forensics()` + mission summary integration
-2. P1a: specialists.py → developer self-verification prompt
-3. P1b: specialists.py → tester verdict guidelines
-4. P2: controller.py → agent_used metadata propagation (scope-safe, single point)
-5. P4: approval_service.py → sunset docstring + STATE.md note
-6. P5: controller.py + quality_gates.py → schema validation → gate findings visibility
-7. P6: STATE.md + NEXT.md → "durable" → "state-persisted, resume not yet implemented"
-8. P7: ops/wsl/ → 5 template files
-9. 7.9: config/capabilities.json → auto-generated capability manifest
-10. 7.10: regression test + E2E rerun
+Outputs:
+- React + TS + Tailwind dashboard on `:3000` with Vite proxy → `:8003`
+- 22 TS types from 22 frozen Pydantic schemas (1:1)
+- Typed API client (8 endpoints) + usePolling hook (30s, D-083)
+- DataQualityBadge (6-state), FreshnessIndicator, MissionStateBadge
+- 5 pages: Missions, MissionDetail, Health, Approvals, Telemetry
+- Per-panel ErrorBoundary (D-084), Sidebar, Layout, 404 page
+- 18 Vitest tests, 0 failures, production build OK
+- Decisions: D-081 (Tailwind), D-082 (manual TS types), D-083 (30s polling), D-084 (ErrorBoundary)
 
 ## Key Reference Docs
 
@@ -47,7 +46,8 @@ Telegram → OpenClaw (WSL) → Agent Runner (Windows) → Mission Controller
 Port Map:
   8001  WMCP (Windows MCP Proxy)
   8002  Legacy Health Dashboard
-  8003  Mission Control API (Phase 5, not yet built)
+  8003  Mission Control API (FastAPI, Sprint 8)
+  3000  Mission Control UI (React, Sprint 9, requires Node.js 20)
 ```
 
 ### Mission Flow
@@ -83,42 +83,37 @@ config/capabilities.json           — capability manifest (auto-generated)
 ## Build & Test
 
 ```bash
-# Run all tests
+# Backend tests (170 total)
 cd agent && python -m pytest tests/ -v
 
-# Run specific test suites
-python -m pytest tests/test_sprint_6d.py -v    # Sprint 6D (41 tests)
-python -m pytest tests/test_phase45a.py -v     # Phase 4.5-A (18 tests)
-python -m pytest tests/test_sprint_5c.py -v    # Sprint 5C (70 tests)
+# Frontend (requires Node.js 20 — portable at C:\Users\AKCA\node20\)
+$env:Path = "C:\Users\AKCA\node20\node-v20.18.1-win-x64;$env:Path"
+cd frontend && npx tsc --noEmit        # 0 errors
+cd frontend && npx vitest run           # 18 tests
+cd frontend && npm run build            # production build
 
 # E2E test
 python tools/run_e2e_test.py --all
 
 # Telemetry analysis
 python tools/analyze_telemetry.py --last 5
-
-# Verify specific changes
-grep "denyForensics" agent/mission/controller.py
-grep "SELF-VERIFICATION" agent/mission/specialists.py
-grep "agent_used" agent/mission/controller.py
 ```
 
-## Phase 5 Preview (Sprint 8+)
+## Phase 5 Progress
 
 Mission Control Center — "See Everything, Including What's Missing"
 
-- FastAPI + Uvicorn (port 8003) — D-061
-- MissionNormalizer = aggregation layer (7 sources) — D-065
-- Schema frozen in Sprint 8 — D-067
-- dataQuality model: freshnessMs, stale, partial, degraded — D-068
-- Localhost security: Host validation, explicit CORS — D-070
-- SSE event ID: `{source}:{offset}` — D-076
-- Read-only first (5A), live updates (5B), intervention behind feature flag (5C)
+- ✅ Sprint 8: FastAPI backend on :8003 — D-061, D-065, D-067, D-068, D-070
+- ✅ Sprint 9: React UI on :3000 — D-081, D-082, D-083, D-084
+- ⬜ Sprint 10: SSE live updates — D-076
+- ⬜ Sprint 11: Intervention (approve/deny from UI)
+- ⬜ Sprint 12: Polish + migration
 
 ## Do Not
 
 - Do not replace existing architecture with "clean rewrite."
 - Do not design from mock data. Use normalized API contract.
+- Do not use Node.js 14 for frontend. Requires Node.js 20+ (Vite 6).
 - Do not write to files without atomic_write_json().
 - Do not treat UI mock structure as backend truth.
 - Do not claim "done" without verification evidence.

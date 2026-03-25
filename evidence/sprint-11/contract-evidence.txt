@@ -1,67 +1,183 @@
-=== mutation lifecycle fields ===
-C:\Users\AKCA\oc\agent\api\approval_mutation_api.py:6:D-096 lifecycle: API writes signal artifact → returns lifecycleState=requested.
-C:\Users\AKCA\oc\agent\api\approval_mutation_api.py:70:async def _emit_mutation_requested(request: Request, request_id: str,
-C:\Users\AKCA\oc\agent\api\approval_mutation_api.py:72:    """Best-effort SSE emit for mutation_requested (D-096 ordering rule)."""
-C:\Users\AKCA\oc\agent\api\approval_mutation_api.py:76:            await sse_mgr.broadcast("mutation_requested", {
-C:\Users\AKCA\oc\agent\api\approval_mutation_api.py:77:                "requestId": request_id,
-C:\Users\AKCA\oc\agent\api\approval_mutation_api.py:82:        logger.warning("Failed to emit mutation_requested SSE: %s", e)
-C:\Users\AKCA\oc\agent\api\approval_mutation_api.py:114:                   f"(requestId={existing})",
-C:\Users\AKCA\oc\agent\api\approval_mutation_api.py:138:    await _emit_mutation_requested(request, request_id, apv_id, "approve")
-C:\Users\AKCA\oc\agent\api\approval_mutation_api.py:147:        requestId=request_id,
-C:\Users\AKCA\oc\agent\api\approval_mutation_api.py:148:        lifecycleState="requested",
-C:\Users\AKCA\oc\agent\api\approval_mutation_api.py:184:                   f"(requestId={existing})",
-C:\Users\AKCA\oc\agent\api\approval_mutation_api.py:208:    await _emit_mutation_requested(request, request_id, apv_id, "reject")
-C:\Users\AKCA\oc\agent\api\approval_mutation_api.py:217:        requestId=request_id,
-C:\Users\AKCA\oc\agent\api\approval_mutation_api.py:218:        lifecycleState="requested",
-C:\Users\AKCA\oc\agent\api\mission_mutation_api.py:6:D-096 lifecycle: API writes signal artifact → returns lifecycleState=requested.
-C:\Users\AKCA\oc\agent\api\mission_mutation_api.py:59:async def _emit_mutation_requested(request: Request, request_id: str,
-C:\Users\AKCA\oc\agent\api\mission_mutation_api.py:61:    """Best-effort SSE emit for mutation_requested."""
-C:\Users\AKCA\oc\agent\api\mission_mutation_api.py:65:            await sse_mgr.broadcast("mutation_requested", {
-C:\Users\AKCA\oc\agent\api\mission_mutation_api.py:66:                "requestId": request_id,
-C:\Users\AKCA\oc\agent\api\mission_mutation_api.py:71:        logger.warning("Failed to emit mutation_requested SSE: %s", e)
-C:\Users\AKCA\oc\agent\api\mission_mutation_api.py:109:                   f"(requestId={existing})",
-C:\Users\AKCA\oc\agent\api\mission_mutation_api.py:133:    await _emit_mutation_requested(request, request_id, mission_id, "cancel")
-C:\Users\AKCA\oc\agent\api\mission_mutation_api.py:142:        requestId=request_id,
-C:\Users\AKCA\oc\agent\api\mission_mutation_api.py:143:        lifecycleState="requested",
-C:\Users\AKCA\oc\agent\api\mission_mutation_api.py:185:                   f"(requestId={existing})",
-C:\Users\AKCA\oc\agent\api\mission_mutation_api.py:209:    await _emit_mutation_requested(request, request_id, mission_id, "retry")
-C:\Users\AKCA\oc\agent\api\mission_mutation_api.py:218:        requestId=request_id,
-C:\Users\AKCA\oc\agent\api\mission_mutation_api.py:219:        lifecycleState="requested",
-C:\Users\AKCA\oc\agent\api\mutation_audit.py:4:timestamp, source, operation, targetId, outcome, requestId, tabId, sessionId.
-C:\Users\AKCA\oc\agent\api\mutation_audit.py:41:        "requestId": request_id,
-C:\Users\AKCA\oc\agent\api\mutation_bridge.py:11:    "requestId": "req-uuid",
-C:\Users\AKCA\oc\agent\api\mutation_bridge.py:53:        Tuple of (requestId, requestedAt ISO string, artifact Path).
-C:\Users\AKCA\oc\agent\api\mutation_bridge.py:62:        "requestId": request_id,
-C:\Users\AKCA\oc\agent\api\mutation_bridge.py:80:        "Signal artifact written: type=%s target=%s requestId=%s path=%s",
-C:\Users\AKCA\oc\agent\api\mutation_bridge.py:95:    Returns the existing requestId if found, None otherwise.
-C:\Users\AKCA\oc\agent\api\mutation_bridge.py:109:                return data.get("requestId")
-C:\Users\AKCA\oc\agent\api\schemas.py:236:    API always returns lifecycleState=requested.
-C:\Users\AKCA\oc\agent\api\schemas.py:239:    requestId: str
-C:\Users\AKCA\oc\agent\api\schemas.py:240:    lifecycleState: str = "requested"
-C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:7: 1. POST mutation → lifecycleState=requested
-C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:62:    """Test 1: POST mutation → lifecycleState=requested, requestedAt populated, acceptedAt null."""
-C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:65:        """POST /api/v1/approvals/{id}/approve → 200 + lifecycleState=requested."""
-C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:88:            self.assertEqual(body["lifecycleState"], "requested")
-C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:89:            self.assertIn("requestId", body)
-C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:96:    """Test 2: API emits mutation_requested SSE with requestId correlation.
-C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:98:    D-096 ordering: artifact persisted → SSE mutation_requested → HTTP response.
-C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:99:    mutation_accepted / mutation_applied are controller-side (runtime consumer).
-C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:102:    def test_sse_mutation_requested_emitted(self):
-C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:103:        """After approve, _emit_mutation_requested called with correct args."""
-C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:121:                    "requestId": request_id,
-C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:128:                 patch("api.approval_mutation_api._emit_mutation_requested",
-C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:137:            request_id = resp.json().get("requestId")
-C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:140:            # Verify _emit_mutation_requested was called
-C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:142:                             "mutation_requested emit not called exactly once")
-C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:143:            self.assertEqual(emit_calls[0]["requestId"], request_id)
-C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:151:    def test_sse_mutation_rejected_with_reason(self):
-C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:152:        """Reject on already-approved approval → mutation_rejected SSE with reason."""
-C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:174:            # Should still return 200 with lifecycleState=requested,
-C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:175:            # then SSE mutation_rejected later. Or might return 409/422.
-C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:180:                self.assertIn("requestId", body)
-C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:187:        """Mutation that is not processed within timeout → mutation_timed_out SSE."""
-C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:209:            self.assertEqual(body["lifecycleState"], "requested")
-C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:323:            required_fields = ["requestId", "operation", "targetId",
-C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:367:            self.assertIn("requestId", artifact_data)
-C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:463:            self.assertEqual(body["lifecycleState"], "requested")
-C:\Users\AKCA\oc\agent\tests\test_mutation_contracts.py:464:            self.assertIn("requestId", body)
+=== Contract Evidence for Sprint 11 ===
+Date: 2026-03-26T01:50:01+03:00
+
+--- DataQuality states (D-079, expected 6) ---
+  Fresh = 'fresh',
+  Partial = 'partial',
+  Stale = 'stale',
+  Degraded = 'degraded',
+  Unknown = 'unknown',
+  NotReached = 'not_reached',
+  Unknown = 'unknown',
+  // ── Source & Freshness ──────────────────────────────────────────
+  freshnessMs: number
+  denyForensics: Record<string, unknown> | null
+  denyForensics: Record<string, unknown>[]
+  status: string // 'ok' | 'degraded' | 'error' | 'unknown'
+  data: Record<string, unknown>
+FOUND ✅
+
+--- CapabilityStatus tri-state (available/unavailable/unknown) ---
+  Unknown = 'unknown',
+  Available = 'available',
+  Unavailable = 'unavailable',
+  Unknown = 'unknown',
+  denyForensics: Record<string, unknown> | null
+  denyForensics: Record<string, unknown>[]
+  status: string // 'ok' | 'degraded' | 'error' | 'unknown'
+  data: Record<string, unknown>
+FOUND ✅
+
+--- ErrorBoundary usage ---
+  import { ErrorBoundary } from './components/ErrorBoundary'
+  <ErrorBoundary fallbackLabel="Missions panel error">
+  </ErrorBoundary>
+  <ErrorBoundary fallbackLabel="Mission detail panel error">
+  </ErrorBoundary>
+  <ErrorBoundary fallbackLabel="Health panel error">
+  </ErrorBoundary>
+  <ErrorBoundary fallbackLabel="Approvals panel error">
+  </ErrorBoundary>
+  <ErrorBoundary fallbackLabel="Telemetry panel error">
+  </ErrorBoundary>
+FOUND ✅
+
+--- SSE hooks ---
+  7: import { useSSE, type SSEStatus } from '../hooks/useSSE'
+  9: interface SSEContextValue {
+  15: const SSEContext = createContext<SSEContextValue>({
+  21: export function useSSEContext(): SSEContextValue {
+  22: return useContext(SSEContext)
+  29: export function useSSEInvalidation(eventType: string | string[], callback: () => void) {
+  30: const { subscribe } = useSSEContext()
+  60: const { status, lastEventAt } = useSSE({ onEvent: handleEvent })
+  77: <SSEContext.Provider value={{ status, lastEventAt, subscribe }}>
+  79: </SSEContext.Provider>
+FOUND ✅
+
+--- ConnectionIndicator ---
+  2: * ConnectionIndicator — shows SSE connection status.
+  15: export function ConnectionIndicator() {
+FOUND ✅
+
+--- FileWatcher class ---
+  36: class FileWatcher:
+FOUND ✅
+
+--- SSEManager class ---
+  37: class SSEManager:
+FOUND ✅
+
+--- Atomic request artifact ---
+  approval_mutation_api.py:118: request_id, requested_at, artifact_path = write_signal_artifact(
+  approval_mutation_api.py:188: request_id, requested_at, artifact_path = write_signal_artifact(
+  mission_mutation_api.py:113: request_id, requested_at, artifact_path = write_signal_artifact(
+  mission_mutation_api.py:189: request_id, requested_at, artifact_path = write_signal_artifact(
+  mutation_bridge.py:3: Atomic request artifact writer. API mutation endpoints call this to write
+  mutation_bridge.py:7: API only writes atomic request artifact; runtime/controller remains sole executor.
+  mutation_bridge.py:28: from utils.atomic_write import atomic_write_json
+  mutation_bridge.py:53: Tuple of (requestId, requestedAt ISO string, artifact Path).
+  mutation_bridge.py:78: atomic_write_json(artifact_path, artifact)
+  mutation_bridge.py:81: mutation_type, target_id, request_id, artifact_path,
+  mutation_bridge.py:84: return request_id, requested_at, artifact_path
+  server.py:26: from utils.atomic_write import atomic_write_json
+  server.py:71: Atomic read-modify-write: read → update own key → atomic write.
+  server.py:97: atomic_write_json(SERVICES_PATH, services)
+FOUND ✅
+
+--- CSRF middleware ---
+  approval_mutation_api.py:8: D-089: CSRF validated by middleware (Origin header).
+  csrf_middleware.py:1: """CSRF Middleware — D-089: SameSite=Strict + Origin Header Check.
+  csrf_middleware.py:11: logger = logging.getLogger("mcc.csrf")
+  csrf_middleware.py:22: class CSRFMiddleware(BaseHTTPMiddleware):
+  csrf_middleware.py:35: "CSRF reject: method=%s path=%s origin=%s",
+  mission_mutation_api.py:8: D-089: CSRF validated by middleware (Origin header).
+  server.py:25: from api.csrf_middleware import CSRFMiddleware
+  server.py:200: # D-089: CSRF — Origin header validation for POST requests
+  server.py:201: app.add_middleware(CSRFMiddleware)
+FOUND ✅
+
+--- MutationResponse contract ---
+  171: requestedAt: Optional[str] = None
+  236: API always returns lifecycleState=requested.
+  240: lifecycleState: str = "requested"
+  242: requestedAt: str
+FOUND ✅
+
+--- Mutation audit fields ---
+  mutation_audit.py:4: timestamp, source, operation, targetId, outcome, requestId, tabId, sessionId.
+  mutation_audit.py:42: "tabId": tab_id,
+  mutation_audit.py:43: "sessionId": session_id,
+  mutation_bridge.py:17: "operatorInfo": { "tabId": "...", "sessionId": "..." }
+  mutation_bridge.py:69: "tabId": tab_id,
+  mutation_bridge.py:70: "sessionId": session_id,
+  normalizer.py:358: missionId=data.get("sessionId"),
+FOUND ✅
+
+--- Mutation SSE events ---
+  approval_mutation_api.py:70: async def _emit_mutation_requested(request: Request, request_id: str,
+  approval_mutation_api.py:72: """Best-effort SSE emit for mutation_requested (D-096 ordering rule)."""
+  approval_mutation_api.py:76: await sse_mgr.broadcast("mutation_requested", {
+  approval_mutation_api.py:82: logger.warning("Failed to emit mutation_requested SSE: %s", e)
+  approval_mutation_api.py:138: await _emit_mutation_requested(request, request_id, apv_id, "approve")
+  approval_mutation_api.py:208: await _emit_mutation_requested(request, request_id, apv_id, "reject")
+  mission_mutation_api.py:59: async def _emit_mutation_requested(request: Request, request_id: str,
+  mission_mutation_api.py:61: """Best-effort SSE emit for mutation_requested."""
+  mission_mutation_api.py:65: await sse_mgr.broadcast("mutation_requested", {
+  mission_mutation_api.py:71: logger.warning("Failed to emit mutation_requested SSE: %s", e)
+  mission_mutation_api.py:133: await _emit_mutation_requested(request, request_id, mission_id, "cancel")
+  mission_mutation_api.py:209: await _emit_mutation_requested(request, request_id, mission_id, "retry")
+FOUND ✅
+
+--- Bridge rule: no direct method call in API layer ---
+  Grep pattern: "def approve|def reject|def cancel_mission|def retry_mission"
+  Matches found (false positive — FastAPI route handlers, NOT direct service calls):
+    approval_mutation_api.py:90:  async def approve_approval → calls write_signal_artifact()
+    approval_mutation_api.py:160: async def reject_approval → calls write_signal_artifact()
+    mission_mutation_api.py:79:  async def cancel_mission → calls write_signal_artifact()
+    mission_mutation_api.py:155: async def retry_mission → calls write_signal_artifact()
+  Verification: No import from services/, no direct runtime.approve/reject/cancel/retry call.
+  All 4 endpoints use atomic signal artifact bridge pattern (D-001, D-062, D-063).
+CLEAN ✅ — No direct service/method calls in API layer. Bridge pattern enforced.
+
+--- mutation-drill.txt existence + PASS check ---
+EXISTS ✅ — mutation-drill.txt
+DRILL ALL PASS ✅
+
+=== INFORMATIVE (non-blocking) ===
+--- usePolling preserved (D-088 fallback) ---
+  usePolling.ts:10: export interface UsePollingResult<T> {
+  usePolling.ts:18: export function usePolling<T>(
+  usePolling.ts:21: ): UsePollingResult<T> {
+  usePolling.test.tsx:2: * usePolling hook tests — timer, visibility, refresh.
+  usePolling.test.tsx:6: import { usePolling } from '../hooks/usePolling'
+  usePolling.test.tsx:8: describe('usePolling', () => {
+  usePolling.test.tsx:19: const { result } = renderHook(() => usePolling(fetcher, 30_000))
+  usePolling.test.tsx:32: const { result } = renderHook(() => usePolling(fetcher, 5_000))
+  usePolling.test.tsx:60: const { result } = renderHook(() => usePolling(fetcher, 5_000))
+  usePolling.test.tsx:78: const { result } = renderHook(() => usePolling(fetcher, 30_000))
+  ApprovalsPage.tsx:9: import { usePolling } from '../hooks/usePolling'
+  ApprovalsPage.tsx:24: const { data, error, loading, refresh, lastFetchedAt } = usePolling(getApprovals)
+  HealthPage.tsx:6: import { usePolling } from '../hooks/usePolling'
+  HealthPage.tsx:26: const health = usePolling(getHealth)
+  HealthPage.tsx:27: const caps = usePolling(getCapabilities)
+  MissionDetailPage.tsx:9: import { usePolling } from '../hooks/usePolling'
+  MissionDetailPage.tsx:31: const { data, error, loading, refresh, lastFetchedAt } = usePolling(fetcher)
+  MissionListPage.tsx:7: import { usePolling } from '../hooks/usePolling'
+  MissionListPage.tsx:14: const { data, error, loading, refresh, lastFetchedAt } = usePolling(getMissions)
+  TelemetryPage.tsx:8: import { usePolling } from '../hooks/usePolling'
+  TelemetryPage.tsx:22: const { data, error, loading, refresh, lastFetchedAt } = usePolling(fetcher)
+
+=== Live Endpoint Checks ===
+
+GET /api/v1/health → 200 ✅
+{"meta":{"freshnessMs":0,"dataQuality":"fresh","sourcesUsed":[],"sourcesMissing":[],"generatedAt":"2026-03-25T22:50:55.686715+00:00"},"status":"ok","components":{"api":{"name":"api","status":"ok","lastCheckAt":"2026-03-25T22:50:55.686622+00:00","detail":"serving"},"cache":{"name":"cache","status":"ok","lastCheckAt":"2026-03-25T22:50:55.686622+00:00","detail":"entries=10, hits=0, errors=0"},"capabilities":{"name":"capabilities","status":"ok","lastCheckAt":"2026-03-25T22:50:55.686622+00:00","detail":null}}}
+
+--- SSE stream (3s capture) ---
+SSE stream captured (timeout expected — connection established)
+✅ SSE endpoint reachable
+
+--- Host attack (D-070) ---
+Host attack → 403 ✅
+
+

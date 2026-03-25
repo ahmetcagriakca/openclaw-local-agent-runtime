@@ -1,0 +1,40 @@
+=== SPRINT 11 LIVE ENDPOINT CHECKS ===
+Date: 2026-03-26T01:41:51Z
+Server: http://127.0.0.1:8003
+
+--- CHECK 1: Health endpoint (baseline) ---
+Status: 200
+Body: {"meta":{"freshnessMs":0,"dataQuality":"fresh","sourcesUsed":[],"sourcesMissing":[],"generatedAt":"2026-03-25T22:41:51.053258+00:00"},"status":"ok","components":{"api":{"name":"api","status":"ok","las...
+
+--- CHECK 2: CSRF — POST without Origin → 403 ---
+Status: 403 ✅ CSRF rejected (no Origin)
+
+--- CHECK 3: Approve pending approval (valid Origin) ---
+Status: 200
+Body: {"requestId":"req-dcde5e36-719b-4050-83df-312eda28779d","lifecycleState":"requested","targetId":"apv-live-001","requestedAt":"2026-03-25T22:42:17.042923+00:00","acceptedAt":null,"appliedAt":null,"rejectedReason":null,"timeoutAt":"2026-03-25T22:42:27.042923+00:00"}
+
+--- CHECK 4: Duplicate approve → 409 ---
+Status: 409 ✅ Duplicate rejected
+
+--- CHECK 5: Approve already-approved → 409 (FSM) ---
+Status: 409 ✅ FSM validation — non-pending rejected
+
+--- CHECK 6: Cancel running mission ---
+Status: 200
+Body: {"requestId":"req-187dd145-bd0b-4ed8-90c4-818159fcaa95","lifecycleState":"requested","targetId":"m-live-001","requestedAt":"2026-03-25T22:42:55.206245+00:00","acceptedAt":null,"appliedAt":null,"rejectedReason":null,"timeoutAt":"2026-03-25T22:43:05.206245+00:00"}
+
+--- CHECK 7: Retry on non-failed mission → 409 ---
+Status: 409 ✅ Retry on executing mission rejected
+
+--- CHECK 8: 404 — nonexistent approval ---
+Status: 404 ✅ Not found
+
+--- CHECK 9: Signal artifact exists after approve ---
+Artifacts found: 1 ✅
+First: approve-request-req-dcde5e36-719b-4050-83df-312eda28779d.json
+
+--- CHECK 10: Signal artifact exists after cancel ---
+Artifacts found: 1 ✅
+First: cancel-request-req-187dd145-bd0b-4ed8-90c4-818159fcaa95.json
+
+=== LIVE CHECKS COMPLETE ===

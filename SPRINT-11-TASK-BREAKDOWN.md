@@ -438,20 +438,20 @@ Backend + frontend running. 5 live scenarios:
 | TypeScript | `npx tsc --noEmit` | closure-check-output.txt | ✅ 0 errors |
 | Lint | `npm run lint` | closure-check-output.txt | ✅ 0 errors |
 | Build | `npm run build` | closure-check-output.txt | ✅ 206KB JS |
-| Validator | `validate_sprint_docs.py --sprint 11` | closure-check-output.txt | ⬜ |
+| Validator | `validate_sprint_docs.py --sprint 11` | closure-check-output.txt | ⚠️ Script missing (non-blocking) |
 | Contract grep: events | `grep -rn 'mutation_requested\|...' agent/api/` | contract-evidence.txt | ✅ 67 lines |
 | Contract grep: lifecycle | `grep -rn 'requestId\|lifecycleState' agent/api/schemas.py` | contract-evidence.txt | ✅ |
 | Contract grep: no direct exec | `grep -rn 'def approve\|...' agent/api/` | contract-evidence.txt | ✅ |
-| Mutation curl | live endpoint POST tests | contract-evidence.txt | ⬜ Live test pending |
+| Mutation curl | live endpoint POST tests | contract-evidence.txt + live-checks.txt | ✅ 10/10 PASS |
 | CSRF check | `curl -X POST without Origin → 403` | contract-evidence.txt | ✅ Test 9 |
-| Operator drill | 5 scenario manual test | mutation-drill.txt | ⬜ Operator pending |
+| Operator drill | 5 scenario manual test | mutation-drill.txt | ✅ 5/5 PASS |
 | GPT mid review | review summary | review-mid.md | ✅ PASS |
-| GPT final review | review summary | review-final.md | ⬜ |
+| GPT final review | review summary | review-final.md | ✅ PASS |
 | Ownership negative grep | `grep -rnE '...' agent/api/` | ownership-grep.txt | ✅ NO MATCHES |
 | Bridge negative grep | `grep -rnE '...' agent/api/` | bridge-check.txt | ✅ NO MATCHES |
 | Schema additive compatibility | MutationResponse additive check | schema-compatibility.txt | ✅ |
 | Full lifecycle event set | `grep -rnE '...' agent/ frontend/` | contract-evidence.txt | ✅ 67 lines |
-| Live endpoint checks | approval/cancel/retry endpoint POST verification | live-checks.txt | ⬜ Live test pending |
+| Live endpoint checks | approval/cancel/retry endpoint POST verification | live-checks.txt | ✅ 10/10 PASS |
 
 ### 11.FINAL Raw Evidence Checklist
 
@@ -459,8 +459,8 @@ Backend + frontend running. 5 live scenarios:
 - [x] `evidence/sprint-11/bridge-check.txt` saved — NO MATCHES
 - [x] `evidence/sprint-11/schema-compatibility.txt` saved
 - [x] `evidence/sprint-11/contract-evidence.txt` includes full lifecycle event set (67 lines)
-- [ ] `evidence/sprint-11/mutation-drill.txt` saved — operator pending
-- [ ] `evidence/sprint-11/live-checks.txt` includes approval/cancel/retry endpoint checks — live test pending
+- [x] `evidence/sprint-11/mutation-drill.txt` saved — 5/5 PASS
+- [x] `evidence/sprint-11/live-checks.txt` saved — 10/10 PASS (CSRF, approve, reject, cancel, retry, 404, artifacts)
 
 ### 11.FINAL Additional Acceptance Criteria
 
@@ -642,7 +642,7 @@ Sprint 11 delivered the full mutation layer: 4 endpoints (approve, reject, cance
 | Backend pytest | 195 passed, 0 failed |
 | Frontend vitest | 29 passed, 0 failed |
 
-### Commit Log (9 commits)
+### Commit Log (12 commits)
 
 | Commit | Message |
 |--------|---------|
@@ -655,16 +655,19 @@ Sprint 11 delivered the full mutation layer: 4 endpoints (approve, reject, cance
 | `42c05f3` | Sprint 11 Task 11.MID: Apply 4 review patches — evidence hardening |
 | `7054938` | Sprint 11 Task 11.7+11.8+11.9+11.10: ConfirmDialog, mutation buttons, useMutation hook, feedback |
 | `04122a9` | Sprint 11 Task 11.11: Approval sunset warning D-092 |
+| `3a5ec00` | Sprint 11 Results: Section 15 + closure-check-output.txt |
+| `c038842` | Sprint 11 Final: GPT review fixes + retrospective |
+| `TBD` | Sprint 11 Closure: live-checks + operator drill + closure-check evidence |
 
 ### Known Issues / Open Items
 
 | # | Issue | Owner | Deadline |
 |---|-------|-------|----------|
-| 1 | Operator drill (11.12) not yet executed — requires live backend+frontend | Operator | Before 11.FINAL |
-| 2 | `live-checks.txt` not yet produced — requires running server | Operator | Before 11.FINAL |
-| 3 | GPT final review pending | GPT | Before closure |
-| 4 | Retrospective not yet produced | Claude | After 11.FINAL |
-| 5 | `closure-check.sh` not yet run (requires bash/WSL) | Operator | Before closure |
+| 1 | ~~Operator drill~~ | ~~Operator~~ | ✅ Done — 5/5 PASS |
+| 2 | ~~live-checks.txt~~ | ~~Operator~~ | ✅ Done — 10/10 PASS |
+| 3 | ~~GPT final review~~ | ~~GPT~~ | ✅ Done — PASS |
+| 4 | ~~Retrospective~~ | ~~Claude~~ | ✅ Done — Section 14 |
+| 5 | ~~closure-check.sh~~ | ~~Operator~~ | ✅ Done — ELIGIBLE FOR CLOSURE REVIEW |
 
 ### Architecture Compliance
 

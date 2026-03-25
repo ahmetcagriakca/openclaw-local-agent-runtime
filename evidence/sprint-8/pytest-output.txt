@@ -1,0 +1,198 @@
+============================= test session starts =============================
+platform win32 -- Python 3.14.3, pytest-9.0.2, pluggy-1.6.0 -- C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\AKCA\oc\agent
+plugins: anyio-4.12.1
+collecting ... collected 100 items
+
+tests/test_api.py::TestSchemas::test_01_data_quality_6_states PASSED     [  1%]
+tests/test_api.py::TestSchemas::test_02_mission_summary_round_trip PASSED [  2%]
+tests/test_api.py::TestSchemas::test_03_stage_detail_with_gate PASSED    [  3%]
+tests/test_api.py::TestSchemas::test_04_capability_tri_state PASSED      [  4%]
+tests/test_api.py::TestSchemas::test_05_component_health_has_name PASSED [  5%]
+tests/test_api.py::TestSchemas::test_06_telemetry_entry_has_mission_id PASSED [  6%]
+tests/test_api.py::TestSchemas::test_07_response_meta PASSED             [  7%]
+tests/test_api.py::TestSchemas::test_08_wrapper_response PASSED          [  8%]
+tests/test_api.py::TestSchemas::test_09_mission_state_enum PASSED        [  9%]
+tests/test_api.py::TestAtomicWrite::test_10_json_write_read PASSED       [ 10%]
+tests/test_api.py::TestAtomicWrite::test_11_no_temp_on_success PASSED    [ 11%]
+tests/test_api.py::TestAtomicWrite::test_12_creates_parent_dirs PASSED   [ 12%]
+tests/test_api.py::TestCache::test_13_miss_then_hit PASSED               [ 13%]
+tests/test_api.py::TestCache::test_14_error_on_missing PASSED            [ 14%]
+tests/test_api.py::TestCache::test_15_error_on_corrupt PASSED            [ 15%]
+tests/test_api.py::TestCache::test_16_invalidate PASSED                  [ 16%]
+tests/test_api.py::TestCircuitBreaker::test_17_closed_on_success PASSED  [ 17%]
+tests/test_api.py::TestCircuitBreaker::test_18_opens_after_threshold PASSED [ 18%]
+tests/test_api.py::TestCircuitBreaker::test_19_source_isolation PASSED   [ 19%]
+tests/test_api.py::TestCircuitBreaker::test_20_half_open_recovery PASSED [ 20%]
+tests/test_api.py::TestNormalizer::test_21_list_missions PASSED          [ 21%]
+tests/test_api.py::TestNormalizer::test_22_get_mission_not_found PASSED  [ 22%]
+tests/test_api.py::TestNormalizer::test_23_precedence_state_over_mission PASSED [ 23%]
+tests/test_api.py::TestNormalizer::test_24_freshness_max_age PASSED      [ 24%]
+tests/test_api.py::TestNormalizer::test_25_missing_source_partial PASSED [ 25%]
+tests/test_api.py::TestNormalizer::test_26_deny_forensics_from_summary PASSED [ 26%]
+tests/test_api.py::TestNormalizer::test_27_corrupt_json_degraded PASSED  [ 27%]
+tests/test_api.py::TestCapabilities::test_28_tri_state_available PASSED  [ 28%]
+tests/test_api.py::TestCapabilities::test_29_missing_manifest_unknown PASSED [ 29%]
+tests/test_api.py::TestCapabilities::test_30_corrupt_manifest_unknown PASSED [ 30%]
+tests/test_api.py::TestAPIEndpoints::test_31_health_200_wrapper PASSED   [ 31%]
+tests/test_api.py::TestAPIEndpoints::test_32_capabilities_200_wrapper PASSED [ 32%]
+tests/test_api.py::TestAPIEndpoints::test_33_missions_list_200_wrapper PASSED [ 33%]
+tests/test_api.py::TestAPIEndpoints::test_34_mission_detail_200_wrapper PASSED [ 34%]
+tests/test_api.py::TestAPIEndpoints::test_35_mission_not_found_404 PASSED [ 35%]
+tests/test_api.py::TestAPIEndpoints::test_36_stages_200_wrapper PASSED   [ 36%]
+tests/test_api.py::TestAPIEndpoints::test_37_approvals_200_wrapper PASSED [ 37%]
+tests/test_api.py::TestAPIEndpoints::test_38_telemetry_200_wrapper PASSED [ 38%]
+tests/test_api.py::TestAPIEndpoints::test_39_host_header_attack_403 PASSED [ 39%]
+tests/test_api.py::TestAPIEndpoints::test_40_meta_has_data_quality PASSED [ 40%]
+tests/test_api.py::TestAPIEndpoints::test_41_meta_has_generated_at PASSED [ 41%]
+tests/test_phase45a.py::TestAnalyzeTelemetry::test_01_empty_events PASSED [ 42%]
+tests/test_phase45a.py::TestAnalyzeTelemetry::test_02_event_type_counts PASSED [ 43%]
+tests/test_phase45a.py::TestAnalyzeTelemetry::test_03_deny_reasons PASSED [ 44%]
+tests/test_phase45a.py::TestAnalyzeTelemetry::test_04_deny_by_role PASSED [ 45%]
+tests/test_phase45a.py::TestAnalyzeMissions::test_05_empty_summaries PASSED [ 46%]
+tests/test_phase45a.py::TestAnalyzeMissions::test_06_basic_stats PASSED  [ 47%]
+tests/test_phase45a.py::TestAnalyzeMissions::test_07_model_usage PASSED  [ 48%]
+tests/test_phase45a.py::TestAnalyzeMissions::test_08_gate_pass_rates PASSED [ 49%]
+tests/test_phase45a.py::TestAnalyzeMissions::test_09_context_tier_distribution PASSED [ 50%]
+tests/test_phase45a.py::TestAnalyzeMissions::test_10_reworks PASSED      [ 51%]
+tests/test_phase45a.py::TestAnalyzeMissions::test_11_failed_missions PASSED [ 52%]
+tests/test_phase45a.py::TestAnalyzeMissions::test_12_cost_estimate PASSED [ 53%]
+tests/test_phase45a.py::TestReportGeneration::test_13_text_report PASSED [ 54%]
+tests/test_phase45a.py::TestReportGeneration::test_14_json_report PASSED [ 55%]
+tests/test_phase45a.py::TestFileLoading::test_15_load_telemetry PASSED   [ 56%]
+tests/test_phase45a.py::TestFileLoading::test_16_load_mission_summaries PASSED [ 57%]
+tests/test_phase45a.py::TestRunE2EImports::test_17_test_cases_defined PASSED [ 58%]
+tests/test_phase45a.py::TestRunE2EImports::test_18_test_case_structure PASSED [ 59%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_01_json_in_response_direct_parse PASSED [ 60%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_02_json_in_markdown_fence PASSED [ 61%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_03_json_embedded_in_text PASSED [ 62%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_04_regex_verdict_in_text PASSED [ 63%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_05_regex_verdict_fail PASSED [ 64%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_06_regex_review_approve PASSED [ 65%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_07_regex_review_approved_alias PASSED [ 66%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_08_regex_analysis_reject PASSED [ 67%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_09_heuristic_fail_indicators PASSED [ 68%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_10_heuristic_pass_indicators PASSED [ 69%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_11_heuristic_default_conditional PASSED [ 70%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_12_heuristic_review_request_changes PASSED [ 71%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_13_code_delivery_file_extraction PASSED [ 72%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_14_code_delivery_no_files PASSED [ 73%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_15_discovery_map_file_paths PASSED [ 74%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_16_requirements_brief_title PASSED [ 75%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_17_requirements_brief_fallback PASSED [ 76%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_18_work_plan_tasks PASSED [ 77%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_19_recovery_retry PASSED [ 78%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_20_recovery_escalate PASSED [ 79%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_21_recovery_abort_default PASSED [ 80%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_22_empty_response PASSED [ 81%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_23_none_response PASSED [ 82%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_24_unknown_type PASSED [ 83%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_25_review_security_concerns PASSED [ 84%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_26_review_no_security_concerns PASSED [ 85%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_27_analysis_feasibility PASSED [ 86%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_28_analysis_feasibility_default PASSED [ 87%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_29_test_report_bugs PASSED [ 88%]
+tests/test_sprint_6d.py::TestStrictApprovalEnforcement::test_30_strict_approve_with_id PASSED [ 89%]
+tests/test_sprint_6d.py::TestStrictApprovalEnforcement::test_31_strict_deny_with_id PASSED [ 90%]
+tests/test_sprint_6d.py::TestStrictApprovalEnforcement::test_32_single_pending_yes_approve_with_deprecation PASSED [ 91%]
+tests/test_sprint_6d.py::TestStrictApprovalEnforcement::test_33_multiple_pending_yes_rejected PASSED [ 92%]
+tests/test_sprint_6d.py::TestStrictApprovalEnforcement::test_34_multiple_pending_strict_id_still_works PASSED [ 93%]
+tests/test_sprint_6d.py::TestStrictApprovalEnforcement::test_35_wrong_id_returns_none PASSED [ 94%]
+tests/test_sprint_6d.py::TestStrictApprovalEnforcement::test_36_unrelated_message_returns_none PASSED [ 95%]
+tests/test_sprint_6d.py::TestStrictApprovalEnforcement::test_37_single_pending_deny_with_deprecation PASSED [ 96%]
+tests/test_sprint_6d.py::TestStrictApprovalEnforcement::test_38_multiple_pending_deny_rejected PASSED [ 97%]
+tests/test_sprint_6d.py::TestStrictApprovalEnforcement::test_39_old_message_ignored PASSED [ 98%]
+tests/test_sprint_6d.py::TestStrictApprovalEnforcement::test_40_wrong_chat_ignored PASSED [ 99%]
+tests/test_sprint_6d.py::TestCountPendingApprovals::test_41_count_pending PASSED [100%]
+
+============================= 100 passed in 1.35s =============================
+
+=== 5C-1: State Machine ===
+  [PASS] Initial state is PENDING
+  [PASS] PENDING->PLANNING
+  [PASS] PLANNING->READY
+  [PASS] READY->RUNNING
+  [PASS] RUNNING->COMPLETED
+  [PASS] Transition log has 4 entries
+  [PASS] Each log entry has from/to/reason
+  [PASS] to_dict has missionId
+  [PASS] to_dict has status
+  [PASS] to_dict has transitionLog
+  [PASS] from_dict roundtrip
+  [PASS] from_dict mission_id
+  [PASS] Invalid PENDING->COMPLETED rejected
+  [PASS] First attempt returns 1
+  [PASS] Can retry after 1 attempt
+  [PASS] Cannot retry after 3 attempts
+  [PASS] 4th attempt returns 4
+
+--- State Persistence ---
+  [PASS] State file created
+  [PASS] Saved state has missionId
+  [PASS] Saved state has status
+
+=== 5C-2: Quality Gates + Feedback Loops ===
+  [PASS] Gate 1 returns GateResult
+  [PASS] Gate 1 has recommendation
+  [PASS] Gate 2 returns GateResult
+  [PASS] Gate 3 returns GateResult
+  [PASS] FeedbackLoop initial dev_test_count=0
+  [PASS] Test pass -> proceed
+  [PASS] dev_test_count unchanged after pass
+  [PASS] Test fail -> rework
+  [PASS] Rework has cycle count
+  [PASS] Review approve -> proceed
+  [PASS] Review request_changes -> rework
+  [PASS] Review reject -> escalate
+  [PASS] Escalate after max dev-test cycles
+  [PASS] get_stats has dev_test_cycles
+  [PASS] get_stats has total_reworks
+
+--- Gate Check Integration ---
+  [PASS] Developer role -> proceed (no gate)
+  [PASS] Rework creates 2 stages
+  [PASS] Rework[0] is developer
+  [PASS] Rework[1] is tester
+  [PASS] Rework has is_rework flag
+  [PASS] Rework has rework_cycle
+  [PASS] Rework has working_set
+  [PASS] Recovery stage is manager
+  [PASS] Recovery has is_recovery flag
+  [PASS] Recovery has working_set
+  [PASS] Recovery id contains 'recovery'
+
+=== 5C-3: Recovery Triage ===
+  [PASS] 3 attempts exhausted
+  [PASS] Exhausted budget -> abort
+  [PASS] Reason is max_attempts
+  [PASS] Find stage-2 -> index 1
+  [PASS] Find nonexistent -> None
+  [PASS] Latest test_report is art-3
+  [PASS] Nonexistent type -> empty dict
+
+=== 5C-4: Approval Store ===
+  [PASS] Record created
+  [PASS] Record has approvalId
+  [PASS] Record status is pending
+  [PASS] Idempotency: no approved yet -> None
+  [PASS] Approve succeeded
+  [PASS] Idempotency: approved -> returns ID
+  [PASS] Deny succeeded
+  [PASS] No pending after decisions
+  [PASS] get_pending returns list
+
+=== Summary Integration ===
+  [PASS] Summary file created
+  [PASS] Summary has stateTransitions
+  [PASS] Summary has finalState
+  [PASS] Summary has attemptCounters
+  [PASS] Summary has feedbackLoopStats
+  [PASS] Summary has gatesChecked
+  [PASS] Summary gatesChecked.gate_1 is True
+  [PASS] Rework stage marked in summary
+
+============================================================
+Sprint 5C Tests: 70 passed, 0 failed, 70 total
+============================================================
+ALL TESTS PASSED

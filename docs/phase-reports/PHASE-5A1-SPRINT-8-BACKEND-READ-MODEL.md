@@ -17,7 +17,7 @@ Sprint 8 delivers the Mission Control Center backend — a FastAPI read-only API
 - FastAPI server running on 127.0.0.1:8003 with D-070 localhost security
 - 14 Pydantic schemas frozen (D-067) — additive-only post-freeze
 - MissionNormalizer aggregating 5 sources with D-065 precedence rules
-- D-068 data quality (5 states) in every API response
+- D-068/D-079 data quality (6 states: fresh, partial, stale, degraded, unknown, not_reached) in every API response
 - Per-source freshness tracking with staleThresholdMs
 - Circuit breaker isolating source failures (D-072)
 - mtime-based incremental cache avoiding redundant disk reads
@@ -106,14 +106,15 @@ Both create parent directories, write to temp file in same directory (avoiding c
 
 **File:** `agent/api/schemas.py` — **FROZEN after Sprint 8 exit.**
 
-14 schemas implementing D-067 (additive-only post-freeze) and D-068 (5 data quality states):
+Schemas implementing D-067 (additive-only post-freeze), D-068/D-079 (6 data quality states), and GPT review fixes:
 
 | Schema | Purpose |
 |--------|---------|
-| `DataQualityStatus` | Enum: known_zero, unknown, not_reached, stale, degraded |
+| `DataQualityStatus` | Enum: fresh, partial, stale, degraded, unknown, not_reached (D-079) |
 | `DataQuality` | Per-response quality indicator |
 | `SourceInfo` | Per-source: name, ageMs, status, lastError |
 | `FreshnessInfo` | freshnessMs, staleThresholdMs, sourcesUsed, sourcesMissing |
+| `ResponseMeta` | generatedAt, dataQuality, freshness — every response wrapper includes this |
 | `Finding` | Gate finding: check, status, detail |
 | `GateResultDetail` | gateName, passed, findings |
 | `DenyForensics` | gate, recommendation, blocking_rules, findings |
@@ -121,20 +122,29 @@ Both create parent directories, write to temp file in same directory (avoiding c
 | `MissionSummary` | Full mission with freshness + dataQuality |
 | `MissionListItem` | Mission list entry |
 | `ApprovalEntry` | Approval record |
-| `TelemetryEntry` | Single telemetry event |
-| `HealthResponse` | System health with components |
-| `CapabilityEntry` | Single capability |
-| `ComponentHealth` | Per-component health |
+| `TelemetryEntry` | type, timestamp, missionId, sourceFile, data |
+| `CapabilityStatus` | Tri-state enum: available, unavailable, unknown (GPT Fix 4) |
+| `CapabilityEntry` | name, status (tri-state), since, detail |
+| `ComponentHealth` | name, status, lastCheckAt, detail |
+| `HealthResponse` | Wrapper: meta + status + components |
+| `MissionDetailResponse` | Wrapper: meta + mission |
+| `MissionListResponse` | Wrapper: meta + missions |
+| `StageListResponse` | Wrapper: meta + stages |
+| `ApprovalListResponse` | Wrapper: meta + approvals |
+| `TelemetryResponse` | Wrapper: meta + events |
+| `CapabilitiesResponse` | Wrapper: meta + capabilities |
 | `APIError` | Standard error response |
 
 ### 3.3 — Capability Checker
 
 **File:** `agent/api/capabilities.py`
 
-Reads `config/capabilities.json`. Graceful degradation:
-- Missing manifest → all capabilities unknown (D-068)
+Reads `config/capabilities.json`. Tri-state capability status (GPT Fix 4):
+- `CapabilityStatus` enum: `available`, `unavailable`, `unknown`
+- Missing manifest → all capabilities `unknown` (D-068)
 - Corrupt JSON → degraded status, no crash
-- `is_available(name)` → bool, `get_all()` → dict, `refresh()` → re-read
+- `get_status(name)` → `CapabilityStatus`, `is_available(name)` → convenience bool
+- `get_all()` → dict, `refresh()` → re-read
 
 ### 3.4 — Incremental File Cache
 
@@ -180,12 +190,14 @@ Reads 5 sources and applies precedence rules:
 - Per-source `ageMs = now - file.mtime`
 - Stale thresholds per source type (state: 60s, summary: 120s, telemetry: 300s)
 
-**Data quality (D-068):**
-- All sources ok + fresh → `known_zero`
-- Source missing → `unknown` (added to `sourcesMissing`)
-- Source corrupt → `degraded`
-- Source stale → `stale`
-- Source not created yet → `not_reached`
+**Data quality (D-068/D-079 — 6 states):**
+- All sources present + below threshold → `fresh`
+- ≥1 source present but ≥1 missing → `partial` (missing listed in `sourcesMissing`)
+- ≥1 source above stale threshold → `stale`
+- ≥1 source parse error or circuit open → `degraded`
+- All sources missing → `unknown`
+- Source not yet created (mission not started) → `not_reached`
+- Priority when multiple conditions: `degraded > stale > partial > fresh`
 
 ### 3.7 — FastAPI Server + Security
 
@@ -213,28 +225,45 @@ Reads 5 sources and applies precedence rules:
 
 ### 3.8 — API Endpoints
 
-| Method | Path | Schema | Task |
-|--------|------|--------|------|
-| GET | `/api/v1/missions` | `list[MissionListItem]` | 8.8 |
-| GET | `/api/v1/missions/{id}` | `MissionSummary` | 8.8 |
-| GET | `/api/v1/missions/{id}/stages` | `list[StageDetail]` | 8.8 |
-| GET | `/api/v1/missions/{id}/stages/{idx}` | `StageDetail` | 8.8 |
-| GET | `/api/v1/approvals` | `list[ApprovalEntry]` | 8.9 |
-| GET | `/api/v1/approvals/{id}` | `ApprovalEntry` | 8.9 |
-| GET | `/api/v1/telemetry` | `list[TelemetryEntry]` | 8.10 |
-| GET | `/api/v1/telemetry?mission_id=X` | Filtered telemetry | 8.10 |
+All endpoints return wrapper responses with `ResponseMeta` (GPT Fix 3):
+
+| Method | Path | Response Wrapper | Task |
+|--------|------|-----------------|------|
+| GET | `/api/v1/missions` | `MissionListResponse` | 8.8 |
+| GET | `/api/v1/missions/{id}` | `MissionDetailResponse` | 8.8 |
+| GET | `/api/v1/missions/{id}/stages` | `StageListResponse` | 8.8 |
+| GET | `/api/v1/missions/{id}/stages/{idx}` | `StageDetail` (inline) | 8.8 |
+| GET | `/api/v1/approvals` | `ApprovalListResponse` | 8.9 |
+| GET | `/api/v1/approvals/{id}` | `ApprovalEntry` (inline) | 8.9 |
+| GET | `/api/v1/telemetry` | `TelemetryResponse` | 8.10 |
+| GET | `/api/v1/telemetry?mission_id=X` | `TelemetryResponse` (filtered) | 8.10 |
 | GET | `/api/v1/health` | `HealthResponse` | 8.11 |
-| GET | `/api/v1/capabilities` | `list[CapabilityEntry]` | 8.11 |
+| GET | `/api/v1/capabilities` | `CapabilitiesResponse` | 8.11 |
 
 All read-only (D-059). Every response includes `dataQuality` and `freshness` where applicable.
 
-### 3.9 — services.json + Startup/Shutdown
+### 3.9 — services.json + Heartbeat (D-080)
 
-Server registers itself in `logs/services.json` on startup (atomic write):
+Server registers itself in `logs/services.json` with heartbeat freshness (GPT Fix 6):
 ```json
-{"mission-control-api": {"status": "running", "port": 8003, "pid": 12345, "startedAt": "..."}}
+{
+  "mission-control-api": {
+    "status": "running",
+    "port": 8003,
+    "pid": 12345,
+    "startedAt": "2026-03-25T..Z",
+    "lastHeartbeatAt": "2026-03-25T..Z",
+    "heartbeatIntervalS": 30
+  }
+}
 ```
-On shutdown: `status → "stopped"`.
+
+**Liveness rule (D-080):**
+- `lastHeartbeatAt + (heartbeatIntervalS × 2) > now` → service alive
+- Threshold exceeded → stale → health `degraded`
+- Background `asyncio.Task` updates `lastHeartbeatAt` every 30 seconds
+- Clean shutdown: `status → "stopped"` (safety net, not primary signal)
+- Crash: heartbeat stops → auto-detected as stale
 
 ---
 
@@ -244,7 +273,7 @@ On shutdown: `status → "stopped"`.
 
 | Test Group | Tests | Description |
 |-----------|-------|-------------|
-| `TestSchemas` | 5 | Schema serialization, round-trip, D-068 5 states |
+| `TestSchemas` | 5 | Schema serialization, round-trip, D-068/D-079 6 states |
 | `TestAtomicWrite` | 4 | JSON/text write, temp cleanup, parent dir creation |
 | `TestCache` | 4 | miss→hit, missing file, corrupt JSON, invalidate |
 | `TestCircuitBreaker` | 5 | Closed, open threshold, isolation, half_open recovery, reset |
@@ -385,12 +414,62 @@ Source files → Cache (mtime check) → CircuitBreaker → Normalizer
 |-------|----------|---------|----------|
 | Sprint 8 GPT Review | 8 | 7 (Fix 1–8) | 0 |
 | Sprint 7-8 Cross-Review | 7 blocking + 3 NB | 3 (D-079, D-080, doc fixes) | 2 (impl evidence) |
+| Closure Assessment | 4 contradictions | 4 (doc fixes) | 0 |
 
 **Key decisions from review:** D-079 (DataQuality 6-state), D-080 (heartbeat freshness).
 
+**Closure Assessment 4 çelişki çözümü:**
+- Ç-1: DataQuality `known_zero` → `fresh/partial` 6-state (kodda doğru, rapor güncellendi)
+- Ç-2: Endpoint return types → wrapper `*Response` schemas (kodda doğru, rapor güncellendi)
+- Ç-3: CapabilityChecker → tri-state `CapabilityStatus` enum (kodda doğru, rapor güncellendi)
+- Ç-4: services.json → heartbeat background task 30s (kodda doğru, rapor güncellendi)
+
 ---
 
-## Section 10: Known Limitations
+## Section 10: Evidence Bundle
+
+Evidence dosyaları `evidence/sprint-8/` dizininde:
+
+| Evidence | Dosya | Sonuç |
+|----------|-------|-------|
+| pytest output (170 test) | `evidence/sprint-8/pytest-output.txt` | 100+70 pass, 0 fail |
+| Doc validator | `evidence/sprint-8/validator-output.txt` | 8/8 PASS |
+| Grep evidence (4 çelişki) | `evidence/sprint-8/grep-evidence.txt` | 4/4 kodda doğru |
+
+### Evidence: Test Summary
+```
+tests/test_api.py: 41 passed
+tests/test_phase45a.py: 18 passed
+tests/test_sprint_6d.py: 41 passed
+tests/test_sprint_5c.py: 70 passed
+Total: 170 passed, 0 failed
+```
+
+### Evidence: Doc Validator
+```
+[PASS] STATE.md — Fresh
+[PASS] STATE.md — All required sections present
+[PASS] NEXT.md — Fresh
+[PASS] SESSION-HANDOFF.md — Fresh
+[PASS] SESSION-HANDOFF.md — Handoff sections present
+[PASS] capabilities.json — autoGenerated: true, 5/5 available
+[PASS] Sprint plan — All checkboxes completed
+[PASS] Test count — 170 tests (>= 129)
+Result: All checks passed — sprint ready to close
+```
+
+### Evidence: Contradiction Resolution (grep)
+```
+Ç-1 DataQuality: FRESH, PARTIAL, STALE, DEGRADED, UNKNOWN, NOT_REACHED (no known_zero)
+Ç-2 Wrappers: ResponseMeta, MissionDetailResponse, MissionListResponse, StageListResponse,
+              HealthResponse, ApprovalListResponse, TelemetryResponse, CapabilitiesResponse
+Ç-3 Tri-state: CapabilityStatus.AVAILABLE / UNAVAILABLE / UNKNOWN, get_status() method
+Ç-4 Heartbeat: HEARTBEAT_INTERVAL_S=30, _heartbeat_loop(), asyncio.create_task
+```
+
+---
+
+## Section 11: Known Limitations
 
 1. **Telemetry not cached:** JSONL read is sequential per-request. For large telemetry files, add JSONL index in Sprint 9+.
 2. **Mission list freshness:** `list_missions()` doesn't populate per-item freshness (would require N source reads). Detail endpoint has full freshness.
@@ -404,4 +483,5 @@ Source files → Cache (mtime check) → CircuitBreaker → Normalizer
 *Date: 2026-03-25*
 *Operator: AKCA | Architect: Claude Opus 4.6*
 *EN RİSKLİ SPRİNT — 3 milestone ile başarıyla yönetildi*
-*GPT Review: 3 rounds, D-079 + D-080 frozen, 24/24 checklist PASS*
+*GPT Review: 3 rounds + closure assessment, D-079 + D-080 frozen, 24/24 checklist PASS*
+*Evidence bundle: evidence/sprint-8/ (pytest, validator, grep)*

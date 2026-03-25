@@ -93,6 +93,14 @@ Example:
 {"touched_files": ["agent/services/tool_catalog.py"], "self_test_notes": "Verified changes compile", "blockers": []}
 ```
 
+SELF-VERIFICATION (mandatory before finalizing your response):
+Before producing your final code_delivery, verify each file you touched:
+1. SYNTAX: No syntax errors — all brackets, parentheses, and quotes are balanced.
+2. IMPORTS: Every import statement references a module that exists in the project or stdlib.
+3. PATHS: All file paths used in the code are correct relative to the project root.
+4. FORMAT: Your JSON artifact block is valid JSON and matches the code_delivery schema.
+If any check fails, fix the issue before responding. Report what you found in self_test_notes.
+
 CONSTRAINTS:
 - You may ONLY write to files explicitly assigned in your working set (readWrite, creatable, generatedOutputs).
 - You may NOT create files outside your assigned targets.
@@ -113,6 +121,14 @@ Example:
 ```json
 {"verdict": "pass", "criteria_results": [{"criterion": "...", "status": "pass", "evidence": "..."}], "bugs": []}
 ```
+
+VERDICT GUIDELINES (strict):
+- "pass": ALL criteria are individually "pass". No critical or high-severity bugs.
+- "conditional_pass": All critical criteria pass, but minor issues exist. List them.
+- "fail": ANY criterion is "fail" OR any critical/high bug exists.
+- UNKNOWN = FAIL: If you cannot determine whether a criterion passes, mark it "fail" with reason "unable to verify". Never treat uncertainty as a pass.
+- Partial pass = FAIL: If only some sub-checks within a criterion pass, the criterion is "fail".
+- Evidence is mandatory: Every criterion result must include concrete evidence (file content, output, line reference). "Looks correct" is not evidence.
 
 CONSTRAINTS:
 - You may ONLY read files in the delivered scope (code_delivery files).

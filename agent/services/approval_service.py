@@ -1,5 +1,11 @@
 """Telegram-based approval service for high-risk tool calls.
 
+SUNSET NOTICE (D-063):
+    This strict-ID-based implementation is valid until Phase 5C (Sprint 11).
+    Per decision D-063, the approval mechanism will migrate to a service layer
+    with structured request/response contracts. Do not extend this module with
+    new approval patterns — design them for the future service layer instead.
+
 Approval flow:
 1. Write pending approval to logs/approvals/apv-XXX.json
 2. Send one-way Telegram notification via Bot API sendMessage

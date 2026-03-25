@@ -1,33 +1,30 @@
-# Next Step
+# Next Steps
 
-**Last updated:** 2026-03-24
+**Last updated:** 2026-03-25
 
 ---
 
-## Phase 4 Complete
+## Current: Sprint 8 (Phase 5A-1) — IN PROGRESS
 
-9 governed roles, 10 skill contracts, 3 quality gates, 2 feedback loops, 10-state mission state machine, complexity router, 350+ tests, 0 failures.
+GPT review fix'leri uygulandı. Schemas rewritten (DataQuality 6-state, wrapper responses, tri-state capabilities, heartbeat model).
 
-## Immediate (Post-Phase 4)
+## Tamamlanan
 
-1. GitHub push — source of truth moves to repo
-2. ~~Sprint 6D — Final Seal~~ **DONE** (structured extraction + strict approval)
-3. ~~docs/ai/ state files updated to Phase 4~~ **DONE**
+- Sprint 7 (Phase 4.5-C): 10/10 task, 129 test, 0 failure
+- E2E: 2/4 pass (D-078 waiver: fail'ler scope dışı)
+- D-077 frozen (Sprint-End Doc Policy)
+- D-078 frozen (E2E Partial Pass Waiver)
+- Phase 5 Freeze Addendum FROZEN (BF-1→BF-4)
+- Sprint 8 GPT review: 7/8 fix uygulandı
 
-## Short-term (Operational Tuning)
+## Sıradaki Sprint'ler
 
-4. E2E with all complexity levels (medium 7 roles, complex 8 roles)
-5. Cost tuning — per-role token budgets from telemetry
-6. Prompt refinement — LLM output→schema compliance
+1. Sprint 8 — Phase 5A-1 — Backend Read Model (17 task) ← CURRENT
+2. Sprint 9 — Phase 5A-2 — Frontend Read-Only (18 task)
+3. Sprint 10 — Phase 5B — Live Updates SSE (10 task)
+4. Sprint 11 — Phase 5C — Intervention (10 task)
+5. Sprint 12 — Phase 5D — Polish + Migration (10 task)
 
-## Medium-term (Phase 4.5)
+## Bekleyen
 
-7. ~~Approval migration — Telegram yes/no → strict approve `<id>`~~ **DONE** (Sprint 6D)
-8. Crash resume — `resume_mission(mission_id)`
-9. Tier C scoped extraction
-10. Token budget enforcement — real-time tracking
-11. build_command string template debt cleanup
-
-## Deferred (Phase 2 — Security Hardening)
-
-12. B-001→B-011 (task auth, encryption, rate limits, audit integrity)
+- D-021→D-058 extraction to DECISIONS.md (documentation debt)

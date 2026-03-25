@@ -1,6 +1,6 @@
 # Collaboration Protocol
 
-**Last updated:** 2026-03-24
+**Last updated:** 2026-03-25
 
 ---
 
@@ -29,20 +29,32 @@ Every work session ends with:
 
 ---
 
-## Sprint Protocol (Phase 4+)
+## Sprint-End Documentation Protocol (D-077)
 
-Phase 4 sprints follow exit criteria documents:
-- Each sprint produces a report in `docs/phase-reports/`
-- Every sprint requires test count + 0 failure evidence
-- Sprint reports include: executive summary, changes made, test evidence, file manifest
+Her sprint kapanışında aşağıdaki adımlar zorunlu:
 
----
+1. Tüm code task'ları tamamla
+2. Aşağıdaki dökümanları güncelle:
 
-## Design Freeze Protocol
+| Döküman | Güncelleme |
+|---------|------------|
+| `docs/ai/STATE.md` | Aktif phase, sprint, test count |
+| `docs/ai/NEXT.md` | Sonraki sprint/task |
+| `docs/ai/DECISIONS.md` | Sprint'te alınan D-XXX kararları |
+| `docs/ai/BACKLOG.md` | Tamamlanan B-XXX, yeni item'lar |
+| `SESSION-HANDOFF.md` | Sprint snapshot |
+| Sprint plan doc | Checklist [x] tamamla |
 
-- Section-level amendments (L-A1, L-A2) for incremental freezes within a phase
-- Amendment creates new frozen section without reopening existing frozen sections
-- Consolidated design document (v3) is the master reference for all 58 decisions
+3. Validation script çalıştır:
+
+```bash
+python tools/validate_sprint_docs.py --sprint N --sprint-date YYYY-MM-DD
+```
+
+4. 0 FAIL → commit + push
+5. FAIL varsa → düzelt, tekrar çalıştır
+
+Sprint, validation pass olmadan "done" sayılmaz.
 
 ---
 
@@ -57,3 +69,24 @@ Requires: identify which decision, provide evidence, get operator approval, upda
 - Scripts, logs, commands, code outputs: English/ASCII only
 - Manifest-based action registry
 - All persistent state in repo files, not chat history
+
+---
+
+## Cross-Review Protocol
+
+- GPT comments are never ignored, never treated as truth without verification
+- Every cross-review comment is either: applied, rejected with reason, or deferred with tracking
+- Applied fixes reference the review round (e.g., "GPT-1 fix applied")
+
+---
+
+## Source Hierarchy
+
+When sources conflict:
+
+1. Real code in the repo
+2. Test results, logs, runtime evidence
+3. Frozen decisions (D-XXX)
+4. Sprint plans and design docs
+5. GPT cross-review comments
+6. Assumptions

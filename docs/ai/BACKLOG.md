@@ -1,6 +1,54 @@
 # Backlog
 
-**Last updated:** 2026-03-24
+**Last updated:** 2026-03-25
+
+---
+
+## Completed
+
+| ID | Item | Sprint | Notes |
+|----|------|--------|-------|
+| B-029 | Deny forensic summary | Sprint 7 | `_aggregate_deny_forensics()` in controller |
+| B-030 | Developer self-verification prompt | Sprint 7 | specialists.py hardened |
+| B-031 | Tester verdict guidelines (unknown=fail) | Sprint 7 | D-068 aligned |
+| B-032 | Model tracking per stage (agent_used) | Sprint 7 | Single-point propagation |
+| B-033 | Approval sunset docstring | Sprint 7 | D-063 reference added |
+| B-034 | Gate findings structured | Sprint 7 | 3 semantic states ready |
+| B-035 | STATE.md + NEXT.md wording fix | Sprint 7 | "durable" → "state-persisted" |
+| B-036 | ops/wsl/ versioned templates | Sprint 7 | 5 files created |
+| B-037 | Capability manifest auto-gen | Sprint 7 | D-071 atomic write |
+| B-038 | Sprint-End Doc Policy + validation script | Sprint 7 | D-077 frozen |
+
+---
+
+## Sprint 8 — Phase 5A-1: Backend Read Model
+
+| ID | Item | Notes |
+|----|------|-------|
+| B-039 | FastAPI + Uvicorn setup (D-061) | Foundation |
+| B-040 | Pydantic schemas freeze (D-067) | /api/v1/ contract |
+| B-041 | MissionNormalizer (D-065) | Aggregation + precedence + cache |
+| B-042 | IncrementalFileCache | File watcher + cache invalidation |
+| B-043 | Per-source circuit breaker (D-072) | Fault isolation |
+| B-044 | Atomic write utility (D-071) | System-wide helper |
+| B-045 | CapabilityChecker service | Reads capabilities.json |
+| B-046 | Localhost security (D-070) | Host + Origin validation |
+| B-047 | Health snapshot FS migration (D-075) | ext4 state |
+| B-048 | File owner/target FS matrix (GPT-4) | Sprint 8 kickoff item |
+| B-049 | API test suite | Endpoint integration tests |
+| B-050 | D-021→D-058 extraction to DECISIONS.md | Documentation debt |
+
+---
+
+## Sprint 9 — Phase 5A-2: Frontend Read-Only
+
+| ID | Item | Notes |
+|----|------|-------|
+| B-051 | React scaffold + API client | mission-control/ |
+| B-052 | DataQualityBadge + StaleBanner components | D-068 UI enforcement |
+| B-053 | Mission List + Detail pages | Core UI |
+| B-054 | Per-panel error boundary (D-072) | UI fault isolation |
+| B-055 | Approval queue read-only | No buttons, Telegram note |
 
 ---
 
@@ -20,6 +68,8 @@
 | B-010 | WMCP credential replacement | Replace local-mcp-12345 |
 | B-011 | Transport encryption | mTLS or equivalent |
 
+---
+
 ## Phase 3 — Productization
 
 | ID | Item | Notes |
@@ -34,46 +84,7 @@
 | B-019 | Intent mapping refinement | OpenClaw conversation quality |
 | B-020 | Standard task library | Common task definitions |
 
-## Phase 3 — Agent-MCP System (Done)
-
-| ID | Item | Status | Notes |
-|----|------|--------|-------|
-| B-029 | Core agent runner | **Done** | Phase 3-B: GPT provider, MCP client, basic tool gateway |
-| B-030 | Risk engine + approval service | **Done** | Phase 3-C: deterministic risk, Telegram approval flow |
-| B-031 | Full tool catalog + typed artifacts | **Done** | Phase 3-D: 24 named tools, artifact store, audit |
-| B-032 | Multi-provider support | **Done** | Phase 3-E: OpenAI, Claude, Ollama providers |
-| B-033 | Multi-agent foundation / mission controller | **Done** | Phase 3-F: hub-and-spoke, specialist agents |
-| B-034 | Agent-to-agent delegation protocol | **Done** | Phase 3-F: typed artifact handoff contracts |
-| B-035 | Persistent mission state | **Done** | Phase 3-F: multi-stage mission tracking |
-
-## Phase 4 — Agent Governance (Done)
-
-| ID | Sprint | Status | Scope |
-|----|--------|--------|-------|
-| Sprint 0+1 | Governance Enforcer | **Done** | Working Set, Path Resolver, Policy Telemetry |
-| Sprint 1H+2 | Governance Context | **Done** | Context Assembler, Expansion Broker, Summary Cache |
-| Sprint 2C | Integration Completion | **Done** | Artifact Identity, Summary Cache fixes |
-| Sprint 3 | Role Expansion | **Done** | 9 roles, 10 skill contracts, 2 feedback loops |
-| Sprint 4 | Complexity Router | **Done** | 4-tier routing, discovery governance |
-| Sprint 5 | Quality Gates + State Machine | **Done** | 3 gates, 10-state machine, approval store |
-| Sprint 5C | Controller Integration | **Done** | State machine, gates, recovery, approval store wired |
-| Sprint 6 | Integration Test Suite | **Done** | 110/110 tests pass |
-| Sprint 6C | Closure Hardening | **Done** | Typed artifacts + model wiring from role registry |
-| Sprint 6D | Final Seal | **Done** | Structured extraction + strict approval enforcement |
-
-## Phase 4.5 — Agent Governance Tuning (Planned)
-
-| ID | Item | Notes |
-|----|------|-------|
-| B-036 | Structured artifact extraction | **Done** — Sprint 6D: LLM response → typed artifact parser |
-| B-037 | Strict approval enforcement | **Done** — Sprint 6D: approve `<id>` / deny `<id>` |
-| B-038 | Crash resume | resume_mission(mission_id) |
-| B-039 | Tier C scoped extraction | Partial content delivery by role |
-| B-040 | Token budget enforcement | Real-time per-role tracking |
-| B-041 | E2E all complexity levels | Medium (7 roles), Complex (8 roles) |
-| B-042 | Cost tuning from telemetry | Per-role token budgets from actual usage |
-| B-043 | Prompt refinement for schema compliance | LLM output→schema mapping improvements |
-| B-044 | build_command string template debt | Replace string concatenation with templates |
+---
 
 ## Phase 4 — Reproducibility / DR
 
@@ -83,6 +94,8 @@
 | B-022 | Backup / restore | Runtime state recovery |
 | B-023 | Corrupted runtime recovery | Beyond stuck-task policy |
 | B-024 | Deterministic redeploy | Reproducible from repo |
+
+---
 
 ## Cleanup (no phase gate)
 

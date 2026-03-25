@@ -1,8 +1,9 @@
 # Current State
 
-**Last updated:** 2026-03-24
-**Active phase:** Phase 4 complete, Phase 4.5 planned
-**Note:** Phase 2 deferred — single-user localhost, security hardening not urgent
+**Last updated:** 2026-03-25
+**Active phase:** Phase 4.5-C (Sprint 7 — Operational Tuning)
+**Note:** Phase 4.5-B complete (E2E validated, 129 tests). Phase 2 deferred — single-user localhost, security hardening not urgent.
+**Persistence:** State is file-persisted (state.json, mission.json). Resume not yet implemented (planned Phase 4.5 item #8).
 
 ---
 
@@ -25,7 +26,7 @@
 | Agent Runner | Operational (multi-agent missions + 3 providers + 24 tools) | `agent/oc-agent-runner.py` |
 | Mission Controller | Operational (9 governed roles, quality gates, state machine) | `agent/mission/controller.py` |
 | Risk Engine | Operational | `agent/services/risk_engine.py` |
-| Approval Service | Operational (Telegram) | `agent/services/approval_service.py` |
+| Approval Service | Operational (Telegram, sunset D-063 → Phase 5C service layer) | `agent/services/approval_service.py` |
 | Approval Store | Operational | `agent/services/approval_store.py` |
 | Artifact Store | Operational | `agent/services/artifact_store.py` |
 | Context Assembler | Operational (5-tier delivery) | `agent/context/assembler.py` |
@@ -162,9 +163,9 @@ Telegram user (8654710624)
 
 ## Test Evidence
 
-- 350+ tests across all Phase 4 sprints
-- 0 failures
+- 129 tests across Sprint 5C (70) + Sprint 6D (41) + Phase 4.5-A (18) — 0 failures
 - 110 integration tests in Sprint 6 (110/110 pass)
+- Sprint 7: 129 tests, 0 failures (regression verified)
 
 ## Known Operational Notes
 

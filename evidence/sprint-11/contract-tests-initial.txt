@@ -1,0 +1,77 @@
+============================= test session starts =============================
+platform win32 -- Python 3.14.3, pytest-9.0.2, pluggy-1.6.0 -- C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\AKCA\oc
+plugins: anyio-4.12.1, timeout-2.4.0
+collecting ... collected 11 items
+
+agent/tests/test_mutation_contracts.py::TestMutationContract01_LifecycleRequested::test_approve_returns_lifecycle_requested FAILED [  9%]
+agent/tests/test_mutation_contracts.py::TestMutationContract02_SSEAcceptedApplied::test_sse_mutation_accepted_and_applied FAILED [ 18%]
+agent/tests/test_mutation_contracts.py::TestMutationContract03_SSERejected::test_sse_mutation_rejected_with_reason FAILED [ 27%]
+agent/tests/test_mutation_contracts.py::TestMutationContract04_SSETimedOut::test_timeout_lifecycle FAILED [ 36%]
+agent/tests/test_mutation_contracts.py::TestMutationContract05_DuplicateConflict::test_duplicate_approve_returns_409 FAILED [ 45%]
+agent/tests/test_mutation_contracts.py::TestMutationContract06_InvalidFSMState::test_approve_non_pending_returns_error FAILED [ 54%]
+agent/tests/test_mutation_contracts.py::TestMutationContract07_AuditLogFields::test_audit_log_contains_required_fields FAILED [ 63%]
+agent/tests/test_mutation_contracts.py::TestMutationContract08_AtomicArtifactCreated::test_signal_artifact_exists_after_approve FAILED [ 72%]
+agent/tests/test_mutation_contracts.py::TestMutationContract09_CSRFMissingOrigin::test_post_without_origin_returns_403 FAILED [ 81%]
+agent/tests/test_mutation_contracts.py::TestMutationContract10_TwoTabRace::test_concurrent_approve_race FAILED [ 90%]
+agent/tests/test_mutation_contracts.py::TestMutationContract11_CancelDuringExecution::test_cancel_running_mission FAILED [100%]
+
+================================== FAILURES ===================================
+_ TestMutationContract01_LifecycleRequested.test_approve_returns_lifecycle_requested _
+agent\tests\test_mutation_contracts.py:86: in test_approve_returns_lifecycle_requested
+    self.assertEqual(resp.status_code, 200)
+E   AssertionError: 404 != 200
+_ TestMutationContract02_SSEAcceptedApplied.test_sse_mutation_accepted_and_applied _
+agent\tests\test_mutation_contracts.py:134: in test_sse_mutation_accepted_and_applied
+    self.assertEqual(resp.status_code, 200)
+E   AssertionError: 404 != 200
+__ TestMutationContract03_SSERejected.test_sse_mutation_rejected_with_reason __
+agent\tests\test_mutation_contracts.py:180: in test_sse_mutation_rejected_with_reason
+    self.assertIn(resp.status_code, [200, 409, 422])
+E   AssertionError: 404 not found in [200, 409, 422]
+__________ TestMutationContract04_SSETimedOut.test_timeout_lifecycle __________
+agent\tests\test_mutation_contracts.py:210: in test_timeout_lifecycle
+    self.assertEqual(resp.status_code, 200)
+E   AssertionError: 404 != 200
+_ TestMutationContract05_DuplicateConflict.test_duplicate_approve_returns_409 _
+agent\tests\test_mutation_contracts.py:243: in test_duplicate_approve_returns_409
+    self.assertEqual(resp1.status_code, 200)
+E   AssertionError: 404 != 200
+_ TestMutationContract06_InvalidFSMState.test_approve_non_pending_returns_error _
+agent\tests\test_mutation_contracts.py:274: in test_approve_non_pending_returns_error
+    self.assertIn(resp.status_code, [409, 422],
+E   AssertionError: 404 not found in [409, 422] : Approve on non-pending should return 409 or 422
+_ TestMutationContract07_AuditLogFields.test_audit_log_contains_required_fields _
+agent\tests\test_mutation_contracts.py:308: in test_audit_log_contains_required_fields
+    self.assertEqual(resp.status_code, 200)
+E   AssertionError: 404 != 200
+_ TestMutationContract08_AtomicArtifactCreated.test_signal_artifact_exists_after_approve _
+agent\tests\test_mutation_contracts.py:343: in test_signal_artifact_exists_after_approve
+    self.assertEqual(resp.status_code, 200)
+E   AssertionError: 404 != 200
+_ TestMutationContract09_CSRFMissingOrigin.test_post_without_origin_returns_403 _
+agent\tests\test_mutation_contracts.py:378: in test_post_without_origin_returns_403
+    self.assertEqual(resp.status_code, 403,
+E   AssertionError: 404 != 403 : POST without Origin should return 403
+_______ TestMutationContract10_TwoTabRace.test_concurrent_approve_race ________
+agent\tests\test_mutation_contracts.py:417: in test_concurrent_approve_race
+    self.assertEqual(resp_tab1.status_code, 200,
+E   AssertionError: 404 != 200 : First tab approve should succeed
+__ TestMutationContract11_CancelDuringExecution.test_cancel_running_mission ___
+agent\tests\test_mutation_contracts.py:448: in test_cancel_running_mission
+    self.assertEqual(resp.status_code, 200)
+E   AssertionError: 404 != 200
+=========================== short test summary info ===========================
+FAILED agent/tests/test_mutation_contracts.py::TestMutationContract01_LifecycleRequested::test_approve_returns_lifecycle_requested
+FAILED agent/tests/test_mutation_contracts.py::TestMutationContract02_SSEAcceptedApplied::test_sse_mutation_accepted_and_applied
+FAILED agent/tests/test_mutation_contracts.py::TestMutationContract03_SSERejected::test_sse_mutation_rejected_with_reason
+FAILED agent/tests/test_mutation_contracts.py::TestMutationContract04_SSETimedOut::test_timeout_lifecycle
+FAILED agent/tests/test_mutation_contracts.py::TestMutationContract05_DuplicateConflict::test_duplicate_approve_returns_409
+FAILED agent/tests/test_mutation_contracts.py::TestMutationContract06_InvalidFSMState::test_approve_non_pending_returns_error
+FAILED agent/tests/test_mutation_contracts.py::TestMutationContract07_AuditLogFields::test_audit_log_contains_required_fields
+FAILED agent/tests/test_mutation_contracts.py::TestMutationContract08_AtomicArtifactCreated::test_signal_artifact_exists_after_approve
+FAILED agent/tests/test_mutation_contracts.py::TestMutationContract09_CSRFMissingOrigin::test_post_without_origin_returns_403
+FAILED agent/tests/test_mutation_contracts.py::TestMutationContract10_TwoTabRace::test_concurrent_approve_race
+FAILED agent/tests/test_mutation_contracts.py::TestMutationContract11_CancelDuringExecution::test_cancel_running_mission
+============================= 11 failed in 0.98s ==============================

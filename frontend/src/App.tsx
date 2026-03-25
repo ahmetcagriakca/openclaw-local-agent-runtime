@@ -1,9 +1,10 @@
 /**
- * App — router + layout + per-panel error boundaries (D-084).
+ * App — router + layout + per-panel error boundaries (D-084) + SSE provider (Sprint 10).
  */
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { Layout } from './components/Layout'
 import { ErrorBoundary } from './components/ErrorBoundary'
+import { SSEProvider } from './hooks/SSEContext'
 import { MissionListPage } from './pages/MissionListPage'
 import { MissionDetailPage } from './pages/MissionDetailPage'
 import { HealthPage } from './pages/HealthPage'
@@ -13,51 +14,53 @@ import { NotFoundPage } from './pages/NotFoundPage'
 
 export default function App() {
   return (
-    <Layout>
-      <Routes>
-        <Route path="/" element={<Navigate to="/missions" replace />} />
-        <Route
-          path="/missions"
-          element={
-            <ErrorBoundary fallbackLabel="Missions panel error">
-              <MissionListPage />
-            </ErrorBoundary>
-          }
-        />
-        <Route
-          path="/missions/:id"
-          element={
-            <ErrorBoundary fallbackLabel="Mission detail panel error">
-              <MissionDetailPage />
-            </ErrorBoundary>
-          }
-        />
-        <Route
-          path="/health"
-          element={
-            <ErrorBoundary fallbackLabel="Health panel error">
-              <HealthPage />
-            </ErrorBoundary>
-          }
-        />
-        <Route
-          path="/approvals"
-          element={
-            <ErrorBoundary fallbackLabel="Approvals panel error">
-              <ApprovalsPage />
-            </ErrorBoundary>
-          }
-        />
-        <Route
-          path="/telemetry"
-          element={
-            <ErrorBoundary fallbackLabel="Telemetry panel error">
-              <TelemetryPage />
-            </ErrorBoundary>
-          }
-        />
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
-    </Layout>
+    <SSEProvider>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<Navigate to="/missions" replace />} />
+          <Route
+            path="/missions"
+            element={
+              <ErrorBoundary fallbackLabel="Missions panel error">
+                <MissionListPage />
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path="/missions/:id"
+            element={
+              <ErrorBoundary fallbackLabel="Mission detail panel error">
+                <MissionDetailPage />
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path="/health"
+            element={
+              <ErrorBoundary fallbackLabel="Health panel error">
+                <HealthPage />
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path="/approvals"
+            element={
+              <ErrorBoundary fallbackLabel="Approvals panel error">
+                <ApprovalsPage />
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path="/telemetry"
+            element={
+              <ErrorBoundary fallbackLabel="Telemetry panel error">
+                <TelemetryPage />
+              </ErrorBoundary>
+            }
+          />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </Layout>
+    </SSEProvider>
   )
 }

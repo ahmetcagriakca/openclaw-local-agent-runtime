@@ -1,11 +1,12 @@
 /**
- * MissionDetailPage — single mission detail with stage timeline.
+ * MissionDetailPage — single mission detail with stage timeline + SSE.
  * 404 → explicit "Mission not found". Deny forensics visible.
  */
 import { useCallback, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { getMission } from '../api/client'
 import { usePolling } from '../hooks/usePolling'
+import { useSSEInvalidation } from '../hooks/SSEContext'
 import { DataQualityBadge } from '../components/DataQualityBadge'
 import { FreshnessIndicator } from '../components/FreshnessIndicator'
 import { MissionStateBadge } from '../components/MissionStateBadge'
@@ -23,6 +24,9 @@ export function MissionDetailPage() {
   }, [id])
 
   const { data, error, loading, refresh, lastFetchedAt } = usePolling(fetcher)
+
+  // SSE: refresh on mission_updated (all — filtering by missionId happens server-side or is acceptable)
+  useSSEInvalidation('mission_updated', refresh)
 
   const is404 = error instanceof ApiError && error.status === 404
 

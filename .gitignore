@@ -48,3 +48,6 @@ logs/missions/
 
 # Legacy archive
 olds/
+
+# Visual Studio settings and workspace files
+.vs/

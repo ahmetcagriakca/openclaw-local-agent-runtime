@@ -1,9 +1,10 @@
 /**
- * HealthPage — health status + capabilities.
+ * HealthPage — health status + capabilities + SSE invalidation.
  * Capability tri-state: available ≠ unavailable ≠ unknown.
  */
 import { getHealth, getCapabilities } from '../api/client'
 import { usePolling } from '../hooks/usePolling'
+import { useSSEInvalidation } from '../hooks/SSEContext'
 import { DataQualityBadge } from '../components/DataQualityBadge'
 import { FreshnessIndicator } from '../components/FreshnessIndicator'
 import { CapabilityStatus } from '../types/api'
@@ -24,6 +25,10 @@ const CAP_STATUS: Record<string, { color: string; icon: string }> = {
 export function HealthPage() {
   const health = usePolling(getHealth)
   const caps = usePolling(getCapabilities)
+
+  // SSE: refresh on health/capability changes
+  useSSEInvalidation('health_changed', health.refresh)
+  useSSEInvalidation('capability_changed', caps.refresh)
 
   return (
     <div className="space-y-6">

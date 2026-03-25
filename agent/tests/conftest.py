@@ -1,0 +1,15 @@
+# conftest.py - pytest configuration
+# Disable pytest-anyio plugin to prevent event loop conflicts
+# with asyncio.run() used in SSE tests and TestClient.
+
+def pytest_configure(config):
+    """Unregister anyio plugin if present - prevents event loop conflicts."""
+    try:
+        plugin = config.pluginmanager.get_plugin("anyio")
+        if plugin:
+            config.pluginmanager.unregister(plugin)
+    except Exception:
+        pass
+
+# test_sprint_5c.py has module-level sys.exit() - exclude from collection
+collect_ignore = ["test_sprint_5c.py"]

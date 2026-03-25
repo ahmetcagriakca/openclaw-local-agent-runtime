@@ -1,16 +1,20 @@
 /**
- * MissionListPage — lists all missions with polling.
+ * MissionListPage — lists all missions with polling + SSE invalidation.
  * Empty/loading/error states explicit. Silent absence forbidden.
  */
 import { Link } from 'react-router-dom'
 import { getMissions } from '../api/client'
 import { usePolling } from '../hooks/usePolling'
+import { useSSEInvalidation } from '../hooks/SSEContext'
 import { DataQualityBadge } from '../components/DataQualityBadge'
 import { FreshnessIndicator } from '../components/FreshnessIndicator'
 import { MissionStateBadge } from '../components/MissionStateBadge'
 
 export function MissionListPage() {
   const { data, error, loading, refresh, lastFetchedAt } = usePolling(getMissions)
+
+  // SSE: immediate refresh on mission changes
+  useSSEInvalidation(['mission_list_changed', 'mission_updated'], refresh)
 
   return (
     <div className="space-y-4">

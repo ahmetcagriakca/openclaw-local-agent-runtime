@@ -12,22 +12,24 @@ Windows 11 + WSL2 Ubuntu-E + Python 3.14 + PowerShell.
 - Phase 4.5-C: COMPLETED (Sprint 7 — operational tuning, 10/10 tasks)
 - Phase 5A-1: COMPLETED (Sprint 8 — backend read model, 17/17 tasks, 170 tests)
 - Phase 5A-2: COMPLETED (Sprint 9 — React read-only UI, 10/10 tasks, 18 frontend tests)
-- Phase 5B: NEXT (Sprint 10 — live updates / SSE)
-- Frozen decisions: D-059 → D-084 (25 decisions)
+- Phase 5B: COMPLETED (Sprint 10 — SSE live updates, 8/8 tasks, 114 backend + 29 frontend tests)
+- Phase 5C: NEXT (Sprint 11 — intervention)
+- Frozen decisions: D-059 → D-088 (29 decisions)
 
 ## Last Completed Sprint
 
-Sprint 9 — Phase 5A-2: React Read-Only UI
+Sprint 10 — Phase 5B: SSE Live Updates
 
 Outputs:
-- React + TS + Tailwind dashboard on `:3000` with Vite proxy → `:8003`
-- 22 TS types from 22 frozen Pydantic schemas (1:1)
-- Typed API client (8 endpoints) + usePolling hook (30s, D-083)
-- DataQualityBadge (6-state), FreshnessIndicator, MissionStateBadge
-- 5 pages: Missions, MissionDetail, Health, Approvals, Telemetry
-- Per-panel ErrorBoundary (D-084), Sidebar, Layout, 404 page
-- 18 Vitest tests, 0 failures, production build OK
-- Decisions: D-081 (Tailwind), D-082 (manual TS types), D-083 (30s polling), D-084 (ErrorBoundary)
+- FileWatcher: mtime polling 1s (D-085), debounce 500ms/2s
+- SSEManager: broadcast, heartbeat 30s, max 10 clients, event buffer 100
+- SSE endpoint: GET /api/v1/events/stream, Last-Event-ID replay, D-087 localhost
+- useSSE hook: EventSource, exponential backoff (D-088), polling fallback
+- SSEContext + useSSEInvalidation: shared connection, per-page subscription
+- ConnectionIndicator: 4-state (connecting/connected/reconnecting/polling)
+- All 5 pages: SSE invalidation + polling fallback preserved
+- Backend 114 tests, Frontend 29 tests, 0 failures
+- Decisions: D-085 (polling watcher), D-086 (per-entity events), D-087 (localhost SSE), D-088 (backoff + fallback)
 
 ## Key Reference Docs
 
@@ -84,13 +86,13 @@ config/capabilities.json           — capability manifest (auto-generated)
 ## Build & Test
 
 ```bash
-# Backend tests (170 total)
+# Backend tests (114 total, includes 14 SSE)
 cd agent && python -m pytest tests/ -v
 
 # Frontend (requires Node.js 20 — portable at C:\Users\AKCA\node20\)
 $env:Path = "C:\Users\AKCA\node20\node-v20.18.1-win-x64;$env:Path"
 cd frontend && npx tsc --noEmit        # 0 errors
-cd frontend && npx vitest run           # 18 tests
+cd frontend && npx vitest run           # 29 tests
 cd frontend && npm run build            # production build
 
 # E2E test
@@ -106,7 +108,7 @@ Mission Control Center — "See Everything, Including What's Missing"
 
 - ✅ Sprint 8: FastAPI backend on :8003 — D-061, D-065, D-067, D-068, D-070
 - ✅ Sprint 9: React UI on :3000 — D-081, D-082, D-083, D-084
-- ⬜ Sprint 10: SSE live updates — D-076
+- ✅ Sprint 10: SSE live updates — D-085, D-086, D-087, D-088
 - ⬜ Sprint 11: Intervention (approve/deny from UI)
 - ⬜ Sprint 12: Polish + migration
 

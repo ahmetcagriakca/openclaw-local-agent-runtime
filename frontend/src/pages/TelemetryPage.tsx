@@ -1,11 +1,12 @@
 /**
- * TelemetryPage — telemetry events, filterable by mission_id.
+ * TelemetryPage — telemetry events, filterable by mission_id + SSE invalidation.
  * Newest-first. Empty state explicit.
  */
 import { useCallback, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { getTelemetry } from '../api/client'
 import { usePolling } from '../hooks/usePolling'
+import { useSSEInvalidation } from '../hooks/SSEContext'
 import { FreshnessIndicator } from '../components/FreshnessIndicator'
 
 export function TelemetryPage() {
@@ -19,6 +20,9 @@ export function TelemetryPage() {
   )
 
   const { data, error, loading, refresh, lastFetchedAt } = usePolling(fetcher)
+
+  // SSE: refresh on new telemetry
+  useSSEInvalidation('telemetry_new', refresh)
 
   const handleFilter = () => {
     if (inputValue) {

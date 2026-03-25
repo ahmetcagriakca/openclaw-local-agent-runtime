@@ -1,9 +1,10 @@
 /**
- * ApprovalsPage — read-only approval list.
+ * ApprovalsPage — read-only approval list + SSE invalidation.
  * Empty state explicit: "No pending approvals".
  */
 import { getApprovals } from '../api/client'
 import { usePolling } from '../hooks/usePolling'
+import { useSSEInvalidation } from '../hooks/SSEContext'
 import { FreshnessIndicator } from '../components/FreshnessIndicator'
 import { DataQualityBadge } from '../components/DataQualityBadge'
 
@@ -16,6 +17,9 @@ const STATUS_COLOR: Record<string, string> = {
 
 export function ApprovalsPage() {
   const { data, error, loading, refresh, lastFetchedAt } = usePolling(getApprovals)
+
+  // SSE: refresh on approval changes
+  useSSEInvalidation('approval_changed', refresh)
 
   return (
     <div className="space-y-4">

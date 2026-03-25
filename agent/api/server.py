@@ -20,6 +20,8 @@ from fastapi.responses import JSONResponse
 from api.normalizer import MissionNormalizer
 from api.capabilities import CapabilityChecker
 from api.schemas import APIError
+from api.file_watcher import FileWatcher
+from api.sse_manager import SSEManager
 from utils.atomic_write import atomic_write_json
 
 # ── Paths ────────────────────────────────────────────────────────
@@ -130,9 +132,29 @@ async def lifespan(app: FastAPI):
     import asyncio
     heartbeat_task = asyncio.create_task(_heartbeat_loop())
 
+    # Step 6: FileWatcher + SSE Manager (Sprint 10)
+    event_queue: asyncio.Queue = asyncio.Queue(maxsize=200)
+    file_watcher = FileWatcher(
+        missions_dir=MISSIONS_DIR,
+        telemetry_path=TELEMETRY_PATH,
+        capabilities_path=CAPABILITIES_PATH,
+        services_path=SERVICES_PATH,
+        approvals_dir=APPROVALS_DIR,
+        event_queue=event_queue,
+    )
+    sse_manager = SSEManager()
+    app.state.sse_manager = sse_manager
+
+    await file_watcher.start()
+    await sse_manager.start_heartbeat()
+    await sse_manager.start_watcher_bridge(event_queue)
+    logger.info("MCC startup: SSE + FileWatcher ready")
+
     yield
 
     # Shutdown
+    await file_watcher.stop()
+    await sse_manager.shutdown()
     heartbeat_task.cancel()
     try:
         await heartbeat_task
@@ -195,11 +217,13 @@ from api.mission_api import router as mission_router
 from api.approval_api import router as approval_router
 from api.telemetry_api import router as telemetry_router
 from api.health_api import router as health_router
+from api.sse_api import router as sse_router
 
 app.include_router(mission_router, prefix="/api/v1")
 app.include_router(approval_router, prefix="/api/v1")
 app.include_router(telemetry_router, prefix="/api/v1")
 app.include_router(health_router, prefix="/api/v1")
+app.include_router(sse_router, prefix="/api/v1")
 
 
 # ── Main ────────────────────────────────────────────────────────

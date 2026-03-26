@@ -150,7 +150,13 @@ class MissionController:
                 stage["working_set"] = working_set
 
             stage["status"] = "running"
+            stage["started_at"] = datetime.now(timezone.utc).isoformat()
             self._save_mission(mission)
+            self._persist_mission_state(mission_state)
+            # Emit live summary so UI can track progress
+            self._emit_mission_summary(mission_id, mission, assembler,
+                                       expansion_broker, "running",
+                                       mission_state=mission_state)
 
             try:
                 # Build artifact context from Assembler for this stage
@@ -189,8 +195,15 @@ class MissionController:
                                                "Stage reported failure"))
 
                 stage["status"] = "completed"
+                stage["finished_at"] = datetime.now(timezone.utc).isoformat()
                 stage["result"] = result.get("response", "")
                 stage["artifacts"] = result.get("artifacts", [])
+                # Save immediately so UI sees progress
+                self._save_mission(mission)
+                self._persist_mission_state(mission_state)
+                self._emit_mission_summary(mission_id, mission, assembler,
+                                           expansion_broker, "running",
+                                           mission_state=mission_state)
                 all_artifacts.extend(stage["artifacts"])
 
                 # Store stage output in Assembler with D-047 header
@@ -254,6 +267,7 @@ class MissionController:
                     continue
                 elif recovery["action"] in ("abort", "escalate"):
                     stage["status"] = "failed"
+                    stage["finished_at"] = datetime.now(timezone.utc).isoformat()
                     stage["error"] = error_context
                     failure_reason = (f"Stage {stage_id} failed: "
                                       f"{recovery.get('reason', error_context)}")

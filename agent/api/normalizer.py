@@ -514,6 +514,8 @@ class MissionNormalizer:
                 policyDenies=s.get("policyDenies",
                                    s.get("policy_deny_count", 0)),
                 durationMs=s.get("durationMs", s.get("duration_ms")),
+                startedAt=s.get("startedAt", s.get("started_at")),
+                finishedAt=s.get("finishedAt", s.get("finished_at")),
                 isRework=s.get("isRework", s.get("is_rework", False)),
                 reworkCycle=s.get("reworkCycle", s.get("rework_cycle", 0)),
                 isRecovery=s.get("isRecovery", s.get("is_recovery", False)),

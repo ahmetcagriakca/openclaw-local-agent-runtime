@@ -80,9 +80,14 @@ def _run_mission_background(mission_id: str, goal: str, missions_dir: Path):
         )
 
         # Update placeholder with result and link to controller's real mission
-        status = result.get("status", "unknown")
-        error = result.get("error")
-        ctrl_id = result.get("missionId", "")
+        if isinstance(result, dict):
+            status = result.get("status", "unknown")
+            error = result.get("error")
+            ctrl_id = result.get("missionId", "")
+        else:
+            status = "completed"
+            error = None
+            ctrl_id = ""
         _update_placeholder(placeholder_file, status, error,
                             finished=True,
                             controller_id=ctrl_id)

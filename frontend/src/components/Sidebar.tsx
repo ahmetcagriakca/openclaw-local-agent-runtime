@@ -1,5 +1,5 @@
 /**
- * Sidebar navigation — active route highlighted.
+ * Sidebar navigation — supports full, collapsed (icon-only), and horizontal modes.
  */
 import { NavLink } from 'react-router-dom'
 
@@ -13,9 +13,11 @@ const NAV_ITEMS = [
 interface SidebarProps {
   onNavigate?: () => void
   horizontal?: boolean
+  collapsed?: boolean
 }
 
-export function Sidebar({ onNavigate, horizontal }: SidebarProps) {
+export function Sidebar({ onNavigate, horizontal, collapsed }: SidebarProps) {
+  // Horizontal mode (mobile dropdown)
   if (horizontal) {
     return (
       <nav aria-label="Main navigation" className="px-4 py-3">
@@ -43,6 +45,37 @@ export function Sidebar({ onNavigate, horizontal }: SidebarProps) {
     )
   }
 
+  // Collapsed mode (icon-only)
+  if (collapsed) {
+    return (
+      <nav aria-label="Main navigation" className="flex w-14 flex-col items-center border-r border-gray-800 bg-gray-900 py-4">
+        <div className="mb-6">
+          <span className="text-lg">⚙</span>
+        </div>
+        <ul role="list" className="space-y-2">
+          {NAV_ITEMS.map((item) => (
+            <li key={item.to}>
+              <NavLink
+                to={item.to}
+                title={item.label}
+                className={({ isActive }) =>
+                  `flex h-9 w-9 items-center justify-center rounded-lg text-base transition ${
+                    isActive
+                      ? 'bg-gray-700/80 text-white'
+                      : 'text-gray-400 hover:bg-gray-800 hover:text-gray-200'
+                  }`
+                }
+              >
+                <span>{item.icon}</span>
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    )
+  }
+
+  // Full mode (desktop default)
   return (
     <nav aria-label="Main navigation" className="flex w-56 flex-col border-r border-gray-800 bg-gray-900 px-3 py-4">
       <div className="mb-6 px-2">

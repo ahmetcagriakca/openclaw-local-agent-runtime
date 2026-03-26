@@ -404,26 +404,66 @@ Respond ONLY with a JSON object, no markdown:
   ]
 }}"""
 
-        # Step 3: LLM fills in instructions
+        # Step 3: LLM fills in instructions (with retry on empty/invalid response)
         messages = [
             {"role": "system", "content": constrained_prompt},
             {"role": "user", "content": goal}
         ]
 
-        response = provider.chat(messages, tools=[], max_tokens=2000)
+        plan = None
+        last_error = None
+        for attempt in range(2):
+            try:
+                response = provider.chat(messages, tools=[], max_tokens=2000)
+                text = response.text or ""
+                text = text.strip()
 
-        # Parse JSON response
-        text = response.text or ""
-        text = text.strip()
-        if text.startswith("```"):
-            text = text.split("\n", 1)[1] if "\n" in text else text[3:]
-        if text.endswith("```"):
-            text = text.rsplit("```", 1)[0]
-        text = text.strip()
-        if text.startswith("json"):
-            text = text[4:].strip()
+                if not text:
+                    last_error = "LLM returned empty response"
+                    continue
 
-        plan = json.loads(text)
+                # Strip markdown fences
+                if text.startswith("```"):
+                    text = text.split("\n", 1)[1] if "\n" in text else text[3:]
+                if text.endswith("```"):
+                    text = text.rsplit("```", 1)[0]
+                text = text.strip()
+                if text.startswith("json"):
+                    text = text[4:].strip()
+
+                # Try to find JSON in text if it doesn't start with {
+                if not text.startswith("{"):
+                    import re
+                    json_match = re.search(r'\{[\s\S]*\}', text)
+                    if json_match:
+                        text = json_match.group(0)
+
+                plan = json.loads(text)
+                break
+            except json.JSONDecodeError as e:
+                last_error = f"LLM response is not valid JSON: {e}. Response was: {(response.text or '')[:200]}"
+                continue
+            except Exception as e:
+                last_error = str(e)
+                continue
+
+        # Fallback: if LLM failed to produce valid JSON, use template directly
+        if plan is None:
+            emit_policy_event("planning_llm_fallback", {
+                "mission_id": mission_id,
+                "reason": last_error,
+            })
+            plan = {"stages": [
+                {
+                    "id": f"stage-{i+1}",
+                    "specialist": s["specialist"],
+                    "skill": s["skill"],
+                    "objective": goal,
+                    "instruction": f"Role: {s['specialist']}. Perform {s['skill']} for: {goal}",
+                }
+                for i, s in enumerate(template)
+            ]}
+
         stages = plan.get("stages", [])
 
         # Step 4: Force template if planner deviated

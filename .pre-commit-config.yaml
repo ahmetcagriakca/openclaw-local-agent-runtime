@@ -1,0 +1,24 @@
+repos:
+  - repo: local
+    hooks:
+      - id: ruff-check
+        name: ruff lint
+        entry: bash -c 'cd agent && python -m ruff check .'
+        language: system
+        types: [python]
+        pass_filenames: false
+
+      - id: tsc-check
+        name: typescript check
+        entry: bash -c 'cd frontend && npx tsc --noEmit'
+        language: system
+        types_or: [ts, tsx]
+        pass_filenames: false
+
+      - id: pytest-quick
+        name: pytest (quick)
+        entry: bash -c 'cd agent && python -m pytest tests/test_eventbus.py tests/test_stage_result.py -q --timeout=10'
+        language: system
+        types: [python]
+        pass_filenames: false
+        stages: [pre-push]

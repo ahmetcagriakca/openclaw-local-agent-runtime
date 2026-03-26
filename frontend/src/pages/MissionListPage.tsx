@@ -13,7 +13,7 @@ import { FreshnessIndicator } from '../components/FreshnessIndicator'
 import { MissionStateBadge } from '../components/MissionStateBadge'
 
 export function MissionListPage() {
-  const { data, error, loading, refresh, lastFetchedAt } = usePolling(getMissions)
+  const { data, error, loading, refresh, lastFetchedAt } = usePolling(getMissions, 10_000)
   const [showCreate, setShowCreate] = useState(false)
   const [goal, setGoal] = useState('')
   const [complexity, setComplexity] = useState('medium')

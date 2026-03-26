@@ -177,6 +177,9 @@ class MissionController:
 
                 stage["status"] = "completed"
                 stage["result"] = result.get("response", "")
+                stage["system_prompt"] = result.get("systemPrompt", "")
+                stage["user_prompt"] = result.get("userPrompt", "")
+                stage["turns_used"] = result.get("turnsUsed", 0)
                 stage["artifacts"] = result.get("artifacts", [])
                 stage["duration_ms"] = result.get("totalDurationMs", 0)
                 stage["tool_call_count"] = len(result.get("toolCalls", []))
@@ -671,6 +674,12 @@ Respond ONLY with a JSON object, no markdown:
                 stage_entry["error"] = stage["error"]
             if stage.get("result"):
                 stage_entry["result"] = stage["result"][:2000]
+            if stage.get("system_prompt"):
+                stage_entry["systemPrompt"] = stage["system_prompt"][:3000]
+            if stage.get("user_prompt"):
+                stage_entry["userPrompt"] = stage["user_prompt"][:3000]
+            if stage.get("turns_used"):
+                stage_entry["turnsUsed"] = stage["turns_used"]
             if stage.get("duration_ms"):
                 stage_entry["durationMs"] = stage["duration_ms"]
             if stage.get("started_at"):

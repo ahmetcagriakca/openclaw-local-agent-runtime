@@ -93,6 +93,9 @@ class StageDetail(BaseModel):
     status: str = "unknown"
     error: Optional[str] = None
     result: Optional[str] = None
+    systemPrompt: Optional[str] = None
+    userPrompt: Optional[str] = None
+    turnsUsed: int = 0
     gateResults: Optional[GateResultDetail] = None
     denyForensics: Optional[dict] = None
     isRework: bool = False

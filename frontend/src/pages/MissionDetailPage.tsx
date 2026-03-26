@@ -28,7 +28,7 @@ export function MissionDetailPage() {
     return getMission(id)
   }, [id])
 
-  const { data, error, loading, refresh, lastFetchedAt } = usePolling(fetcher)
+  const { data, error, loading, refresh, lastFetchedAt } = usePolling(fetcher, 10_000)
 
   // SSE: refresh on mission_updated + mutation events
   useSSEInvalidation(['mission_updated', 'mutation_applied', 'mutation_rejected'], refresh)

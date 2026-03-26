@@ -73,6 +73,9 @@ export interface StageDetail {
   status: string
   error: string | null
   result: string | null
+  systemPrompt: string | null
+  userPrompt: string | null
+  turnsUsed: number
   gateResults: GateResultDetail | null
   denyForensics: Record<string, unknown> | null
   isRework: boolean

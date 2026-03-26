@@ -12,6 +12,8 @@ interface StageCardProps {
 
 export function StageCard({ stage }: StageCardProps) {
   const [showResult, setShowResult] = useState(false)
+  const [showSystemPrompt, setShowSystemPrompt] = useState(false)
+  const [showUserPrompt, setShowUserPrompt] = useState(false)
 
   return (
     <div className="rounded-lg border border-gray-700 bg-gray-800/60 p-4 space-y-3">
@@ -47,12 +49,51 @@ export function StageCard({ stage }: StageCardProps) {
       <div className="flex flex-wrap gap-4 text-xs text-gray-400">
         <span>Tool calls: <span className="text-gray-200">{stage.toolCalls}</span></span>
         <span>Policy denies: <span className="text-gray-200">{stage.policyDenies}</span></span>
+        {stage.turnsUsed > 0 && (
+          <span>Turns: <span className="text-gray-200">{stage.turnsUsed}</span></span>
+        )}
         {stage.durationMs != null && (
           <span>Duration: <span className="text-gray-200">{(stage.durationMs / 1000).toFixed(1)}s</span></span>
         )}
         {stage.startedAt && <span>Started: {new Date(stage.startedAt).toLocaleTimeString()}</span>}
         {stage.finishedAt && <span>Finished: {new Date(stage.finishedAt).toLocaleTimeString()}</span>}
       </div>
+
+      {/* System Prompt — collapsible */}
+      {stage.systemPrompt && (
+        <div className="rounded border border-purple-700/40 bg-purple-950/20 p-3">
+          <button
+            onClick={() => setShowSystemPrompt(!showSystemPrompt)}
+            className="flex w-full items-center justify-between text-sm font-medium text-purple-300 hover:text-purple-100"
+          >
+            <span>System Prompt</span>
+            <span className="text-xs text-gray-500">{showSystemPrompt ? 'Hide' : 'Show'} ({stage.systemPrompt.length} chars)</span>
+          </button>
+          {showSystemPrompt && (
+            <pre className="mt-2 max-h-64 overflow-auto whitespace-pre-wrap break-words rounded bg-gray-950/50 p-2 text-xs text-purple-200/80 leading-relaxed">
+              {stage.systemPrompt}
+            </pre>
+          )}
+        </div>
+      )}
+
+      {/* User Prompt (instruction + context) — collapsible */}
+      {stage.userPrompt && (
+        <div className="rounded border border-cyan-700/40 bg-cyan-950/20 p-3">
+          <button
+            onClick={() => setShowUserPrompt(!showUserPrompt)}
+            className="flex w-full items-center justify-between text-sm font-medium text-cyan-300 hover:text-cyan-100"
+          >
+            <span>User Prompt (Instruction + Context)</span>
+            <span className="text-xs text-gray-500">{showUserPrompt ? 'Hide' : 'Show'} ({stage.userPrompt.length} chars)</span>
+          </button>
+          {showUserPrompt && (
+            <pre className="mt-2 max-h-96 overflow-auto whitespace-pre-wrap break-words rounded bg-gray-950/50 p-2 text-xs text-cyan-200/80 leading-relaxed">
+              {stage.userPrompt}
+            </pre>
+          )}
+        </div>
+      )}
 
       {/* Error Detail — prominent red box when stage has error */}
       {stage.error && (

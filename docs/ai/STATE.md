@@ -173,7 +173,7 @@ Telegram user (8654710624)
 
 ## Architectural Decisions
 
-101 frozen decisions (D-001 through D-101). Decision debt zero. See `docs/ai/DECISIONS.md`.
+103 frozen decisions (D-001 through D-103). Decision debt zero. See `docs/ai/DECISIONS.md`.
 
 ## Test Evidence
 
@@ -185,6 +185,7 @@ Telegram user (8654710624)
 - Sprint 10: Backend 114 tests (100 legacy + 14 SSE), 0 failures. Frontend 29 Vitest tests (6 files), 0 failures.
 - Sprint 11: Backend 195 tests (includes 11 contract), 0 failures. Frontend 29 Vitest tests, 0 failures.
 - Sprint 12: Backend 234 tests (195 legacy + 39 E2E), 0 failures. Frontend 29 Vitest tests, 0 failures. Phase 5 scoreboard 15/15.
+- Sprint 13 (in progress): Backend 225 tests (non-E2E), 0 failures. +30 new tests (L1/L2, token report, rework limiter, context tiers).
 
 ## Known Operational Notes
 

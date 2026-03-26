@@ -114,8 +114,8 @@ async def cancel_mission(mission_id: str, request: Request):
     if current_state not in CANCEL_VALID_STATES:
         raise HTTPException(
             status_code=409,
-            detail=f"Mission {mission_id} is '{current_state}', "
-                   f"cannot cancel. Valid states: {sorted(CANCEL_VALID_STATES)}",
+            detail=f"Bu mission iptal edilemez — mevcut durum: '{current_state}'. "
+                   f"Sadece aktif mission'lar iptal edilebilir ({', '.join(sorted(CANCEL_VALID_STATES))}).",
         )
 
     # 2. Check for pending duplicate
@@ -124,8 +124,9 @@ async def cancel_mission(mission_id: str, request: Request):
     if existing:
         raise HTTPException(
             status_code=409,
-            detail=f"Pending cancel request already exists for {mission_id} "
-                   f"(requestId={existing})",
+            detail=f"Bu mission icin zaten bekleyen bir iptal istegi var. "
+                   f"Onceki istek islenmeden yeni istek gonderilemez. "
+                   f"Mission detay sayfasindan bekleyen sinyali silebilirsiniz.",
         )
 
     # 3. Write atomic signal artifact
@@ -188,10 +189,16 @@ async def retry_mission(mission_id: str, request: Request):
 
     current_state = state_data.get("state") or state_data.get("status", "unknown")
     if current_state not in RETRY_VALID_STATES:
+        state_label = {
+            "completed": "basariyla tamamlanmis",
+            "pending": "henuz baslatilmamis",
+            "planning": "planlama asamasinda",
+            "executing": "calisiyor",
+        }.get(current_state, current_state)
         raise HTTPException(
             status_code=409,
-            detail=f"Mission {mission_id} is '{current_state}', "
-                   f"cannot retry. Valid states: {sorted(RETRY_VALID_STATES)}",
+            detail=f"Bu mission tekrar denenemez — mevcut durum: '{current_state}' ({state_label}). "
+                   f"Sadece basarisiz mission'lar tekrar denenebilir ({', '.join(sorted(RETRY_VALID_STATES))}).",
         )
 
     # 2. Check for pending duplicate
@@ -200,8 +207,9 @@ async def retry_mission(mission_id: str, request: Request):
     if existing:
         raise HTTPException(
             status_code=409,
-            detail=f"Pending retry request already exists for {mission_id} "
-                   f"(requestId={existing})",
+            detail=f"Bu mission icin zaten bekleyen bir retry istegi var. "
+                   f"Onceki istek islenmeden yeni istek gonderilemez. "
+                   f"Mission detay sayfasindan bekleyen sinyali silebilirsiniz.",
         )
 
     # 3. Write atomic signal artifact

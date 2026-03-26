@@ -82,7 +82,16 @@ export function useMutation(options: UseMutationOptions): UseMutationResult {
     } catch (err: unknown) {
       activeRequestIdRef.current = null
       clearTimer()
-      const msg = err instanceof Error ? err.message : 'Mutation failed'
+      // Extract detail from API error response for user-friendly message
+      let msg = 'Mutation failed'
+      if (err && typeof err === 'object' && 'body' in err) {
+        const body = (err as { body: unknown }).body
+        if (body && typeof body === 'object' && 'detail' in body) {
+          msg = String((body as { detail: string }).detail)
+        }
+      } else if (err instanceof Error) {
+        msg = err.message
+      }
       setErrorMessage(msg)
       setStatus('error')
       onError?.(msg)

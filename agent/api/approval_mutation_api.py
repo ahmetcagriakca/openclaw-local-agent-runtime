@@ -53,10 +53,13 @@ def _validate_approval_for_mutation(
     """
     status = approval_data.get("status", "unknown")
     if status != "pending":
+        op_label = {"approve": "onaylanamaz", "reject": "reddedilemez"}.get(operation, operation)
+        status_label = {"approved": "zaten onaylanmis", "denied": "zaten reddedilmis",
+                        "timeout": "zaman asimina ugramis"}.get(status, status)
         raise HTTPException(
             status_code=409,
-            detail=f"Approval {apv_id} is '{status}', expected 'pending'. "
-                   f"Cannot {operation} a non-pending approval.",
+            detail=f"Bu approval {op_label} — mevcut durum: '{status}' ({status_label}). "
+                   f"Sadece 'pending' durumundaki approval'lar islem gorebilir.",
         )
 
 
@@ -110,8 +113,8 @@ async def approve_approval(apv_id: str, request: Request):
     if existing:
         raise HTTPException(
             status_code=409,
-            detail=f"Pending approve request already exists for {apv_id} "
-                   f"(requestId={existing})",
+            detail=f"Bu approval icin zaten bekleyen bir onay istegi var. "
+                   f"Onceki istek islenmeden yeni istek gonderilemez.",
         )
 
     # 3. Write atomic signal artifact (D-001: no direct service call)
@@ -180,8 +183,8 @@ async def reject_approval(apv_id: str, request: Request):
     if existing:
         raise HTTPException(
             status_code=409,
-            detail=f"Pending reject request already exists for {apv_id} "
-                   f"(requestId={existing})",
+            detail=f"Bu approval icin zaten bekleyen bir red istegi var. "
+                   f"Onceki istek islenmeden yeni istek gonderilemez.",
         )
 
     # 3. Write atomic signal artifact

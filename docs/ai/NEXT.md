@@ -18,16 +18,17 @@
 ## Current Sprint
 
 ```
-Sprint 13  Stabilization  Known issues + repo cleanup  ~11 task  ← ACTIVE
+Sprint 14A  Event-Driven + Backend Restructure  ~27 task  ← ACTIVE
 ```
 
 ## Completed Sprints
 
 ```
 Sprint 12  Phase 5D     Polish + Phase 5 Closure  25 task  CLOSED (2026-03-26)
+Sprint 13  Stabilization  L1/L2 + cleanup  10 task  CLOSED (2026-03-26)
 ```
 
-### Sprint 13 Deliverables (review_pending)
+### Sprint 13 Deliverables (closed)
 
 - D-102 L1/L2: StageResult isolation + distance-based context tiers
 - 13.1: Token report ID mismatch fix

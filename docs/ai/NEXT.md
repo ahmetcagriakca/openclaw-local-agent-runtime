@@ -1,7 +1,7 @@
 # Next Steps
 
 **Last updated:** 2026-03-26
-**Current:** Sprint 12 KICKOFF — Phase 5D
+**Current:** Sprint 13 — Stabilization
 
 ---
 
@@ -18,25 +18,8 @@
 ## Current Sprint
 
 ```
-Sprint 12  Phase 5D     Polish + Phase 5 Closure  ~25 task  ← ACTIVE
-```
-
-### Sprint 12 Scope
-
-- D-021→D-058 decision debt extraction (Task 0)
-- Feature gap analysis :8002 vs :8003
-- E2E framework setup + 12+ test scenarios
-- Bundle optimization + Lighthouse benchmarks
-- Accessibility audit + keyboard navigation
-- API documentation
-- Operator user guide
-- Approval sunset Phase 2
-- Phase 5 closure scoreboard 15/15
-
-## Upcoming Sprints
-
-```
-Sprint 13  Stabilization  Repo structure migration + cleanup  ~11 task
+Sprint 12  Phase 5D     Polish + Phase 5 Closure  25 task  closure_status=review_pending
+Sprint 13  Stabilization  Known issues + repo cleanup  ~11 task  (blocked by Sprint 12 closure)
 ```
 
 ### Sprint 13 Scope (Draft)

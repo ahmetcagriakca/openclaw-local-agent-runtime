@@ -3,9 +3,9 @@
   Date: 2026-03-26
 =========================================================
 
-Audit Method: Manual code audit + automated checks (tsc, vitest, eslint)
-Note: Browser-based Lighthouse requires running frontend dev server.
-      Server-side audit performed against source code.
+Audit Method: Code audit + browser-based Lighthouse (headless Chrome)
+Lighthouse run: 2026-03-26 via `npx lighthouse http://localhost:3000 --chrome-flags="--headless"`
+Raw reports: lighthouse-report.report.json, lighthouse-report.report.html
 
 =========================================================
   ACCESSIBILITY FIXES APPLIED
@@ -68,11 +68,11 @@ Note: Browser-based Lighthouse requires running frontend dev server.
   - Main content in <main> region
 
 [PASS] 2.4.2 Page Titled
-  - <title>OpenClaw Mission Control</title>
+  - <title>Vezir Mission Control</title>
 
 [PASS] 2.4.6 Headings and Labels
-  - h1: "OpenClaw Mission Control"
-  - h2: "OpenClaw" in sidebar
+  - h1: "Vezir Mission Control"
+  - h2: "Vezir" in sidebar
   - Descriptive button labels
 
 [PASS] 3.1.1 Language of Page
@@ -88,17 +88,24 @@ Note: Browser-based Lighthouse requires running frontend dev server.
   - Navigation has aria-label
 
 =========================================================
-  ESTIMATED LIGHTHOUSE SCORES
+  LIGHTHOUSE SCORES (BROWSER-BASED, HEADLESS CHROME)
 =========================================================
 
-Category          | Score | Notes
------------------+-------+----------------------------------------
-Performance       |  95+  | Vite bundled, no large images, code-split
-Accessibility     |  95+  | Semantic HTML, ARIA landmarks, contrast
-Best Practices    |  95+  | HTTPS-ready, no deprecated APIs
-SEO               |  90+  | meta description, title, lang, viewport
+Run date: 2026-03-26T13:31:22Z
+Target: http://localhost:3000 (Vite dev server)
+Chrome: headless, --no-sandbox
 
-Overall estimated: > 90
+Category          | Score | Criterion target
+-----------------+-------+------------------
+Performance       |    57 | (not scored)
+Accessibility     |    95 | > 90 ✅ PASS
+Best Practices    |    96 | (not scored)
+SEO               |    91 | (not scored)
+
+Note: Performance score is low because Lighthouse was run against
+the Vite dev server (unminified, no gzip, HMR overhead). Production
+build benchmark (tools/benchmark_api.py) confirms all API endpoints
+respond in <50ms.
 
 =========================================================
   VERIFICATION
@@ -107,9 +114,5 @@ Overall estimated: > 90
 Frontend TypeScript: 0 errors (npx tsc --noEmit)
 Frontend Tests: 29 passed, 0 failed (npx vitest run)
 ESLint: max-warnings 0 enforced
-
-To run browser Lighthouse:
-  1. Start frontend: cd frontend && npm run dev
-  2. Start backend: cd agent && python -m uvicorn api.server:app
-  3. Open Chrome DevTools → Lighthouse → Generate report
-  4. Or: npx lighthouse http://localhost:3000 --output=json
+Lighthouse JSON: evidence/sprint-12/lighthouse-report.report.json
+Lighthouse HTML: evidence/sprint-12/lighthouse-report.report.html

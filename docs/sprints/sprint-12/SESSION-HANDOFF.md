@@ -1,143 +1,125 @@
-# Session Handoff — Sprint 12+ Dashboard Development
+# Session Handoff — 2026-03-26 (Final)
 
-**Tarih:** 2026-03-26
-**Son commit:** b6b2cef
-**Branch:** main (pushed to origin)
-
----
-
-## Sistem Durumu
-
-### Çalışan Servisler
-```
-Backend API:   http://localhost:8003  (python -m uvicorn api.server:app --host 127.0.0.1 --port 8003)
-Frontend UI:   http://localhost:3000  (cd frontend && npm run dev)
-WMCP Server:   http://localhost:8001  (powershell bin/start-wmcp-server.ps1)
-```
-
-### Veritabanı Durumu
-- 8 completed mission (tüm failed/stuck temizlendi)
-- 7 approval kaydı
-- Health: OK (10 component)
-- Errors: 0
+**From:** Claude Opus 4.6 (this session)
+**To:** Next Claude session
+**Operator:** AKCA
+**Platform:** Vezir Platform (formerly OpenClaw)
 
 ---
 
-## Tamamlanan İşler (Bu Session)
+## Current State
 
-### Sprint 12 Closure ✅
-- 10 implementation task, 263 test, Phase 5 scoreboard 15/15
-- Phase 5 kapatıldı, docs/sprints/sprint-12/ altında tüm dokümanlar
-
-### Dashboard Operasyonel ✅
-- Mission creation (POST /api/v1/missions + form UI)
-- Error transparency (telemetry'den root cause, state transitions, stage errors)
-- Agent prompt visibility (system/user prompt per stage)
-- Mutation fixes (retry/cancel/approve/reject + user-friendly 409 messages)
-- Signal artifact management (pending signals panel + delete)
-- Health dashboard (10 component, bar charts, error log, audit trail)
-- Telemetry fix (correct event parsing, type filters)
-- Polling 10s (mission list + detail)
-
-### D-102 Token Budget ✅
-- Tool response truncation: >10K auto-truncate, >50K block
-- Token observability: per-tool-call + per-stage logging
-- Context isolation: tiered truncation (A=5K, B=2K, C=500)
-- Sonuç: Developer stage 219K → 9.6K token (%97.8 azalma)
-
-### Live Stage Tracking ✅
-- Stage başladığında hemen UI'da görünüyor
-- started_at/finished_at timestamps
-- Summary her stage'de güncelleniyor
-
-### Son Commit (b6b2cef) — Paralel Agent Çalışması
-3 agent paralel çalıştırılarak eklendi:
-- **Tool call details**: ToolCallDetail schema, controller tracking, StageCard UI
-- **Agent skills popup**: roles_api.py, AgentSkillsPopup.tsx
-- **Stage control actions**: pause/resume/skip-stage endpoints + UI buttons
-
-⚠ **Bu commit test edilmedi — paralel agent'lar dosyaları ayrı ayrı yazdı, entegrasyon testi yapılmadı.**
+| Item | Status |
+|------|--------|
+| Sprint 12 | implementation largely done (per session report), formal gates pending |
+| Sprint 13 | NOT STARTED — plan v5 ready |
+| Phase 5 | Scoreboard 15/15 targeted |
+| Phase 5.5 | Sprint 13 = stabilization |
+| Vezir rebrand | ✅ Complete (~30 files, 3 commits) |
+| D-102 | ✅ Frozen. L3/L4/L5 inline. L1/L2/EventBus = Sprint 13.0 |
 
 ---
 
-## Test Edilmesi Gereken (Sonraki Session)
+## What Happened This Session
 
-1. **Backend restart** ve tüm yeni endpoint'lerin çalıştığını doğrula:
-   - `GET /api/v1/roles` → 9 role bilgisi dönmeli
-   - `POST /api/v1/missions/{id}/pause` → signal artifact yazmalı
-   - `POST /api/v1/missions/{id}/resume`
-   - `POST /api/v1/missions/{id}/skip-stage`
-
-2. **Frontend kontrol**:
-   - StageCard'da "Tool Calls" paneli açılıyor mu?
-   - Agent skills popup açılıyor mu?
-   - Pause/Resume/Skip butonları görünüyor mu?
-
-3. **Complex mission E2E test**:
-   - Complex mission oluştur
-   - Canlı stage tracking çalışıyor mu?
-   - Tool call detayları görünüyor mu?
-   - Token truncation/block logları var mı?
+1. **Sprint 12 kickoff package** — 3 iterations (v1→v3), operator + GPT reviews, all blockers fixed
+2. **D-097→D-101** frozen (legacy retire, httpx E2E, approval Phase 6, OpenAPI auto-gen, SSE=MC)
+3. **D-093/094/095** deprecated stubs (gap closure)
+4. **GPT pre-sprint review** — FAIL on first pass (4 blockers), patched, packet v2 sent
+5. **Sprint 13 planning** — 5 iterations (v1→v5), deepened with research, event-driven D-102
+6. **D-102 architecture** — 3 evolutions: 3-layer → 5-layer → event-driven (13 handlers, 28 events)
+7. **D-102 enforcement addendum** — bypass prevention, audit trail, monitoring
+8. **Known issues** identified: token report ID, WSL naming, rework count
+9. **Vezir Platform presentation** — 3-slide PPTX deck
+10. **Session report** processed — Sprint 13 plan revised for actual state
 
 ---
 
-## Yapılacaklar (Sıralı — Paralel Değil)
+## Decisions Registry
 
-### Öncelik 1: Test + Fix (b6b2cef commit'i)
-- Backend restart, endpoint test
-- Frontend TypeScript + runtime test
-- Kırık olan yerleri fix et
+| Decision | Status | Sprint |
+|----------|--------|--------|
+| D-001→D-020 | Frozen | Phase 1-1.5 |
+| D-021→D-058 | Frozen | Extracted at Sprint 12 kickoff |
+| D-059→D-092 | Frozen | Sprint 8-11 |
+| D-093→D-095 | Deprecated stubs | Reassigned to D-097/098/099 |
+| D-096 | Frozen | Sprint 11 lifecycle |
+| D-097 | Frozen | Legacy dashboard retired |
+| D-098 | Frozen | httpx + pytest E2E |
+| D-099 | Frozen | Approval = Phase 6 scope |
+| D-100 | Frozen | OpenAPI from FastAPI |
+| D-101 | Frozen | SSE = MC frontend only |
+| D-102 | Frozen | Event-driven token governance |
+| D-103 | Proposed | Rework limiter — Sprint 13 Task 13.3 |
 
-### Öncelik 2: D-102 Devamı
-- [ ] Role-based tool access (Layer 5) — Analyst/Architect Snapshot'a erişemesin
-- [ ] Per-mission token report JSON dosyası
-- [ ] Token report UI sayfası veya Health'e entegrasyon
-- [ ] D-102 karar kaydını DECISIONS.md'ye yaz
-
-### Öncelik 3: Retry Resume
-- [ ] Retry'ın son kaldığı yerden devam etmesi (şu an yeni mission oluşturuyor)
-- [ ] Controller'da checkpoint/resume mekanizması
-
-### Öncelik 4: UI Geliştirmeler
-- [ ] Stage pipeline'da running stage animasyonu
-- [ ] Agent skill popup entegrasyonu StageCard'a
-- [ ] Pause/resume controller'da gerçek implementasyon (şu an sadece signal yazıyor)
+**Total: 103 entries (101 frozen + 2 deprecated stubs + D-103 proposed)**
 
 ---
 
-## Kritik Dosyalar
+## Test Baseline
 
-| Dosya | Son Değişiklik |
-|-------|----------------|
-| `agent/api/server.py` | 11 router kayıtlı (mission, approval, health, sse, mutations, create, signal, logs, roles) |
-| `agent/mission/controller.py` | Live stage save, token budget, prompt saving, planning retry |
-| `agent/oc_agent_runner_lib.py` | Token truncation, prompt fields, token tracker |
-| `agent/context/token_budget.py` | BudgetConfig, TokenTracker, truncate_tool_response |
-| `agent/api/normalizer.py` | Dashboard→controller linking, error enrichment, tool call details |
-| `frontend/src/components/StageCard.tsx` | Prompts, tool calls, error, result panels |
-| `frontend/src/pages/MissionDetailPage.tsx` | Pause/resume/skip buttons, signals panel |
+| Suite | Count |
+|-------|-------|
+| Backend (pytest) | 233 PASS |
+| Frontend (vitest) | 29 PASS |
+| TSC | 0 errors |
+| Math Service | 11 PASS |
+| Test scenarios | 4/5 completed |
 
 ---
 
-## Komutlar
+## Known Issues (3 — Sprint 13 scope)
 
-```bash
-# Backend başlat
-cd agent && python -m uvicorn api.server:app --host 127.0.0.1 --port 8003
+| # | Issue | Fix | Task |
+|---|-------|-----|------|
+| 1 | Token report ID: dashboard vs controller mismatch | Normalizer in mission_api.py | 13.1 |
+| 2 | WSL paths still "openclaw" | Dir rename + symlink + grep | 13.2 |
+| 3 | Rework uncontrolled (6 on simple) | Complexity-based limits (D-103) | 13.3 |
 
-# Frontend başlat
-export Path="C:\Users\AKCA\node20\node-v20.18.1-win-x64;$Path"
-cd frontend && npm run dev
+---
 
-# WMCP başlat
-powershell -File bin/start-wmcp-server.ps1
+## Port Map
 
-# Test
-cd agent && python -m pytest tests/ -v
-cd frontend && npx tsc --noEmit && npx vitest run
+| Port | Service |
+|------|---------|
+| 8001 | WMCP (18 tools) |
+| 8002 | Legacy Dashboard (retired) |
+| 8003 | Vezir API (11 components) |
+| 3000 | Vezir UI (React) |
+| 9000 | Math Service |
 
-# Mission oluştur (CLI)
-curl -X POST http://localhost:3000/api/v1/missions \
-  -H "Content-Type: application/json" -H "Origin: http://localhost:3000" \
-  -d '{"goal": "...", "complexity": "trivial"}'
-```
+---
+
+## Files Produced This Session
+
+### Sprint 12 (latest versions)
+- S12-README.md, S12-KICKOFF-GATE.md, S12-TASK-BREAKDOWN.md
+- SPRINT-12-GPT-KICKOFF-PACKET-v2.md
+- DECISIONS-DELTA-D097-D101.md, DECISIONS-DELTA-D093-D095-STUBS.md
+- sprint-closure-check.sh
+
+### Sprint 13 (latest versions)
+- S13-README.md, S13-KICKOFF-GATE.md, S13-TASK-BREAKDOWN.md (v5)
+
+### Architecture Specs
+- D-102-FINAL-ARCHITECTURE-SPEC.md (EventBus, 13 handlers, 28 events)
+- D-102-ENFORCEMENT-MONITORING-ADDENDUM.md (§16-§20)
+- D-102-DEEP-ANALYSIS.md (root cause)
+- KNOWN-ISSUES-PATCH-PLAN.md
+
+### Other
+- SESSION-HANDOFF.md (this file)
+- vezir-platform.pptx (3-slide presentation)
+
+---
+
+## Next Session Priority
+
+1. **Verify Sprint 12 formal status** — map session report work to gate checklist
+2. **Close Sprint 12** — mid-review → final → retro → closure
+3. **Start Sprint 13** — kickoff gate → Task 13.0 (EventBus)
+
+---
+
+*Session Handoff — Vezir Platform*
+*Date: 2026-03-26*

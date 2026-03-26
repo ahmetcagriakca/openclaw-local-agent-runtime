@@ -17,7 +17,7 @@
 | 12.7 Legacy dashboard (D-097) | DONE | Deprecation banner + startup warning |
 | 12.8 Scoreboard verification | DONE | 15/15 PASS |
 | 12.9 Gap fix | SKIPPED | No gaps found (12.8 = 15/15) |
-| 12.10 Re-verification + full test | DONE | 234+29 = 263 tests, 0 failures |
+| 12.10 Re-verification + full test | DONE | 234+29+39 = 302 tests, 0 failures |
 
 ## Test Results (P-05 Auto-Count)
 
@@ -25,13 +25,16 @@
 |-------|--------|--------|-------|
 | Backend (pytest) | 234 | 0 | 234 |
 | Frontend (vitest) | 29 | 0 | 29 |
+| E2E (httpx+pytest) | 39 | 0 | 39 |
 | TypeScript (tsc) | — | 0 errors | — |
 | ESLint | — | 0 warnings | — |
 | Build | — | Success | — |
+| **Total** | **302** | **0** | **302** |
 
 ## Phase 5 Scoreboard
 
 15/15 PASS — see `evidence/sprint-12/phase5-scoreboard-final.txt`
+Criterion 9 evidenced: Lighthouse headless Chrome accessibility score = 95 (target > 90).
 
 ## Decisions
 
@@ -48,13 +51,13 @@
 All 20 evidence files present in `evidence/sprint-12/`:
 pytest-output.txt, vitest-output.txt, tsc-output.txt, lint-output.txt,
 build-output.txt, validator-output.txt, grep-evidence.txt, live-checks.txt,
-closure-check-output.txt (pending), contract-evidence.txt, sse-evidence.txt,
+closure-check-output.txt, contract-evidence.txt, sse-evidence.txt,
 e2e-output.txt, lighthouse.txt, benchmark.txt, phase5-scoreboard.txt,
 phase5-scoreboard-final.txt, decision-debt-check.txt, mutation-drill.txt,
-review-summary.md (this file ref), file-manifest.txt (pending)
+review-summary.md, file-manifest.txt
 
 ## Next Step
 **Produced:** Final review report
 **Next actor:** Operator
-**Action:** Review and authorize closure
-**Blocking:** Yes — closure requires operator sign-off
+**Action:** Verify corrections, then authorize closure
+**Current:** closure_status=review_pending

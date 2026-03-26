@@ -2,7 +2,7 @@
 
 **Sprint:** 12 — Phase 5D: Polish + Phase 5 Closure
 **Date:** 2026-03-26
-**Status:** implementation_status=done, closure_status=pending_operator
+**Status:** implementation_status=done, closure_status=review_pending
 
 ## Deliverables
 
@@ -41,5 +41,5 @@ All present in `evidence/sprint-12/`.
 ## Next Step
 **Produced:** Closure summary
 **Next actor:** Operator
-**Action:** Set `closure_status=closed` in STATE.md
-**Blocking:** Yes
+**Action:** Verify all corrections, then set closure_status=closed
+**Current:** closure_status=review_pending

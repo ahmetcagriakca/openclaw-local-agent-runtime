@@ -3,7 +3,7 @@
 **Phase:** 5 — Mission Control Center ("See Everything, Including What's Missing")
 **Sprints:** 8, 9, 10, 11, 12
 **Date:** 2026-03-26
-**Status:** CLOSED (pending operator sign-off)
+**Status:** closure_status=review_pending
 
 ## Phase Goal
 
@@ -52,13 +52,13 @@ Key principle: **API never directly calls services** (D-001). It only writes ato
 | 6 | Contract-first tests | PASS |
 | 7 | Operator drill 5/5 | PASS |
 | 8 | E2E tests 12+ scenarios | PASS (16 scenarios) |
-| 9 | Accessibility > 90 | PASS |
+| 9 | Accessibility > 90 | PASS (Lighthouse headless: 95) |
 | 10 | Performance benchmark | PASS (<50ms) |
 | 11 | API documentation | PASS (14 endpoints) |
 | 12 | Operator guide | PASS (11 sections) |
 | 13 | Legacy dashboard resolved | PASS (D-097) |
 | 14 | Decision debt zero | PASS (D-001→D-101 frozen) |
-| 15 | All tests passing | PASS (263 total, 0 fail) |
+| 15 | All tests passing | PASS (302 total, 0 fail) |
 
 ## Test Coverage
 
@@ -69,7 +69,7 @@ Key principle: **API never directly calls services** (D-001). It only writes ato
 | E2E (httpx+pytest) | 39 | All pass |
 | TypeScript | 0 errors | Clean |
 | ESLint | 0 warnings | Clean |
-| **Total** | **263** | **0 failures** |
+| **Total** | **302** | **0 failures** |
 
 ## What Phase 5 Achieved
 

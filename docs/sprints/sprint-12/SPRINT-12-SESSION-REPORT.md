@@ -1,7 +1,11 @@
-# Sprint 12 — Session Report
+# Sprint 12 — Session Report (NON-CANONICAL)
 
-**Tarih:** 2026-03-26
-**Kapsam:** Phase 5D Polish + Mission Control Dashboard Operasyonel Hale Getirme
+> **Note:** This file is a session chat log, not a canonical repo document.
+> It contains Turkish-language notes from the operator session.
+> Canonical closure documents: SPRINT-12-CLOSURE-SUMMARY.md, SPRINT-12-FINAL-REVIEW.md, SPRINT-12-PHASE-CLOSURE.md
+
+**Date:** 2026-03-26
+**Scope:** Phase 5D Polish + Mission Control Dashboard Operationalization
 **Commits:** 21 (ae2d12e → c78af09)
 **Değişiklik:** 49 dosya, +6,696 / -393 satır
 
@@ -23,8 +27,8 @@ Sprint 12'nin tüm resmi task'ları tamamlandı ve kapatıldı:
 | 12.8-10 Scoreboard | 15/15 PASS |
 | Process | Mid-review, final review, retro, closure, phase closure raporu |
 
-**Test sonuçları:** 234 backend + 29 frontend = 263 test, 0 hata
-**Phase 5 Scoreboard:** 15/15 PASS — Phase 5 kapatıldı
+**Test results:** 234 backend + 29 frontend + 39 E2E = 302 tests, 0 failures
+**Phase 5 Scoreboard:** 15/15 PASS (Lighthouse accessibility: 95)
 
 ---
 

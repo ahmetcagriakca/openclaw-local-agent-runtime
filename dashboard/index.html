@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OpenClaw System Monitor</title>
+<title>Vezir System Monitor</title>
 <style>
   :root {
     --bg: #0d1117; --card: #161b22; --border: #30363d;
@@ -65,7 +65,7 @@
 </div>
 
 <div class="header">
-  <h1>OpenClaw System Monitor</h1>
+  <h1>Vezir System Monitor</h1>
   <div class="meta">
     Last check: <span id="timestamp">—</span> &nbsp;|&nbsp;
     Overall: <span id="overall-badge" class="badge badge-ok">—</span>
@@ -82,7 +82,7 @@
     <thead>
       <tr>
         <th>Time</th><th>Overall</th><th>WMCP</th><th>WSL</th>
-        <th>OpenClaw</th><th>Runtime</th><th>Bridge</th><th>Tasks</th>
+        <th>Vezir</th><th>Runtime</th><th>Bridge</th><th>Tasks</th>
       </tr>
     </thead>
     <tbody id="history-body"></tbody>
@@ -90,7 +90,7 @@
 </div>
 
 <div class="footer">
-  Auto-refreshes every 30s &nbsp;|&nbsp; OpenClaw Local Agent Runtime
+  Auto-refreshes every 30s &nbsp;|&nbsp; Vezir Platform
 </div>
 
 <script>
@@ -101,7 +101,7 @@ const REFRESH_MS = 30000;
 const COMPONENT_LABELS = {
   wmcp: 'WMCP Server (port 8001)',
   wsl: 'WSL Instance (Ubuntu-E)',
-  openclaw: 'OpenClaw Gateway',
+  vezir: 'Vezir Gateway',
   runtime: 'oc Runtime',
   bridge: 'Bridge',
   scheduledTasks: 'Scheduled Tasks'

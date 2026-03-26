@@ -10,7 +10,7 @@
 #>
 
 param(
-    [string]$TaskName   = "OpenClawWmcpServer",
+    [string]$TaskName   = "VezirWmcpServer",
     [string]$ScriptPath = "$env:USERPROFILE\oc\bin\start-wmcp-server.ps1"
 )
 

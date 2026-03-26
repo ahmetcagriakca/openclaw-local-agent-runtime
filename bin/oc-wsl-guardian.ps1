@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Active guardian for WSL Ubuntu-E and OpenClaw gateway.
+    Active guardian for WSL Ubuntu-E and Vezir gateway.
     Checks every 30 seconds, auto-restarts if down, sends Telegram alerts on state changes.
     Runs indefinitely (like start-wmcp-server.ps1). Stops with Ctrl+C.
 
@@ -32,11 +32,11 @@ $Emoji = @{
 
 # --- State variables ---
 $wslPreviousStatus = 'unknown'
-$openclawPreviousStatus = 'unknown'
+$vezirPreviousStatus = 'unknown'
 $wslRestartCount = 0
-$openclawRestartCount = 0
+$vezirRestartCount = 0
 $wslLastDownUtc = $null
-$openclawLastDownUtc = $null
+$vezirLastDownUtc = $null
 $startedUtc = [DateTime]::UtcNow
 $cycleCount = 0
 $sleepJob = $null
@@ -95,7 +95,7 @@ function Test-WslRunning {
     } catch { return $false }
 }
 
-function Test-OpenClawRunning {
+function Test-VezirRunning {
     try {
         $out = & wsl -d Ubuntu-E -- pgrep -fa openclaw 2>&1 | Out-String
         $lines = @(($out -split "`n") | Where-Object { $_.Trim().Length -gt 0 })
@@ -119,7 +119,7 @@ try {
         $cycleCount++
         $now = [DateTime]::UtcNow
         $wslStatus = 'ok'
-        $openclawStatus = 'ok'
+        $vezirStatus = 'ok'
         $sleepInfinity = $false
 
         # ── 1. CHECK WSL ──────────────────────────────────────────────────────
@@ -184,37 +184,37 @@ try {
         # ── 2. CHECK OPENCLAW (only if WSL is running) ────────────────────────
         if ($wslStatus -eq 'ok') {
             try {
-                $ocUp = Test-OpenClawRunning
+                $ocUp = Test-VezirRunning
                 if ($ocUp) {
-                    $openclawStatus = 'ok'
+                    $vezirStatus = 'ok'
                 } else {
-                    $openclawStatus = 'error'
-                    Write-GuardianLog -Level 'warn' -Message 'OpenClaw is down. Restarting...'
+                    $vezirStatus = 'error'
+                    Write-GuardianLog -Level 'warn' -Message 'Vezir is down. Restarting...'
 
                     try {
                         & wsl -d Ubuntu-E -- bash -c 'cd /home/akca/.openclaw && nohup openclaw start > /dev/null 2>&1 &' 2>&1 | Out-Null
                     } catch { }
                     Start-Sleep -Seconds 10
 
-                    $ocRecovered = Test-OpenClawRunning
+                    $ocRecovered = Test-VezirRunning
                     if ($ocRecovered) {
-                        $openclawStatus = 'ok'
-                        $openclawRestartCount++
-                        Write-GuardianLog -Level 'info' -Message 'OpenClaw recovered after restart.'
+                        $vezirStatus = 'ok'
+                        $vezirRestartCount++
+                        Write-GuardianLog -Level 'info' -Message 'Vezir recovered after restart.'
                     } else {
-                        Write-GuardianLog -Level 'error' -Message 'OpenClaw failed to recover.'
+                        Write-GuardianLog -Level 'error' -Message 'Vezir failed to recover.'
                     }
 
-                    if (-not $openclawLastDownUtc) { $openclawLastDownUtc = $now.ToString('o') }
+                    if (-not $vezirLastDownUtc) { $vezirLastDownUtc = $now.ToString('o') }
 
                     # Telegram notification
-                    if ($openclawPreviousStatus -ne 'error') {
+                    if ($vezirPreviousStatus -ne 'error') {
                         $resultText = if ($ocRecovered) { $Emoji.CheckMark + ' Recovered' } else { $Emoji.CrossMark + ' Failed to recover' }
                         Send-TelegramMessage -Text (@(
-                            $Emoji.RedCircle + " ALERT: OpenClaw Gateway is DOWN"
+                            $Emoji.RedCircle + " ALERT: Vezir Gateway is DOWN"
                             ""
                             "Time: $($now.ToString('yyyy-MM-dd HH:mm:ss')) UTC"
-                            "Component: OpenClaw Gateway"
+                            "Component: Vezir Gateway"
                             "Status: Auto-restart attempted"
                             "Result: $resultText"
                         ) -join "`n")
@@ -222,25 +222,25 @@ try {
                 }
 
                 # Notify recovery if was down, now ok
-                if ($openclawPreviousStatus -eq 'error' -and $openclawStatus -eq 'ok' -and $openclawPreviousStatus -ne 'unknown') {
-                    $downtime = if ($openclawLastDownUtc) {
-                        [math]::Round(($now - [DateTime]::Parse($openclawLastDownUtc)).TotalSeconds)
+                if ($vezirPreviousStatus -eq 'error' -and $vezirStatus -eq 'ok' -and $vezirPreviousStatus -ne 'unknown') {
+                    $downtime = if ($vezirLastDownUtc) {
+                        [math]::Round(($now - [DateTime]::Parse($vezirLastDownUtc)).TotalSeconds)
                     } else { '?' }
                     Send-TelegramMessage -Text (@(
-                        $Emoji.GreenCircle + " RECOVERED: OpenClaw Gateway is back up"
+                        $Emoji.GreenCircle + " RECOVERED: Vezir Gateway is back up"
                         ""
                         "Time: $($now.ToString('yyyy-MM-dd HH:mm:ss')) UTC"
-                        "Component: OpenClaw Gateway"
+                        "Component: Vezir Gateway"
                         "Downtime: ~${downtime} seconds"
                     ) -join "`n")
-                    $openclawLastDownUtc = $null
+                    $vezirLastDownUtc = $null
                 }
             } catch {
-                $openclawStatus = 'error'
-                Write-GuardianLog -Level 'error' -Message ('OpenClaw check exception: ' + $_.Exception.Message)
+                $vezirStatus = 'error'
+                Write-GuardianLog -Level 'error' -Message ('Vezir check exception: ' + $_.Exception.Message)
             }
         } else {
-            $openclawStatus = 'unknown'
+            $vezirStatus = 'unknown'
         }
 
         # ── 3. KEEP WSL ALIVE (sleep infinity) ───────────────────────────────
@@ -262,13 +262,13 @@ try {
 
         # ── 4. UPDATE STATE ──────────────────────────────────────────────────
         $wslPreviousStatus = $wslStatus
-        $openclawPreviousStatus = $openclawStatus
+        $vezirPreviousStatus = $vezirStatus
 
         $uptimeSeconds = [math]::Round(($now - $startedUtc).TotalSeconds)
         $state = [ordered]@{
             timestamp      = $now.ToString('o')
             wsl            = [ordered]@{ status = $wslStatus; lastDownUtc = $wslLastDownUtc; restartCount = $wslRestartCount }
-            openclaw       = [ordered]@{ status = $openclawStatus; lastDownUtc = $openclawLastDownUtc; restartCount = $openclawRestartCount }
+            vezir          = [ordered]@{ status = $vezirStatus; lastDownUtc = $vezirLastDownUtc; restartCount = $vezirRestartCount }
             sleepInfinity  = $sleepInfinity
             uptimeSeconds  = $uptimeSeconds
             cycleCount     = $cycleCount

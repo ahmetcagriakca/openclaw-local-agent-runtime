@@ -12,7 +12,7 @@ from services.artifact_store import ArtifactStore
 
 from context.token_budget import BudgetConfig, TokenTracker, truncate_tool_response, estimate_tokens
 
-DEFAULT_SYSTEM_PROMPT = """You are a Windows automation assistant for the OpenClaw system.
+DEFAULT_SYSTEM_PROMPT = """You are a Windows automation assistant for the Vezir platform.
 You help the user manage their Windows computer through specialized tools.
 
 Rules:

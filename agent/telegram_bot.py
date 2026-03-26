@@ -1,4 +1,4 @@
-"""Telegram Bot Poller — listens for messages and routes to OpenClaw.
+"""Telegram Bot Poller — listens for messages and routes to Vezir.
 
 Runs as a long-polling loop:
   - Normal messages → oc-agent-runner (single-turn)
@@ -95,7 +95,7 @@ def handle_health(chat_id: str):
         req = urllib.request.Request(url, headers={"Origin": "http://localhost:3000"})
         with urllib.request.urlopen(req, timeout=5) as resp:
             d = json.loads(resp.read())
-        lines = [f"*OpenClaw Health* — {d['status'].upper()}"]
+        lines = [f"*Vezir Health* — {d['status'].upper()}"]
         for k, v in d.get("components", {}).items():
             icon = "✅" if v["status"] == "ok" else "⚠️" if v["status"] == "degraded" else "❌"
             lines.append(f"{icon} {v['name']}: {v.get('detail', '')[:60]}")
@@ -229,7 +229,7 @@ def main():
                     handle_agent_message(chat_id, text[9:].strip(), mission_mode=True)
                 elif text.lower() in ("/help", "help", "/yardim"):
                     send_message(chat_id,
-                        "*OpenClaw Telegram Bot*\n\n"
+                        "*Vezir Telegram Bot*\n\n"
                         "Komutlar:\n"
                         "• `/health` — Sistem sagligi\n"
                         "• `/status` — Aktif missionlar\n"

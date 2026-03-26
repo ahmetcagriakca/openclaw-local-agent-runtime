@@ -4,7 +4,7 @@ import math
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
-app = FastAPI(title="Math Service", version="1.0.0")
+app = FastAPI(title="Vezir Math Service", version="1.0.0")
 
 
 class Operands(BaseModel):

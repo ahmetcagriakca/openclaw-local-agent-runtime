@@ -266,7 +266,7 @@ Write-Output "Screenshot saved: $path"
     },
     {
         "name": "get_system_health",
-        "description": "Get full OpenClaw system health status (all 6 components)",
+        "description": "Get full Vezir system health status (all components)",
         "parameters": {
             "type": "object",
             "properties": {},
@@ -505,19 +505,19 @@ Write-Output "Screenshot saved: $path"
     },
     {
         "name": "list_scheduled_tasks",
-        "description": "List Windows scheduled tasks filtered by name pattern. Default: OpenClaw tasks.",
+        "description": "List Windows scheduled tasks filtered by name pattern. Default: Vezir tasks.",
         "parameters": {
             "type": "object",
             "properties": {
                 "filter": {
                     "type": "string",
-                    "description": "Task name filter (e.g. 'OpenClaw*'). Default: all OpenClaw tasks."
+                    "description": "Task name filter (e.g. 'Vezir*'). Default: all Vezir tasks."
                 }
             },
             "required": []
         },
         "powershell_template": "Get-ScheduledTask | Where-Object {{ $_.TaskName -like '{filter}' }} | Select-Object TaskName, State | Format-Table -AutoSize | Out-String",
-        "defaults": {"filter": "OpenClaw*"},
+        "defaults": {"filter": "Vezir*"},
         "risk": "low",
         "governance": {
             "filesystemTouching": False,

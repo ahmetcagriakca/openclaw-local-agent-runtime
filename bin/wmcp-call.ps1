@@ -2,7 +2,7 @@
 # INTERNAL RUNTIME TRANSPORT ONLY.
 # This script is an internal MCP HTTP transport layer used by oc-run-file.ps1.
 # It is NOT part of the external task-centric integration surface.
-# External callers (Bridge, OpenClaw, Telegram) must use canonical task APIs
+# External callers (Bridge, Vezir, Telegram) must use canonical task APIs
 # (enqueue_task, get_task, etc.) — never this script directly.
 #
 # Phase 1.5-A frozen decision: external integration surface is task-centric.

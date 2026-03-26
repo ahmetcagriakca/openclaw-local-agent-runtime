@@ -112,7 +112,7 @@ async def get_health(request: Request):
 
     # 1. API server
     components["api"] = ComponentHealth(
-        name="Mission Control API", status="ok",
+        name="Vezir API", status="ok",
         detail=f"serving on :{PORT}, PID {os.getpid()}", lastCheckAt=now)
 
     # 2. Cache

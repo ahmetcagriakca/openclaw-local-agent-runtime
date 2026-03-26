@@ -36,7 +36,7 @@ try {
         overall   = $healthObj.overall
         wmcp      = $c.wmcp.status
         wsl       = $c.wsl.status
-        openclaw  = $c.openclaw.status
+        vezir     = $c.vezir.status
         runtime   = $c.runtime.status
         bridge    = $c.bridge.status
         tasks     = $c.scheduledTasks.detail

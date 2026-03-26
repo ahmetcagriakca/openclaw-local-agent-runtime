@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Register (or update) the OpenClawWslGuardian scheduled task.
+    Register (or update) the VezirWslGuardian scheduled task.
     Replaces the legacy WSLKeepAlive task.
 
 .NOTES
@@ -10,7 +10,7 @@
 #>
 
 param(
-    [string]$TaskName   = "OpenClawWslGuardian",
+    [string]$TaskName   = "VezirWslGuardian",
     [string]$ScriptPath = "$env:USERPROFILE\oc\bin\oc-wsl-guardian.ps1"
 )
 

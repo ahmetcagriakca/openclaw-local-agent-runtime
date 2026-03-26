@@ -1,11 +1,12 @@
-# CLAUDE.md — OpenClaw Local Agent Runtime
+# CLAUDE.md — Vezir Platform
 
 ## Project
 
-OpenClaw Local Agent Runtime — governed multi-agent mission system.
+Vezir — governed multi-agent mission platform (formerly OpenClaw).
 Windows 11 + WSL2 Ubuntu-E + Python 3.14 + PowerShell.
-9 specialist roles, 3 quality gates, 10-state mission state machine.
+9 specialist roles, 3 quality gates, 11-state mission state machine.
 24 MCP tools, 3 LLM providers (GPT-4o, Claude Sonnet, Ollama).
+Telegram bot integration, Math Service on :9000.
 
 ## Current State
 
@@ -48,14 +49,15 @@ Outputs:
 ## Architecture Quick Reference
 
 ```
-Telegram → OpenClaw (WSL) → Agent Runner (Windows) → Mission Controller
+Telegram → Vezir Bot → Agent Runner (Windows) → Mission Controller
   → 9 roles with quality gates → MCP → PowerShell
 
 Port Map:
   8001  WMCP (Windows MCP Proxy)
-  8002  Legacy Health Dashboard
-  8003  Mission Control API (FastAPI, Sprint 8)
-  3000  Mission Control UI (React, Sprint 9, requires Node.js 20)
+  8002  Legacy Health Dashboard (deprecated)
+  8003  Vezir API (FastAPI)
+  3000  Vezir UI (React, requires Node.js 20)
+  9000  Math Service (example deployable)
 ```
 
 ### Mission Flow
@@ -72,6 +74,8 @@ agent/mission/quality_gates.py     — 3 quality gates
 agent/mission/artifact_extractor.py — 3-layer artifact parse
 agent/services/approval_service.py — approval handling
 agent/services/policy_enforcer.py  — file system policy enforcement
+agent/telegram_bot.py              — Telegram bot poller
+agent/math_service/app.py          — example deployable service
 bridge/oc-bridge.ps1               — PowerShell bridge to Windows
 config/capabilities.json           — capability manifest (auto-generated)
 ```
@@ -108,15 +112,16 @@ python tools/run_e2e_test.py --all
 python tools/analyze_telemetry.py --last 5
 ```
 
-## Phase 5 Progress
+## Phase 5 Progress (Vezir Dashboard)
 
-Mission Control Center — "See Everything, Including What's Missing"
+"See Everything, Including What's Missing"
 
-- ✅ Sprint 8: FastAPI backend on :8003 — D-061, D-065, D-067, D-068, D-070
-- ✅ Sprint 9: React UI on :3000 — D-081, D-082, D-083, D-084
-- ✅ Sprint 10: SSE live updates — D-085, D-086, D-087, D-088
-- ✅ Sprint 11: Intervention (approve/deny from UI) — D-089, D-090, D-091, D-092, D-096
-- ⬜ Sprint 12: Polish + Phase 5 closure
+- ✅ Sprint 8: FastAPI backend on :8003
+- ✅ Sprint 9: React UI on :3000
+- ✅ Sprint 10: SSE live updates
+- ✅ Sprint 11: Intervention (approve/deny from UI)
+- ✅ Sprint 12: Polish + Phase 5 closure
+- ✅ Post-Sprint 12: D-102 token budget, Telegram bot, Math Service, Vezir rebrand
 
 ## Do Not
 

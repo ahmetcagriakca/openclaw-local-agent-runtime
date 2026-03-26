@@ -1,12 +1,12 @@
-# OpenClaw Mission Control — Operator Guide
+# Vezir Platform — Operator Guide
 
 ## 1. System Overview
 
-OpenClaw Mission Control is a governed multi-agent mission system with 9 specialist roles, 3 quality gates, and a 10-state mission state machine.
+Vezir is a governed multi-agent mission system with 9 specialist roles, 3 quality gates, and a 10-state mission state machine.
 
 **Architecture:**
 ```
-Telegram → OpenClaw (WSL) → Agent Runner (Windows) → Mission Controller
+Telegram → Vezir (WSL) → Agent Runner (Windows) → Mission Controller
   → 9 roles with quality gates → MCP → PowerShell
 ```
 

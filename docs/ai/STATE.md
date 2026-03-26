@@ -16,14 +16,14 @@
 | oc runtime | Operational | `C:\Users\AKCA\oc\bin\` |
 | Bridge | Operational, validated | `C:\Users\AKCA\oc\bridge\oc-bridge.ps1` |
 | WMCP server | Operational (manual start) | via `bin\start-wmcp-server.ps1` |
-| OpenClaw gateway | Operational (systemd managed, auto-restart) | `/home/akca/.openclaw/` via `openclaw.service` |
+| Vezir gateway | Operational (systemd managed, auto-restart) | `/home/akca/.openclaw/` via `openclaw.service` |
 | WSL VM | Bounded (6GB RAM, 4GB swap, 30min idle timeout) | `C:\Users\AKCA\.wslconfig` |
-| OpenClaw keepalive | Operational (20s health loop) | `wsl-openclaw-keepalive.service` |
+| Vezir keepalive | Operational (20s health loop) | `wsl-openclaw-keepalive.service` |
 | Telegram channel | Connected, real user validated | User ID `8654710624` |
 | WSL bridge wrappers | Operational | `/home/akca/bin/oc-bridge-*` |
 | System health engine | Operational | `bin\oc-system-health.ps1` |
 | Web dashboard | Operational (manual start) | via `bin\start-dashboard.ps1` on :8002 |
-| WSL Guardian | Operational (L2 — VM-level monitor) | `bin\oc-wsl-guardian.ps1` — Windows-side WSL + OpenClaw monitor |
+| WSL Guardian | Operational (L2 — VM-level monitor) | `bin\oc-wsl-guardian.ps1` — Windows-side WSL + Vezir monitor |
 | Telegram notifications | Operational | `bin\oc-health-notify.ps1` — alerts, startup reports, recovery |
 | Agent Runner | Operational (multi-agent missions + 3 providers + 24 tools) | `agent/oc-agent-runner.py` |
 | Mission Controller | Operational (9 governed roles, quality gates, state machine) | `agent/mission/controller.py` |
@@ -57,7 +57,7 @@
 | Phase 1.5-D | Security Baseline Freeze | Closed |
 | Phase 1.5-E | Bridge Implementation | Closed |
 | Phase 1.5-F | Exit Verification (local) | Closed |
-| Phase TG-1R | OpenClaw Telegram Wiring | Closed |
+| Phase TG-1R | Vezir Telegram Wiring | Closed |
 | Phase 1.5-TG-R | Real Telegram Closure | **FULLY SEALED** |
 | Phase 1.6 | Operational Monitoring | Closed |
 | Phase 1.7 | Proactive Notifications | Closed |
@@ -139,7 +139,7 @@
 ```
 Agent path (primary):
 Telegram user (8654710624)
-  -> OpenClaw (WSL Ubuntu-E)
+  -> Vezir (WSL Ubuntu-E)
   -> /home/akca/bin/oc-agent-run (Python)
   -> agent/oc-agent-runner.py (Windows)
      Single-agent: GPT-4o/Claude/Ollama + 24 tools
@@ -153,7 +153,7 @@ Telegram user (8654710624)
 
 Legacy path (predefined tasks):
 Telegram user (8654710624)
-  -> OpenClaw (WSL Ubuntu-E)
+  -> Vezir (WSL Ubuntu-E)
   -> /home/akca/bin/oc-bridge-submit (Python)
   -> /home/akca/bin/oc-bridge-call (Bash)
   -> pwsh.exe -File bridge/oc-bridge.ps1 (Windows)
@@ -164,12 +164,12 @@ Telegram user (8654710624)
 
 | Task | Trigger | Purpose |
 |------|---------|---------|
-| OpenClawTaskWorker | AtLogOn | Ephemeral -RunOnce worker |
-| OpenClawRuntimeWatchdog | Every 15min | Health + stuck task + worker kick |
-| OpenClawStartupPreflight | AtBoot | Stale recovery + layout validation |
-| OpenClawWmcpServer | AtLogOn | windows-mcp HTTP server on :8001 |
-| OpenClawWslGuardian | AtLogOn | WSL + OpenClaw active guardian (30s check, auto-restart, Telegram alerts) |
-| OpenClawDashboard | AtLogOn | Web dashboard HTTP server on :8002 |
+| VezirTaskWorker | AtLogOn | Ephemeral -RunOnce worker |
+| VezirRuntimeWatchdog | Every 15min | Health + stuck task + worker kick |
+| VezirStartupPreflight | AtBoot | Stale recovery + layout validation |
+| VezirWmcpServer | AtLogOn | windows-mcp HTTP server on :8001 |
+| VezirWslGuardian | AtLogOn | WSL + Vezir active guardian (30s check, auto-restart, Telegram alerts) |
+| VezirDashboard | AtLogOn | Web dashboard HTTP server on :8002 |
 
 ## Architectural Decisions
 
@@ -190,8 +190,8 @@ Telegram user (8654710624)
 
 - WMCP `local-mcp-12345` API key is a known temporary localhost-only credential
 - Bridge wrapper sourceUserId is hardcoded to single user (Phase 2 scope to make dynamic)
-- OpenClaw exec-approvals prompt on first use of each bridge wrapper
-- `telegram/oc-telegram-bot.py` is superseded by OpenClaw path — removed from repo
+- Vezir exec-approvals prompt on first use of each bridge wrapper
+- `telegram/oc-telegram-bot.py` is superseded by Vezir path — removed from repo
 - WSL stability: two-layer monitoring (L1: systemd keepalive 20s, L2: WSL Guardian 30s) — see `docs/phase-reports/WSL-OPENCLAW-STABILITY-HARDENING.md`
 - build_command string template debt — currently generates PowerShell via string concatenation (Phase 4.5 item)
 - Approval flow uses strict `approve <id>` / `deny <id>` format (Sprint 6D). Simple "yes/no" deprecated — accepted only with single pending approval

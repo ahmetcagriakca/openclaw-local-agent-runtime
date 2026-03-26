@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Minimal HTTP server for the OpenClaw System Monitor dashboard.
+    Minimal HTTP server for the Vezir System Monitor dashboard.
     Serves dashboard/index.html and health API endpoints.
     Runs in-process, stops with Ctrl+C.
 

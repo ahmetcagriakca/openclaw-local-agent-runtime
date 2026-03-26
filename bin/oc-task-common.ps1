@@ -29,10 +29,10 @@ function Get-OcRuntimeConfig {
         WatchdogScriptPath = Join-Path $script:OcBinPath 'oc-runtime-watchdog.ps1'
         PreflightScriptPath = Join-Path $script:OcBinPath 'oc-runtime-startup-preflight.ps1'
         RebootValidatePath = Join-Path $script:OcBinPath 'oc-reboot-validate.ps1'
-        SchedulerTaskName = 'OpenClawTaskWorker'
-        WatchdogTaskName = 'OpenClawRuntimeWatchdog'
-        PreflightTaskName = 'OpenClawStartupPreflight'
-        WorkerMutexName = 'Global\OpenClawTaskWorker'
+        SchedulerTaskName = 'VezirTaskWorker'
+        WatchdogTaskName = 'VezirRuntimeWatchdog'
+        PreflightTaskName = 'VezirStartupPreflight'
+        WorkerMutexName = 'Global\VezirTaskWorker'
         StuckWarningMinutes = 30
         StuckRecoveryMinutes = 60
         StaleLeaseMinutes = 30

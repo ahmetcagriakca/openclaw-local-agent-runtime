@@ -1,6 +1,6 @@
 # test-bridge.ps1
-# Minimal validation utility simulating OpenClaw behavior.
-# Not OpenClaw implementation. Validation-only.
+# Minimal validation utility simulating Vezir behavior.
+# Not Vezir implementation. Validation-only.
 param(
     [Parameter(Mandatory = $true)]
     [ValidateSet('all', 'startup', 'validation', 'submit', 'poll', 'cancel', 'health')]

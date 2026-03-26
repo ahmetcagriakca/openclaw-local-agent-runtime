@@ -1,4 +1,4 @@
-"""OpenClaw Mission Control API — FastAPI server.
+"""Vezir Platform API — FastAPI server.
 
 D-061: FastAPI from day 1.
 D-070: Localhost security (Host validation, CORS, 127.0.0.1 binding).
@@ -128,7 +128,7 @@ async def lifespan(app: FastAPI):
     # Step 4: Register service
     _register_service("running")
     logger.info(f"MCC startup: serving on 127.0.0.1:{PORT}")
-    logger.warning("D-097: Legacy dashboard on :8002 is deprecated. Use Mission Control UI on :3000.")
+    logger.warning("D-097: Legacy dashboard on :8002 is deprecated. Use Vezir UI on :3000.")
 
     # Step 5: Start heartbeat background task (GPT Fix 6)
     import asyncio
@@ -180,7 +180,7 @@ async def _heartbeat_loop():
 # ── App ──────────────────────────────────────────────────────────
 
 app = FastAPI(
-    title="OpenClaw Mission Control",
+    title="Vezir Platform",
     version="1.0.0",
     lifespan=lifespan,
 )

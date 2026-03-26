@@ -1,7 +1,7 @@
 # oc-bridge.ps1
 # Phase 1.5-E Bridge implementation.
 # Stateless PowerShell script entrypoint. Not a persistent server.
-# OpenClaw invokes this script per-request with -RequestJson parameter.
+# Vezir invokes this script per-request with -RequestJson parameter.
 #
 # Physical form: single-invocation script.
 # Each call processes one external request and exits.

@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Comprehensive system health check for all OpenClaw components.
+    Comprehensive system health check for all Vezir components.
     Outputs a single JSON object to stdout.
     Callable standalone (CLI), by dashboard, watchdog, or Telegram wrapper.
 
@@ -46,24 +46,24 @@ if (Test-Path -LiteralPath $guardianStatePath) {
     try {
         $gState = Get-Content -Raw -LiteralPath $guardianStatePath | ConvertFrom-Json
         $wslRestarts = $gState.wsl.restartCount
-        $ocRestarts = $gState.openclaw.restartCount
+        $ocRestarts = $gState.vezir.restartCount
         if ($wslRestarts -gt 0 -or $ocRestarts -gt 0) {
             $components['wsl']['detail'] += " (WSL restarts: $wslRestarts, OC restarts: $ocRestarts)"
         }
     } catch { }
 }
 
-# --- 3. OpenClaw Gateway ------------------------------------------------------
+# --- 3. Vezir Gateway ------------------------------------------------------
 try {
     $pgrepOut = & wsl -d Ubuntu-E -- pgrep -fa openclaw 2>&1 | Out-String
     $procLines = @(($pgrepOut -split "`n") | Where-Object { $_.Trim().Length -gt 0 })
     if ($procLines.Count -gt 0) {
-        $components['openclaw'] = @{ status = 'ok'; detail = "$($procLines.Count) processes" }
+        $components['vezir'] = @{ status = 'ok'; detail = "$($procLines.Count) processes" }
     } else {
-        $components['openclaw'] = @{ status = 'error'; detail = 'no openclaw process found' }
+        $components['vezir'] = @{ status = 'error'; detail = 'no vezir process found' }
     }
 } catch {
-    $components['openclaw'] = @{ status = 'error'; detail = 'pgrep command failed' }
+    $components['vezir'] = @{ status = 'error'; detail = 'pgrep command failed' }
 }
 
 # --- 4. oc Runtime Health -----------------------------------------------------
@@ -115,12 +115,12 @@ if (Test-Path -LiteralPath $allowlistPath) {
 
 # --- 6. Scheduled Tasks -------------------------------------------------------
 $taskNames = @(
-    'OpenClawTaskWorker',
-    'OpenClawRuntimeWatchdog',
-    'OpenClawStartupPreflight',
-    'OpenClawWmcpServer',
-    'OpenClawWslGuardian',
-    'OpenClawDashboard'
+    'VezirTaskWorker',
+    'VezirRuntimeWatchdog',
+    'VezirStartupPreflight',
+    'VezirWmcpServer',
+    'VezirWslGuardian',
+    'VezirDashboard'
 )
 $taskStates = [ordered]@{}
 $okCount = 0

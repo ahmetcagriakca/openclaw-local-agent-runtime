@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""OpenClaw Agent Runner — AI-powered Windows automation via MCP tools."""
+"""Vezir Agent Runner — AI-powered Windows automation via MCP tools."""
 import sys, io
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
 sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8")
@@ -17,7 +17,7 @@ from oc_agent_runner_lib import run_agent_with_config
 
 
 def main():
-    parser = argparse.ArgumentParser(description="OpenClaw Agent Runner")
+    parser = argparse.ArgumentParser(description="Vezir Agent Runner")
     parser.add_argument("--message", "-m", required=True, help="User message")
     parser.add_argument("--agent", default="gpt-general", help="Agent ID")
     parser.add_argument("--user-id", default="8654710624", help="User ID")

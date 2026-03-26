@@ -1,7 +1,7 @@
 <#
 .SYNOPSIS
     Register (or update) a Windows Scheduled Task that starts the
-    OpenClaw dashboard server at user logon.
+    Vezir dashboard server at user logon.
 
 .NOTES
     Run once from an elevated (admin) PowerShell prompt.
@@ -10,7 +10,7 @@
 #>
 
 param(
-    [string]$TaskName   = "OpenClawDashboard",
+    [string]$TaskName   = "VezirDashboard",
     [string]$ScriptPath = "$env:USERPROFILE\oc\bin\start-dashboard.ps1"
 )
 

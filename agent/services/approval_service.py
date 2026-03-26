@@ -17,7 +17,7 @@ Approval flow:
 4. Timeout after N seconds -> auto-deny
 
 The user approves by running: oc-approve apv-XXX
-Or from Telegram via OpenClaw: "approve apv-XXX"
+Or from Telegram via Vezir: "approve apv-XXX"
 Or from Dashboard (Sprint 11+): Approve/Reject buttons
 """
 import json
@@ -48,7 +48,7 @@ class ApprovalService:
         self.chat_id = os.environ.get("OC_TELEGRAM_CHAT_ID", "8654710624")
 
     def _resolve_token_from_wsl(self):
-        """Try to read bot token from WSL OpenClaw .env file."""
+        """Try to read bot token from WSL .env file."""
         try:
             result = subprocess.run(
                 ["wsl", "-d", "Ubuntu-E", "--", "bash", "-c",

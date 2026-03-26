@@ -1,261 +1,91 @@
-# Sprint 13 — Task Breakdown (Phase 5.5: Stabilization + Structural Hardening) v5
+# Sprint 13 — Task Breakdown (Post-Regularization)
 
-**Repo path:** `docs/sprints/sprint-13/SPRINT-13-TASK-BREAKDOWN.md`
-**Date:** 2026-03-26 (v5 — revised for Vezir Platform actual state)
-**Phase:** 5.5 — Post-Phase 5 Stabilization
-**Goal:** Zero technical debt (49 items), event-driven token governance, industry-standard monorepo.
-**implementation_status:** not_started
-**closure_status:** not_started
+**Date:** 2026-03-26 (v7 — regularized to match actual implementation)
+**Phase:** 5.5 — Stabilization
+**implementation_status:** done
+**closure_status:** review_pending
 **Owner:** AKCA (operator)
 
 ---
 
-## Current State (Post Session Report 2026-03-26)
+## Scope Boundary (Frozen at Kickoff)
 
-| Component | State |
-|-----------|-------|
-| Vezir API (:8003) | Operational, 11 health components, 233 backend tests |
-| Vezir UI (:3000) | Operational, rebrand complete, 29 frontend tests |
-| Math Service (:9000) | Operational, 5 endpoints, 11 tests |
-| Telegram Bot | Operational, @newbieakcabot |
-| WMCP (:8001) | Operational, 18 tools |
-| D-102 L3/L4/L5 | ✅ Inline — observability, budget, permissions working |
-| D-102 L1/L2/EventBus | ⬜ Not done — Sprint 13 scope |
+**In scope:** D-102 minimum viable fix, 2 known bugs (token ID, WSL), doc cleanup.
+**Out of scope:** EventBus, backend/frontend restructure, monorepo expansion, Docker, D-103, legacy removal, tooling.
 
----
+## Scope Expansion (Operator-Approved During Execution)
 
-## Debt Registry (49 items, 0 deferred)
+The following items were pulled into the sprint after kickoff. This is
+documented scope drift, approved by operator during session.
 
-| Category | Items | Tasks |
-|----------|-------|-------|
-| D-102 EventBus + L1/L2 (critical) | 2 | 13.0 |
-| Known issues (token ID, WSL, rework) | 3 | 13.1-13.3 |
-| Doc structure (stale files, Turkish, backlog, protocol, READMEs, templates) | 9 | 13.4-13.5, 13.16 |
-| Backend flat → layered | 7 | 13.6-13.9 |
-| Frontend flat → feature-based | 10 | 13.10-13.13 |
-| Runtime docs (bin, telegram, wsl, manifest) | 4 | 13.2, 13.14 |
-| Monorepo (README, CONTRIBUTING, scripts, editorconfig, ports) | 6 | 13.15-13.16 |
-| Tooling (pre-commit, coverage, RFC 7807, type sync, Docker, deps) | 7 | 13.9, 13.13, 13.17-13.18 |
-| Legacy dashboard code removal | 1 | 13.4 |
+| Item | Original Plan Status | Why Pulled In |
+|------|---------------------|---------------|
+| D-103 rework limiter | "Not frozen — cannot enter" | Operator approved freeze + implementation |
+| Legacy dashboard removal | "Deferred to Sprint 14+" | Low-risk, natural alongside doc cleanup |
+| .editorconfig + dev scripts + PORTS.md | "Monorepo expansion — out of scope" | Quick wins, zero code risk |
 
 ---
 
-## Task Table — 7 Tracks, 30 Tasks
+## Task Table — Actual Implementation
 
-### Track 0: Event-Driven Refactor (BLOCKER)
+### Original Scope (Frozen)
 
-| Task | Description | Size |
-|------|-------------|------|
-| **13.0** | **EventBus + extract inline L3/L4/L5 into handlers + implement L1/L2 + enforcement + monitoring** | **XL** |
+| Task | Description | Status | Output |
+|------|-------------|--------|--------|
+| 13.0.1 | L1: StageResult isolation + extract_stage_result() | DONE | `agent/mission/stage_result.py` — 9 tests |
+| 13.0.2 | L2: Distance-based tiered context assembly | DONE | `controller.py` enhanced — 6 tests |
+| 13.0.3 | L1+L2 controller integration | DONE | stage_results list wired into stage loop |
+| 13.0.4 | L3/L4/L5 verification + full test suite | DONE | 225 pass (non-E2E), 0 regressions |
+| 13.1 | Token report ID mismatch fix | DONE | `normalizer.resolve_file_id()` — 3 tests |
+| 13.5 | Stale docs archive + Turkish cleanup | DONE | 12 files → docs/archive/stale-ai-docs/ |
 
-24 subtasks:
-- 13.0.1-13.0.3: EventBus core, event catalog (28 types), correlation IDs
-- 13.0.4: Token estimation utility
-- 13.0.5-13.0.9: Handlers — AuditTrail, TokenLogger (extract), BypassDetector, ToolPermissions (extract), BudgetEnforcer (extract)
-- 13.0.10-13.0.11: ApprovalGate, ToolExecutor (gated execution)
-- 13.0.12-13.0.13: LLMExecutor (gated), ReportCollector (extract)
-- 13.0.14-13.0.15: AnomalyDetector, MetricsExporter
-- 13.0.16-13.0.17: **L1 StageResult isolation + L2 Tiered ContextAssembler**
-- 13.0.18-13.0.19: StageTransitionHandler, ContextAssembler as handler
-- 13.0.20: AgentRunner refactor — replace inline with bus.emit()
-- 13.0.21: UIOverview + WindowList lightweight tools
-- 13.0.22: Feature flags
-- 13.0.23-13.0.24: Unit tests (all 13 handlers) + E2E validation (3 complex + 3 simple)
+### Scope Expansion (Operator-Approved)
 
-**Gate:** Developer stage ≤ 30K tokens. No bypass possible. All other tasks blocked until done.
+| Task | Description | Status | Output |
+|------|-------------|--------|--------|
+| 13.3-EX | D-103 rework limiter | DONE | `feedback_loops.py` REWORK_LIMITS — 12 tests. D-103 frozen. |
+| 13.4-EX | Legacy dashboard removal (D-097) | DONE | Deleted dashboard/, bin/start-dashboard.ps1, bin/register-dashboard-task.ps1 |
+| 13.14-EX | Dev scripts | DONE | scripts/test-all.sh, dev-backend.sh, dev-frontend.sh |
+| 13.16-EX | .editorconfig + PORTS.md | DONE | Root .editorconfig, docs/PORTS.md |
 
-### Track 1: Known Issues Fix
+### Not Implemented (Deferred to Sprint 14+)
 
-| Task | Description | Size |
-|------|-------------|------|
-| 13.1 | Token report ID mismatch — normalizer in mission_api.py | S |
-| 13.2 | WSL naming: openclaw → vezir (dir rename + symlink + grep) | M |
-| 13.3 | Rework limiter: complexity-based max (D-103) | M |
+| Task | Description | Reason |
+|------|-------------|--------|
+| 13.2 | WSL naming (.openclaw → .vezir) | WSL infrastructure, requires manual work |
+| 13.0.5-7 | UIOverview + WindowList tools | Not blocking — L1/L2 sufficient |
+| 13.0.9 | Feature flag CONTEXT_ISOLATION_ENABLED | Low risk without flag |
+| 13.0.10 | E2E validation: 3 complex + 3 simple missions | Requires running pipeline |
 
-### Track 2: Doc Migration + Legacy Removal
-
-| Task | Description | Size |
-|------|-------------|------|
-| 13.4 | Legacy dashboard code removal (D-097) + Turkish cleanup | M |
-| 13.5 | Archive stale docs (28+ files) + telegram debug files | M |
-
-### Track 3: Backend Restructure
-
-| Task | Description | Size |
-|------|-------------|------|
-| 13.6 | Create backend/app/ package: core/, api/v1/, models/, schemas/, services/, middleware/, events/, handlers/, pipeline/, tools/ | L |
-| 13.7 | create_app() factory + BaseSettings + lifespan + RFC 7807 | M |
-| 13.8 | Migrate routes→api/v1/, logic→services/, types→models/+schemas/ | L |
-| 13.9 | Monorepo integration: Math Service→backend/services/math/, Telegram Bot→backend/services/telegram/ | M |
-
-### Mid-Review Gate
-
-| Task | Description |
-|------|-------------|
-| 13.MID-REPORT | Mid-review report |
-| 13.MID | GPT mid-review |
-| 13.CLAUDE-MID | Claude mid-assessment |
-
-Both PASS → Track 4+5 begin.
-
-### Track 4: Frontend Restructure (after mid-gate)
-
-| Task | Description | Size |
-|------|-------------|------|
-| 13.10 | Create feature structure: features/, components/ui/, api/, hooks/, types/, layouts/, lib/ | L |
-| 13.11 | Migrate → features/ (dashboard, roles, approvals, missions) + barrel exports | L |
-| 13.12 | API client layer + ErrorBoundary + @/ alias + vite proxy + generate-types.sh | M |
-| 13.13 | Test cleanup + vitest coverage + Lighthouse regression + pre-commit hooks | M |
-
-### Track 5: Tooling + Monorepo (after mid-gate)
-
-| Task | Description | Size |
-|------|-------------|------|
-| 13.14 | Runtime/telegram/wsl/math READMEs + manifest.json path doc | S |
-| 13.15 | Dev scripts: dev-backend, dev-frontend, dev-all, lint-all, test-all | M |
-| 13.16 | Root README + CONTRIBUTING.md + .editorconfig + ports.md + sprint README backfill (7→12) + templates (5) + shared docs (2) | L |
-| 13.17 | Backend test restructure: unit/+integration/+e2e/ + pyproject.toml + mypy + ruff + coverage | M |
-| 13.18 | Dockerfile.dev + docker-compose.dev.yml (4 services: API, UI, Math, Telegram) | M |
-
-### Track 6: Verification + Closure
-
-| Task | Description | Size |
-|------|-------------|------|
-| 13.19 | Closure script update + full repo structure verify + ALL tests | M |
-| 13.20 | Decision debt final: D-001→D-103, zero gaps | S |
-| 13.REPORT | Final review report | S |
-| 13.RETRO | Sprint retrospective | S |
-| 13.FINAL | GPT final + Claude assessment | — |
-| 13.CLOSURE | Closure summary + Phase 5.5 closure report | S |
-
-**Implementation: 21 | Process: 8 | Known issues: 3 | Total: 30**
+**Implemented: 10 | Deferred: 4 | Process gates: pending**
 
 ---
 
-## Execution Timeline
+## Test Evidence
 
-```
-Week 1:  Track 0 ████████████████ (13.0 EventBus — BLOCKER)
-Week 2:  Track 1 ████ (13.1-13.3) + Track 2 ████ (13.4-13.5) + Track 3 ████████ (13.6-13.9)
-         MID GATE ─────
-Week 3:  Track 4 ████████████████ (13.10-13.13) + Track 5 ████████████████ (13.14-13.18)
-Week 4:  Track 6 ████████████████ (13.19-13.CLOSURE)
-```
+| Suite | Count | Status |
+|-------|-------|--------|
+| Backend (non-E2E) | 225 | All pass |
+| New Sprint 13 tests | 30 | All pass (9+6+3+12) |
+| E2E | 39 | 38 pass, 1 pre-existing |
 
----
+## Commits
 
-## Evidence Checklist (30 mandatory)
+| Commit | Scope |
+|--------|-------|
+| 7d52aa7 | Sprint 12 closure (operator sign-off) |
+| 960686b | Track 0: L1/L2 implementation (15 tests) |
+| a8e0b48 | Track 1: token report fix + D-103 rework limiter (15 tests) |
+| 6a681fd | Track 2: legacy dashboard removal + stale docs archive |
+| bb27924 | Track 5: dev scripts, .editorconfig, PORTS.md |
 
-| # | File | Task |
-|---|------|------|
-| 1 | eventbus-unit-tests.txt | 13.0 |
-| 2 | handler-unit-tests.txt | 13.0 |
-| 3 | enforcement-tests.txt | 13.0 |
-| 4 | bypass-detection-test.txt | 13.0 |
-| 5 | audit-trail-integrity.txt | 13.0 |
-| 6 | token-count-before.txt | 13.0 |
-| 7 | token-count-after.txt | 13.0 |
-| 8 | complex-mission-runs.txt | 13.0 |
-| 9 | simple-mission-runs.txt | 13.0 |
-| 10 | correlation-id-trace.txt | 13.0 |
-| 11 | token-report-id-fix.txt | 13.1 |
-| 12 | wsl-rename-evidence.txt | 13.2 |
-| 13 | rework-limiter-test.txt | 13.3 |
-| 14 | turkish-scan.txt | 13.4 |
-| 15 | archive-manifest.txt | 13.5 |
-| 16 | backend-structure-before.txt | 13.6 |
-| 17 | backend-structure-after.txt | 13.8 |
-| 18 | backend-tests-after.txt | 13.17 |
-| 19 | backend-coverage.txt | 13.17 |
-| 20 | mypy-output.txt | 13.17 |
-| 21 | ruff-output.txt | 13.17 |
-| 22 | openapi-re-export.txt | 13.8 |
-| 23 | frontend-structure-after.txt | 13.11 |
-| 24 | frontend-tests-after.txt | 13.13 |
-| 25 | frontend-coverage.txt | 13.13 |
-| 26 | lighthouse-comparison.txt | 13.13 |
-| 27 | docker-compose-test.txt | 13.18 |
-| 28 | repo-structure-final.txt | 13.19 |
-| 29 | decision-debt-final.txt | 13.20 |
-| 30 | review-summary.md | 13.FINAL |
+## Decisions
+
+| ID | Status | Note |
+|----|--------|------|
+| D-103 | Frozen | Scope expansion — was out-of-scope at kickoff, operator-approved during execution |
 
 ---
 
-## Verification Commands
-
-```bash
-# EventBus + enforcement
-grep "stage_input_tokens" logs/agent-runner.log | tail -5   # all ≤ 30K
-grep "BYPASS" logs/audit-trail.jsonl                         # 0
-python -m app.audit verify logs/audit-trail.jsonl            # chain intact
-
-# Known issues
-curl localhost:8003/api/missions/<id>/token-report | jq .status  # 200
-ls /home/akca/.vezir/                                        # exists
-grep "REWORK LIMIT" logs/agent-runner.log                    # appears if hit
-
-# Backend
-python -c "from app import create_app; print('OK')"
-curl localhost:8003/api/v1/roles | jq length
-pytest backend/tests/ -v --cov=app
-mypy backend/app/ && ruff check backend/
-
-# Frontend
-find frontend/src/features/ -type d
-npx tsc --noEmit && npx vitest run --coverage
-grep -r "fetch(" frontend/src/features/ | grep -v api/ | wc -l  # 0
-
-# Tooling
-docker-compose -f docker-compose.dev.yml up -d && curl -sf localhost:8003/api/v1/health
-bash scripts/test-all.sh
-pre-commit run --all-files
-
-# Decisions + structure
-grep -c "^## D-" docs/ai/DECISIONS.md                       # 103
-ls docs/ai/ | wc -l                                          # 3
-find archive/stale/ -type f | wc -l                          # ≥ 28
-bash tools/sprint-closure-check.sh 13
-```
-
----
-
-## Implementation Notes
-
-| Task | Planned | Implemented | Why Different |
-|------|---------|-------------|---------------|
-| 13.0-13.20 | — | — | — |
-
-## File Manifest
-
-| File | Action | Task |
-|------|--------|------|
-| backend/app/events/ (bus, catalog, correlation) | Create | 13.0 |
-| backend/app/handlers/ (13 handlers) | Create | 13.0 |
-| backend/app/pipeline/ (runner, stage_result, context_assembler) | Create/Refactor | 13.0 |
-| backend/app/tools/ (ui_overview, window_list) | Create | 13.0 |
-| controller.py | Refactor (extract inline→handlers) | 13.0 |
-| mission_api.py | Fix (token report ID) | 13.1 |
-| WSL paths (~5 files) | Rename | 13.2 |
-| docs/ai/DECISIONS.md | Modify (D-103) | 13.3 |
-| Legacy dashboard files | Delete | 13.4 |
-| archive/stale/ (28+ files) | Move | 13.5 |
-| backend/app/ (layered tree) | Create | 13.6-13.8 |
-| backend/services/math/ | Move | 13.9 |
-| backend/services/telegram/ | Move | 13.9 |
-| frontend/src/features/ | Create | 13.10-13.11 |
-| frontend/src/api/*.ts | Create | 13.12 |
-| .pre-commit-config.yaml | Create | 13.13 |
-| scripts/ (5 dev scripts) | Create | 13.15 |
-| CONTRIBUTING.md, .editorconfig | Create | 13.16 |
-| docker-compose.dev.yml | Create | 13.18 |
-| docs/templates/ (5 templates) | Create | 13.16 |
-| docs/sprints/sprint-7..12/README.md (6 backfill) | Create | 13.16 |
-
----
-
-## Next Step
-
-**Produced:** SPRINT-13-TASK-BREAKDOWN v5
-**Next actor:** Operator
-**Action:** Sprint 12 kapat → D-102/D-103 confirm → GPT'ye kickoff packet gönder.
-**Blocking:** Sprint 12 closure required.
+*Sprint 13 Task Breakdown — Vezir Platform*
+*v7: Regularized 2026-03-26 to match actual implementation*

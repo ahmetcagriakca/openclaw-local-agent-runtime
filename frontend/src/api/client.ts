@@ -12,6 +12,7 @@ import type {
   HealthApiResponse,
   CapabilityListResponse,
   MutationResponse,
+  CreateMissionResponse,
 } from '../types/api'
 
 const BASE = '/api/v1'
@@ -132,4 +133,32 @@ export function cancelMission(id: string): Promise<MutationResponse> {
 
 export function retryMission(id: string): Promise<MutationResponse> {
   return apiPost<MutationResponse>(`/missions/${encodeURIComponent(id)}/retry`)
+}
+
+// ── Mission Create ──────────────────────────────────────────────
+
+async function apiPostJson<T>(path: string, body: unknown): Promise<T> {
+  const res = await fetch(`${BASE}${path}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Tab-Id': getTabId(),
+      'X-Session-Id': getSessionId(),
+    },
+    body: JSON.stringify(body),
+  })
+  if (!res.ok) {
+    let respBody: unknown
+    try {
+      respBody = await res.json()
+    } catch {
+      respBody = await res.text()
+    }
+    throw new ApiError(res.status, respBody)
+  }
+  return res.json() as Promise<T>
+}
+
+export function createMission(goal: string, complexity?: string): Promise<CreateMissionResponse> {
+  return apiPostJson<CreateMissionResponse>('/missions', { goal, complexity: complexity ?? 'medium' })
 }

@@ -196,6 +196,20 @@ export interface APIError {
   timestamp: string
 }
 
+// ── Create Mission ──────────────────────────────────────────────
+
+export interface CreateMissionRequest {
+  goal: string
+  complexity?: string
+}
+
+export interface CreateMissionResponse {
+  meta: ResponseMeta
+  missionId: string
+  state: string
+  goal: string
+}
+
 // ── Mutation Response (D-096) ───────────────────────────────────
 
 export interface MutationResponse {

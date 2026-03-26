@@ -129,6 +129,8 @@ class MissionController:
         completed_roles = set()
         failure_reason = None
         current_stage_index = resume_from_index
+        # D-102 L1: Track stage results for distance-based context assembly
+        stage_results = []
 
         while current_stage_index < len(mission["stages"]):
             stage = mission["stages"][current_stage_index]
@@ -208,7 +210,8 @@ class MissionController:
                         stage_id=stage_id,
                         artifact_ids=mission["completedArtifactIds"]
                     )
-                    artifact_context = self._format_artifact_context(context_package)
+                    artifact_context = self._format_artifact_context(
+                        context_package, stage_results=stage_results)
 
                 result = self._execute_stage(
                     stage, all_artifacts, mission_id, user_id,
@@ -282,6 +285,11 @@ class MissionController:
                     self._validate_artifact_schema(
                         artifact_type, stage_artifact_data,
                         mission_id, stage_id, canonical_role)
+
+                # D-102 L1: Extract clean stage result for downstream context
+                from mission.stage_result import extract_stage_result
+                sr = extract_stage_result(stage)
+                stage_results.append(sr)
 
                 # 5C-1: Track completion in state machine
                 completed_roles.add(role)
@@ -700,25 +708,50 @@ Respond ONLY with a JSON object, no markdown:
 
         return result
 
-    def _format_artifact_context(self, context_package: list) -> str:
+    def _format_artifact_context(self, context_package: list,
+                                   stage_results: list = None) -> str:
         """Format assembler context for LLM consumption.
 
-        D-102 tiered truncation:
-          Tier A (previous stage):  max 5000 chars
-          Tier B (2 stages back):   max 2000 chars
-          Tier C (3+ stages back):  max 500 chars
-          Tier D (default):         max 1000 chars
+        D-102 L2 distance-based tiered truncation:
+          Distance 1 (N-1, previous stage):  max 5000 chars
+          Distance 2 (N-2):                  max 2000 chars
+          Distance 3+ (N-3+):                max 500 chars
 
-        Stage boundary isolation: only artifact text passed,
+        Semantic tier limits (A-D) are still respected but capped by
+        distance limits. The stricter of the two applies.
+
+        Stage boundary isolation (L1): only artifact text passed,
         tool call history never crosses stage boundaries.
+
+        Args:
+            context_package: list of (artifactId, content, tier) from assembler
+            stage_results: list of StageResult from completed stages (optional,
+                          enables distance-based limits)
         """
-        TIER_LIMITS = {"A": 5000, "B": 2000, "C": 500, "D": 1000}
+        # Semantic tier limits (existing)
+        SEMANTIC_LIMITS = {"A": 5000, "B": 2000, "C": 500, "D": 1000}
+        # Distance-based limits (L2) — index from end of context_package
+        DISTANCE_LIMITS = {1: 5000, 2: 2000}  # 3+ defaults to 500
+        DISTANCE_DEFAULT = 500
+
+        n_artifacts = len(context_package)
 
         parts = []
-        for artifact_id, content, tier in context_package:
+        for idx, (artifact_id, content, tier) in enumerate(context_package):
             if content is None:
                 continue
-            char_limit = TIER_LIMITS.get(tier, 1000)
+
+            # Semantic limit from tier matrix
+            semantic_limit = SEMANTIC_LIMITS.get(tier, 1000)
+
+            # Distance limit: how far back is this artifact?
+            # idx=0 is oldest, idx=n-1 is most recent
+            if stage_results is not None and n_artifacts > 0:
+                distance = n_artifacts - idx  # 1 = most recent
+                distance_limit = DISTANCE_LIMITS.get(distance, DISTANCE_DEFAULT)
+                char_limit = min(semantic_limit, distance_limit)
+            else:
+                char_limit = semantic_limit
 
             if isinstance(content, dict):
                 text = json.dumps(content, indent=2, ensure_ascii=False)

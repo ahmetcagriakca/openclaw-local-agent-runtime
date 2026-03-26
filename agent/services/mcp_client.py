@@ -8,7 +8,13 @@ import requests
 class MCPClient:
     def __init__(self, base_url=None, api_key=None, timeout=30):
         self.base_url = base_url or os.environ.get("OC_MCP_BASE_URL", "http://localhost:8001")
-        self.api_key = api_key or os.environ.get("OC_MCP_API_KEY", "local-mcp-12345")
+        self.api_key = api_key or os.environ.get("OC_MCP_API_KEY", "")
+        if not self.api_key:
+            import logging
+            logging.getLogger("mcc.mcp").warning(
+                "OC_MCP_API_KEY not set — using insecure default. "
+                "Set OC_MCP_API_KEY env var in production.")
+            self.api_key = "local-mcp-12345"
         self.timeout = timeout
 
     def execute_powershell(self, command: str) -> dict:

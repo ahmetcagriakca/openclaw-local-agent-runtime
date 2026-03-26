@@ -20,7 +20,9 @@ def main():
     parser = argparse.ArgumentParser(description="Vezir Agent Runner")
     parser.add_argument("--message", "-m", required=True, help="User message")
     parser.add_argument("--agent", default="gpt-general", help="Agent ID")
-    parser.add_argument("--user-id", default="8654710624", help="User ID")
+    parser.add_argument("--user-id",
+                        default=os.environ.get("OC_USER_ID", "8654710624"),
+                        help="User ID (default: OC_USER_ID env var)")
     parser.add_argument("--session-id", default=None, help="Session ID")
     parser.add_argument("--max-turns", type=int, default=10, help="Max turns")
     parser.add_argument("--mission", action="store_true",

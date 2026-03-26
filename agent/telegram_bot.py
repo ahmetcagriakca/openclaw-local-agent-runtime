@@ -28,7 +28,11 @@ log = logging.getLogger("tg-bot")
 
 # ── Config ──────────────────────────────────────────────────────
 BOT_TOKEN = os.environ.get("OC_TELEGRAM_BOT_TOKEN")
-CHAT_ID = os.environ.get("OC_TELEGRAM_CHAT_ID", "8654710624")
+CHAT_ID = os.environ.get("OC_TELEGRAM_CHAT_ID", "")
+if not CHAT_ID:
+    log.warning("OC_TELEGRAM_CHAT_ID not set — using hardcoded default. "
+                 "Set env var in production.")
+    CHAT_ID = "8654710624"
 AGENT_SCRIPT = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                             "oc-agent-runner.py")
 PYTHON_EXE = sys.executable

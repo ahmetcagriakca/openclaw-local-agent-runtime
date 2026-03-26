@@ -45,7 +45,7 @@ class ApprovalService:
         if not self.bot_token:
             self._resolve_token_from_wsl()
 
-        self.chat_id = os.environ.get("OC_TELEGRAM_CHAT_ID", "8654710624")
+        self.chat_id = os.environ.get("OC_TELEGRAM_CHAT_ID") or "8654710624"
 
     def _resolve_token_from_wsl(self):
         """Try to read bot token from WSL .env file."""

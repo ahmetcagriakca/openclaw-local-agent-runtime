@@ -244,7 +244,7 @@ async def get_health(request: Request):
     # 10. Telegram Bot
     try:
         tg_token = os.environ.get("OC_TELEGRAM_BOT_TOKEN")
-        tg_chat = os.environ.get("OC_TELEGRAM_CHAT_ID", "8654710624")
+        tg_chat = os.environ.get("OC_TELEGRAM_CHAT_ID") or "8654710624"
         if not tg_token:
             # Try WSL resolution (same as approval_service)
             import subprocess as _sp

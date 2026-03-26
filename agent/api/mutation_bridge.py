@@ -94,8 +94,12 @@ def has_pending_signal(
 
     Returns the existing requestId if found, None otherwise.
     Used to prevent duplicate mutations (Test 5: 409 conflict).
+    Signal artifacts older than 60 seconds are considered expired and cleaned up.
     """
     import json
+    import time
+
+    SIGNAL_TTL_S = 60  # Expire signals after 60 seconds
 
     mission_dir = missions_dir / mission_id
     if not mission_dir.exists():
@@ -104,6 +108,15 @@ def has_pending_signal(
     pattern = f"{mutation_type}-request-req-*.json"
     for artifact_path in mission_dir.glob(pattern):
         try:
+            # Expire old artifacts — controller may not be running
+            age_s = time.time() - artifact_path.stat().st_mtime
+            if age_s > SIGNAL_TTL_S:
+                try:
+                    artifact_path.unlink()
+                except OSError:
+                    pass
+                continue
+
             data = json.loads(artifact_path.read_text(encoding="utf-8"))
             if data.get("targetId") == target_id:
                 return data.get("requestId")

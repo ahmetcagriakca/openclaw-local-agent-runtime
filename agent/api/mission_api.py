@@ -67,9 +67,15 @@ async def get_mission_stage(mission_id: str, stage_idx: int):
 @router.get("/missions/{mission_id}/token-report",
             responses={404: {"model": APIError}})
 async def get_token_report(mission_id: str):
-    """Return the per-mission token usage report (D-102)."""
+    """Return the per-mission token usage report (D-102).
+
+    Resolves dashboard placeholder IDs to controller mission IDs
+    so the correct token-report.json file is found.
+    """
+    from api.server import normalizer
+    file_id = normalizer.resolve_file_id(mission_id)
     report_path = os.path.join(
-        MISSIONS_DIR, f"{mission_id}-token-report.json")
+        MISSIONS_DIR, f"{file_id}-token-report.json")
     if not os.path.isfile(report_path):
         raise HTTPException(status_code=404,
                             detail=f"Token report for {mission_id} not found")

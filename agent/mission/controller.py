@@ -95,6 +95,7 @@ class MissionController:
                 complexity = retry_from_mission.get("complexity", "standard")
                 mission["stages"] = plan["stages"]
                 mission["complexity"] = complexity
+                self._mission_complexity = complexity
                 mission["status"] = "executing"
                 # Carry forward completed artifacts
                 for s in plan["stages"][:resume_from_index]:
@@ -106,6 +107,7 @@ class MissionController:
                 plan, complexity = self._plan_mission(goal, mission_id)
                 mission["stages"] = plan["stages"]
                 mission["complexity"] = complexity
+                self._mission_complexity = complexity
                 mission["status"] = "executing"
                 mission_state.transition_to(MissionStatus.READY,
                                             f"planned {len(plan['stages'])} stages")
@@ -1231,9 +1233,11 @@ Respond ONLY with a JSON object, no markdown:
         from mission.feedback_loops import FeedbackLoop
         from context.policy_telemetry import emit_policy_event
 
-        # Lazy-init feedback loop for this mission
+        # Lazy-init feedback loop for this mission (D-103: complexity-based limits)
         if not hasattr(self, '_feedback_loop') or self._feedback_loop is None:
-            self._feedback_loop = FeedbackLoop(mission_id)
+            complexity = getattr(self, '_mission_complexity', 'medium')
+            self._feedback_loop = FeedbackLoop(
+                mission_id, complexity=complexity)
         feedback = self._feedback_loop
 
         GATE_1_AFTER = {"product-owner", "analyst", "architect",

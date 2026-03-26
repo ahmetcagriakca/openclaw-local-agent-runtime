@@ -314,6 +314,33 @@ class TestNormalizer(unittest.TestCase):
         n = self._normalizer()
         self.assertIsNone(n.get_mission("mission-006"))
 
+    def test_42_resolve_file_id_direct(self):
+        """resolve_file_id returns same ID for controller missions."""
+        self._write(self.missions_dir / "mission-001.json", {
+            "missionId": "mission-001", "status": "completed", "stages": []})
+        n = self._normalizer()
+        self.assertEqual(n.resolve_file_id("mission-001"), "mission-001")
+
+    def test_43_resolve_file_id_dashboard_placeholder(self):
+        """resolve_file_id resolves dashboard placeholder to controller ID."""
+        # Dashboard placeholder
+        self._write(self.missions_dir / "dash-uuid-123.json", {
+            "missionId": "dash-uuid-123", "goal": "test",
+            "createdFrom": "dashboard", "status": "running", "stages": []})
+        # Controller mission linked by session
+        self._write(self.missions_dir / "mission-20260326120000-999.json", {
+            "missionId": "mission-20260326120000-999",
+            "sessionId": "web-dash-uuid-123",
+            "status": "completed", "stages": []})
+        n = self._normalizer()
+        resolved = n.resolve_file_id("dash-uuid-123")
+        self.assertEqual(resolved, "mission-20260326120000-999")
+
+    def test_44_resolve_file_id_nonexistent(self):
+        """resolve_file_id returns original ID if mission not found."""
+        n = self._normalizer()
+        self.assertEqual(n.resolve_file_id("nope"), "nope")
+
 
 # ── Unit Tests: Capabilities ────────────────────────────────────
 

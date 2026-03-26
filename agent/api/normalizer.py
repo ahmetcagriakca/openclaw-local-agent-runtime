@@ -168,6 +168,50 @@ class MissionNormalizer:
         )
         return items, meta
 
+    def resolve_file_id(self, mission_id: str) -> str:
+        """Resolve the controller mission ID for file lookups.
+
+        Dashboard-created missions have a placeholder ID (UUID).
+        The actual mission files use the controller's ID format
+        (mission-YYYYMMDDHHMMSS-PID). This method resolves the
+        mapping so token reports, state files, etc. can be found.
+
+        Returns the controller ID if found, otherwise the original ID.
+        """
+        mission_path = self._missions_dir / f"{mission_id}.json"
+        if not mission_path.exists():
+            return mission_id
+
+        try:
+            mission_data = json.loads(mission_path.read_text(encoding="utf-8"))
+        except Exception:
+            return mission_id
+
+        ctrl_id = mission_data.get("controllerMissionId")
+        if not ctrl_id and mission_data.get("createdFrom") == "dashboard":
+            session_key = f"web-{mission_id}"
+            for fpath in sorted(self._missions_dir.glob("mission-*.json"),
+                                reverse=True):
+                base = fpath.name
+                if "-state.json" in base or "-summary.json" in base:
+                    continue
+                if base == f"{mission_id}.json":
+                    continue
+                try:
+                    d = json.loads(fpath.read_text(encoding="utf-8"))
+                    if d.get("sessionId") == session_key:
+                        ctrl_id = d.get("missionId")
+                        break
+                except Exception:
+                    continue
+
+        if ctrl_id and ctrl_id != mission_id:
+            ctrl_path = self._missions_dir / f"{ctrl_id}.json"
+            if ctrl_path.exists():
+                return ctrl_id
+
+        return mission_id
+
     # ── Mission Detail ───────────────────────────────────────────
 
     def get_mission(self, mission_id: str) -> Optional[

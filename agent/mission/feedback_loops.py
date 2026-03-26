@@ -4,15 +4,36 @@ from datetime import datetime, timezone
 from context.policy_telemetry import emit_policy_event
 
 
+# D-103: Complexity-based rework limits
+REWORK_LIMITS = {
+    "trivial": {"dev_test": 1, "dev_review": 1},
+    "simple":  {"dev_test": 2, "dev_review": 1},
+    "medium":  {"dev_test": 3, "dev_review": 2},
+    "complex": {"dev_test": 4, "dev_review": 3},
+}
+REWORK_LIMITS_DEFAULT = {"dev_test": 3, "dev_review": 2}
+
+
 @dataclass
 class FeedbackLoop:
-    """Tracks rework cycles. D-034: Dev-Tester max 3, Dev-Reviewer max 2."""
+    """Tracks rework cycles.
+
+    D-034: Dev-Tester and Dev-Reviewer rework management.
+    D-103: Complexity-based limits — simpler missions get fewer rework cycles.
+    """
     mission_id: str
     max_dev_test_cycles: int = 3
     max_dev_review_cycles: int = 2
     dev_test_count: int = 0
     dev_review_count: int = 0
     rework_history: list = field(default_factory=list)
+    complexity: str = "medium"
+
+    def __post_init__(self):
+        """Apply complexity-based limits (D-103)."""
+        limits = REWORK_LIMITS.get(self.complexity, REWORK_LIMITS_DEFAULT)
+        self.max_dev_test_cycles = limits["dev_test"]
+        self.max_dev_review_cycles = limits["dev_review"]
 
     def evaluate_test_result(self, test_report_data: dict) -> dict:
         """After Tester produces test_report, decide next action.

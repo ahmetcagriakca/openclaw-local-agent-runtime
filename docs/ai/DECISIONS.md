@@ -872,6 +872,24 @@ Token budget enforcement to prevent context overflow in multi-stage missions. 5-
 **Key files:** `agent/context/token_budget.py`, `agent/mission/role_registry.py`, `agent/oc_agent_runner_lib.py` (dispatch enforcement), `agent/mission/controller.py` (`_save_token_report`).
 **Trade-off:** Conservative limits (10K truncate, 50K block) may require tuning per use case. Runtime enforcement adds ~1ms per tool call overhead — acceptable vs. context overflow risk. **Validation:** Backend 233 tests pass. Frontend TypeScript 0 errors, 29 tests pass.
 
+### D-103: Complexity-based rework limits
+
+**Phase:** Sprint 13 | **Status:** Frozen
+
+Rework cycle limits scale with mission complexity to prevent runaway rework on simple missions.
+
+| Complexity | Dev-Test max | Dev-Review max |
+|------------|-------------|----------------|
+| trivial    | 1           | 1              |
+| simple     | 2           | 1              |
+| medium     | 3           | 2              |
+| complex    | 4           | 3              |
+
+**Rationale:** Simple missions were seeing 6+ rework cycles (observed in Sprint 12 test scenarios). Complexity-based limits escalate to recovery earlier for simpler tasks, reducing wasted token budget and mission duration.
+
+**Key files:** `agent/mission/feedback_loops.py` (REWORK_LIMITS dict, `__post_init__`), `agent/mission/controller.py` (`_mission_complexity`, `_check_gates_and_loops`).
+**Validation:** 12 unit tests in `tests/test_rework_limiter.py`. All existing feedback loop tests (12) pass unchanged.
+
 ---
 
 ## Phase 5 Freeze Addendum (Sprint 7→8 transition)
@@ -901,4 +919,5 @@ Sprint 8 did not start until this document was FROZEN.
 *D-089 → D-092, D-096: Phase 5C / Sprint 11 (frozen)*
 *D-097 → D-101: Phase 5D / Sprint 12 (frozen)*
 *D-102: Token budget enforcement — Post-5D (frozen)*
+*D-103: Complexity-based rework limits — Sprint 13 (frozen)*
 *BF-1 → BF-4: Phase 5 Freeze Addendum (frozen)*

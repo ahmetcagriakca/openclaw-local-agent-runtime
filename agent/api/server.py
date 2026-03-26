@@ -210,11 +210,20 @@ async def validate_host(request: Request, call_next):
                f"localhost:{PORT}", f"127.0.0.1:{PORT}",
                "testserver"}  # FastAPI TestClient
     if host not in allowed:
+        logger.warning("Host validation rejected: %s %s (host=%s)",
+                       request.method, request.url.path, host)
         return JSONResponse(
             status_code=403,
             content={"error": "forbidden", "detail": "Invalid Host header"},
         )
-    return await call_next(request)
+    response = await call_next(request)
+    # Log 4xx/5xx errors
+    if response.status_code >= 400:
+        logger.warning("HTTP %s %s %s → %d",
+                       request.method, request.url.path,
+                       request.client.host if request.client else "?",
+                       response.status_code)
+    return response
 
 
 # ── Import routers ──────────────────────────────────────────────
@@ -228,6 +237,7 @@ from api.approval_mutation_api import router as approval_mutation_router
 from api.mission_mutation_api import router as mission_mutation_router
 from api.mission_create_api import router as mission_create_router
 from api.signal_api import router as signal_router
+from api.logs_api import router as logs_router
 
 app.include_router(mission_router, prefix="/api/v1")
 app.include_router(approval_router, prefix="/api/v1")
@@ -238,6 +248,7 @@ app.include_router(approval_mutation_router, prefix="/api/v1")
 app.include_router(mission_mutation_router, prefix="/api/v1")
 app.include_router(mission_create_router, prefix="/api/v1")
 app.include_router(signal_router, prefix="/api/v1")
+app.include_router(logs_router, prefix="/api/v1")
 
 
 # ── Main ────────────────────────────────────────────────────────

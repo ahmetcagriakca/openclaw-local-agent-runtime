@@ -2,7 +2,7 @@
  * HealthPage — comprehensive system health + capabilities + SSE.
  * Shows all components, agents, LLM providers, mission/approval stats.
  */
-import { getHealth, getCapabilities } from '../api/client'
+import { getHealth, getCapabilities, getRecentLogs } from '../api/client'
 import { usePolling } from '../hooks/usePolling'
 import { useSSEInvalidation } from '../hooks/SSEContext'
 import { DataQualityBadge } from '../components/DataQualityBadge'
@@ -24,6 +24,7 @@ const CAP_STATUS: Record<string, { color: string; icon: string }> = {
 export function HealthPage() {
   const health = usePolling(getHealth, 10_000)
   const caps = usePolling(getCapabilities, 30_000)
+  const logs = usePolling(getRecentLogs, 15_000)
 
   useSSEInvalidation(['health_changed'], health.refresh)
   useSSEInvalidation(['capability_changed'], caps.refresh)
@@ -231,6 +232,72 @@ export function HealthPage() {
           </div>
         )}
       </section>
+
+      {/* Recent Errors & Audit Log */}
+      {logs.data && (
+        <>
+          {logs.data.errors.length > 0 && (
+            <section>
+              <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-gray-500">
+                Recent Errors ({logs.data.totalErrors})
+              </h2>
+              <div className="space-y-1.5">
+                {logs.data.errors.slice(0, 20).map((log, i) => {
+                  // Extract mission ID from message [mission-xxx]
+                  const missionMatch = log.message.match(/\[(mission-[^\]]+)\]/)
+                  const missionId = missionMatch?.[1]
+                  return (
+                    <div key={`err-${i}`} className="rounded border border-red-800/40 bg-red-950/20 px-3 py-2">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <span className={`rounded px-1.5 py-0.5 text-[10px] font-bold ${
+                            log.source === 'stage_failed' ? 'bg-red-800 text-red-200' :
+                            log.source === 'mission_failed' ? 'bg-red-900 text-red-100' :
+                            'bg-orange-800 text-orange-200'
+                          }`}>{log.source}</span>
+                          {missionId && (
+                            <a href={`/missions/${missionId}`}
+                               className="font-mono text-[11px] text-blue-400 hover:underline">
+                              {missionId.length > 28 ? missionId.slice(0, 28) + '…' : missionId}
+                            </a>
+                          )}
+                        </div>
+                        <span className="text-[10px] text-gray-500">
+                          {log.timestamp ? new Date(log.timestamp).toLocaleString() : ''}
+                        </span>
+                      </div>
+                      <p className="mt-1 text-xs text-red-300/80">{log.message}</p>
+                    </div>
+                  )
+                })}
+              </div>
+            </section>
+          )}
+
+          {logs.data.mutations.length > 0 && (
+            <section>
+              <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-gray-500">
+                Mutation Audit Trail ({logs.data.totalMutations})
+              </h2>
+              <div className="space-y-1">
+                {logs.data.mutations.slice(0, 15).map((log, i) => (
+                  <div key={`mut-${i}`} className="flex items-center justify-between rounded border border-gray-700/30 bg-gray-800/30 px-3 py-1.5">
+                    <div className="flex items-center gap-2 text-xs">
+                      <span className="rounded bg-blue-800 px-1.5 py-0.5 text-[10px] font-medium text-blue-200">
+                        {log.source}
+                      </span>
+                      <span className="text-gray-300">{log.message}</span>
+                    </div>
+                    <span className="text-[10px] text-gray-500">
+                      {log.timestamp ? new Date(log.timestamp).toLocaleString() : ''}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+        </>
+      )}
     </div>
   )
 }

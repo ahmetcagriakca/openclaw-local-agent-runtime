@@ -78,6 +78,26 @@ export function getCapabilities(): Promise<CapabilityListResponse> {
 
 export { ApiError }
 
+// ── Logs ────────────────────────────────────────────────────────
+
+export interface LogEntry {
+  timestamp: string
+  level: string
+  source: string
+  message: string
+}
+
+export interface LogsResponse {
+  errors: LogEntry[]
+  mutations: LogEntry[]
+  totalErrors: number
+  totalMutations: number
+}
+
+export function getRecentLogs(): Promise<LogsResponse> {
+  return apiGet<LogsResponse>('/logs/recent')
+}
+
 // ── Mutation POST helpers (Sprint 11) ───────────────────────────
 
 async function apiPost<T>(path: string): Promise<T> {

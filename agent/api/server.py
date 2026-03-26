@@ -238,6 +238,7 @@ from api.mission_mutation_api import router as mission_mutation_router
 from api.mission_create_api import router as mission_create_router
 from api.signal_api import router as signal_router
 from api.logs_api import router as logs_router
+from api.roles_api import router as roles_router
 
 app.include_router(mission_router, prefix="/api/v1")
 app.include_router(approval_router, prefix="/api/v1")
@@ -249,6 +250,7 @@ app.include_router(mission_mutation_router, prefix="/api/v1")
 app.include_router(mission_create_router, prefix="/api/v1")
 app.include_router(signal_router, prefix="/api/v1")
 app.include_router(logs_router, prefix="/api/v1")
+app.include_router(roles_router, prefix="/api/v1")
 
 
 # ── Main ────────────────────────────────────────────────────────

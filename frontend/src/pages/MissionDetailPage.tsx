@@ -5,7 +5,7 @@
  */
 import { useCallback, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { getMission, cancelMission, retryMission, deleteSignal } from '../api/client'
+import { getMission, cancelMission, retryMission, pauseMission, resumeMission, skipStage, deleteSignal } from '../api/client'
 import { usePolling } from '../hooks/usePolling'
 import { useMutation } from '../hooks/useMutation'
 import { useSSEInvalidation } from '../hooks/SSEContext'
@@ -53,8 +53,41 @@ export function MissionDetailPage() {
     onTimeout: () => setToast({ type: 'timeout', message: 'Retry timed out — try manual refresh' }),
   })
 
-  const CANCEL_STATES = new Set(['pending', 'planning', 'executing', 'gate_check', 'rework', 'approval_wait'])
+  const pauseMut = useMutation({
+    mutationFn: () => pauseMission(id!),
+    onSuccess: () => {
+      setToast({ type: 'success', message: 'Pause request sent — will pause after current stage' })
+      refresh()
+    },
+    onError: (reason) => setToast({ type: 'error', message: reason }),
+    onTimeout: () => setToast({ type: 'timeout', message: 'Pause timed out — try manual refresh' }),
+  })
+
+  const resumeMut = useMutation({
+    mutationFn: () => resumeMission(id!),
+    onSuccess: () => {
+      setToast({ type: 'success', message: 'Resume request sent — awaiting controller' })
+      refresh()
+    },
+    onError: (reason) => setToast({ type: 'error', message: reason }),
+    onTimeout: () => setToast({ type: 'timeout', message: 'Resume timed out — try manual refresh' }),
+  })
+
+  const skipStageMut = useMutation({
+    mutationFn: () => skipStage(id!),
+    onSuccess: () => {
+      setToast({ type: 'success', message: 'Skip stage request sent — awaiting controller' })
+      refresh()
+    },
+    onError: (reason) => setToast({ type: 'error', message: reason }),
+    onTimeout: () => setToast({ type: 'timeout', message: 'Skip stage timed out — try manual refresh' }),
+  })
+
+  const CANCEL_STATES = new Set(['pending', 'planning', 'executing', 'gate_check', 'rework', 'approval_wait', 'paused'])
   const RETRY_STATES = new Set(['failed', 'aborted', 'timed_out'])
+  const PAUSE_STATES = new Set(['pending', 'planning', 'executing', 'gate_check', 'rework', 'approval_wait'])
+  const RESUME_STATES = new Set(['paused'])
+  const SKIP_STATES = new Set(['pending', 'planning', 'executing', 'gate_check', 'rework', 'approval_wait'])
 
   const is404 = error instanceof ApiError && error.status === 404
 
@@ -112,6 +145,42 @@ export function MissionDetailPage() {
                 <DataQualityBadge quality={data.meta.dataQuality} />
               </div>
               <div className="flex items-center gap-2">
+                {PAUSE_STATES.has(mission.state) && (
+                  <button
+                    onClick={() => pauseMut.mutate()}
+                    disabled={pauseMut.status === 'loading'}
+                    className="flex items-center gap-1.5 rounded bg-yellow-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-yellow-500 disabled:opacity-50"
+                  >
+                    {pauseMut.status === 'loading' && (
+                      <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                    )}
+                    Pause
+                  </button>
+                )}
+                {RESUME_STATES.has(mission.state) && (
+                  <button
+                    onClick={() => resumeMut.mutate()}
+                    disabled={resumeMut.status === 'loading'}
+                    className="flex items-center gap-1.5 rounded bg-green-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-green-500 disabled:opacity-50"
+                  >
+                    {resumeMut.status === 'loading' && (
+                      <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                    )}
+                    Resume
+                  </button>
+                )}
+                {SKIP_STATES.has(mission.state) && (
+                  <button
+                    onClick={() => skipStageMut.mutate()}
+                    disabled={skipStageMut.status === 'loading'}
+                    className="flex items-center gap-1.5 rounded bg-orange-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-orange-500 disabled:opacity-50"
+                  >
+                    {skipStageMut.status === 'loading' && (
+                      <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                    )}
+                    Skip Stage
+                  </button>
+                )}
                 {CANCEL_STATES.has(mission.state) && (
                   <button
                     onClick={() => setShowCancelConfirm(true)}
@@ -191,6 +260,9 @@ export function MissionDetailPage() {
                         sig.type === 'retry' ? 'bg-blue-800 text-blue-200' :
                         sig.type === 'cancel' ? 'bg-red-800 text-red-200' :
                         sig.type === 'approve' ? 'bg-green-800 text-green-200' :
+                        sig.type === 'pause' ? 'bg-yellow-800 text-yellow-200' :
+                        sig.type === 'resume' ? 'bg-green-800 text-green-200' :
+                        sig.type === 'skip-stage' ? 'bg-orange-800 text-orange-200' :
                         'bg-gray-700 text-gray-300'
                       }`}>{sig.type}</span>
                       <span className="font-mono text-gray-400">{sig.requestId.slice(0, 20)}…</span>

@@ -182,6 +182,7 @@ class MissionController:
                 stage["turns_used"] = result.get("turnsUsed", 0)
                 stage["duration_ms"] = result.get("totalDurationMs", 0)
                 stage["tool_call_count"] = len(result.get("toolCalls", []))
+                stage["tool_calls_detail"] = result.get("toolCalls", [])
                 stage["token_report"] = result.get("tokenReport")
                 stage["policy_deny_count"] = sum(
                     1 for tc in result.get("toolCalls", [])
@@ -789,6 +790,20 @@ Respond ONLY with a JSON object, no markdown:
                 stage_entry["reworkCycle"] = stage.get("rework_cycle", 0)
             if stage.get("is_recovery"):
                 stage_entry["isRecovery"] = True
+            if stage.get("tool_calls_detail"):
+                stage_entry["toolCallDetails"] = [
+                    {
+                        "tool": tc.get("tool", ""),
+                        "params": tc.get("params", {}),
+                        "success": tc.get("success", True),
+                        "error": tc.get("error"),
+                        "durationMs": tc.get("durationMs", 0),
+                        "risk": tc.get("risk", "unknown"),
+                        "tokenTruncated": tc.get("tokenTruncated", False),
+                        "tokenBlocked": tc.get("tokenBlocked", False),
+                    }
+                    for tc in stage["tool_calls_detail"][:20]  # limit to 20
+                ]
             summary["stages"].append(stage_entry)
             summary["totalPolicyDenies"] += pd_count
 

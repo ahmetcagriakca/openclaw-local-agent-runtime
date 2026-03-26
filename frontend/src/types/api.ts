@@ -64,6 +64,19 @@ export interface GateResultDetail {
   findings: Finding[]
 }
 
+// ── Tool Call Detail ────────────────────────────────────────────
+
+export interface ToolCallDetail {
+  tool: string
+  params: Record<string, unknown>
+  success: boolean
+  error: string | null
+  durationMs: number
+  risk: string
+  tokenTruncated: boolean
+  tokenBlocked: boolean
+}
+
 // ── Stage ───────────────────────────────────────────────────────
 
 export interface StageDetail {
@@ -86,6 +99,7 @@ export interface StageDetail {
   durationMs: number | null
   startedAt: string | null
   finishedAt: string | null
+  toolCallDetails: ToolCallDetail[]
 }
 
 // ── Mission ─────────────────────────────────────────────────────
@@ -212,6 +226,25 @@ export interface TelemetryListResponse {
 export interface CapabilityListResponse {
   meta: ResponseMeta
   capabilities: Record<string, CapabilityEntry>
+}
+
+// ── Roles ──────────────────────────────────────────────────────
+
+export interface RoleInfo {
+  name: string
+  defaultSkill: string
+  allowedSkills: string[]
+  toolPolicy: string
+  model: string
+  tools: string[]
+  discoveryRights: string
+  maxFileReads: number
+  promptPreview: string
+}
+
+export interface RolesResponse {
+  meta: ResponseMeta
+  roles: Record<string, RoleInfo>
 }
 
 // ── Error ───────────────────────────────────────────────────────

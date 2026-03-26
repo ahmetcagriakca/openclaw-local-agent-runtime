@@ -22,7 +22,7 @@ from api.schemas import (
     DataQuality, SourceInfo, ResponseMeta,
     MissionSummary, MissionListItem, StageDetail,
     GateResultDetail, Finding, SignalArtifact,
-    TelemetryEntry, ApprovalEntry,
+    TelemetryEntry, ApprovalEntry, ToolCallDetail,
 )
 
 
@@ -530,6 +530,21 @@ class MissionNormalizer:
             df = s.get("denyForensics", s.get("deny_forensics"))
             if df and isinstance(df, dict):
                 stage.denyForensics = df
+            raw_tc = s.get("toolCallDetails", s.get("tool_calls_detail", []))
+            if raw_tc:
+                stage.toolCallDetails = [
+                    ToolCallDetail(
+                        tool=tc.get("tool", ""),
+                        params=tc.get("params", {}),
+                        success=tc.get("success", True),
+                        error=tc.get("error"),
+                        durationMs=tc.get("durationMs", 0),
+                        risk=tc.get("risk", "unknown"),
+                        tokenTruncated=tc.get("tokenTruncated", False),
+                        tokenBlocked=tc.get("tokenBlocked", False),
+                    )
+                    for tc in raw_tc[:20]
+                ]
             stages.append(stage)
 
         return stages

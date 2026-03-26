@@ -1,7 +1,10 @@
-"""Mission Mutation API — Sprint 11 Task 11.6.
+"""Mission Mutation API — Sprint 11 Task 11.6 + Sprint 12 stage controls.
 
 POST /api/v1/missions/{id}/cancel
 POST /api/v1/missions/{id}/retry
+POST /api/v1/missions/{id}/pause
+POST /api/v1/missions/{id}/resume
+POST /api/v1/missions/{id}/skip-stage
 
 D-096 lifecycle: API writes signal artifact → returns lifecycleState=requested.
 D-001: No direct service/method call. Atomic signal artifact only.
@@ -28,8 +31,13 @@ MUTATION_TIMEOUT_S = 10
 
 # Valid FSM states for each mutation
 CANCEL_VALID_STATES = {"pending", "planning", "executing", "gate_check",
-                       "rework", "approval_wait"}
+                       "rework", "approval_wait", "paused"}
 RETRY_VALID_STATES = {"failed", "aborted", "timed_out"}
+PAUSE_VALID_STATES = {"pending", "planning", "executing", "gate_check",
+                      "rework", "approval_wait"}
+RESUME_VALID_STATES = {"paused"}
+SKIP_VALID_STATES = {"pending", "planning", "executing", "gate_check",
+                     "rework", "approval_wait"}
 
 
 def _get_dirs():
@@ -266,6 +274,237 @@ async def retry_mission(mission_id: str, request: Request):
 
     # 5. SSE best-effort emit
     await _emit_mutation_requested(request, request_id, mission_id, "retry")
+
+    # 6. Return D-096 lifecycle response
+    timeout_at = (
+        datetime.fromisoformat(requested_at)
+        + timedelta(seconds=MUTATION_TIMEOUT_S)
+    ).isoformat()
+
+    return MutationResponse(
+        requestId=request_id,
+        lifecycleState="requested",
+        targetId=mission_id,
+        requestedAt=requested_at,
+        timeoutAt=timeout_at,
+    )
+
+
+@router.post(
+    "/missions/{mission_id}/pause",
+    response_model=MutationResponse,
+    responses={404: {"model": APIError}, 409: {"model": APIError}},
+)
+async def pause_mission(mission_id: str, request: Request):
+    """Pause a running mission — pauses after current stage completes.
+
+    Valid states: pending, planning, executing, gate_check, rework, approval_wait.
+    Already paused / completed / failed → 409.
+    """
+    missions_dir = _get_dirs()
+    tab_id, session_id = _extract_operator_info(request)
+
+    # 1. Read and validate mission state
+    state_data = _read_mission_state(missions_dir, mission_id)
+    if state_data is None:
+        raise HTTPException(status_code=404,
+                            detail=f"Mission {mission_id} not found")
+
+    current_state = state_data.get("state") or state_data.get("status", "unknown")
+    if current_state not in PAUSE_VALID_STATES:
+        raise HTTPException(
+            status_code=409,
+            detail=f"Bu mission duraklatılamaz — mevcut durum: '{current_state}'. "
+                   f"Sadece aktif mission'lar duraklatılabilir ({', '.join(sorted(PAUSE_VALID_STATES))}).",
+        )
+
+    # 2. Check for pending duplicate
+    existing = has_pending_signal(
+        missions_dir, mission_id, "pause", mission_id)
+    if existing:
+        raise HTTPException(
+            status_code=409,
+            detail=f"Bu mission icin zaten bekleyen bir duraklat istegi var. "
+                   f"Onceki istek islenmeden yeni istek gonderilemez. "
+                   f"Mission detay sayfasindan bekleyen sinyali silebilirsiniz.",
+        )
+
+    # 3. Write atomic signal artifact
+    request_id, requested_at, artifact_path = write_signal_artifact(
+        missions_dir=missions_dir,
+        mutation_type="pause",
+        target_id=mission_id,
+        mission_id=mission_id,
+        tab_id=tab_id,
+        session_id=session_id,
+    )
+
+    # 4. Audit log
+    log_mutation(
+        request_id=request_id,
+        operation="pause",
+        target_id=mission_id,
+        outcome="requested",
+        tab_id=tab_id,
+        session_id=session_id,
+    )
+
+    # 5. SSE best-effort emit
+    await _emit_mutation_requested(request, request_id, mission_id, "pause")
+
+    # 6. Return D-096 lifecycle response
+    timeout_at = (
+        datetime.fromisoformat(requested_at)
+        + timedelta(seconds=MUTATION_TIMEOUT_S)
+    ).isoformat()
+
+    return MutationResponse(
+        requestId=request_id,
+        lifecycleState="requested",
+        targetId=mission_id,
+        requestedAt=requested_at,
+        timeoutAt=timeout_at,
+    )
+
+
+@router.post(
+    "/missions/{mission_id}/resume",
+    response_model=MutationResponse,
+    responses={404: {"model": APIError}, 409: {"model": APIError}},
+)
+async def resume_mission(mission_id: str, request: Request):
+    """Resume a paused mission.
+
+    Valid states: paused.
+    Running / completed / failed → 409.
+    """
+    missions_dir = _get_dirs()
+    tab_id, session_id = _extract_operator_info(request)
+
+    # 1. Read and validate mission state
+    state_data = _read_mission_state(missions_dir, mission_id)
+    if state_data is None:
+        raise HTTPException(status_code=404,
+                            detail=f"Mission {mission_id} not found")
+
+    current_state = state_data.get("state") or state_data.get("status", "unknown")
+    if current_state not in RESUME_VALID_STATES:
+        raise HTTPException(
+            status_code=409,
+            detail=f"Bu mission devam ettirilemez — mevcut durum: '{current_state}'. "
+                   f"Sadece duraklatılmış mission'lar devam ettirilebilir.",
+        )
+
+    # 2. Check for pending duplicate
+    existing = has_pending_signal(
+        missions_dir, mission_id, "resume", mission_id)
+    if existing:
+        raise HTTPException(
+            status_code=409,
+            detail=f"Bu mission icin zaten bekleyen bir devam istegi var. "
+                   f"Onceki istek islenmeden yeni istek gonderilemez. "
+                   f"Mission detay sayfasindan bekleyen sinyali silebilirsiniz.",
+        )
+
+    # 3. Write atomic signal artifact
+    request_id, requested_at, artifact_path = write_signal_artifact(
+        missions_dir=missions_dir,
+        mutation_type="resume",
+        target_id=mission_id,
+        mission_id=mission_id,
+        tab_id=tab_id,
+        session_id=session_id,
+    )
+
+    # 4. Audit log
+    log_mutation(
+        request_id=request_id,
+        operation="resume",
+        target_id=mission_id,
+        outcome="requested",
+        tab_id=tab_id,
+        session_id=session_id,
+    )
+
+    # 5. SSE best-effort emit
+    await _emit_mutation_requested(request, request_id, mission_id, "resume")
+
+    # 6. Return D-096 lifecycle response
+    timeout_at = (
+        datetime.fromisoformat(requested_at)
+        + timedelta(seconds=MUTATION_TIMEOUT_S)
+    ).isoformat()
+
+    return MutationResponse(
+        requestId=request_id,
+        lifecycleState="requested",
+        targetId=mission_id,
+        requestedAt=requested_at,
+        timeoutAt=timeout_at,
+    )
+
+
+@router.post(
+    "/missions/{mission_id}/skip-stage",
+    response_model=MutationResponse,
+    responses={404: {"model": APIError}, 409: {"model": APIError}},
+)
+async def skip_stage(mission_id: str, request: Request):
+    """Skip the current stage in a running mission.
+
+    Valid states: pending, planning, executing, gate_check, rework, approval_wait.
+    Paused / completed / failed → 409.
+    """
+    missions_dir = _get_dirs()
+    tab_id, session_id = _extract_operator_info(request)
+
+    # 1. Read and validate mission state
+    state_data = _read_mission_state(missions_dir, mission_id)
+    if state_data is None:
+        raise HTTPException(status_code=404,
+                            detail=f"Mission {mission_id} not found")
+
+    current_state = state_data.get("state") or state_data.get("status", "unknown")
+    if current_state not in SKIP_VALID_STATES:
+        raise HTTPException(
+            status_code=409,
+            detail=f"Bu mission'da aşama atlanamaz — mevcut durum: '{current_state}'. "
+                   f"Sadece aktif mission'larda aşama atlanabilir ({', '.join(sorted(SKIP_VALID_STATES))}).",
+        )
+
+    # 2. Check for pending duplicate
+    existing = has_pending_signal(
+        missions_dir, mission_id, "skip-stage", mission_id)
+    if existing:
+        raise HTTPException(
+            status_code=409,
+            detail=f"Bu mission icin zaten bekleyen bir aşama atlama istegi var. "
+                   f"Onceki istek islenmeden yeni istek gonderilemez. "
+                   f"Mission detay sayfasindan bekleyen sinyali silebilirsiniz.",
+        )
+
+    # 3. Write atomic signal artifact
+    request_id, requested_at, artifact_path = write_signal_artifact(
+        missions_dir=missions_dir,
+        mutation_type="skip-stage",
+        target_id=mission_id,
+        mission_id=mission_id,
+        tab_id=tab_id,
+        session_id=session_id,
+    )
+
+    # 4. Audit log
+    log_mutation(
+        request_id=request_id,
+        operation="skip-stage",
+        target_id=mission_id,
+        outcome="requested",
+        tab_id=tab_id,
+        session_id=session_id,
+    )
+
+    # 5. SSE best-effort emit
+    await _emit_mutation_requested(request, request_id, mission_id, "skip-stage")
 
     # 6. Return D-096 lifecycle response
     timeout_at = (

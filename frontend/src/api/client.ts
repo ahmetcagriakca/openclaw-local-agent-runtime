@@ -13,6 +13,7 @@ import type {
   CapabilityListResponse,
   MutationResponse,
   CreateMissionResponse,
+  RolesResponse,
 } from '../types/api'
 
 const BASE = '/api/v1'
@@ -74,6 +75,10 @@ export function getHealth(): Promise<HealthApiResponse> {
 
 export function getCapabilities(): Promise<CapabilityListResponse> {
   return apiGet<CapabilityListResponse>('/capabilities')
+}
+
+export function getRoles(): Promise<RolesResponse> {
+  return apiGet<RolesResponse>('/roles')
 }
 
 export { ApiError }
@@ -153,6 +158,18 @@ export function cancelMission(id: string): Promise<MutationResponse> {
 
 export function retryMission(id: string): Promise<MutationResponse> {
   return apiPost<MutationResponse>(`/missions/${encodeURIComponent(id)}/retry`)
+}
+
+export function pauseMission(id: string): Promise<MutationResponse> {
+  return apiPost<MutationResponse>(`/missions/${encodeURIComponent(id)}/pause`)
+}
+
+export function resumeMission(id: string): Promise<MutationResponse> {
+  return apiPost<MutationResponse>(`/missions/${encodeURIComponent(id)}/resume`)
+}
+
+export function skipStage(id: string): Promise<MutationResponse> {
+  return apiPost<MutationResponse>(`/missions/${encodeURIComponent(id)}/skip-stage`)
 }
 
 // ── Mission Create ──────────────────────────────────────────────

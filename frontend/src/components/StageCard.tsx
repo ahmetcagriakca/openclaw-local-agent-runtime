@@ -3,8 +3,24 @@
  * Shows error details, gate findings, deny forensics, agent info, LLM result.
  * Error details and deny forensics explicitly visible (never hidden).
  */
-import { useState } from 'react'
-import type { StageDetail } from '../types/api'
+import { useState, useEffect } from 'react'
+import type { StageDetail, RoleInfo } from '../types/api'
+import { getRoles } from '../api/client'
+import { AgentSkillsPopup } from './AgentSkillsPopup'
+
+/** Module-level roles cache so we only fetch once across all StageCards. */
+let _rolesCache: Record<string, RoleInfo> | null = null
+let _rolesFetchPromise: Promise<Record<string, RoleInfo>> | null = null
+
+function fetchRolesOnce(): Promise<Record<string, RoleInfo>> {
+  if (_rolesCache) return Promise.resolve(_rolesCache)
+  if (!_rolesFetchPromise) {
+    _rolesFetchPromise = getRoles()
+      .then((res) => { _rolesCache = res.roles; return res.roles })
+      .catch(() => { _rolesFetchPromise = null; return {} })
+  }
+  return _rolesFetchPromise
+}
 
 interface StageCardProps {
   stage: StageDetail
@@ -14,6 +30,17 @@ export function StageCard({ stage }: StageCardProps) {
   const [showResult, setShowResult] = useState(false)
   const [showSystemPrompt, setShowSystemPrompt] = useState(false)
   const [showUserPrompt, setShowUserPrompt] = useState(false)
+  const [showToolCalls, setShowToolCalls] = useState(false)
+  const [showSkillsPopup, setShowSkillsPopup] = useState(false)
+  const [roles, setRoles] = useState<Record<string, RoleInfo> | null>(_rolesCache)
+
+  useEffect(() => {
+    if (!roles) {
+      fetchRolesOnce().then((r) => { if (Object.keys(r).length > 0) setRoles(r) })
+    }
+  }, [roles])
+
+  const roleInfo = roles && stage.role ? roles[stage.role] : null
 
   return (
     <div className="rounded-lg border border-gray-700 bg-gray-800/60 p-4 space-y-3">
@@ -38,11 +65,25 @@ export function StageCard({ stage }: StageCardProps) {
             </span>
           )}
         </div>
-        {stage.agentUsed && (
-          <span className="text-xs text-gray-400">
-            Model: <span className="text-gray-200">{stage.agentUsed}</span>
-          </span>
-        )}
+        <div className="flex items-center gap-2">
+          {stage.agentUsed && (
+            <span className="text-xs text-gray-400">
+              Model: <span className="text-gray-200">{stage.agentUsed}</span>
+            </span>
+          )}
+          {roleInfo && (
+            <button
+              onClick={() => setShowSkillsPopup(true)}
+              className="rounded p-1 text-gray-400 hover:bg-gray-700 hover:text-indigo-300"
+              title={`View ${roleInfo.name} skills & tools`}
+              aria-label="View agent skills"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+              </svg>
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Metrics */}
@@ -154,6 +195,61 @@ export function StageCard({ stage }: StageCardProps) {
         </div>
       )}
 
+      {/* Tool Call Details — collapsible */}
+      {stage.toolCallDetails && stage.toolCallDetails.length > 0 && (
+        <div className="rounded border border-indigo-700/40 bg-indigo-950/20 p-3">
+          <button
+            onClick={() => setShowToolCalls(!showToolCalls)}
+            className="flex w-full items-center justify-between text-sm font-medium text-indigo-300 hover:text-indigo-100"
+          >
+            <span>Tool Calls ({stage.toolCallDetails.length})</span>
+            <span className="text-xs text-gray-500">{showToolCalls ? 'Hide' : 'Show'}</span>
+          </button>
+          {showToolCalls && (
+            <div className="mt-2 space-y-2">
+              {stage.toolCallDetails.map((tc, i) => (
+                <div key={i} className="rounded bg-gray-950/50 p-2 text-xs">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="font-semibold text-indigo-200">{tc.tool}</span>
+                    <span className={`rounded px-1.5 py-0.5 text-[10px] font-medium ${
+                      tc.success ? 'bg-green-800 text-green-200' : 'bg-red-800 text-red-200'
+                    }`}>
+                      {tc.success ? 'OK' : 'FAIL'}
+                    </span>
+                    {tc.risk !== 'unknown' && (
+                      <span className={`rounded px-1.5 py-0.5 text-[10px] font-medium ${
+                        tc.risk === 'high' ? 'bg-red-900 text-red-300' :
+                        tc.risk === 'medium' ? 'bg-yellow-900 text-yellow-300' :
+                        'bg-gray-700 text-gray-300'
+                      }`}>
+                        {tc.risk}
+                      </span>
+                    )}
+                    {tc.durationMs > 0 && (
+                      <span className="text-gray-500">{tc.durationMs}ms</span>
+                    )}
+                    {tc.tokenTruncated && (
+                      <span className="rounded bg-orange-900 px-1.5 py-0.5 text-[10px] text-orange-300">truncated</span>
+                    )}
+                    {tc.tokenBlocked && (
+                      <span className="rounded bg-red-900 px-1.5 py-0.5 text-[10px] text-red-300">blocked</span>
+                    )}
+                  </div>
+                  {tc.error && (
+                    <div className="mt-1 text-red-300">{tc.error}</div>
+                  )}
+                  {Object.keys(tc.params).length > 0 && (
+                    <pre className="mt-1 overflow-x-auto whitespace-pre-wrap text-gray-400">
+                      {JSON.stringify(tc.params, null, 2)}
+                    </pre>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
       {/* LLM Result — collapsible since it can be long */}
       {stage.result && (
         <div className="rounded border border-gray-600/50 bg-gray-900/40 p-3">
@@ -170,6 +266,15 @@ export function StageCard({ stage }: StageCardProps) {
             </pre>
           )}
         </div>
+      )}
+
+      {/* Agent Skills Popup */}
+      {showSkillsPopup && roleInfo && stage.role && (
+        <AgentSkillsPopup
+          roleId={stage.role}
+          role={roleInfo}
+          onClose={() => setShowSkillsPopup(false)}
+        />
       )}
     </div>
   )

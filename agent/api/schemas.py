@@ -83,6 +83,20 @@ class GateResultDetail(BaseModel):
     findings: list[Finding] = Field(default_factory=list)
 
 
+# ── Tool Call Detail ─────────────────────────────────────────────
+
+class ToolCallDetail(BaseModel):
+    """Single tool call within a stage."""
+    tool: str
+    params: dict = Field(default_factory=dict)
+    success: bool = True
+    error: Optional[str] = None
+    durationMs: int = 0
+    risk: str = "unknown"
+    tokenTruncated: bool = False
+    tokenBlocked: bool = False
+
+
 # ── Stage ────────────────────────────────────────────────────────
 
 class StageDetail(BaseModel):
@@ -106,6 +120,7 @@ class StageDetail(BaseModel):
     durationMs: Optional[int] = None
     startedAt: Optional[str] = None
     finishedAt: Optional[str] = None
+    toolCallDetails: list[ToolCallDetail] = Field(default_factory=list)
 
 
 # ── Mission ──────────────────────────────────────────────────────

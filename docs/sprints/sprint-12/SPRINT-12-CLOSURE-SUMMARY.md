@@ -2,7 +2,7 @@
 
 **Sprint:** 12 — Phase 5D: Polish + Phase 5 Closure
 **Date:** 2026-03-26
-**Status:** implementation_status=done, closure_status=review_pending
+**Status:** implementation_status=done, closure_status=closed (operator sign-off: 2026-03-26)
 
 ## Deliverables
 
@@ -38,8 +38,6 @@ All frozen at kickoff. No new decisions during implementation.
 
 All present in `evidence/sprint-12/`.
 
-## Next Step
-**Produced:** Closure summary
-**Next actor:** Operator
-**Action:** Verify all corrections, then set closure_status=closed
-**Current:** closure_status=review_pending
+## Closure
+**Operator sign-off:** AKCA — 2026-03-26
+**closure_status:** closed

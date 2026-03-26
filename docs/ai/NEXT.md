@@ -18,8 +18,13 @@
 ## Current Sprint
 
 ```
-Sprint 12  Phase 5D     Polish + Phase 5 Closure  25 task  closure_status=review_pending
-Sprint 13  Stabilization  Known issues + repo cleanup  ~11 task  (blocked by Sprint 12 closure)
+Sprint 13  Stabilization  Known issues + repo cleanup  ~11 task  ← ACTIVE
+```
+
+## Completed Sprints
+
+```
+Sprint 12  Phase 5D     Polish + Phase 5 Closure  25 task  CLOSED (2026-03-26)
 ```
 
 ### Sprint 13 Scope (Draft)

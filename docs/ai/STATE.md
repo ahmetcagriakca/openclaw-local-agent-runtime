@@ -22,7 +22,7 @@
 | Telegram channel | Connected, real user validated | User ID `8654710624` |
 | WSL bridge wrappers | Operational | `/home/akca/bin/oc-bridge-*` |
 | System health engine | Operational | `bin\oc-system-health.ps1` |
-| Web dashboard | Operational (manual start) | via `bin\start-dashboard.ps1` on :8002 |
+| Web dashboard | Removed (D-097, Sprint 13) | Was `bin\start-dashboard.ps1` on :8002. Replaced by Vezir UI on :3000 |
 | WSL Guardian | Operational (L2 — VM-level monitor) | `bin\oc-wsl-guardian.ps1` — Windows-side WSL + Vezir monitor |
 | Telegram notifications | Operational | `bin\oc-health-notify.ps1` — alerts, startup reports, recovery |
 | Agent Runner | Operational (multi-agent missions + 3 providers + 24 tools) | `agent/oc-agent-runner.py` |
@@ -169,7 +169,7 @@ Telegram user (8654710624)
 | VezirStartupPreflight | AtBoot | Stale recovery + layout validation |
 | VezirWmcpServer | AtLogOn | windows-mcp HTTP server on :8001 |
 | VezirWslGuardian | AtLogOn | WSL + Vezir active guardian (30s check, auto-restart, Telegram alerts) |
-| VezirDashboard | AtLogOn | Web dashboard HTTP server on :8002 |
+| VezirDashboard | Removed | Legacy dashboard removed (D-097, Sprint 13) |
 
 ## Architectural Decisions
 

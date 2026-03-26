@@ -128,7 +128,7 @@ async def lifespan(app: FastAPI):
     # Step 4: Register service
     _register_service("running")
     logger.info(f"MCC startup: serving on 127.0.0.1:{PORT}")
-    logger.warning("D-097: Legacy dashboard on :8002 is deprecated. Use Vezir UI on :3000.")
+    # D-097: Legacy dashboard removed in Sprint 13. Vezir UI on :3000 is primary.
 
     # Step 5: Start heartbeat background task (GPT Fix 6)
     import asyncio

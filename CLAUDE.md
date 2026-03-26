@@ -54,7 +54,7 @@ Telegram → Vezir Bot → Agent Runner (Windows) → Mission Controller
 
 Port Map:
   8001  WMCP (Windows MCP Proxy)
-  8002  Legacy Health Dashboard (deprecated)
+  8002  (removed — was Legacy Health Dashboard, D-097)
   8003  Vezir API (FastAPI)
   3000  Vezir UI (React, requires Node.js 20)
   9000  Math Service (example deployable)

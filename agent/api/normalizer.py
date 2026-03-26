@@ -74,14 +74,37 @@ class MissionNormalizer:
                 continue
             found_any = True
             try:
-                data, _ = self._read_source("mission", fpath)
+                data, age_ms = self._read_source("mission", fpath)
                 if data is None:
                     continue
+                mid = data.get("missionId", "")
                 stages = data.get("stages", [])
+
+                # Read state file for accurate status
+                state_path = self._missions_dir / f"{mid}-state.json"
+                state_data, _ = self._read_source("state", str(state_path)) \
+                    if state_path.exists() else (None, 0)
+                status = data.get("status", "unknown")
+                if state_data and state_data.get("status"):
+                    status = state_data["status"]
+
+                # Read summary for stage count
+                summary_path = self._missions_dir / f"{mid}-summary.json"
+                summary_data, _ = self._read_source("summary", str(summary_path)) \
+                    if summary_path.exists() else (None, 0)
+                if summary_data and summary_data.get("stages"):
+                    stages = summary_data["stages"]
+
+                # Compute per-mission data quality
+                threshold = _SOURCE_STALE.get("mission", 10_000)
+                dq = (DataQuality.FRESH if age_ms <= threshold
+                      else DataQuality.STALE)
+
                 items.append(MissionListItem(
-                    missionId=data.get("missionId", ""),
-                    state=data.get("status", "unknown"),
+                    missionId=mid,
+                    state=status,
                     goal=data.get("goal"),
+                    dataQuality=dq,
                     startedAt=data.get("startedAt"),
                     stageCount=len(stages),
                     currentStage=data.get("currentStage", 0),
@@ -89,6 +112,9 @@ class MissionNormalizer:
                 ))
             except Exception:
                 continue
+
+        # Sort: newest first by startedAt
+        items.sort(key=lambda m: m.startedAt or "", reverse=True)
 
         if not found_any:
             sources_missing.append("missions")

@@ -39,14 +39,33 @@ def _get_dirs():
 
 
 def _read_mission_state(missions_dir: Path, mission_id: str) -> dict | None:
-    """Read mission state.json. Returns None if not found."""
-    state_path = missions_dir / mission_id / "state.json"
-    if not state_path.exists():
-        return None
-    try:
-        return json.loads(state_path.read_text(encoding="utf-8"))
-    except Exception:
-        return None
+    """Read mission state file. Returns None if not found.
+
+    Checks both flat format ({id}-state.json) and directory format ({id}/state.json).
+    """
+    # Flat format: logs/missions/{mission_id}-state.json (controller default)
+    flat_path = missions_dir / f"{mission_id}-state.json"
+    if flat_path.exists():
+        try:
+            return json.loads(flat_path.read_text(encoding="utf-8"))
+        except Exception:
+            return None
+    # Directory format: logs/missions/{mission_id}/state.json (signal artifact layout)
+    dir_path = missions_dir / mission_id / "state.json"
+    if dir_path.exists():
+        try:
+            return json.loads(dir_path.read_text(encoding="utf-8"))
+        except Exception:
+            return None
+    # Fallback: read from main mission file
+    mission_path = missions_dir / f"{mission_id}.json"
+    if mission_path.exists():
+        try:
+            data = json.loads(mission_path.read_text(encoding="utf-8"))
+            return {"state": data.get("status", "unknown")}
+        except Exception:
+            return None
+    return None
 
 
 def _extract_operator_info(request: Request) -> tuple[str, str]:
@@ -91,7 +110,7 @@ async def cancel_mission(mission_id: str, request: Request):
         raise HTTPException(status_code=404,
                             detail=f"Mission {mission_id} not found")
 
-    current_state = state_data.get("state", "unknown")
+    current_state = state_data.get("state") or state_data.get("status", "unknown")
     if current_state not in CANCEL_VALID_STATES:
         raise HTTPException(
             status_code=409,
@@ -167,7 +186,7 @@ async def retry_mission(mission_id: str, request: Request):
         raise HTTPException(status_code=404,
                             detail=f"Mission {mission_id} not found")
 
-    current_state = state_data.get("state", "unknown")
+    current_state = state_data.get("state") or state_data.get("status", "unknown")
     if current_state not in RETRY_VALID_STATES:
         raise HTTPException(
             status_code=409,

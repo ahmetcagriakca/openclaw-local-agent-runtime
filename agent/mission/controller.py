@@ -639,6 +639,10 @@ Respond ONLY with a JSON object, no markdown:
             "consumptionByTier": consumption.get("by_tier", {})
         }
 
+        # Mission-level error
+        if mission.get("error"):
+            summary["error"] = mission["error"]
+
         # 5C-1: State machine info in summary
         if mission_state:
             summary["stateTransitions"] = mission_state.transition_log
@@ -661,8 +665,18 @@ Respond ONLY with a JSON object, no markdown:
                 "role": stage.get("specialist", "unknown"),
                 "status": stage.get("status", "unknown"),
                 "toolCalls": stage.get("tool_call_count", 0),
-                "policyDenies": pd_count
+                "policyDenies": pd_count,
             }
+            if stage.get("error"):
+                stage_entry["error"] = stage["error"]
+            if stage.get("result"):
+                stage_entry["result"] = stage["result"][:2000]
+            if stage.get("duration_ms"):
+                stage_entry["durationMs"] = stage["duration_ms"]
+            if stage.get("started_at"):
+                stage_entry["startedAt"] = stage["started_at"]
+            if stage.get("finished_at"):
+                stage_entry["finishedAt"] = stage["finished_at"]
             # 7.1: Deny forensics per stage
             if stage.get("deny_forensics"):
                 stage_entry["denyForensics"] = stage["deny_forensics"]

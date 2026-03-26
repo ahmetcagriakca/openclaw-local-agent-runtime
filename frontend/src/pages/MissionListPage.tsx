@@ -20,6 +20,7 @@ export function MissionListPage() {
   const [creating, setCreating] = useState(false)
   const [createError, setCreateError] = useState<string | null>(null)
   const [toast, setToast] = useState<string | null>(null)
+  const [stateFilter, setStateFilter] = useState<string>('all')
 
   // SSE: immediate refresh on mission changes
   useSSEInvalidation(['mission_list_changed', 'mission_updated'], refresh)
@@ -121,6 +122,28 @@ export function MissionListPage() {
         </div>
       )}
 
+      {/* State Filter */}
+      {data && data.missions.length > 0 && (
+        <div className="flex items-center gap-2">
+          <span className="text-xs text-gray-500">Filter:</span>
+          {['all', 'pending', 'planning', 'executing', 'completed', 'failed'].map((f) => (
+            <button
+              key={f}
+              onClick={() => setStateFilter(f)}
+              className={`rounded px-2.5 py-1 text-xs font-medium transition ${
+                stateFilter === f
+                  ? f === 'failed' ? 'bg-red-700 text-white'
+                    : f === 'completed' ? 'bg-green-700 text-white'
+                    : 'bg-blue-700 text-white'
+                  : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+              }`}
+            >
+              {f === 'all' ? `All (${data.missions.length})` : f}
+            </button>
+          ))}
+        </div>
+      )}
+
       {data && (
         <FreshnessIndicator
           freshnessMs={data.meta.freshnessMs}
@@ -162,9 +185,17 @@ export function MissionListPage() {
         </div>
       )}
 
-      {data && data.missions.length > 0 && (
+      {data && data.missions.length > 0 && (() => {
+        const filtered = stateFilter === 'all'
+          ? data.missions
+          : data.missions.filter((m) => m.state === stateFilter)
+        return filtered.length === 0 ? (
+          <div className="py-6 text-center text-gray-500">
+            No missions matching filter "{stateFilter}"
+          </div>
+        ) : (
         <div className="space-y-2">
-          {data.missions.map((m) => (
+          {filtered.map((m) => (
             <Link
               key={m.missionId}
               to={`/missions/${m.missionId}`}
@@ -198,7 +229,8 @@ export function MissionListPage() {
             </Link>
           ))}
         </div>
-      )}
+        )
+      })()}
 
       {/* Success toast */}
       {toast && (

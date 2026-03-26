@@ -217,7 +217,31 @@ async def get_health(request: Request):
                 f"mission files: {log_info['mission_files']}"),
         lastCheckAt=now)
 
-    # 9. LLM Providers (check env vars)
+    # 9. WMCP Server (Windows MCP Proxy on :8001)
+    try:
+        import urllib.request
+        req = urllib.request.Request("http://localhost:8001/openapi.json", method="GET")
+        req.add_header("User-Agent", "mcc-health")
+        with urllib.request.urlopen(req, timeout=3) as resp:
+            if resp.status == 200:
+                wmcp_data = json.loads(resp.read())
+                tool_count = len(wmcp_data.get("paths", {}))
+                version = wmcp_data.get("info", {}).get("version", "?")
+                components["wmcp"] = ComponentHealth(
+                    name="WMCP Server (MCP Proxy)", status="ok",
+                    detail=f"v{version}, {tool_count} tools on :8001",
+                    lastCheckAt=now)
+            else:
+                components["wmcp"] = ComponentHealth(
+                    name="WMCP Server (MCP Proxy)", status="degraded",
+                    detail=f"HTTP {resp.status}", lastCheckAt=now)
+    except Exception as e:
+        components["wmcp"] = ComponentHealth(
+            name="WMCP Server (MCP Proxy)", status="error",
+            detail=f"unreachable at localhost:8001 — {type(e).__name__}",
+            lastCheckAt=now)
+
+    # 10. LLM Providers (check env vars)
     providers = []
     if os.environ.get("OPENAI_API_KEY"):
         providers.append("OpenAI")

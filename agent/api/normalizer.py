@@ -68,6 +68,20 @@ class MissionNormalizer:
 
         pattern = str(self._missions_dir / "mission-*.json")
         found_any = False
+        # Track controller missions spawned by dashboard (hide from list)
+        dashboard_sessions: set[str] = set()
+        # First pass: collect dashboard session IDs
+        for fpath in glob.glob(pattern):
+            base = os.path.basename(fpath)
+            if "-state.json" in base or "-summary.json" in base:
+                continue
+            try:
+                data = json.loads(Path(fpath).read_text(encoding="utf-8"))
+                if data.get("createdFrom") == "dashboard":
+                    dashboard_sessions.add(f"web-{data.get('missionId', '')}")
+            except Exception:
+                continue
+
         for fpath in sorted(glob.glob(pattern)):
             base = os.path.basename(fpath)
             if "-state.json" in base or "-summary.json" in base:
@@ -78,10 +92,36 @@ class MissionNormalizer:
                 if data is None:
                     continue
                 mid = data.get("missionId", "")
+
+                # Skip controller-spawned missions (shown via dashboard placeholder)
+                if data.get("sessionId") in dashboard_sessions:
+                    continue
+
+                # For dashboard placeholders, resolve status from controller
+                file_id = mid
+                if data.get("createdFrom") == "dashboard":
+                    ctrl_id = data.get("controllerMissionId")
+                    if not ctrl_id:
+                        # Find by session
+                        session_key = f"web-{mid}"
+                        for cf in self._missions_dir.glob("mission-*.json"):
+                            cb = cf.name
+                            if "-state.json" in cb or "-summary.json" in cb or cb == f"{mid}.json":
+                                continue
+                            try:
+                                cd = json.loads(cf.read_text(encoding="utf-8"))
+                                if cd.get("sessionId") == session_key:
+                                    ctrl_id = cd.get("missionId")
+                                    break
+                            except Exception:
+                                continue
+                    if ctrl_id:
+                        file_id = ctrl_id
+
                 stages = data.get("stages", [])
 
                 # Read state file for accurate status
-                state_path = self._missions_dir / f"{mid}-state.json"
+                state_path = self._missions_dir / f"{file_id}-state.json"
                 state_data, _ = self._read_source("state", str(state_path)) \
                     if state_path.exists() else (None, 0)
                 status = data.get("status", "unknown")
@@ -89,7 +129,7 @@ class MissionNormalizer:
                     status = state_data["status"]
 
                 # Read summary for stage count
-                summary_path = self._missions_dir / f"{mid}-summary.json"
+                summary_path = self._missions_dir / f"{file_id}-summary.json"
                 summary_data, _ = self._read_source("summary", str(summary_path)) \
                     if summary_path.exists() else (None, 0)
                 if summary_data and summary_data.get("stages"):

@@ -18,14 +18,15 @@
 ## Current Sprint
 
 ```
-Sprint 14A  Event-Driven + Backend Restructure  ~27 task  ← ACTIVE
+Sprint 14B  Frontend Restructure + Tooling  (not started — per advance plan Option A)
 ```
 
 ## Completed Sprints
 
 ```
-Sprint 12  Phase 5D     Polish + Phase 5 Closure  25 task  CLOSED (2026-03-26)
-Sprint 13  Stabilization  L1/L2 + cleanup  10 task  CLOSED (2026-03-26)
+Sprint 12   Phase 5D      Polish + Phase 5 Closure          25 task  CLOSED (2026-03-26)
+Sprint 13   Stabilization  L1/L2 + cleanup                  10 task  CLOSED (2026-03-26)
+Sprint 14A  EventBus + Backend Restructure                  23 task  CLOSED (2026-03-26)
 ```
 
 ### Sprint 13 Deliverables (closed)

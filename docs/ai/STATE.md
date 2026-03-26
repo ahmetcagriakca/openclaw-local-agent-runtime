@@ -1,7 +1,7 @@
 # Current State
 
 **Last updated:** 2026-03-26
-**Active phase:** Sprint 14A (Event-Driven Architecture + Backend Restructure) — Sprint 13 closed 2026-03-26
+**Active phase:** Sprint 14A DONE — implementation_status=done, closure_status=closed (2026-03-26)
 **Note:** Sprint 7 (4.5-C) + Sprint 8 (5A-1) + Sprint 9 (5A-2) + Sprint 10 (5B) + Sprint 11 (5C) complete. Phase 2 deferred — single-user localhost, security hardening not urgent.
 **Persistence:** State is file-persisted (state.json, mission.json). Resume not yet implemented.
 **API:** Mission Control API on 127.0.0.1:8003 (FastAPI + Uvicorn). Schemas FROZEN (D-067). SSE on /api/v1/events/stream. Mutation endpoints (Sprint 11).
@@ -185,7 +185,8 @@ Telegram user (8654710624)
 - Sprint 10: Backend 114 tests (100 legacy + 14 SSE), 0 failures. Frontend 29 Vitest tests (6 files), 0 failures.
 - Sprint 11: Backend 195 tests (includes 11 contract), 0 failures. Frontend 29 Vitest tests, 0 failures.
 - Sprint 12: Backend 234 tests (195 legacy + 39 E2E), 0 failures. Frontend 29 Vitest tests, 0 failures. Phase 5 scoreboard 15/15.
-- Sprint 13 (in progress): Backend 225 tests (non-E2E), 0 failures. +30 new tests (L1/L2, token report, rework limiter, context tiers).
+- Sprint 13: Backend 225 tests, 0 failures. +30 new tests.
+- Sprint 14A: Backend 353 tests, 0 failures. +132 new tests (EventBus 120, quality 12).
 
 ## Known Operational Notes
 

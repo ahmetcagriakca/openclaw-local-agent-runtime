@@ -14,6 +14,8 @@ OD-10: Retry = new mission linked to failed original (controller handles).
 """
 import json
 import logging
+import threading
+import traceback
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -75,6 +77,46 @@ def _resolve_controller_id(missions_dir: Path, mission_id: str) -> str:
     except Exception:
         pass
     return mission_id
+
+
+def _read_mission_data(missions_dir: Path, mission_id: str) -> dict | None:
+    """Read the full mission JSON (not just state)."""
+    real_id = _resolve_controller_id(missions_dir, mission_id)
+    path = missions_dir / f"{real_id}.json"
+    if path.exists():
+        try:
+            return json.loads(path.read_text(encoding="utf-8"))
+        except Exception:
+            return None
+    return None
+
+
+def _run_retry_background(mission_id: str, failed_mission: dict,
+                          missions_dir: Path):
+    """Run retry mission via MissionController in background thread."""
+    import os
+    import sys
+
+    try:
+        agent_dir = str(Path(__file__).resolve().parent.parent)
+        if agent_dir not in sys.path:
+            sys.path.insert(0, agent_dir)
+        os.chdir(agent_dir)
+
+        from mission.controller import MissionController
+        controller = MissionController()
+
+        result = controller.execute_mission(
+            goal=failed_mission.get("goal", ""),
+            user_id="dashboard",
+            session_id=f"web-retry-{mission_id}",
+            retry_from_mission=failed_mission,
+        )
+        status = result.get("status", "unknown") if isinstance(result, dict) else "completed"
+        logger.info("Retry mission for %s completed: status=%s", mission_id, status)
+    except Exception as e:
+        tb = traceback.format_exc()
+        logger.error("Retry mission for %s failed: %s\n%s", mission_id, e, tb)
 
 
 def _read_mission_state(missions_dir: Path, mission_id: str) -> dict | None:
@@ -274,6 +316,18 @@ async def retry_mission(mission_id: str, request: Request):
 
     # 5. SSE best-effort emit
     await _emit_mutation_requested(request, request_id, mission_id, "retry")
+
+    # 5b. Spawn background thread to execute retry from checkpoint
+    real_id = _resolve_controller_id(missions_dir, mission_id)
+    failed_mission = _read_mission_data(missions_dir, real_id)
+    if failed_mission:
+        thread = threading.Thread(
+            target=_run_retry_background,
+            args=(mission_id, failed_mission, missions_dir),
+            daemon=True,
+            name=f"retry-{mission_id}",
+        )
+        thread.start()
 
     # 6. Return D-096 lifecycle response
     timeout_at = (

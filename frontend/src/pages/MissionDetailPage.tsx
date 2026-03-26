@@ -3,9 +3,10 @@
  * 404 → explicit "Mission not found". Deny forensics visible.
  * Sprint 11: cancel/retry buttons added (D-090, D-091).
  */
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { getMission, cancelMission, retryMission, pauseMission, resumeMission, skipStage, deleteSignal } from '../api/client'
+import { getMission, cancelMission, retryMission, pauseMission, resumeMission, skipStage, deleteSignal, getTokenReport } from '../api/client'
+import type { TokenReport } from '../types/api'
 import { usePolling } from '../hooks/usePolling'
 import { useMutation } from '../hooks/useMutation'
 import { useSSEInvalidation } from '../hooks/SSEContext'
@@ -22,6 +23,8 @@ export function MissionDetailPage() {
   const [selectedStage, setSelectedStage] = useState<number | null>(null)
   const [showCancelConfirm, setShowCancelConfirm] = useState(false)
   const [toast, setToast] = useState<{ type: 'success' | 'error' | 'timeout'; message: string } | null>(null)
+  const [tokenReport, setTokenReport] = useState<TokenReport | null>(null)
+  const [tokenReportOpen, setTokenReportOpen] = useState(false)
 
   const fetcher = useCallback(() => {
     if (!id) return Promise.reject(new Error('No mission ID'))
@@ -29,6 +32,14 @@ export function MissionDetailPage() {
   }, [id])
 
   const { data, error, loading, refresh, lastFetchedAt } = usePolling(fetcher, 10_000)
+
+  // D-102: Fetch token report on demand
+  const missionState = data?.mission?.state
+  useEffect(() => {
+    if (!tokenReportOpen || !id) return
+    if (missionState !== 'completed' && missionState !== 'failed') return
+    getTokenReport(id).then(setTokenReport).catch(() => setTokenReport(null))
+  }, [tokenReportOpen, id, missionState])
 
   // SSE: refresh on mission_updated + mutation events
   useSSEInvalidation(['mission_updated', 'mutation_applied', 'mutation_rejected'], refresh)
@@ -315,6 +326,70 @@ export function MissionDetailPage() {
 
           {/* Expanded Stage Card */}
           {activeStage && <StageCard stage={activeStage} />}
+
+          {/* D-102: Token Report */}
+          {(mission.state === 'completed' || mission.state === 'failed') && (
+            <div className="rounded-lg border border-gray-700/50 bg-gray-800/50">
+              <button
+                onClick={() => setTokenReportOpen(!tokenReportOpen)}
+                className="flex w-full items-center justify-between p-4 text-left text-sm font-semibold text-gray-300 hover:bg-gray-700/30"
+              >
+                <span>Token Usage Report (D-102)</span>
+                <span className="text-xs text-gray-500">{tokenReportOpen ? '▼' : '▶'}</span>
+              </button>
+              {tokenReportOpen && (
+                <div className="border-t border-gray-700/50 p-4">
+                  {!tokenReport ? (
+                    <p className="text-xs text-gray-500">No token report available for this mission.</p>
+                  ) : (
+                    <div className="space-y-3">
+                      {/* Summary */}
+                      <div className="flex flex-wrap gap-4 text-xs">
+                        <span className="text-gray-400">Total tokens: <span className="font-mono text-gray-200">{tokenReport.total_tokens.toLocaleString()}</span></span>
+                        <span className="text-gray-400">Tool calls: <span className="font-mono text-gray-200">{tokenReport.total_tool_calls}</span></span>
+                        <span className="text-gray-400">Truncations: <span className={`font-mono ${tokenReport.truncations > 0 ? 'text-yellow-300' : 'text-gray-200'}`}>{tokenReport.truncations}</span></span>
+                        <span className="text-gray-400">Blocks: <span className={`font-mono ${tokenReport.blocks > 0 ? 'text-red-300' : 'text-gray-200'}`}>{tokenReport.blocks}</span></span>
+                      </div>
+
+                      {/* Per-stage breakdown */}
+                      {tokenReport.stages.length > 0 && (
+                        <table className="w-full text-xs">
+                          <thead>
+                            <tr className="border-b border-gray-700/50 text-left text-gray-500">
+                              <th className="pb-1 pr-4">Stage</th>
+                              <th className="pb-1 pr-4 text-right">Tokens</th>
+                              <th className="pb-1 pr-4 text-right">Tool Calls</th>
+                              <th className="pb-1 text-right">% of Total</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {tokenReport.stages.map((s, i) => (
+                              <tr key={i} className="border-b border-gray-700/20">
+                                <td className="py-1 pr-4 font-mono text-gray-300">{s.stage}</td>
+                                <td className="py-1 pr-4 text-right font-mono text-gray-200">{s.tokens_consumed.toLocaleString()}</td>
+                                <td className="py-1 pr-4 text-right font-mono text-gray-200">{s.tool_calls}</td>
+                                <td className="py-1 text-right">
+                                  <div className="flex items-center justify-end gap-2">
+                                    <div className="h-1.5 w-16 overflow-hidden rounded-full bg-gray-700">
+                                      <div
+                                        className="h-full rounded-full bg-blue-500"
+                                        style={{ width: `${Math.min(100, s.pct_of_total)}%` }}
+                                      />
+                                    </div>
+                                    <span className="w-10 text-right font-mono text-gray-400">{s.pct_of_total}%</span>
+                                  </div>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
 
           {/* State Transitions */}
           {mission.stateTransitions && mission.stateTransitions.length > 0 && (

@@ -241,7 +241,52 @@ async def get_health(request: Request):
             detail=f"unreachable at localhost:8001 — {type(e).__name__}",
             lastCheckAt=now)
 
-    # 10. LLM Providers (check env vars)
+    # 10. Telegram Bot
+    try:
+        tg_token = os.environ.get("OC_TELEGRAM_BOT_TOKEN")
+        tg_chat = os.environ.get("OC_TELEGRAM_CHAT_ID", "8654710624")
+        if not tg_token:
+            # Try WSL resolution (same as approval_service)
+            import subprocess as _sp
+            try:
+                _r = _sp.run(
+                    ["wsl", "-d", "Ubuntu-E", "--", "bash", "-c",
+                     "grep '^TELEGRAM_BOT_TOKEN=' /home/akca/.openclaw/.env 2>/dev/null"],
+                    capture_output=True, text=True, timeout=5
+                )
+                if _r.returncode == 0 and "=" in _r.stdout:
+                    tg_token = _r.stdout.strip().split("=", 1)[1].strip()
+            except Exception:
+                pass
+
+        if tg_token:
+            import urllib.request
+            tg_url = f"https://api.telegram.org/bot{tg_token}/getMe"
+            tg_req = urllib.request.Request(tg_url, method="GET")
+            with urllib.request.urlopen(tg_req, timeout=5) as tg_resp:
+                tg_data = json.loads(tg_resp.read())
+                if tg_data.get("ok"):
+                    bot_name = tg_data["result"].get("username", "?")
+                    components["telegram"] = ComponentHealth(
+                        name="Telegram Bot", status="ok",
+                        detail=f"@{bot_name} active, chat={tg_chat}",
+                        lastCheckAt=now)
+                else:
+                    components["telegram"] = ComponentHealth(
+                        name="Telegram Bot", status="error",
+                        detail="getMe failed", lastCheckAt=now)
+        else:
+            components["telegram"] = ComponentHealth(
+                name="Telegram Bot", status="error",
+                detail="No bot token (OC_TELEGRAM_BOT_TOKEN or WSL .env)",
+                lastCheckAt=now)
+    except Exception as e:
+        components["telegram"] = ComponentHealth(
+            name="Telegram Bot", status="error",
+            detail=f"unreachable — {type(e).__name__}: {str(e)[:60]}",
+            lastCheckAt=now)
+
+    # 11. LLM Providers (check env vars)
     providers = []
     if os.environ.get("OPENAI_API_KEY"):
         providers.append("OpenAI")

@@ -1,9 +1,17 @@
 """Mission API endpoints — read-only (D-059). GPT Fix 3: wrapper responses."""
+import json
+import os
+
 from fastapi import APIRouter, HTTPException
 
 from api.schemas import (
     MissionDetailResponse, MissionListResponse,
     StageListResponse, StageDetail, APIError,
+)
+
+MISSIONS_DIR = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+    "logs", "missions"
 )
 
 router = APIRouter(tags=["missions"])
@@ -54,3 +62,16 @@ async def get_mission_stage(mission_id: str, stage_idx: int):
         raise HTTPException(status_code=404,
                             detail=f"Stage {stage_idx} not found")
     return mission.stages[stage_idx]
+
+
+@router.get("/missions/{mission_id}/token-report",
+            responses={404: {"model": APIError}})
+async def get_token_report(mission_id: str):
+    """Return the per-mission token usage report (D-102)."""
+    report_path = os.path.join(
+        MISSIONS_DIR, f"{mission_id}-token-report.json")
+    if not os.path.isfile(report_path):
+        raise HTTPException(status_code=404,
+                            detail=f"Token report for {mission_id} not found")
+    with open(report_path, "r", encoding="utf-8") as f:
+        return json.load(f)

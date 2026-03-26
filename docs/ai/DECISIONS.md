@@ -858,6 +858,22 @@ SSE is a Mission Control frontend transport concern only. Does not amend or expa
 
 ---
 
+### D-102: Token budget enforcement — 5-layer defense
+
+**Phase:** Post-5D | **Status:** Frozen
+
+Token budget enforcement to prevent context overflow in multi-stage missions. 5-layer architecture:
+- **Layer 3 (Observability):** `TokenTracker` logs per-tool-call and per-stage token consumption. `estimate_tokens()` at ~4 chars/token. Per-mission report saved to `{mission_id}-token-report.json`.
+- **Layer 4 (Budget Enforcement):** `truncate_tool_response()` auto-truncates tool responses >10K tokens, blocks >50K. Controller truncates artifact context >40K chars.
+- **Layer 5 (Role-Based Tool Access):** `take_screenshot` removed from analyst/architect/tester allowedTools — developer-only. Runtime enforcement at dispatch: tool calls not in `allowedTools` are blocked with `policyDenied` flag.
+- **Token Report API:** `GET /api/v1/missions/{id}/token-report` returns aggregated report. UI panel in MissionDetailPage shows per-stage breakdown with progress bars.
+- **Budget Config:** tool_response_limit=10K, tool_response_hard_limit=50K, stage_input_limit=50K, stage_input_hard_limit=150K, mission_total_limit=500K.
+
+**Key files:** `agent/context/token_budget.py`, `agent/mission/role_registry.py`, `agent/oc_agent_runner_lib.py` (dispatch enforcement), `agent/mission/controller.py` (`_save_token_report`).
+**Trade-off:** Conservative limits (10K truncate, 50K block) may require tuning per use case. Runtime enforcement adds ~1ms per tool call overhead — acceptable vs. context overflow risk. **Validation:** Backend 233 tests pass. Frontend TypeScript 0 errors, 29 tests pass.
+
+---
+
 ## Phase 5 Freeze Addendum (Sprint 7→8 transition)
 
 ### Blocking Fix Closures
@@ -884,4 +900,5 @@ Sprint 8 did not start until this document was FROZEN.
 *D-085 → D-088: Phase 5B / Sprint 10 (frozen)*
 *D-089 → D-092, D-096: Phase 5C / Sprint 11 (frozen)*
 *D-097 → D-101: Phase 5D / Sprint 12 (frozen)*
+*D-102: Token budget enforcement — Post-5D (frozen)*
 *BF-1 → BF-4: Phase 5 Freeze Addendum (frozen)*

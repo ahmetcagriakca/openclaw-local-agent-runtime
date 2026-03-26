@@ -25,13 +25,17 @@ class MissionController:
         # 7.9: Auto-generate capability manifest on startup
         self._update_capability_manifest()
 
-    def execute_mission(self, goal: str, user_id: str, session_id: str) -> dict:
+    def execute_mission(self, goal: str, user_id: str, session_id: str,
+                         retry_from_mission: dict = None) -> dict:
         """Execute a multi-agent mission.
 
         1. Plan: break goal into stages
         2. Execute: run each stage with appropriate specialist (state-driven)
         3. Collect: gather artifacts via Context Assembler
         4. Report: return final result with structured summary
+
+        retry_from_mission: If provided, resume from last completed stage of this
+        failed mission instead of re-planning from scratch.
         """
         from context.assembler import ContextAssembler
         from context.expansion_broker import ExpansionBroker
@@ -64,18 +68,47 @@ class MissionController:
             "completedArtifactIds": [],
             "currentStage": 0,
             "error": None,
-            "finishedAt": None
+            "finishedAt": None,
+            "retryFromMissionId": retry_from_mission.get("missionId") if retry_from_mission else None,
         }
         self._save_mission(mission)
 
-        # Step 1: Plan the mission (complexity-routed)
+        # Step 1: Plan the mission (complexity-routed or reuse from retry)
+        resume_from_index = 0
         try:
-            plan, complexity = self._plan_mission(goal, mission_id)
-            mission["stages"] = plan["stages"]
-            mission["complexity"] = complexity
-            mission["status"] = "executing"
-            mission_state.transition_to(MissionStatus.READY,
-                                        f"planned {len(plan['stages'])} stages")
+            if retry_from_mission:
+                # Reuse plan from failed mission, resume after last completed stage
+                old_stages = retry_from_mission.get("stages", [])
+                plan = {"stages": []}
+                for s in old_stages:
+                    # Reset non-completed stages for re-execution
+                    new_stage = dict(s)
+                    if new_stage.get("status") == "completed":
+                        resume_from_index += 1
+                    else:
+                        new_stage["status"] = "pending"
+                        new_stage["error"] = None
+                        new_stage["result"] = None
+                        new_stage["started_at"] = None
+                        new_stage["finished_at"] = None
+                    plan["stages"].append(new_stage)
+                complexity = retry_from_mission.get("complexity", "standard")
+                mission["stages"] = plan["stages"]
+                mission["complexity"] = complexity
+                mission["status"] = "executing"
+                # Carry forward completed artifacts
+                for s in plan["stages"][:resume_from_index]:
+                    all_completed_arts = s.get("artifacts", [])
+                    mission["artifacts"].extend(all_completed_arts)
+                mission_state.transition_to(MissionStatus.READY,
+                                            f"retry: reusing plan, resuming from stage {resume_from_index + 1}")
+            else:
+                plan, complexity = self._plan_mission(goal, mission_id)
+                mission["stages"] = plan["stages"]
+                mission["complexity"] = complexity
+                mission["status"] = "executing"
+                mission_state.transition_to(MissionStatus.READY,
+                                            f"planned {len(plan['stages'])} stages")
             self._save_mission(mission)
         except Exception as e:
             mission["status"] = "failed"
@@ -92,10 +125,10 @@ class MissionController:
 
         # Step 2: Execute stages with state-driven while loop
         mission_state.transition_to(MissionStatus.RUNNING, "executing stages")
-        all_artifacts = []
+        all_artifacts = list(mission.get("artifacts", []))
         completed_roles = set()
         failure_reason = None
-        current_stage_index = 0
+        current_stage_index = resume_from_index
 
         while current_stage_index < len(mission["stages"]):
             stage = mission["stages"][current_stage_index]
@@ -107,6 +140,13 @@ class MissionController:
             # 5C-1: Track current position in state machine
             mission_state.current_stage_index = current_stage_index
             mission_state.pending_stage_id = stage_id
+
+            # Skip already-completed stages (retry resume)
+            if stage.get("status") == "completed":
+                all_artifacts.extend(stage.get("artifacts", []))
+                completed_roles.add(role)
+                current_stage_index += 1
+                continue
 
             # Skip stages that failed during planning validation
             if stage.get("status") == "failed":
@@ -280,6 +320,7 @@ class MissionController:
                     mission["finishedAt"] = datetime.now(timezone.utc).isoformat()
                     self._save_mission(mission)
                     self._persist_mission_state(mission_state)
+                    self._save_token_report(mission)
                     self._emit_mission_summary(
                         mission_id, mission, assembler,
                         expansion_broker, "failed",
@@ -328,10 +369,32 @@ class MissionController:
                 mission["finishedAt"] = datetime.now(timezone.utc).isoformat()
                 self._save_mission(mission)
                 self._persist_mission_state(mission_state)
+                self._save_token_report(mission)
                 self._emit_mission_summary(mission_id, mission, assembler,
                                            expansion_broker, "failed",
                                            mission_state=mission_state)
                 return mission
+
+            # Check for pause signal between stages
+            if self._check_and_handle_pause(mission_id, mission, mission_state,
+                                             assembler, expansion_broker):
+                # Mission was paused — wait for resume or abort
+                resumed = self._wait_for_resume(mission_id, mission,
+                                                 mission_state)
+                if not resumed:
+                    # Resume timed out or cancel signal — abort
+                    mission["status"] = "failed"
+                    mission["error"] = "Mission aborted — resume not received"
+                    mission["finishedAt"] = datetime.now(timezone.utc).isoformat()
+                    mission_state.transition_to(MissionStatus.FAILED,
+                                                "pause aborted — no resume")
+                    self._save_mission(mission)
+                    self._persist_mission_state(mission_state)
+                    self._save_token_report(mission)
+                    self._emit_mission_summary(mission_id, mission, assembler,
+                                               expansion_broker, "failed",
+                                               mission_state=mission_state)
+                    return mission
 
             # Both "proceed" and "stages_modified" → increment
             current_stage_index += 1
@@ -357,6 +420,7 @@ class MissionController:
         mission["totalDurationMs"] = int((time.time() - start_time) * 1000)
         self._save_mission(mission)
         self._persist_mission_state(mission_state)
+        self._save_token_report(mission)
 
         # D-055: Structured mission summary
         self._emit_mission_summary(mission_id, mission, assembler,
@@ -802,7 +866,8 @@ Respond ONLY with a JSON object, no markdown:
                         "tokenTruncated": tc.get("tokenTruncated", False),
                         "tokenBlocked": tc.get("tokenBlocked", False),
                     }
-                    for tc in stage["tool_calls_detail"][:20]  # limit to 20
+                    for tc in stage["tool_calls_detail"][:20]
+                    if isinstance(tc, dict)  # guard against str items
                 ]
             summary["stages"].append(stage_entry)
             summary["totalPolicyDenies"] += pd_count
@@ -1591,3 +1656,161 @@ Respond ONLY with a JSON object, no markdown:
                 raise
         except Exception:
             pass
+
+    def _save_token_report(self, mission: dict):
+        """Save aggregated token report to {mission_id}-token-report.json.
+
+        Collects per-stage token_report data into a single mission-level report.
+        Uses atomic write pattern (D-071).
+        """
+        import tempfile
+        mission_id = mission.get("missionId", "")
+        if not mission_id:
+            return
+
+        stages = mission.get("stages", [])
+        stage_reports = []
+        total_tokens = 0
+        total_tool_calls = 0
+        total_truncations = 0
+        total_blocks = 0
+
+        for stage in stages:
+            sr = stage.get("token_report")
+            if sr and isinstance(sr, dict):
+                for s in sr.get("stages", []):
+                    stage_reports.append(s)
+                total_tokens += sr.get("total_tokens", 0)
+                total_tool_calls += sr.get("total_tool_calls", 0)
+                total_truncations += sr.get("truncations", 0)
+                total_blocks += sr.get("blocks", 0)
+            elif stage.get("status") == "completed":
+                from context.token_budget import estimate_tokens
+                result_tokens = estimate_tokens(stage.get("result", ""))
+                stage_reports.append({
+                    "stage": stage.get("stageId", ""),
+                    "tokens_consumed": result_tokens,
+                    "tool_calls": stage.get("tool_call_count", 0),
+                    "pct_of_total": 0,
+                })
+                total_tokens += result_tokens
+                total_tool_calls += stage.get("tool_call_count", 0)
+
+        for s in stage_reports:
+            if total_tokens > 0:
+                s["pct_of_total"] = round(
+                    s["tokens_consumed"] / total_tokens * 100, 1)
+
+        report = {
+            "mission_id": mission_id,
+            "status": mission.get("status", "unknown"),
+            "generated_at": datetime.now(timezone.utc).isoformat(),
+            "total_tokens": total_tokens,
+            "total_tool_calls": total_tool_calls,
+            "truncations": total_truncations,
+            "blocks": total_blocks,
+            "stages": stage_reports,
+        }
+
+        report_path = os.path.join(
+            MISSIONS_DIR, f"{mission_id}-token-report.json")
+        try:
+            fd, tmp_path = tempfile.mkstemp(
+                dir=MISSIONS_DIR, suffix=".tmp", prefix="token-report-")
+            try:
+                with os.fdopen(fd, "w", encoding="utf-8") as f:
+                    json.dump(report, f, ensure_ascii=False, indent=2)
+                    f.flush()
+                    os.fsync(f.fileno())
+                os.replace(tmp_path, report_path)
+            except Exception:
+                try:
+                    os.unlink(tmp_path)
+                except OSError:
+                    pass
+                raise
+        except Exception:
+            pass  # Best effort
+
+    def _check_and_handle_pause(self, mission_id: str, mission: dict,
+                                 mission_state: MissionState,
+                                 assembler=None, expansion_broker=None) -> bool:
+        """Check for pending pause signal. Returns True if mission should pause."""
+        from pathlib import Path
+        from api.mutation_bridge import has_pending_signal
+
+        missions_dir = Path(MISSIONS_DIR)
+        pause_req = has_pending_signal(missions_dir, mission_id, "pause", mission_id)
+        if not pause_req:
+            return False
+
+        # Transition to paused state
+        mission_state.transition_to(MissionStatus.PAUSED, f"pause signal: {pause_req}")
+        mission["status"] = "paused"
+        self._save_mission(mission)
+        self._persist_mission_state(mission_state)
+
+        if assembler and expansion_broker:
+            self._emit_mission_summary(mission_id, mission, assembler,
+                                       expansion_broker, "paused",
+                                       mission_state=mission_state)
+
+        # Clean up pause signal
+        self._delete_signal(missions_dir, mission_id, "pause", pause_req)
+        return True
+
+    def _wait_for_resume(self, mission_id: str, mission: dict,
+                          mission_state: MissionState,
+                          timeout_s: int = 3600) -> bool:
+        """Block until resume signal arrives or timeout. Returns True if resumed."""
+        import logging
+        from pathlib import Path
+        from api.mutation_bridge import has_pending_signal
+
+        logger = logging.getLogger("mcc.controller")
+        missions_dir = Path(MISSIONS_DIR)
+        deadline = time.time() + timeout_s
+
+        logger.info("[PAUSE] Mission %s paused — waiting for resume (timeout=%ds)",
+                    mission_id, timeout_s)
+
+        while time.time() < deadline:
+            # Check for resume signal
+            resume_req = has_pending_signal(missions_dir, mission_id,
+                                            "resume", mission_id)
+            if resume_req:
+                mission_state.transition_to(MissionStatus.RUNNING,
+                                            f"resume signal: {resume_req}")
+                mission["status"] = "executing"
+                self._save_mission(mission)
+                self._persist_mission_state(mission_state)
+                self._delete_signal(missions_dir, mission_id, "resume", resume_req)
+                logger.info("[RESUME] Mission %s resumed", mission_id)
+                return True
+
+            # Check for cancel signal — don't block forever
+            cancel_req = has_pending_signal(missions_dir, mission_id,
+                                             "cancel", mission_id)
+            if cancel_req:
+                self._delete_signal(missions_dir, mission_id, "cancel", cancel_req)
+                logger.info("[CANCEL] Mission %s cancelled during pause", mission_id)
+                return False
+
+            time.sleep(2)  # Poll every 2 seconds
+
+        logger.warning("[PAUSE TIMEOUT] Mission %s — no resume after %ds",
+                       mission_id, timeout_s)
+        return False
+
+    @staticmethod
+    def _delete_signal(missions_dir, mission_id: str,
+                       signal_type: str, request_id: str):
+        """Delete a processed signal artifact."""
+        from pathlib import Path
+        mission_dir = Path(missions_dir) / mission_id
+        pattern = f"{signal_type}-request-{request_id}.json"
+        for f in mission_dir.glob(pattern):
+            try:
+                f.unlink()
+            except OSError:
+                pass

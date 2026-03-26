@@ -269,6 +269,26 @@ export interface CreateMissionResponse {
   goal: string
 }
 
+// ── Token Report (D-102) ─────────────────────────────────────────
+
+export interface TokenStageReport {
+  stage: string
+  tokens_consumed: number
+  tool_calls: number
+  pct_of_total: number
+}
+
+export interface TokenReport {
+  mission_id: string
+  status: string
+  generated_at: string
+  total_tokens: number
+  total_tool_calls: number
+  truncations: number
+  blocks: number
+  stages: TokenStageReport[]
+}
+
 // ── Mutation Response (D-096) ───────────────────────────────────
 
 export interface MutationResponse {

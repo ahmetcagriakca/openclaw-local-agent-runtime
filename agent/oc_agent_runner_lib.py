@@ -92,11 +92,13 @@ def run_agent_with_config(message: str, agent_id: str, user_id: str,
 
     # Get available tools — filter by specialist policy if set
     all_tools = get_tools_for_openai()
+    allowed_tool_set = None  # D-102 Layer 5: runtime enforcement set
     if tool_policy:
         from mission.specialists import get_specialist_tools
         allowed = get_specialist_tools(tool_policy)
         if allowed:
-            all_tools = [t for t in all_tools if t["function"]["name"] in allowed]
+            allowed_tool_set = set(allowed)
+            all_tools = [t for t in all_tools if t["function"]["name"] in allowed_tool_set]
 
     # Select system prompt
     if system_prompt_override:
@@ -174,6 +176,30 @@ def run_agent_with_config(message: str, agent_id: str, user_id: str,
                     tool_entry["error"] = result_text
                 else:
                     tool_entry["risk"] = tool_def.get("risk", "medium")
+
+                    # D-102 Layer 5: Role-based tool access enforcement
+                    if tool_policy and allowed_tool_set and tc.name not in allowed_tool_set:
+                        result_text = (
+                            f"[POLICY DENIED] Tool '{tc.name}' is not in the "
+                            f"allowed tool set for role '{tool_policy}'. "
+                            f"Use one of: {', '.join(sorted(allowed_tool_set))}"
+                        )
+                        tool_entry["success"] = False
+                        tool_entry["error"] = result_text
+                        tool_entry["policyDenied"] = True
+                        tool_entry["durationMs"] = int((time.time() - tool_start) * 1000)
+                        tool_log.append(tool_entry)
+                        artifact_store.add_from_tool_result(
+                            tc.name, tc.params, result_text, False)
+                        messages.append({
+                            "role": "tool",
+                            "tool_call_id": tc.id,
+                            "content": result_text
+                        })
+                        logger.warning(
+                            "[TOOL POLICY] %s denied for role %s",
+                            tc.name, tool_policy)
+                        continue
 
                     # Working set enforcement (before risk engine)
                     if working_set:

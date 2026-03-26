@@ -60,11 +60,11 @@ export function Sidebar({ onNavigate, onToggle, horizontal, collapsed }: Sidebar
       {/* Logo */}
       <div className={`shrink-0 border-b border-gray-800/50 px-3 py-4 ${collapsed ? 'text-center' : ''}`}>
         {collapsed ? (
-          <span className="text-lg" title="OpenClaw Mission Control">⚙</span>
+          <span className="text-lg" title="Vezir — Multi-Agent Platform">⚙</span>
         ) : (
           <div className="px-1">
-            <h2 className="text-sm font-bold text-gray-100">OpenClaw</h2>
-            <p className="text-[10px] text-gray-500">Mission Control</p>
+            <h2 className="text-sm font-bold text-gray-100">Vezir</h2>
+            <p className="text-[10px] text-gray-500">Multi-Agent Platform</p>
           </div>
         )}
       </div>

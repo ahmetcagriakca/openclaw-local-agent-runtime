@@ -14,6 +14,7 @@ class MissionStatus(Enum):
     WAITING_REWORK = "waiting_rework"
     WAITING_TEST = "waiting_test"
     WAITING_REVIEW = "waiting_review"
+    PAUSED = "paused"
     COMPLETED = "completed"
     FAILED = "failed"
 
@@ -27,8 +28,12 @@ VALID_TRANSITIONS = {
         MissionStatus.WAITING_REWORK,
         MissionStatus.WAITING_TEST,
         MissionStatus.WAITING_REVIEW,
+        MissionStatus.PAUSED,
         MissionStatus.COMPLETED,
         MissionStatus.FAILED
+    },
+    MissionStatus.PAUSED: {
+        MissionStatus.RUNNING, MissionStatus.FAILED
     },
     MissionStatus.WAITING_APPROVAL: {
         MissionStatus.RUNNING, MissionStatus.FAILED

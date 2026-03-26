@@ -9,6 +9,7 @@ const STAGE_STATUS_COLOR: Record<string, string> = {
   completed: 'border-green-500 bg-green-950/50 text-green-300',
   failed: 'border-red-500 bg-red-950/50 text-red-300',
   running: 'border-indigo-500 bg-indigo-950/50 text-indigo-300',
+  paused: 'border-yellow-500 bg-yellow-950/50 text-yellow-300',
   pending: 'border-gray-600 bg-gray-800/50 text-gray-400',
   skipped: 'border-gray-700 bg-gray-900/50 text-gray-500',
 }
@@ -36,14 +37,24 @@ export function StageTimeline({ stages, activeIndex, onSelect }: StageTimelinePr
         return (
           <div key={stage.index} className="flex items-center">
             {i > 0 && (
-              <div className="mx-0.5 h-0.5 w-4 bg-gray-600" />
+              <div className={`mx-0.5 h-0.5 w-4 ${
+                stage.status === 'running' ? 'bg-indigo-500' :
+                stage.status === 'completed' || stage.status === 'passed' ? 'bg-green-600' :
+                'bg-gray-600'
+              }`} />
             )}
             <button
               onClick={() => onSelect(stage.index)}
-              className={`flex flex-col items-center rounded-lg border-2 px-3 py-2 text-xs transition ${statusClass} ${
+              className={`relative flex flex-col items-center rounded-lg border-2 px-3 py-2 text-xs transition ${statusClass} ${
                 isActive ? 'ring-2 ring-blue-400' : ''
-              }`}
+              } ${stage.status === 'running' ? 'animate-pulse' : ''}`}
             >
+              {stage.status === 'running' && (
+                <span className="absolute -right-1 -top-1 flex h-3 w-3">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-indigo-400 opacity-75" />
+                  <span className="relative inline-flex h-3 w-3 rounded-full bg-indigo-500" />
+                </span>
+              )}
               <span className="font-medium capitalize">
                 {stage.role || `Stage ${stage.index}`}
               </span>

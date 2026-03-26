@@ -14,6 +14,7 @@ import type {
   MutationResponse,
   CreateMissionResponse,
   RolesResponse,
+  TokenReport,
 } from '../types/api'
 
 const BASE = '/api/v1'
@@ -79,6 +80,10 @@ export function getCapabilities(): Promise<CapabilityListResponse> {
 
 export function getRoles(): Promise<RolesResponse> {
   return apiGet<RolesResponse>('/roles')
+}
+
+export function getTokenReport(missionId: string): Promise<TokenReport> {
+  return apiGet<TokenReport>(`/missions/${missionId}/token-report`)
 }
 
 export { ApiError }

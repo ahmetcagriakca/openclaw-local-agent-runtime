@@ -14,7 +14,7 @@ Telegram → Vezir (WSL) → Agent Runner (Windows) → Mission Controller
 | Port | Service | Purpose |
 |------|---------|---------|
 | 8001 | WMCP | Windows MCP Proxy |
-| 8002 | Legacy Dashboard | Deprecated (D-097) |
+| 8002 | — | Removed (D-097, Sprint 13) |
 | 8003 | Mission Control API | FastAPI backend |
 | 3000 | Mission Control UI | React frontend (dev) |
 

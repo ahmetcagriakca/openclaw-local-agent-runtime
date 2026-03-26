@@ -441,7 +441,7 @@ Sprint 12 phase closure requires:
 - **Active:** Sprint 10 closure → Sprint 11 → Sprint 12 → Phase 5 closure
 - **Frozen decisions:** D-001→D-088 (D-021→D-058 extraction pending)
 - **Draft decisions:** D-089→D-096
-- **Port map:** 8001 (WMCP), 8002 (Legacy Health), 8003 (Mission Control API), 3000 (React dev)
+- **Port map:** 8001 (WMCP), 8003 (Vezir API), 3000 (Vezir UI), 9000 (Math Service)
 
 ---
 

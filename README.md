@@ -93,7 +93,7 @@ defs/tasks/            Task definitions
 config/                Environment variable templates
 logs/                  Audit logs, approval records, session artifacts
 results/               Agent output files (screenshots, generated files)
-dashboard/             Web-based system monitor (port 8002)
+frontend/              Vezir UI — React dashboard (port 3000)
 docs/ai/               Living project state (STATE, NEXT, DECISIONS, BACKLOG, PROTOCOL)
 docs/architecture/     Frozen design documents
 docs/phase-reports/    Completed phase reports (Phase 1 through Phase 4 Sprint 6C)
@@ -183,20 +183,22 @@ python bin/oc-approve.py approve apv-XXXXXXXX-XXXXX
 # Start WMCP server (required for agent)
 pwsh -NoProfile -ExecutionPolicy Bypass -File bin\start-wmcp-server.ps1
 
-# Start web dashboard (optional, port 8002)
-pwsh -NoProfile -ExecutionPolicy Bypass -File bin\start-dashboard.ps1
+# Start Vezir UI (port 3000, requires Node.js 20)
+bash scripts/dev-frontend.sh
+
+# Start Vezir API (port 8003)
+bash scripts/dev-backend.sh
 ```
 
 ## Scheduled Tasks
 
 | Task | Trigger | Purpose |
 |------|---------|---------|
-| OpenClawTaskWorker | AtLogOn | Ephemeral -RunOnce worker |
-| OpenClawRuntimeWatchdog | Every 15min | Health + stuck task + worker kick |
-| OpenClawStartupPreflight | AtBoot | Stale recovery + layout validation |
-| OpenClawWmcpServer | AtLogOn | windows-mcp HTTP server on :8001 |
-| OpenClawWslGuardian | AtLogOn | WSL + OpenClaw active guardian |
-| OpenClawDashboard | AtLogOn | Web dashboard on :8002 |
+| VezirTaskWorker | AtLogOn | Ephemeral -RunOnce worker |
+| VezirRuntimeWatchdog | Every 15min | Health + stuck task + worker kick |
+| VezirStartupPreflight | AtBoot | Stale recovery + layout validation |
+| VezirWmcpServer | AtLogOn | windows-mcp HTTP server on :8001 |
+| VezirWslGuardian | AtLogOn | WSL + Vezir active guardian |
 
 ## Completed Phases
 

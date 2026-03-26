@@ -1,4 +1,4 @@
-# openclaw-local-agent-runtime
+# vezir-platform
 
 # Runtime state
 logs/
@@ -13,6 +13,7 @@ config/.env
 *.env
 *.env.*
 .openclaw/
+.vezir/
 
 # IDE / tooling
 .claude/

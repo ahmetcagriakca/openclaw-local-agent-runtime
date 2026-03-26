@@ -170,23 +170,26 @@ class MissionController:
                     expansion_broker=expansion_broker
                 )
 
-                # Check if stage itself reported failure
-                if result and result.get("status") == "error":
-                    raise Exception(result.get("error",
-                                               "Stage reported failure"))
-
-                stage["status"] = "completed"
-                stage["result"] = result.get("response", "")
+                # Always save prompt/execution info regardless of outcome
                 stage["system_prompt"] = result.get("systemPrompt", "")
                 stage["user_prompt"] = result.get("userPrompt", "")
                 stage["turns_used"] = result.get("turnsUsed", 0)
-                stage["artifacts"] = result.get("artifacts", [])
                 stage["duration_ms"] = result.get("totalDurationMs", 0)
                 stage["tool_call_count"] = len(result.get("toolCalls", []))
                 stage["policy_deny_count"] = sum(
                     1 for tc in result.get("toolCalls", [])
                     if tc.get("policyDenied")
                 )
+
+                # Check if stage itself reported failure
+                if result and result.get("status") == "error":
+                    stage["result"] = result.get("response", "")
+                    raise Exception(result.get("error",
+                                               "Stage reported failure"))
+
+                stage["status"] = "completed"
+                stage["result"] = result.get("response", "")
+                stage["artifacts"] = result.get("artifacts", [])
                 all_artifacts.extend(stage["artifacts"])
 
                 # Store stage output in Assembler with D-047 header

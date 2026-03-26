@@ -63,6 +63,8 @@ def run_agent_with_config(message: str, agent_id: str, user_id: str,
             "agentId": agent_id,
             "sessionId": session_id,
             "error": f"Failed to initialize provider: {e}",
+            "systemPrompt": "",
+            "userPrompt": message,
             "artifacts": [{"type": "error", "data": {"error": str(e), "recoverable": False}}]
         }
 
@@ -77,6 +79,8 @@ def run_agent_with_config(message: str, agent_id: str, user_id: str,
             "agentId": agent_id,
             "sessionId": session_id,
             "error": "MCP server unreachable at localhost:8001",
+            "systemPrompt": "",
+            "userPrompt": message,
             "artifacts": [{"type": "error", "data": {"error": "MCP server unreachable", "recoverable": True}}]
         }
 
@@ -118,8 +122,11 @@ def run_agent_with_config(message: str, agent_id: str, user_id: str,
                 "agentId": agent_id,
                 "sessionId": session_id,
                 "error": f"LLM API error: {e}",
+                "systemPrompt": system_prompt,
+                "userPrompt": message,
                 "toolCalls": tool_log,
                 "turnsUsed": turns_used,
+                "totalDurationMs": int((time.time() - start_time) * 1000),
                 "artifacts": [{"type": "error", "data": {"error": str(e), "recoverable": True}}]
             }
 

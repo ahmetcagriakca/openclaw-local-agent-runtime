@@ -5,7 +5,7 @@
  */
 import { useCallback, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { getMission, cancelMission, retryMission } from '../api/client'
+import { getMission, cancelMission, retryMission, deleteSignal } from '../api/client'
 import { usePolling } from '../hooks/usePolling'
 import { useMutation } from '../hooks/useMutation'
 import { useSSEInvalidation } from '../hooks/SSEContext'
@@ -168,6 +168,55 @@ export function MissionDetailPage() {
               <pre className="whitespace-pre-wrap break-words text-sm text-red-200/90 leading-relaxed">
                 {mission.error}
               </pre>
+            </div>
+          )}
+
+          {/* Pending Signal Artifacts */}
+          {mission.pendingSignals && mission.pendingSignals.length > 0 && (
+            <div className="rounded-lg border border-yellow-600/50 bg-yellow-950/30 p-4">
+              <h3 className="mb-2 text-sm font-semibold text-yellow-300">
+                Pending Signals ({mission.pendingSignals.length})
+              </h3>
+              <div className="space-y-2">
+                {mission.pendingSignals.map((sig) => (
+                  <div
+                    key={sig.requestId}
+                    className="flex items-center justify-between rounded border border-yellow-700/40 bg-yellow-950/20 px-3 py-2"
+                  >
+                    <div className="flex items-center gap-3 text-xs">
+                      <span className={`rounded px-2 py-0.5 font-medium uppercase ${
+                        sig.type === 'retry' ? 'bg-blue-800 text-blue-200' :
+                        sig.type === 'cancel' ? 'bg-red-800 text-red-200' :
+                        sig.type === 'approve' ? 'bg-green-800 text-green-200' :
+                        'bg-gray-700 text-gray-300'
+                      }`}>{sig.type}</span>
+                      <span className="font-mono text-gray-400">{sig.requestId.slice(0, 20)}…</span>
+                      <span className="text-gray-500">
+                        {sig.ageSeconds < 60 ? `${sig.ageSeconds}s ago` :
+                         sig.ageSeconds < 3600 ? `${Math.floor(sig.ageSeconds / 60)}m ago` :
+                         `${Math.floor(sig.ageSeconds / 3600)}h ago`}
+                      </span>
+                      {sig.ageSeconds > 60 && (
+                        <span className="rounded bg-red-900 px-1.5 py-0.5 text-red-300">Expired</span>
+                      )}
+                    </div>
+                    <button
+                      onClick={async () => {
+                        try {
+                          await deleteSignal(sig.requestId)
+                          setToast({ type: 'success', message: `Signal ${sig.type} deleted` })
+                          refresh()
+                        } catch {
+                          setToast({ type: 'error', message: 'Failed to delete signal' })
+                        }
+                      }}
+                      className="rounded bg-red-700 px-2 py-1 text-xs text-white hover:bg-red-600"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
 

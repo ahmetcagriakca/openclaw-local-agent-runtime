@@ -227,6 +227,7 @@ from api.sse_api import router as sse_router
 from api.approval_mutation_api import router as approval_mutation_router
 from api.mission_mutation_api import router as mission_mutation_router
 from api.mission_create_api import router as mission_create_router
+from api.signal_api import router as signal_router
 
 app.include_router(mission_router, prefix="/api/v1")
 app.include_router(approval_router, prefix="/api/v1")
@@ -236,6 +237,7 @@ app.include_router(sse_router, prefix="/api/v1")
 app.include_router(approval_mutation_router, prefix="/api/v1")
 app.include_router(mission_mutation_router, prefix="/api/v1")
 app.include_router(mission_create_router, prefix="/api/v1")
+app.include_router(signal_router, prefix="/api/v1")
 
 
 # ── Main ────────────────────────────────────────────────────────

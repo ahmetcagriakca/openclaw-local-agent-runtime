@@ -159,6 +159,17 @@ async function apiPostJson<T>(path: string, body: unknown): Promise<T> {
   return res.json() as Promise<T>
 }
 
+export async function deleteSignal(requestId: string): Promise<void> {
+  const res = await fetch(`${BASE}/signals/${encodeURIComponent(requestId)}`, {
+    method: 'DELETE',
+    headers: { 'X-Tab-Id': getTabId(), 'X-Session-Id': getSessionId() },
+  })
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}))
+    throw new ApiError(res.status, body)
+  }
+}
+
 export function createMission(goal: string, complexity?: string): Promise<CreateMissionResponse> {
   return apiPostJson<CreateMissionResponse>('/missions', { goal, complexity: complexity ?? 'medium' })
 }

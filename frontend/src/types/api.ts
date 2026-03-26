@@ -94,6 +94,16 @@ export interface StateTransition {
   timestamp: string
 }
 
+export interface SignalArtifact {
+  requestId: string
+  type: string
+  targetId: string
+  missionId: string
+  requestedAt: string
+  source: string
+  ageSeconds: number
+}
+
 export interface MissionSummary {
   missionId: string
   state: string
@@ -102,6 +112,7 @@ export interface MissionSummary {
   error: string | null
   stages: StageDetail[]
   denyForensics: Record<string, unknown>[]
+  pendingSignals: SignalArtifact[]
   totalPolicyDenies: number
   artifactCount: number
   totalDurationMs: number | null

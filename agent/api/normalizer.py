@@ -21,7 +21,7 @@ from api.circuit_breaker import CircuitBreaker, CircuitBreakerOpen
 from api.schemas import (
     DataQuality, SourceInfo, ResponseMeta,
     MissionSummary, MissionListItem, StageDetail,
-    GateResultDetail, Finding,
+    GateResultDetail, Finding, SignalArtifact,
     TelemetryEntry, ApprovalEntry,
 )
 
@@ -193,6 +193,9 @@ class MissionNormalizer:
             if last.get("to") in ("failed", "aborted"):
                 error_msg = last.get("reason")
 
+        # Read pending signal artifacts
+        pending_signals = self._read_signal_artifacts(mission_id)
+
         # Propagate error to failed stages from transitions or mission error
         for s in stages:
             if s.status == "failed" and not s.error:
@@ -213,6 +216,7 @@ class MissionNormalizer:
             error=error_msg,
             stages=stages,
             denyForensics=deny_forensics,
+            pendingSignals=pending_signals,
             totalPolicyDenies=(summary_data or {}).get("totalPolicyDenies", 0),
             artifactCount=(summary_data or {}).get("artifactCount", 0),
             totalDurationMs=mission_data.get("totalDurationMs"),
@@ -412,6 +416,30 @@ class MissionNormalizer:
             stages.append(stage)
 
         return stages
+
+    def _read_signal_artifacts(self, mission_id: str) -> list[SignalArtifact]:
+        """Read pending signal artifacts for a mission."""
+        artifacts = []
+        mission_dir = self._missions_dir / mission_id
+        if not mission_dir.is_dir():
+            return artifacts
+        for fpath in mission_dir.glob("*-request-req-*.json"):
+            try:
+                age_s = int(time.time() - os.path.getmtime(str(fpath)))
+                data = json.loads(fpath.read_text(encoding="utf-8"))
+                artifacts.append(SignalArtifact(
+                    requestId=data.get("requestId", ""),
+                    type=data.get("type", "unknown"),
+                    targetId=data.get("targetId", ""),
+                    missionId=data.get("missionId", mission_id),
+                    requestedAt=data.get("requestedAt", ""),
+                    source=data.get("source", "dashboard"),
+                    ageSeconds=age_s,
+                ))
+            except Exception:
+                continue
+        artifacts.sort(key=lambda a: a.requestedAt, reverse=True)
+        return artifacts
 
     def _approval_from_data(self, data: dict) -> ApprovalEntry:
         return ApprovalEntry(

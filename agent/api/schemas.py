@@ -107,6 +107,17 @@ class StageDetail(BaseModel):
 
 # ── Mission ──────────────────────────────────────────────────────
 
+class SignalArtifact(BaseModel):
+    """Pending signal artifact (mutation request waiting for controller)."""
+    requestId: str
+    type: str  # approve | reject | cancel | retry
+    targetId: str
+    missionId: str
+    requestedAt: str
+    source: str = "dashboard"
+    ageSeconds: int = 0
+
+
 class MissionSummary(BaseModel):
     """Full mission detail."""
     missionId: str
@@ -116,6 +127,7 @@ class MissionSummary(BaseModel):
     error: Optional[str] = None
     stages: list[StageDetail] = Field(default_factory=list)
     denyForensics: list[dict] = Field(default_factory=list)
+    pendingSignals: list[SignalArtifact] = Field(default_factory=list)
     totalPolicyDenies: int = 0
     artifactCount: int = 0
     totalDurationMs: Optional[int] = None

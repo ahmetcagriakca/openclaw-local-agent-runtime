@@ -113,8 +113,10 @@ def has_pending_signal(
             if age_s > SIGNAL_TTL_S:
                 try:
                     artifact_path.unlink()
-                except OSError:
-                    pass
+                    logger.info("Expired signal artifact deleted: %s (age=%ds)", artifact_path.name, int(age_s))
+                except OSError as oe:
+                    logger.warning("Failed to delete expired artifact %s: %s", artifact_path.name, oe)
+                # Skip this artifact regardless of whether delete succeeded
                 continue
 
             data = json.loads(artifact_path.read_text(encoding="utf-8"))

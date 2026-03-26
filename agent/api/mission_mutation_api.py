@@ -38,33 +38,65 @@ def _get_dirs():
     return MISSIONS_DIR
 
 
-def _read_mission_state(missions_dir: Path, mission_id: str) -> dict | None:
-    """Read mission state file. Returns None if not found.
+def _resolve_controller_id(missions_dir: Path, mission_id: str) -> str:
+    """If mission_id is a dashboard placeholder, find the controller's real mission ID."""
+    mission_path = missions_dir / f"{mission_id}.json"
+    if not mission_path.exists():
+        return mission_id
+    try:
+        data = json.loads(mission_path.read_text(encoding="utf-8"))
+        # Direct link
+        ctrl_id = data.get("controllerMissionId")
+        if ctrl_id:
+            return ctrl_id
+        # Session-based link
+        if data.get("createdFrom") == "dashboard":
+            session_key = f"web-{mission_id}"
+            for fpath in sorted(missions_dir.glob("mission-*.json"), reverse=True):
+                base = fpath.name
+                if "-state.json" in base or "-summary.json" in base:
+                    continue
+                if base == f"{mission_id}.json":
+                    continue
+                try:
+                    d = json.loads(fpath.read_text(encoding="utf-8"))
+                    if d.get("sessionId") == session_key:
+                        return d.get("missionId", mission_id)
+                except Exception:
+                    continue
+    except Exception:
+        pass
+    return mission_id
 
-    Checks both flat format ({id}-state.json) and directory format ({id}/state.json).
-    """
-    # Flat format: logs/missions/{mission_id}-state.json (controller default)
-    flat_path = missions_dir / f"{mission_id}-state.json"
+
+def _read_mission_state(missions_dir: Path, mission_id: str) -> dict | None:
+    """Read mission state file. Resolves dashboard placeholders to controller files."""
+    # Resolve to controller's mission ID if this is a dashboard placeholder
+    real_id = _resolve_controller_id(missions_dir, mission_id)
+
+    # Flat format: logs/missions/{id}-state.json (controller default)
+    flat_path = missions_dir / f"{real_id}-state.json"
     if flat_path.exists():
         try:
             return json.loads(flat_path.read_text(encoding="utf-8"))
         except Exception:
             return None
-    # Directory format: logs/missions/{mission_id}/state.json (signal artifact layout)
-    dir_path = missions_dir / mission_id / "state.json"
+    # Directory format: logs/missions/{id}/state.json (signal artifact layout)
+    dir_path = missions_dir / real_id / "state.json"
     if dir_path.exists():
         try:
             return json.loads(dir_path.read_text(encoding="utf-8"))
         except Exception:
             return None
-    # Fallback: read from main mission file
-    mission_path = missions_dir / f"{mission_id}.json"
-    if mission_path.exists():
-        try:
-            data = json.loads(mission_path.read_text(encoding="utf-8"))
-            return {"state": data.get("status", "unknown")}
-        except Exception:
-            return None
+    # Fallback: read from main mission file (use real_id first, then original)
+    for mid in [real_id, mission_id]:
+        mission_path = missions_dir / f"{mid}.json"
+        if mission_path.exists():
+            try:
+                data = json.loads(mission_path.read_text(encoding="utf-8"))
+                return {"state": data.get("status", "unknown")}
+            except Exception:
+                pass
     return None
 
 

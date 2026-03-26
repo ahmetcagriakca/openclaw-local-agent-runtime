@@ -12,9 +12,37 @@ const NAV_ITEMS = [
 
 interface SidebarProps {
   onNavigate?: () => void
+  horizontal?: boolean
 }
 
-export function Sidebar({ onNavigate }: SidebarProps) {
+export function Sidebar({ onNavigate, horizontal }: SidebarProps) {
+  if (horizontal) {
+    return (
+      <nav aria-label="Main navigation" className="px-4 py-3">
+        <ul role="list" className="flex flex-wrap gap-2">
+          {NAV_ITEMS.map((item) => (
+            <li key={item.to}>
+              <NavLink
+                to={item.to}
+                onClick={onNavigate}
+                className={({ isActive }) =>
+                  `flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition ${
+                    isActive
+                      ? 'bg-gray-700 text-white'
+                      : 'text-gray-400 hover:bg-gray-800 hover:text-gray-200'
+                  }`
+                }
+              >
+                <span aria-hidden="true">{item.icon}</span>
+                {item.label}
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    )
+  }
+
   return (
     <nav aria-label="Main navigation" className="flex w-56 flex-col border-r border-gray-800 bg-gray-900 px-3 py-4">
       <div className="mb-6 px-2">

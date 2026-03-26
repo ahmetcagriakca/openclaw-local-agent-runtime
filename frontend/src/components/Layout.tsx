@@ -26,12 +26,15 @@ export function Layout({ children }: LayoutProps) {
         />
       )}
 
-      {/* Sidebar — hidden on mobile, toggle via hamburger */}
-      <div className={`fixed inset-y-0 left-0 z-40 transform transition-transform duration-200 lg:relative lg:translate-x-0 ${
-        sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-      }`}>
+      {/* Sidebar — slides down from top on mobile, always visible on desktop */}
+      <div className={`hidden lg:block`}>
         <Sidebar onNavigate={() => setSidebarOpen(false)} />
       </div>
+      {sidebarOpen && (
+        <div className="fixed inset-x-0 top-[49px] z-40 border-b border-gray-700 bg-gray-900 shadow-xl lg:hidden">
+          <Sidebar onNavigate={() => setSidebarOpen(false)} horizontal />
+        </div>
+      )}
 
       <div className="flex flex-1 flex-col overflow-hidden">
         {/* Header */}

@@ -1,12 +1,12 @@
-# OpenClaw Local Agent Runtime
+# Vezir Local Agent Runtime
 
 Personal AI-powered Windows automation system with Telegram integration. 9 governed agent roles orchestrated by Mission Controller with quality gates, feedback loops, and artifact-driven context economy. Supports GPT-4o, Claude, and Ollama providers with 24 specialized tools executed via MCP on Windows.
 
 ## Architecture
 
 ```
-User (Telegram)
-  -> OpenClaw (WSL Ubuntu-E, conversation gateway)
+User (Telegram)h
+  -> Vezir (WSL Ubuntu-E, conversation gateway)
   -> Agent Runner (Windows, multi-provider)
      Single-agent: GPT-4o/Claude/Ollama + 24 tools
      Mission mode: MissionController

@@ -50,7 +50,7 @@ Legacy path (predefined tasks):
 | Provider Factory | `agent/providers/factory.py` | Multi-provider: GPT-4o, Claude, Ollama |
 | Bridge | `bridge/oc-bridge.ps1` | Stateless adapter for legacy task system |
 | oc runtime | `bin/` | Task queue, worker, watchdog, health engine |
-| WSL Guardian | `bin/oc-wsl-guardian.ps1` | Active WSL + OpenClaw monitor with auto-restart |
+| WSL Guardian | `bin/oc-wsl-guardian.ps1` | Active WSL + Vezir monitor with auto-restart |
 
 ## 9 Governed Roles
 
@@ -119,7 +119,7 @@ docs/phase-reports/    Completed phase reports (Phase 1 through Phase 4 Sprint 6
 | lock_screen | medium | Lock workstation |
 | system_shutdown | critical | Shutdown (requires approval) |
 | system_restart | critical | Restart (requires approval) |
-| get_system_health | low | OpenClaw health check (6 components) |
+| get_system_health | low | Vezir health check (11 components) |
 | get_process_details | low | Detailed process info |
 | get_network_info | low | IP addresses + connectivity |
 | list_scheduled_tasks | low | Windows scheduled tasks |

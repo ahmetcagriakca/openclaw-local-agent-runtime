@@ -188,7 +188,7 @@ done
 
 ---
 
-*Decision Debt Burn-Down Plan — OpenClaw*
+*Decision Debt Burn-Down Plan — Vezir Platform*
 *Sprint 11: D-081→D-096 (13 decisions + 4 OD freeze)*
 *Sprint 12: D-021→D-058 (38 decision extraction) + D-093/D-094/D-095 freeze*
 *Phase 5 Closure: Zero debt*

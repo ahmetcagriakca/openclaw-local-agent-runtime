@@ -1,4 +1,4 @@
-# Claude Instructions — AKCA / OpenClaw
+# Claude Instructions — AKCA / Vezir
 
 **Version:** 3.0
 **Date:** 2026-03-25
@@ -434,7 +434,7 @@ Sprint 12 phase closure requires:
 
 ## 27. Project Context
 
-- **Project:** OpenClaw Local Agent Runtime
+- **Project:** Vezir Platform (formerly OpenClaw)
 - **Runtime:** Windows 11 + WSL2 Ubuntu-E + Python 3.14 + PowerShell
 - **Repo:** `openclaw-local-agent-runtime` (private)
 - **Architecture:** 9 governed roles, 3 quality gates, 10-state mission FSM
@@ -504,6 +504,6 @@ Never `done` or `closed`.
 
 ---
 
-*Claude Instructions — OpenClaw Local Agent Runtime*
+*Claude Instructions — Vezir Platform*
 *Version 3.0 — Process Hardened*
 *Effective: Sprint 11+*

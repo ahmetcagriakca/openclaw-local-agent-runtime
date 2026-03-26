@@ -362,6 +362,6 @@ Standard sprint task list includes these mandatory tasks:
 
 ---
 
-*Process Gates — OpenClaw Local Agent Runtime*
+*Process Gates — Vezir Platform*
 *Effective: Sprint 12+ (v4)*
 *Owner: Operator (AKCA)*

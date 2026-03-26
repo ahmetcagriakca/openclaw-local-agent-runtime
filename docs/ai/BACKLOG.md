@@ -81,7 +81,7 @@
 | B-016 | Task result artifact access | Beyond outputPreview |
 | B-017 | Multi-step status visibility | Step-level status |
 | B-018 | Dynamic sourceUserId | WSL wrapper improvement |
-| B-019 | Intent mapping refinement | OpenClaw conversation quality |
+| B-019 | Intent mapping refinement | Vezir conversation quality |
 | B-020 | Standard task library | Common task definitions |
 
 ## Phase 4 — Reproducibility / DR
@@ -104,5 +104,5 @@
 
 ---
 
-*Backlog — OpenClaw Local Agent Runtime*
+*Backlog — Vezir Platform*
 *Last updated: 2026-03-25*

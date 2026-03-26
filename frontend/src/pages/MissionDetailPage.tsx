@@ -138,9 +138,12 @@ export function MissionDetailPage() {
                 )}
                 <button
                   onClick={refresh}
-                  className="rounded bg-gray-700 px-3 py-1.5 text-sm hover:bg-gray-600"
+                  title="Refresh"
+                  className="rounded bg-gray-700 p-1.5 text-gray-400 hover:bg-gray-600 hover:text-white"
                 >
-                  Refresh
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h5M20 20v-5h-5M4.5 15.5A8.5 8.5 0 0118 6.07M19.5 8.5A8.5 8.5 0 016 17.93" />
+                  </svg>
                 </button>
               </div>
             </div>

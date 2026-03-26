@@ -1,5 +1,6 @@
 """Agent runner library — reusable by CLI and Mission Controller (Vezir)."""
 import json
+import logging
 import time
 
 from providers.factory import create_provider
@@ -11,6 +12,8 @@ from services.approval_store import ApprovalStore
 from services.artifact_store import ArtifactStore
 
 from context.token_budget import BudgetConfig, TokenTracker, truncate_tool_response, estimate_tokens
+
+logger = logging.getLogger("mcc.agent_runner")
 
 DEFAULT_SYSTEM_PROMPT = """You are a Windows automation assistant for the Vezir platform.
 You help the user manage their Windows computer through specialized tools.
@@ -37,7 +40,8 @@ def run_agent_with_config(message: str, agent_id: str, user_id: str,
                           tool_policy: str = None,
                           system_prompt_override: str = None,
                           working_set=None,
-                          expansion_broker=None) -> dict:
+                          expansion_broker=None,
+                          event_bus=None) -> dict:
     """Run agent with optional tool filtering, prompt override, and working set enforcement.
 
     tool_policy: specialist name ("analyst", "executor") or None for all tools
@@ -109,6 +113,17 @@ def run_agent_with_config(message: str, agent_id: str, user_id: str,
     else:
         system_prompt = DEFAULT_SYSTEM_PROMPT
 
+    # D-102: Emit stage entering event
+    if event_bus:
+        from events.bus import Event
+        from events.catalog import EventType
+        event_bus.emit(Event(
+            type=EventType.STAGE_ENTERING,
+            data={"stage": session_id, "specialist": tool_policy or "general",
+                  "agent_id": agent_id,
+                  "input_tokens": estimate_tokens(message + (system_prompt or ""))},
+            source="agent_runner"))
+
     # Build conversation
     messages = [
         {"role": "system", "content": system_prompt},
@@ -177,7 +192,36 @@ def run_agent_with_config(message: str, agent_id: str, user_id: str,
                 else:
                     tool_entry["risk"] = tool_def.get("risk", "medium")
 
-                    # D-102 Layer 5: Role-based tool access enforcement
+                    # D-102: Emit tool.requested event if bus available
+                    if event_bus:
+                        from events.bus import Event
+                        from events.catalog import EventType
+                        req_event = Event(
+                            type=EventType.TOOL_REQUESTED,
+                            data={"tool": tc.name, "role": tool_policy or "",
+                                  "params": tc.params, "stage": session_id},
+                            source="agent_runner")
+                        req_results = event_bus.emit(req_event)
+                        if event_bus.was_halted(req_results):
+                            # Bus handler blocked this tool
+                            halt_reason = next(
+                                (r.error for r in req_results if r.halt), "blocked by bus")
+                            result_text = f"[BUS DENIED] {halt_reason}"
+                            tool_entry["success"] = False
+                            tool_entry["error"] = result_text
+                            tool_entry["policyDenied"] = True
+                            tool_entry["durationMs"] = int((time.time() - tool_start) * 1000)
+                            tool_log.append(tool_entry)
+                            artifact_store.add_from_tool_result(
+                                tc.name, tc.params, result_text, False)
+                            messages.append({
+                                "role": "tool",
+                                "tool_call_id": tc.id,
+                                "content": result_text
+                            })
+                            continue
+
+                    # D-102 Layer 5: Role-based tool access enforcement (inline fallback)
                     if tool_policy and allowed_tool_set and tc.name not in allowed_tool_set:
                         result_text = (
                             f"[POLICY DENIED] Tool '{tc.name}' is not in the "
@@ -342,6 +386,31 @@ def run_agent_with_config(message: str, agent_id: str, user_id: str,
                     session_id, tc.name, req_tokens, resp_tokens,
                     truncated=was_truncated, blocked=was_blocked)
 
+                # D-102: Emit tool events to bus
+                if event_bus:
+                    from events.bus import Event
+                    from events.catalog import EventType
+                    if was_blocked:
+                        event_bus.emit(Event(
+                            type=EventType.TOOL_BLOCKED,
+                            data={"tool": tc.name, "stage": session_id,
+                                  "tokens": resp_tokens},
+                            source="agent_runner"))
+                    elif was_truncated:
+                        event_bus.emit(Event(
+                            type=EventType.TOOL_TRUNCATED,
+                            data={"tool": tc.name, "stage": session_id,
+                                  "original_tokens": resp_tokens,
+                                  "truncated_to": budget_config.tool_response_limit},
+                            source="agent_runner"))
+                    else:
+                        event_bus.emit(Event(
+                            type=EventType.TOOL_EXECUTED,
+                            data={"tool": tc.name, "stage": session_id,
+                                  "request_tokens": req_tokens,
+                                  "response_tokens": resp_tokens},
+                            source="agent_runner"))
+
                 tool_log.append(tool_entry)
 
                 # Create typed artifact from tool result
@@ -391,6 +460,19 @@ def run_agent_with_config(message: str, agent_id: str, user_id: str,
     # D-102: Log stage completion
     token_tracker.log_stage_complete(
         session_id, estimate_tokens(final_text or ""), len(tool_log))
+
+    # D-102: Emit stage completed event
+    if event_bus:
+        from events.bus import Event
+        from events.catalog import EventType
+        event_bus.emit(Event(
+            type=EventType.STAGE_COMPLETED,
+            data={"stage": session_id, "specialist": tool_policy or "general",
+                  "artifact_tokens": estimate_tokens(final_text or ""),
+                  "tool_calls": len(tool_log),
+                  "duration_ms": total_duration,
+                  "policy_denies": sum(1 for t in tool_log if t.get("policyDenied"))},
+            source="agent_runner"))
 
     return {
         "status": "completed",

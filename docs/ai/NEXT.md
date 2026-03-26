@@ -15,18 +15,13 @@
 - D-077 → D-096 frozen
 - Process Patch v4 applied (P-01→P-10)
 
-## Current Sprint
-
-```
-Sprint 14B  Frontend Restructure + Tooling  (not started — per advance plan Option A)
-```
-
 ## Completed Sprints
 
 ```
 Sprint 12   Phase 5D      Polish + Phase 5 Closure          25 task  CLOSED (2026-03-26)
 Sprint 13   Stabilization  L1/L2 + cleanup                  10 task  CLOSED (2026-03-26)
 Sprint 14A  EventBus + Backend Restructure                  23 task  CLOSED (2026-03-26)
+Sprint 14B  Frontend Restructure + Tooling                   8 task  CLOSED (2026-03-26)
 ```
 
 ### Sprint 13 Deliverables (closed)

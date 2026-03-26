@@ -1,7 +1,7 @@
 # Current State
 
 **Last updated:** 2026-03-26
-**Active phase:** Sprint 14A DONE — implementation_status=done, closure_status=closed (2026-03-26)
+**Active phase:** Sprint 14A+14B DONE — both closed (2026-03-26)
 **Note:** Sprint 7 (4.5-C) + Sprint 8 (5A-1) + Sprint 9 (5A-2) + Sprint 10 (5B) + Sprint 11 (5C) complete. Phase 2 deferred — single-user localhost, security hardening not urgent.
 **Persistence:** State is file-persisted (state.json, mission.json). Resume not yet implemented.
 **API:** Mission Control API on 127.0.0.1:8003 (FastAPI + Uvicorn). Schemas FROZEN (D-067). SSE on /api/v1/events/stream. Mutation endpoints (Sprint 11).

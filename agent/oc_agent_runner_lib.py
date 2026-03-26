@@ -1,4 +1,4 @@
-"""Agent runner library — reusable by CLI and Mission Controller."""
+"""Agent runner library — reusable by CLI and Mission Controller (Vezir)."""
 import json
 import time
 

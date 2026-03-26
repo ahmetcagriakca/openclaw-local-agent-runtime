@@ -243,7 +243,7 @@ def generate_report(telemetry: dict, missions: dict, as_json: bool = False) -> s
 
     lines = []
     lines.append("=" * 60)
-    lines.append("  OpenClaw Telemetry Report")
+    lines.append("  Vezir Telemetry Report")
     lines.append(f"  Generated: {combined['generatedAt']}")
     lines.append("=" * 60)
 
@@ -334,7 +334,7 @@ def _parse_ts(ts_str: str) -> float:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="OpenClaw Telemetry Analyzer")
+    parser = argparse.ArgumentParser(description="Vezir Telemetry Analyzer")
     parser.add_argument("--json", action="store_true", help="Output as JSON")
     parser.add_argument("--last", type=int, default=None,
                         help="Only analyze last N missions")

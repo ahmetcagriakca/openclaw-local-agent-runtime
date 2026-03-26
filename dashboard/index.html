@@ -60,7 +60,7 @@
 <body>
 
 <div class="deprecation-banner">
-  ⚠ This dashboard is deprecated (D-097). Use <a href="http://localhost:3000">Mission Control UI</a> on port 3000 instead.
+  ⚠ This dashboard is deprecated (D-097). Use <a href="http://localhost:3000">Vezir UI</a> on port 3000 instead.
   Legacy dashboard will be removed in Sprint 13.
 </div>
 
@@ -160,7 +160,7 @@ function renderHistory(lines) {
     try {
       const h = JSON.parse(line);
       const tr = document.createElement('tr');
-      const fields = ['timestamp','overall','wmcp','wsl','openclaw','runtime','bridge','tasks'];
+      const fields = ['timestamp','overall','wmcp','wsl','vezir','runtime','bridge','tasks'];
       for (const f of fields) {
         const td = document.createElement('td');
         if (f === 'timestamp') {

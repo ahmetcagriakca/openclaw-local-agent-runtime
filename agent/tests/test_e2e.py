@@ -1,6 +1,6 @@
 """Sprint 12 E2E Test Suite — D-098: API-level E2E with httpx + pytest.
 
-12+ scenarios covering the full Mission Control API flow:
+12+ scenarios covering the full Vezir API flow:
   1. Health check → system operational
   2. Capabilities listing
   3. Mission list → empty state

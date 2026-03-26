@@ -157,7 +157,7 @@ class TestReportGeneration(unittest.TestCase):
                     "modelUsage": {}, "contextTierDistribution": {},
                     "artifactExtractionRate": {}, "costEstimate": {}}
         report = generate_report(telemetry, missions, as_json=False)
-        self.assertIn("OpenClaw Telemetry Report", report)
+        self.assertIn("Vezir Telemetry Report", report)
         self.assertIn("Missions: 2", report)
 
     def test_14_json_report(self):

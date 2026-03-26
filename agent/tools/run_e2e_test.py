@@ -250,7 +250,7 @@ def list_test_cases():
 
 
 def main():
-    parser = argparse.ArgumentParser(description="OpenClaw E2E Test Runner")
+    parser = argparse.ArgumentParser(description="Vezir E2E Test Runner")
     parser.add_argument("--complexity", choices=TEST_CASES.keys(),
                         help="Run specific complexity level")
     parser.add_argument("--message", type=str, help="Custom mission message")

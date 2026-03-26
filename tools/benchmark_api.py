@@ -118,7 +118,7 @@ def main():
     ]
 
     print("=" * 70)
-    print("  OpenClaw Mission Control API — Performance Benchmark")
+    print("  Vezir API — Performance Benchmark")
     print(f"  Date: {time.strftime('%Y-%m-%d %H:%M:%S')}")
     print(f"  Iterations: {ITERATIONS} per endpoint")
     print(f"  Data: 10 missions, 5 approvals, 50 telemetry events")
@@ -149,7 +149,7 @@ def main():
 
     with open(evidence_path, "w", encoding="utf-8") as f:
         f.write("=" * 70 + "\n")
-        f.write("  OpenClaw Mission Control API — Performance Benchmark\n")
+        f.write("  Vezir API — Performance Benchmark\n")
         f.write(f"  Date: {time.strftime('%Y-%m-%d %H:%M:%S')}\n")
         f.write(f"  Iterations: {ITERATIONS} per endpoint\n")
         f.write(f"  Data: 10 missions, 5 approvals, 50 telemetry events\n")

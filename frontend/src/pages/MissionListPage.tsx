@@ -51,14 +51,13 @@ export function MissionListPage() {
           <button
             onClick={() => setShowCreate(!showCreate)}
             title={showCreate ? 'Close form' : 'New Mission'}
-            className="flex items-center gap-1.5 rounded bg-green-700 px-3 py-1.5 text-sm font-medium text-white hover:bg-green-600"
+            className="rounded bg-green-700 p-1.5 text-white hover:bg-green-600"
           >
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               {showCreate
                 ? <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                 : <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />}
             </svg>
-            {showCreate ? '' : 'New'}
           </button>
           <button
             onClick={refresh}

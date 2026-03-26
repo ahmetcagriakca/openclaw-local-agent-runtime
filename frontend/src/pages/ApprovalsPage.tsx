@@ -31,6 +31,7 @@ export function ApprovalsPage() {
   const [activeAction, setActiveAction] = useState<'approve' | 'reject' | null>(null)
   const [confirmRejectId, setConfirmRejectId] = useState<string | null>(null)
   const [toast, setToast] = useState<{ type: 'success' | 'error' | 'timeout'; message: string } | null>(null)
+  const [statusFilter, setStatusFilter] = useState<string>('all')
 
   const clearToast = useCallback(() => setToast(null), [])
 
@@ -144,15 +145,44 @@ export function ApprovalsPage() {
         </div>
       )}
 
-      {data && data.approvals.length === 0 && (
-        <div className="py-8 text-center text-gray-500">
-          No pending approvals
+      {/* Status filter */}
+      {data && data.approvals.length > 0 && (
+        <div className="flex items-center gap-2">
+          <span className="text-xs text-gray-500">Filter:</span>
+          {['all', 'pending', 'approved', 'denied'].map((f) => (
+            <button
+              key={f}
+              onClick={() => setStatusFilter(f)}
+              className={`rounded px-2.5 py-1 text-xs font-medium transition ${
+                statusFilter === f
+                  ? f === 'pending' ? 'bg-yellow-700 text-white'
+                    : f === 'approved' ? 'bg-green-700 text-white'
+                    : f === 'denied' ? 'bg-red-700 text-white'
+                    : 'bg-blue-700 text-white'
+                  : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+              }`}
+            >
+              {f === 'all' ? `All (${data.approvals.length})` : f}
+            </button>
+          ))}
         </div>
       )}
 
-      {data && data.approvals.length > 0 && (
+      {data && data.approvals.length === 0 && (
+        <div className="py-8 text-center text-gray-500">
+          No approvals
+        </div>
+      )}
+
+      {data && data.approvals.length > 0 && (() => {
+        const filtered = statusFilter === 'all'
+          ? data.approvals
+          : data.approvals.filter((a) => a.status === statusFilter)
+        return filtered.length === 0 ? (
+          <div className="py-6 text-center text-gray-500">No approvals matching "{statusFilter}"</div>
+        ) : (
         <div className="space-y-2">
-          {data.approvals.map((a) => (
+          {filtered.map((a) => (
             <div
               key={a.id}
               className="rounded-lg border border-gray-700/50 bg-gray-800/50 p-4"
@@ -204,7 +234,8 @@ export function ApprovalsPage() {
             </div>
           ))}
         </div>
-      )}
+        )
+      })()}
 
       {/* D-090: Reject confirmation dialog */}
       <ConfirmDialog

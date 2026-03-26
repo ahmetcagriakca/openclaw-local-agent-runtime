@@ -34,17 +34,18 @@ export function ConfirmDialog({
       : 'bg-blue-600 hover:bg-blue-500 focus:ring-blue-500'
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center" role="dialog" aria-modal="true" aria-labelledby="confirm-dialog-title" aria-describedby="confirm-dialog-desc">
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/60"
         onClick={loading ? undefined : onCancel}
+        aria-hidden="true"
       />
 
       {/* Dialog */}
       <div className="relative z-10 w-full max-w-md rounded-lg border border-gray-700 bg-gray-800 p-6 shadow-xl">
-        <h2 className="text-lg font-semibold text-gray-100">{title}</h2>
-        <p className="mt-2 text-sm text-gray-300">{message}</p>
+        <h2 id="confirm-dialog-title" className="text-lg font-semibold text-gray-100">{title}</h2>
+        <p id="confirm-dialog-desc" className="mt-2 text-sm text-gray-300">{message}</p>
 
         <div className="mt-6 flex justify-end gap-3">
           <button

@@ -163,26 +163,317 @@ OpenClaw Telegram → WSL wrappers → oc-bridge-call → pwsh.exe bridge/oc-bri
 
 ### D-020: Project identity
 
-**Phase:** Post-1.5 | **Status:** Active
+**Phase:** Post-1.5 | **Status:** Frozen
 
 Project: OpenClaw Local Agent Runtime. Repo: openclaw-local-agent-runtime.
 
 ---
 
-## Phase 4 Decisions (D-021 → D-058)
+## Phase 3-A / 3-F Decisions (D-021 → D-031)
 
-> **GAP:** D-021→D-058 (38 karar) Phase 4 Agent System sprint'lerinde (6A–6D) alındı.
-> Bu kararlar repo'daki CLAUDE.md ve session notlarında referans ediliyor ancak
-> DECISIONS.md'ye henüz eklenmemiş.
->
-> **Kapsam:** 9 governed roles, 10 skill contracts, 3 quality gates, 2 feedback loops,
-> 10-state mission state machine, artifact extraction, approval service.
->
-> **Aksiyon:** Repo'daki Phase 4 session handoff veya CLAUDE.md'den D-021→D-058
-> detayları çıkarılıp bu dosyaya eklenecek. Ayrı task olarak planlanmış.
->
-> **Owner:** AKCA
-> **Deadline:** Sprint 8 kickoff öncesi
+### D-021: Agent Runner — single entry point for all agent execution
+
+**Phase:** 3-B | **Status:** Frozen
+
+`agent/oc-agent-runner.py` is the sole agent execution entry point. Handles single-agent and mission (multi-agent) modes. No other script may invoke LLM providers directly.
+
+---
+
+### D-022: Agent architecture — registry-based, multi-agent extensible
+
+**Phase:** 3-A | **Status:** Frozen
+
+Agent system uses a registry pattern. Roles registered with capabilities, tool policies, and model assignments. Extensible to new roles without modifying core runner.
+
+---
+
+### D-023: run_powershell denied to general-assistant, executor-only
+
+**Phase:** 3-A | **Status:** Frozen
+
+`run_powershell` tool restricted to remote-operator role only. Requires approval above "high" risk tier. General-assistant and all other roles denied.
+
+---
+
+### D-024: Tool access — role-scoped via Tool Gateway
+
+**Phase:** 3-A | **Status:** Frozen
+
+Every tool call passes through Tool Gateway which enforces role-based tool policy. Roles have explicit allowed/denied tool sets. No role can bypass gateway.
+
+---
+
+### D-025: Approval — service interface with correlation IDs
+
+**Phase:** 3-A | **Status:** Frozen
+
+Approval service exposes structured interface with correlation IDs for audit. Every approval request/response carries requestId for tracing through the full execution chain.
+
+---
+
+### D-026: Artifacts — typed output, handoff contracts
+
+**Phase:** 3-A | **Status:** Frozen
+
+Every agent stage produces typed artifacts (requirements_brief, discovery_map, technical_design, etc.). Artifact types define the handoff contract between stages. Untyped output forbidden in mission mode.
+
+---
+
+### D-027: Routing — deterministic table, not context-guessed
+
+**Phase:** 3-A | **Status:** Frozen
+
+Stage-to-role routing uses deterministic lookup table, not LLM-guessed context. Complexity router selects role sequence based on tier (trivial→complex). No runtime routing decisions.
+
+---
+
+### D-028: Framework — direct SDK calls, no LangChain
+
+**Phase:** 3-A | **Status:** Frozen
+
+Agent system uses direct SDK calls (OpenAI, Anthropic, Ollama). No LangChain, CrewAI, or other agent frameworks. Reduces dependency chain and allows full control over prompt construction.
+
+---
+
+### D-029: Hub-and-spoke — all handoffs through Mission Controller
+
+**Phase:** 3-F | **Status:** Frozen
+
+Mission Controller is the central hub. All stage handoffs pass through controller. Agents never call each other directly. Controller manages state transitions, artifact routing, and failure handling.
+
+---
+
+### D-030: Specialists share same LLM provider, differentiated by system prompt + tool policy
+
+**Phase:** 3-F | **Status:** Frozen
+
+All specialist roles within a mission use the same underlying LLM provider. Differentiation via role-specific system prompt and tool policy. Model assignment is per-role (gpt-4o or claude-sonnet), not per-invocation.
+
+---
+
+### D-031: Sequential execution only in Phase 3-F, parallel deferred
+
+**Phase:** 3-F | **Status:** Frozen
+
+Mission stages execute sequentially. Parallel stage execution deferred to future phase. Simplifies state management, artifact handoff, and failure recovery.
+
+---
+
+## Phase 4 Design Decisions (D-032 → D-058)
+
+### D-032: Execution ladder — 4-tier complexity routing
+
+**Phase:** 4 (Design, 3G-K) | **Status:** Frozen
+
+Complexity router assigns missions to one of 4 tiers: trivial (3 roles), simple (4 roles), medium (7 roles), complex (9 roles). Tier determines which roles participate and in what order. **Trade-off:** Simpler missions skip unnecessary roles, reducing cost and latency.
+
+---
+
+### D-033: Cost governance — per-stage budget limits
+
+**Phase:** 4 (Design, 3G-K) | **Status:** Frozen
+
+Each skill contract defines budget limits: maxTurns, maxFileReads, maxTokens. Exceeding budget triggers stage termination. **Trade-off:** Prevents runaway LLM costs at the expense of potentially truncating complex analysis.
+
+---
+
+### D-034: Discovery governance — analyst/architect only
+
+**Phase:** 4 (Design, 3G-K) | **Status:** Frozen
+
+Repository discovery (file listing, grep, read) restricted to analyst and architect roles. Developer, tester, and other roles forbidden from discovery. Prevents scope creep during execution phases.
+
+---
+
+### D-035: Cost class routing — model selection by role cost tier
+
+**Phase:** 4 (Design, 3G-K) | **Status:** Frozen
+
+Roles assigned cost classes (low/medium/high). PO, PM, manager use gpt-4o (low cost). Analyst, architect, developer, tester, reviewer use claude-sonnet (medium). Cost class determines model selection.
+
+---
+
+### D-036: Skill contracts — machine-readable role-skill binding
+
+**Phase:** 4 (Design, 3G-L) | **Status:** Frozen
+
+10 skill contracts define: owningRoles, forbiddenRoles, inputArtifacts, outputArtifact, allowedTools, budgets (maxTurns, maxFileReads), costClass, escalationTier. Violation of forbidden skill-role combination → mission-level policy fail.
+
+---
+
+### D-037: Working set concept — bounded per-stage file access
+
+**Phase:** 4 (Design, 3G-L) | **Status:** Frozen
+
+Each mission stage executes with bounded working set: allowed read/write files, creatable files, forbidden directories/patterns, read/write/expansion budgets. Budgets are per-stage, not shared across mission.
+
+---
+
+### D-038: Enforcer runs before Risk Engine
+
+**Phase:** 4-0/1 | **Status:** Frozen
+
+Working Set Enforcer sits between Tool Gateway and Risk Engine. Policy violations denied before approval/MCP execution. When `working_set=None` (single-agent mode), enforcer bypassed entirely.
+
+---
+
+### D-039: Policy telemetry event types
+
+**Phase:** 4-1 | **Status:** Frozen
+
+Every enforcer decision emits structured JSONL event to `logs/policy-telemetry.jsonl`. Initial event types: filesystem_tool_allowed, policy_denied, budget_exhausted, path_resolution_failed. Extended by D-055.
+
+---
+
+### D-040: Summary cache — zero-cost reuse
+
+**Phase:** 4-2 | **Status:** Frozen
+
+In-memory cache stores artifact summaries (<30% original size). `generate_basic_summary()` extracts field names, types, truncated values without LLM. Summaries enable zero-cost second delivery of same artifact to same role.
+
+---
+
+### D-041: Five-tier context delivery (A through E)
+
+**Phase:** 4-2 | **Status:** Frozen
+
+Artifact delivery tiers: A (metadata only), B (structural summary <30%), C (scoped excerpt), D (full with header), E (full + related files). Default tier per role defined in 47-entry tier matrix (artifact type × role).
+
+---
+
+### D-042: Reread auto-downgrade + expansion broker
+
+**Phase:** 4-2 | **Status:** Frozen
+
+First full read: delivered in full. Second read by same role: auto-downgraded to summary (tier B). Different roles reading same artifact: not a reread, full delivery. Expansion Broker handles working set growth with role-based budgets (developer max 8, tester max 3, analyst/architect unlimited, others 0).
+
+---
+
+### D-043: Artifact consumption logging
+
+**Phase:** 4-2 | **Status:** Frozen
+
+Every artifact access logged: artifactId, role, stageId, tier, reread flag, timestamp. Consumption stats aggregated for quality gate verification.
+
+---
+
+### D-044: Canonical path resolution
+
+**Phase:** 4-0/1 | **Status:** Frozen
+
+Every filesystem tool call path resolved via `os.path.realpath(os.path.normpath(path))`. Windows case-insensitive via `os.path.normcase()`. Produces absolute path free of `..` traversals. Foundation for all containment checks. See also D-049.
+
+---
+
+### D-045: Write authorization scope
+
+**Phase:** 4-1 | **Status:** Frozen
+
+Write operations (`mutationSurface == "code"`) must target paths in `read_write`, `creatable`, or `generated_outputs` sets. Violation → policy_denied event + LLM feedback message.
+
+---
+
+### D-046: Per-stage budget isolation
+
+**Phase:** 4-1H | **Status:** Frozen
+
+Each stage has independent budget counters. One stage exhausting its file_reads budget does not affect next stage. When exhausted, subsequent read attempts denied with `budget_exhausted` event.
+
+---
+
+### D-047: Artifact identity header — 12 mandatory fields
+
+**Phase:** 4-2 | **Status:** Frozen
+
+Every artifact carries identity header: artifactId (unique), artifactType, version (monotonic), missionId, producedByStage, producedByRole, producedBySkill, producedAt (ISO), inputArtifactIds (lineage), contentHash (SHA-256), sizeTokens, compressionAvailable. Enables tracking, deduplication, lineage verification.
+
+---
+
+### D-048: Canonical role names + alias resolution
+
+**Phase:** 4-2C | **Status:** Frozen
+
+Working set templates use canonical role names (product-owner, analyst, architect, project-manager, developer, tester, reviewer, manager, remote-operator). Alias table: `{"executor": "remote-operator"}`. Unknown roles get restrictive fallback: 5 file reads, 2 dir reads, 0 expansions.
+
+---
+
+### D-049: Path resolution — absolute, case-normalized, traversal-safe
+
+**Phase:** 4-0/1 | **Status:** Frozen
+
+Extends D-044. `os.path.realpath(os.path.normpath(path))` with `os.path.normcase()`. Containment check against project root. Used by Working Set Enforcer for every filesystem tool call.
+
+---
+
+### D-050: Mission mode fail-closed gate
+
+**Phase:** 4-1H | **Status:** Frozen
+
+Pre-dispatch check in `execute_mission()`: if stage's `working_set` is None in mission mode, stage immediately fails with `POLICY:` message and mission aborts. Single-agent mode (working_set=None) continues to work — enforcer bypass only outside mission context. See also D-053.
+
+---
+
+### D-051: Mutation surface mismatch detection
+
+**Phase:** 4-2C | **Status:** Frozen
+
+When tool's `mutationSurface` doesn't match working set expectations, `mutation_surface_mismatch` telemetry event emitted. Soft denial with warning — operation may proceed but is flagged.
+
+---
+
+### D-052: Per-mission structured summary
+
+**Phase:** 4-2C | **Status:** Frozen
+
+`_emit_mission_summary()` produces `logs/missions/{mission_id}-summary.json` with: stateTransitions, finalState, attemptCounters, feedbackLoopStats, gatesChecked. Also emits `mission_completed` or `mission_failed` telemetry event.
+
+---
+
+### D-053: Mission mode fail-closed — working set required
+
+**Phase:** 4-1H | **Status:** Frozen
+
+If a stage's `working_set` is None in mission mode, stage immediately fails with `POLICY:` message. Default working sets auto-generated per specialist role during planning via `_build_default_working_set()`. Code: `controller.py` line 126.
+
+---
+
+### D-054: Feedback loops — quality improvement cycles
+
+**Phase:** 4-5 | **Status:** Frozen
+
+Two feedback loops: (1) test-developer loop — tester failure feeds back to developer for fix, (2) reviewer-developer loop — reviewer rejection feeds back to developer. Max 2 iterations per loop before escalation.
+
+---
+
+### D-055: Policy telemetry — 6 enforcer event types
+
+**Phase:** 4-1H/2C | **Status:** Frozen
+
+Six enforcer telemetry event types to `logs/policy-telemetry.jsonl`: filesystem_tool_allowed, policy_denied, budget_exhausted, path_resolution_failed, mutation_surface_mismatch (Sprint 2C), policy_soft_denied (Sprint 2C). 12+ total event types across all layers.
+
+---
+
+### D-056: Recovery triage — manager recovery before abort
+
+**Phase:** 4-5C | **Status:** Frozen
+
+On stage failure, `_handle_stage_failure()` checks retry budget (max 3 per stage). If available, creates manager `recovery_triage` stage. Manager returns action: `retry_stage`, `abort`, `escalate_to_operator`, or `retry_from` (rewind). 4th failure on same stage always aborts. Recovery failure caught by outer try/except.
+
+---
+
+### D-057: Startup metadata validation gate
+
+**Phase:** 4-1H | **Status:** Frozen
+
+`validate_catalog_governance()` runs on every startup before any LLM/MCP call. Validates all 24 tools have complete governance metadata. Missing metadata → `FATAL:` error + `exit 1`. Also validates skill contracts and role registry. Code: `oc-agent-runner.py` line 30.
+
+---
+
+### D-058: Path hardening — null byte + UNC rejection
+
+**Phase:** 4-1H | **Status:** Frozen
+
+Extension to D-049. Rejects: null byte injection (`\x00` → None), UNC paths (`\\server\share` → None). Blocks 9 Windows attack vectors (traversal, junction escape, symlink, null byte, UNC). Test corpus: 9 cases, all pass. Code: `path_resolver.py` lines 14-19.
 
 ---
 
@@ -353,19 +644,7 @@ Example: `policy-telemetry.jsonl:48231`, `mission-abc123.json:1711288380`
 
 **Phase:** 4.5-C (Sprint 7) | **Status:** Frozen
 
-**Context:** Sprint kapanışlarında döküman güncellemeleri atlanıyor veya tutarsız yapılıyor. SESSION-HANDOFF, STATE.md, DECISIONS.md gibi dosyalar stale kalıyor.
-
-**Decision:** Her sprint kapanışında zorunlu döküman güncellemesi. `tools/validate_sprint_docs.py` script'i ile enforce edilir. Validation pass olmadan sprint "done" sayılmaz.
-
-**Zorunlu dökümanlar:** STATE.md, NEXT.md, DECISIONS.md, BACKLOG.md, SESSION-HANDOFF.md, capabilities.json, sprint plan doc. Koşullu: phase report, ops docs.
-
-**Validation kontrolleri:** freshness (stale tarih), required sections, capability autoGenerated flag, open checkboxes, test count regression.
-
-**Trade-off:** Sprint kapanış süresi artar (~15 dk) vs. döküman tutarlılığı ve session handoff kalitesi garanti altına alınır.
-
-**Enforce:** `python tools/validate_sprint_docs.py --sprint N` → exit 0 gerekli.
-
-**Rollback:** Script devre dışı bırakılabilir ama policy kuralları elle uygulanmaya devam eder.
+Mandatory documentation update at every sprint closure. Enforced by `tools/validate_sprint_docs.py`. Validation must pass before sprint is marked "done". Required docs: STATE.md, NEXT.md, DECISIONS.md, BACKLOG.md, SESSION-HANDOFF.md, capabilities.json, sprint plan doc. Checks: freshness, required sections, capability autoGenerated flag, open checkboxes, test count regression. **Trade-off:** Sprint closure takes ~15 min longer vs. document consistency and session handoff quality guaranteed.
 
 ---
 
@@ -373,13 +652,7 @@ Example: `policy-telemetry.jsonl:48231`, `mission-abc123.json:1711288380`
 
 **Phase:** 4.5-C → 5A-1 | **Status:** Frozen
 
-**Context:** Sprint 7 E2E 2/4 pass. T-OT-3: LLM kalitesi (Sprint 7 scope dışı). T-OT-4: `_save_mission()` non-atomic write crash (pre-existing bug, Sprint 8 BF olarak planlandı).
-
-**Decision:** Sprint 7 E2E partial pass kabul edilir. Sprint 7 code değişiklikleri (denyForensics, agentUsed, gateResults) başarılı mission'larda doğrulandı. Her iki fail Sprint 7 scope'u dışında.
-
-**Trade-off:** E2E %50 ile Sprint 8'e geçiş. Risk kabul edilir çünkü fail root cause'ları Sprint 7 code'unda değil.
-
-**Rollback:** Fail root cause'u Sprint 7'de olduğu kanıtlanırsa Sprint 8 durdurulur.
+Sprint 7 E2E 2/4 pass accepted. T-OT-3: LLM quality (out of Sprint 7 scope). T-OT-4: `_save_mission()` non-atomic write crash (pre-existing bug, planned as Sprint 8 blocking fix). Sprint 7 code changes (denyForensics, agentUsed, gateResults) validated in successful missions. Both failures outside Sprint 7 scope. **Trade-off:** Proceeding to Sprint 8 with 50% E2E. Risk accepted because fail root causes are not in Sprint 7 code.
 
 ---
 
@@ -387,11 +660,7 @@ Example: `policy-telemetry.jsonl:48231`, `mission-abc123.json:1711288380`
 
 **Phase:** 5A-1 (Sprint 8) | **Status:** Frozen
 
-**Context:** D-068 "5 state" dondurdu. Sprint 8 schema tasarımında `known_zero` semantik olarak yanlış kullanılıyordu (value state, quality state değil) ve `partial` (bazı kaynaklar mevcut, bazıları eksik) durumu eksikti.
-
-**Decision:** D-068 ilkesi korunur. State listesi güncellenir: `known_zero` kaldırıldı, `fresh` ve `partial` eklendi. 6 state: `fresh`, `partial`, `stale`, `degraded`, `unknown`, `not_reached`. Öncelik: `degraded > stale > partial > fresh`.
-
-**Trade-off:** Frozen decision state sayısı değişti. İlke ve güvenlik garantisi aynı, temsil kapasitesi arttı.
+D-068 principle preserved but state list updated. `known_zero` removed (was a value state, not a quality state), `fresh` and `partial` added. 6 states: `fresh`, `partial`, `stale`, `degraded`, `unknown`, `not_reached`. Precedence: `degraded > stale > partial > fresh`. **Trade-off:** Frozen decision state count changed. Principle and safety guarantee unchanged, representation capacity increased.
 
 ---
 
@@ -399,11 +668,7 @@ Example: `policy-telemetry.jsonl:48231`, `mission-abc123.json:1711288380`
 
 **Phase:** 5A-1 (Sprint 8) | **Status:** Frozen
 
-**Context:** `services.json` startup/shutdown model'i crash durumunda stale "running" bırakır. Fake live üretir.
-
-**Decision:** Service registration heartbeat-based freshness ile korunur. Her service `lastHeartbeatAt` + `heartbeatIntervalS` yazar. Canlılık: `lastHeartbeatAt + (heartbeatIntervalS × 2) > now`. Threshold aşımı → stale → health `degraded`.
-
-**Impacted:** `agent/api/server.py`, `agent/api/health_api.py`
+Service registration protected by heartbeat-based freshness. Each service writes `lastHeartbeatAt` + `heartbeatIntervalS`. Liveness: `lastHeartbeatAt + (heartbeatIntervalS × 2) > now`. Threshold exceeded → stale → health `degraded`. Prevents stale "running" entries after crash. **Impacted:** `agent/api/server.py`, `agent/api/health_api.py`
 
 ---
 
@@ -413,7 +678,7 @@ Example: `policy-telemetry.jsonl:48231`, `mission-abc123.json:1711288380`
 
 **Phase:** 5A-2 (Sprint 9) | **Status:** Frozen
 
-CSS framework olarak Tailwind CSS utility-first yaklaşımı. Component library kullanılmaz; tüm UI Tailwind utility class'ları ile yazılır. **Trade-off:** Daha verbose JSX, ancak runtime CSS bloat yok, design token tutarlılığı sağlanır.
+Tailwind CSS utility-first approach. No component library; all UI built with Tailwind utility classes. **Trade-off:** More verbose JSX, but zero runtime CSS bloat and design token consistency guaranteed.
 
 ---
 
@@ -421,7 +686,7 @@ CSS framework olarak Tailwind CSS utility-first yaklaşımı. Component library 
 
 **Phase:** 5A-2 (Sprint 9) | **Status:** Frozen
 
-Backend Pydantic schema'ları (D-067) frozen olduğu için frontend TypeScript type'ları manuel yazılır. Otomatik code-gen araçları (openapi-typescript vb.) eklenmez. **Trade-off:** Schema değişikliğinde her iki taraf güncellenmeli; ancak dependency chain basit kalır.
+Frontend TypeScript types written manually from frozen Pydantic schemas (D-067). No auto code-gen tools (openapi-typescript, etc.). **Trade-off:** Both sides must update on schema change, but dependency chain stays simple.
 
 ---
 
@@ -429,7 +694,7 @@ Backend Pydantic schema'ları (D-067) frozen olduğu için frontend TypeScript t
 
 **Phase:** 5A-2 (Sprint 9) | **Status:** Frozen
 
-Başlangıç veri fetch stratejisi: 30s global polling interval + manual refresh butonu. Tab arka plandayken polling durur (Page Visibility API). Sprint 10 SSE ile augment edilir, polling fallback olarak kalır. **Trade-off:** 30s stale window kabul edilir; real-time SSE zaten sonraki sprint'te gelir.
+Initial data fetch strategy: 30s global polling interval + manual refresh button. Polling pauses when tab is in background (Page Visibility API). Augmented by SSE in Sprint 10, polling remains as fallback. **Trade-off:** 30s stale window accepted; real-time SSE comes in next sprint.
 
 ---
 
@@ -437,7 +702,7 @@ Başlangıç veri fetch stratejisi: 30s global polling interval + manual refresh
 
 **Phase:** 5A-2 (Sprint 9) | **Status:** Frozen
 
-Her dashboard paneli kendi ErrorBoundary'sine sahip. Bir panel crash olursa diğerleri etkilenmez. Route seviyesinde de ErrorBoundary var. **Trade-off:** Daha fazla boilerplate, ancak partial degradation mümkün — tek panel hatası tüm UI'ı çökertmez.
+Each dashboard panel has its own ErrorBoundary. One panel crash does not affect others. Route-level ErrorBoundary also present. **Trade-off:** More boilerplate, but partial degradation possible — single panel failure does not take down entire UI.
 
 ---
 
@@ -447,7 +712,7 @@ Her dashboard paneli kendi ErrorBoundary'sine sahip. Bir panel crash olursa diğ
 
 **Phase:** 5B (Sprint 10) | **Status:** Frozen
 
-Dosya değişiklik algılama: watchdog/inotify yerine 1s interval ile `os.stat()` mtime polling. Pure Python, cross-platform. **Trade-off:** 1s gecikme ve CPU overhead (dosya başına stat call), ancak zero dependency ve Windows/WSL2 uyumlu.
+File change detection via 1s interval `os.stat()` mtime polling instead of watchdog/inotify. Pure Python, cross-platform. **Trade-off:** 1s latency and CPU overhead (stat call per file), but zero dependency and Windows/WSL2 compatible.
 
 ---
 
@@ -455,7 +720,7 @@ Dosya değişiklik algılama: watchdog/inotify yerine 1s interval ile `os.stat()
 
 **Phase:** 5B (Sprint 10) | **Status:** Frozen
 
-SSE event'leri entity seviyesinde invalidation sinyali gönderir (örn: `mission_updated`), field-level diff göndermez. Client SSE event'i aldığında ilgili entity'yi yeniden fetch eder. **Trade-off:** Daha fazla HTTP request, ancak SSE payload basit kalır ve partial state riski yok.
+SSE events send entity-level invalidation signals (e.g., `mission_updated`), not field-level diffs. Client re-fetches the relevant entity on SSE event. **Trade-off:** More HTTP requests, but SSE payload stays simple and no partial state risk.
 
 **Sprint 11 Extension — Mutation SSE Event Types:**
 
@@ -473,7 +738,7 @@ SSE event'leri entity seviyesinde invalidation sinyali gönderir (örn: `mission
 
 **Phase:** 5B (Sprint 10) | **Status:** Frozen
 
-SSE endpoint'i D-070 (localhost-only binding + Host header validation) ile korunur. Ek SSE token veya authentication mekanizması eklenmez. **Trade-off:** Multi-user senaryoda yetersiz, ancak single-operator localhost için yeterli.
+SSE endpoint protected by D-070 (localhost-only binding + Host header validation). No additional SSE token or authentication mechanism. **Trade-off:** Insufficient for multi-user scenario, but adequate for single-operator localhost.
 
 ---
 
@@ -481,17 +746,17 @@ SSE endpoint'i D-070 (localhost-only binding + Host header validation) ile korun
 
 **Phase:** 5B (Sprint 10) | **Status:** Frozen
 
-SSE bağlantı koptuğunda: 1s→2s→4s→8s→16s→30s exponential backoff ile yeniden bağlan. 3 ardışık fail → polling fallback moduna geç. Last-Event-ID persistence ile missed event'leri yakala. 60s heartbeat timeout → connection dead sayılır. **Trade-off:** Karmaşık reconnect logic, ancak SSE kaybında UI dark olmaz.
+On SSE disconnect: 1s→2s→4s→8s→16s→30s exponential backoff reconnect. 3 consecutive failures → switch to polling fallback mode. Last-Event-ID persistence catches missed events. 60s heartbeat timeout → connection considered dead. **Trade-off:** Complex reconnect logic, but UI never goes dark on SSE loss.
 
 ---
 
 ## Phase 5C Decisions (Sprint 11 — Intervention / Mutation)
 
-### D-089: CSRF — SameSite=Strict + Origin Header Check
+### D-089: CSRF — Origin Header Check (SameSite browser-dependent)
 
 **Phase:** 5C (Sprint 11) | **Status:** Frozen
 
-Localhost + single-operator + modern browser → SameSite=Strict cookie + Origin header validation. Mutation endpoint'leri valid Origin olmadan reject → 403. Double-submit cookie gereksiz karmaşıklık. **Trade-off:** Eski browser'larda daha az koruma. Kabul edilir: sistem localhost-only (D-070).
+Origin header check enforced on all POST endpoints; SameSite depends on browser cookie context (not server-enforced). Mutation endpoints reject requests with missing or invalid Origin → 403. Double-submit cookie unnecessary for localhost single-operator. **Trade-off:** Older browsers may not send Origin on same-origin POST. Accepted: system is localhost-only (D-070).
 
 ---
 
@@ -499,7 +764,7 @@ Localhost + single-operator + modern browser → SameSite=Strict cookie + Origin
 
 **Phase:** 5C (Sprint 11) | **Status:** Frozen
 
-Destructive action'lar (cancel, reject) → confirmation dialog gerektirir. Non-destructive (approve, retry) → single click. Undo mekanizması yok — mutation'lar irreversible. **Trade-off:** UX friction artışı, ancak yanlışlıkla destructive action riski ortadan kalkar.
+Destructive actions (cancel, reject) require confirmation dialog. Non-destructive (approve, retry) are single click. No undo mechanism — mutations are irreversible. **Trade-off:** Increased UX friction, but eliminates accidental destructive action risk.
 
 ---
 
@@ -507,7 +772,7 @@ Destructive action'lar (cancel, reject) → confirmation dialog gerektirir. Non-
 
 **Phase:** 5C (Sprint 11) | **Status:** Frozen
 
-Mutation request → server response bekle → SSE event ile state change confirm → UI refresh. Optimistic state update yok. 100-500ms gecikme kabul edilir — operator dashboard, real-time trading değil. **Trade-off:** Daha yavaş UX, ancak yanlış state gösterme riski sıfır.
+Mutation request → wait for server response → SSE event confirms state change → UI refresh. No optimistic state update. 100-500ms latency accepted — operator dashboard, not real-time trading. **Trade-off:** Slower UX, but zero risk of displaying incorrect state.
 
 ---
 
@@ -515,7 +780,31 @@ Mutation request → server response bekle → SSE event ile state change confir
 
 **Phase:** 5C (Sprint 11) | **Status:** Frozen
 
-Dashboard `approve <id>` / `reject <id>` ana kanal olur. Telegram yes/no hâlâ çalışır ancak deprecation warning loglar. Tam kaldırma Sprint 12'de (D-095). **Trade-off:** Geçiş döneminde iki kanal aktif; ancak backward compatibility korunur.
+Dashboard `approve <id>` / `reject <id>` becomes primary channel. Telegram yes/no still works but logs deprecation warning. Full removal deferred to Phase 6 (D-099 scope boundary). **Trade-off:** Two active channels during transition, but backward compatibility preserved.
+
+---
+
+### D-093: Reserved — reassigned to D-097
+
+**Phase:** 5D (Sprint 12) | **Status:** Deprecated (reassigned)
+
+Originally planned as OD-11 (legacy dashboard decision). Reassigned to D-097 during Sprint 12 kickoff to maintain contiguous numbering with D-098→D-101. See D-097 for the frozen decision.
+
+---
+
+### D-094: Reserved — reassigned to D-098
+
+**Phase:** 5D (Sprint 12) | **Status:** Deprecated (reassigned)
+
+Originally planned as OD-12 (E2E framework decision). Reassigned to D-098 during Sprint 12 kickoff. See D-098 for the frozen decision.
+
+---
+
+### D-095: Reserved — reassigned to D-099
+
+**Phase:** 5D (Sprint 12) | **Status:** Deprecated (reassigned)
+
+Originally planned as OD-14 (approval sunset Phase 2). Reassigned to D-099 during Sprint 12 kickoff. See D-099 for the frozen decision.
 
 ---
 
@@ -523,18 +812,60 @@ Dashboard `approve <id>` / `reject <id>` ana kanal olur. Telegram yes/no hâlâ 
 
 **Phase:** 5C (Sprint 11) | **Status:** Frozen
 
-Her mutation endpoint D-096 lifecycle döner: `{ requestId, lifecycleState, targetId, requestedAt, acceptedAt, appliedAt, rejectedReason, timeoutAt }`. Lifecycle: `requested → accepted → applied | rejected | timed_out`. API response daima `lifecycleState=requested` döner. Sonraki state'ler yalnızca SSE ile gelir. Client requestId ile SSE event'lerini correlate eder. Fire-and-forget yasak.
+Every mutation endpoint returns D-096 lifecycle: `{ requestId, lifecycleState, targetId, requestedAt, acceptedAt, appliedAt, rejectedReason, timeoutAt }`. Lifecycle: `requested → accepted → applied | rejected | timed_out`. API response always returns `lifecycleState=requested`. Subsequent states arrive via SSE only. Client correlates SSE events by requestId. Fire-and-forget forbidden.
 
 ---
 
-## Phase 5 Freeze Addendum (Sprint 7→8 arası)
+## Phase 5D Decisions (Sprint 12 — Polish + Phase 5 Closure)
+
+### D-097: Legacy dashboard retired — removal deferred
+
+**Phase:** 5D (Sprint 12) | **Status:** Frozen
+
+Mission Control (:8003 + :3000) fully replaces legacy health dashboard (:8002). Deprecation banner added to UI, startup log warning emitted. Code removal deferred to Sprint 13. **Trade-off:** Keeping code in Sprint 12 avoids regression risk during Phase 5 closure. Removal in Sprint 13 (stabilization sprint) is lower risk. **Validation:** Deprecation banner visible at localhost:8002, startup log contains warning, OPERATOR-GUIDE.md documents deprecation.
+
+---
+
+### D-098: API-level E2E with httpx + pytest — browser E2E deferred
+
+**Phase:** 5D (Sprint 12) | **Status:** Frozen
+
+E2E tests use `httpx` + `pytest` for API-level testing. Browser-level E2E (Playwright/Cypress) deferred to Phase 6. API-level E2E covers critical paths (roles, signals, approvals, SSE) without browser driver overhead. **Trade-off:** UI interaction coverage deferred but not eliminated. **Validation:** `pytest tests/e2e/ -v` → 12+ PASS, 0 FAIL. Tests isolated from unit test suite.
+
+---
+
+### D-099: Approval model changes are Phase 6 scope
+
+**Phase:** 5D (Sprint 12) | **Status:** Frozen
+
+Current preapproval model (D-012) remains unchanged. Approval evolution (dynamic approval, per-request approval, delegation) is Phase 6 work. **Trade-off:** Defers flexibility for stability. Phase 5 closes with a proven, tested approval model.
+
+---
+
+### D-100: OpenAPI spec auto-generated from FastAPI
+
+**Phase:** 5D (Sprint 12) | **Status:** Frozen
+
+OpenAPI spec generated from FastAPI built-in schema, exported to `docs/api/openapi.json`. No hand-written spec. Custom documentation added via FastAPI decorators. **Trade-off:** Auto-generated spec always in sync with code. **Validation:** `curl localhost:8003/openapi.json | python -m json.tool` → valid JSON. Endpoint count matches actual routes.
+
+---
+
+### D-101: SSE is Mission Control frontend transport only — amends D-068
+
+**Phase:** 5D (Sprint 12) | **Status:** Frozen | **Amends:** D-068
+
+SSE is a Mission Control frontend transport concern only. Does not amend or expand Bridge contract responsibilities. Bridge contract remains four operations (D-011). SSE streams served by Mission Control API (:8003) to React frontend (:3000). **Trade-off:** Clear ownership boundary. SSE complexity stays inside Mission Control. Bridge remains stateless single-invocation (D-018). **Validation:** `grep -r "SSE\|EventSource" bridge/` → 0 matches.
+
+---
+
+## Phase 5 Freeze Addendum (Sprint 7→8 transition)
 
 ### Blocking Fix Closures
 
-4 blocking fix'in yazılı closure'ı `docs/ai/PHASE-5-FREEZE-ADDENDUM.md` dosyasında.
-Sprint 8 bu belge FROZEN olmadan başlamaz.
+Written closure of 4 blocking fixes in `docs/ai/PHASE-5-FREEZE-ADDENDUM.md`.
+Sprint 8 did not start until this document was FROZEN.
 
-| BF | Konu | Referans |
+| BF | Topic | Reference |
 |----|------|----------|
 | BF-1 | Response freshness semantics | Freeze Addendum Section 1 |
 | BF-2 | Startup ownership matrix | Freeze Addendum Section 2 |
@@ -545,10 +876,12 @@ Sprint 8 bu belge FROZEN olmadan başlamaz.
 
 *Architectural Decisions — OpenClaw Local Agent Runtime*
 *D-001 → D-020: Phase 1/1.5 (frozen)*
-*D-021 → D-058: Phase 4 (GAP — extraction pending, Sprint 12 Task 0)*
+*D-021 → D-031: Phase 3-A/3-F (frozen)*
+*D-032 → D-058: Phase 4 Design + Sprints 0–6D (frozen)*
 *D-059 → D-076: Phase 5 (frozen)*
 *D-077, D-078, D-079, D-080: Phase 4.5-C / 5A-1 (frozen)*
 *D-081 → D-084: Phase 5A-2 / Sprint 9 (frozen)*
 *D-085 → D-088: Phase 5B / Sprint 10 (frozen)*
 *D-089 → D-092, D-096: Phase 5C / Sprint 11 (frozen)*
+*D-097 → D-101: Phase 5D / Sprint 12 (frozen)*
 *BF-1 → BF-4: Phase 5 Freeze Addendum (frozen)*

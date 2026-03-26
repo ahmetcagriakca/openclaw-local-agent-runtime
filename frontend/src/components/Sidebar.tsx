@@ -12,12 +12,12 @@ const NAV_ITEMS = [
 
 export function Sidebar() {
   return (
-    <nav className="flex w-56 flex-col border-r border-gray-800 bg-gray-900 px-3 py-4">
+    <nav aria-label="Main navigation" className="flex w-56 flex-col border-r border-gray-800 bg-gray-900 px-3 py-4">
       <div className="mb-6 px-2">
         <h2 className="text-sm font-bold text-gray-100">OpenClaw</h2>
         <p className="text-[10px] text-gray-500">Mission Control</p>
       </div>
-      <ul className="space-y-1">
+      <ul role="list" className="space-y-1">
         {NAV_ITEMS.map((item) => (
           <li key={item.to}>
             <NavLink
@@ -30,7 +30,7 @@ export function Sidebar() {
                 }`
               }
             >
-              <span>{item.icon}</span>
+              <span aria-hidden="true">{item.icon}</span>
               {item.label}
             </NavLink>
           </li>

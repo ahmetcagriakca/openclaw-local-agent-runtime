@@ -1,11 +1,11 @@
 # Current State
 
-**Last updated:** 2026-03-25
-**Active phase:** Phase 5B COMPLETE (Sprint 10 — SSE Live Updates)
-**Note:** Sprint 7 (4.5-C) + Sprint 8 (5A-1) + Sprint 9 (5A-2) + Sprint 10 (5B) complete. Phase 2 deferred — single-user localhost, security hardening not urgent.
+**Last updated:** 2026-03-26
+**Active phase:** Phase 5D DONE (Sprint 12 — Polish + Phase 5 Closure) — implementation_status=done, closure_status=closed
+**Note:** Sprint 7 (4.5-C) + Sprint 8 (5A-1) + Sprint 9 (5A-2) + Sprint 10 (5B) + Sprint 11 (5C) complete. Phase 2 deferred — single-user localhost, security hardening not urgent.
 **Persistence:** State is file-persisted (state.json, mission.json). Resume not yet implemented.
-**API:** Mission Control API on 127.0.0.1:8003 (FastAPI + Uvicorn). Schemas FROZEN (D-067). SSE on /api/v1/events/stream.
-**Frontend:** React dashboard on localhost:3000 (Vite + Tailwind). SSE live updates + polling fallback. Node.js 20 required.
+**API:** Mission Control API on 127.0.0.1:8003 (FastAPI + Uvicorn). Schemas FROZEN (D-067). SSE on /api/v1/events/stream. Mutation endpoints (Sprint 11).
+**Frontend:** React dashboard on localhost:3000 (Vite + Tailwind). SSE live updates + polling fallback + intervention buttons. Node.js 20 required.
 
 ---
 
@@ -28,7 +28,7 @@
 | Agent Runner | Operational (multi-agent missions + 3 providers + 24 tools) | `agent/oc-agent-runner.py` |
 | Mission Controller | Operational (9 governed roles, quality gates, state machine) | `agent/mission/controller.py` |
 | Risk Engine | Operational | `agent/services/risk_engine.py` |
-| Approval Service | Operational (Telegram, sunset D-063 → Phase 5C service layer) | `agent/services/approval_service.py` |
+| Approval Service | Operational (Telegram deprecated D-092, Dashboard primary) | `agent/services/approval_service.py` |
 | Approval Store | Operational | `agent/services/approval_store.py` |
 | Artifact Store | Operational | `agent/services/artifact_store.py` |
 | Context Assembler | Operational (5-tier delivery) | `agent/context/assembler.py` |
@@ -41,6 +41,10 @@
 | Complexity Router | Operational (4 tiers) | `agent/mission/complexity_router.py` |
 | Schema Validator | Operational | `agent/artifacts/schema_validator.py` |
 | Policy Telemetry | Operational (20 event types) | `agent/context/policy_telemetry.py` |
+| Mission Control API | Operational (read + write endpoints) | `agent/api/server.py` on :8003 |
+| CSRF Middleware | Operational (D-089) | `agent/api/csrf_middleware.py` |
+| Mutation Bridge | Operational (atomic signal artifacts) | `agent/api/mutation_bridge.py` |
+| SSE Manager | Operational (broadcast, heartbeat 30s) | `agent/api/sse_manager.py` |
 
 ## Completed Phases
 
@@ -78,7 +82,9 @@
 | Phase 4.5-C (Sprint 7) | Operational Tuning | Closed |
 | Phase 5A-1 (Sprint 8) | Backend Read Model | Closed |
 | Phase 5A-2 (Sprint 9) | React Read-Only UI | Closed |
-| **Phase 5B (Sprint 10)** | **SSE Live Updates** | **Closed** |
+| Phase 5B (Sprint 10) | SSE Live Updates | Closed |
+| Phase 5C (Sprint 11) | Intervention / Mutation | Closed |
+| Phase 5D (Sprint 12) | Polish + Phase 5 Closure | Closed |
 
 ## Agent System (Phase 3-4)
 
@@ -167,7 +173,7 @@ Telegram user (8654710624)
 
 ## Architectural Decisions
 
-58 frozen decisions (D-001 through D-058). See `docs/ai/DECISIONS.md`.
+101 frozen decisions (D-001 through D-101). Decision debt zero. See `docs/ai/DECISIONS.md`.
 
 ## Test Evidence
 
@@ -176,7 +182,9 @@ Telegram user (8654710624)
 - Sprint 7: 129 tests, 0 failures
 - Sprint 8: 170 tests (129 legacy + 41 API), 0 failures
 - Sprint 9: 18 Vitest frontend tests (4 files), 0 failures. tsc 0 errors. ESLint 0 errors. Production build success.
-- Sprint 10: Backend 114 tests (100 legacy + 14 SSE), 0 failures. Frontend 29 Vitest tests (6 files), 0 failures. tsc 0 errors. ESLint 0 errors. Production build success.
+- Sprint 10: Backend 114 tests (100 legacy + 14 SSE), 0 failures. Frontend 29 Vitest tests (6 files), 0 failures.
+- Sprint 11: Backend 195 tests (includes 11 contract), 0 failures. Frontend 29 Vitest tests, 0 failures.
+- Sprint 12: Backend 234 tests (195 legacy + 39 E2E), 0 failures. Frontend 29 Vitest tests, 0 failures. Phase 5 scoreboard 15/15.
 
 ## Known Operational Notes
 
@@ -187,3 +195,4 @@ Telegram user (8654710624)
 - WSL stability: two-layer monitoring (L1: systemd keepalive 20s, L2: WSL Guardian 30s) — see `docs/phase-reports/WSL-OPENCLAW-STABILITY-HARDENING.md`
 - build_command string template debt — currently generates PowerShell via string concatenation (Phase 4.5 item)
 - Approval flow uses strict `approve <id>` / `deny <id>` format (Sprint 6D). Simple "yes/no" deprecated — accepted only with single pending approval
+- Telegram approval path deprecated with D-092 sunset warning (Sprint 11). Dashboard is primary approval channel.

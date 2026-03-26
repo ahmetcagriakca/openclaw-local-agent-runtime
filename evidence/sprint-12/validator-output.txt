@@ -1,0 +1,7 @@
+=== Validator Output ===
+capabilities.json: 5 capabilities
+OpenAPI spec: 14 endpoints
+Operator guide: 11 sections
+Dashboard deprecation banner: True
+Proposed decisions remaining: 0
+All checks passed

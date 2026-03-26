@@ -1,0 +1,1516 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "OpenClaw Mission Control",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/v1/missions": {
+      "get": {
+        "tags": [
+          "missions"
+        ],
+        "summary": "List Missions",
+        "operationId": "list_missions_api_v1_missions_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MissionListResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/missions/{mission_id}": {
+      "get": {
+        "tags": [
+          "missions"
+        ],
+        "summary": "Get Mission",
+        "operationId": "get_mission_api_v1_missions__mission_id__get",
+        "parameters": [
+          {
+            "name": "mission_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Mission Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MissionDetailResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/missions/{mission_id}/stages": {
+      "get": {
+        "tags": [
+          "missions"
+        ],
+        "summary": "Get Mission Stages",
+        "operationId": "get_mission_stages_api_v1_missions__mission_id__stages_get",
+        "parameters": [
+          {
+            "name": "mission_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Mission Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StageListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/missions/{mission_id}/stages/{stage_idx}": {
+      "get": {
+        "tags": [
+          "missions"
+        ],
+        "summary": "Get Mission Stage",
+        "operationId": "get_mission_stage_api_v1_missions__mission_id__stages__stage_idx__get",
+        "parameters": [
+          {
+            "name": "mission_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Mission Id"
+            }
+          },
+          {
+            "name": "stage_idx",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Stage Idx"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StageDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/approvals": {
+      "get": {
+        "tags": [
+          "approvals"
+        ],
+        "summary": "List Approvals",
+        "operationId": "list_approvals_api_v1_approvals_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalListResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/approvals/{apv_id}": {
+      "get": {
+        "tags": [
+          "approvals"
+        ],
+        "summary": "Get Approval",
+        "operationId": "get_approval_api_v1_approvals__apv_id__get",
+        "parameters": [
+          {
+            "name": "apv_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Apv Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalEntry"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/telemetry": {
+      "get": {
+        "tags": [
+          "telemetry"
+        ],
+        "summary": "List Telemetry",
+        "operationId": "list_telemetry_api_v1_telemetry_get",
+        "parameters": [
+          {
+            "name": "mission_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Mission Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 200,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TelemetryResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/health": {
+      "get": {
+        "tags": [
+          "health"
+        ],
+        "summary": "Get Health",
+        "operationId": "get_health_api_v1_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/capabilities": {
+      "get": {
+        "tags": [
+          "health"
+        ],
+        "summary": "List Capabilities",
+        "operationId": "list_capabilities_api_v1_capabilities_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CapabilitiesResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/events/stream": {
+      "get": {
+        "tags": [
+          "events"
+        ],
+        "summary": "Sse Stream",
+        "description": "SSE event stream endpoint.\n\n- Sends ``connected`` event on first connect\n- Replays missed events if ``Last-Event-ID`` header present\n- Streams events until client disconnects\n- Returns 503 if max clients reached",
+        "operationId": "sse_stream_api_v1_events_stream_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/approvals/{apv_id}/approve": {
+      "post": {
+        "tags": [
+          "approval-mutations"
+        ],
+        "summary": "Approve Approval",
+        "description": "Approve a pending approval.\n\nSignal flow: validate → check duplicate → write artifact → SSE → respond.",
+        "operationId": "approve_approval_api_v1_approvals__apv_id__approve_post",
+        "parameters": [
+          {
+            "name": "apv_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Apv Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MutationResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/approvals/{apv_id}/reject": {
+      "post": {
+        "tags": [
+          "approval-mutations"
+        ],
+        "summary": "Reject Approval",
+        "description": "Reject a pending approval (D-090: destructive — requires confirmation).\n\nSignal flow: validate → check duplicate → write artifact → SSE → respond.",
+        "operationId": "reject_approval_api_v1_approvals__apv_id__reject_post",
+        "parameters": [
+          {
+            "name": "apv_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Apv Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MutationResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/missions/{mission_id}/cancel": {
+      "post": {
+        "tags": [
+          "mission-mutations"
+        ],
+        "summary": "Cancel Mission",
+        "description": "Cancel a running/active mission (D-090: destructive — requires confirmation).\n\nValid states: pending, planning, executing, gate_check, rework, approval_wait.\nCompleted/failed/aborted/timed_out → 409.",
+        "operationId": "cancel_mission_api_v1_missions__mission_id__cancel_post",
+        "parameters": [
+          {
+            "name": "mission_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Mission Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MutationResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/missions/{mission_id}/retry": {
+      "post": {
+        "tags": [
+          "mission-mutations"
+        ],
+        "summary": "Retry Mission",
+        "description": "Retry a failed/aborted mission (OD-10: creates new mission via controller).\n\nValid states: failed, aborted, timed_out.\nRunning/pending/completed → 409.",
+        "operationId": "retry_mission_api_v1_missions__mission_id__retry_post",
+        "parameters": [
+          {
+            "name": "mission_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Mission Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MutationResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "APIError": {
+        "properties": {
+          "error": {
+            "type": "string",
+            "title": "Error"
+          },
+          "detail": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Detail"
+          },
+          "timestamp": {
+            "type": "string",
+            "title": "Timestamp"
+          }
+        },
+        "type": "object",
+        "required": [
+          "error"
+        ],
+        "title": "APIError",
+        "description": "Standard error response."
+      },
+      "ApprovalEntry": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "missionId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Missionid"
+          },
+          "toolName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Toolname"
+          },
+          "risk": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Risk"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "default": "unknown"
+          },
+          "requestedAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Requestedat"
+          },
+          "respondedAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Respondedat"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "title": "ApprovalEntry",
+        "description": "Approval record."
+      },
+      "ApprovalListResponse": {
+        "properties": {
+          "meta": {
+            "$ref": "#/components/schemas/ResponseMeta"
+          },
+          "approvals": {
+            "items": {
+              "$ref": "#/components/schemas/ApprovalEntry"
+            },
+            "type": "array",
+            "title": "Approvals"
+          }
+        },
+        "type": "object",
+        "title": "ApprovalListResponse",
+        "description": "Wrapper for approval list."
+      },
+      "CapabilitiesResponse": {
+        "properties": {
+          "meta": {
+            "$ref": "#/components/schemas/ResponseMeta"
+          },
+          "capabilities": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/CapabilityEntry"
+            },
+            "type": "object",
+            "title": "Capabilities"
+          }
+        },
+        "type": "object",
+        "title": "CapabilitiesResponse",
+        "description": "Wrapper for capabilities."
+      },
+      "CapabilityEntry": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "status": {
+            "$ref": "#/components/schemas/CapabilityStatus",
+            "default": "unknown"
+          },
+          "since": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Since"
+          },
+          "detail": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "title": "CapabilityEntry",
+        "description": "Single capability — tri-state, not bool."
+      },
+      "CapabilityStatus": {
+        "type": "string",
+        "enum": [
+          "available",
+          "unavailable",
+          "unknown"
+        ],
+        "title": "CapabilityStatus",
+        "description": "Tri-state capability status."
+      },
+      "ComponentHealth": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "default": "unknown"
+          },
+          "lastCheckAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lastcheckat"
+          },
+          "detail": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "title": "ComponentHealth",
+        "description": "Per-component health."
+      },
+      "DataQuality": {
+        "type": "string",
+        "enum": [
+          "fresh",
+          "partial",
+          "stale",
+          "degraded",
+          "unknown",
+          "not_reached"
+        ],
+        "title": "DataQuality",
+        "description": "Response-level data quality indicator (D-068).\n\nGPT Fix 2: known_zero removed. fresh/partial added.\nPriority when multiple conditions: degraded > stale > partial > fresh."
+      },
+      "Finding": {
+        "properties": {
+          "check": {
+            "type": "string",
+            "title": "Check"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "detail": {
+            "type": "string",
+            "title": "Detail",
+            "default": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "check",
+          "status"
+        ],
+        "title": "Finding",
+        "description": "Single gate finding."
+      },
+      "GateResultDetail": {
+        "properties": {
+          "gateName": {
+            "type": "string",
+            "title": "Gatename"
+          },
+          "passed": {
+            "type": "boolean",
+            "title": "Passed"
+          },
+          "findings": {
+            "items": {
+              "$ref": "#/components/schemas/Finding"
+            },
+            "type": "array",
+            "title": "Findings"
+          }
+        },
+        "type": "object",
+        "required": [
+          "gateName",
+          "passed"
+        ],
+        "title": "GateResultDetail",
+        "description": "Structured gate result per stage."
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "HealthResponse": {
+        "properties": {
+          "meta": {
+            "$ref": "#/components/schemas/ResponseMeta"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "default": "unknown"
+          },
+          "components": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/ComponentHealth"
+            },
+            "type": "object",
+            "title": "Components"
+          }
+        },
+        "type": "object",
+        "title": "HealthResponse",
+        "description": "System health response."
+      },
+      "MissionDetailResponse": {
+        "properties": {
+          "meta": {
+            "$ref": "#/components/schemas/ResponseMeta"
+          },
+          "mission": {
+            "$ref": "#/components/schemas/MissionSummary"
+          }
+        },
+        "type": "object",
+        "required": [
+          "mission"
+        ],
+        "title": "MissionDetailResponse",
+        "description": "Wrapper for single mission detail."
+      },
+      "MissionListItem": {
+        "properties": {
+          "missionId": {
+            "type": "string",
+            "title": "Missionid"
+          },
+          "state": {
+            "type": "string",
+            "title": "State",
+            "default": "unknown"
+          },
+          "goal": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Goal"
+          },
+          "dataQuality": {
+            "$ref": "#/components/schemas/DataQuality",
+            "default": "unknown"
+          },
+          "startedAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Startedat"
+          },
+          "stageCount": {
+            "type": "integer",
+            "title": "Stagecount",
+            "default": 0
+          },
+          "currentStage": {
+            "type": "integer",
+            "title": "Currentstage",
+            "default": 0
+          },
+          "stageSummary": {
+            "type": "string",
+            "title": "Stagesummary",
+            "default": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "missionId"
+        ],
+        "title": "MissionListItem",
+        "description": "Mission list entry."
+      },
+      "MissionListResponse": {
+        "properties": {
+          "meta": {
+            "$ref": "#/components/schemas/ResponseMeta"
+          },
+          "missions": {
+            "items": {
+              "$ref": "#/components/schemas/MissionListItem"
+            },
+            "type": "array",
+            "title": "Missions"
+          }
+        },
+        "type": "object",
+        "title": "MissionListResponse",
+        "description": "Wrapper for mission list."
+      },
+      "MissionSummary": {
+        "properties": {
+          "missionId": {
+            "type": "string",
+            "title": "Missionid"
+          },
+          "state": {
+            "type": "string",
+            "title": "State",
+            "default": "unknown"
+          },
+          "goal": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Goal"
+          },
+          "complexity": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Complexity"
+          },
+          "stages": {
+            "items": {
+              "$ref": "#/components/schemas/StageDetail"
+            },
+            "type": "array",
+            "title": "Stages"
+          },
+          "denyForensics": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Denyforensics"
+          },
+          "totalPolicyDenies": {
+            "type": "integer",
+            "title": "Totalpolicydenies",
+            "default": 0
+          },
+          "artifactCount": {
+            "type": "integer",
+            "title": "Artifactcount",
+            "default": 0
+          },
+          "totalDurationMs": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Totaldurationms"
+          },
+          "startedAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Startedat"
+          },
+          "completedAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Completedat"
+          },
+          "finalState": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Finalstate"
+          }
+        },
+        "type": "object",
+        "required": [
+          "missionId"
+        ],
+        "title": "MissionSummary",
+        "description": "Full mission detail."
+      },
+      "MutationResponse": {
+        "properties": {
+          "requestId": {
+            "type": "string",
+            "title": "Requestid"
+          },
+          "lifecycleState": {
+            "type": "string",
+            "title": "Lifecyclestate",
+            "default": "requested"
+          },
+          "targetId": {
+            "type": "string",
+            "title": "Targetid"
+          },
+          "requestedAt": {
+            "type": "string",
+            "title": "Requestedat"
+          },
+          "acceptedAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Acceptedat"
+          },
+          "appliedAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Appliedat"
+          },
+          "rejectedReason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rejectedreason"
+          },
+          "timeoutAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Timeoutat"
+          }
+        },
+        "type": "object",
+        "required": [
+          "requestId",
+          "targetId",
+          "requestedAt"
+        ],
+        "title": "MutationResponse",
+        "description": "D-096 mutation response contract.\n\nAPI always returns lifecycleState=requested.\nSubsequent states (accepted/applied/rejected/timed_out) via SSE only."
+      },
+      "ResponseMeta": {
+        "properties": {
+          "freshnessMs": {
+            "type": "integer",
+            "title": "Freshnessms",
+            "default": 0
+          },
+          "dataQuality": {
+            "$ref": "#/components/schemas/DataQuality",
+            "default": "unknown"
+          },
+          "sourcesUsed": {
+            "items": {
+              "$ref": "#/components/schemas/SourceInfo"
+            },
+            "type": "array",
+            "title": "Sourcesused"
+          },
+          "sourcesMissing": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Sourcesmissing"
+          },
+          "generatedAt": {
+            "type": "string",
+            "title": "Generatedat"
+          }
+        },
+        "type": "object",
+        "title": "ResponseMeta",
+        "description": "Response envelope metadata — present in every API response."
+      },
+      "SourceInfo": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "ageMs": {
+            "type": "integer",
+            "title": "Agems",
+            "default": 0
+          },
+          "status": {
+            "$ref": "#/components/schemas/DataQuality",
+            "default": "unknown"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "title": "SourceInfo",
+        "description": "Per-source freshness and status."
+      },
+      "StageDetail": {
+        "properties": {
+          "index": {
+            "type": "integer",
+            "title": "Index",
+            "default": 0
+          },
+          "role": {
+            "type": "string",
+            "title": "Role",
+            "default": ""
+          },
+          "agentUsed": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Agentused"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "default": "unknown"
+          },
+          "gateResults": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/GateResultDetail"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "denyForensics": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Denyforensics"
+          },
+          "isRework": {
+            "type": "boolean",
+            "title": "Isrework",
+            "default": false
+          },
+          "reworkCycle": {
+            "type": "integer",
+            "title": "Reworkcycle",
+            "default": 0
+          },
+          "isRecovery": {
+            "type": "boolean",
+            "title": "Isrecovery",
+            "default": false
+          },
+          "toolCalls": {
+            "type": "integer",
+            "title": "Toolcalls",
+            "default": 0
+          },
+          "policyDenies": {
+            "type": "integer",
+            "title": "Policydenies",
+            "default": 0
+          },
+          "startedAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Startedat"
+          },
+          "finishedAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Finishedat"
+          }
+        },
+        "type": "object",
+        "title": "StageDetail",
+        "description": "Single mission stage."
+      },
+      "StageListResponse": {
+        "properties": {
+          "meta": {
+            "$ref": "#/components/schemas/ResponseMeta"
+          },
+          "stages": {
+            "items": {
+              "$ref": "#/components/schemas/StageDetail"
+            },
+            "type": "array",
+            "title": "Stages"
+          }
+        },
+        "type": "object",
+        "title": "StageListResponse",
+        "description": "Wrapper for stage list."
+      },
+      "TelemetryEntry": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "title": "Type"
+          },
+          "timestamp": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Timestamp"
+          },
+          "missionId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Missionid"
+          },
+          "sourceFile": {
+            "type": "string",
+            "title": "Sourcefile",
+            "default": ""
+          },
+          "data": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Data"
+          }
+        },
+        "type": "object",
+        "required": [
+          "type"
+        ],
+        "title": "TelemetryEntry",
+        "description": "Single telemetry event."
+      },
+      "TelemetryResponse": {
+        "properties": {
+          "meta": {
+            "$ref": "#/components/schemas/ResponseMeta"
+          },
+          "events": {
+            "items": {
+              "$ref": "#/components/schemas/TelemetryEntry"
+            },
+            "type": "array",
+            "title": "Events"
+          }
+        },
+        "type": "object",
+        "title": "TelemetryResponse",
+        "description": "Wrapper for telemetry events."
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}

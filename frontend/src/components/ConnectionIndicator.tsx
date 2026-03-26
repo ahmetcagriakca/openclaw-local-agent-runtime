@@ -21,8 +21,9 @@ export function ConnectionIndicator() {
     : 'No events yet'
 
   return (
-    <div className="flex items-center gap-2 text-xs text-gray-400" title={tooltip}>
+    <div className="flex items-center gap-2 text-xs text-gray-400" title={tooltip} role="status" aria-live="polite">
       <span
+        aria-hidden="true"
         className={`inline-block h-2 w-2 rounded-full ${config.color} ${
           config.pulse ? 'animate-pulse' : ''
         }`}

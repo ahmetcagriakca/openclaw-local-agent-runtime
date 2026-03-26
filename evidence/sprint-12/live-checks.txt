@@ -1,0 +1,25 @@
+=== Live Checks Evidence — Sprint 12 ===
+Date: Thu Mar 26 04:58:01 TST 2026
+
+--- Backend test summary ---
+tests/test_sse.py::TestSSEManager::test_12_heartbeat_fast
+tests/test_sse.py::TestSSEEndpoint::test_13_stream_connected_event
+tests/test_sse.py::TestSSEEndpoint::test_14_host_validation_rejects
+
+234 tests collected in 0.11s
+
+--- E2E test count ---
+tests/test_e2e.py::TestE2E_16_OpenAPISpec::test_openapi_json
+
+39 tests collected in 0.02s
+
+--- Contract test count ---
+tests/test_mutation_contracts.py::TestMutationContract11_CancelDuringExecution::test_cancel_running_mission
+
+11 tests collected in 0.02s
+
+--- OpenAPI endpoint count ---
+Endpoints: 14
+
+--- Operator guide section count ---
+Sections: 11

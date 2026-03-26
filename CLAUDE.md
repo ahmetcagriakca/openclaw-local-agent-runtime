@@ -13,31 +13,33 @@ Windows 11 + WSL2 Ubuntu-E + Python 3.14 + PowerShell.
 - Phase 5A-1: implementation_status=done, closure_status=closed (Sprint 8)
 - Phase 5A-2: implementation_status=done, closure_status=closed (Sprint 9)
 - Phase 5B: implementation_status=done, closure_status=closed (Sprint 10)
-- Phase 5C: implementation_status=not_started (Sprint 11 — intervention)
-- Frozen decisions: D-059 → D-088 (29 decisions, D-081→D-088 pending DECISIONS.md write)
+- Phase 5C: implementation_status=done, closure_status=closed (Sprint 11)
+- Phase 5D: implementation_status=done, closure_status=closed (Sprint 12)
+- Frozen decisions: D-001 → D-101 (decision debt zero)
 
 ## Last Completed Sprint
 
-Sprint 10 — Phase 5B: SSE Live Updates
+Sprint 12 — Phase 5D: Polish + Phase 5 Closure
 
 Outputs:
-- FileWatcher: mtime polling 1s (D-085), debounce 500ms/2s
-- SSEManager: broadcast, heartbeat 30s, max 10 clients, event buffer 100
-- SSE endpoint: GET /api/v1/events/stream, Last-Event-ID replay, D-087 localhost
-- useSSE hook: EventSource, exponential backoff (D-088), polling fallback
-- SSEContext + useSSEInvalidation: shared connection, per-page subscription
-- ConnectionIndicator: 4-state (connecting/connected/reconnecting/polling)
-- All 5 pages: SSE invalidation + polling fallback preserved
-- Backend 184 tests, Frontend 29 tests, 0 failures
-- Decisions: D-085 (polling watcher), D-086 (per-entity events), D-087 (localhost SSE), D-088 (backoff + fallback)
+- OpenAPI spec export (D-100): docs/api/openapi.json — 14 endpoints, 24 schemas
+- E2E test suite (D-098): 16 scenarios, 39 tests
+- Accessibility audit: ARIA landmarks, dialog semantics, status indicators
+- Performance benchmark: all endpoints <50ms
+- Operator guide: docs/OPERATOR-GUIDE.md — 11 sections
+- Legacy dashboard deprecation (D-097): banner + startup warning
+- Phase 5 scoreboard: 15/15 PASS
+- Decision debt zero: D-001→D-101 all frozen
+- Backend 234 tests, Frontend 29 tests, 0 failures
+- Decisions: D-097→D-101
 
 ## Key Reference Docs
 
 - `docs/ai/STATE.md` — current system state
-- `docs/ai/DECISIONS.md` — frozen decisions D-001 → D-058
-- `docs/ai/PROCESS-GATES.md` — sprint governance rules (v3)
+- `docs/ai/DECISIONS.md` — frozen decisions D-001 → D-096
+- `docs/ai/PROCESS-GATES.md` — sprint governance rules (v4)
 - `docs/ai/DECISION-DEBT-BURNDOWN.md` — debt payment plan
-- `docs/ai/SPRINT-12-CLOSURE-GATE.md` — Phase 5 scoreboard
+- `docs/sprints/sprint-12/` — Sprint 12 docs + artifacts
 - `docs/ai/NEXT.md` — roadmap
 - `docs/ai/BACKLOG.md` — backlog
 - `docs/ai/PROTOCOL.md` — sprint + freeze protocols
@@ -85,7 +87,7 @@ config/capabilities.json           — capability manifest (auto-generated)
 - Atomic writes: temp → fsync → os.replace(). No raw json.dump to file.
 - Source precedence: state.json > mission.json (status), summary > telemetry (forensics).
 - Capability detection via config/capabilities.json, not heuristics.
-- **Her sprint sonunda tüm çalışmalar (kod, doküman, evidence) git commit + push yapılır. Sprint, push yapılmadan kapatılmış sayılmaz.**
+- **Every sprint ends with git commit + push of all work (code, docs, evidence). A sprint is not considered closed without push.**
 
 ## Build & Test
 
@@ -113,8 +115,8 @@ Mission Control Center — "See Everything, Including What's Missing"
 - ✅ Sprint 8: FastAPI backend on :8003 — D-061, D-065, D-067, D-068, D-070
 - ✅ Sprint 9: React UI on :3000 — D-081, D-082, D-083, D-084
 - ✅ Sprint 10: SSE live updates — D-085, D-086, D-087, D-088
-- ⬜ Sprint 11: Intervention (approve/deny from UI)
-- ⬜ Sprint 12: Polish + migration
+- ✅ Sprint 11: Intervention (approve/deny from UI) — D-089, D-090, D-091, D-092, D-096
+- ⬜ Sprint 12: Polish + Phase 5 closure
 
 ## Do Not
 

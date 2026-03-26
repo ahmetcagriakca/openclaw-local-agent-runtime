@@ -1,0 +1,46 @@
+=== SSE Evidence — Sprint 12 ===
+Date: 2026-03-26
+
+--- SSE Manager Implementation (D-085, D-087) ---
+File: agent/api/sse_manager.py
+  - Max clients: 10 (D-087 abuse prevention)
+  - Heartbeat: 30s interval
+  - Event buffer: 100 events (Last-Event-ID replay)
+  - Per-client queue: 50 events max
+
+--- SSE API Endpoint ---
+File: agent/api/sse_api.py
+  - GET /api/v1/events/stream
+  - Sends "connected" event on first connect
+  - Supports Last-Event-ID header for reconnect replay
+  - 1-hour idle timeout (3600 cycles)
+  - Returns 503 if max clients reached
+
+--- SSE Test Results ---
+14 tests in test_sse.py:
+  test_01_mtime_change_produces_event         PASS
+  test_02_missing_file_no_crash               PASS
+  test_03_new_mission_dir_produces_list_event  PASS
+  test_04_debounce_merges_rapid_changes        PASS
+  test_05_mission_state_file_change            PASS
+  test_06_subscribe_unsubscribe                PASS
+  test_07_broadcast_reaches_all                PASS
+  test_08_max_clients_rejection                PASS
+  test_09_missed_events_replay                 PASS
+  test_10_sse_event_format                     PASS
+  test_11_shutdown_signals_clients             PASS
+  test_12_heartbeat_fast                       PASS
+  test_13_stream_connected_event               PASS
+  test_14_host_validation_rejects              PASS
+
+--- Frontend SSE Integration ---
+  - useSSE hook: exponential backoff 1s → 30s (D-088)
+  - SSEContext: provider + subscribe pattern
+  - ConnectionIndicator: 4 states (connecting/connected/reconnecting/polling)
+  - Page Visibility API: pause on tab hidden
+  - Fallback: polling after 3 reconnect failures
+
+--- SSE Event Types ---
+  connected, heartbeat, mission_new, mission_changed,
+  approval_new, approval_changed, telemetry_new,
+  capability_changed, health_changed, mutation_requested

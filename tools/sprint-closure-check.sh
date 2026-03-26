@@ -36,10 +36,12 @@ log ""
 log "--- Backend Tests ---"
 cd agent
 if python -m pytest tests/ -v 2>&1 | tee -a "../$MAIN_OUTPUT"; then
-    BACKEND_COUNT=$(python -m pytest tests/ --co -q 2>/dev/null | tail -1)
-    pass "Backend tests: $BACKEND_COUNT"
+    BACKEND_COUNT=$(python -m pytest tests/ --co -q 2>/dev/null | tail -1 | grep -oP '\d+')
+    log "Backend test count (collected): $BACKEND_COUNT"
+    pass "Backend tests: $BACKEND_COUNT collected"
 else
     fail "Backend tests failed"
+    BACKEND_COUNT=0
 fi
 cd ..
 
@@ -49,9 +51,12 @@ log ""
 log "--- Frontend Tests ---"
 cd frontend
 if npx vitest run 2>&1 | tee -a "../$MAIN_OUTPUT"; then
-    pass "Frontend tests passed"
+    FRONTEND_COUNT=$(npx vitest list 2>/dev/null | wc -l)
+    log "Frontend test count (collected): $FRONTEND_COUNT"
+    pass "Frontend tests: $FRONTEND_COUNT collected"
 else
     fail "Frontend tests failed"
+    FRONTEND_COUNT=0
 fi
 
 log ""
@@ -187,10 +192,21 @@ log "--- Contract Evidence ---"
             echo "EXISTS ✅ — lighthouse.txt"
         fi
 
-        # Sprint 12 final decision debt check: D-001→D-096 ALL must be present
-        echo "--- Decision Debt: D-001→D-096 zero debt check ---"
+        # Sprint 12+ E2E test count (P-05)
+        echo "--- E2E Test Count (auto-parsed, P-05) ---"
+        if command -v python &>/dev/null && [ -d "tests/e2e" ]; then
+            E2E_COUNT=$(cd agent && python -m pytest ../tests/e2e/ --co -q 2>/dev/null | tail -1 | grep -oP '\d+' || echo "0")
+            echo "E2E test count (collected): $E2E_COUNT"
+        else
+            E2E_COUNT=0
+            echo "E2E tests not available: $E2E_COUNT"
+        fi
+        echo ""
+
+        # Sprint 12 final decision debt check: D-001→D-101 ALL present
+        echo "--- Decision Debt: D-001→D-101 zero gap check ---"
         MISSING_DECISIONS=0
-        for i in $(seq 1 96); do
+        for i in $(seq 1 101); do
             ID=$(printf "D-%03d" "$i")
             if ! grep -q "$ID" docs/ai/DECISIONS.md 2>/dev/null; then
                 echo "MISSING ❌ — $ID"
@@ -202,7 +218,7 @@ log "--- Contract Evidence ---"
             echo "DECISION DEBT ❌ — $MISSING_DECISIONS decision(s) missing from DECISIONS.md"
             FAIL_COUNT=$((FAIL_COUNT + 1))
         else
-            echo "DECISION DEBT ZERO ✅ — D-001→D-096 all present"
+            echo "DECISION DEBT ZERO ✅ — D-001→D-101 all present"
         fi
         echo ""
     fi
@@ -267,6 +283,14 @@ log ""
 log "==========================================="
 log "Sprint $SPRINT Closure Check Summary"
 log "==========================================="
+# P-05: Auto test count from raw output — source hierarchy: raw > report
+TOTAL_TESTS=$((${BACKEND_COUNT:-0} + ${FRONTEND_COUNT:-0} + ${E2E_COUNT:-0}))
+log "Test counts (auto-parsed, P-05 rule):"
+log "  Backend:  ${BACKEND_COUNT:-0}"
+log "  Frontend: ${FRONTEND_COUNT:-0}"
+log "  E2E:      ${E2E_COUNT:-0}"
+log "  Total:    $TOTAL_TESTS"
+log ""
 log "Failures: $FAIL_COUNT"
 log ""
 

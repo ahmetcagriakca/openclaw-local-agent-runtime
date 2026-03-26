@@ -1,0 +1,10 @@
+// Shared UI components — barrel export
+export { ConfirmDialog } from '../ConfirmDialog'
+export { ConnectionIndicator } from '../ConnectionIndicator'
+export { DataQualityBadge } from '../DataQualityBadge'
+export { ErrorBoundary } from '../ErrorBoundary'
+export { FreshnessIndicator } from '../FreshnessIndicator'
+export { MissionStateBadge } from '../MissionStateBadge'
+export { StageCard } from '../StageCard'
+export { StageTimeline } from '../StageTimeline'
+export { AgentSkillsPopup } from '../AgentSkillsPopup'

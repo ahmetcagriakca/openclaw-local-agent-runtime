@@ -151,8 +151,8 @@ export function MissionDetailPage() {
               {mission.complexity && (
                 <span>Complexity: <span className="text-gray-200">{mission.complexity}</span></span>
               )}
-              {mission.startedAt && <span>Started: {mission.startedAt}</span>}
-              {mission.completedAt && <span>Completed: {mission.completedAt}</span>}
+              {mission.startedAt && <span>Started: {new Date(mission.startedAt).toLocaleString()}</span>}
+              {mission.completedAt && <span>Completed: {new Date(mission.completedAt).toLocaleString()}</span>}
               {mission.totalDurationMs != null && (
                 <span>Duration: <span className="text-gray-200">{(mission.totalDurationMs / 1000).toFixed(1)}s</span></span>
               )}
@@ -160,6 +160,16 @@ export function MissionDetailPage() {
               <span>Policy denies: <span className="text-gray-200">{mission.totalPolicyDenies}</span></span>
             </div>
           </div>
+
+          {/* Mission-level Error — prominent banner */}
+          {mission.error && (
+            <div className="rounded-lg border border-red-600/60 bg-red-950/40 p-4">
+              <h3 className="mb-2 text-sm font-semibold text-red-400">Mission Error</h3>
+              <pre className="whitespace-pre-wrap break-words text-sm text-red-200/90 leading-relaxed">
+                {mission.error}
+              </pre>
+            </div>
+          )}
 
           {/* Freshness */}
           <FreshnessIndicator
@@ -181,6 +191,32 @@ export function MissionDetailPage() {
 
           {/* Expanded Stage Card */}
           {activeStage && <StageCard stage={activeStage} />}
+
+          {/* State Transitions */}
+          {mission.stateTransitions && mission.stateTransitions.length > 0 && (
+            <div className="rounded-lg border border-gray-700/50 bg-gray-800/50 p-4">
+              <h3 className="mb-2 text-sm font-semibold text-gray-300">State Transitions</h3>
+              <div className="space-y-1">
+                {mission.stateTransitions.map((t, i) => (
+                  <div key={i} className="flex items-center gap-2 text-xs">
+                    <span className="w-20 shrink-0 text-gray-500">
+                      {t.timestamp ? new Date(t.timestamp).toLocaleTimeString() : ''}
+                    </span>
+                    <span className="rounded bg-gray-700 px-1.5 py-0.5 font-mono text-gray-300">{t.from}</span>
+                    <span className="text-gray-500">→</span>
+                    <span className={`rounded px-1.5 py-0.5 font-mono ${
+                      t.to === 'failed' ? 'bg-red-900 text-red-300' :
+                      t.to === 'completed' ? 'bg-green-900 text-green-300' :
+                      'bg-gray-700 text-gray-300'
+                    }`}>{t.to}</span>
+                    {t.reason && (
+                      <span className="text-gray-400 truncate">{t.reason}</span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Mission-level Deny Forensics */}
           {mission.denyForensics.length > 0 && (

@@ -71,6 +71,8 @@ export interface StageDetail {
   role: string
   agentUsed: string | null
   status: string
+  error: string | null
+  result: string | null
   gateResults: GateResultDetail | null
   denyForensics: Record<string, unknown> | null
   isRework: boolean
@@ -78,17 +80,26 @@ export interface StageDetail {
   isRecovery: boolean
   toolCalls: number
   policyDenies: number
+  durationMs: number | null
   startedAt: string | null
   finishedAt: string | null
 }
 
 // ── Mission ─────────────────────────────────────────────────────
 
+export interface StateTransition {
+  from: string
+  to: string
+  reason: string
+  timestamp: string
+}
+
 export interface MissionSummary {
   missionId: string
   state: string
   goal: string | null
   complexity: string | null
+  error: string | null
   stages: StageDetail[]
   denyForensics: Record<string, unknown>[]
   totalPolicyDenies: number
@@ -97,6 +108,7 @@ export interface MissionSummary {
   startedAt: string | null
   completedAt: string | null
   finalState: string | null
+  stateTransitions: StateTransition[]
 }
 
 export interface MissionListItem {

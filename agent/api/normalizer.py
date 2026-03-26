@@ -150,11 +150,41 @@ class MissionNormalizer:
 
         # Build response
         dq = self._compute_quality(sources_used, sources_missing)
+        # State transitions from state file or summary
+        transitions = []
+        if state_data and state_data.get("transitionLog"):
+            transitions = state_data["transitionLog"]
+        elif summary_data and summary_data.get("stateTransitions"):
+            transitions = summary_data["stateTransitions"]
+
+        # Error: mission-level error message
+        error_msg = mission_data.get("error")
+        if not error_msg and summary_data:
+            error_msg = summary_data.get("error")
+        # Fallback: extract error from last state transition reason
+        if not error_msg and transitions:
+            last = transitions[-1]
+            if last.get("to") in ("failed", "aborted"):
+                error_msg = last.get("reason")
+
+        # Propagate error to failed stages from transitions or mission error
+        for s in stages:
+            if s.status == "failed" and not s.error:
+                # Try mission-level error
+                if error_msg:
+                    s.error = error_msg
+                # Try matching transition
+                for t in transitions:
+                    if t.get("to") in ("failed",) and s.role and s.role in t.get("reason", ""):
+                        s.error = t.get("reason")
+                        break
+
         mission = MissionSummary(
             missionId=mission_data.get("missionId", mission_id),
             state=status,
             goal=mission_data.get("goal"),
             complexity=mission_data.get("complexity"),
+            error=error_msg,
             stages=stages,
             denyForensics=deny_forensics,
             totalPolicyDenies=(summary_data or {}).get("totalPolicyDenies", 0),
@@ -164,6 +194,7 @@ class MissionNormalizer:
             completedAt=mission_data.get("finishedAt"),
             finalState=(summary_data or {}).get("finalState")
             or (state_data or {}).get("status"),
+            stateTransitions=transitions,
         )
         meta = ResponseMeta(
             freshnessMs=max_age,
@@ -332,9 +363,12 @@ class MissionNormalizer:
                 role=s.get("role", s.get("specialist", "")),
                 agentUsed=s.get("agentUsed", s.get("agent_used")),
                 status=s.get("status", "unknown"),
+                error=s.get("error"),
+                result=s.get("result"),
                 toolCalls=s.get("toolCalls", s.get("tool_call_count", 0)),
                 policyDenies=s.get("policyDenies",
                                    s.get("policy_deny_count", 0)),
+                durationMs=s.get("durationMs", s.get("duration_ms")),
                 isRework=s.get("isRework", s.get("is_rework", False)),
                 reworkCycle=s.get("reworkCycle", s.get("rework_cycle", 0)),
                 isRecovery=s.get("isRecovery", s.get("is_recovery", False)),
@@ -350,6 +384,7 @@ class MissionNormalizer:
             if df and isinstance(df, dict):
                 stage.denyForensics = df
             stages.append(stage)
+
         return stages
 
     def _approval_from_data(self, data: dict) -> ApprovalEntry:

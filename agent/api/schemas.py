@@ -91,6 +91,8 @@ class StageDetail(BaseModel):
     role: str = ""
     agentUsed: Optional[str] = None
     status: str = "unknown"
+    error: Optional[str] = None
+    result: Optional[str] = None
     gateResults: Optional[GateResultDetail] = None
     denyForensics: Optional[dict] = None
     isRework: bool = False
@@ -98,6 +100,7 @@ class StageDetail(BaseModel):
     isRecovery: bool = False
     toolCalls: int = 0
     policyDenies: int = 0
+    durationMs: Optional[int] = None
     startedAt: Optional[str] = None
     finishedAt: Optional[str] = None
 
@@ -110,6 +113,7 @@ class MissionSummary(BaseModel):
     state: str = "unknown"
     goal: Optional[str] = None
     complexity: Optional[str] = None
+    error: Optional[str] = None
     stages: list[StageDetail] = Field(default_factory=list)
     denyForensics: list[dict] = Field(default_factory=list)
     totalPolicyDenies: int = 0
@@ -118,6 +122,7 @@ class MissionSummary(BaseModel):
     startedAt: Optional[str] = None
     completedAt: Optional[str] = None
     finalState: Optional[str] = None
+    stateTransitions: list[dict] = Field(default_factory=list)
 
 
 class MissionListItem(BaseModel):

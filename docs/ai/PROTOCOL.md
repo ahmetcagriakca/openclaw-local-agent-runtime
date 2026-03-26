@@ -31,30 +31,30 @@ Every work session ends with:
 
 ## Sprint-End Documentation Protocol (D-077)
 
-Her sprint kapanışında aşağıdaki adımlar zorunlu:
+The following steps are mandatory at every sprint closure:
 
-1. Tüm code task'ları tamamla
-2. Aşağıdaki dökümanları güncelle:
+1. Complete all code tasks
+2. Update the following documents:
 
-| Döküman | Güncelleme |
-|---------|------------|
-| `docs/ai/STATE.md` | Aktif phase, sprint, test count |
-| `docs/ai/NEXT.md` | Sonraki sprint/task |
-| `docs/ai/DECISIONS.md` | Sprint'te alınan D-XXX kararları |
-| `docs/ai/BACKLOG.md` | Tamamlanan B-XXX, yeni item'lar |
+| Document | Update |
+|----------|--------|
+| `docs/ai/STATE.md` | Active phase, sprint, test count |
+| `docs/ai/NEXT.md` | Next sprint/task updates |
+| `docs/ai/DECISIONS.md` | D-XXX decisions made in sprint |
+| `docs/ai/BACKLOG.md` | Completed B-XXX, new items |
 | `SESSION-HANDOFF.md` | Sprint snapshot |
-| Sprint plan doc | Checklist [x] tamamla |
+| Sprint plan doc | Checklist [x] completion |
 
-3. Validation script çalıştır:
+3. Run validation script:
 
 ```bash
 python tools/validate_sprint_docs.py --sprint N --sprint-date YYYY-MM-DD
 ```
 
 4. 0 FAIL → commit + push
-5. FAIL varsa → düzelt, tekrar çalıştır
+5. If FAIL → fix and re-run
 
-Sprint, validation pass olmadan "done" sayılmaz.
+Sprint is not "done" until validation passes.
 
 ---
 

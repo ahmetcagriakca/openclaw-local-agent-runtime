@@ -194,8 +194,8 @@ log "--- Contract Evidence ---"
 
         # Sprint 12+ E2E test count (P-05)
         echo "--- E2E Test Count (auto-parsed, P-05) ---"
-        if command -v python &>/dev/null && [ -d "tests/e2e" ]; then
-            E2E_COUNT=$(cd agent && python -m pytest ../tests/e2e/ --co -q 2>/dev/null | tail -1 | grep -oP '\d+' || echo "0")
+        if command -v python &>/dev/null && [ -f "agent/tests/test_e2e.py" ]; then
+            E2E_COUNT=$(cd agent && python -m pytest tests/test_e2e.py --co -q 2>/dev/null | tail -1 | grep -oP '\d+' || echo "0")
             echo "E2E test count (collected): $E2E_COUNT"
         else
             E2E_COUNT=0
@@ -203,10 +203,11 @@ log "--- Contract Evidence ---"
         fi
         echo ""
 
-        # Sprint 12 final decision debt check: D-001→D-101 ALL present
-        echo "--- Decision Debt: D-001→D-101 zero gap check ---"
+        # Decision debt check: D-001→D-103 ALL present (updated Sprint 13)
+        DECISION_MAX=103
+        echo "--- Decision Debt: D-001→D-$DECISION_MAX zero gap check ---"
         MISSING_DECISIONS=0
-        for i in $(seq 1 101); do
+        for i in $(seq 1 $DECISION_MAX); do
             ID=$(printf "D-%03d" "$i")
             if ! grep -q "$ID" docs/ai/DECISIONS.md 2>/dev/null; then
                 echo "MISSING ❌ — $ID"
@@ -218,7 +219,7 @@ log "--- Contract Evidence ---"
             echo "DECISION DEBT ❌ — $MISSING_DECISIONS decision(s) missing from DECISIONS.md"
             FAIL_COUNT=$((FAIL_COUNT + 1))
         else
-            echo "DECISION DEBT ZERO ✅ — D-001→D-101 all present"
+            echo "DECISION DEBT ZERO ✅ — D-001→D-$DECISION_MAX all present"
         fi
         echo ""
     fi

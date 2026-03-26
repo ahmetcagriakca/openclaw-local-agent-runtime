@@ -143,17 +143,49 @@ class MissionNormalizer:
             "mission", mission_path, sources_used, sources_missing)
         if mission_data is None:
             return None
+
+        # If this is a dashboard placeholder, find the controller's mission by sessionId
+        mission_id_for_files = mission_id
+        ctrl_id = mission_data.get("controllerMissionId")
+        if not ctrl_id and mission_data.get("createdFrom") == "dashboard":
+            # Scan for controller mission linked by session ID
+            session_key = f"web-{mission_id}"
+            for fpath in sorted(self._missions_dir.glob("mission-*.json"), reverse=True):
+                base = fpath.name
+                if "-state.json" in base or "-summary.json" in base:
+                    continue
+                if base == f"{mission_id}.json":
+                    continue
+                try:
+                    d = json.loads(fpath.read_text(encoding="utf-8"))
+                    if d.get("sessionId") == session_key:
+                        ctrl_id = d.get("missionId")
+                        break
+                except Exception:
+                    continue
+
+        if ctrl_id and ctrl_id != mission_id:
+            ctrl_path = self._missions_dir / f"{ctrl_id}.json"
+            if ctrl_path.exists():
+                ctrl_data, ctrl_age = self._read_source("mission", str(ctrl_path))
+                if ctrl_data:
+                    ctrl_data["missionId"] = mission_id
+                    if not ctrl_data.get("goal"):
+                        ctrl_data["goal"] = mission_data.get("goal")
+                    mission_data = ctrl_data
+                    mission_age = ctrl_age
+                    mission_id_for_files = ctrl_id
         max_age = max(max_age, mission_age)
 
         # Source 2: State file (BF-4: state > mission for status)
-        state_path = self._missions_dir / f"{mission_id}-state.json"
+        state_path = self._missions_dir / f"{mission_id_for_files}-state.json"
         state_data, state_age = self._read_tracked(
             "state", state_path, sources_used, sources_missing)
         if state_age > 0:
             max_age = max(max_age, state_age)
 
         # Source 3: Summary (BF-4: summary > telemetry for forensics)
-        summary_path = self._missions_dir / f"{mission_id}-summary.json"
+        summary_path = self._missions_dir / f"{mission_id_for_files}-summary.json"
         summary_data, summary_age = self._read_tracked(
             "summary", summary_path, sources_used, sources_missing)
         if summary_age > 0:
@@ -194,7 +226,7 @@ class MissionNormalizer:
                 error_msg = last.get("reason")
 
         # Read pending signal artifacts
-        pending_signals = self._read_signal_artifacts(mission_id)
+        pending_signals = self._read_signal_artifacts(mission_id_for_files)
 
         # Enrich failed stages with error from telemetry (stage_failed events)
         telemetry_errors = {}

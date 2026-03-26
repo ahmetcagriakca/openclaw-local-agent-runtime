@@ -2,12 +2,13 @@
 
 POST /api/v1/missions — create a new mission with a goal.
 Creates mission JSON in logs/missions/ so it appears in the UI via file watcher.
-Optionally spawns the MissionController in a background thread for execution.
+Spawns the MissionController in a background thread for execution.
 """
 import json
 import logging
 import os
 import threading
+import traceback
 import uuid
 from datetime import datetime, timezone
 from pathlib import Path
@@ -47,34 +48,72 @@ def _generate_mission_id() -> str:
 
 
 def _run_mission_background(mission_id: str, goal: str, missions_dir: Path):
-    """Attempt to run the mission in background via MissionController."""
+    """Run mission via MissionController in background thread.
+
+    The controller creates its own mission files with its own ID.
+    We update the dashboard-created placeholder file to track progress.
+    """
+    placeholder_file = missions_dir / f"{mission_id}.json"
+
     try:
         import sys
+        # __file__ = agent/api/mission_create_api.py → parent.parent = agent/
         agent_dir = str(Path(__file__).resolve().parent.parent)
         if agent_dir not in sys.path:
             sys.path.insert(0, agent_dir)
+        os.chdir(agent_dir)
+        logger.info("Mission %s bg thread: cwd=%s agent_dir=%s", mission_id, os.getcwd(), agent_dir)
+
+        # Update placeholder to "planning"
+        _update_placeholder(placeholder_file, "planning", None)
 
         from mission.controller import MissionController
         controller = MissionController()
+
+        # Controller generates ID as mission-{timestamp}-{pid}
+        # We can predict it by looking at newly created files after execute starts
+        # But simpler: scan for files matching session after a brief delay
         result = controller.execute_mission(
             goal=goal,
             user_id="dashboard",
             session_id=f"web-{mission_id}",
         )
-        logger.info("Mission %s completed: %s", mission_id, result.get("status", "unknown"))
+
+        # Update placeholder with result and link to controller's real mission
+        status = result.get("status", "unknown")
+        error = result.get("error")
+        ctrl_id = result.get("missionId", "")
+        _update_placeholder(placeholder_file, status, error,
+                            finished=True,
+                            controller_id=ctrl_id)
+
+        logger.info("Mission %s completed: status=%s", mission_id, status)
+
     except Exception as e:
-        logger.error("Mission %s background execution failed: %s", mission_id, e)
-        # Update mission state to failed
-        try:
-            mission_file = missions_dir / f"{mission_id}.json"
-            if mission_file.exists():
-                data = json.loads(mission_file.read_text(encoding="utf-8"))
-                data["status"] = "failed"
-                data["error"] = str(e)
-                data["completedAt"] = datetime.now(timezone.utc).isoformat()
-                atomic_write_json(mission_file, data)
-        except Exception:
-            pass
+        tb = traceback.format_exc()
+        error_msg = f"{type(e).__name__}: {e}"
+        logger.error("Mission %s failed: %s\n%s", mission_id, error_msg, tb)
+        _update_placeholder(placeholder_file, "failed", error_msg, finished=True)
+
+
+def _update_placeholder(path: Path, status: str, error: str | None,
+                        finished: bool = False, controller_id: str | None = None):
+    """Update the dashboard-created placeholder mission file."""
+    try:
+        if path.exists():
+            data = json.loads(path.read_text(encoding="utf-8"))
+        else:
+            data = {}
+        data["status"] = status
+        if error:
+            data["error"] = error
+        if finished:
+            data["finishedAt"] = datetime.now(timezone.utc).isoformat()
+        if controller_id:
+            data["controllerMissionId"] = controller_id
+        atomic_write_json(path, data)
+    except Exception as e:
+        logger.warning("Failed to update placeholder %s: %s", path, e)
 
 
 @router.post(

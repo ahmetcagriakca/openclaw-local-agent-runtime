@@ -176,6 +176,7 @@ class MissionController:
                 stage["turns_used"] = result.get("turnsUsed", 0)
                 stage["duration_ms"] = result.get("totalDurationMs", 0)
                 stage["tool_call_count"] = len(result.get("toolCalls", []))
+                stage["token_report"] = result.get("tokenReport")
                 stage["policy_deny_count"] = sum(
                     1 for tc in result.get("toolCalls", [])
                     if tc.get("policyDenied")
@@ -621,18 +622,49 @@ Respond ONLY with a JSON object, no markdown:
         return result
 
     def _format_artifact_context(self, context_package: list) -> str:
-        """Format assembler context for LLM consumption."""
+        """Format assembler context for LLM consumption.
+
+        D-102 tiered truncation:
+          Tier A (previous stage):  max 5000 chars
+          Tier B (2 stages back):   max 2000 chars
+          Tier C (3+ stages back):  max 500 chars
+          Tier D (default):         max 1000 chars
+
+        Stage boundary isolation: only artifact text passed,
+        tool call history never crosses stage boundaries.
+        """
+        TIER_LIMITS = {"A": 5000, "B": 2000, "C": 500, "D": 1000}
+
         parts = []
         for artifact_id, content, tier in context_package:
             if content is None:
                 continue
+            char_limit = TIER_LIMITS.get(tier, 1000)
+
             if isinstance(content, dict):
-                parts.append(f"--- Artifact: {artifact_id} (tier {tier}) ---")
-                parts.append(json.dumps(content, indent=2, ensure_ascii=False)[:3000])
+                text = json.dumps(content, indent=2, ensure_ascii=False)
             elif isinstance(content, str):
-                parts.append(f"--- Artifact: {artifact_id} (summary, tier {tier}) ---")
-                parts.append(content)
-        return "\n\n".join(parts)
+                text = content
+            else:
+                continue
+
+            if len(text) > char_limit:
+                text = text[:char_limit] + f"\n[...truncated to {char_limit} chars]"
+
+            parts.append(f"--- {artifact_id} (tier {tier}) ---\n{text}")
+
+        result = "\n\n".join(parts)
+
+        # D-102: Total context budget check
+        from context.token_budget import estimate_tokens
+        total_tokens = estimate_tokens(result)
+        if total_tokens > 40000:
+            # Emergency truncation — keep only most recent artifacts
+            parts = parts[-3:]
+            result = "\n\n".join(parts)
+            result += f"\n\n[Context truncated: {total_tokens} tokens exceeded 40K budget]"
+
+        return result
 
     def _persist_mission_state(self, mission_state: MissionState):
         """5C-1: Persist mission state machine to disk.

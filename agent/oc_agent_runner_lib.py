@@ -10,6 +10,8 @@ from services.approval_service import ApprovalService
 from services.approval_store import ApprovalStore
 from services.artifact_store import ArtifactStore
 
+from context.token_budget import BudgetConfig, TokenTracker, truncate_tool_response, estimate_tokens
+
 DEFAULT_SYSTEM_PROMPT = """You are a Windows automation assistant for the OpenClaw system.
 You help the user manage their Windows computer through specialized tools.
 
@@ -46,6 +48,10 @@ def run_agent_with_config(message: str, agent_id: str, user_id: str,
     start_time = time.time()
     tool_log = []
     approval_log = []
+
+    # D-102: Token budget enforcement
+    budget_config = BudgetConfig()
+    token_tracker = TokenTracker(mission_id=session_id)
 
     # Initialize services
     risk_engine = RiskEngine()
@@ -293,6 +299,23 @@ def run_agent_with_config(message: str, agent_id: str, user_id: str,
                         tool_entry["error"] = str(e)
 
                 tool_entry["durationMs"] = int((time.time() - tool_start) * 1000)
+
+                # D-102: Token budget — truncate/block large tool responses
+                req_tokens = estimate_tokens(json.dumps(tc.params))
+                resp_tokens = estimate_tokens(result_text)
+                result_text, was_truncated, was_blocked = truncate_tool_response(
+                    result_text, budget_config, tc.name)
+                if was_truncated:
+                    tool_entry["tokenTruncated"] = True
+                    resp_tokens = estimate_tokens(result_text)
+                if was_blocked:
+                    tool_entry["tokenBlocked"] = True
+                    tool_entry["success"] = False
+                    resp_tokens = estimate_tokens(result_text)
+                token_tracker.log_tool_call(
+                    session_id, tc.name, req_tokens, resp_tokens,
+                    truncated=was_truncated, blocked=was_blocked)
+
                 tool_log.append(tool_entry)
 
                 # Create typed artifact from tool result
@@ -339,6 +362,10 @@ def run_agent_with_config(message: str, agent_id: str, user_id: str,
     except Exception:
         pass  # Audit is best-effort
 
+    # D-102: Log stage completion
+    token_tracker.log_stage_complete(
+        session_id, estimate_tokens(final_text or ""), len(tool_log))
+
     return {
         "status": "completed",
         "agentId": agent_id,
@@ -349,5 +376,6 @@ def run_agent_with_config(message: str, agent_id: str, user_id: str,
         "artifacts": artifacts,
         "toolCalls": tool_log,
         "turnsUsed": turns_used,
-        "totalDurationMs": total_duration
+        "totalDurationMs": total_duration,
+        "tokenReport": token_tracker.get_report(),
     }

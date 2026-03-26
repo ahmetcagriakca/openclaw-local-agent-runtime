@@ -38,8 +38,6 @@ interface UseMutationOptions {
   onTimeout?: () => void
 }
 
-const MUTATION_TIMEOUT_MS = 12_000 // 10s server + 2s buffer
-
 export function useMutation(options: UseMutationOptions): UseMutationResult {
   const { mutationFn, onSuccess, onError, onTimeout } = options
 
@@ -75,14 +73,12 @@ export function useMutation(options: UseMutationOptions): UseMutationResult {
       setRequestId(response.requestId)
       activeRequestIdRef.current = response.requestId
 
-      // Start timeout timer
-      timeoutRef.current = setTimeout(() => {
-        if (activeRequestIdRef.current) {
-          activeRequestIdRef.current = null
-          setStatus('timeout')
-          onTimeout?.()
-        }
-      }, MUTATION_TIMEOUT_MS)
+      // Signal artifact written successfully — treat as success immediately.
+      // SSE will provide additional confirmation if controller processes it.
+      clearTimer()
+      activeRequestIdRef.current = null
+      setStatus('success')
+      onSuccess?.()
     } catch (err: unknown) {
       activeRequestIdRef.current = null
       clearTimer()

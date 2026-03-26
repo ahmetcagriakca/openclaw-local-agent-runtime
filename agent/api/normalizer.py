@@ -196,17 +196,44 @@ class MissionNormalizer:
         # Read pending signal artifacts
         pending_signals = self._read_signal_artifacts(mission_id)
 
-        # Propagate error to failed stages from transitions or mission error
+        # Enrich failed stages with error from telemetry (stage_failed events)
+        telemetry_errors = {}
+        if self._telemetry_path.exists():
+            try:
+                with open(self._telemetry_path, "r", encoding="utf-8") as f:
+                    for line in f:
+                        line = line.strip()
+                        if not line:
+                            continue
+                        try:
+                            ev = json.loads(line)
+                            ev_type = ev.get("event") or ev.get("event_type") or ""
+                            ev_mid = ev.get("mission_id") or (ev.get("data") or {}).get("mission_id")
+                            if ev_mid == mission_id and ev_type == "stage_failed":
+                                sid = (ev.get("data") or ev).get("stage_id", "")
+                                err = (ev.get("data") or ev).get("error", "")
+                                if sid and err:
+                                    telemetry_errors[sid] = err
+                        except Exception:
+                            continue
+            except Exception:
+                pass
+
+        # Propagate error to failed stages
         for s in stages:
             if s.status == "failed" and not s.error:
-                # Try mission-level error
-                if error_msg:
+                # Best source: telemetry stage_failed event
+                stage_id = f"stage-{s.index + 1}"
+                if stage_id in telemetry_errors:
+                    s.error = telemetry_errors[stage_id]
+                elif error_msg:
                     s.error = error_msg
-                # Try matching transition
-                for t in transitions:
-                    if t.get("to") in ("failed",) and s.role and s.role in t.get("reason", ""):
-                        s.error = t.get("reason")
-                        break
+
+        # Also enrich mission-level error with telemetry detail
+        if error_msg and telemetry_errors:
+            first_err = next(iter(telemetry_errors.values()), None)
+            if first_err and first_err not in error_msg:
+                error_msg = f"{error_msg}\nRoot cause: {first_err}"
 
         mission = MissionSummary(
             missionId=mission_data.get("missionId", mission_id),
@@ -290,16 +317,29 @@ class MissionNormalizer:
                         continue
                     try:
                         event = json.loads(line)
-                        event_mid = (event.get("data") or {}).get("mission_id")
+                        # Event type: try "event", "event_type", "type"
+                        etype = (event.get("event")
+                                 or event.get("event_type")
+                                 or event.get("type", "unknown"))
+                        # Mission ID: top-level or inside data
+                        event_mid = (event.get("mission_id")
+                                     or (event.get("data") or {}).get("mission_id"))
                         if mission_id and event_mid != mission_id:
                             continue
+                        # Build data dict from remaining fields
+                        skip_keys = {"timestamp", "event", "event_type", "type",
+                                     "mission_id", "data"}
+                        extra = {k: v for k, v in event.items()
+                                 if k not in skip_keys}
+                        data_dict = event.get("data", {})
+                        if extra:
+                            data_dict = {**extra, **data_dict}
                         entries.append(TelemetryEntry(
-                            type=event.get("event_type",
-                                           event.get("type", "unknown")),
+                            type=etype,
                             timestamp=event.get("timestamp"),
                             missionId=event_mid,
                             sourceFile=source_file,
-                            data=event.get("data", {}),
+                            data=data_dict,
                         ))
                     except json.JSONDecodeError:
                         continue

@@ -1,7 +1,7 @@
 /**
  * Layout — sidebar + header + content area.
- * Desktop: sidebar collapsible to icon-only mode.
- * Mobile: dropdown nav from header.
+ * Desktop: sidebar toggles between full (text+icon) and collapsed (icon-only).
+ * Mobile: dropdown nav from header hamburger.
  */
 import { useState } from 'react'
 import type { ReactNode } from 'react'
@@ -14,13 +14,13 @@ interface LayoutProps {
 
 export function Layout({ children }: LayoutProps) {
   const [mobileOpen, setMobileOpen] = useState(false)
-  const [collapsed, setCollapsed] = useState(false)
+  const [collapsed, setCollapsed] = useState(true)
 
   return (
     <div className="flex h-screen overflow-hidden bg-gray-950 text-gray-100">
-      {/* Desktop sidebar */}
-      <div className="hidden lg:block">
-        <Sidebar collapsed={collapsed} />
+      {/* Desktop sidebar — always rendered, width changes */}
+      <div className="hidden h-full shrink-0 lg:flex">
+        <Sidebar collapsed={collapsed} onToggle={() => setCollapsed(!collapsed)} />
       </div>
 
       {/* Mobile overlay */}
@@ -39,9 +39,9 @@ export function Layout({ children }: LayoutProps) {
         </div>
       )}
 
-      <div className="flex flex-1 flex-col overflow-hidden">
+      <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
         {/* Header */}
-        <header className="flex items-center justify-between border-b border-gray-800 bg-gray-900/80 px-4 py-3 lg:px-6">
+        <header className="flex shrink-0 items-center justify-between border-b border-gray-800 bg-gray-900/80 px-4 py-3 lg:px-6">
           <div className="flex items-center gap-2">
             {/* Mobile hamburger */}
             <button
@@ -53,18 +53,6 @@ export function Layout({ children }: LayoutProps) {
                 {mobileOpen
                   ? <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                   : <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />}
-              </svg>
-            </button>
-            {/* Desktop sidebar toggle */}
-            <button
-              onClick={() => setCollapsed(!collapsed)}
-              className="hidden rounded p-1 text-gray-400 hover:bg-gray-700 hover:text-white lg:block"
-              aria-label="Toggle sidebar"
-            >
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                {collapsed
-                  ? <path strokeLinecap="round" strokeLinejoin="round" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
-                  : <path strokeLinecap="round" strokeLinejoin="round" d="M11 19l-7-7 7-7M19 19l-7-7 7-7" />}
               </svg>
             </button>
             <h1 className="text-sm font-semibold">OpenClaw Mission Control</h1>

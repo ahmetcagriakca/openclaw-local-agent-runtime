@@ -27,21 +27,33 @@ Sprint 13  Stabilization  Known issues + repo cleanup  ~11 task  ← ACTIVE
 Sprint 12  Phase 5D     Polish + Phase 5 Closure  25 task  CLOSED (2026-03-26)
 ```
 
-### Sprint 13 Scope (Draft)
+### Sprint 13 Deliverables (review_pending)
 
-- Migration map: move existing sprint material to `docs/sprints/sprint-{N}/`
-- Archive/stale cleanup
-- `docs/shared/` setup with promotion rules
-- Sprint doc templates
-- Turkish content cleanup
-- closure-check.sh path updates
+- D-102 L1/L2: StageResult isolation + distance-based context tiers
+- 13.1: Token report ID mismatch fix
+- 13.3: Rework limiter (D-103 frozen)
+- 13.4: Legacy dashboard removal (D-097)
+- 13.5: Stale docs archived (12 files)
+- Dev scripts, .editorconfig, PORTS.md
+
+## Next Sprint
+
+```
+Sprint 14  Phase 6A    Structural Hardening  ~17 task  (blocked by Sprint 13 closure)
+```
+
+### Sprint 14 Scope
+
+- Carry-forward: UIOverview/WindowList tools, feature flag, E2E validation, WSL rename
+- Backend restructure: create_app() factory, route migration, services layer
+- Frontend restructure: feature-based layout, API client layer
+- Tooling: pyproject.toml, ruff, mypy, pre-commit, Docker dev env
 
 ## Decision Debt
 
-- D-021→D-058 (38 decisions): Sprint 12 Task 0 target
-- D-059→D-080 (22 decisions): gap check in Sprint 12 Task 0b
+- D-001→D-103: all frozen, debt zero
 
 ---
 
-*Next Steps — OpenClaw Local Agent Runtime*
+*Next Steps — Vezir Platform*
 *Last updated: 2026-03-26*

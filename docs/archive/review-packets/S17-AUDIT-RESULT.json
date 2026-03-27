@@ -1,0 +1,32 @@
+{
+  "sprint": 17,
+  "model": "A",
+  "policy_note": "POLICY OVERRIDE: Sprint 17 requires Model A (you passed: --model B). Reason: D-105 constraint: Sprint 17 is first sprint after Phase 5.5 closure. Model A mandatory after S13-S16 consecutive Model B run.",
+  "timestamp": "2026-03-27T13:39:53.431400+00:00",
+  "eligible": false,
+  "blockers": [
+    "BLOCKER: POLICY OVERRIDE: Sprint 17 requires Model A (you passed: --model B). Reason: D-105 constraint: Sprint 17 is first sprint after Phase 5.5 closure. Model A mandatory after S13-S16 consecutive Model B run. \u2014 Model B is forbidden for Sprint 17. Re-run with --model A or omit --model flag.",
+    "BLOCKER: Evidence directory not found (checked: evidence/sprint-17, docs/sprints/sprint-17/evidence)",
+    "BLOCKER: Sprint doc directory not found under docs/sprints/sprint-17/"
+  ],
+  "warnings": [
+    "Open decision references in DECISIONS.md: OD-12, OD-14, OD-11",
+    "WARNING: Sprint 17 closure not reflected in STATE.md"
+  ],
+  "evidence": {},
+  "canonical": {},
+  "archive_candidates": [],
+  "stale_language": [],
+  "ghost_decisions": [
+    "  Ghost/open decision reference: 'OD-11'",
+    "  Ghost/open decision reference: 'OD-12'",
+    "  Ghost/open decision reference: 'OD-14'"
+  ],
+  "broken_refs": [],
+  "status_issues": [],
+  "waivers": [],
+  "verdict": "NOT CLOSEABLE",
+  "decisions": {
+    "frozen_count": 108
+  }
+}

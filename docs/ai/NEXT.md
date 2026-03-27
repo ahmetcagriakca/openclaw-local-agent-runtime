@@ -71,7 +71,12 @@ Items that become possible now:
 
 ## Decision Debt
 
-- D-001→D-103: all frozen, debt zero
+- D-001→D-103, D-105→D-108: all frozen, debt zero (107 total)
+
+## Phase 5.5 Closure
+
+- Phase 5.5 closure report: `docs/phase-reports/PHASE-5.5-CLOSURE-REPORT.md`
+- Sprint 17 must use Model A closure (D-105 constraint: max 2 consecutive Model B)
 
 ---
 

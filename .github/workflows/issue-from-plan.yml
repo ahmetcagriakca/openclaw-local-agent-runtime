@@ -11,6 +11,7 @@ on:
 permissions:
   issues: write
   contents: write
+  pull-requests: write
 
 jobs:
   create-issues:
@@ -247,12 +248,27 @@ jobs:
           print("DONE")
           PYTHON_SCRIPT
 
-      - name: Commit issues.json
+      - name: Commit issues.json via PR
         env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SPRINT_NUMBER: ${{ inputs.sprint_number }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add "docs/sprints/sprint-${{ inputs.sprint_number }}/issues.json"
-          git diff --cached --quiet && echo "No changes to commit" || git commit -m "[S${{ inputs.sprint_number }}] generate issues.json from plan.yaml"
-          git push
+          BRANCH="auto/s${SPRINT_NUMBER}-issues-json"
+          git checkout -b "$BRANCH"
+          git add "docs/sprints/sprint-${SPRINT_NUMBER}/issues.json"
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "[S${SPRINT_NUMBER}] generate issues.json from plan.yaml"
+            git push -u origin "$BRANCH"
+            # Create PR and auto-merge
+            PR_URL=$(gh pr create \
+              --title "[S${SPRINT_NUMBER}] issues.json from plan.yaml" \
+              --body "Auto-generated issues.json mapping from workflow run." \
+              --base main \
+              --head "$BRANCH")
+            echo "Created PR: $PR_URL"
+            gh pr merge "$PR_URL" --merge --auto
+          fi

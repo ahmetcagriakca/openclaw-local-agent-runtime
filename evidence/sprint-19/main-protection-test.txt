@@ -1,0 +1,17 @@
+Branch protection test evidence:
+
+1. Workflow run #2 (issue-from-plan.yml) attempted direct push to main:
+   Result: 'remote: error: GH006: Protected branch update failed for refs/heads/main'
+   Evidence: Push was rejected by branch protection.
+
+2. Branch protection rule configured via GitHub Settings > Branches:
+   - Pattern: main
+   - Require a pull request before merging: ENABLED
+   - Require approvals: DISABLED (single-developer repo)
+   - Force pushes: NOT ALLOWED
+   - Branch deletion: NOT ALLOWED
+
+3. All Sprint 19 changes were merged via PR (no direct commits to main).
+   PRs: #1, #2, #3, #4, #17, #18, #19, #20, #21, #22
+
+VERIFIED: main branch protection is active and working.

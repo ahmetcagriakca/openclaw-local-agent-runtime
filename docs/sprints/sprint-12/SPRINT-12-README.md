@@ -70,7 +70,7 @@ Phase 5D is the final sprint of Phase 5 (Mission Control). It covers:
 | SPRINT-12-FINAL-REVIEW.md | Final review report | Created after all tasks |
 | SPRINT-12-RETROSPECTIVE.md | Sprint retrospective (mandatory) | Created before final gate |
 | SPRINT-12-CLOSURE-SUMMARY.md | Closure summary | Created before operator sign-off |
-| PHASE-5-CLOSURE-REPORT.md (→ docs/phase-reports/) | Phase 5 closure report (Sprint 12 only) | Created at closure |
+| SPRINT-12-PHASE-CLOSURE.md | Phase 5 closure report (Sprint 12 only) | Created at closure |
 
 ## Evidence Location
 
@@ -139,7 +139,7 @@ bash tools/sprint-closure-check.sh 12
 |----------|----------|----------------|
 | OpenAPI spec | docs/api/openapi.json | Sprint-local |
 | Operator guide | docs/OPERATOR-GUIDE.md | Promoted to shared: cross-sprint, governance-relevant, referenced by Sprint 12+. Owner: AKCA. Source: Sprint 12. Sunset: when replaced by dedicated ops platform. |
-| Phase 5 closure report | docs/sprints/sprint-12/PHASE-5-CLOSURE-REPORT.md (→ docs/phase-reports/) | Sprint-local |
+| Phase 5 closure report | docs/sprints/sprint-12/SPRINT-12-PHASE-CLOSURE.md | Sprint-local |
 | E2E test suite | tests/e2e/ | Permanent test infrastructure |
 
 ## Open Decisions (Kickoff Blockers)

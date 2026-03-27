@@ -81,7 +81,7 @@ New:
   docs/sprints/sprint-12/SPRINT-12-FINAL-REVIEW.md
   docs/sprints/sprint-12/SPRINT-12-RETROSPECTIVE.md
   docs/sprints/sprint-12/SPRINT-12-CLOSURE-SUMMARY.md
-  docs/sprints/sprint-12/SPRINT-12-PHASE-CLOSURE.md
+  docs/phase-reports/PHASE-5D-SPRINT-12-CLOSURE.md
   docs/phase-reports/PHASE-5D-SPRINT-12-POLISH-CLOSURE.md
   evidence/sprint-12/* (20 files)
 

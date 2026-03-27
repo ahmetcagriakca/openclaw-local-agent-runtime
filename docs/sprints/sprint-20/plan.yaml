@@ -1,0 +1,100 @@
+sprint: 20
+phase: 6
+title: "Project Integration + PR Traceability"
+model: "A"
+
+authority:
+  source_of_truth: "SPRINT-20-TASK-BREAKDOWN.md"
+  human_summary: "S20-KICKOFF.md"
+  automation_index: "plan.yaml"
+  generated_files:
+    - "issues.json"
+  not_generated:
+    - "SPRINT-20-TASK-BREAKDOWN.md"
+    - "plan.yaml"
+
+issue:
+  parent_title: "[S20] Project Integration + PR Traceability"
+  labels: ["sprint", "phase-6", "automation"]
+  milestone: "Sprint 20"
+
+tasks:
+  - id: "20.1"
+    title: "plan.yaml + task breakdown + project field schema"
+    type: "implementation"
+    track: 1
+    branch_name: "sprint-20/t20.1-plan-schema"
+    labels: ["automation", "foundation"]
+
+  - id: "20.2"
+    title: "Labels + milestones bootstrap script"
+    type: "implementation"
+    track: 1
+    branch_name: "sprint-20/t20.2-labels-milestones"
+    labels: ["automation", "tooling"]
+    depends_on: ["20.1"]
+
+  - id: "20.3"
+    title: "Issue form templates"
+    type: "implementation"
+    track: 2
+    branch_name: "sprint-20/t20.3-issue-templates"
+    labels: ["automation", "github"]
+
+  - id: "20.4"
+    title: "Project auto-add workflow"
+    type: "implementation"
+    track: 2
+    branch_name: "sprint-20/t20.4-project-auto-add"
+    labels: ["automation", "github-actions"]
+    depends_on: ["20.1"]
+
+  - id: "20.5"
+    title: "Status sync workflow"
+    type: "implementation"
+    track: 3
+    branch_name: "sprint-20/t20.5-status-sync"
+    labels: ["automation", "github-actions"]
+
+  - id: "20.6"
+    title: "PR title/body validator"
+    type: "implementation"
+    track: 3
+    branch_name: "sprint-20/t20.6-pr-validator"
+    labels: ["automation", "tooling"]
+
+  - id: "20.7"
+    title: "issues.json PR linkage"
+    type: "implementation"
+    track: 4
+    branch_name: "sprint-20/t20.7-pr-linkage"
+    labels: ["automation", "tooling"]
+
+  - id: "20.G1"
+    title: "Mid Review Gate"
+    type: "gate"
+    branch_exempt: true
+    blocks: ["20.5", "20.6", "20.7"]
+    labels: ["gate"]
+
+  - id: "20.G2"
+    title: "Final Review Gate"
+    type: "gate"
+    branch_exempt: true
+    labels: ["gate"]
+
+  - id: "20.RETRO"
+    title: "Retrospective"
+    type: "gate"
+    branch_exempt: true
+    labels: ["process"]
+
+  - id: "20.CLOSURE"
+    title: "Sprint Closure"
+    type: "gate"
+    branch_exempt: true
+    labels: ["process"]
+
+validation:
+  require_doc_sync: true
+  fail_on_conflict: true

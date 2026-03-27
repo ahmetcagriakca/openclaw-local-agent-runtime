@@ -1,0 +1,8 @@
+plan.yaml:       docs\sprints\sprint-20\plan.yaml
+task breakdown:  docs\sprints\sprint-20\SPRINT-20-TASK-BREAKDOWN.md
+
+Plan tasks:      11 (['20.1', '20.2', '20.3', '20.4', '20.5', '20.6', '20.7', '20.CLOSURE', '20.G1', '20.G2', '20.RETRO'])
+Breakdown tasks: 11 (['20.1', '20.2', '20.3', '20.4', '20.5', '20.6', '20.7', '20.CLOSURE', '20.G1', '20.G2', '20.RETRO'])
+Common:          11
+
+PASS: plan.yaml and task breakdown are in sync

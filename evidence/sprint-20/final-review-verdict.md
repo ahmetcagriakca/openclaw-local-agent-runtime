@@ -9,15 +9,15 @@
 
 ## All Tasks Summary
 
-| Task | Title | Status | Evidence |
-|------|-------|--------|----------|
-| 20.1 | plan.yaml + task breakdown + field schema | Merged | plan-yaml-valid.txt, validator-pass.txt |
-| 20.2 | Labels + milestones bootstrap script | Merged | bootstrap script in tools/ |
-| 20.3 | Issue form templates | Merged | 3 YAML templates in .github/ISSUE_TEMPLATE/ |
-| 20.4 | Project auto-add workflow | Merged | project-auto-add.yml |
-| 20.5 | Status sync workflow | Merged | status-sync.yml |
-| 20.6 | PR title/body validator | Merged | pr-validator.yml |
-| 20.7 | issues.json PR linkage script | Merged | update-pr-linkage.py |
+| Task | Title | Code Status | Runtime Evidence |
+|------|-------|-------------|------------------|
+| 20.1 | plan.yaml + task breakdown + field schema | Merged | Raw evidence: plan-yaml-valid.txt, validator-pass.txt |
+| 20.2 | Labels + milestones bootstrap script | Merged | NO EVIDENCE — script not executed (gh CLI missing) |
+| 20.3 | Issue form templates | Merged | Code verified: 3 YAML templates in .github/ISSUE_TEMPLATE/ |
+| 20.4 | Project auto-add workflow | Merged | NO EVIDENCE — skip-path only verified (no Project V2 board) |
+| 20.5 | Status sync workflow | Merged | NO EVIDENCE — status intent logged, full field mutation not implemented |
+| 20.6 | PR title/body validator | Merged | NO EVIDENCE — title pattern validated, body sections not enforced |
+| 20.7 | issues.json PR linkage script | Merged | NO EVIDENCE — script not executed (gh CLI missing) |
 
 ## Files Produced
 
@@ -37,14 +37,17 @@
 
 ## Acceptance Criteria
 
+Verified (raw evidence exists):
 - [x] plan.yaml parses → evidence: plan-yaml-valid.txt
 - [x] Validator sync passes → evidence: validator-pass.txt
-- [x] Bootstrap script handles labels + milestones idempotently
-- [x] 3 issue form templates (sprint-task, bug-report, feature-request) in .github/ISSUE_TEMPLATE/
-- [x] Project auto-add workflow: triggers on issue with sprint label, uses GraphQL API
-- [x] Status sync workflow: PR open → In Progress, PR merge → Done
-- [x] PR validator: validates [SN-N.M] title pattern, skips bot PRs
-- [x] PR linkage script: scans merged PRs, updates issues.json PR fields
+- [x] 3 issue form templates present in .github/ISSUE_TEMPLATE/
+
+Code present, not runtime-verified:
+- [ ] 20.2: Script present, idempotent by inspection; not executed (gh CLI missing)
+- [ ] 20.4: Workflow present; skip-path only verified; no board E2E evidence
+- [ ] 20.5: Status intent logged; full field mutation not implemented
+- [ ] 20.6: Title pattern validated; body required sections not enforced
+- [ ] 20.7: Script present; not executed (gh CLI missing)
 
 ## Scope Note
 

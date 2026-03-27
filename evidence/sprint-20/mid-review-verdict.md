@@ -25,11 +25,14 @@
 
 ## Acceptance Check
 
+Verified (raw evidence exists):
 - [x] plan.yaml parses, validator passes
-- [x] Bootstrap script creates labels + milestones (idempotent, gh CLI)
-- [x] 3 issue form templates (sprint-task, bug-report, feature-request)
-- [x] Project auto-add workflow triggers on issue with `sprint` label
+- [x] 3 issue form templates present
 - [x] Field schema document defines Status, Sprint, Task ID, Track, Type, PR Link
+
+Code present, not runtime-verified:
+- [ ] 20.2: Bootstrap script present, idempotent by inspection; not executed (gh CLI missing)
+- [ ] 20.4: Workflow present; skip-path only verified (no Project V2 board exists)
 
 ## Verdict
 

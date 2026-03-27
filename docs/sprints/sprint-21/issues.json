@@ -1,0 +1,56 @@
+{
+  "sprint": 21,
+  "parent_issue": 65,
+  "tasks": {
+    "21.1": {
+      "issue": 66,
+      "branch": "sprint-21/t21.1-plan-schema",
+      "pr": null
+    },
+    "21.2": {
+      "issue": 67,
+      "branch": "sprint-21/t21.2-stale-refs",
+      "pr": null
+    },
+    "21.3": {
+      "issue": 68,
+      "branch": "sprint-21/t21.3-archive-manifest",
+      "pr": null
+    },
+    "21.4": {
+      "issue": 69,
+      "branch": "sprint-21/t21.4-closure-preflight",
+      "pr": null
+    },
+    "21.5": {
+      "issue": 70,
+      "branch": "sprint-21/t21.5-merged-state-check",
+      "pr": null
+    },
+    "21.6": {
+      "issue": 71,
+      "branch": "sprint-21/t21.6-branch-cleanup",
+      "pr": null
+    },
+    "21.G1": {
+      "issue": 72,
+      "branch": null,
+      "pr": null
+    },
+    "21.G2": {
+      "issue": 73,
+      "branch": null,
+      "pr": null
+    },
+    "21.RETRO": {
+      "issue": 74,
+      "branch": null,
+      "pr": null
+    },
+    "21.CLOSURE": {
+      "issue": 75,
+      "branch": null,
+      "pr": null
+    }
+  }
+}

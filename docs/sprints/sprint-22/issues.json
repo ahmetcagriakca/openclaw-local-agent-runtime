@@ -1,0 +1,41 @@
+{
+  "sprint": 22,
+  "parent_issue": 85,
+  "tasks": {
+    "22.1": {
+      "issue": 86,
+      "branch": "sprint-22/t22.1-archive-execution",
+      "pr": null
+    },
+    "22.2": {
+      "issue": 87,
+      "branch": "sprint-22/t22.2-stale-ref-tuning",
+      "pr": null
+    },
+    "22.G1": {
+      "issue": 88,
+      "branch": null,
+      "pr": null
+    },
+    "22.3": {
+      "issue": 89,
+      "branch": "sprint-22/t22.3-playwright-e2e",
+      "pr": null
+    },
+    "22.G2": {
+      "issue": 90,
+      "branch": null,
+      "pr": null
+    },
+    "22.RETRO": {
+      "issue": 91,
+      "branch": null,
+      "pr": null
+    },
+    "22.CLOSURE": {
+      "issue": 92,
+      "branch": null,
+      "pr": null
+    }
+  }
+}

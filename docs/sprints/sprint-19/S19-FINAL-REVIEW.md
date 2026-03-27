@@ -53,7 +53,7 @@
 - [x] main branch protection active → evidence: `main-protection-test.txt` (GH006 rejection + full PR list covering all phases)
 - [x] Governance document with all 9 rules → evidence: `governance-doc.txt`
 - [x] Branch-per-task discipline followed → all implementation tasks merged via named sprint branches
-- [x] All changes merged via PR → evidence: `main-protection-test.txt` (PR #1-#27 listed)
+- [x] All implementation and gate changes merged via PR → evidence: `main-protection-test.txt` (implementation PRs #1-#27 listed; evidence-only remediation PRs #28+ excluded from set to avoid self-referential drift)
 
 ## Workflow Fixes Applied During Sprint
 
@@ -79,3 +79,5 @@
 ## Verdict
 
 **PASS** — All implementation tasks complete, all evidence present, all acceptance criteria met. Sprint is eligible for retrospective and closure.
+
+**Scope note:** This review covers implementation PRs #1-#27. Evidence-only remediation PRs (#28+) fix review artifact alignment and are explicitly excluded from the implementation PR inventory to prevent self-referential final-state drift.

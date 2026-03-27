@@ -9,7 +9,7 @@
 
 | # | Item | Owner | Sprint |
 |---|------|-------|--------|
-| 1 | D-104 patches 6-8 apply + freeze | AKCA / Claude Code | Pre-S17 |
+| — | *(none — D-104 frozen in commit 3c60a23, 2026-03-27)* | — | — |
 
 ---
 
@@ -45,7 +45,7 @@
 | Item | Since | Priority |
 |------|-------|---------|
 | D-021→D-058 extraction to DECISIONS.md (38 Phase 4 decisions) | Sprint 8 kickoff | AKCA-assigned, non-blocking |
-| D-104 patches 6-8 apply + freeze | S16 session | Low urgency |
+| ~~D-104 patches 6-8 apply + freeze~~ | ~~S16 session~~ | ✅ DONE — frozen in commit 3c60a23 |
 
 ---
 
@@ -54,5 +54,5 @@
 **Sprint 17 — Phase 6**
 - Status: NOT STARTED
 - Kickoff gate: OPEN
-- Required before kickoff: D-104 patch status decision
+- Required before kickoff: ~~D-104 patch status decision~~ ✅ DONE
 - Carry-forward assignment needed before scope is frozen

@@ -957,6 +957,38 @@ Formal record: `docs/decisions/D-110-DOC-MODEL.md`.
 
 ---
 
+### D-111: CLAUDE.md Rewrite — Compact Operating Brief
+
+**Phase:** Sprint 18 | **Status:** Frozen
+
+CLAUDE.md stays as filename (Claude Code convention). Rewritten to ~80-100 lines. Stale sections (Current State, Phase 5 Progress, Architecture Quick Reference) removed. Sections: Project, Key Files, Documentation, Build & Test, Hard Rules, Do Not.
+
+---
+
+### D-112: Governance Consolidation — PROCESS-GATES + PROTOCOL → GOVERNANCE.md
+
+**Phase:** Sprint 18 | **Status:** Frozen
+
+PROCESS-GATES.md (368 lines) + PROTOCOL.md (93 lines) merged into `docs/ai/GOVERNANCE.md` (~150-200 lines). Keep: source hierarchy, sprint status model, gate model, done/evidence/closure/archive rules, test hygiene, retrospective gate, proposal format, cross-review protocol. Drop: patch history (P-01→P-10), migration model, sprint-specific rules.
+
+---
+
+### D-113: Archive Boundary — Active vs Historical Separation
+
+**Phase:** Sprint 18 | **Status:** Frozen
+
+Archive boundary: `docs/archive/` sub-structured by type (sprints, phase-reports, process-history, debt-plans, review-packets). Active sprints in `docs/sprints/` = last closed + current only. Old phase reports archived except PHASE-5.5-CLOSURE-REPORT.md and Sprint 15/16 reports.
+
+---
+
+### D-114: Handoff Model — Keep current.md Path
+
+**Phase:** Sprint 18 | **Status:** Frozen
+
+Keep `docs/ai/handoffs/current.md` path (sprint-plan.py depends on it). Archive stale snapshots. Handoff is supplementary to STATE.md/NEXT.md (per D-110).
+
+---
+
 ## Phase 5 Freeze Addendum (Sprint 7→8 transition)
 
 ### Blocking Fix Closures

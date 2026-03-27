@@ -1,0 +1,68 @@
+name: Validate PR title and body
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  validate-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate PR title format
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+        run: |
+          echo "Validating PR #${PR_NUMBER}: ${PR_TITLE}"
+          ERRORS=""
+          WARNINGS=""
+
+          # Skip validation for bot PRs
+          if [ "$PR_AUTHOR" = "github-actions[bot]" ] || [ "$PR_AUTHOR" = "dependabot[bot]" ]; then
+            echo "Bot PR — skipping validation."
+            exit 0
+          fi
+
+          # Rule 1: Title should match [SN-N.M] pattern for sprint PRs
+          if echo "$PR_TITLE" | grep -qP '^\[S\d+-'; then
+            # Sprint PR — validate full pattern
+            if ! echo "$PR_TITLE" | grep -qP '^\[S\d+-\d+(\.\w+)*\]'; then
+              ERRORS="${ERRORS}\n- Title pattern invalid. Expected: [SN-N.M] description"
+            fi
+          else
+            # Non-sprint PR — just warn
+            WARNINGS="${WARNINGS}\n- Title does not follow sprint pattern [SN-N.M]. This is OK for non-sprint PRs."
+          fi
+
+          # Rule 2: Title length
+          TITLE_LEN=${#PR_TITLE}
+          if [ "$TITLE_LEN" -gt 100 ]; then
+            WARNINGS="${WARNINGS}\n- Title is ${TITLE_LEN} chars (recommended: <100)"
+          fi
+
+          # Rule 3: Body should not be empty for sprint PRs
+          if echo "$PR_TITLE" | grep -qP '^\[S\d+-' && [ -z "$PR_BODY" ]; then
+            WARNINGS="${WARNINGS}\n- Sprint PR has empty body. Consider adding description."
+          fi
+
+          # Report
+          if [ -n "$ERRORS" ]; then
+            echo "ERRORS found:"
+            echo -e "$ERRORS"
+            echo ""
+            echo "FAIL: PR title validation failed."
+            exit 1
+          fi
+
+          if [ -n "$WARNINGS" ]; then
+            echo "WARNINGS:"
+            echo -e "$WARNINGS"
+          fi
+
+          echo ""
+          echo "PASS: PR validation passed."

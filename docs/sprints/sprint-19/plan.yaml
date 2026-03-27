@@ -1,0 +1,102 @@
+sprint: 19
+phase: 6
+title: "Single-Repo Automation MVP"
+model: "A"
+
+authority:
+  source_of_truth: "SPRINT-19-TASK-BREAKDOWN.md"
+  human_summary: "S19-KICKOFF.md"
+  automation_index: "plan.yaml"
+  generated_files:
+    - "issues.json"
+  not_generated:
+    - "SPRINT-19-TASK-BREAKDOWN.md"
+    - "S19-KICKOFF.md"
+    - "plan.yaml"
+
+issue:
+  parent_title: "[S19] Single-Repo Automation MVP"
+  labels: ["sprint", "phase-6", "automation"]
+  milestone: "Sprint 19"
+
+tasks:
+  - id: "19.1"
+    title: "plan.yaml schema freeze"
+    type: "implementation"
+    track: 1
+    branch_name: "sprint-19/t19.1-plan-schema"
+    labels: ["automation", "foundation"]
+
+  - id: "19.2"
+    title: "plan.yaml task breakdown validator"
+    type: "implementation"
+    track: 1
+    branch_name: "sprint-19/t19.2-validator"
+    labels: ["automation", "tooling"]
+    depends_on: ["19.1"]
+
+  - id: "19.3"
+    title: "issue-from-plan.yml workflow"
+    type: "implementation"
+    track: 2
+    branch_name: "sprint-19/t19.3-issue-workflow"
+    labels: ["automation", "github-actions"]
+    depends_on: ["19.1"]
+
+  - id: "19.4"
+    title: "issues.json schema and mapping"
+    type: "implementation"
+    track: 2
+    branch_name: null
+    labels: ["automation"]
+    co_delivered_with: "19.3"
+
+  - id: "19.5"
+    title: "Branch naming contract and check script"
+    type: "implementation"
+    track: 3
+    branch_name: "sprint-19/t19.5-branch-contract"
+    labels: ["process", "tooling"]
+
+  - id: "19.6"
+    title: "main protection verification"
+    type: "implementation"
+    track: 3
+    branch_name: "sprint-19/t19.6-protection-verify"
+    labels: ["process", "security"]
+
+  - id: "19.7"
+    title: "Governance update"
+    type: "implementation"
+    track: 4
+    branch_name: "sprint-19/t19.7-governance"
+    labels: ["process", "docs"]
+
+  - id: "19.G1"
+    title: "Mid Review Gate"
+    type: "gate"
+    branch_exempt: true
+    blocks: ["19.5", "19.6", "19.7"]
+    labels: ["gate"]
+
+  - id: "19.G2"
+    title: "Final Review Gate"
+    type: "gate"
+    branch_exempt: true
+    labels: ["gate"]
+
+  - id: "19.RETRO"
+    title: "Retrospective"
+    type: "gate"
+    branch_exempt: true
+    labels: ["process"]
+
+  - id: "19.CLOSURE"
+    title: "Sprint Closure"
+    type: "gate"
+    branch_exempt: true
+    labels: ["process"]
+
+validation:
+  require_doc_sync: true
+  fail_on_conflict: true

@@ -107,7 +107,7 @@ class ArtifactStore:
         return self.add("system_info", data)
 
     def _parse_process_list(self, output: str, params: dict) -> dict:
-        lines = [l.strip() for l in output.split("\n") if l.strip()]
+        lines = [ln.strip() for ln in output.split("\n") if ln.strip()]
         return self.add("process_list", {
             "count": len(lines),
             "top_processes": lines[:5]

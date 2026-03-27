@@ -16,7 +16,7 @@ from pathlib import Path
 from fastapi import APIRouter, Request
 from pydantic import BaseModel, Field
 
-from api.schemas import ResponseMeta, DataQuality
+from api.schemas import DataQuality, ResponseMeta
 from utils.atomic_write import atomic_write_json
 
 logger = logging.getLogger("mcc.mission.create")

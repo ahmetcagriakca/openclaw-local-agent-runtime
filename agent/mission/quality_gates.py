@@ -1,5 +1,6 @@
 """Quality gates — 3 gates that validate artifacts between stage groups."""
 from dataclasses import dataclass, field
+
 from artifacts.schema_validator import validate_artifact_data
 
 

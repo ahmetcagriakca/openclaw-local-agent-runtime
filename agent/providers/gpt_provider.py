@@ -1,7 +1,9 @@
 """OpenAI GPT provider implementation."""
 import json
 import os
+
 from openai import OpenAI
+
 from .base import AgentProvider, AgentResponse, ToolCall
 
 

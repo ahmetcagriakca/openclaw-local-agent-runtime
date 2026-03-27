@@ -15,10 +15,9 @@ import os
 import re
 import sys
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
 from typing import Optional
-
 
 # ---------------------------------------------------------------------------
 # Config
@@ -366,7 +365,7 @@ def print_results(results: list[CheckResult], sprint: int,
                   sprint_date: datetime,
                   verbose: bool = False):
     print(f"\n{'=' * 50}")
-    print(f"  Sprint-End Doc Validation")
+    print("  Sprint-End Doc Validation")
     print(f"  Sprint: {sprint}")
     print(f"  Date: {sprint_date.date()}")
     print(f"{'=' * 50}\n")
@@ -400,8 +399,8 @@ def print_results(results: list[CheckResult], sprint: int,
         print(f"\033[33m  Result: 0 FAIL, {warn_count} WARN"
               f" — review warnings before close\033[0m")
     else:
-        print(f"\033[32m  Result: All checks passed"
-              f" — sprint ready to close\033[0m")
+        print("\033[32m  Result: All checks passed"
+              " — sprint ready to close\033[0m")
     print()
     return fail_count
 

@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Vezir Agent Runner — AI-powered Windows automation via MCP tools."""
-import sys, io
+import io
+import sys
+
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
 sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8")
 import argparse
@@ -30,9 +32,9 @@ def main():
     args = parser.parse_args()
 
     # D-057: Startup metadata gate — validate tool catalog + registries
-    from services.tool_catalog import validate_catalog_governance
-    from mission.skill_contracts import validate_all_contracts
     from mission.role_registry import validate_role_registry
+    from mission.skill_contracts import validate_all_contracts
+    from services.tool_catalog import validate_catalog_governance
 
     startup_errors = []
     startup_errors.extend(validate_catalog_governance())

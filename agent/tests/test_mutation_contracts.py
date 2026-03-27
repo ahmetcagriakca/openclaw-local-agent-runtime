@@ -21,10 +21,9 @@ import json
 import os
 import sys
 import tempfile
-import time
 import unittest
 from pathlib import Path
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -41,6 +40,7 @@ def run_with_timeout(coro, timeout=TEST_TIMEOUT):
 def _make_test_client():
     """Create a TestClient with minimal app setup."""
     from fastapi.testclient import TestClient
+
     from api.server import app
     return TestClient(app)
 
@@ -315,7 +315,7 @@ class TestMutationContract07_AuditLogFields(unittest.TestCase):
             self.assertEqual(resp.status_code, 200)
 
             # Verify audit log entry has required fields
-            audit_entries = [l for l in captured_logs if "MUTATION_AUDIT" in l]
+            audit_entries = [ln for ln in captured_logs if "MUTATION_AUDIT" in ln]
             self.assertGreater(len(audit_entries), 0, "No MUTATION_AUDIT entry")
 
             audit_json_str = audit_entries[0].replace("MUTATION_AUDIT ", "")

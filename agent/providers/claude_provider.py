@@ -1,6 +1,7 @@
 """Anthropic Claude provider implementation."""
 import json
 import os
+
 from .base import AgentProvider, AgentResponse, ToolCall
 
 

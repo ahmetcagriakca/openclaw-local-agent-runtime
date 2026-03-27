@@ -7,9 +7,13 @@ not a rewrite. Full route migration happens in 14.20.
 from __future__ import annotations
 
 import os
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from fastapi import FastAPI
 
 
-def create_app(testing: bool = False) -> "FastAPI":
+def create_app(testing: bool = False) -> FastAPI:
     """Create and return the FastAPI application.
 
     Args:

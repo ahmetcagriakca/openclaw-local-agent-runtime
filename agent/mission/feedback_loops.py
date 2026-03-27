@@ -1,8 +1,8 @@
 """Feedback loops — Dev-Tester and Dev-Reviewer rework cycle management."""
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
-from context.policy_telemetry import emit_policy_event
 
+from context.policy_telemetry import emit_policy_event
 
 # D-103: Complexity-based rework limits
 REWORK_LIMITS = {

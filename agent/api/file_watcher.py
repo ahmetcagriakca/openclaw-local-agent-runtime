@@ -6,7 +6,6 @@ Debouncing: mission 500ms, telemetry 2s (D-085 / Task 10.7).
 """
 import asyncio
 import logging
-import os
 import time
 from dataclasses import dataclass, field
 from pathlib import Path

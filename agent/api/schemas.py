@@ -17,7 +17,6 @@ from typing import Any, Optional
 
 from pydantic import BaseModel, Field
 
-
 # ── D-068: Data Quality States (GPT Fix 2) ──────────────────────
 
 class DataQuality(str, Enum):

@@ -1,6 +1,5 @@
 """Tests for D-103 complexity-based rework limiter."""
-import pytest
-from mission.feedback_loops import FeedbackLoop, REWORK_LIMITS
+from mission.feedback_loops import REWORK_LIMITS, FeedbackLoop
 
 
 class TestComplexityBasedLimits:

@@ -3,7 +3,6 @@
 Health endpoint contract test, Telegram bot unit tests,
 WMCP tool inventory verification.
 """
-import json
 import os
 import sys
 import unittest
@@ -15,9 +14,11 @@ class TestHealthContract(unittest.TestCase):
     """Health endpoint returns expected component structure."""
 
     def setUp(self):
-        from api.server import app
-        from httpx import ASGITransport, AsyncClient
         import asyncio
+
+        from httpx import ASGITransport, AsyncClient
+
+        from api.server import app
         self.loop = asyncio.new_event_loop()
         self.client = self.loop.run_until_complete(
             AsyncClient(
@@ -27,12 +28,10 @@ class TestHealthContract(unittest.TestCase):
         )
 
     def tearDown(self):
-        import asyncio
         self.loop.run_until_complete(self.client.__aexit__(None, None, None))
         self.loop.close()
 
     def _get(self, path):
-        import asyncio
         return self.loop.run_until_complete(self.client.get(path))
 
     def test_health_returns_200(self):

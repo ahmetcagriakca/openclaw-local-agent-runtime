@@ -1,5 +1,4 @@
 """Tests for D-102 L2 distance-based tiered context assembly."""
-import pytest
 
 from mission.stage_result import StageResult
 
@@ -46,7 +45,7 @@ class TestFormatArtifactContextWithDistance:
         stages = [_make_stage_result("s1", 8000)]
         result = self._format(pkg, stage_results=stages)
         # Should be truncated to 5000 (distance tier A)
-        art_section = result.split("---")[1] if "---" in result else result
+        result.split("---")[1] if "---" in result else result
         # The actual text content (excluding header) should be <= 5000 + truncation notice
         assert "truncated" in result.lower()
 

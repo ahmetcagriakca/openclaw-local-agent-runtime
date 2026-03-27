@@ -1,19 +1,17 @@
 """Tests for EventBus integration with AgentRunner — Task 14.11."""
-import tempfile
 import shutil
-
-import pytest
+import tempfile
 
 from events.bus import Event, EventBus
 from events.catalog import EventType
-from events.handlers.audit_trail import AuditTrailHandler
-from events.handlers.token_logger import TokenLoggerHandler
-from events.handlers.bypass_detector import BypassDetectorHandler
-from events.handlers.tool_permissions import ToolPermissionsHandler
-from events.handlers.budget_enforcer import BudgetEnforcerHandler
 from events.handlers.anomaly_detector import AnomalyDetectorHandler
+from events.handlers.audit_trail import AuditTrailHandler
+from events.handlers.budget_enforcer import BudgetEnforcerHandler
+from events.handlers.bypass_detector import BypassDetectorHandler
 from events.handlers.metrics_exporter import MetricsExporterHandler
 from events.handlers.report_collector import ReportCollectorHandler
+from events.handlers.token_logger import TokenLoggerHandler
+from events.handlers.tool_permissions import ToolPermissionsHandler
 
 
 def _create_test_bus(audit_dir, role_tools=None):

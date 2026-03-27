@@ -1,8 +1,8 @@
 """Artifact identity — D-047 compliant headers for typed artifacts."""
 import hashlib
 import json
+from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
-from dataclasses import dataclass, asdict
 
 
 @dataclass

@@ -5,7 +5,7 @@ import tempfile
 
 import pytest
 
-from events.bus import Event, EventBus, HandlerResult
+from events.bus import Event, EventBus
 from events.catalog import EventType
 from events.handlers.audit_trail import AuditTrailHandler
 
@@ -47,7 +47,7 @@ class TestAuditTrailHandler:
         handler(Event(type="b", data={}, source="s"))
 
         with open(os.path.join(audit_dir, "audit-trail.jsonl")) as f:
-            lines = [json.loads(l) for l in f if l.strip()]
+            lines = [json.loads(ln) for ln in f if ln.strip()]
 
         assert lines[0]["prev_hash"] == "genesis"
         assert lines[1]["prev_hash"] == lines[0]["hash"]
@@ -94,7 +94,7 @@ class TestAuditTrailHandler:
             handler(Event(type="t", data={}, source="s"))
 
         with open(os.path.join(audit_dir, "audit-trail.jsonl")) as f:
-            entries = [json.loads(l) for l in f if l.strip()]
+            entries = [json.loads(ln) for ln in f if ln.strip()]
 
         assert [e["seq"] for e in entries] == [0, 1, 2]
 

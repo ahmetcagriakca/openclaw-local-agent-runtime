@@ -1,9 +1,10 @@
 """Approval store — strict ID-based approval lifecycle with idempotency."""
+import hashlib
 import json
 import os
-import hashlib
-from datetime import datetime, timezone, timedelta
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
+from datetime import datetime, timedelta, timezone
+
 from context.policy_telemetry import emit_policy_event
 
 

@@ -4,6 +4,7 @@ Applied to POST requests only. Rejects requests without valid localhost Origin â
 Localhost single-operator system (D-070 extension).
 """
 import logging
+
 from fastapi import Request
 from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware

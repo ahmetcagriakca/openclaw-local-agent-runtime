@@ -8,7 +8,6 @@ Rules applied:
 - Each async test wrapped in run_with_timeout (10s hard limit)
 """
 import asyncio
-import json
 import os
 import sys
 import tempfile
@@ -166,7 +165,7 @@ class TestSSEManager(unittest.TestCase):
         run_with_timeout(_t())
 
     def test_08_max_clients_rejection(self):
-        from api.sse_manager import SSEManager, MAX_CLIENTS
+        from api.sse_manager import MAX_CLIENTS, SSEManager
         async def _t():
             m = SSEManager()
             qs = []
@@ -230,6 +229,7 @@ class TestSSEEndpoint(unittest.TestCase):
     def _make_stream_app():
         """Minimal app WITHOUT middleware — safe for SSE streaming tests."""
         from fastapi import FastAPI
+
         from api.sse_api import router as sse_router
         from api.sse_manager import SSEManager
 
@@ -244,6 +244,7 @@ class TestSSEEndpoint(unittest.TestCase):
         """App WITH host-validation middleware — for rejection tests."""
         from fastapi import FastAPI
         from fastapi.responses import JSONResponse
+
         from api.sse_api import router as sse_router
         from api.sse_manager import SSEManager
 
@@ -267,6 +268,7 @@ class TestSSEEndpoint(unittest.TestCase):
     def test_13_stream_connected_event(self):
         """Directly invoke sse_stream() - avoids ASGI transport SSE deadlock."""
         from unittest.mock import AsyncMock
+
         from api.sse_api import sse_stream
         from api.sse_manager import SSEManager
 

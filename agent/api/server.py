@@ -6,8 +6,6 @@ D-074: Startup sequence (config → FS validation → cache warm → normalizer 
 """
 import logging
 import os
-import signal
-import sys
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 from logging.handlers import RotatingFileHandler
@@ -17,12 +15,11 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from api.normalizer import MissionNormalizer
 from api.capabilities import CapabilityChecker
-from api.schemas import APIError
-from api.file_watcher import FileWatcher
-from api.sse_manager import SSEManager
 from api.csrf_middleware import CSRFMiddleware
+from api.file_watcher import FileWatcher
+from api.normalizer import MissionNormalizer
+from api.sse_manager import SSEManager
 from utils.atomic_write import atomic_write_json
 
 # ── Paths ────────────────────────────────────────────────────────
@@ -228,20 +225,20 @@ async def validate_host(request: Request, call_next):
 
 # ── Import routers ──────────────────────────────────────────────
 
-from api.mission_api import router as mission_router
-from api.approval_api import router as approval_router
-from api.telemetry_api import router as telemetry_router
-from api.health_api import router as health_router
-from api.sse_api import router as sse_router
-from api.approval_mutation_api import router as approval_mutation_router
-from api.mission_mutation_api import router as mission_mutation_router
-from api.mission_create_api import router as mission_create_router
-from api.signal_api import router as signal_router
-from api.logs_api import router as logs_router
-from api.roles_api import router as roles_router
-from api.dashboard_api import router as dashboard_router
-from api.telemetry_query_api import router as telemetry_query_router
 from api.alerts_api import router as alerts_router
+from api.approval_api import router as approval_router
+from api.approval_mutation_api import router as approval_mutation_router
+from api.dashboard_api import router as dashboard_router
+from api.health_api import router as health_router
+from api.logs_api import router as logs_router
+from api.mission_api import router as mission_router
+from api.mission_create_api import router as mission_create_router
+from api.mission_mutation_api import router as mission_mutation_router
+from api.roles_api import router as roles_router
+from api.signal_api import router as signal_router
+from api.sse_api import router as sse_router
+from api.telemetry_api import router as telemetry_router
+from api.telemetry_query_api import router as telemetry_query_router
 
 app.include_router(mission_router, prefix="/api/v1")
 app.include_router(approval_router, prefix="/api/v1")

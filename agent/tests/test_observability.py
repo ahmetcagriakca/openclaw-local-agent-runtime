@@ -10,17 +10,14 @@ E2E: 3 mission scenarios with full span tree verification
 from __future__ import annotations
 
 import io
-import json
+import threading
 import time
 
-import threading
-
 import pytest
-from opentelemetry import trace
-from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import SimpleSpanProcessor, SpanExporter, SpanExportResult
 from opentelemetry.sdk.metrics import MeterProvider
 from opentelemetry.sdk.metrics.export import InMemoryMetricReader
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import SimpleSpanProcessor, SpanExporter, SpanExportResult
 
 
 class InMemorySpanExporter(SpanExporter):
@@ -46,14 +43,12 @@ class InMemorySpanExporter(SpanExporter):
     def shutdown(self):
         pass
 
-from events.bus import EventBus, Event, HandlerResult
+from events.bus import Event, EventBus
 from events.catalog import EventType
-
-from observability.otel_setup import init_otel
-from observability.tracing import TracingHandler
 from observability.meters import MetricsHandler
+from observability.otel_setup import init_otel
 from observability.structured_logging import StructuredLogHandler
-
+from observability.tracing import TracingHandler
 
 # ── Fixtures ──────────────────────────────────────────────────
 
@@ -136,7 +131,7 @@ def run_simulated_mission(
     start_event = Event(
         type=EventType.MISSION_STARTED,
         data={
-            "mission_id": f"m-test-001",
+            "mission_id": "m-test-001",
             "goal": "Test mission",
             "complexity": complexity,
             "stage_count": len(stages),
@@ -278,7 +273,7 @@ class TestT2_SpanHierarchy:
     """Verify parent-child span relationships."""
 
     def test_mission_stage_hierarchy(self, full_bus, span_exporter):
-        cid = run_simulated_mission(full_bus, stages=["analyst"])
+        run_simulated_mission(full_bus, stages=["analyst"])
         spans = span_exporter.get_finished_spans()
 
         mission_spans = [s for s in spans if s.name == "mission"]
@@ -294,7 +289,7 @@ class TestT2_SpanHierarchy:
                 "Stage span must belong to same trace as mission"
 
     def test_tool_under_stage(self, full_bus, span_exporter):
-        cid = run_simulated_mission(full_bus, stages=["developer"], tools=["ReadFile"])
+        run_simulated_mission(full_bus, stages=["developer"], tools=["ReadFile"])
         spans = span_exporter.get_finished_spans()
 
         tool_spans = [s for s in spans if s.name.startswith("tool:")]
@@ -310,7 +305,7 @@ class TestT2_SpanHierarchy:
                 "Tool span must belong to same trace"
 
     def test_llm_under_stage(self, full_bus, span_exporter):
-        cid = run_simulated_mission(full_bus, stages=["analyst"], tools=[])
+        run_simulated_mission(full_bus, stages=["analyst"], tools=[])
         spans = span_exporter.get_finished_spans()
 
         llm_spans = [s for s in spans if s.name == "llm_call"]
@@ -320,7 +315,7 @@ class TestT2_SpanHierarchy:
             assert ls.parent is not None, "LLM span must have parent"
 
     def test_approval_under_tool(self, full_bus, span_exporter):
-        cid = run_simulated_mission(
+        run_simulated_mission(
             full_bus, stages=["analyst"], tools=["UIOverview"],
             with_approval=True,
         )
@@ -333,14 +328,14 @@ class TestT2_SpanHierarchy:
             assert aps.parent is not None, "Approval span must have parent"
 
     def test_context_assembly_under_stage(self, full_bus, span_exporter):
-        cid = run_simulated_mission(full_bus, stages=["analyst"])
+        run_simulated_mission(full_bus, stages=["analyst"])
         spans = span_exporter.get_finished_spans()
 
         ctx_spans = [s for s in spans if s.name == "context_assembly"]
         assert len(ctx_spans) >= 1, "Expected context_assembly span"
 
     def test_gate_under_stage(self, full_bus, span_exporter):
-        cid = run_simulated_mission(full_bus, stages=["analyst"], with_gate=True)
+        run_simulated_mission(full_bus, stages=["analyst"], with_gate=True)
         spans = span_exporter.get_finished_spans()
 
         gate_spans = [s for s in spans if s.name.startswith("gate:")]
@@ -409,7 +404,7 @@ class TestT4_LogTraceCorrelation:
     """Verify structured logs have trace_id and span_id."""
 
     def test_all_logs_have_trace_fields(self, full_bus, log_handler):
-        cid = run_simulated_mission(full_bus)
+        run_simulated_mission(full_bus)
         entries = log_handler.entries
         assert len(entries) > 0, "Expected log entries"
 
@@ -418,7 +413,7 @@ class TestT4_LogTraceCorrelation:
             assert "span_id" in entry, f"Missing span_id in {entry['event']}"
 
     def test_trace_id_non_empty_for_mission_events(self, full_bus, log_handler):
-        cid = run_simulated_mission(full_bus)
+        run_simulated_mission(full_bus)
         entries = log_handler.entries
 
         # After mission.started, all subsequent entries should have trace_id
@@ -576,7 +571,7 @@ class TestE2E_TraceCompleteness:
 
     def test_trivial_mission(self, full_bus, span_exporter):
         """Trivial: 1 stage, 1 tool, no approval."""
-        cid = run_simulated_mission(
+        run_simulated_mission(
             full_bus, complexity="trivial",
             stages=["developer"], tools=["ReadFile"],
         )
@@ -585,7 +580,7 @@ class TestE2E_TraceCompleteness:
 
     def test_medium_mission(self, full_bus, span_exporter):
         """Medium: 3 stages, 2 tools, with gate."""
-        cid = run_simulated_mission(
+        run_simulated_mission(
             full_bus, complexity="medium",
             stages=["analyst", "developer", "reviewer"],
             tools=["UIOverview", "ReadFile"],
@@ -596,7 +591,7 @@ class TestE2E_TraceCompleteness:
 
     def test_complex_mission(self, full_bus, span_exporter):
         """Complex: 5 stages, 3 tools, approval + rework."""
-        cid = run_simulated_mission(
+        run_simulated_mission(
             full_bus, complexity="complex",
             stages=["po", "analyst", "architect", "developer", "reviewer"],
             tools=["UIOverview", "ReadFile", "RunCommand"],

@@ -1,7 +1,8 @@
 """Mission state machine — formal states, transitions, attempt tracking."""
-from enum import Enum
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
+from enum import Enum
+
 from context.policy_telemetry import emit_policy_event
 
 

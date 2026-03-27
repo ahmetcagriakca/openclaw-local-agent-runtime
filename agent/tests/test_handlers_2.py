@@ -1,13 +1,11 @@
 """Tests for BypassDetector, ReportCollector, AnomalyDetector, MetricsExporter."""
-import pytest
 
-from events.bus import Event, EventBus, HandlerResult
+from events.bus import Event
 from events.catalog import EventType
-from events.handlers.bypass_detector import BypassDetectorHandler
-from events.handlers.report_collector import ReportCollectorHandler
 from events.handlers.anomaly_detector import AnomalyDetectorHandler
+from events.handlers.bypass_detector import BypassDetectorHandler
 from events.handlers.metrics_exporter import MetricsExporterHandler
-
+from events.handlers.report_collector import ReportCollectorHandler
 
 # ── BypassDetector (14.3) ────────────────────────────────────────
 
@@ -38,7 +36,7 @@ class TestBypassDetector:
         h(Event(type=EventType.TOOL_CLEARED,
                 data={"tool": "read_file"}, source="perm",
                 correlation_id="abc"))
-        r = h(Event(type=EventType.TOOL_EXECUTED,
+        h(Event(type=EventType.TOOL_EXECUTED,
                      data={"tool": "write_file"}, source="runner",
                      correlation_id="abc"))
         assert h.bypass_count == 1

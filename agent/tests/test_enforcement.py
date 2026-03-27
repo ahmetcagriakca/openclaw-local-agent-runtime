@@ -2,26 +2,25 @@
 
 10 scenarios from D-102 addendum validating the full governance pipeline.
 """
-import tempfile
 import shutil
+import tempfile
 
 import pytest
 
-from events.bus import Event, EventBus, HandlerResult
+from context.token_budget import BudgetConfig
+from events.bus import Event, EventBus
 from events.catalog import EventType
-from events.handlers.audit_trail import AuditTrailHandler
-from events.handlers.token_logger import TokenLoggerHandler
-from events.handlers.bypass_detector import BypassDetectorHandler
-from events.handlers.tool_permissions import ToolPermissionsHandler
-from events.handlers.budget_enforcer import BudgetEnforcerHandler
 from events.handlers.anomaly_detector import AnomalyDetectorHandler
+from events.handlers.approval_gate import ApprovalGateHandler
+from events.handlers.audit_trail import AuditTrailHandler
+from events.handlers.budget_enforcer import BudgetEnforcerHandler
+from events.handlers.bypass_detector import BypassDetectorHandler
 from events.handlers.metrics_exporter import MetricsExporterHandler
 from events.handlers.report_collector import ReportCollectorHandler
-from events.handlers.approval_gate import ApprovalGateHandler
-from events.handlers.tool_executor import ToolExecutorHandler
 from events.handlers.stage_transition import StageTransitionHandler
-
-from context.token_budget import BudgetConfig
+from events.handlers.token_logger import TokenLoggerHandler
+from events.handlers.tool_executor import ToolExecutorHandler
+from events.handlers.tool_permissions import ToolPermissionsHandler
 
 
 @pytest.fixture

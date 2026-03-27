@@ -10,7 +10,7 @@ D-090: Destructive action (reject) — confirmation handled by frontend.
 """
 import json
 import logging
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 from pathlib import Path
 
 from fastapi import APIRouter, HTTPException, Request
@@ -113,8 +113,8 @@ async def approve_approval(apv_id: str, request: Request):
     if existing:
         raise HTTPException(
             status_code=409,
-            detail=f"Bu approval icin zaten bekleyen bir onay istegi var. "
-                   f"Onceki istek islenmeden yeni istek gonderilemez.",
+            detail="Bu approval icin zaten bekleyen bir onay istegi var. "
+                   "Onceki istek islenmeden yeni istek gonderilemez.",
         )
 
     # 3. Write atomic signal artifact (D-001: no direct service call)
@@ -183,8 +183,8 @@ async def reject_approval(apv_id: str, request: Request):
     if existing:
         raise HTTPException(
             status_code=409,
-            detail=f"Bu approval icin zaten bekleyen bir red istegi var. "
-                   f"Onceki istek islenmeden yeni istek gonderilemez.",
+            detail="Bu approval icin zaten bekleyen bir red istegi var. "
+                   "Onceki istek islenmeden yeni istek gonderilemez.",
         )
 
     # 3. Write atomic signal artifact

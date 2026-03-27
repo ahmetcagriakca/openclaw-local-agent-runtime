@@ -41,7 +41,7 @@ class TestSchemas(unittest.TestCase):
         self.assertEqual(restored.missionId, "test-1")
 
     def test_03_stage_detail_with_gate(self):
-        from api.schemas import StageDetail, GateResultDetail, Finding
+        from api.schemas import Finding, GateResultDetail, StageDetail
         stage = StageDetail(
             index=0, role="tester", status="completed",
             agentUsed="gpt-general",
@@ -74,7 +74,7 @@ class TestSchemas(unittest.TestCase):
         self.assertEqual(te.sourceFile, "telemetry.jsonl")
 
     def test_07_response_meta(self):
-        from api.schemas import ResponseMeta, DataQuality
+        from api.schemas import DataQuality, ResponseMeta
         rm = ResponseMeta(freshnessMs=100, dataQuality=DataQuality.FRESH)
         data = rm.model_dump()
         self.assertEqual(data["dataQuality"], "fresh")
@@ -82,10 +82,14 @@ class TestSchemas(unittest.TestCase):
 
     def test_08_wrapper_response(self):
         """GPT Fix 3: All endpoints use wrapper responses."""
-        from api.schemas import (MissionListResponse, MissionDetailResponse,
-                                  HealthResponse, ApprovalListResponse,
-                                  TelemetryResponse, CapabilitiesResponse,
-                                  StageListResponse)
+        from api.schemas import (
+            ApprovalListResponse,
+            CapabilitiesResponse,
+            HealthResponse,
+            MissionListResponse,
+            StageListResponse,
+            TelemetryResponse,
+        )
         # All wrappers must have 'meta' field
         for cls in [MissionListResponse, HealthResponse,
                     ApprovalListResponse, TelemetryResponse,
@@ -131,7 +135,7 @@ class TestAtomicWrite(unittest.TestCase):
 class TestCache(unittest.TestCase):
 
     def test_13_miss_then_hit(self):
-        from api.cache import IncrementalFileCache, CacheStatus
+        from api.cache import CacheStatus, IncrementalFileCache
         cache = IncrementalFileCache()
         with tempfile.NamedTemporaryFile(mode="w", suffix=".json",
                                           delete=False) as f:
@@ -146,14 +150,14 @@ class TestCache(unittest.TestCase):
             os.unlink(path)
 
     def test_14_error_on_missing(self):
-        from api.cache import IncrementalFileCache, CacheStatus
+        from api.cache import CacheStatus, IncrementalFileCache
         cache = IncrementalFileCache()
         data, status = cache.get("/nonexistent/file.json")
         self.assertIsNone(data)
         self.assertEqual(status, CacheStatus.error)
 
     def test_15_error_on_corrupt(self):
-        from api.cache import IncrementalFileCache, CacheStatus
+        from api.cache import CacheStatus, IncrementalFileCache
         cache = IncrementalFileCache()
         with tempfile.NamedTemporaryFile(mode="w", suffix=".json",
                                           delete=False) as f:
@@ -428,8 +432,8 @@ class TestAPIEndpoints(unittest.TestCase):
         srv.SERVICES_PATH = Path(cls.tmpdir) / "services.json"
         srv.API_LOG_PATH = Path(cls.tmpdir) / "api.log"
 
-        from api.normalizer import MissionNormalizer
         from api.capabilities import CapabilityChecker
+        from api.normalizer import MissionNormalizer
         srv.normalizer = MissionNormalizer(
             missions_dir, srv.TELEMETRY_PATH, caps_path, approvals_dir)
         srv.capability_checker = CapabilityChecker(caps_path)

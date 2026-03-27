@@ -14,7 +14,7 @@ target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I"]
-ignore = ["E501"]  # line length handled separately
+ignore = ["E501", "E402"]  # E501: line length; E402: imports after app init / sys.path
 
 [tool.mypy]
 python_version = "3.12"

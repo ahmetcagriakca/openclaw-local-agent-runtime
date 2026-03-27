@@ -3,15 +3,14 @@ import json
 import logging
 import time
 
+from context.token_budget import BudgetConfig, TokenTracker, estimate_tokens, truncate_tool_response
 from providers.factory import create_provider
-from services.mcp_client import MCPClient
-from services.tool_catalog import get_tools_for_openai, get_tool, build_command
-from services.risk_engine import RiskEngine
 from services.approval_service import ApprovalService
 from services.approval_store import ApprovalStore
 from services.artifact_store import ArtifactStore
-
-from context.token_budget import BudgetConfig, TokenTracker, truncate_tool_response, estimate_tokens
+from services.mcp_client import MCPClient
+from services.risk_engine import RiskEngine
+from services.tool_catalog import build_command, get_tool, get_tools_for_openai
 
 logger = logging.getLogger("mcc.agent_runner")
 

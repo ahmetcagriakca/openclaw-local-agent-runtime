@@ -6,8 +6,9 @@ from __future__ import annotations
 
 import logging
 import os
-import requests
 from typing import TYPE_CHECKING
+
+import requests
 
 if TYPE_CHECKING:
     from observability.alert_engine import Alert

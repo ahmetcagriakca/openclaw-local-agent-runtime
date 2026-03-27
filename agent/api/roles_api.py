@@ -2,7 +2,7 @@
 from fastapi import APIRouter
 from pydantic import BaseModel, Field
 
-from api.schemas import ResponseMeta, DataQuality
+from api.schemas import DataQuality, ResponseMeta
 from mission.role_registry import ROLE_REGISTRY
 from mission.specialists import SPECIALIST_PROMPTS
 

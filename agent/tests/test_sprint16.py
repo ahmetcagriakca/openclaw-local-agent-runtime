@@ -11,16 +11,11 @@ Covers:
 """
 from __future__ import annotations
 
-import json
-import os
 import tempfile
 import unittest
-from datetime import datetime, timezone
 from pathlib import Path
-from unittest.mock import patch
 
 from fastapi.testclient import TestClient
-
 
 # ══════════════════════════════════════════════════════════════
 # Persistence Layer Tests
@@ -218,8 +213,8 @@ class TestAlertNotifier(unittest.TestCase):
     """Task 16.7: alert_notifier.py tests."""
 
     def test_format_message(self):
-        from observability.alert_notifier import AlertNotifier
         from observability.alert_engine import Alert
+        from observability.alert_notifier import AlertNotifier
         notifier = AlertNotifier()
         alert = Alert(
             rule_id="A-001", rule_name="Budget gates",
@@ -231,8 +226,8 @@ class TestAlertNotifier(unittest.TestCase):
         self.assertIn("m-test", msg)
 
     def test_no_token_skips_send(self):
-        from observability.alert_notifier import AlertNotifier
         from observability.alert_engine import Alert
+        from observability.alert_notifier import AlertNotifier
         notifier = AlertNotifier(bot_token="", chat_id="")
         alert = Alert("A-001", "Test", "info", "m-001", {})
         result = notifier.send_alert(alert)
@@ -301,8 +296,8 @@ class TestTelemetryQueryAPI(unittest.TestCase):
 
     def setUp(self):
         self.tmp = tempfile.mkdtemp()
-        from persistence.trace_store import TraceStore
         from persistence.metric_store import MetricStore
+        from persistence.trace_store import TraceStore
         self.trace_store = TraceStore(store_path=Path(self.tmp) / "traces.json")
         self.metric_store = MetricStore(store_path=Path(self.tmp) / "metrics.json")
 
@@ -484,9 +479,9 @@ class TestFullIntegration(unittest.TestCase):
     def test_alert_e2e(self):
         """Event → alert engine → alert fired."""
         tmp = tempfile.mkdtemp()
-        from observability.alert_engine import AlertEngine
-        from events.bus import EventBus, Event
+        from events.bus import Event, EventBus
         from events.catalog import EventType
+        from observability.alert_engine import AlertEngine
 
         engine = AlertEngine(config_path=Path(tmp) / "rules.json")
         bus = EventBus()

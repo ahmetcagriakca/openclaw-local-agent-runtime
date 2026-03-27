@@ -16,8 +16,8 @@ import subprocess
 import sys
 import threading
 import time
-import urllib.request
 import urllib.error
+import urllib.request
 
 logging.basicConfig(
     level=logging.INFO,

@@ -5,20 +5,19 @@ Console exporter for dev, OTLP for prod (future).
 """
 from __future__ import annotations
 
-from opentelemetry import trace, metrics
-from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import (
-    SimpleSpanProcessor,
-    ConsoleSpanExporter,
-    BatchSpanProcessor,
-)
+from opentelemetry import metrics, trace
 from opentelemetry.sdk.metrics import MeterProvider
 from opentelemetry.sdk.metrics.export import (
     ConsoleMetricExporter,
-    PeriodicExportingMetricReader,
     InMemoryMetricReader,
+    PeriodicExportingMetricReader,
 )
 from opentelemetry.sdk.resources import Resource
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import (
+    ConsoleSpanExporter,
+    SimpleSpanProcessor,
+)
 
 SERVICE_NAME = "vezir-runtime"
 

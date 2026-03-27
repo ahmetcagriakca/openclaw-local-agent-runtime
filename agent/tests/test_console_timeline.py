@@ -1,7 +1,7 @@
 """Tests for ConsoleTimeline handler — Task 14.12."""
 import io
 
-from events.bus import Event, EventBus, HandlerResult
+from events.bus import Event, EventBus
 from events.catalog import EventType
 from events.handlers.console_timeline import ConsoleTimelineHandler
 

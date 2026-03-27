@@ -16,7 +16,7 @@ import json
 import logging
 import threading
 import traceback
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 from pathlib import Path
 
 from fastapi import APIRouter, HTTPException, Request
@@ -206,9 +206,9 @@ async def cancel_mission(mission_id: str, request: Request):
     if existing:
         raise HTTPException(
             status_code=409,
-            detail=f"Bu mission icin zaten bekleyen bir iptal istegi var. "
-                   f"Onceki istek islenmeden yeni istek gonderilemez. "
-                   f"Mission detay sayfasindan bekleyen sinyali silebilirsiniz.",
+            detail="Bu mission icin zaten bekleyen bir iptal istegi var. "
+                   "Onceki istek islenmeden yeni istek gonderilemez. "
+                   "Mission detay sayfasindan bekleyen sinyali silebilirsiniz.",
         )
 
     # 3. Write atomic signal artifact
@@ -289,9 +289,9 @@ async def retry_mission(mission_id: str, request: Request):
     if existing:
         raise HTTPException(
             status_code=409,
-            detail=f"Bu mission icin zaten bekleyen bir retry istegi var. "
-                   f"Onceki istek islenmeden yeni istek gonderilemez. "
-                   f"Mission detay sayfasindan bekleyen sinyali silebilirsiniz.",
+            detail="Bu mission icin zaten bekleyen bir retry istegi var. "
+                   "Onceki istek islenmeden yeni istek gonderilemez. "
+                   "Mission detay sayfasindan bekleyen sinyali silebilirsiniz.",
         )
 
     # 3. Write atomic signal artifact
@@ -378,9 +378,9 @@ async def pause_mission(mission_id: str, request: Request):
     if existing:
         raise HTTPException(
             status_code=409,
-            detail=f"Bu mission icin zaten bekleyen bir duraklat istegi var. "
-                   f"Onceki istek islenmeden yeni istek gonderilemez. "
-                   f"Mission detay sayfasindan bekleyen sinyali silebilirsiniz.",
+            detail="Bu mission icin zaten bekleyen bir duraklat istegi var. "
+                   "Onceki istek islenmeden yeni istek gonderilemez. "
+                   "Mission detay sayfasindan bekleyen sinyali silebilirsiniz.",
         )
 
     # 3. Write atomic signal artifact
@@ -455,9 +455,9 @@ async def resume_mission(mission_id: str, request: Request):
     if existing:
         raise HTTPException(
             status_code=409,
-            detail=f"Bu mission icin zaten bekleyen bir devam istegi var. "
-                   f"Onceki istek islenmeden yeni istek gonderilemez. "
-                   f"Mission detay sayfasindan bekleyen sinyali silebilirsiniz.",
+            detail="Bu mission icin zaten bekleyen bir devam istegi var. "
+                   "Onceki istek islenmeden yeni istek gonderilemez. "
+                   "Mission detay sayfasindan bekleyen sinyali silebilirsiniz.",
         )
 
     # 3. Write atomic signal artifact
@@ -532,9 +532,9 @@ async def skip_stage(mission_id: str, request: Request):
     if existing:
         raise HTTPException(
             status_code=409,
-            detail=f"Bu mission icin zaten bekleyen bir aşama atlama istegi var. "
-                   f"Onceki istek islenmeden yeni istek gonderilemez. "
-                   f"Mission detay sayfasindan bekleyen sinyali silebilirsiniz.",
+            detail="Bu mission icin zaten bekleyen bir aşama atlama istegi var. "
+                   "Onceki istek islenmeden yeni istek gonderilemez. "
+                   "Mission detay sayfasindan bekleyen sinyali silebilirsiniz.",
         )
 
     # 3. Write atomic signal artifact

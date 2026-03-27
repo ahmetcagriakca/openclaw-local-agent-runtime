@@ -18,7 +18,7 @@ import time
 from typing import Any
 
 from opentelemetry import trace
-from opentelemetry.trace import StatusCode, Span
+from opentelemetry.trace import Span, StatusCode
 
 from events.bus import Event, HandlerResult
 from events.catalog import EventType

@@ -2,15 +2,17 @@
 import glob
 import json
 import os
-import time
 from datetime import datetime, timezone
 from pathlib import Path
 
 from fastapi import APIRouter, Request
 
 from api.schemas import (
-    HealthResponse, ComponentHealth, CapabilitiesResponse,
-    ResponseMeta, DataQuality,
+    CapabilitiesResponse,
+    ComponentHealth,
+    DataQuality,
+    HealthResponse,
+    ResponseMeta,
 )
 
 router = APIRouter(tags=["health"])
@@ -105,7 +107,7 @@ def _check_log_size() -> dict:
 
 @router.get("/health", response_model=HealthResponse)
 async def get_health(request: Request):
-    from api.server import normalizer, capability_checker, PORT
+    from api.server import PORT, capability_checker, normalizer
 
     now = datetime.now(timezone.utc).isoformat()
     components = {}

@@ -1,7 +1,7 @@
 """Approval API — read-only (D-059). GPT Fix 3: wrapper responses."""
 from fastapi import APIRouter, HTTPException
 
-from api.schemas import ApprovalListResponse, ApprovalEntry, APIError
+from api.schemas import APIError, ApprovalEntry, ApprovalListResponse
 
 router = APIRouter(tags=["approvals"])
 

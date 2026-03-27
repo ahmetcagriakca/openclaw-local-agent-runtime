@@ -1,14 +1,14 @@
-# OpenClaw + oc runtime Architecture
+# Vezir + oc runtime Architecture
 
-**Status:** Canonical  
-**Version:** vCurrent  
-**Date:** 2026-03-22
+**Status:** Canonical
+**Version:** vCurrent
+**Date:** 2026-03-27 (updated: OpenClaw → Vezir rebrand)
 
 ---
 
 ## 1. Purpose
 
-This architecture defines the responsibility boundaries, execution model, stabilization priorities, and security baseline for the OpenClaw + oc runtime system.
+This architecture defines the responsibility boundaries, execution model, stabilization priorities, and security baseline for the Vezir + oc runtime system.
 
 The primary objective is:
 
@@ -22,11 +22,11 @@ This architecture is intentionally split into distinct layers to avoid orchestra
 
 The system has three layers:
 
-1. **OpenClaw / Telegram**
+1. **Vezir / Telegram**
 2. **Bridge**
 3. **oc runtime**
 
-### 2.1 OpenClaw / Telegram
+### 2.1 Vezir / Telegram
 This is the conversation and intent layer.
 
 Responsibilities:
@@ -43,7 +43,7 @@ Non-responsibilities:
 - does not bypass the runtime task control plane
 
 ### 2.2 Bridge
-This is the narrow translation and trust-boundary layer between OpenClaw and oc runtime.
+This is the narrow translation and trust-boundary layer between Vezir and oc runtime.
 
 Responsibilities:
 - convert intent into canonical task contract
@@ -80,14 +80,14 @@ Non-responsibilities:
 
 ## 3. Responsibility Boundaries
 
-### 3.1 OpenClaw does
+### 3.1 Vezir does
 - intent extraction
 - task selection
 - parameter preparation
 - approval UX
 - result narration
 
-### 3.2 OpenClaw does not
+### 3.2 Vezir does not
 - manage runtime queue directly
 - call raw actions
 - implement parallel execution semantics
@@ -612,8 +612,8 @@ Scope:
 
 ### Phase 1.5 — Bridge Validation + Minimum Security Baseline
 Scope:
-- Telegram -> OpenClaw intent
-- OpenClaw -> bridge contract
+- Telegram -> Vezir intent
+- Vezir -> bridge contract
 - bridge -> oc runtime task call
 - result -> Telegram return
 - Telegram allowlist
@@ -668,7 +668,7 @@ Scope:
 - Bridge Contract Freeze
 - Telegram allowlist
 - bot token storage + rotation policy
-- OpenClaw -> oc runtime basic enqueue path
+- Vezir -> oc runtime basic enqueue path
 - structured rejection -> user-visible mapping
 
 ### P2
@@ -706,7 +706,7 @@ The following are explicitly out of scope unless later approved:
 
 | Owner | Responsibilities |
 |-------|-----------------|
-| **OpenClaw** | Conversation flow, intent extraction, approval UX, result narration |
+| **Vezir** | Conversation flow, intent extraction, approval UX, result narration |
 | **Bridge** | Translation, trust boundary, allowlist enforcement. **Never an orchestrator.** |
 | **oc runtime** | **Sole owner of task execution orchestration.** Queue, worker, runner, recovery, health. |
 
@@ -729,7 +729,7 @@ The following are explicitly out of scope unless later approved:
 
 This system is finalized around a simple rule:
 
-**OpenClaw handles conversation and intent.
+**Vezir handles conversation and intent.
 Bridge handles translation and trust boundaries.
 oc runtime handles reliable local execution.**
 

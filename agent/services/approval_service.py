@@ -23,8 +23,8 @@ Or from Dashboard (Sprint 11+): Approve/Reject buttons
 import json
 import logging
 import os
-import time
 import subprocess
+import time
 from datetime import datetime, timezone
 
 logger = logging.getLogger("mcc.approval.sunset")

@@ -4,7 +4,7 @@
 When one source fails, others continue serving.
 """
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any, Callable
 
 

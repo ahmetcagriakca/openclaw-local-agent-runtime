@@ -3,9 +3,9 @@
 Sprint 16 Task 16.15: Fail if any endpoint regressed > threshold%.
 Usage: python compare_benchmark.py baseline.json current.json --threshold 10
 """
+import argparse
 import json
 import sys
-import argparse
 
 
 def main():

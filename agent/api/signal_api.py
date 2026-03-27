@@ -1,7 +1,5 @@
 """Signal Artifact API — view and delete pending signal artifacts."""
-import json
 import logging
-from pathlib import Path
 
 from fastapi import APIRouter, HTTPException
 

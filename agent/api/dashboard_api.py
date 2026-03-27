@@ -13,8 +13,6 @@ from typing import Optional
 from fastapi import APIRouter, HTTPException, Query, Request
 from fastapi.responses import StreamingResponse
 
-from api.schemas import ResponseMeta, DataQuality
-
 logger = logging.getLogger("mcc.api.dashboard")
 
 router = APIRouter(prefix="/dashboard", tags=["dashboard"])
@@ -100,7 +98,7 @@ async def dashboard_live(request: Request):
     async def event_stream():
         try:
             # Send connected event
-            yield f"event: connected\ndata: {{}}\n\n"
+            yield "event: connected\ndata: {}\n\n"
 
             while True:
                 try:
@@ -109,7 +107,7 @@ async def dashboard_live(request: Request):
                     data = event.get("data", "{}")
                     yield f"event: {event_type}\ndata: {data}\n\n"
                 except asyncio.TimeoutError:
-                    yield f"event: heartbeat\ndata: {{}}\n\n"
+                    yield "event: heartbeat\ndata: {}\n\n"
         except asyncio.CancelledError:
             pass
         finally:

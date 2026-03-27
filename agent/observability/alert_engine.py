@@ -10,7 +10,6 @@ import logging
 import threading
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
 
 from events.bus import Event, HandlerResult
 from events.catalog import EventType

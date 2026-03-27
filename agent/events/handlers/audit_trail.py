@@ -10,7 +10,6 @@ import hashlib
 import json
 import logging
 import os
-from datetime import datetime, timezone
 
 from events.bus import Event, HandlerResult
 

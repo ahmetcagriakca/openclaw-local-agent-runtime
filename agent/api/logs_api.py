@@ -1,14 +1,9 @@
 """Logs API — expose recent errors and audit trail for the dashboard."""
 import json
-import os
 import re
-from datetime import datetime, timezone
-from pathlib import Path
-from typing import Optional
 
 from fastapi import APIRouter
 from pydantic import BaseModel, Field
-
 
 router = APIRouter(tags=["logs"])
 

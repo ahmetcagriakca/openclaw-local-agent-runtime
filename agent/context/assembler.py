@@ -1,7 +1,8 @@
 """Context Assembler — D-040/D-041/D-042 artifact distribution engine."""
+from datetime import datetime, timezone
+
 from context.artifact_identity import create_artifact_header, wrap_artifact
 from context.summary_cache import SummaryCache, generate_basic_summary, generate_metadata_view
-from datetime import datetime, timezone
 
 
 class ContextAssembler:

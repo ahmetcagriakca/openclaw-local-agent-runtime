@@ -193,7 +193,7 @@ def run_test_case(complexity: str, custom_message: str = None,
         stage_count = len(stages)
         reworks = sum(s.get("reworkCycle", 0) for s in stages)
 
-    print(f"\n  Results:")
+    print("\n  Results:")
     print(f"    Status: {status}")
     print(f"    Duration: {result['durationSec']}s")
     print(f"    Stages: {stage_count} (max expected: {tc['expected_max_stages']})")

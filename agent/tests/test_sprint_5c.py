@@ -3,21 +3,20 @@
 Converted from custom check() framework to pytest-native assertions.
 Original: 56 tests with sys.exit(0/1).
 """
+import hashlib
+import json
 import os
 import sys
-import json
-import hashlib
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from unittest.mock import MagicMock
 
+from mission.controller import MISSIONS_DIR, MissionController
+from mission.feedback_loops import FeedbackLoop
 from mission.mission_state import MissionState, MissionStatus
 from mission.quality_gates import check_gate_1, check_gate_2, check_gate_3
-from mission.feedback_loops import FeedbackLoop
 from services.approval_store import ApprovalStore
-from mission.controller import MissionController, MISSIONS_DIR
-
 
 # -- 5C-1: State Machine Unit Tests --
 

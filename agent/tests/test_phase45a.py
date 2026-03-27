@@ -8,8 +8,11 @@ import unittest
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from tools.analyze_telemetry import (
-    analyze_telemetry, analyze_missions, generate_report,
-    load_telemetry_events, load_mission_summaries
+    analyze_missions,
+    analyze_telemetry,
+    generate_report,
+    load_mission_summaries,
+    load_telemetry_events,
 )
 
 

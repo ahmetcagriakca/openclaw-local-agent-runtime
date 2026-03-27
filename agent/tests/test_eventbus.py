@@ -3,7 +3,7 @@ import pytest
 
 from events.bus import Event, EventBus, HandlerResult
 from events.catalog import EventType
-from events.correlation import new_correlation_id, get_correlation_id, set_correlation_id
+from events.correlation import get_correlation_id, new_correlation_id, set_correlation_id
 
 
 class TestEvent:

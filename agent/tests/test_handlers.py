@@ -1,12 +1,10 @@
 """Tests for TokenLogger, ToolPermissions, BudgetEnforcer handlers."""
-import pytest
 
-from events.bus import Event, EventBus, HandlerResult
+from events.bus import Event, EventBus
 from events.catalog import EventType
+from events.handlers.budget_enforcer import BudgetEnforcerHandler
 from events.handlers.token_logger import TokenLoggerHandler
 from events.handlers.tool_permissions import ToolPermissionsHandler
-from events.handlers.budget_enforcer import BudgetEnforcerHandler
-
 
 # ── TokenLogger (14.2) ──────────────────────────────────────────
 

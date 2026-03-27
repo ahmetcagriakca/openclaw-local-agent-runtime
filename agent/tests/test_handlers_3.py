@@ -1,13 +1,11 @@
 """Tests for ApprovalGate, ToolExecutor, LLMExecutor, StageTransition."""
-import pytest
 
-from events.bus import Event, EventBus, HandlerResult
+from events.bus import Event, EventBus
 from events.catalog import EventType
 from events.handlers.approval_gate import ApprovalGateHandler
-from events.handlers.tool_executor import ToolExecutorHandler
 from events.handlers.llm_executor import LLMExecutorHandler
-from events.handlers.stage_transition import StageTransitionHandler, ContextAssemblerHandler
-
+from events.handlers.stage_transition import ContextAssemblerHandler, StageTransitionHandler
+from events.handlers.tool_executor import ToolExecutorHandler
 
 # ── ApprovalGate (14.6) ─────────────────────────────────────────
 
@@ -192,15 +190,17 @@ class TestFullPipeline:
 
     def test_13_handlers_registered(self):
         """All 13 handlers can be registered on a single bus."""
-        from events.handlers.audit_trail import AuditTrailHandler
-        from events.handlers.token_logger import TokenLoggerHandler
-        from events.handlers.bypass_detector import BypassDetectorHandler
-        from events.handlers.tool_permissions import ToolPermissionsHandler
-        from events.handlers.budget_enforcer import BudgetEnforcerHandler
-        from events.handlers.report_collector import ReportCollectorHandler
+        import shutil
+        import tempfile
+
         from events.handlers.anomaly_detector import AnomalyDetectorHandler
+        from events.handlers.audit_trail import AuditTrailHandler
+        from events.handlers.budget_enforcer import BudgetEnforcerHandler
+        from events.handlers.bypass_detector import BypassDetectorHandler
         from events.handlers.metrics_exporter import MetricsExporterHandler
-        import tempfile, shutil
+        from events.handlers.report_collector import ReportCollectorHandler
+        from events.handlers.token_logger import TokenLoggerHandler
+        from events.handlers.tool_permissions import ToolPermissionsHandler
 
         tmpdir = tempfile.mkdtemp()
         try:

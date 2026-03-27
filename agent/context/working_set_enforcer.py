@@ -1,10 +1,14 @@
 """Working Set Enforcer — intercepts filesystem tool calls and enforces bounded access."""
 from dataclasses import dataclass
-from context.working_set import WorkingSet
+
 from context.path_resolver import (
-    resolve_canonical, is_path_within, is_path_under_directory, is_path_forbidden
+    is_path_forbidden,
+    is_path_under_directory,
+    is_path_within,
+    resolve_canonical,
 )
 from context.policy_telemetry import emit_policy_event
+from context.working_set import WorkingSet
 
 
 @dataclass

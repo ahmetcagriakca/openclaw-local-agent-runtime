@@ -444,11 +444,11 @@ class MissionController:
 
         Returns (plan_dict, complexity_class).
         """
-        from providers.factory import create_provider
-        from mission.complexity_router import classify_complexity
-        from mission.role_registry import resolve_role, get_role
-        from mission.skill_contracts import validate_role_skill
         from context.policy_telemetry import emit_policy_event
+        from mission.complexity_router import classify_complexity
+        from mission.role_registry import get_role, resolve_role
+        from mission.skill_contracts import validate_role_skill
+        from providers.factory import create_provider
 
         provider, _ = create_provider(self.planner_agent_id)
 
@@ -1038,7 +1038,7 @@ Respond ONLY with a JSON object, no markdown:
         D-053: Every mission stage must have a working set.
         D-048: Canonical role naming — "executor" maps to "remote-operator".
         """
-        from context.working_set import WorkingSet, FileAccess, ReadBudget
+        from context.working_set import FileAccess, ReadBudget, WorkingSet
 
         # controller.py is at agent/mission/controller.py → 3x dirname = project root
         oc_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -1132,8 +1132,8 @@ Respond ONLY with a JSON object, no markdown:
         Ollama for compression. Falls back to gpt-general if provider
         unavailable.
         """
-        from mission.role_registry import get_role, resolve_role
         from context.policy_telemetry import emit_policy_event
+        from mission.role_registry import get_role, resolve_role
 
         canonical = resolve_role(role_name)
         role_def = get_role(canonical)
@@ -1229,9 +1229,9 @@ Respond ONLY with a JSON object, no markdown:
 
         Returns: "proceed" | "abort" | "stages_modified"
         """
-        from mission.quality_gates import check_gate_1, check_gate_2, check_gate_3
-        from mission.feedback_loops import FeedbackLoop
         from context.policy_telemetry import emit_policy_event
+        from mission.feedback_loops import FeedbackLoop
+        from mission.quality_gates import check_gate_1, check_gate_2, check_gate_3
 
         # Lazy-init feedback loop for this mission (D-103: complexity-based limits)
         if not hasattr(self, '_feedback_loop') or self._feedback_loop is None:
@@ -1774,6 +1774,7 @@ Respond ONLY with a JSON object, no markdown:
                                  assembler=None, expansion_broker=None) -> bool:
         """Check for pending pause signal. Returns True if mission should pause."""
         from pathlib import Path
+
         from api.mutation_bridge import has_pending_signal
 
         missions_dir = Path(MISSIONS_DIR)
@@ -1802,6 +1803,7 @@ Respond ONLY with a JSON object, no markdown:
         """Block until resume signal arrives or timeout. Returns True if resumed."""
         import logging
         from pathlib import Path
+
         from api.mutation_bridge import has_pending_signal
 
         logger = logging.getLogger("mcc.controller")

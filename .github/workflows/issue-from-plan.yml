@@ -27,6 +27,28 @@ jobs:
       - name: Install dependencies
         run: pip install pyyaml
 
+      - name: Ensure labels exist
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SPRINT_NUMBER: ${{ inputs.sprint_number }}
+        run: |
+          python3 << 'LABEL_SCRIPT'
+          import os, subprocess, yaml
+          sprint = os.environ["SPRINT_NUMBER"]
+          plan_path = f"docs/sprints/sprint-{sprint}/plan.yaml"
+          with open(plan_path) as f:
+              plan = yaml.safe_load(f)
+          labels = set(plan.get("issue", {}).get("labels", []))
+          for t in plan.get("tasks", []):
+              labels.update(t.get("labels", []))
+          for label in sorted(labels):
+              result = subprocess.run(["gh", "label", "create", label, "--force"], capture_output=True, text=True)
+              if result.returncode == 0:
+                  print(f"Label ensured: {label}")
+              else:
+                  print(f"Label warning: {label} — {result.stderr.strip()}")
+          LABEL_SCRIPT
+
       - name: Create issues from plan.yaml
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,51 @@
+name: Sprint Task
+description: Create a sprint task issue
+title: "[S{sprint}-{task_id}] "
+labels: ["sprint"]
+body:
+  - type: input
+    id: sprint
+    attributes:
+      label: Sprint Number
+      placeholder: "20"
+    validations:
+      required: true
+  - type: input
+    id: task_id
+    attributes:
+      label: Task ID
+      placeholder: "20.1"
+    validations:
+      required: true
+  - type: dropdown
+    id: type
+    attributes:
+      label: Task Type
+      options:
+        - implementation
+        - gate
+        - process
+    validations:
+      required: true
+  - type: input
+    id: track
+    attributes:
+      label: Track
+      placeholder: "Track 1"
+  - type: input
+    id: branch
+    attributes:
+      label: Branch Name
+      placeholder: "sprint-20/t20.1-slug"
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      placeholder: "What this task delivers..."
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance Criteria
+      placeholder: "- [ ] Criterion 1\n- [ ] Criterion 2"

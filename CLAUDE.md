@@ -16,20 +16,22 @@ Telegram bot integration, Math Service on :9000.
 - Phase 5B: implementation_status=done, closure_status=closed (Sprint 10)
 - Phase 5C: implementation_status=done, closure_status=closed (Sprint 11)
 - Phase 5D: implementation_status=done, closure_status=closed (Sprint 12)
+- Sprint 15: implementation_status=done, closure_status=closed (OTel Observability)
 - Frozen decisions: D-001 → D-101 (decision debt zero)
 
 ## Last Completed Sprint
 
-Sprint 12 — Phase 5D: Polish + Phase 5 Closure
+Sprint 15 — Full Observability: OpenTelemetry Integration
 
 Outputs:
-- OpenAPI spec export (D-100): docs/api/openapi.json — 14 endpoints, 24 schemas
-- E2E test suite (D-098): 16 scenarios, 39 tests
-- Accessibility audit: ARIA landmarks, dialog semantics, status indicators
-- Performance benchmark: all endpoints <50ms
-- Operator guide: docs/OPERATOR-GUIDE.md — 11 sections
-- Legacy dashboard deprecation (D-097): banner + startup warning
-- Phase 5 scoreboard: 15/15 PASS
+- TracingHandler: 28/28 event types → OTel spans, zero blind spots
+- MetricsHandler: 17 instruments (6 counters + 11 histograms)
+- StructuredLogHandler: JSON logs with trace_id/span_id injection
+- Span hierarchy: mission → stage → tool/llm → approval (4 levels)
+- 27 new tests (T1-T5 coverage + E2E trace completeness + edge cases)
+- observability/README.md: coverage map, ID contract, metric catalog, extension guide
+- No-blind-spots closure blocker test: PASS
+- Full suite: 418/419 PASS (1 pre-existing health check)
 - Decision debt zero: D-001→D-101 all frozen
 - Backend 234 tests, Frontend 29 tests, 0 failures
 - Decisions: D-097→D-101

@@ -1,0 +1,66 @@
+=== Structured Log Sample (first 5 entries) ===
+{
+  "ts": "2026-03-27T05:45:03.428699+00:00",
+  "level": "INFO",
+  "event": "mission.started",
+  "trace_id": "92b81df4a655b64dc6cdc2e3ccb9153d",
+  "span_id": "e96c9d64456122dc",
+  "mission_id": "m-sample-001",
+  "correlation_id": "sample-001"
+}
+{
+  "ts": "2026-03-27T05:45:03.428885+00:00",
+  "level": "INFO",
+  "event": "stage.entering",
+  "trace_id": "92b81df4a655b64dc6cdc2e3ccb9153d",
+  "span_id": "e96c9d64456122dc",
+  "mission_id": "",
+  "correlation_id": "sample-001",
+  "stage": "analyst",
+  "specialist": "analyst"
+}
+{
+  "ts": "2026-03-27T05:45:03.428994+00:00",
+  "level": "INFO",
+  "event": "tool.requested",
+  "trace_id": "92b81df4a655b64dc6cdc2e3ccb9153d",
+  "span_id": "e96c9d64456122dc",
+  "mission_id": "",
+  "correlation_id": "sample-001",
+  "tool": "UIOverview",
+  "stage": "analyst",
+  "role": "analyst",
+  "response_tokens": 0
+}
+{
+  "ts": "2026-03-27T05:45:03.429066+00:00",
+  "level": "INFO",
+  "event": "tool.executed",
+  "trace_id": "92b81df4a655b64dc6cdc2e3ccb9153d",
+  "span_id": "e96c9d64456122dc",
+  "mission_id": "",
+  "correlation_id": "sample-001",
+  "tool": "UIOverview",
+  "stage": "analyst",
+  "role": "",
+  "response_tokens": 1200
+}
+{
+  "ts": "2026-03-27T05:45:03.429148+00:00",
+  "level": "INFO",
+  "event": "llm.requested",
+  "trace_id": "92b81df4a655b64dc6cdc2e3ccb9153d",
+  "span_id": "e96c9d64456122dc",
+  "mission_id": "",
+  "correlation_id": "sample-001",
+  "stage": "analyst",
+  "model": "gpt-4o",
+  "input_tokens": 3000,
+  "output_tokens": 0
+}
+
+Total entries: 8
+All entries have trace_id field: True
+All entries have span_id field: True
+
+RESULT: Structured log sample PASS

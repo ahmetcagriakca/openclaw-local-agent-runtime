@@ -1,1 +1,29 @@
-workflow-run-log: Run #2 — 11 issues created, issues.json generated, push to main failed (branch protection). Labels created successfully. Issues: #5 (parent), #6-#16 (tasks).
+Workflow: Create Issues from plan.yaml (issue-from-plan.yml)
+
+Run #1 — FAIL
+  Cause: Labels not found (sprint, phase-6, etc. did not exist in repo)
+  Fix: Added "Ensure labels exist" step (PR #4)
+
+Run #2 — PARTIAL (issue creation SUCCESS, commit FAIL)
+  Issues created: #5 (parent), #6-#16 (task issues) — 12 total
+  Commit step failed: GH006 Protected branch update failed for refs/heads/main
+  Fix: Changed to PR-based commit (PR #18)
+
+Run #3 — PARTIAL (issue creation SUCCESS, PR creation FAIL)
+  Issues detected as existing (idempotent) — no duplicates created
+  PR created but auto-merge failed: GitHub Free plan does not support enablePullRequestAutoMerge
+  Fix: Changed --auto to --admin merge (PR #21)
+
+Run #4 — PARTIAL (PR created, merge failed due to permission)
+  PR #20 created by workflow, but merge failed: Actions not permitted to create PRs
+  Fix: Enabled "Allow GitHub Actions to create and approve pull requests" in repo settings
+
+Run #5 — SUCCESS
+  All steps passed. Duration: 32s
+  Labels ensured (idempotent)
+  Issues detected as existing (idempotent) — no duplicates
+  issues.json written
+  Branch auto/s19-issues-json created
+  PR created and merged via --admin
+  issues.json successfully committed to main via PR
+  GitHub Actions run URL: https://github.com/ahmetcagriakca/vezir/actions/runs/23662884082

@@ -51,11 +51,7 @@
 
 ## Next Sprint
 
-**Sprint 17 — Phase 6 Controlled Start**
-- Status: IN PROGRESS (implementation done, pending closure)
-- Model: A (forced — D-105)
-- D-109 frozen: benchmark evidence-only
-- D-110 frozen: doc model dual source
-- Mid review gate: PASS
-- Final review gate: PASS
-- Awaiting: operator sign-off for closure
+**Sprint 18 — Phase 6**
+- Status: NOT STARTED
+- Kickoff gate: OPEN
+- Sprint 17 closed (Model A reset — next sprint can be A or B)

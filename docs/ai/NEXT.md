@@ -54,11 +54,12 @@ Cleanup     Ruff fix + test fix + OpenClaw→Vezir rebrand     —      CLOSED (
 | Repository | Concern-based backend, feature-based frontend |
 | Developer experience | Pre-commit hooks, ruff, CONTRIBUTING.md |
 
-## Sprint 17 — Phase 6 Controlled Start (IN PROGRESS)
+## Sprint 17 — Phase 6 Controlled Start (CLOSED)
 
 **Model:** A (forced — D-105)
-**Scope:** CI benchmark fix, doc model alignment, decision freeze (D-109, D-110)
+**Scope:** CI benchmark fix, dependency fix, doc model alignment, decision freeze (D-109, D-110)
 **Kickoff:** `docs/sprints/sprint-17/S17-KICKOFF.md`
+**Review:** PASS (3 rounds) — `docs/ai/reviews/S17-REVIEW.md`
 
 ## Phase 6 — Roadmap
 

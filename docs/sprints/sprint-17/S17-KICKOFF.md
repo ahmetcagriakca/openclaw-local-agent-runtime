@@ -8,7 +8,7 @@
 | Phase | 6 |
 | Model | **A** (forced — D-105: max 2 consecutive Model B, S13-S16 were Model B) |
 | implementation_status | done |
-| closure_status | review_pending |
+| closure_status | closed |
 | Owner | AKCA |
 | Date | 2026-03-27 |
 

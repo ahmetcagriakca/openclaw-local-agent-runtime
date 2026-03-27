@@ -1,7 +1,8 @@
 # Sprint 13 — Phase 5.5: Stabilization
 
 **implementation_status:** done
-**closure_status:** closed (operator sign-off: 2026-03-26)
+**closure_status:** closed (operator sign-off: 2026-03-26, retroactive evidence + waivers: 2026-03-27)
+**D-102 amendment:** Scope reconciliation applied (commit `9e61777`). Sprint 13 delivered L1+L2 only; deferred items documented.
 **Owner:** AKCA (operator)
 **Implementer:** Claude Code
 

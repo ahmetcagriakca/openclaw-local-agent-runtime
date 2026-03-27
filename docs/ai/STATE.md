@@ -1,7 +1,7 @@
 # Current State
 
 **Last updated:** 2026-03-27
-**Active phase:** Sprint 19 CLOSED — Single-Repo Automation MVP (2026-03-27)
+**Active phase:** Sprint 20 CLOSED — Project Integration + PR Traceability (2026-03-27)
 **Doc model:** This file is canonical for system state. Session context lives in `docs/ai/handoffs/current.md`.
 **Note:** All sprints through 16 closed. Phase 6 ready to start. Phase 2 deferred — single-user localhost, security hardening not urgent.
 **Persistence:** State is file-persisted (state.json, mission.json). Mission history via persistence layer (Sprint 16).
@@ -47,7 +47,7 @@
 | Mission Control API | Operational (~35 endpoints) | `agent/api/server.py` on :8003 |
 | SSE Manager | Operational (broadcast, heartbeat 30s) | `agent/api/sse_manager.py` |
 | Session Model | Foundation (operator identity, no auth flow) | `agent/auth/session.py` |
-| CI/CD Pipeline | 4 GitHub Actions workflows (ci, benchmark, evidence, issue-from-plan) | `.github/workflows/` |
+| CI/CD Pipeline | 7 GitHub Actions workflows | `.github/workflows/` |
 | Branch Protection | Active on main (require PR, no direct push) | GitHub Settings |
 | Issue Automation | plan.yaml → issues + issues.json via workflow | `.github/workflows/issue-from-plan.yml` |
 
@@ -74,6 +74,7 @@
 | Sprint 17 | Phase 6 Controlled Start (CI fix + doc alignment) | Closed |
 | Sprint 18 | Repo Cleanup (source-of-truth compression) | Closed |
 | Sprint 19 | Single-Repo Automation MVP (plan.yaml + issues + branches) | Closed |
+| Sprint 20 | Project Integration + PR Traceability | Closed |
 
 ## Test Evidence
 

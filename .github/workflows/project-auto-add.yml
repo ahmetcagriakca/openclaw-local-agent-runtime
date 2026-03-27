@@ -1,0 +1,68 @@
+name: Auto-add issues to project
+
+on:
+  issues:
+    types: [opened, labeled]
+
+permissions:
+  issues: read
+  repository-projects: write
+
+jobs:
+  add-to-project:
+    runs-on: ubuntu-latest
+    if: contains(github.event.issue.labels.*.name, 'sprint')
+    steps:
+      - name: Add issue to project
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_URL: ${{ github.event.issue.html_url }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+        run: |
+          echo "Issue #${ISSUE_NUMBER}: ${ISSUE_TITLE}"
+          echo "Labels include 'sprint' — eligible for project board"
+
+          # Get project ID (first project in repo)
+          PROJECT_ID=$(gh api graphql -f query='
+            query($owner: String!, $repo: String!) {
+              repository(owner: $owner, name: $repo) {
+                projectsV2(first: 1) {
+                  nodes { id title }
+                }
+              }
+            }
+          ' -f owner="${GITHUB_REPOSITORY_OWNER}" -f repo="${GITHUB_REPOSITORY#*/}" \
+            --jq '.data.repository.projectsV2.nodes[0].id' 2>/dev/null || true)
+
+          if [ -z "$PROJECT_ID" ] || [ "$PROJECT_ID" = "null" ]; then
+            echo "No project found in repository. Skipping auto-add."
+            echo "Create a GitHub Project V2 board to enable this workflow."
+            exit 0
+          fi
+
+          echo "Project ID: $PROJECT_ID"
+
+          # Get issue node ID
+          ISSUE_NODE_ID=$(gh api graphql -f query='
+            query($owner: String!, $repo: String!, $number: Int!) {
+              repository(owner: $owner, name: $repo) {
+                issue(number: $number) { id }
+              }
+            }
+          ' -f owner="${GITHUB_REPOSITORY_OWNER}" -f repo="${GITHUB_REPOSITORY#*/}" \
+            -F number="$ISSUE_NUMBER" --jq '.data.repository.issue.id')
+
+          echo "Issue Node ID: $ISSUE_NODE_ID"
+
+          # Add to project (idempotent — adding existing item is a no-op)
+          RESULT=$(gh api graphql -f query='
+            mutation($projectId: ID!, $contentId: ID!) {
+              addProjectV2ItemById(input: {projectId: $projectId, contentId: $contentId}) {
+                item { id }
+              }
+            }
+          ' -f projectId="$PROJECT_ID" -f contentId="$ISSUE_NODE_ID" 2>&1 || true)
+
+          echo "Result: $RESULT"
+          echo "Issue #${ISSUE_NUMBER} added to project board."

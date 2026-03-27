@@ -1,0 +1,61 @@
+{
+  "sprint": 20,
+  "parent_issue": 39,
+  "tasks": {
+    "20.1": {
+      "issue": 40,
+      "branch": "sprint-20/t20.1-plan-schema",
+      "pr": null
+    },
+    "20.2": {
+      "issue": 41,
+      "branch": "sprint-20/t20.2-labels-milestones",
+      "pr": null
+    },
+    "20.3": {
+      "issue": 42,
+      "branch": "sprint-20/t20.3-issue-templates",
+      "pr": null
+    },
+    "20.4": {
+      "issue": 43,
+      "branch": "sprint-20/t20.4-project-auto-add",
+      "pr": null
+    },
+    "20.5": {
+      "issue": 44,
+      "branch": "sprint-20/t20.5-status-sync",
+      "pr": null
+    },
+    "20.6": {
+      "issue": 45,
+      "branch": "sprint-20/t20.6-pr-validator",
+      "pr": null
+    },
+    "20.7": {
+      "issue": 46,
+      "branch": "sprint-20/t20.7-pr-linkage",
+      "pr": null
+    },
+    "20.G1": {
+      "issue": 47,
+      "branch": null,
+      "pr": null
+    },
+    "20.G2": {
+      "issue": 48,
+      "branch": null,
+      "pr": null
+    },
+    "20.RETRO": {
+      "issue": 49,
+      "branch": null,
+      "pr": null
+    },
+    "20.CLOSURE": {
+      "issue": 50,
+      "branch": null,
+      "pr": null
+    }
+  }
+}

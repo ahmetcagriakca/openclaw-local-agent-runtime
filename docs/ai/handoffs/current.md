@@ -1,4 +1,4 @@
-# Session Handoff — 2026-03-27 (Session 4)
+# Session Handoff — 2026-03-27 (Session 5)
 
 **Platform:** Vezir Platform
 **Operator:** AKCA
@@ -7,42 +7,34 @@
 
 ## Session Summary
 
-2 sprint kapatıldı:
+Sprint 19 kapatıldı:
 
 | Sprint | Scope | Model | Status |
 |--------|-------|-------|--------|
-| 17 | CI fix + doc alignment + D-109/D-110 | A | Closed |
-| 18 | Repo cleanup (source-of-truth compression) | B | Closed |
+| 19 | Single-Repo Automation MVP | A | Closed |
 
 ---
 
-## Sprint 17 Deliverables
-- benchmark.yml fix (broken path + dead compare step)
-- requirements.txt + package-lock.json CI dependency fix
-- benchmark_api.py summary fix (no false claims)
-- D-109 frozen (benchmark evidence-only)
-- D-110 frozen (doc model dual source)
-- GPT review: PASS (3 rounds)
-
-## Sprint 18 Deliverables
-- GOVERNANCE.md (PROCESS-GATES + PROTOCOL merged, 461→164 lines)
-- CLAUDE.md rewrite (176→83 lines)
-- NEXT.md, BACKLOG.md simplified (forward/open only)
-- 116 files archived via git mv (history preserved)
-- D-111→D-114 frozen
-- Stale references fixed in 4 active files
-- GPT review: PASS (2 rounds)
+## Sprint 19 Deliverables
+- `plan.yaml` schema freeze + validator (`tools/validate-plan-sync.py`)
+- `issue-from-plan.yml` GitHub Actions workflow (label bootstrap + PR-based commit)
+- `issues.json` mapping (12 GitHub issues created automatically)
+- `BRANCH-CONTRACT.md` + `check-branch-name.sh`
+- `GOVERNANCE.md` (9 shared rules)
+- `main` branch protection enabled + verified
+- GPT review: Mid PASS (1 round) + Final PASS (3 rounds, P1-P8 patches)
 
 ---
 
 ## Current State
 
 - **Phase:** 6
-- **Last closed sprint:** 18
+- **Last closed sprint:** 19
 - **Decisions:** 114 frozen (D-001→D-114)
 - **Tests:** 458 backend + 29 frontend PASS
-- **CI:** 4 workflows green (CI, Benchmark, Evidence Collection, CodeQL)
-- **Sprint 19:** NOT STARTED, kickoff gate OPEN
+- **CI:** 5 workflows (CI, Benchmark, Evidence Collection, CodeQL, issue-from-plan)
+- **Branch protection:** Active on main (require PR)
+- **Sprint 20:** NOT STARTED
 
 ## Canonical Docs (D-110, D-112)
 
@@ -52,11 +44,15 @@
 | `docs/ai/NEXT.md` | Roadmap (canonical) |
 | `docs/ai/DECISIONS.md` | Decision index (canonical) |
 | `docs/ai/GOVERNANCE.md` | Sprint governance (canonical) |
+| `docs/shared/GOVERNANCE.md` | Shared governance rules (S19+) |
+| `docs/shared/BRANCH-CONTRACT.md` | Branch naming contract (S19+) |
 | `docs/ai/BACKLOG.md` | Open backlog (canonical) |
 | This file | Session context (supplementary) |
 
 ## Open Items
 
-- Sprint 19 scope TBD by operator
+- Sprint 20 scope: Project integration + PR traceability (per EXECUTION-PLAN)
+- `gh` CLI not installed — recommended for S20
 - Dependabot moderate vulnerability (1) on default branch
 - D-021→D-058 extraction (AKCA-assigned, non-blocking)
+- PR field backfill in issues.json deferred to S20 (task 20.7)

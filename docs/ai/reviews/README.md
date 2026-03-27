@@ -16,6 +16,24 @@ D{N}-REVIEW.md          — Decision record review
 PHASE-{N}-REVIEW.md     — Phase closure review
 ```
 
+## Closure Flow (Frozen)
+
+```
+sprint-finalize.sh  →  ELIGIBLE / NOT CLOSEABLE
+Review verdict      →  PASS (eligible for operator close) / HOLD + patch list
+Operator sign-off   →  closure_status=closed
+```
+
+**`closure_status=closed` is operator-only.** No tool, no review verdict, no automation can set it. PASS means "documents are defensible, operator may close" — not "closed."
+
+## Verdict Definitions
+
+| Verdict | Meaning | Next Action |
+|---------|---------|-------------|
+| PASS | Eligible for operator close | Operator signs off → `closure_status=closed` |
+| HOLD | Patches required before re-review | Claude Code applies patches, re-runs finalize |
+| FAIL | Fundamental issue, sprint cannot close | Investigate root cause, may require re-scoping |
+
 ## File Format
 
 ```markdown
@@ -27,7 +45,9 @@ PHASE-{N}-REVIEW.md     — Phase closure review
 
 ## Verdict
 
-PASS | HOLD | FAIL
+PASS — eligible for operator close
+(or: HOLD — N patches required)
+(or: FAIL — reason)
 
 ## Findings
 
@@ -46,6 +66,7 @@ PASS | HOLD | FAIL
 ## Next Step
 
 → Claude Code: [exact action]
+→ Operator: [sign-off action if PASS]
 ```
 
 ## Current Reviews

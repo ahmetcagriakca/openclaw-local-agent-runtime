@@ -156,8 +156,9 @@ python tools/analyze_telemetry.py --last 5
 3. Commit + push
 4. Operator sends: "S{N} review packet hazır"
 5. Reviewer writes verdict to `docs/ai/reviews/S{N}-REVIEW.md`
-6. Claude Code reads verdict, applies patches if HOLD
-7. Re-run finalize, push
+   - PASS = eligible for operator close (NOT closed)
+   - HOLD = patches required, Claude Code applies + re-run finalize
+6. **Operator sign-off → `closure_status=closed`** (operator-only, never automatic)
 
 ### Operator → Claude Code Communication
 - Review verdicts: `docs/ai/reviews/`

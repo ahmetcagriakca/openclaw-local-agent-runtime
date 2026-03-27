@@ -1,10 +1,10 @@
 # Sprint 14A — Event-Driven Architecture + Backend Restructure
 
 **Phase:** 5.5-B (Structural Hardening)
-**Source:** SPRINT-14-ADVANCE-PLAN.md Option A (Sprint 14A)
-**implementation_status:** not_started
-**closure_status:** not_started
-**Predecessor:** Sprint 13 — closure pending
+**Source:** SPRINT-14-ADVANCE-PLAN.md Option A (archived to docs/archive/sprint-14/)
+**implementation_status:** done
+**closure_status:** closed (operator sign-off: 2026-03-26)
+**Predecessor:** Sprint 13 — closed
 
 ---
 

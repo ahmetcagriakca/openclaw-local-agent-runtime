@@ -1,8 +1,10 @@
 # Sprint 14A — Kickoff Gate
 
+> **Historical snapshot.** This document records the pre-kickoff gate state as it was when Sprint 14A planning began. The sprint was subsequently delivered and closed with retroactive waivers. For current closure truth see `S14-CLOSURE-CONFIRMATION.md` and `S14-EVIDENCE-AUDIT-RESULT.md`.
+
 **Date:** TBD
 **Sprint:** 14A — Event-Driven Architecture + Backend Restructure
-**Source:** SPRINT-14-ADVANCE-PLAN.md Option A
+**Source:** SPRINT-14-ADVANCE-PLAN.md Option A (archived to docs/archive/sprint-14/)
 **Previous sprint:** Sprint 13 — closure pending
 
 ---
@@ -41,7 +43,7 @@ requires explicit operator re-confirmation before Sprint 14A kickoff.
 | 1 | docs/sprints/sprint-14/S14-README.md |
 | 2 | docs/sprints/sprint-14/S14-KICKOFF-GATE.md |
 | 3 | docs/sprints/sprint-14/S14-TASK-BREAKDOWN.md |
-| 4 | docs/sprints/sprint-14/SPRINT-14-ADVANCE-PLAN.md (source of truth) |
+| 4 | docs/archive/sprint-14/SPRINT-14-ADVANCE-PLAN.md (archived) |
 
 ---
 

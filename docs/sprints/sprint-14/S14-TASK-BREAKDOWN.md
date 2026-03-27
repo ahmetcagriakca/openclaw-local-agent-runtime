@@ -1,10 +1,10 @@
 # Sprint 14A — Task Breakdown
 
-**Source:** SPRINT-14-ADVANCE-PLAN.md Option A
+**Source:** SPRINT-14-ADVANCE-PLAN.md Option A (archived to docs/archive/sprint-14/)
 **Date:** 2026-03-26
 **Phase:** 5.5-B — Event-Driven Architecture + Backend Restructure
-**implementation_status:** not_started
-**closure_status:** not_started
+**implementation_status:** done
+**closure_status:** closed (operator sign-off: 2026-03-26)
 **Owner:** AKCA (operator)
 
 ---

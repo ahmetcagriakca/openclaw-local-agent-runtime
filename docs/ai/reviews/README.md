@@ -73,4 +73,4 @@ PASS — eligible for operator close
 
 | File | Sprint | Verdict | Date |
 |------|--------|---------|------|
-| *(none yet — first review will appear here)* | | | |
+| S17-REVIEW.md | Sprint 17 | PASS (3rd round) | 2026-03-27 |

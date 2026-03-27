@@ -11,10 +11,23 @@ sprints:
   17:
     forced_model: "A"
     reason: "D-105 constraint: Sprint 17 is first sprint after Phase 5.5 closure. Model A mandatory after S13-S16 consecutive Model B run."
+    require_previous_sprint_closed: true
+    require_mid_review_task: true
+    require_final_review_task: true
+    max_open_decisions: 2
+    require_evidence_checklist: true
+    require_acceptance_criteria: true
+    require_exit_criteria: true
   # 18 and beyond: not configured = operator declares at kickoff
-  # Add entries here to override: e.g. "18: {forced_model: A, reason: '...'}"
+  # Add entries here to override: e.g. "18: {forced_model: A, ...}"
 
 defaults:
-  # If sprint not listed above, operator must explicitly pass --model
   require_explicit_model: true
   max_consecutive_model_b: 2
+  require_previous_sprint_closed: true
+  require_mid_review_task: true
+  require_final_review_task: true
+  max_open_decisions: 2
+  require_evidence_checklist: true
+  require_acceptance_criteria: true
+  require_exit_criteria: true

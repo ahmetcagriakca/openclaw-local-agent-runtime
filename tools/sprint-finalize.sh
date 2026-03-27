@@ -30,17 +30,16 @@ SKIP_TESTS=false
 while [[ $# -gt 0 ]]; do
     case "$1" in
         --model)
-            shift
-            MODEL="${1:-B}"
-            ;;
+            shift; MODEL="${1:-B}"; shift;;
+        --model=*)
+            MODEL="${1#--model=}"; shift;;
         --skip-tests)
-            SKIP_TESTS=true
-            ;;
+            SKIP_TESTS=true; shift;;
         [0-9]*)
-            SPRINT="$1"
-            ;;
+            SPRINT="$1"; shift;;
+        *)
+            shift;;
     esac
-    shift
 done
 
 if [[ -z "$SPRINT" ]]; then
@@ -69,6 +68,47 @@ if command -v python3 &>/dev/null; then
 else
     check_fail "python3 not found — required for sprint-audit.py"
     exit 1
+fi
+
+# ── 1b. Policy enforcement (fail-fast before all other checks) ────────────────
+
+echo ""
+echo "── Step 1b: Policy check (sprint-policy.yml)"
+
+POLICY_FILE="$SCRIPT_DIR/sprint-policy.yml"
+if [[ -f "$POLICY_FILE" ]]; then
+    FORCED=$(python3 - <<PYEOF 2>/dev/null
+import re, sys
+content = open("$POLICY_FILE").read()
+block = re.search(r'^\s+${SPRINT}:\s*\n((?:\s{4,}[^\n]+\n?)*)', content, re.MULTILINE)
+if block:
+    m = re.search(r'forced_model:\s*"([AB])"', block.group(1))
+    if m: print(m.group(1))
+PYEOF
+    )
+    if [[ -n "$FORCED" && "$FORCED" != "$MODEL" ]]; then
+        REASON=$(python3 - <<PYEOF 2>/dev/null
+import re
+content = open("$POLICY_FILE").read()
+block = re.search(r'^\s+${SPRINT}:\s*\n((?:\s{4,}[^\n]+\n?)*)', content, re.MULTILINE)
+if block:
+    m = re.search(r'reason:\s*"([^"]+)"', block.group(1))
+    if m: print(m.group(1))
+PYEOF
+        )
+        echo "  ❌ POLICY VIOLATION: Sprint $SPRINT requires --model $FORCED, you passed --model $MODEL"
+        echo "     Reason: $REASON"
+        echo "     Fix: ./tools/sprint-finalize.sh $SPRINT --model $FORCED"
+        echo ""
+        echo "  ❌ NOT CLOSEABLE — policy violation (exit 1)"
+        exit 1
+    elif [[ -n "$FORCED" ]]; then
+        check_pass "Model $MODEL confirmed by sprint-policy.yml"
+    else
+        check_pass "No forced model for Sprint $SPRINT — Model $MODEL accepted"
+    fi
+else
+    check_warn "sprint-policy.yml not found — no policy enforcement"
 fi
 
 # ── 2. Evidence directory ─────────────────────────────────────────────────────
@@ -218,31 +258,6 @@ if [[ "$SKIP_TESTS" == false ]]; then
 else
     echo ""
     echo "── Step 8: Test run skipped (--skip-tests)"
-fi
-
-# ── Policy enforcement ────────────────────────────────────────────────────────
-
-echo ""
-echo "── Policy check: Sprint $SPRINT model constraint"
-
-POLICY_FILE="$SCRIPT_DIR/sprint-policy.yml"
-if [[ -f "$POLICY_FILE" ]]; then
-    FORCED=$(grep -A5 "  ${SPRINT}:" "$POLICY_FILE" 2>/dev/null | grep "forced_model" | sed 's/.*"\([AB]\)".*/\1/' || true)
-    if [[ -n "$FORCED" && "$FORCED" != "$MODEL" ]]; then
-        REASON=$(grep -A6 "  ${SPRINT}:" "$POLICY_FILE" 2>/dev/null | grep "reason" | sed 's/.*reason: "\(.*\)".*/\1/' || true)
-        check_fail "POLICY VIOLATION: Sprint $SPRINT requires --model $FORCED, got --model $MODEL."
-        echo "         Reason: $REASON"
-        echo "         Fix: ./tools/sprint-finalize.sh $SPRINT --model $FORCED"
-        echo ""
-        echo "  ❌ NOT CLOSEABLE — policy violation"
-        exit 1
-    elif [[ -n "$FORCED" ]]; then
-        check_pass "Model $MODEL confirmed by policy (sprint-policy.yml)"
-    else
-        check_pass "No model constraint in policy for Sprint $SPRINT (Model $MODEL accepted)"
-    fi
-else
-    check_warn "sprint-policy.yml not found — no policy enforcement (add to tools/)"
 fi
 
 # ── 9. Run sprint-audit.py ────────────────────────────────────────────────────

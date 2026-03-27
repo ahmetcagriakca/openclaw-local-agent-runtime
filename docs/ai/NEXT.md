@@ -1,19 +1,9 @@
 # Next Steps
 
-**Last updated:** 2026-03-26
-**Current:** Sprint 13 — Stabilization
+**Last updated:** 2026-03-27
+**Current:** Phase 5.5 complete. Phase 6 ready to start.
 
 ---
-
-## Completed
-
-- Sprint 7 (Phase 4.5-C): 10/10 task, 129 test, 0 failure
-- Sprint 8 (Phase 5A-1): 17/17 task, 170 test, 0 failure — Backend Read Model
-- Sprint 9 (Phase 5A-2): 10/10 task, 18 frontend test, 0 failure — React Read-Only UI
-- Sprint 10 (Phase 5B): 8/8 task, 114 backend + 29 frontend test, 0 failure — SSE Live Updates
-- Sprint 11 (Phase 5C): 17 commits, 195 backend + 29 frontend test, 0 failure — Intervention / Mutation
-- D-077 → D-096 frozen
-- Process Patch v4 applied (P-01→P-10)
 
 ## Completed Sprints
 
@@ -22,29 +12,62 @@ Sprint 12   Phase 5D      Polish + Phase 5 Closure          25 task  CLOSED (202
 Sprint 13   Stabilization  L1/L2 + cleanup                  10 task  CLOSED (2026-03-26)
 Sprint 14A  EventBus + Backend Restructure                  23 task  CLOSED (2026-03-26)
 Sprint 14B  Frontend Restructure + Tooling                   8 task  CLOSED (2026-03-26)
+Sprint 15   OTel Observability (traces + metrics + logs)    10 task  CLOSED (2026-03-27)
+Sprint 16   Presentation Layer + CI/CD Foundation           24 task  CLOSED (2026-03-27)
+Cleanup     Ruff fix + test fix + OpenClaw→Vezir rebrand     —      CLOSED (2026-03-27)
 ```
 
-### Sprint 13 Deliverables (closed)
+### Sprint 15 Deliverables
 
-- D-102 L1/L2: StageResult isolation + distance-based context tiers
-- 13.1: Token report ID mismatch fix
-- 13.3: Rework limiter (D-103 frozen)
-- 13.4: Legacy dashboard removal (D-097)
-- 13.5: Stale docs archived (12 files)
-- Dev scripts, .editorconfig, PORTS.md
+- TracingHandler: 28/28 event types → OTel spans, zero blind spots
+- MetricsHandler: 17 instruments (6 counters + 11 histograms)
+- StructuredLogHandler: JSON logs with trace_id/span_id injection
+- 27 new tests, no-blind-spots closure blocker PASS
 
-## Next Sprint
+### Sprint 16 Deliverables
 
-```
-Sprint 14  Phase 6A    Structural Hardening  ~17 task  (blocked by Sprint 13 closure)
-```
+- Dashboard API: 15 new endpoints (missions, traces, metrics, logs, alerts, live SSE)
+- Persistence layer: mission_store, trace_store, metric_store (JSON file)
+- Alert system: 9 rules + engine + Telegram notification + CRUD API
+- Frontend: MonitoringPage + 5 API hooks + live SSE feed
+- CI/CD: 3 GitHub Actions (ci.yml, benchmark.yml, evidence.yml)
+- Session model foundation + Jaeger evaluation doc
+- 39 new tests
 
-### Sprint 14 Scope
+### Cleanup Deliverables
 
-- Carry-forward: UIOverview/WindowList tools, feature flag, E2E validation, WSL rename
-- Backend restructure: create_app() factory, route migration, services layer
-- Frontend restructure: feature-based layout, API client layer
-- Tooling: pyproject.toml, ruff, mypy, pre-commit, Docker dev env
+- Ruff: 169 lint fixes (unused imports, unsorted imports, f-strings, unused vars)
+- Test fix: health check test now passes without running services
+- ARCHITECTURE.md: OpenClaw → Vezir rebrand
+- Final state: **458 backend tests PASS, 0 ruff errors, 0 TS errors**
+
+## Current Capabilities
+
+| Capability | State |
+|-----------|-------|
+| Token governance | EventBus + 14 handlers + budget enforcement |
+| Observability | OTel traces + metrics + structured logs, 28/28 coverage |
+| Visibility | Dashboard with real data, live waterfall, filtered logs, alerts |
+| Alerting | 9 rules, Telegram notification, configurable thresholds |
+| CI/CD | Automated tests + lint + type check + benchmark on push |
+| Repository | Concern-based backend, feature-based frontend |
+| Developer experience | Pre-commit hooks, ruff, CONTRIBUTING.md |
+
+## Phase 6 — Ready to Plan
+
+Items that become possible now:
+
+| Item | Why After Sprint 16 |
+|------|---------------------|
+| Browser E2E with Playwright | CI/CD pipeline exists to run it |
+| OpenAPI → TypeScript SDK generation | Backend structured, API versioned |
+| Multi-user / authentication | Session model foundation exists |
+| Jaeger/Grafana deployment | OTel export path documented |
+| Plugin system for custom handlers | EventBus architecture supports it |
+| Mission templates / presets | Mission persistence exists |
+| Cost tracking / billing | Token metrics recorded |
+| Frontend component tests | Vitest + React Testing Library |
+| Webhook notifications (Slack, Discord) | Alert notifier extensible |
 
 ## Decision Debt
 
@@ -53,4 +76,4 @@ Sprint 14  Phase 6A    Structural Hardening  ~17 task  (blocked by Sprint 13 clo
 ---
 
 *Next Steps — Vezir Platform*
-*Last updated: 2026-03-26*
+*Last updated: 2026-03-27*

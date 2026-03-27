@@ -1,0 +1,33 @@
+=== Branch Cleanup for Sprint 19 ===
+
+From https://github.com/ahmetcagriakca/vezir
+ - [deleted]         (none)               -> origin/sprint-19/t19.CLOSURE-state-update
+ - [deleted]         (none)               -> origin/sprint-19/t19.G2-patches-p6p8
+ - [deleted]         (none)               -> origin/sprint-20/t20.1-plan-schema
+ - [deleted]         (none)               -> origin/sprint-20/t20.2-labels-milestones
+ - [deleted]         (none)               -> origin/sprint-20/t20.4-project-auto-add
+ - [deleted]         (none)               -> origin/sprint-20/t20.6-pr-validator
+ - [deleted]         (none)               -> origin/sprint-20/t20.7-pr-linkage
+ - [deleted]         (none)               -> origin/sprint-20/t20.G2-patches-p1p5
+ * [new branch]      alert-autofix-26     -> origin/alert-autofix-26
+ * [new branch]      auto/s19-issues-json -> origin/auto/s19-issues-json
+ * [new branch]      auto/s20-issues-json -> origin/auto/s20-issues-json
+Found 14 merged branch(es):
+  - sprint-19/t19.1-plan-schema
+  - sprint-19/t19.2-validator
+  - sprint-19/t19.3-final-test
+  - sprint-19/t19.3-fix-auto-merge
+  - sprint-19/t19.3-fix-commit-step
+  - sprint-19/t19.3-fix-labels
+  - sprint-19/t19.3-issue-workflow
+  - sprint-19/t19.3-remove-issues-json-for-test
+  - sprint-19/t19.4-issues-json
+  - sprint-19/t19.5-branch-contract
+  - sprint-19/t19.6-protection-verify
+  - sprint-19/t19.7-governance
+  - sprint-19/t19.G2-final-review
+  - sprint-19/t19.G2-patches
+
+DRY RUN — no branches deleted.
+Run with --force to actually delete:
+  bash tools/cleanup-merged-branches.sh 19 --force

@@ -90,17 +90,26 @@ New (untracked):
 | 14B | closed | **cleaned** | 3 docs |
 | 14 shared | — | **cleaned** | 3 docs (confirmation + audit + README) |
 | 15 | closed | **cleaned** | 5 docs + 12 evidence files |
-| 16 | closed | **NOT cleaned** | 4 docs + 19 evidence + files.zip |
+| 16 | closed | **cleaned** | 5 docs + 18 evidence |
 
 ---
 
-## Sprint 16 — Next Cleanup Target
+## Sprint 16 — Cleanup Complete (Session 3)
 
-Not reviewed yet. Known items to investigate:
-- `SPRINT-16-ADVANCE-PLAN.md` — likely stale pre-kickoff planning
-- `files.zip` — unknown, needs investigation
-- No `S16-CLOSURE-CONFIRMATION.md` or `S16-EVIDENCE-AUDIT-RESULT.md`
-- 19 evidence files in `docs/sprints/sprint-16/evidence/`
+| Action | File | Detail |
+|--------|------|--------|
+| EXTRACTED | `files.zip` | 6 files extracted, zip deleted |
+| PLACED | `S16-CLOSURE-CONFIRMATION.md` | → `docs/sprints/sprint-16/` |
+| PLACED | `S16-EVIDENCE-AUDIT-RESULT.md` | → `docs/sprints/sprint-16/` |
+| PLACED | `D-105-CLOSURE-MODEL.md` | → `docs/decisions/` (proposed→frozen) |
+| PLACED | `D-106-PERSISTENCE-MODEL.md` | → `docs/decisions/` (frozen) |
+| PLACED | `D-107-ALERT-ENGINE.md` | → `docs/decisions/` (frozen) |
+| PLACED | `D-108-SESSION-AUTH-MODEL.md` | → `docs/decisions/` (frozen) |
+| ARCHIVED | `SPRINT-16-ADVANCE-PLAN.md` | → `docs/archive/sprint-16-SPRINT-16-ADVANCE-PLAN.md` + historical annotation |
+| DELETED | `files.zip` | Content extracted, no longer needed |
+| UPDATED | `DECISIONS.md` | D-105→D-108 entries added |
+| UPDATED | `STATE.md` | Decision count updated |
+| VERIFIED | Evidence (18 files) | All non-empty, 298 total lines |
 
 ---
 
@@ -112,7 +121,10 @@ Not reviewed yet. Known items to investigate:
 | D-102 | Frozen (EventBus) |
 | D-103 | Frozen (rework limiter) |
 | D-104 | Frozen (backend package: `app/`) |
-| D-105 | Not proposed — process debt acknowledged |
+| D-105 | Frozen (closure model A/B) |
+| D-106 | Frozen (persistence — JSON file store) |
+| D-107 | Frozen (alert engine — rule-based) |
+| D-108 | Frozen (session/auth — single-operator) |
 
 ## Test Baseline
 

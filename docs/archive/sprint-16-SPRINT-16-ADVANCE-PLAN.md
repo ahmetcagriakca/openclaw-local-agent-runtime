@@ -1,3 +1,7 @@
+<!-- HISTORICAL DOCUMENT — Pre-kickoff planning artifact. Not current closure truth.
+     Current closure truth: S16-README.md, S16-CLOSURE-CONFIRMATION.md.
+     Do not use for closure status determination. -->
+
 # Sprint 16 — Presentation Layer + CI/CD Foundation
 
 **Status:** Advance planning (NOT kickoff-ready)

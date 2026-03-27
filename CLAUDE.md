@@ -18,7 +18,7 @@ Telegram bot integration, Math Service on :9000.
 - Phase 5D: implementation_status=done, closure_status=closed (Sprint 12)
 - Sprint 15: implementation_status=done, closure_status=closed (OTel Observability)
 - Sprint 16: implementation_status=done, closure_status=closed (Presentation + CI/CD)
-- Frozen decisions: D-001 → D-101 (decision debt zero)
+- Frozen decisions: D-001 → D-103, D-105 → D-108 (decision debt zero)
 
 ## Last Completed Sprint
 
@@ -33,14 +33,15 @@ Outputs:
 - Session model foundation (auth/session.py)
 - Jaeger evaluation document (not deployed)
 - 39 new tests, full suite: 457/458 PASS
-- Decision debt zero: D-001→D-101 all frozen
-- Backend 234 tests, Frontend 29 tests, 0 failures
-- Decisions: D-097→D-101
+- Decision debt zero: D-001→D-103, D-105→D-108 all frozen
+- Backend 458 tests, Frontend 29 tests, 0 failures
+- Decisions: D-097→D-101, D-105→D-108
 
 ## Key Reference Docs
 
 - `docs/ai/STATE.md` — current system state
-- `docs/ai/DECISIONS.md` — frozen decisions D-001 → D-096
+- `docs/ai/DECISIONS.md` — frozen decisions D-001 → D-108
+- `docs/decisions/` — formal decision records (D-105 → D-108)
 - `docs/ai/PROCESS-GATES.md` — sprint governance rules (v4)
 - `docs/ai/DECISION-DEBT-BURNDOWN.md` — debt payment plan
 - `docs/sprints/sprint-12/` — Sprint 12 docs + artifacts

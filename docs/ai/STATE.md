@@ -83,7 +83,7 @@
 
 ## Architectural Decisions
 
-103 frozen decisions (D-001 through D-103). Decision debt zero. See `docs/ai/DECISIONS.md`.
+107 frozen decisions (D-001 through D-103, D-105 through D-108). Decision debt zero. See `docs/ai/DECISIONS.md`. Decision records D-105→D-108 in `docs/decisions/`.
 
 ## Port Map
 

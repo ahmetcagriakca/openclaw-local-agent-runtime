@@ -1,6 +1,6 @@
 # Architectural Decisions
 
-**Last updated:** 2026-03-26
+**Last updated:** 2026-03-27
 
 All decisions below are frozen unless marked otherwise.
 Reopening requires explicit phase gate approval + operator sign-off.
@@ -892,6 +892,44 @@ Rework cycle limits scale with mission complexity to prevent runaway rework on s
 
 ---
 
+## Sprint 16 / Phase 5.5 Decisions (D-105 → D-108)
+
+### D-105: Sprint Closure Model — Model A / Model B
+
+**Phase:** Sprint 16 | **Status:** Frozen
+
+Two closure models. Model A = full (all evidence + gates sprint-time). Model B = lightweight (retroactive evidence + waiver docs acceptable). Operator selects at kickoff. Model B max 2 consecutive sprints. Retrospective never waivable.
+Formal record: `docs/decisions/D-105-CLOSURE-MODEL.md`.
+
+---
+
+### D-106: Persistence Model — JSON File Store
+
+**Phase:** Sprint 16 | **Status:** Frozen (post-hoc)
+
+JSON file store for mission history, OTel traces, metric snapshots. `mission_store.py`, `trace_store.py`, `metric_store.py`. Atomic writes. No ORM, no migrations.
+Formal record: `docs/decisions/D-106-PERSISTENCE-MODEL.md`.
+
+---
+
+### D-107: Alert Engine — Rule-Based Threshold Evaluation
+
+**Phase:** Sprint 16 | **Status:** Frozen (post-hoc)
+
+Rule-based threshold evaluation. 9 default rules + CRUD API. Telegram notifier. Known limitation: `"any"` rules lack namespace scoping (P-16.2 carry-forward).
+Formal record: `docs/decisions/D-107-ALERT-ENGINE.md`.
+
+---
+
+### D-108: Session/Auth Model — Single-Operator Foundation
+
+**Phase:** Sprint 16 | **Status:** Frozen (post-hoc)
+
+Single-operator identity model (`agent/auth/session.py`). No password auth, no token issuance. Multi-user deferred to Phase 6 under D-104.
+Formal record: `docs/decisions/D-108-SESSION-AUTH-MODEL.md`.
+
+---
+
 ## Phase 5 Freeze Addendum (Sprint 7→8 transition)
 
 ### Blocking Fix Closures
@@ -920,4 +958,8 @@ Sprint 8 did not start until this document was FROZEN.
 *D-097 → D-101: Phase 5D / Sprint 12 (frozen)*
 *D-102: Token budget enforcement — Post-5D (frozen)*
 *D-103: Complexity-based rework limits — Sprint 13 (frozen)*
+*D-105: Sprint closure model (Model A / Model B) — Sprint 16 (frozen)*
+*D-106: Persistence model — JSON file store — Sprint 16 (frozen)*
+*D-107: Alert engine — Rule-based threshold evaluation — Sprint 16 (frozen)*
+*D-108: Session/auth model — Single-operator foundation — Sprint 16 (frozen)*
 *BF-1 → BF-4: Phase 5 Freeze Addendum (frozen)*

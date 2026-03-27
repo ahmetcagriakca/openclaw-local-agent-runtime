@@ -1,41 +1,41 @@
 ======================================================================
   Vezir API — Performance Benchmark
-  Date: 2026-03-27 17:35:45
+  Date: 2026-03-27 18:16:57
   Iterations: 50 per endpoint
   Data: 10 missions, 5 approvals, 50 telemetry events
 ======================================================================
 
 GET /api/v1/health
-  avg=2549.4ms  p50=2547.2ms  p95=2628.3ms  min=2469.9ms  max=2706.7ms
+  avg=2562.6ms  p50=2554.8ms  p95=2667.3ms  min=2495.6ms  max=2736.6ms
 
 GET /api/v1/capabilities
-  avg=3.7ms  p50=3.6ms  p95=5.4ms  min=2.5ms  max=6.2ms
+  avg=2.5ms  p50=2.4ms  p95=2.9ms  min=2.2ms  max=3.3ms
 
 GET /api/v1/missions
-  avg=7.2ms  p50=6.9ms  p95=9.8ms  min=5.6ms  max=10.3ms
+  avg=7.6ms  p50=7.3ms  p95=9.9ms  min=5.2ms  max=10.3ms
 
 GET /api/v1/missions/mission-bench-000
-  avg=4.6ms  p50=4.2ms  p95=6.9ms  min=2.9ms  max=16.4ms
+  avg=4.9ms  p50=4.9ms  p95=6.4ms  min=3.2ms  max=7.1ms
 
 GET /api/v1/missions/mission-bench-000/stages
-  avg=3.7ms  p50=3.5ms  p95=4.8ms  min=3.0ms  max=6.4ms
+  avg=5.3ms  p50=5.3ms  p95=6.3ms  min=4.0ms  max=7.2ms
 
 GET /api/v1/approvals
-  avg=3.4ms  p50=3.3ms  p95=4.3ms  min=2.9ms  max=4.4ms
+  avg=5.1ms  p50=5.0ms  p95=6.6ms  min=3.5ms  max=6.8ms
 
 GET /api/v1/telemetry
-  avg=3.6ms  p50=3.3ms  p95=5.0ms  min=2.8ms  max=12.3ms
+  avg=4.7ms  p50=4.3ms  p95=6.7ms  min=3.5ms  max=14.1ms
 
 GET /api/v1/telemetry
-  avg=2.9ms  p50=2.8ms  p95=3.4ms  min=2.6ms  max=3.5ms
+  avg=5.5ms  p50=5.4ms  p95=7.1ms  min=3.6ms  max=11.7ms
 
 POST /api/v1/approvals/apv-bench-000/approve
-  avg=13.7ms  p50=13.7ms  p95=13.7ms  min=13.7ms  max=13.7ms
+  avg=10.7ms  p50=10.7ms  p95=10.7ms  min=10.7ms  max=10.7ms
 
 ======================================================================
   BENCHMARK SUMMARY
 ======================================================================
-  All GET endpoints respond in < 50ms (target: < 200ms)
-  POST mutation completes in < 50ms (target: < 500ms)
-  No regressions detected
+  GET endpoints: avg=324.8ms, max=2736.6ms (target: < 200ms)
+  POST endpoints: avg=10.7ms, max=10.7ms (target: < 500ms)
+  Total measurements: 400 GET + 1 POST
 ======================================================================

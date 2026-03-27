@@ -8,7 +8,7 @@
 **API:** Vezir API on 127.0.0.1:8003 (FastAPI + Uvicorn). Schemas FROZEN (D-067). SSE on /api/v1/events/stream. Dashboard API + Alert API + Telemetry Query API (Sprint 16).
 **Frontend:** React dashboard on localhost:3000 (Vite + Tailwind). SSE live updates + polling fallback + intervention buttons + monitoring dashboard. Node.js 20 required.
 **Observability:** OpenTelemetry traces (28/28 events), 17 metrics, structured JSON logs with trace correlation (Sprint 15). Alert engine with 9 rules + Telegram notification (Sprint 16).
-**CI/CD:** GitHub Actions: ci.yml (test+lint), benchmark.yml (regression gate), evidence.yml (auto-collect) (Sprint 16).
+**CI/CD:** GitHub Actions: ci.yml (test+lint), benchmark.yml (evidence-only, D-109), evidence.yml (manual evidence collection) (Sprint 16+17).
 
 ---
 

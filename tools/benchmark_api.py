@@ -124,6 +124,9 @@ def main():
     print(f"  Data: 10 missions, 5 approvals, 50 telemetry events")
     print("=" * 70)
 
+    all_get_times = []
+    all_post_times = []
+
     for method, path, headers in endpoints:
         # For POST mutations, skip after first since it creates artifacts
         n = 1 if method == "POST" else ITERATIONS
@@ -132,14 +135,29 @@ def main():
         result = f"\n{label}\n{fmt(times)}"
         results.append(result)
         print(result)
+        if method == "GET":
+            all_get_times.extend(times)
+        else:
+            all_post_times.extend(times)
+
+    # Compute summary from actual measurements
+    get_avg = statistics.mean(all_get_times) if all_get_times else 0
+    get_max = max(all_get_times) if all_get_times else 0
+    post_avg = statistics.mean(all_post_times) if all_post_times else 0
+    post_max = max(all_post_times) if all_post_times else 0
+
+    summary_lines = [
+        f"  GET endpoints: avg={get_avg:.1f}ms, max={get_max:.1f}ms (target: < 200ms)",
+        f"  POST endpoints: avg={post_avg:.1f}ms, max={post_max:.1f}ms (target: < 500ms)",
+        f"  Total measurements: {len(all_get_times)} GET + {len(all_post_times)} POST",
+    ]
 
     # Summary
     print("\n" + "=" * 70)
     print("  BENCHMARK SUMMARY")
     print("=" * 70)
-    print(f"  All GET endpoints respond in < 50ms (target: < 200ms)")
-    print(f"  POST mutation completes in < 50ms (target: < 500ms)")
-    print(f"  No regressions detected")
+    for line in summary_lines:
+        print(line)
     print("=" * 70)
 
     # Write evidence
@@ -159,9 +177,8 @@ def main():
         f.write("\n" + "=" * 70 + "\n")
         f.write("  BENCHMARK SUMMARY\n")
         f.write("=" * 70 + "\n")
-        f.write("  All GET endpoints respond in < 50ms (target: < 200ms)\n")
-        f.write("  POST mutation completes in < 50ms (target: < 500ms)\n")
-        f.write("  No regressions detected\n")
+        for line in summary_lines:
+            f.write(line + "\n")
         f.write("=" * 70 + "\n")
 
     print(f"\nEvidence saved: {evidence_path}")

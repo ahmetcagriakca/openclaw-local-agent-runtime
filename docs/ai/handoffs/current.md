@@ -81,10 +81,19 @@
 
 ---
 
+## GPT Review — HOLD Patches Applied
+
+GPT verdict: HOLD (4 patches). All applied:
+1. HOLD-1: benchmark_api.py summary now computed from real measurements
+2. HOLD-2: STATE.md "regression gate" → "evidence-only (D-109)"
+3. HOLD-3: S17-KICKOFF.md fully synced (metadata, scope, tasks, gates, checklist)
+4. HOLD-4: Scope delta section added to kickoff doc
+
 ## Sonraki Adımlar
 
-1. **Commit + push** — Sprint 17 tüm deliverable'ları
-2. **Operator sign-off** — `closure_status=closed`
+1. **Commit + push** — HOLD patches
+2. **GPT re-review** — request PASS
+3. **Operator sign-off** — `closure_status=closed`
 
 ---
 

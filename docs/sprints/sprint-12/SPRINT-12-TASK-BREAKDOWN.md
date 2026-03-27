@@ -341,7 +341,7 @@ All items below must complete before any implementation task starts. If implemen
 
 **Output:**
 - `docs/sprints/sprint-12/SPRINT-12-CLOSURE-SUMMARY.md`
-- `docs/sprints/sprint-12/SPRINT-12-PHASE-CLOSURE.md`
+- `docs/phase-reports/PHASE-5-CLOSURE-REPORT.md`
 
 **Phase 5 Closure Report content:** Phase 5 goal vs actual, scoreboard 15/15 evidence, Sprint 8→12 summary, decision registry D-059→D-101, carried items to Phase 6, architecture compliance statement.
 

@@ -32,7 +32,7 @@
 |---|-----------|--------|----------|
 | C1 | D-021→D-058 extracted into DECISIONS.md (38 decisions) | ✅ DONE | 98 entries total, gap check clean |
 | C2 | D-059→D-080 gap check complete | ✅ DONE | 0 missing in range |
-| C3 | D-093/094/095 reassigned to D-097/098/099 | ✅ DONE | Operator-approved DECISIONS-DELTA-D097-D101.md |
+| C3 | D-093/094/095 reassigned to D-097/098/099 | ✅ DONE | Operator-approved DECISIONS-DELTA-D097-D101.md (archived → docs/archive/sprint-12/) |
 | C4 | D-089 text fixed (SameSite → Origin header) | ✅ DONE | "Origin Header Check (SameSite browser-dependent)" |
 | C5 | D-020 status normalized (Active → Frozen) | ✅ DONE | All entries Status: Frozen |
 | C6 | decision-debt-check.txt produced | ✅ DONE | `evidence/sprint-12/decision-debt-check.txt` |
@@ -79,7 +79,7 @@ GPT receives the **full kickoff packet**:
 | 1 | `docs/sprints/sprint-12/SPRINT-12-README.md` | Sprint entry point |
 | 2 | `docs/sprints/sprint-12/SPRINT-12-KICKOFF-GATE.md` | Gate checklist |
 | 3 | `docs/sprints/sprint-12/SPRINT-12-TASK-BREAKDOWN.md` | Full plan |
-| 4 | `docs/sprints/sprint-12/DECISIONS-DELTA-D097-D101.md` | Decision context |
+| 4 | `docs/sprints/sprint-12/DECISIONS-DELTA-D097-D101.md (archived → docs/archive/sprint-12/)` | Decision context |
 
 ---
 

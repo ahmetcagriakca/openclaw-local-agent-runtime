@@ -5,37 +5,37 @@
     "19.1": {
       "issue": 6,
       "branch": "sprint-19/t19.1-plan-schema",
-      "pr": null
+      "pr": 1
     },
     "19.2": {
       "issue": 7,
       "branch": "sprint-19/t19.2-validator",
-      "pr": null
+      "pr": 2
     },
     "19.3": {
       "issue": 8,
       "branch": "sprint-19/t19.3-issue-workflow",
-      "pr": null
+      "pr": 3
     },
     "19.4": {
       "issue": 9,
       "branch": null,
-      "pr": null
+      "pr": 17
     },
     "19.5": {
       "issue": 10,
       "branch": "sprint-19/t19.5-branch-contract",
-      "pr": null
+      "pr": 24
     },
     "19.6": {
       "issue": 11,
       "branch": "sprint-19/t19.6-protection-verify",
-      "pr": null
+      "pr": 25
     },
     "19.7": {
       "issue": 12,
       "branch": "sprint-19/t19.7-governance",
-      "pr": null
+      "pr": 26
     },
     "19.G1": {
       "issue": 13,
@@ -45,7 +45,7 @@
     "19.G2": {
       "issue": 14,
       "branch": null,
-      "pr": null
+      "pr": 27
     },
     "19.RETRO": {
       "issue": 15,
@@ -55,7 +55,7 @@
     "19.CLOSURE": {
       "issue": 16,
       "branch": null,
-      "pr": null
+      "pr": 31
     }
   }
 }

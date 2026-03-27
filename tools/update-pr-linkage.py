@@ -51,13 +51,13 @@ def main():
     print(f"Merged PRs found: {len(prs)}")
 
     # Match PRs to tasks by title pattern [SN-N.M]
-    pattern = re.compile(rf'\[S{sprint}-(\d+(?:\.\w+)*)\]')
+    pattern = re.compile(rf'\[S{sprint}-([\d]+(?:\.\w+)*)\]')
     updated = 0
 
     for pr in prs:
         match = pattern.search(pr["title"])
         if match:
-            task_id = f"{sprint}.{match.group(1)}"
+            task_id = match.group(1)
             if task_id in data["tasks"]:
                 old_pr = data["tasks"][task_id].get("pr")
                 new_pr = pr["number"]

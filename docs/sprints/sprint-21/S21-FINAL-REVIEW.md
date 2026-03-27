@@ -14,7 +14,7 @@
 | 21.1 | Review packet generator | Merged (PR #59) | 21.1-review-packet-output.txt — S20 packet generated |
 | 21.2 | Stale ref grep automation | Merged (PR #60) | 21.2-stale-refs-output.txt — 252 refs checked, 173 stale found |
 | 21.3 | Archive manifest generator | Merged (PR #61) | 21.3-archive-manifest-output.txt — S19 manifest (20 files) |
-| 21.4 | Closure preflight workflow | Merged (PR #62, fix PR #78) | 21.4-preflight-run-output.txt — S19 preflight SUCCESS (5/5 checks) |
+| 21.4 | Closure preflight workflow | Merged (PR #62, fix PR #78, evidence PR #79) | 21.4-preflight-run-output.txt — S19 preflight SUCCESS (5/5 checks) |
 | 21.5 | Merged-state-only closure check | Merged (PR #63) | 21.5-merged-state-output.txt — S19 16/16 merged |
 | 21.6 | Branch cleanup automation | Merged (PR #64) | 21.6-branch-cleanup-output.txt — S19 14 branches (dry-run) |
 
@@ -29,6 +29,7 @@
 | 5 | 21.3-archive-manifest-output.txt | 21.3 | S19 archive manifest JSON (20 files) |
 | 6 | 21.5-merged-state-output.txt | 21.5 | S19 all 16 branches merged PASS |
 | 7 | 21.6-branch-cleanup-output.txt | 21.6 | S19 14 branches listed (dry-run, no deletion) |
+| 8 | 21.4-preflight-run-output.txt | 21.4 | S19 preflight SUCCESS (5/5 checks passed) |
 
 ## Acceptance Criteria
 

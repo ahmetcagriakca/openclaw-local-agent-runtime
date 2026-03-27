@@ -51,7 +51,7 @@
 
 ## Next Sprint
 
-**Sprint 18 — Phase 6**
+**Sprint 19 — Phase 6**
 - Status: NOT STARTED
 - Kickoff gate: OPEN
-- Sprint 17 closed (Model A reset — next sprint can be A or B)
+- Sprint 18 closed (Model B — next sprint can be A or B, max 2 consecutive B)

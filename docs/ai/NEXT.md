@@ -5,11 +5,12 @@
 
 ---
 
-## Sprint 18 — Repo Cleanup (IN PROGRESS)
+## Sprint 18 — Repo Cleanup (CLOSED)
 
 **Model:** B (docs-only)
 **Scope:** Source-of-truth compression, governance consolidation, archive boundary, stale reference cleanup
 **Decisions:** D-111→D-114
+**Review:** PASS (2 rounds) — `docs/ai/reviews/S18-REVIEW.md`
 
 ## Phase 6 — Roadmap
 

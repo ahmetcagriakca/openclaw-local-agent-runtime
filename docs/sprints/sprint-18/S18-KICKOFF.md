@@ -7,8 +7,8 @@
 | Sprint | 18 |
 | Phase | 6 |
 | Model | B (docs-only, no code changes) |
-| implementation_status | in_progress |
-| closure_status | not_started |
+| implementation_status | done |
+| closure_status | closed |
 | Owner | AKCA |
 | Date | 2026-03-27 |
 

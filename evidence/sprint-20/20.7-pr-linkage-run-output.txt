@@ -1,1 +1,8 @@
-NO EVIDENCE — Script/workflow not executed. Prerequisite missing (gh CLI or Project V2 board). Code artifact merged to main.
+Sprint: 20
+Tasks: 11
+Merged PRs found: 29
+  20.4: PR #53 (was: 35)
+  20.4: PR #35 (was: 53)
+
+Updated 2 PR linkages in docs\sprints\sprint-20\issues.json
+DONE

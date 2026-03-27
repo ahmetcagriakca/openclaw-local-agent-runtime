@@ -1,0 +1,15 @@
+=== Grep Evidence — sprint-14B ===
+../agent/events/bus.py:1:"""EventBus — core dispatcher for D-102 event-driven governance.
+../agent/events/bus.py:65:class EventBus:
+../agent/oc_agent_runner_lib.py:43:                          event_bus=None) -> dict:
+../agent/oc_agent_runner_lib.py:116:    if event_bus:
+../agent/oc_agent_runner_lib.py:119:        event_bus.emit(Event(
+../agent/oc_agent_runner_lib.py:195:                    if event_bus:
+../agent/oc_agent_runner_lib.py:203:                        req_results = event_bus.emit(req_event)
+../agent/oc_agent_runner_lib.py:204:                        if event_bus.was_halted(req_results):
+../agent/oc_agent_runner_lib.py:389:                if event_bus:
+../agent/oc_agent_runner_lib.py:393:                        event_bus.emit(Event(
+../agent/api/server.py:23:from utils.atomic_write import atomic_write_json
+../agent/api/server.py:94:        atomic_write_json(SERVICES_PATH, services)
+../agent/api/mutation_bridge.py:28:from utils.atomic_write import atomic_write_json
+../agent/api/mutation_bridge.py:78:    atomic_write_json(artifact_path, artifact)

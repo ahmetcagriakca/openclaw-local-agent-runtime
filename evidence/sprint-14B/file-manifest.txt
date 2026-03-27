@@ -1,0 +1,14 @@
+/c/Users/AKCA/oc/evidence/sprint-14B/build-output.txt
+/c/Users/AKCA/oc/evidence/sprint-14B/contract-evidence.txt
+/c/Users/AKCA/oc/evidence/sprint-14B/e2e-output.txt
+/c/Users/AKCA/oc/evidence/sprint-14B/file-manifest.txt
+/c/Users/AKCA/oc/evidence/sprint-14B/grep-evidence.txt
+/c/Users/AKCA/oc/evidence/sprint-14B/lighthouse.txt
+/c/Users/AKCA/oc/evidence/sprint-14B/lint-output.txt
+/c/Users/AKCA/oc/evidence/sprint-14B/live-checks.txt
+/c/Users/AKCA/oc/evidence/sprint-14B/mutation-drill.txt
+/c/Users/AKCA/oc/evidence/sprint-14B/pytest-output.txt
+/c/Users/AKCA/oc/evidence/sprint-14B/sse-evidence.txt
+/c/Users/AKCA/oc/evidence/sprint-14B/tsc-output.txt
+/c/Users/AKCA/oc/evidence/sprint-14B/validator-output.txt
+/c/Users/AKCA/oc/evidence/sprint-14B/vitest-output.txt

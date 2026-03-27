@@ -1,0 +1,2 @@
+11 mutation contract tests PASS (in pytest suite)
+11

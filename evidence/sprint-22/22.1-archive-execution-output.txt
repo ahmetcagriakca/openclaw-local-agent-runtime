@@ -1,0 +1,28 @@
+Archive Execution — Sprint 19
+Files to move: 20
+Mode: DRY RUN
+
+  WOULD MOVE: docs\sprints\sprint-19\issues.json → docs\archive\sprints\sprint-19\issues.json
+  WOULD MOVE: docs\sprints\sprint-19\plan.yaml → docs\archive\sprints\sprint-19\plan.yaml
+  WOULD MOVE: docs\sprints\sprint-19\S19-FINAL-REVIEW.md → docs\archive\sprints\sprint-19\S19-FINAL-REVIEW.md
+  WOULD MOVE: docs\sprints\sprint-19\S19-MID-REVIEW.md → docs\archive\sprints\sprint-19\S19-MID-REVIEW.md
+  WOULD MOVE: docs\sprints\sprint-19\S19-RETROSPECTIVE.md → docs\archive\sprints\sprint-19\S19-RETROSPECTIVE.md
+  WOULD MOVE: docs\sprints\sprint-19\SPRINT-19-TASK-BREAKDOWN.md → docs\archive\sprints\sprint-19\SPRINT-19-TASK-BREAKDOWN.md
+  WOULD MOVE: evidence\sprint-19\branch-check-fail.txt → docs\archive\evidence\sprint-19\branch-check-fail.txt
+  WOULD MOVE: evidence\sprint-19\branch-check-pass.txt → docs\archive\evidence\sprint-19\branch-check-pass.txt
+  WOULD MOVE: evidence\sprint-19\closure-script-output.txt → docs\archive\evidence\sprint-19\closure-script-output.txt
+  WOULD MOVE: evidence\sprint-19\final-review-verdict.md → docs\archive\evidence\sprint-19\final-review-verdict.md
+  WOULD MOVE: evidence\sprint-19\governance-doc.txt → docs\archive\evidence\sprint-19\governance-doc.txt
+  WOULD MOVE: evidence\sprint-19\issues-json-snapshot.txt → docs\archive\evidence\sprint-19\issues-json-snapshot.txt
+  WOULD MOVE: evidence\sprint-19\issues-json-valid.txt → docs\archive\evidence\sprint-19\issues-json-valid.txt
+  WOULD MOVE: evidence\sprint-19\main-protection-test.txt → docs\archive\evidence\sprint-19\main-protection-test.txt
+  WOULD MOVE: evidence\sprint-19\mid-review-verdict.md → docs\archive\evidence\sprint-19\mid-review-verdict.md
+  WOULD MOVE: evidence\sprint-19\plan-yaml-valid.txt → docs\archive\evidence\sprint-19\plan-yaml-valid.txt
+  WOULD MOVE: evidence\sprint-19\retrospective.md → docs\archive\evidence\sprint-19\retrospective.md
+  WOULD MOVE: evidence\sprint-19\validator-fail-test.txt → docs\archive\evidence\sprint-19\validator-fail-test.txt
+  WOULD MOVE: evidence\sprint-19\validator-pass.txt → docs\archive\evidence\sprint-19\validator-pass.txt
+  WOULD MOVE: evidence\sprint-19\workflow-run-log.txt → docs\archive\evidence\sprint-19\workflow-run-log.txt
+
+Summary: 20 moved, 0 skipped, 0 errors
+
+DRY RUN complete. Run with --execute to actually move files.

@@ -131,10 +131,37 @@ async function apiPost<T>(path: string): Promise<T> {
   return res.json() as Promise<T>
 }
 
+// Generate a cryptographically secure random suffix consisting of
+// lowercase alphanumeric characters, similar to Math.random().toString(36).
+function generateRandomIdSuffix(length: number): string {
+  const alphabet = 'abcdefghijklmnopqrstuvwxyz0123456789'
+  const alphabetLength = alphabet.length
+  const bytes = new Uint8Array(length)
+
+  if (typeof crypto !== 'undefined' && typeof crypto.getRandomValues === 'function') {
+    crypto.getRandomValues(bytes)
+  } else if (typeof window !== 'undefined' && window.crypto && typeof window.crypto.getRandomValues === 'function') {
+    window.crypto.getRandomValues(bytes)
+  } else {
+    // Fallback for environments without crypto; not cryptographically secure.
+    for (let i = 0; i < length; i++) {
+      bytes[i] = Math.floor(Math.random() * 256)
+    }
+  }
+
+  let result = ''
+  for (let i = 0; i < length; i++) {
+    result += alphabet[bytes[i] % alphabetLength]
+  }
+  return result
+}
+
 let _tabId: string | null = null
 function getTabId(): string {
   if (!_tabId) {
-    _tabId = sessionStorage.getItem('tabId') ?? `tab-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+    _tabId =
+      sessionStorage.getItem('tabId') ??
+      `tab-${Date.now()}-${generateRandomIdSuffix(6)}`
     sessionStorage.setItem('tabId', _tabId)
   }
   return _tabId
@@ -143,7 +170,9 @@ function getTabId(): string {
 let _sessionId: string | null = null
 function getSessionId(): string {
   if (!_sessionId) {
-    _sessionId = localStorage.getItem('sessionId') ?? `sess-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+    _sessionId =
+      localStorage.getItem('sessionId') ??
+      `sess-${Date.now()}-${generateRandomIdSuffix(6)}`
     localStorage.setItem('sessionId', _sessionId)
   }
   return _sessionId

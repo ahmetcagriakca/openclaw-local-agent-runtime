@@ -221,8 +221,8 @@ bash scripts/dev-backend.sh
 ## Documentation
 
 - `docs/ai/STATE.md` — Current system state and component status
-- `docs/ai/NEXT.md` — Next phase plan
-- `docs/ai/DECISIONS.md` — 58 architectural decisions (frozen)
-- `docs/ai/BACKLOG.md` — Backlog items by phase
-- `docs/ai/PROTOCOL.md` — Collaboration protocol
-- `docs/phase-reports/` — Detailed phase and sprint completion reports
+- `docs/ai/NEXT.md` — Roadmap and carry-forward items
+- `docs/ai/DECISIONS.md` — 114 architectural decisions (frozen)
+- `docs/ai/GOVERNANCE.md` — Sprint governance rules (D-112)
+- `docs/ai/BACKLOG.md` — Open backlog items
+- `docs/phase-reports/` — Active phase/sprint reports (historical in `docs/archive/`)

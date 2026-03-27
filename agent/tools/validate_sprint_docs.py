@@ -76,10 +76,10 @@ SPRINT_DOC_CONFIG = {
         "freshness_required": False,
         "description": "Backlog",
     },
-    "docs/ai/PROTOCOL.md": {
+    "docs/ai/GOVERNANCE.md": {
         "required_sections": [],
         "freshness_required": False,
-        "description": "Collaboration protocol",
+        "description": "Sprint governance rules",
     },
 }
 

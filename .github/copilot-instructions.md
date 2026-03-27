@@ -9,7 +9,7 @@
 ## 1. Language and Style
 
 - Chat language is Turkish. Technical terms stay English: sprint, commit, schema freeze, circuit breaker, capability manifest, stale, degraded, closure, evidence, review, gate, rollback, lifecycle, artifact.
-- **All repository documents must be in English.** This includes: task breakdowns, sprint reports, decision records, retrospectives, evidence files, review reports, DECISIONS.md, PROCESS-GATES.md, and any file committed to the repo. Turkish is strictly chat-only — never appears in committed documents.
+- **All repository documents must be in English.** This includes: task breakdowns, sprint reports, decision records, retrospectives, evidence files, review reports, DECISIONS.md, GOVERNANCE.md, and any file committed to the repo. Turkish is strictly chat-only — never appears in committed documents.
 - Short, direct, action-oriented sentences.
 - No filler, no praise, no motivational tone.
 - Never use "complete", "closed", "resolved", "sealed" without evidence.

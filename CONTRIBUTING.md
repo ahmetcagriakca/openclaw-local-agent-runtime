@@ -44,4 +44,4 @@ docs/ai/         Living project docs (STATE, DECISIONS, NEXT)
 
 ## Sprint Process
 
-See `docs/ai/PROCESS-GATES.md` for the full sprint governance model.
+See `docs/ai/GOVERNANCE.md` for the full sprint governance model.

@@ -136,3 +136,39 @@ python tools/analyze_telemetry.py --last 5
 - Do not treat UI mock structure as backend truth.
 - Do not claim "done" without verification evidence.
 - Do not leave "to be clarified later" in any task.
+
+## Repo-Native Workflow (Active)
+
+### Session Start Protocol
+1. Read `docs/ai/handoffs/current.md` — this is the session context
+2. Read `docs/ai/state/open-items.md` — active blockers and carry-forward
+3. Do NOT ask operator to re-upload context that exists in repo
+
+### Session End Protocol
+1. Write `docs/ai/handoffs/current.md` with full state
+2. Move previous `current.md` to `docs/ai/handoffs/archive/YYYY-MM-DD-vN.md`
+3. Update `docs/ai/state/open-items.md` with any new open items
+4. Commit: `docs(handoff): session end YYYY-MM-DD`
+
+### Review Loop
+1. Sprint ends → run `./tools/sprint-finalize.sh {N}`
+2. Output: `docs/review-packets/S{N}-REVIEW-PACKET.md`
+3. Commit + push
+4. Operator sends: "S{N} review packet hazır"
+5. Reviewer writes verdict to `docs/ai/reviews/S{N}-REVIEW.md`
+6. Claude Code reads verdict, applies patches if HOLD
+7. Re-run finalize, push
+
+### Operator → Claude Code Communication
+- Review verdicts: `docs/ai/reviews/`
+- Decisions: `docs/decisions/`
+- Handoff context: `docs/ai/handoffs/current.md`
+- Active items: `docs/ai/state/open-items.md`
+
+### What Goes in Chat vs Repo
+| Chat | Repo |
+|------|------|
+| Scope/intent for new sprint | All artifacts |
+| Quick clarification | Review verdicts |
+| Emergency override | Handoffs |
+| Architecture debate | Decisions |

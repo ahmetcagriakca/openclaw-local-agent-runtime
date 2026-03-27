@@ -220,6 +220,31 @@ else
     echo "── Step 8: Test run skipped (--skip-tests)"
 fi
 
+# ── Policy enforcement ────────────────────────────────────────────────────────
+
+echo ""
+echo "── Policy check: Sprint $SPRINT model constraint"
+
+POLICY_FILE="$SCRIPT_DIR/sprint-policy.yml"
+if [[ -f "$POLICY_FILE" ]]; then
+    FORCED=$(grep -A5 "  ${SPRINT}:" "$POLICY_FILE" 2>/dev/null | grep "forced_model" | sed 's/.*"\([AB]\)".*/\1/' || true)
+    if [[ -n "$FORCED" && "$FORCED" != "$MODEL" ]]; then
+        REASON=$(grep -A6 "  ${SPRINT}:" "$POLICY_FILE" 2>/dev/null | grep "reason" | sed 's/.*reason: "\(.*\)".*/\1/' || true)
+        check_fail "POLICY VIOLATION: Sprint $SPRINT requires --model $FORCED, got --model $MODEL."
+        echo "         Reason: $REASON"
+        echo "         Fix: ./tools/sprint-finalize.sh $SPRINT --model $FORCED"
+        echo ""
+        echo "  ❌ NOT CLOSEABLE — policy violation"
+        exit 1
+    elif [[ -n "$FORCED" ]]; then
+        check_pass "Model $MODEL confirmed by policy (sprint-policy.yml)"
+    else
+        check_pass "No model constraint in policy for Sprint $SPRINT (Model $MODEL accepted)"
+    fi
+else
+    check_warn "sprint-policy.yml not found — no policy enforcement (add to tools/)"
+fi
+
 # ── 9. Run sprint-audit.py ────────────────────────────────────────────────────
 
 echo ""

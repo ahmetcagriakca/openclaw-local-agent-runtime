@@ -4,6 +4,10 @@ sprint-audit.py — Sprint closure audit tool for Vezir Platform
 Usage: python tools/sprint-audit.py <sprint_number> [--model A|B]
 
 Generates: docs/review-packets/S{N}-REVIEW-PACKET.md
+           docs/review-packets/S{N}-AUDIT-RESULT.json
+
+Policy enforcement: reads tools/sprint-policy.yml for per-sprint model constraints.
+If sprint has forced_model, --model flag is ignored and policy wins.
 
 Exit codes:
   0 = ELIGIBLE FOR CLOSURE REVIEW
@@ -74,6 +78,38 @@ GHOST_DECISION_PATTERNS = [
     r"D-\d{3}.*pending decision",
     r"\bOD-\d+\b",  # open decisions still referenced
 ]
+
+POLICY_FILE = REPO_ROOT / "tools" / "sprint-policy.yml"
+
+# ── Policy loader ─────────────────────────────────────────────────────────────
+
+def load_sprint_policy(n: int) -> dict:
+    """
+    Returns effective policy for sprint N.
+    Reads sprint-policy.yml if available (no external yaml dep — manual parse).
+    Returns: {forced_model: str|None, reason: str, require_explicit: bool}
+    """
+    policy = {"forced_model": None, "reason": "", "require_explicit": True}
+    if not POLICY_FILE.exists():
+        return policy
+
+    content = POLICY_FILE.read_text(encoding="utf-8")
+
+    # Find sprint block: look for "  {N}:" pattern
+    sprint_block = re.search(
+        rf'^\s+{n}:\s*\n((?:\s{{4,}}[^\n]+\n?)*)',
+        content, re.MULTILINE
+    )
+    if sprint_block:
+        block = sprint_block.group(1)
+        fm = re.search(r'forced_model:\s*"([AB])"', block)
+        reason = re.search(r'reason:\s*"([^"]+)"', block)
+        if fm:
+            policy["forced_model"] = fm.group(1)
+        if reason:
+            policy["reason"] = reason.group(1)
+
+    return policy
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -160,9 +196,21 @@ def check_retrospective_present(sprint_dir: Path, n: int) -> bool:
 # ── Main audit ────────────────────────────────────────────────────────────────
 
 def audit_sprint(n: int, model: str = "B") -> dict:
+    # ── Policy enforcement ────────────────────────────────────────────────────
+    policy = load_sprint_policy(n)
+    policy_note = None
+    if policy["forced_model"] and policy["forced_model"] != model:
+        policy_note = (
+            f"POLICY OVERRIDE: Sprint {n} requires Model {policy['forced_model']} "
+            f"(you passed: --model {model}). "
+            f"Reason: {policy['reason']}"
+        )
+        model = policy["forced_model"]
+
     result = {
         "sprint": n,
         "model": model,
+        "policy_note": policy_note,
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "eligible": True,
         "blockers": [],
@@ -177,6 +225,17 @@ def audit_sprint(n: int, model: str = "B") -> dict:
         "waivers": [],
         "verdict": "",
     }
+
+    if policy_note:
+        # Model A enforcement: if user passed B but policy says A, this is an error, not just a warning
+        if policy["forced_model"] == "A":
+            result["blockers"].append(
+                f"BLOCKER: {policy_note} — Model B is forbidden for Sprint {n}. "
+                f"Re-run with --model A or omit --model flag."
+            )
+            result["eligible"] = False
+        else:
+            result["warnings"].insert(0, policy_note)
 
     # ── 1. Evidence directory ─────────────────────────────────────────────────
     ev_dir, ev_path = find_evidence_dir(n)
@@ -309,13 +368,67 @@ def generate_report(r: dict) -> str:
     verdict = r["verdict"]
     model = r["model"]
 
+    # Audit summary counts for human-readable header
+    blocker_count  = len(r["blockers"])
+    warning_count  = len(r["warnings"])
+    waiver_count   = len(r["waivers"])
+    ev_files       = r.get("evidence", {}).get("file_count", "?")
+    ev_mandatory   = r.get("evidence", {}).get("mandatory_check", [])
+    covered        = sum(1 for m in ev_mandatory if m["status"] == "PRESENT")
+    total_mandatory = len(ev_mandatory)
+    canon_files    = r.get("canonical", {}).get("files", [])
+    canon_present  = sum(1 for c in canon_files if c["status"] == "PRESENT")
+    canon_total    = len(canon_files)
+    frozen_decisions = r.get("decisions", {}).get("frozen_count", "?")
+    ghost_count    = len(r["ghost_decisions"])
+    stale_count    = len(r["stale_language"])
+    broken_count   = len(r["broken_refs"])
+
+    verdict_icon = "✅" if verdict == "ELIGIBLE FOR CLOSURE REVIEW" else "❌"
+    policy_line  = f"\n**Policy Note:** {r['policy_note']}" if r.get("policy_note") else ""
+
     lines = [
         f"# S{n}-REVIEW-PACKET.md",
         f"",
         f"**Sprint:** {n}",
         f"**Generated:** {ts}",
-        f"**Closure Model:** {model}",
-        f"**Verdict:** {verdict}",
+        f"**Closure Model:** Model {model}",
+        f"**Verdict:** {verdict_icon} {verdict}",
+        policy_line if policy_line else "",
+        f"",
+        f"---",
+        f"",
+        f"## AUDIT SUMMARY",
+        f"",
+        f"| Dimension | Result |",
+        f"|-----------|--------|",
+        f"| Verdict | {verdict_icon} **{verdict}** |",
+        f"| Closure Model | Model {model} |",
+        f"| Blockers | {'❌ ' + str(blocker_count) if blocker_count else '✅ 0'} |",
+        f"| Warnings | {'⚠️ ' + str(warning_count) if warning_count else '✅ 0'} |",
+        f"| Waivers required | {'⚠️ ' + str(waiver_count) if waiver_count else '✅ 0'} |",
+        f"| Evidence files | {ev_files} |",
+        f"| Mandatory coverage | {covered}/{total_mandatory} |",
+        f"| Canonical files | {canon_present}/{canon_total} |",
+        f"| Frozen decisions | {frozen_decisions} |",
+        f"| Ghost decision refs | {'❌ ' + str(ghost_count) if ghost_count else '✅ 0'} |",
+        f"| Stale language hits | {'⚠️ ' + str(stale_count) if stale_count else '✅ 0'} |",
+        f"| Broken refs | {'⚠️ ' + str(broken_count) if broken_count else '✅ 0'} |",
+        f"",
+        f"**Reviewer action required:**",
+    ]
+
+    if blocker_count:
+        lines.append(f"- Fix {blocker_count} blocker(s) listed in Section 2 before closure.")
+    if waiver_count:
+        lines.append(f"- Confirm or reject {waiver_count} waiver(s) in Section 7.")
+    if not blocker_count and not waiver_count:
+        lines.append(f"- Review findings below and return: **PASS** or **HOLD + patch list**.")
+
+    lines += [
+        f"",
+        f"---",
+        f"",
         f"",
         f"---",
         f"",

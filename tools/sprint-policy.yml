@@ -1,0 +1,20 @@
+# Sprint Policy Configuration
+# Format: sprint_number: {model: A|B, reason: "..."}
+# 
+# Rules:
+# - Model A = full closure (sprint-time evidence, all gates, no waivers)
+# - Model B = lightweight (retroactive evidence acceptable, gate waivers documented)
+# - "forced_model" overrides any --model flag passed to sprint-finalize.sh
+# - After 2 consecutive Model B sprints, next sprint forced to Model A
+
+sprints:
+  17:
+    forced_model: "A"
+    reason: "D-105 constraint: Sprint 17 is first sprint after Phase 5.5 closure. Model A mandatory after S13-S16 consecutive Model B run."
+  # 18 and beyond: not configured = operator declares at kickoff
+  # Add entries here to override: e.g. "18: {forced_model: A, reason: '...'}"
+
+defaults:
+  # If sprint not listed above, operator must explicitly pass --model
+  require_explicit_model: true
+  max_consecutive_model_b: 2

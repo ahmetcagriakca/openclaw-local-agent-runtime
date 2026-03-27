@@ -1,0 +1,131 @@
+name: Sprint Closure Preflight
+
+on:
+  workflow_dispatch:
+    inputs:
+      sprint_number:
+        description: 'Sprint number (e.g., 21)'
+        required: true
+        type: string
+
+permissions:
+  issues: read
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install pyyaml
+
+      - name: Run closure preflight checks
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SPRINT_NUMBER: ${{ inputs.sprint_number }}
+        run: |
+          SPRINT=$SPRINT_NUMBER
+          SPRINT_DIR="docs/sprints/sprint-${SPRINT}"
+          EVIDENCE_DIR="evidence/sprint-${SPRINT}"
+          ERRORS=0
+
+          echo "=== Sprint $SPRINT Closure Preflight ==="
+          echo ""
+
+          # Check 1: plan.yaml exists and parses
+          echo "--- Check 1: plan.yaml ---"
+          if python3 -c "import yaml; yaml.safe_load(open('${SPRINT_DIR}/plan.yaml')); print('VALID')" 2>&1; then
+            echo "PASS"
+          else
+            echo "FAIL: plan.yaml missing or invalid"
+            ERRORS=$((ERRORS + 1))
+          fi
+          echo ""
+
+          # Check 2: Validator passes
+          echo "--- Check 2: plan ↔ breakdown sync ---"
+          if python3 tools/validate-plan-sync.py "${SPRINT_DIR}/" 2>&1; then
+            echo "PASS"
+          else
+            echo "FAIL: plan and breakdown out of sync"
+            ERRORS=$((ERRORS + 1))
+          fi
+          echo ""
+
+          # Check 3: Evidence files exist
+          echo "--- Check 3: Evidence directory ---"
+          if [ -d "$EVIDENCE_DIR" ]; then
+            COUNT=$(ls -1 "$EVIDENCE_DIR" | wc -l)
+            echo "Evidence files: $COUNT"
+            ls -1 "$EVIDENCE_DIR"
+            if [ "$COUNT" -lt 2 ]; then
+              echo "WARNING: Very few evidence files"
+            fi
+            echo "PASS"
+          else
+            echo "FAIL: Evidence directory not found"
+            ERRORS=$((ERRORS + 1))
+          fi
+          echo ""
+
+          # Check 4: No unmerged sprint branches
+          echo "--- Check 4: Unmerged branches ---"
+          UNMERGED=$(git branch -r --no-merged origin/main | grep "sprint-${SPRINT}/" | wc -l)
+          if [ "$UNMERGED" -eq 0 ]; then
+            echo "No unmerged sprint-${SPRINT} branches"
+            echo "PASS"
+          else
+            echo "Unmerged branches:"
+            git branch -r --no-merged origin/main | grep "sprint-${SPRINT}/"
+            echo "FAIL: $UNMERGED unmerged branches"
+            ERRORS=$((ERRORS + 1))
+          fi
+          echo ""
+
+          # Check 5: Issues closed
+          echo "--- Check 5: Issues closed ---"
+          if [ -f "${SPRINT_DIR}/issues.json" ]; then
+            python3 << 'PYCHECK'
+          import json, subprocess, sys
+          data = json.load(open("${SPRINT_DIR}/issues.json".replace("${SPRINT_DIR}", "docs/sprints/sprint-${SPRINT}".replace("${SPRINT}", "${SPRINT_NUMBER}"))))
+          open_count = 0
+          for tid, info in data.get("tasks", {}).items():
+              inum = info.get("issue")
+              if not inum: continue
+              result = subprocess.run(["gh", "issue", "view", str(inum), "--json", "state", "--jq", ".state"], capture_output=True, text=True)
+              state = result.stdout.strip()
+              if state != "CLOSED":
+                  print(f"  {tid}: #{inum} is {state}")
+                  open_count += 1
+          if open_count == 0:
+              print("All issues closed")
+              print("PASS")
+          else:
+              print(f"FAIL: {open_count} issues still open")
+              sys.exit(1)
+          PYCHECK
+            if [ $? -ne 0 ]; then
+              ERRORS=$((ERRORS + 1))
+            fi
+          else
+            echo "WARNING: issues.json not found, skipping issue check"
+          fi
+          echo ""
+
+          # Summary
+          echo "=== Preflight Summary ==="
+          if [ "$ERRORS" -eq 0 ]; then
+            echo "ALL CHECKS PASSED — Sprint $SPRINT is eligible for closure"
+            exit 0
+          else
+            echo "FAILED — $ERRORS check(s) failed. Sprint $SPRINT is NOT eligible for closure"
+            exit 1
+          fi

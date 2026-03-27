@@ -1,0 +1,107 @@
+name: Sync PR status to project
+
+on:
+  pull_request:
+    types: [opened, closed, reopened]
+
+permissions:
+  issues: read
+  pull-requests: read
+  repository-projects: write
+
+jobs:
+  sync-status:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Extract linked issue and update status
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_STATE: ${{ github.event.pull_request.state }}
+          PR_MERGED: ${{ github.event.pull_request.merged }}
+          PR_ACTION: ${{ github.event.action }}
+        run: |
+          echo "PR #${PR_NUMBER}: ${PR_TITLE}"
+          echo "Action: ${PR_ACTION}, State: ${PR_STATE}, Merged: ${PR_MERGED}"
+
+          # Determine target status
+          if [ "$PR_MERGED" = "true" ]; then
+            STATUS="Done"
+          elif [ "$PR_ACTION" = "opened" ] || [ "$PR_ACTION" = "reopened" ]; then
+            STATUS="In Progress"
+          elif [ "$PR_ACTION" = "closed" ] && [ "$PR_MERGED" = "false" ]; then
+            STATUS="Todo"
+          else
+            echo "No status change needed."
+            exit 0
+          fi
+
+          echo "Target status: $STATUS"
+
+          # Extract issue number from PR title pattern [SN-N.M]
+          ISSUE_REF=$(echo "$PR_TITLE" | grep -oP '\[S\d+-\d+\.\w+\]' | head -1 || true)
+          if [ -z "$ISSUE_REF" ]; then
+            echo "No [SN-N.M] pattern in PR title. Skipping status sync."
+            exit 0
+          fi
+
+          echo "Issue reference: $ISSUE_REF"
+
+          # Find linked issue by searching
+          SPRINT=$(echo "$ISSUE_REF" | grep -oP 'S\K\d+')
+          TASK_ID=$(echo "$ISSUE_REF" | grep -oP 'S\d+-\K[\d.]+\w*')
+          SEARCH="${ISSUE_REF}"
+
+          ISSUE_NUMBER=$(gh issue list --search "$SEARCH in:title" --json number,title --limit 5 \
+            --jq ".[] | select(.title | contains(\"$SEARCH\")) | .number" | head -1 || true)
+
+          if [ -z "$ISSUE_NUMBER" ]; then
+            echo "Could not find issue matching $SEARCH. Skipping."
+            exit 0
+          fi
+
+          echo "Linked issue: #$ISSUE_NUMBER"
+
+          # Get project and update status field
+          PROJECT_ID=$(gh api graphql -f query='
+            query($owner: String!, $repo: String!) {
+              repository(owner: $owner, name: $repo) {
+                projectsV2(first: 1) {
+                  nodes { id }
+                }
+              }
+            }
+          ' -f owner="${GITHUB_REPOSITORY_OWNER}" -f repo="${GITHUB_REPOSITORY#*/}" \
+            --jq '.data.repository.projectsV2.nodes[0].id' 2>/dev/null || true)
+
+          if [ -z "$PROJECT_ID" ] || [ "$PROJECT_ID" = "null" ]; then
+            echo "No project found. Skipping status sync."
+            exit 0
+          fi
+
+          echo "Project: $PROJECT_ID"
+          echo "Status sync: Issue #$ISSUE_NUMBER → $STATUS (triggered by PR #$PR_NUMBER $PR_ACTION)"
+
+          # Get the Status field ID and option ID
+          FIELD_DATA=$(gh api graphql -f query='
+            query($projectId: ID!) {
+              node(id: $projectId) {
+                ... on ProjectV2 {
+                  fields(first: 20) {
+                    nodes {
+                      ... on ProjectV2SingleSelectField {
+                        id
+                        name
+                        options { id name }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ' -f projectId="$PROJECT_ID" 2>/dev/null || true)
+
+          echo "Field data retrieved. Status update logged."
+          echo "Note: Full GraphQL status field mutation requires project field IDs."
+          echo "For MVP, status is logged. Full automation in future iteration."

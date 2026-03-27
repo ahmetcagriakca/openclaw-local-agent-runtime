@@ -1,0 +1,10 @@
+Playwright E2E Baseline Evidence
+
+Playwright version: Version 1.58.2
+Config: playwright.config.ts
+Test dir: tests/e2e/
+Tests: smoke.spec.ts (3 tests: health, root, docs)
+
+Note: Tests require Vezir API running on :8003.
+Dry validation: config parses, test file compiles.
+Full run evidence will be captured when API is available.

@@ -126,3 +126,32 @@ Retrospective P-11 uses "D-102" for evidence automation proposal, but real D-102
 **closure_status:** closed (confirmed)
 
 Sprint 12 and Phase 5 are closed. No remaining blockers.
+
+---
+
+## Post-Closure Cleanup Summary (2026-03-27)
+
+**Actions applied:**
+- Duplicates archived: S12-KICKOFF-GATE, S12-README, S12-TASK-BREAKDOWN → `docs/archive/sprint-12/`
+- Non-canonical archived: GPT-KICKOFF-PACKET, SESSION-REPORT, DECISIONS-DELTA → `docs/archive/sprint-12/`
+- Misplaced moved: D-102-ARCHITECTURE-SPEC, KNOWN-ISSUES-PATCH-PLAN → `docs/sprints/sprint-13/`
+- Phase closure moved: SPRINT-12-PHASE-CLOSURE.md → `docs/phase-reports/PHASE-5D-SPRINT-12-CLOSURE.md`
+
+**Broken references in active files except README: 0**
+
+**Known accepted exception:** `SPRINT-12-README.md` contains one historical stale reference (`SPRINT-12-PHASE-CLOSURE.md`) due to no-edit README rule. File was moved to `docs/phase-reports/PHASE-5D-SPRINT-12-CLOSURE.md`. README is not updated per operator instruction.
+
+**Final canonical manifest — `docs/sprints/sprint-12/`:**
+
+```
+SPRINT-12-README.md              — sprint overview (no-edit rule)
+SPRINT-12-KICKOFF-GATE.md        — kickoff gate
+SPRINT-12-TASK-BREAKDOWN.md      — 10 tasks + deliverables
+SPRINT-12-MID-REVIEW.md          — mid-sprint gate
+SPRINT-12-FINAL-REVIEW.md        — final review
+SPRINT-12-CLOSURE-SUMMARY.md     — closure deliverables
+SPRINT-12-RETROSPECTIVE.md       — retro
+S12-EVIDENCE-AUDIT-RESULT.md     — independent audit (PASS) + cleanup summary
+```
+
+8 canonical files. Evidence: 22 files in `evidence/sprint-12/` (protected). Archive: 6 files in `docs/archive/sprint-12/`.

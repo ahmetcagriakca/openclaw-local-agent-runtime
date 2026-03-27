@@ -1,0 +1,60 @@
+# Sprint 20 — Review Packet
+
+**Generated automatically**
+
+## Sprint Metadata
+- **Title:** Project Integration + PR Traceability
+- **Phase:** 6
+- **Model:** A
+
+## Task Status
+
+| Task | Issue | Branch | PR |
+|------|-------|--------|-----|
+| 20.1 | #40 | `sprint-20/t20.1-plan-schema` | #32 |
+| 20.2 | #41 | `sprint-20/t20.2-labels-milestones` | #33 |
+| 20.3 | #42 | `sprint-20/t20.3-issue-templates` | #34 |
+| 20.4 | #43 | `sprint-20/t20.4-project-auto-add` | #35 |
+| 20.5 | #44 | `sprint-20/t20.5-status-sync` | #36 |
+| 20.6 | #45 | `sprint-20/t20.6-pr-validator` | #37 |
+| 20.7 | #46 | `sprint-20/t20.7-pr-linkage` | #38 |
+| 20.G1 | #47 | exempt | — |
+| 20.G2 | #48 | exempt | #55 |
+| 20.RETRO | #49 | exempt | — |
+| 20.CLOSURE | #50 | exempt | #52 |
+
+## Evidence Inventory
+
+Total files: 10
+
+- `20.2-bootstrap-run-output.txt` (6268 bytes)
+- `20.4-project-auto-add-run-output.txt` (486 bytes) — `Project V2 Board: Vezir Sprint Board
+URL: https://github.com/users/ahmetcagriakc`
+- `20.5-status-sync-run-output.txt` (128 bytes) — `NO EVIDENCE — Script/workflow not executed. Prerequisite missing (gh CLI or Proj`
+- `20.6-pr-validator-run-output.txt` (128 bytes) — `NO EVIDENCE — Script/workflow not executed. Prerequisite missing (gh CLI or Proj`
+- `20.7-pr-linkage-run-output.txt` (166 bytes) — `Sprint: 20
+Tasks: 11
+Merged PRs found: 29
+  20.4: PR #53 (was: 35)
+  20.4: PR #3`
+- `final-review-verdict.md` (3179 bytes)
+- `mid-review-verdict.md` (1369 bytes)
+- `plan-yaml-valid.txt` (7 bytes) — `VALID`
+- `retrospective.md` (1777 bytes)
+- `validator-pass.txt` (441 bytes) — `plan.yaml:       docs\sprints\sprint-20\plan.yaml
+task breakdown:  docs\sprints\`
+
+## Sprint Documents
+
+- `issues.json`
+- `plan.yaml`
+- `PROJECT-FIELD-SCHEMA.md`
+- `S20-FINAL-REVIEW.md`
+- `S20-MID-REVIEW.md`
+- `S20-RETROSPECTIVE.md`
+- `SPRINT-20-TASK-BREAKDOWN.md`
+
+## Validation
+
+- [x] plan.yaml ↔ task breakdown: PASS
+- [x] plan.yaml parse: VALID

@@ -1,0 +1,16 @@
+evidence/sprint-13/build-output.txt
+evidence/sprint-13/closure-check-output.txt
+evidence/sprint-13/contract-evidence.txt
+evidence/sprint-13/e2e-output.txt
+evidence/sprint-13/file-manifest.txt
+evidence/sprint-13/grep-evidence.txt
+evidence/sprint-13/lighthouse.txt
+evidence/sprint-13/lint-output.txt
+evidence/sprint-13/live-checks.txt
+evidence/sprint-13/mutation-drill.txt
+evidence/sprint-13/pytest-output.txt
+evidence/sprint-13/review-summary.md
+evidence/sprint-13/sse-evidence.txt
+evidence/sprint-13/tsc-output.txt
+evidence/sprint-13/validator-output.txt
+evidence/sprint-13/vitest-output.txt

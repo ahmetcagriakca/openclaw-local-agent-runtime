@@ -1,0 +1,3 @@
+Mutation infrastructure unchanged in Sprint 13.
+Reference: evidence/sprint-12/mutation-drill.txt (operator drill 5/5)
+Contract tests: 11 pass (included in pytest-output.txt)

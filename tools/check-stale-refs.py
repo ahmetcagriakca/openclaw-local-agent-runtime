@@ -1,15 +1,21 @@
 #!/usr/bin/env python3
 """Check for stale file references in active docs.
 
-Usage: python tools/check-stale-refs.py
+Usage: python tools/check-stale-refs.py [--strict]
+       python tools/check-stale-refs.py          # relaxed mode (default, excludes reviews/)
 """
 import re
 import sys
 from pathlib import Path
 
+STRICT = "--strict" in sys.argv
+
 # Docs to scan for references
 SCAN_DIRS = ["docs/ai", "docs/shared"]
 SCAN_FILES = ["CLAUDE.md"]
+
+# Directories to exclude in relaxed mode (historical docs with expected generic refs)
+EXCLUDE_DIRS = [] if STRICT else ["docs/ai/reviews"]
 # Patterns to match file references
 REF_PATTERNS = [
     re.compile(r'`([a-zA-Z][\w/.-]+\.\w+)`'),  # `path/to/file.ext`
@@ -26,7 +32,15 @@ def find_docs():
     for d in SCAN_DIRS:
         p = Path(d)
         if p.is_dir():
-            docs.extend(p.rglob("*.md"))
+            for f in p.rglob("*.md"):
+                # Check exclusions
+                excluded = False
+                for ex in EXCLUDE_DIRS:
+                    if str(f).replace("\\", "/").startswith(ex):
+                        excluded = True
+                        break
+                if not excluded:
+                    docs.append(f)
     for f in SCAN_FILES:
         p = Path(f)
         if p.exists():
@@ -44,6 +58,9 @@ def extract_refs(filepath):
                 ref = match.group(1)
                 # Skip URLs, anchors, common false positives
                 if ref.startswith('http') or ref.startswith('#') or ref.startswith('mailto:'):
+                    continue
+                # In relaxed mode, skip bare filenames without path separators (inline mentions)
+                if not STRICT and '/' not in ref and '\\' not in ref:
                     continue
                 # Only check refs with file extensions
                 if Path(ref).suffix in FILE_EXTENSIONS:

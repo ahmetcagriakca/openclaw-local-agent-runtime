@@ -1,4 +1,4 @@
-Branch protection test evidence:
+Branch protection test evidence (final state — 2026-03-27):
 
 1. Workflow run #2 (issue-from-plan.yml) attempted direct push to main:
    Result: 'remote: error: GH006: Protected branch update failed for refs/heads/main'
@@ -12,6 +12,13 @@ Branch protection test evidence:
    - Branch deletion: NOT ALLOWED
 
 3. All Sprint 19 changes were merged via PR (no direct commits to main).
-   PRs: #1, #2, #3, #4, #17, #18, #19, #20, #21, #22
+   Phase 1 PRs: #1, #2, #3, #4, #17, #18, #19, #20, #21, #22
+   Phase 2 PRs: #24, #25, #26
+   Gate PRs: #27
+   Workflow-generated PRs: #20 (issues.json run #4), #23 (issues.json run #5)
 
-VERIFIED: main branch protection is active and working.
+4. GitHub Actions settings:
+   - "Allow GitHub Actions to create and approve pull requests": ENABLED
+   - Workflow permissions: Read repository contents and packages permissions
+
+VERIFIED: main branch protection is active and working across all sprint phases.

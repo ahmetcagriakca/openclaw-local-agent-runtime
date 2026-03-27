@@ -1,0 +1,236 @@
+name: Create Issues from plan.yaml
+
+on:
+  workflow_dispatch:
+    inputs:
+      sprint_number:
+        description: 'Sprint number (e.g., 19)'
+        required: true
+        type: string
+
+permissions:
+  issues: write
+  contents: write
+
+jobs:
+  create-issues:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install pyyaml
+
+      - name: Create issues from plan.yaml
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SPRINT_NUMBER: ${{ inputs.sprint_number }}
+        run: |
+          python3 << 'PYTHON_SCRIPT'
+          import json
+          import os
+          import subprocess
+          import sys
+          import yaml
+
+          sprint = os.environ["SPRINT_NUMBER"]
+          plan_path = f"docs/sprints/sprint-{sprint}/plan.yaml"
+
+          # Load plan.yaml
+          try:
+              with open(plan_path) as f:
+                  plan = yaml.safe_load(f)
+          except FileNotFoundError:
+              print(f"FAIL: {plan_path} not found")
+              sys.exit(1)
+          except yaml.YAMLError as e:
+              print(f"FAIL: Invalid YAML in {plan_path}: {e}")
+              sys.exit(1)
+
+          issue_config = plan.get("issue", {})
+          parent_title = issue_config.get("parent_title", f"[S{sprint}] Sprint {sprint}")
+          labels = issue_config.get("labels", [])
+          tasks = plan.get("tasks", [])
+
+          repo = os.environ.get("GITHUB_REPOSITORY", "")
+          marker_prefix = "vezir-task"
+
+          def gh(*args):
+              """Run gh CLI command and return output."""
+              cmd = ["gh"] + list(args)
+              result = subprocess.run(cmd, capture_output=True, text=True)
+              if result.returncode != 0:
+                  print(f"gh error: {result.stderr}")
+              return result.stdout.strip(), result.returncode
+
+          def find_issue_by_marker(marker):
+              """Search for existing issue by HTML comment marker."""
+              search_query = f"repo:{repo} is:issue {marker} in:body"
+              out, rc = gh("issue", "list", "--search", marker, "--json", "number,title,body", "--limit", "100")
+              if rc != 0 or not out:
+                  return None
+              try:
+                  issues = json.loads(out)
+                  for issue in issues:
+                      if marker in issue.get("body", ""):
+                          return issue["number"]
+              except json.JSONDecodeError:
+                  pass
+              return None
+
+          def find_issue_by_title_marker(title_marker):
+              """Search for existing issue by title marker."""
+              out, rc = gh("issue", "list", "--search", f'"{title_marker}" in:title', "--json", "number,title", "--limit", "50")
+              if rc != 0 or not out:
+                  return None
+              try:
+                  issues = json.loads(out)
+                  for issue in issues:
+                      if title_marker in issue.get("title", ""):
+                          return issue["number"]
+              except json.JSONDecodeError:
+                  pass
+              return None
+
+          # --- Create parent issue ---
+          parent_marker = f"<!-- {marker_prefix}:{sprint}.parent -->"
+          parent_number = find_issue_by_marker(parent_marker)
+
+          if parent_number is None:
+              parent_number = find_issue_by_title_marker(f"[S{sprint}]")
+
+          if parent_number is None:
+              label_args = []
+              for l in labels:
+                  label_args.extend(["--label", l])
+              parent_body = f"""{parent_marker}
+
+          # {parent_title}
+
+          **Sprint:** {sprint}
+          **Phase:** {plan.get('phase', 'N/A')}
+          **Model:** {plan.get('model', 'N/A')}
+
+          ## Tasks
+
+          """
+              for t in tasks:
+                  checkbox = f"- [ ] **{t['id']}** — {t['title']} (`{t.get('type', 'N/A')}`)"
+                  parent_body += checkbox + "\n"
+
+              out, rc = gh("issue", "create",
+                          "--title", parent_title,
+                          "--body", parent_body,
+                          *label_args)
+              if rc == 0:
+                  # Extract issue number from URL
+                  parent_number = int(out.strip().split("/")[-1])
+                  print(f"Created parent issue #{parent_number}: {parent_title}")
+              else:
+                  print(f"FAIL: Could not create parent issue")
+                  sys.exit(1)
+          else:
+              print(f"Parent issue already exists: #{parent_number}")
+
+          # --- Create child issues ---
+          issues_mapping = {
+              "sprint": int(sprint),
+              "parent_issue": parent_number,
+              "tasks": {}
+          }
+
+          for task in tasks:
+              task_id = task["id"]
+              task_title = task["title"]
+              task_type = task.get("type", "implementation")
+              branch_name = task.get("branch_name")
+              task_labels = task.get("labels", [])
+              branch_exempt = task.get("branch_exempt", False)
+
+              child_marker = f"<!-- {marker_prefix}:{sprint}.{task_id} -->"
+              child_title = f"[S{sprint}-{task_id}] {task_title}"
+
+              existing = find_issue_by_marker(child_marker)
+              if existing is None:
+                  existing = find_issue_by_title_marker(f"[S{sprint}-{task_id}]")
+
+              if existing is not None:
+                  print(f"  Task {task_id} issue already exists: #{existing}")
+                  issues_mapping["tasks"][task_id] = {
+                      "issue": existing,
+                      "branch": branch_name,
+                      "pr": None
+                  }
+                  continue
+
+              # Build issue body
+              body_parts = [child_marker, "", f"## {task_title}", ""]
+              body_parts.append(f"**Task ID:** {task_id}")
+              body_parts.append(f"**Type:** {task_type}")
+              body_parts.append(f"**Track:** {task.get('track', 'N/A')}")
+
+              if branch_name:
+                  body_parts.append(f"**Branch:** `{branch_name}`")
+              elif branch_exempt:
+                  body_parts.append("**Branch:** _exempt (gate task)_")
+
+              depends = task.get("depends_on", [])
+              if depends:
+                  body_parts.append(f"**Depends on:** {', '.join(depends)}")
+
+              co_delivered = task.get("co_delivered_with")
+              if co_delivered:
+                  body_parts.append(f"**Co-delivered with:** {co_delivered}")
+
+              child_body = "\n".join(body_parts)
+
+              label_args = []
+              all_labels = list(set(labels + task_labels))
+              for l in all_labels:
+                  label_args.extend(["--label", l])
+
+              out, rc = gh("issue", "create",
+                          "--title", child_title,
+                          "--body", child_body,
+                          *label_args)
+
+              if rc == 0:
+                  issue_num = int(out.strip().split("/")[-1])
+                  print(f"  Created #{issue_num}: {child_title}")
+                  issues_mapping["tasks"][task_id] = {
+                      "issue": issue_num,
+                      "branch": branch_name,
+                      "pr": None
+                  }
+              else:
+                  print(f"  FAIL: Could not create issue for {task_id}")
+                  issues_mapping["tasks"][task_id] = {
+                      "issue": None,
+                      "branch": branch_name,
+                      "pr": None
+                  }
+
+          # --- Write issues.json ---
+          issues_json_path = f"docs/sprints/sprint-{sprint}/issues.json"
+          with open(issues_json_path, "w") as f:
+              json.dump(issues_mapping, f, indent=2)
+          print(f"\nWritten: {issues_json_path}")
+          print(f"Tasks mapped: {len(issues_mapping['tasks'])}")
+          print("DONE")
+          PYTHON_SCRIPT
+
+      - name: Commit issues.json
+        env:
+          SPRINT_NUMBER: ${{ inputs.sprint_number }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add "docs/sprints/sprint-${{ inputs.sprint_number }}/issues.json"
+          git diff --cached --quiet && echo "No changes to commit" || git commit -m "[S${{ inputs.sprint_number }}] generate issues.json from plan.yaml"
+          git push

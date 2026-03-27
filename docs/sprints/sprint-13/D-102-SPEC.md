@@ -1,9 +1,8 @@
 # D-102: Token Governance — Context Window Fix
 
-**Status:** Frozen
+**Status:** Frozen (amended 2026-03-27)
 **Date:** 2026-03-26
-**Sprint 13 scope:** Minimum viable fix (L1 + L2 + tools + verify L3/L4/L5)
-**Future scope (Sprint 14+):** EventBus full architecture, handler classes, audit trail, bypass detection
+**Amendment:** D-102-AMENDMENT — Sprint 13 scope reconciliation (2026-03-27)
 
 ---
 
@@ -13,7 +12,7 @@ Developer stage received 219,531 tokens. Root cause: Snapshot MCP tool returns 5
 
 ## Decision
 
-### Sprint 13 Implements
+### Sprint 13 — Delivered
 
 **L1: Stage boundary isolation.** When a stage completes, only the final assistant message text is passed downstream. All tool call requests, responses, and intermediate messages are discarded.
 
@@ -37,6 +36,10 @@ def extract_stage_result(stage_name: str, messages: list[dict]) -> StageResult:
 | B | Two stages back (N-2) | 2,000 |
 | C | Three+ stages back | 500 |
 
+### Sprint 14+ — Deferred
+
+The following items were in original Sprint 13 scope but deferred. L1+L2 alone eliminates the 219K overflow (→ ~5K tokens). Deferred items provide defense-in-depth but are not required for the minimum viable fix.
+
 **Lightweight tools.** Two new tools replace Snapshot for read-only roles:
 
 | Tool | Returns | Target Tokens |
@@ -46,11 +49,11 @@ def extract_stage_result(stage_name: str, messages: list[dict]) -> StageResult:
 
 **Role restriction update.** Analyst and Architect prompts updated to use UIOverview instead of Snapshot.
 
-**Verify existing inline code.** L3 (token logging), L4 (budget: >10K truncate, >50K block), L5 (role permissions, 19 denies) already work inline. Sprint 13 verifies they are not broken by L1/L2 changes.
-
 **Feature flag.** `CONTEXT_ISOLATION_ENABLED` defaults true. Set false to revert.
 
-### Sprint 14+ Implements (NOT Sprint 13)
+**Explicit L3/L4/L5 verification.** L3 (token logging), L4 (budget: >10K truncate, >50K block), L5 (role permissions, 19 denies) already work inline. Currently covered implicitly by backend test suite (225 tests pass at S13 close, 458 at current).
+
+### Sprint 14A — Delivered (EventBus Architecture)
 
 - EventBus class with ordered handler dispatch
 - 13 handler classes extracted from inline code
@@ -68,25 +71,25 @@ Developer input: 219,531 → approximately 5,000 tokens (97.8% reduction).
 
 ## Validation
 
-| Test | Expected |
-|------|----------|
-| extract_stage_result strips tool history | Zero tool_call/tool_result in output |
-| Tiered assembly ≤ tier sum | Assembled ≤ 8000 chars for 4 previous stages |
-| UIOverview ≤ 1500 tokens | Measured |
-| WindowList ≤ 300 tokens | Measured |
-| Developer input ≤ 30K on complex mission | Token log |
-| 3 complex missions complete | Mission reports |
-| 3 simple missions no regression | Comparison |
-| Feature flag off reverts | Old behavior restored |
+| # | Criterion | Sprint | Status |
+|---|-----------|--------|--------|
+| 1 | extract_stage_result strips tool history | 13 | Done (9 tests) |
+| 2 | Tiered assembly ≤ tier sum | 13 | Done (6 tests) |
+| 3 | UIOverview ≤ 1500 tokens | Deferred | Tool not built |
+| 4 | WindowList ≤ 300 tokens | Deferred | Tool not built |
+| 5 | Developer input ≤ 30K on complex mission | Deferred | Requires live pipeline |
+| 6 | 3 complex missions complete | Deferred | Requires live pipeline |
+| 7 | 3 simple missions no regression | Deferred | Requires live pipeline |
+| 8 | Feature flag off reverts | Deferred | Flag not built |
 
 ## Rollback
 
-`CONTEXT_ISOLATION_ENABLED = false` in config.
+L1/L2 are structural (frozen dataclass + tier constants). Rollback by reverting `extract_stage_result()` and `assembler.py` tier logic.
 
 ## Trade-off
 
 | Gain | Cost |
 |------|------|
 | Overflow eliminated | Upstream tool responses lost at boundary |
-| Simple implementation (2 functions + 2 tools) | No event-driven governance yet |
-| Quick to implement (1-2 sessions) | Full observability deferred |
+| Simple implementation (2 functions) | No tool-level caps yet |
+| Quick to implement (1 session) | Full observability deferred to Sprint 15 |

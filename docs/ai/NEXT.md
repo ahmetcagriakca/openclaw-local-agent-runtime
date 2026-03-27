@@ -1,9 +1,16 @@
 # Next Steps — Vezir Platform
 
 **Last updated:** 2026-03-27
-**Current:** Phase 6 active. Sprint 20 closed.
+**Current:** Phase 6 active. Sprint 21 implementation done, review pending.
 
 ---
+
+## Sprint 21 — Closure + Archive Automation (review_pending)
+
+**Model:** A (implementation)
+**Scope:** Review packet generator, stale ref checker, archive manifest, closure preflight, merged-state check, branch cleanup
+**Status:** implementation_status=done, closure_status=review_pending
+**Key artifacts:** `generate-review-packet.py`, `check-stale-refs.py`, `generate-archive-manifest.py`, `closure-preflight.yml`, `check-merged-state.py`, `cleanup-merged-branches.sh`
 
 ## Sprint 20 — Project Integration + PR Traceability (CLOSED)
 

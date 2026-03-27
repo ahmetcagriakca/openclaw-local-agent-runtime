@@ -1,7 +1,7 @@
 # Current State
 
 **Last updated:** 2026-03-27
-**Active phase:** Sprint 20 CLOSED — Project Integration + PR Traceability (2026-03-27)
+**Active phase:** Sprint 20 — Project Integration + PR Traceability (implementation_status=done, closure_status=review_pending)
 **Doc model:** This file is canonical for system state. Session context lives in `docs/ai/handoffs/current.md`.
 **Note:** All sprints through 16 closed. Phase 6 ready to start. Phase 2 deferred — single-user localhost, security hardening not urgent.
 **Persistence:** State is file-persisted (state.json, mission.json). Mission history via persistence layer (Sprint 16).
@@ -74,7 +74,7 @@
 | Sprint 17 | Phase 6 Controlled Start (CI fix + doc alignment) | Closed |
 | Sprint 18 | Repo Cleanup (source-of-truth compression) | Closed |
 | Sprint 19 | Single-Repo Automation MVP (plan.yaml + issues + branches) | Closed |
-| Sprint 20 | Project Integration + PR Traceability | Closed |
+| Sprint 20 | Project Integration + PR Traceability | review_pending |
 
 ## Test Evidence
 

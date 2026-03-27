@@ -17,7 +17,7 @@ Yes. Five new tools automate previously manual closure steps:
 
 ## What friction remains?
 
-1. Closure preflight workflow not yet tested end-to-end via GitHub Actions (needs workflow_dispatch trigger)
+1. Closure preflight workflow had a Python env var bug on first run — fixed (PR #78), then verified end-to-end (S19 preflight SUCCESS 5/5)
 2. Stale ref checker has many false positives from historical review docs referencing generic filenames
 3. Archive manifest generates plan but doesn't execute moves (manual step remains)
 

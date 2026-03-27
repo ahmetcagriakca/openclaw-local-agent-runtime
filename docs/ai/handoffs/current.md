@@ -2,100 +2,61 @@
 
 **Platform:** Vezir Platform
 **Operator:** AKCA
-**Session scope:** Sprint 17 kickoff — Phase 6 controlled start
 
 ---
 
-## Sprint Status
+## Session Summary
 
-| Sprint | Status | Detail |
-|--------|--------|--------|
-| 12-16 | ✅ Closed | All clean |
-| **17** | **IN PROGRESS** | Model A, Phase 6 controlled start |
+2 sprint kapatıldı:
 
-**Phase 5.5:** ✅ Closed (d01a3aa)
-
----
-
-## Sprint 17 Scope
-
-| Task | Status | Deliverable |
-|------|--------|-------------|
-| T17-1 Benchmark workflow fix | ✅ Done | `.github/workflows/benchmark.yml` fixed |
-| T17-2 Evidence workflow modernize | ⏭ Skipped | evidence.yml already works, no change needed |
-| T17-3 Source-of-truth alignment | ✅ Done | STATE.md + NEXT.md + doc model markers |
-| T17-4 Sprint plan + evidence freeze | ✅ Done | `S17-KICKOFF.md` + D-109 + D-110 frozen |
-| T17-G1 Mid Review Gate | ✅ PASS | 6/6 checks green |
-| T17-G2 Final Review Gate | ✅ PASS | 458 tests pass, evidence bundle complete |
-
-## Decisions (Sprint 17)
-
-| ID | Status | Konu |
-|----|--------|------|
-| D-109 | ✅ Frozen | Benchmark: evidence-only model |
-| D-110 | ✅ Frozen | Doc model: dual source, STATE.md canonical |
+| Sprint | Scope | Model | Status |
+|--------|-------|-------|--------|
+| 17 | CI fix + doc alignment + D-109/D-110 | A | Closed |
+| 18 | Repo cleanup (source-of-truth compression) | B | Closed |
 
 ---
 
-## Bu Oturumda Yapılanlar
+## Sprint 17 Deliverables
+- benchmark.yml fix (broken path + dead compare step)
+- requirements.txt + package-lock.json CI dependency fix
+- benchmark_api.py summary fix (no false claims)
+- D-109 frozen (benchmark evidence-only)
+- D-110 frozen (doc model dual source)
+- GPT review: PASS (3 rounds)
 
-### Kickoff
-- `docs/sprints/sprint-17/S17-KICKOFF.md` — Model A uyumlu, 6 task, 2 gate, 10-item evidence checklist
-- GPT analizi doğrulandı, optimize edildi, scope daraltıldı
-
-### Benchmark Fix (T17-1)
-- `cd agent &&` prefix kaldırıldı (benchmark_api.py repo root'ta)
-- Sahte `compare_benchmark.py` step'i çıkarıldı
-- Evidence verify + artifact upload eklendi
-
-### Doc Alignment (T17-3)
-- STATE.md: Sprint 17 entry, doc model marker, active phase updated
-- NEXT.md: Sprint 17 section, doc model marker, decision count updated
-
----
-
-## Aktif Hard Rules
-
-1. Sprint 17 = **Model A zorunlu** — forced by sprint-policy.yml
-2. `closure_status=closed` = operator-only
-3. D-109 ve D-110 sprint kapanmadan frozen olmalı
-4. Mid review gate (T17-G1) pass etmeden T17-3/T17-4 başlamaz
+## Sprint 18 Deliverables
+- GOVERNANCE.md (PROCESS-GATES + PROTOCOL merged, 461→164 lines)
+- CLAUDE.md rewrite (176→83 lines)
+- NEXT.md, BACKLOG.md simplified (forward/open only)
+- 116 files archived via git mv (history preserved)
+- D-111→D-114 frozen
+- Stale references fixed in 4 active files
+- GPT review: PASS (2 rounds)
 
 ---
 
-## Decisions
+## Current State
 
-| ID | Status | Konu |
-|----|--------|------|
-| D-001 → D-110 | Frozen | 110 total |
+- **Phase:** 6
+- **Last closed sprint:** 18
+- **Decisions:** 114 frozen (D-001→D-114)
+- **Tests:** 458 backend + 29 frontend PASS
+- **CI:** 4 workflows green (CI, Benchmark, Evidence Collection, CodeQL)
+- **Sprint 19:** NOT STARTED, kickoff gate OPEN
 
----
+## Canonical Docs (D-110, D-112)
 
-## Test Baseline
+| Doc | Role |
+|-----|------|
+| `docs/ai/STATE.md` | System state (canonical) |
+| `docs/ai/NEXT.md` | Roadmap (canonical) |
+| `docs/ai/DECISIONS.md` | Decision index (canonical) |
+| `docs/ai/GOVERNANCE.md` | Sprint governance (canonical) |
+| `docs/ai/BACKLOG.md` | Open backlog (canonical) |
+| This file | Session context (supplementary) |
 
-| Suite | Count | Status |
-|-------|-------|--------|
-| Backend (pytest) | 458 | All pass |
-| Frontend (vitest) | 29 | All pass |
-| TSC errors | 0 | Clean |
+## Open Items
 
----
-
-## GPT Review — HOLD Patches Applied
-
-GPT verdict: HOLD (4 patches). All applied:
-1. HOLD-1: benchmark_api.py summary now computed from real measurements
-2. HOLD-2: STATE.md "regression gate" → "evidence-only (D-109)"
-3. HOLD-3: S17-KICKOFF.md fully synced (metadata, scope, tasks, gates, checklist)
-4. HOLD-4: Scope delta section added to kickoff doc
-
-## Sonraki Adımlar
-
-1. **Commit + push** — HOLD patches
-2. **GPT re-review** — request PASS
-3. **Operator sign-off** — `closure_status=closed`
-
----
-
-*Bu dosya `docs/ai/handoffs/current.md` olarak commit edilmeli.*
-*Önceki handoff → `docs/ai/handoffs/archive/2026-03-27-v3.md`*
+- Sprint 19 scope TBD by operator
+- Dependabot moderate vulnerability (1) on default branch
+- D-021→D-058 extraction (AKCA-assigned, non-blocking)

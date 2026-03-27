@@ -1,0 +1,12 @@
+Scanning 11 documents for stale references...
+
+References checked: 64
+Stale references: 4
+
+STALE REFERENCES:
+  docs\ai\DECISIONS.md:647 -> tools/validate_sprint_docs.py
+  docs\ai\DECISIONS.md:891 -> tests/test_rework_limiter.py
+  docs\ai\DECISIONS.md:996 -> docs/ai/PHASE-5-FREEZE-ADDENDUM.md
+  docs\ai\handoffs\README.md:14 -> archive/YYYY-MM-DD-vN.md
+
+FAIL: Stale references found

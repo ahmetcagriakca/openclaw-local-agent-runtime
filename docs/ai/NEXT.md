@@ -1,16 +1,16 @@
 # Next Steps — Vezir Platform
 
 **Last updated:** 2026-03-27
-**Current:** Phase 6 active. Sprint 20 closed.
+**Current:** Phase 6 active. Sprint 20 implementation done, closure review pending.
 
 ---
 
-## Sprint 20 — Project Integration + PR Traceability (CLOSED)
+## Sprint 20 — Project Integration + PR Traceability (review_pending)
 
 **Model:** A (implementation)
 **Scope:** GitHub Project field schema, labels/milestones bootstrap, issue form templates, project auto-add, status sync, PR validator, PR linkage
-**Deliverables:** 7 implementation tasks, 3 new workflows, 3 issue templates, 2 new tools
-**Review:** Pending GPT review
+**Status:** implementation_status=done, closure_status=review_pending
+**Note:** Tasks 20.2/20.4/20.5/20.6/20.7 code merged but lack runtime evidence (gh CLI missing, no Project V2 board).
 **Key artifacts:** `project-auto-add.yml`, `status-sync.yml`, `pr-validator.yml`, `bootstrap-labels-milestones.sh`, `update-pr-linkage.py`
 
 ## Sprint 19 — Single-Repo Automation MVP (CLOSED)

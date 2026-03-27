@@ -1,7 +1,7 @@
 # Current State
 
 **Last updated:** 2026-03-27
-**Active phase:** Sprint 17 CLOSED — Phase 6 controlled start (2026-03-27)
+**Active phase:** Sprint 18 IN PROGRESS — Repo Cleanup (2026-03-27)
 **Doc model:** This file is canonical for system state. Session context lives in `docs/ai/handoffs/current.md`.
 **Note:** All sprints through 16 closed. Phase 6 ready to start. Phase 2 deferred — single-user localhost, security hardening not urgent.
 **Persistence:** State is file-persisted (state.json, mission.json). Mission history via persistence layer (Sprint 16).
@@ -70,6 +70,7 @@
 | Sprint 15 | OTel Observability (traces + metrics + logs) | Closed |
 | Sprint 16 | Presentation Layer + CI/CD (Phase 5.5 closure) | Closed |
 | Sprint 17 | Phase 6 Controlled Start (CI fix + doc alignment) | Closed |
+| Sprint 18 | Repo Cleanup (source-of-truth compression) | In Progress |
 
 ## Test Evidence
 
@@ -85,7 +86,7 @@
 
 ## Architectural Decisions
 
-110 frozen decisions (D-001 through D-110). See `docs/ai/DECISIONS.md`. Decision records D-105→D-110 in `docs/decisions/`.
+114 frozen decisions (D-001 through D-114). See `docs/ai/DECISIONS.md`. Governance rules in `docs/ai/GOVERNANCE.md` (D-112).
 
 ## Port Map
 

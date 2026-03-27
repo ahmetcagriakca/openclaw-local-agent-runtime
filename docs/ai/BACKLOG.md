@@ -1,56 +1,8 @@
-# Backlog
+# Backlog — Vezir Platform
 
-**Last updated:** 2026-03-25
+**Last updated:** 2026-03-27
 
----
-
-## Completed
-
-| ID | Item | Sprint | Notes |
-|----|------|--------|-------|
-| B-029 | Deny forensic summary | Sprint 7 | `_aggregate_deny_forensics()` in controller |
-| B-030 | Developer self-verification prompt | Sprint 7 | specialists.py hardened |
-| B-031 | Tester verdict guidelines (unknown=fail) | Sprint 7 | D-068 aligned |
-| B-032 | Model tracking per stage (agent_used) | Sprint 7 | Single-point propagation |
-| B-033 | Approval sunset docstring | Sprint 7 | D-063 reference added |
-| B-034 | Gate findings structured | Sprint 7 | 3 semantic states ready |
-| B-035 | STATE.md + NEXT.md wording fix | Sprint 7 | "durable" → "state-persisted" |
-| B-036 | ops/wsl/ versioned templates | Sprint 7 | 5 files created |
-| B-037 | Capability manifest auto-gen | Sprint 7 | D-071 atomic write |
-| B-038 | Sprint-End Doc Policy + validation script | Sprint 7 | D-077 frozen |
-| B-056 | DataQuality enum amendment (5→6 state) | Pre-Sprint 8 | D-079 frozen |
-| B-057 | Service registry freshness rule | Pre-Sprint 8 | D-080 frozen |
-
----
-
-## Sprint 8 — Phase 5A-1: Backend Read Model
-
-| ID | Item | Notes |
-|----|------|-------|
-| B-039 | FastAPI + Uvicorn setup (D-061) | Foundation |
-| B-040 | Pydantic schemas freeze (D-067) | `/api/v1/` contract |
-| B-041 | MissionNormalizer (D-065) | Aggregation + precedence + cache |
-| B-042 | IncrementalFileCache | File watcher + cache invalidation |
-| B-043 | Per-source circuit breaker (D-072) | Fault isolation |
-| B-044 | Atomic write utility (D-071) | System-wide helper |
-| B-045 | CapabilityChecker service | Reads capabilities.json |
-| B-046 | Localhost security (D-070) | Host + Origin validation |
-| B-047 | Health snapshot FS migration (D-075) | ext4 state |
-| B-048 | File owner/target FS matrix (GPT-4) | Sprint 8 kickoff item |
-| B-049 | API test suite | Endpoint integration tests |
-| B-050 | D-021→D-058 extraction to DECISIONS.md | Documentation debt |
-
----
-
-## Sprint 9 — Phase 5A-2: Frontend Read-Only
-
-| ID | Item | Notes |
-|----|------|-------|
-| B-051 | React scaffold + API client | mission-control/ |
-| B-052 | DataQualityBadge + StaleBanner components | D-068 UI enforcement |
-| B-053 | Mission List + Detail pages | Core UI |
-| B-054 | Per-panel error boundary (D-072) | UI fault isolation |
-| B-055 | Approval queue read-only | No buttons, Telegram note |
+Open items only. Completed items archived (Sprint 18, D-113).
 
 ---
 
@@ -101,8 +53,4 @@
 | B-026 | Dead-letter retention policy | No auto-purge defined |
 | B-027 | Task directory retention policy | No auto-purge defined |
 | B-028 | Stale .bak files | Bootstrap-created backups |
-
----
-
-*Backlog — Vezir Platform*
-*Last updated: 2026-03-25*
+| B-050 | D-021→D-058 extraction to DECISIONS.md | Documentation debt |

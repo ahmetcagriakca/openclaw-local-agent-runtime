@@ -17,21 +17,22 @@ Telegram bot integration, Math Service on :9000.
 - Phase 5C: implementation_status=done, closure_status=closed (Sprint 11)
 - Phase 5D: implementation_status=done, closure_status=closed (Sprint 12)
 - Sprint 15: implementation_status=done, closure_status=closed (OTel Observability)
+- Sprint 16: implementation_status=done, closure_status=closed (Presentation + CI/CD)
 - Frozen decisions: D-001 → D-101 (decision debt zero)
 
 ## Last Completed Sprint
 
-Sprint 15 — Full Observability: OpenTelemetry Integration
+Sprint 16 — Presentation Layer + CI/CD Foundation (Phase 5.5 closure)
 
 Outputs:
-- TracingHandler: 28/28 event types → OTel spans, zero blind spots
-- MetricsHandler: 17 instruments (6 counters + 11 histograms)
-- StructuredLogHandler: JSON logs with trace_id/span_id injection
-- Span hierarchy: mission → stage → tool/llm → approval (4 levels)
-- 27 new tests (T1-T5 coverage + E2E trace completeness + edge cases)
-- observability/README.md: coverage map, ID contract, metric catalog, extension guide
-- No-blind-spots closure blocker test: PASS
-- Full suite: 418/419 PASS (1 pre-existing health check)
+- Dashboard API: 15 new endpoints (missions, traces, metrics, logs, alerts, live SSE)
+- Persistence layer: mission_store, trace_store, metric_store (JSON file)
+- Alert system: 9 rules, rule engine, Telegram notification, CRUD API
+- Frontend: MonitoringPage + 5 API hooks + live SSE feed
+- CI/CD: 3 GitHub Actions (ci.yml, benchmark.yml, evidence.yml)
+- Session model foundation (auth/session.py)
+- Jaeger evaluation document (not deployed)
+- 39 new tests, full suite: 457/458 PASS
 - Decision debt zero: D-001→D-101 all frozen
 - Backend 234 tests, Frontend 29 tests, 0 failures
 - Decisions: D-097→D-101

@@ -1,0 +1,35 @@
+name: Benchmark
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+
+      - name: Install dependencies
+        run: |
+          pip install -r agent/requirements.txt
+          pip install pytest pytest-timeout
+
+      - name: Run benchmark
+        run: cd agent && python tools/benchmark_api.py
+
+      - name: Compare with baseline
+        run: |
+          if [ -f agent/tools/benchmark-baseline.json ]; then
+            cd agent && python tools/compare_benchmark.py \
+              tools/benchmark-baseline.json \
+              tools/benchmark-current.json \
+              --threshold 10
+          else
+            echo "No baseline found, skipping comparison"
+          fi

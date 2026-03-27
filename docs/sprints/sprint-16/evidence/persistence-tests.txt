@@ -1,0 +1,22 @@
+============================= test session starts =============================
+platform win32 -- Python 3.14.3, pytest-7.4.4, pluggy-1.6.0 -- C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\AKCA\oc\agent
+configfile: pyproject.toml
+plugins: anyio-4.12.1, cov-4.1.0, mock-3.12.0, timeout-2.4.0
+timeout: 30.0s
+timeout method: thread
+timeout func_only: False
+collecting ... collected 9 items
+
+tests/test_sprint16.py::TestMissionStore::test_list_with_filters PASSED  [ 11%]
+tests/test_sprint16.py::TestMissionStore::test_persistence_across_instances PASSED [ 22%]
+tests/test_sprint16.py::TestMissionStore::test_record_and_get PASSED     [ 33%]
+tests/test_sprint16.py::TestMissionStore::test_summary PASSED            [ 44%]
+tests/test_sprint16.py::TestTraceStore::test_get_span_tree PASSED        [ 55%]
+tests/test_sprint16.py::TestTraceStore::test_list_traces PASSED          [ 66%]
+tests/test_sprint16.py::TestTraceStore::test_record_and_get PASSED       [ 77%]
+tests/test_sprint16.py::TestMetricStore::test_history PASSED             [ 88%]
+tests/test_sprint16.py::TestMetricStore::test_snapshot_and_get PASSED    [100%]
+
+============================== 9 passed in 0.49s ==============================

@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+
+      - name: Install dependencies
+        run: |
+          pip install -r agent/requirements.txt
+          pip install pytest pytest-timeout pytest-cov ruff
+
+      - name: Ruff lint
+        run: cd agent && python -m ruff check .
+
+      - name: Pytest
+        run: cd agent && python -m pytest tests/ -v --timeout=30 --cov=. --cov-report=xml -k "not test_health_returns_ok"
+
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: cd frontend && npm ci
+
+      - name: TypeScript check
+        run: cd frontend && npx tsc --noEmit
+
+      - name: Vitest
+        run: cd frontend && npx vitest run

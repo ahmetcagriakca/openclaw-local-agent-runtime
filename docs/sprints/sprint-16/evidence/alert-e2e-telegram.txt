@@ -1,0 +1,14 @@
+============================= test session starts =============================
+platform win32 -- Python 3.14.3, pytest-7.4.4, pluggy-1.6.0 -- C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\AKCA\oc\agent
+configfile: pyproject.toml
+plugins: anyio-4.12.1, cov-4.1.0, mock-3.12.0, timeout-2.4.0
+timeout: 30.0s
+timeout method: thread
+timeout func_only: False
+collecting ... collected 39 items / 38 deselected / 1 selected
+
+tests/test_sprint16.py::TestFullIntegration::test_alert_e2e PASSED       [100%]
+
+====================== 1 passed, 38 deselected in 0.57s =======================

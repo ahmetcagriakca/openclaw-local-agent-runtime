@@ -10,6 +10,7 @@ import { MissionDetailPage } from './pages/MissionDetailPage'
 import { HealthPage } from './pages/HealthPage'
 import { ApprovalsPage } from './pages/ApprovalsPage'
 import { TelemetryPage } from './pages/TelemetryPage'
+import { MonitoringPage } from './features/monitoring/MonitoringPage'
 import { NotFoundPage } from './pages/NotFoundPage'
 
 export default function App() {
@@ -55,6 +56,14 @@ export default function App() {
             element={
               <ErrorBoundary fallbackLabel="Telemetry panel error">
                 <TelemetryPage />
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path="/monitoring"
+            element={
+              <ErrorBoundary fallbackLabel="Monitoring panel error">
+                <MonitoringPage />
               </ErrorBoundary>
             }
           />

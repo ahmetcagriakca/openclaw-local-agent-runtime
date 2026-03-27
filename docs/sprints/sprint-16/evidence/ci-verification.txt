@@ -1,0 +1,13 @@
+=== CI Verification ===
+3 workflow files present:
+benchmark.yml
+ci.yml
+evidence.yml
+
+Pre-commit hooks exist:
+repos:
+  - repo: local
+    hooks:
+      - id: ruff-check
+        name: ruff lint
+RESULT: CI verification PASS

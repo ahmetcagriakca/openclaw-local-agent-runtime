@@ -1,0 +1,7 @@
+Live waterfall SSE endpoint registered in server.py
+
+242:from api.dashboard_api import router as dashboard_router
+257:app.include_router(dashboard_router, prefix="/api/v1")
+
+useLiveMission hook connects to /api/v1/dashboard/live SSE
+RESULT: Live SSE infrastructure PASS

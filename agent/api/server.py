@@ -239,6 +239,9 @@ from api.mission_create_api import router as mission_create_router
 from api.signal_api import router as signal_router
 from api.logs_api import router as logs_router
 from api.roles_api import router as roles_router
+from api.dashboard_api import router as dashboard_router
+from api.telemetry_query_api import router as telemetry_query_router
+from api.alerts_api import router as alerts_router
 
 app.include_router(mission_router, prefix="/api/v1")
 app.include_router(approval_router, prefix="/api/v1")
@@ -251,6 +254,9 @@ app.include_router(mission_create_router, prefix="/api/v1")
 app.include_router(signal_router, prefix="/api/v1")
 app.include_router(logs_router, prefix="/api/v1")
 app.include_router(roles_router, prefix="/api/v1")
+app.include_router(dashboard_router, prefix="/api/v1")
+app.include_router(telemetry_query_router, prefix="/api/v1")
+app.include_router(alerts_router, prefix="/api/v1")
 
 
 # ── Main ────────────────────────────────────────────────────────

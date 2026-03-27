@@ -1,0 +1,18 @@
+============================= test session starts =============================
+platform win32 -- Python 3.14.3, pytest-7.4.4, pluggy-1.6.0 -- C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\AKCA\oc\agent
+configfile: pyproject.toml
+plugins: anyio-4.12.1, cov-4.1.0, mock-3.12.0, timeout-2.4.0
+timeout: 30.0s
+timeout method: thread
+timeout func_only: False
+collecting ... collected 5 items
+
+tests/test_sprint16.py::TestAlertEngine::test_alert_history PASSED       [ 20%]
+tests/test_sprint16.py::TestAlertEngine::test_budget_warning_fires_after_threshold PASSED [ 40%]
+tests/test_sprint16.py::TestAlertEngine::test_default_rules_loaded PASSED [ 60%]
+tests/test_sprint16.py::TestAlertEngine::test_mission_aborted_fires_alert PASSED [ 80%]
+tests/test_sprint16.py::TestAlertEngine::test_rule_crud PASSED           [100%]
+
+============================== 5 passed in 0.51s ==============================

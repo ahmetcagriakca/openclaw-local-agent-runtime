@@ -1,0 +1,60 @@
+name: Evidence Collection
+
+on:
+  workflow_dispatch:
+    inputs:
+      sprint:
+        description: 'Sprint number'
+        required: true
+        type: string
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install backend deps
+        run: |
+          pip install -r agent/requirements.txt
+          pip install pytest pytest-timeout pytest-cov ruff
+
+      - name: Install frontend deps
+        run: cd frontend && npm ci
+
+      - name: Create evidence directory
+        run: mkdir -p evidence/sprint-${{ inputs.sprint }}
+
+      - name: Backend tests
+        run: cd agent && python -m pytest tests/ -v --timeout=30 > ../evidence/sprint-${{ inputs.sprint }}/pytest-output.txt 2>&1 || true
+
+      - name: Frontend tests
+        run: cd frontend && npx vitest run > ../evidence/sprint-${{ inputs.sprint }}/vitest-output.txt 2>&1 || true
+
+      - name: TypeScript check
+        run: cd frontend && npx tsc --noEmit > ../evidence/sprint-${{ inputs.sprint }}/tsc-output.txt 2>&1 || true
+
+      - name: Ruff lint
+        run: cd agent && python -m ruff check . > ../evidence/sprint-${{ inputs.sprint }}/ruff-output.txt 2>&1 || true
+
+      - name: File manifest
+        run: |
+          find . -type f \( -name "*.py" -o -name "*.tsx" -o -name "*.ts" \) \
+            ! -path "*/node_modules/*" ! -path "*/.git/*" | sort \
+            > evidence/sprint-${{ inputs.sprint }}/file-manifest.txt
+
+      - name: Upload evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: sprint-${{ inputs.sprint }}-evidence
+          path: evidence/sprint-${{ inputs.sprint }}/

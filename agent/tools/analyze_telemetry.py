@@ -352,5 +352,52 @@ def main():
     print(report)
 
 
+def load_otel_traces() -> dict:
+    """Load OTel trace data from trace-history.json (Sprint 16)."""
+    trace_path = os.path.join(PROJECT_ROOT, "logs", "trace-history.json")
+    if not os.path.exists(trace_path):
+        return {}
+    try:
+        with open(trace_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        return data.get("traces", {})
+    except Exception:
+        return {}
+
+
+def load_otel_metrics() -> list[dict]:
+    """Load OTel metric snapshots from metric-history.json (Sprint 16)."""
+    metric_path = os.path.join(PROJECT_ROOT, "logs", "metric-history.json")
+    if not os.path.exists(metric_path):
+        return []
+    try:
+        with open(metric_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        return data.get("snapshots", [])
+    except Exception:
+        return []
+
+
+def analyze_otel_traces(traces: dict) -> dict:
+    """Analyze OTel trace data."""
+    total_spans = sum(t.get("span_count", 0) for t in traces.values())
+    return {
+        "trace_count": len(traces),
+        "total_spans": total_spans,
+        "avg_spans_per_trace": round(total_spans / len(traces), 1) if traces else 0,
+    }
+
+
+def analyze_otel_metrics(snapshots: list[dict]) -> dict:
+    """Analyze OTel metric snapshots."""
+    if not snapshots:
+        return {"snapshot_count": 0}
+    latest = snapshots[-1].get("metrics", {})
+    return {
+        "snapshot_count": len(snapshots),
+        "latest_metrics": latest,
+    }
+
+
 if __name__ == "__main__":
     main()

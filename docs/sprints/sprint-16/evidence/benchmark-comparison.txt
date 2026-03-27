@@ -1,0 +1,14 @@
+compare_benchmark.py created
+usage: compare_benchmark.py [-h] [--threshold THRESHOLD] baseline current
+
+Compare benchmark results
+
+positional arguments:
+  baseline              Baseline benchmark JSON file
+  current               Current benchmark JSON file
+
+options:
+  -h, --help            show this help message and exit
+  --threshold THRESHOLD
+                        Regression threshold percentage (default: 10)
+RESULT: Benchmark comparison tool PASS

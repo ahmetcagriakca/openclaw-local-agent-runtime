@@ -93,25 +93,26 @@ jobs:
           # Check 5: Issues closed
           echo "--- Check 5: Issues closed ---"
           if [ -f "${SPRINT_DIR}/issues.json" ]; then
-            python3 << 'PYCHECK'
-          import json, subprocess, sys
-          data = json.load(open("${SPRINT_DIR}/issues.json".replace("${SPRINT_DIR}", "docs/sprints/sprint-${SPRINT}".replace("${SPRINT}", "${SPRINT_NUMBER}"))))
+            python3 -c "
+          import json, subprocess, sys, os
+          sprint = os.environ['SPRINT_NUMBER']
+          data = json.load(open(f'docs/sprints/sprint-{sprint}/issues.json'))
           open_count = 0
-          for tid, info in data.get("tasks", {}).items():
-              inum = info.get("issue")
+          for tid, info in data.get('tasks', {}).items():
+              inum = info.get('issue')
               if not inum: continue
-              result = subprocess.run(["gh", "issue", "view", str(inum), "--json", "state", "--jq", ".state"], capture_output=True, text=True)
+              result = subprocess.run(['gh', 'issue', 'view', str(inum), '--json', 'state', '--jq', '.state'], capture_output=True, text=True)
               state = result.stdout.strip()
-              if state != "CLOSED":
-                  print(f"  {tid}: #{inum} is {state}")
+              if state != 'CLOSED':
+                  print(f'  {tid}: #{inum} is {state}')
                   open_count += 1
           if open_count == 0:
-              print("All issues closed")
-              print("PASS")
+              print('All issues closed')
+              print('PASS')
           else:
-              print(f"FAIL: {open_count} issues still open")
+              print(f'FAIL: {open_count} issues still open')
               sys.exit(1)
-          PYCHECK
+          "
             if [ $? -ne 0 ]; then
               ERRORS=$((ERRORS + 1))
             fi

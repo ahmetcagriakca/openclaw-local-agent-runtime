@@ -35,8 +35,8 @@
 
 1. No Phase 6 implementation until Phase 5.5 closure report committed ✅ DONE (d01a3aa)
 2. D-105 must be frozen before Sprint 17 kickoff ✅ DONE (frozen 2026-03-27)
-3. Sprint 17 must use Model A or explicitly declare Model B at kickoff
-4. Max 2 consecutive Model B sprints — Sprint 17 is first Model B eligible post-reset
+3. Sprint 17 = Model A (active — D-105 constraint satisfied)
+4. Max 2 consecutive Model B sprints — counter reset by Sprint 17 Model A
 
 ---
 
@@ -51,8 +51,11 @@
 
 ## Next Sprint
 
-**Sprint 17 — Phase 6**
-- Status: NOT STARTED
-- Kickoff gate: OPEN
-- Required before kickoff: ~~D-104 patch status decision~~ ✅ DONE
-- Carry-forward assignment needed before scope is frozen
+**Sprint 17 — Phase 6 Controlled Start**
+- Status: IN PROGRESS (implementation done, pending closure)
+- Model: A (forced — D-105)
+- D-109 frozen: benchmark evidence-only
+- D-110 frozen: doc model dual source
+- Mid review gate: PASS
+- Final review gate: PASS
+- Awaiting: operator sign-off for closure

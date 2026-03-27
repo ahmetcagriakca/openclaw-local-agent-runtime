@@ -939,6 +939,24 @@ Formal record: `docs/decisions/D-108-SESSION-AUTH-MODEL.md`.
 
 ---
 
+### D-109: Benchmark Strategy — Evidence-Only Model
+
+**Phase:** Sprint 17 | **Status:** Frozen
+
+Benchmark pipeline produces `benchmark.txt` as CI artifact. No automated regression gate. JSON baseline + comparator deferred to future sprint.
+Formal record: `docs/decisions/D-109-BENCHMARK-STRATEGY.md`.
+
+---
+
+### D-110: Documentation Model Hierarchy — Dual Source
+
+**Phase:** Sprint 17 | **Status:** Frozen
+
+Dual model: STATE.md/NEXT.md canonical for system state and roadmap. handoffs/current.md supplementary for session context. Sprint tooling optional.
+Formal record: `docs/decisions/D-110-DOC-MODEL.md`.
+
+---
+
 ## Phase 5 Freeze Addendum (Sprint 7→8 transition)
 
 ### Blocking Fix Closures

@@ -1,7 +1,8 @@
 # Next Steps
 
 **Last updated:** 2026-03-27
-**Current:** Phase 5.5 complete. Phase 6 ready to start.
+**Current:** Phase 6 started. Sprint 17 in progress (Model A).
+**Doc model:** This file is canonical for roadmap/next steps. Session context lives in `docs/ai/handoffs/current.md`.
 
 ---
 
@@ -53,7 +54,13 @@ Cleanup     Ruff fix + test fix + OpenClaw→Vezir rebrand     —      CLOSED (
 | Repository | Concern-based backend, feature-based frontend |
 | Developer experience | Pre-commit hooks, ruff, CONTRIBUTING.md |
 
-## Phase 6 — Ready to Plan
+## Sprint 17 — Phase 6 Controlled Start (IN PROGRESS)
+
+**Model:** A (forced — D-105)
+**Scope:** CI benchmark fix, doc model alignment, decision freeze (D-109, D-110)
+**Kickoff:** `docs/sprints/sprint-17/S17-KICKOFF.md`
+
+## Phase 6 — Roadmap
 
 Items that become possible now:
 
@@ -71,7 +78,7 @@ Items that become possible now:
 
 ## Decision Debt
 
-- D-001→D-103, D-105→D-108: all frozen, debt zero (107 total)
+- D-001→D-110: all frozen (110 total)
 
 ## Phase 5.5 Closure
 

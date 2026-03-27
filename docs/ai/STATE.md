@@ -1,7 +1,8 @@
 # Current State
 
 **Last updated:** 2026-03-27
-**Active phase:** Sprint 16 DONE — Phase 5.5 closure complete (2026-03-27)
+**Active phase:** Sprint 17 IN PROGRESS — Phase 6 controlled start (2026-03-27)
+**Doc model:** This file is canonical for system state. Session context lives in `docs/ai/handoffs/current.md`.
 **Note:** All sprints through 16 closed. Phase 6 ready to start. Phase 2 deferred — single-user localhost, security hardening not urgent.
 **Persistence:** State is file-persisted (state.json, mission.json). Mission history via persistence layer (Sprint 16).
 **API:** Vezir API on 127.0.0.1:8003 (FastAPI + Uvicorn). Schemas FROZEN (D-067). SSE on /api/v1/events/stream. Dashboard API + Alert API + Telemetry Query API (Sprint 16).
@@ -68,6 +69,7 @@
 | Sprint 14B | Frontend Restructure + Tooling | Closed |
 | Sprint 15 | OTel Observability (traces + metrics + logs) | Closed |
 | Sprint 16 | Presentation Layer + CI/CD (Phase 5.5 closure) | Closed |
+| Sprint 17 | Phase 6 Controlled Start (CI fix + doc alignment) | In Progress |
 
 ## Test Evidence
 
@@ -83,7 +85,7 @@
 
 ## Architectural Decisions
 
-108 frozen decisions (D-001 through D-108). Decision debt zero. See `docs/ai/DECISIONS.md`. Decision records D-105→D-108 in `docs/decisions/`.
+110 frozen decisions (D-001 through D-110). See `docs/ai/DECISIONS.md`. Decision records D-105→D-110 in `docs/decisions/`.
 
 ## Port Map
 

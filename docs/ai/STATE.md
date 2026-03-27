@@ -1,7 +1,7 @@
 # Current State
 
 **Last updated:** 2026-03-27
-**Active phase:** Sprint 22 — Automation Hardening CLOSED (2026-03-28))
+**Active phase:** Sprint 22 CLOSED — Automation Hardening (2026-03-28)
 **Doc model:** This file is canonical for system state. Session context lives in `docs/ai/handoffs/current.md`.
 **Note:** All sprints through 16 closed. Phase 6 ready to start. Phase 2 deferred — single-user localhost, security hardening not urgent.
 **Persistence:** State is file-persisted (state.json, mission.json). Mission history via persistence layer (Sprint 16).
@@ -76,7 +76,7 @@
 | Sprint 19 | Single-Repo Automation MVP (plan.yaml + issues + branches) | Closed |
 | Sprint 20 | Project Integration + PR Traceability | Closed |
 | Sprint 21 | Closure + Archive Automation | Closed |
-| Sprint 22 — Automation Hardening CLOSED (2026-03-28) |
+| Sprint 22 | Automation Hardening / Operationalization | Closed |
 
 ## Test Evidence
 

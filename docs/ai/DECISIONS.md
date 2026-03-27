@@ -892,7 +892,16 @@ Rework cycle limits scale with mission complexity to prevent runaway rework on s
 
 ---
 
-## Sprint 16 / Phase 5.5 Decisions (D-105 → D-108)
+## Sprint 14A / Phase 5.5 Decisions (D-104 → D-108)
+
+### D-104: Backend Package Name = `app/`
+
+**Phase:** Sprint 14A | **Status:** Frozen
+
+Backend restructure uses `app/` as the top-level package name with `create_app()` factory pattern. Enables proper Python packaging and test isolation.
+Formal record: Sprint 14A task breakdown + retrospective.
+
+---
 
 ### D-105: Sprint Closure Model — Model A / Model B
 
@@ -958,6 +967,7 @@ Sprint 8 did not start until this document was FROZEN.
 *D-097 → D-101: Phase 5D / Sprint 12 (frozen)*
 *D-102: Token budget enforcement — Post-5D (frozen)*
 *D-103: Complexity-based rework limits — Sprint 13 (frozen)*
+*D-104: Backend package name = app/ — Sprint 14A (frozen)*
 *D-105: Sprint closure model (Model A / Model B) — Sprint 16 (frozen)*
 *D-106: Persistence model — JSON file store — Sprint 16 (frozen)*
 *D-107: Alert engine — Rule-based threshold evaluation — Sprint 16 (frozen)*

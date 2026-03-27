@@ -231,6 +231,11 @@ jobs:
                       "branch": branch_name,
                       "pr": None
                   }
+                  # Update issue body with closing hint (now we know the issue number)
+                  if branch_name and not branch_exempt:
+                      hint = f"\n\n---\n_PR closing keyword: add `Closes #{issue_num}` to your PR body from `{branch_name}` to auto-close this issue on merge._"
+                      updated_body = child_body + hint
+                      gh("issue", "edit", str(issue_num), "--body", updated_body)
               else:
                   print(f"  FAIL: Could not create issue for {task_id}")
                   issues_mapping["tasks"][task_id] = {

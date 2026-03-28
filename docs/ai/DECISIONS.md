@@ -1030,3 +1030,9 @@ Sprint 8 did not start until this document was FROZEN.
 *D-116: Docker dev runtime topology — see `docs/decisions/D-116-docker-dev.md` — Sprint 26 (frozen)*
 *D-117: Multi-user auth contract — API key auth, operator/viewer roles, fail-closed, file-based key registry. Supersedes D-108. — Sprint 27 (frozen)*
 *D-118: Plugin runtime contract — file-based plugins, JSON manifest, EventBus integration, config-driven loading, 30s timeout, error isolation, priority 500+. — Sprint 29 (frozen)*
+
+## Phase 7 / Sprint 30 Decisions (D-119 → D-121)
+
+*D-119: Mission template lifecycle — JSON schema, CRUD API, parameter validation, run-from-template, draft/published/archived states. — Sprint 30 (frozen)*
+*D-120: Scheduled/triggered missions — cron scheduling, event triggers, execution queue. Decision frozen, implementation deferred to S31+. — Sprint 30 (frozen)*
+*D-121: Approval gate contract — centralized inbox, lifecycle (pending/approved/rejected/expired), actor-chain audit, 30min default timeout. — Sprint 30 (frozen)*

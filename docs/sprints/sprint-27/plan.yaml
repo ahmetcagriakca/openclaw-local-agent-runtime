@@ -1,0 +1,84 @@
+sprint: 27
+phase: 6
+title: "Identity Foundation + Deterministic Delivery"
+model: "A"
+
+authority:
+  source_of_truth: "SPRINT-27-TASK-BREAKDOWN.md"
+  automation_index: "plan.yaml"
+  generated_files:
+    - "issues.json"
+
+issue:
+  parent_title: "[S27] Identity Foundation + Deterministic Delivery"
+  labels: ["sprint", "phase-6"]
+  milestone: "Sprint 27"
+
+tasks:
+  - id: "27.1"
+    title: "Multi-user auth freeze pack"
+    type: "implementation"
+    track: 1
+    branch_name: "sprint-27/t27.1-auth-freeze"
+    labels: ["docs", "auth"]
+
+  - id: "27.2"
+    title: "Backend multi-user auth baseline"
+    type: "implementation"
+    track: 1
+    branch_name: "sprint-27/t27.2-backend-auth"
+    labels: ["auth", "api"]
+    depends_on: ["27.1"]
+
+  - id: "27.G1"
+    title: "Mid Review Gate"
+    type: "gate"
+    branch_exempt: true
+    blocks: ["27.3", "27.4", "27.5"]
+    labels: ["gate"]
+
+  - id: "27.3"
+    title: "Frontend auth/session baseline"
+    type: "implementation"
+    track: 2
+    branch_name: "sprint-27/t27.3-frontend-auth"
+    labels: ["frontend", "auth"]
+    depends_on: ["27.G1"]
+
+  - id: "27.4"
+    title: "Mock LLM provider for deterministic E2E"
+    type: "implementation"
+    track: 2
+    branch_name: "sprint-27/t27.4-mock-provider"
+    labels: ["testing", "providers"]
+    depends_on: ["27.G1"]
+
+  - id: "27.5"
+    title: "Docker build CI smoke gate"
+    type: "implementation"
+    track: 2
+    branch_name: "sprint-27/t27.5-docker-ci"
+    labels: ["ci", "docker"]
+    depends_on: ["27.G1"]
+
+  - id: "27.G2"
+    title: "Final Review Gate"
+    type: "gate"
+    branch_exempt: true
+    labels: ["gate"]
+
+  - id: "27.RETRO"
+    title: "Retrospective"
+    type: "gate"
+    branch_exempt: true
+    labels: ["process"]
+
+  - id: "27.CLOSURE"
+    title: "Sprint Closure"
+    type: "gate"
+    branch_exempt: true
+    labels: ["process"]
+
+validation:
+  require_doc_sync: true
+  fail_on_conflict: true

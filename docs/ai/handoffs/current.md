@@ -7,7 +7,7 @@
 
 ## Session Summary
 
-Sprint 23 tamamlandı — GPT pre-sprint PASS (2 round), G1 PASS, G2 PASS (5 round).
+Sprint 23 tamamlandı ve kapatıldı — GPT pre-sprint PASS (2 round), G1 PASS, G2 PASS (5 round), GPT closure PASS.
 
 | Sprint | Scope | Model | GPT Rounds | Status |
 |--------|-------|-------|-----------|--------|
@@ -15,7 +15,7 @@ Sprint 23 tamamlandı — GPT pre-sprint PASS (2 round), G1 PASS, G2 PASS (5 rou
 | 20 | Project Integration + PR Traceability | A | 4 | Closed |
 | 21 | Closure + Archive Automation | A | 2 | Closed |
 | 22 | Automation Hardening / Operationalization | A | 2 | Closed |
-| **23** | **Governance Debt Closure + CI Hygiene** | **A** | **8** | **GPT PASS — closure pending operator** |
+| **23** | **Governance Debt Closure + CI Hygiene** | **A** | **8** | **Closed** |
 
 ---
 
@@ -43,7 +43,7 @@ Sprint 23 tamamlandı — GPT pre-sprint PASS (2 round), G1 PASS, G2 PASS (5 rou
 ## Current State
 
 - **Phase:** 6
-- **Last closed sprint:** 22 (23 GPT PASS, closure pending)
+- **Last closed sprint:** 23
 - **Decisions:** 114 frozen (D-001→D-114)
 - **Tests:** 458 backend + 29 frontend PASS
 - **Sprint 24:** NOT STARTED
@@ -62,3 +62,9 @@ Sprint 23 tamamlandı — GPT pre-sprint PASS (2 round), G1 PASS, G2 PASS (5 rou
 - **PROJECT_TOKEN** secret — enables Project V2 field mutations from GitHub Actions
 - **status-sync live** — PR events auto-update Project V2 Status field
 - **pr-validator enforced** — Sprint PRs require Summary + Test Plan sections
+
+## Operating Model
+
+- GPT = operator for review verdicts AND closure approval
+- Claude Code executes implementation, GPT reviews and approves
+- No human approval needed for sprint closure — GPT PASS = closure eligible, proceed autonomously

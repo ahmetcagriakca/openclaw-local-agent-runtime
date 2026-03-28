@@ -59,11 +59,8 @@
 
 ## Next Sprint
 
-**Sprint 23 — Phase 6**
-- Status: implementation `done`, closure_status `review_pending`
-- GPT: Pre-sprint PASS (2 rounds), G1 PASS, G2 PASS (5 rounds)
-- RETRO complete
-- Awaiting operator `closure_status=closed`
+**Sprint 23 — Phase 6** ✅ CLOSED
+- closure_status: `closed` (GPT operator approval 2026-03-28)
 
 **Sprint 24 — Phase 6**
 - Status: NOT STARTED

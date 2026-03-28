@@ -1,6 +1,6 @@
 # Architectural Decisions
 
-**Last updated:** 2026-03-27
+**Last updated:** 2026-03-28
 
 All decisions below are frozen unless marked otherwise.
 Reopening requires explicit phase gate approval + operator sign-off.
@@ -1023,3 +1023,8 @@ Sprint 8 did not start until this document was FROZEN.
 *D-107: Alert engine — Rule-based threshold evaluation — Sprint 16 (frozen)*
 *D-108: Session/auth model — Single-operator foundation — Sprint 16 (frozen)*
 *BF-1 → BF-4: Phase 5 Freeze Addendum (frozen)*
+
+## Phase 6 / Sprint 26 Decisions (D-115 → D-116)
+
+*D-115: Backend physical topology — no restructure needed, current modular architecture is clean and acyclic (138 files, 12 modules, 0 circular deps). Import rules codified. S14A/14B carryover RETIRED. — Sprint 26 (frozen)*
+*D-116: Docker dev runtime topology — see `docs/decisions/D-116-docker-dev.md` — Sprint 26 (frozen)*

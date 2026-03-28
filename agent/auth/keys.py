@@ -2,9 +2,11 @@
 
 Loads API keys from config/auth.json. Validates Bearer tokens.
 Fail-closed: missing config = deny all mutations.
+Supports optional expires_at for token expiration.
 """
 import json
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
 
@@ -15,6 +17,7 @@ class ApiKey:
     name: str
     role: str  # "operator" or "viewer"
     created: str
+    expires_at: str = ""  # ISO 8601, empty = no expiration
 
 
 _keys: dict[str, ApiKey] = {}
@@ -37,6 +40,7 @@ def _load_keys() -> None:
                 name=entry["name"],
                 role=entry["role"],
                 created=entry.get("created", ""),
+                expires_at=entry.get("expires_at", ""),
             )
             for entry in data.get("keys", [])
         }
@@ -46,10 +50,20 @@ def _load_keys() -> None:
 
 
 def validate_key(token: str) -> Optional[ApiKey]:
-    """Validate an API key. Returns ApiKey if valid, None if invalid."""
+    """Validate an API key. Returns ApiKey if valid, None if invalid/expired."""
     if not _loaded:
         _load_keys()
-    return _keys.get(token)
+    key = _keys.get(token)
+    if key is None:
+        return None
+    if key.expires_at:
+        try:
+            exp = datetime.fromisoformat(key.expires_at.replace("Z", "+00:00"))
+            if datetime.now(timezone.utc) > exp:
+                return None  # Expired
+        except ValueError:
+            pass  # Invalid date format — treat as non-expiring
+    return key
 
 
 def is_auth_enabled() -> bool:

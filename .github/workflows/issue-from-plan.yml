@@ -211,6 +211,11 @@ jobs:
               if co_delivered:
                   body_parts.append(f"**Co-delivered with:** {co_delivered}")
 
+              # D-122: Backlog issue linkage
+              backlog_ref = task.get("backlog_ref")
+              if backlog_ref:
+                  body_parts.append(f"\n**Backlog:** Relates to #{backlog_ref}")
+
               child_body = "\n".join(body_parts)
 
               label_args = []

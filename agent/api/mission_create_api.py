@@ -13,7 +13,9 @@ import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Depends, Request
+
+from auth.middleware import require_operator
 from pydantic import BaseModel, Field
 
 from api.schemas import DataQuality, ResponseMeta
@@ -126,7 +128,7 @@ def _update_placeholder(path: Path, status: str, error: str | None,
     response_model=CreateMissionResponse,
     status_code=201,
 )
-async def create_mission(body: CreateMissionRequest, request: Request):
+async def create_mission(body: CreateMissionRequest, request: Request, _operator=Depends(require_operator)):
     """Create a new mission.
 
     Writes mission JSON to logs/missions/ so it appears immediately in the UI.

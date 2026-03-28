@@ -19,8 +19,9 @@ import traceback
 from datetime import datetime, timedelta
 from pathlib import Path
 
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Request
 
+from auth.middleware import require_operator
 from api.mutation_audit import log_mutation
 from api.mutation_bridge import has_pending_signal, write_signal_artifact
 from api.schemas import APIError, MutationResponse
@@ -177,7 +178,7 @@ async def _emit_mutation_requested(request: Request, request_id: str,
     response_model=MutationResponse,
     responses={404: {"model": APIError}, 409: {"model": APIError}},
 )
-async def cancel_mission(mission_id: str, request: Request):
+async def cancel_mission(mission_id: str, request: Request, _operator=Depends(require_operator)):
     """Cancel a running/active mission (D-090: destructive — requires confirmation).
 
     Valid states: pending, planning, executing, gate_check, rework, approval_wait.
@@ -254,7 +255,7 @@ async def cancel_mission(mission_id: str, request: Request):
     response_model=MutationResponse,
     responses={404: {"model": APIError}, 409: {"model": APIError}},
 )
-async def retry_mission(mission_id: str, request: Request):
+async def retry_mission(mission_id: str, request: Request, _operator=Depends(require_operator)):
     """Retry a failed/aborted mission (OD-10: creates new mission via controller).
 
     Valid states: failed, aborted, timed_out.
@@ -349,7 +350,7 @@ async def retry_mission(mission_id: str, request: Request):
     response_model=MutationResponse,
     responses={404: {"model": APIError}, 409: {"model": APIError}},
 )
-async def pause_mission(mission_id: str, request: Request):
+async def pause_mission(mission_id: str, request: Request, _operator=Depends(require_operator)):
     """Pause a running mission — pauses after current stage completes.
 
     Valid states: pending, planning, executing, gate_check, rework, approval_wait.
@@ -426,7 +427,7 @@ async def pause_mission(mission_id: str, request: Request):
     response_model=MutationResponse,
     responses={404: {"model": APIError}, 409: {"model": APIError}},
 )
-async def resume_mission(mission_id: str, request: Request):
+async def resume_mission(mission_id: str, request: Request, _operator=Depends(require_operator)):
     """Resume a paused mission.
 
     Valid states: paused.
@@ -503,7 +504,7 @@ async def resume_mission(mission_id: str, request: Request):
     response_model=MutationResponse,
     responses={404: {"model": APIError}, 409: {"model": APIError}},
 )
-async def skip_stage(mission_id: str, request: Request):
+async def skip_stage(mission_id: str, request: Request, _operator=Depends(require_operator)):
     """Skip the current stage in a running mission.
 
     Valid states: pending, planning, executing, gate_check, rework, approval_wait.

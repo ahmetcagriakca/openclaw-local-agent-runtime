@@ -58,14 +58,21 @@
 - **Last closed sprint:** 22
 - **Decisions:** 114 frozen (D-001→D-114)
 - **Tests:** 458 backend + 29 frontend PASS
-- **Sprint 23:** NOT STARTED
+- **Sprint 23:** **PLANNED** (task breakdown + plan.yaml + S23-KICKOFF; pre-sprint GPT review not started)
+
+## Sprint 23 scope (draft, canonical in repo)
+
+- **Title:** Regression Guards & Live E2E CI  
+- **Artifacts:** `docs/sprints/sprint-23/SPRINT-23-TASK-BREAKDOWN.md`, `plan.yaml`, `S23-KICKOFF.md`  
+- **Tasks:** 23.1 stale doc refs → 23.2 benchmark regression gate (D-109 follow-up) → **G1** → 23.3 Playwright in GHA → **G2** → RETRO → CLOSURE  
+- **Next operator steps:** GPT pre-sprint review PASS; workflow dispatch **Create Issues from plan.yaml** with sprint `23`; milestone Sprint 23 if missing
 
 ## GPT Recommendation for Next Sprint
 
 GPT recommended parking Repo Split Discovery. Instead:
 - S22 scope completed: archive execution, stale ref tuning, Playwright baseline
-- Next candidates from GPT: OpenAPI → TypeScript SDK, benchmark regression gate, or deeper E2E
-- Operator decision needed for S23 scope
+- S23 plan picks up: benchmark regression gate, Playwright CI, stale ref cleanup; defers OpenAPI SDK to S24+
+- Operator may adjust breakdown before GPT pre-sprint; canonical text lives in `docs/sprints/sprint-23/`
 
 ## Open Items
 

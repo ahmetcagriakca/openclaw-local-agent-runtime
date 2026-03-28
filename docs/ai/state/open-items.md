@@ -1,6 +1,6 @@
 # open-items.md — Active State Tracker
 
-**Last updated:** 2026-03-27
+**Last updated:** 2026-03-28
 **Updated by:** Claude (Architect)
 
 ---
@@ -51,7 +51,7 @@
 
 ## Next Sprint
 
-**Sprint 19 — Phase 6**
-- Status: NOT STARTED
-- Kickoff gate: OPEN
-- Sprint 18 closed (Model B — next sprint can be A or B, max 2 consecutive B)
+**Sprint 23 — Phase 6**
+- Status: PLANNED (implementation `not_started`; see `docs/sprints/sprint-23/S23-KICKOFF.md`)
+- Kickoff gate: OPEN until pre-sprint GPT review PASS + operator issue creation from `plan.yaml`
+- Sprint 22 closed (Model A); S23 Model A in kickoff doc

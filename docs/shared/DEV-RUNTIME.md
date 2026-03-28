@@ -1,6 +1,6 @@
 # Dev Runtime Runbook
 
-**Effective:** Sprint 26+
+**Effective:** Sprint 26+ (updated Sprint 28: Jaeger + Grafana added)
 **Owner:** AKCA
 
 ---
@@ -29,7 +29,10 @@ docker compose down
 
 ## Architecture
 
-Single container: `vezir-api` (Python 3.14 + FastAPI + uvicorn on :8003)
+3 containers:
+- `vezir-api` — Python 3.14 + FastAPI + uvicorn on :8003
+- `jaeger` — All-in-one tracing on :16686 (UI), :4317 (OTLP gRPC), :4318 (OTLP HTTP)
+- `grafana` — Dashboards on :3001 (admin/admin)
 
 ## Data Persistence
 

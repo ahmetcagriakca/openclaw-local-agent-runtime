@@ -21,3 +21,31 @@ services:
       start_period: 15s
       retries: 3
     restart: unless-stopped
+    depends_on:
+      jaeger:
+        condition: service_started
+
+  jaeger:
+    image: jaegertracing/all-in-one:1.65
+    ports:
+      - "16686:16686"  # Jaeger UI
+      - "4317:4317"    # OTLP gRPC
+      - "4318:4318"    # OTLP HTTP
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:11.5.2
+    ports:
+      - "3001:3000"  # Grafana UI (3001 to avoid conflict with frontend on 3000)
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
+    volumes:
+      - grafana-data:/var/lib/grafana
+    restart: unless-stopped
+
+volumes:
+  grafana-data:

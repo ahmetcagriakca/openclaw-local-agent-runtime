@@ -7,50 +7,45 @@
 
 ## Session Summary
 
-4 sprint kapatıldı tek session'da. Tümü GPT operator PASS.
+5 sprint kapatıldı tek session'da (S23-S27). Tümü GPT operator PASS.
 
 | Sprint | Scope | Model | Status |
 |--------|-------|-------|--------|
-| 23 | Governance Debt Closure + CI Hygiene | A | Closed |
-| 24 | CI Gate Hardening / Operational Safety | A | Closed |
-| 25 | Contract Execution and Frontend Reliability | A | Closed |
-| 26 | Foundation Hardening — Dev Runtime + Contract Guards | A | Closed |
-
----
-
-## Key Deliverables (S23-S26)
-
-**S23:** status-sync Project V2 mutation, pr-validator body sections, stale ref fix
-**S24:** benchmark regression gate, Playwright CI smoke, Dependabot 0 vulns, SECRETS-CONTRACT
-**S25:** archive S17-S22 (68 files), OpenAPI TypeScript SDK, component tests 29→39
-**S26:** D-115 (no restructure needed), Docker dev env, SDK drift CI gate, live E2E, component tests 39→55
-
-**Decisions frozen:** D-115 (backend topology), D-116 (Docker dev runtime)
+| 23 | Governance Debt Closure | A | Closed |
+| 24 | CI Gate Hardening | A | Closed |
+| 25 | Contract Execution + Frontend Reliability | A | Closed |
+| 26 | Foundation Hardening — Dev Runtime + Guards | A | Closed |
+| 27 | Identity Foundation + Deterministic Delivery | A | Closed |
 
 ---
 
 ## Current State
 
 - **Phase:** 6
-- **Last closed sprint:** 26
-- **Decisions:** 116 frozen (D-001→D-116)
-- **Tests:** 458 backend + 55 frontend + 7 e2e PASS
+- **Last closed sprint:** 27
+- **Decisions:** 117 frozen (D-001→D-117)
+- **Tests:** 458 backend + 60 frontend + 7 e2e PASS
 - **Vulnerabilities:** 0
-- **Sprint 27:** NOT STARTED
+- **Sprint 28:** NOT STARTED
 
-## Open Items
+## Key Deliverables (S23-S27)
 
-- Multi-user auth (D-104/D-108, Phase 6 roadmap)
-- Jaeger/Grafana deployment (Phase 6 roadmap)
-- Plugin system for custom handlers (roadmap)
-- Mission templates/presets (roadmap)
-- Cost tracking/billing (roadmap)
-- Webhook notifications (Slack/Discord) (roadmap)
-- Mock LLM provider for deterministic E2E (S26 retro finding)
-- Docker build CI test (S26 retro finding)
+- S23: status-sync Project V2 mutation, pr-validator body sections
+- S24: benchmark gate, Playwright CI, Dependabot fix, SECRETS-CONTRACT
+- S25: archive S17-S22, OpenAPI TypeScript SDK, component tests
+- S26: D-115 (no restructure), Docker dev env, SDK drift CI, live E2E
+- S27: D-117 (auth contract), backend auth middleware, frontend AuthContext, mock LLM, Docker CI
+
+## Open Items (S28 candidates)
+
+- Jaeger/Grafana deployment
+- Plugin system for custom handlers
+- Mission templates/presets
+- Cost tracking/billing
+- Webhook notifications (Slack/Discord)
+- Auth integration tests with config/auth.json
+- Session expiration / token rotation
 
 ## Operating Model
 
-- GPT = operator (verdicts + closure)
-- Claude Code = implementor (autonomous)
-- Chat bridge: `node C:/Users/AKCA/chatbridge/bridge.js`
+GPT = operator | Claude Code = implementor | Chat bridge = communication

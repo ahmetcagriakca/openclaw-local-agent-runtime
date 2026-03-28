@@ -1,0 +1,84 @@
+sprint: 31
+phase: 7
+title: "Backlog-to-Project-to-Sprint Pipeline"
+model: "A"
+
+authority:
+  source_of_truth: "SPRINT-31-TASK-BREAKDOWN.md"
+  automation_index: "plan.yaml"
+  generated_files:
+    - "issues.json"
+
+issue:
+  parent_title: "[S31] Backlog-to-Project-to-Sprint Pipeline"
+  labels: ["sprint", "phase-7", "governance"]
+  milestone: "Sprint 31"
+
+tasks:
+  - id: "31.1"
+    title: "D-122 Backlog-to-Project-to-Sprint Contract"
+    type: "implementation"
+    track: 1
+    branch_name: "sprint-31/t31.1-backlog-contract"
+    labels: ["docs", "architecture"]
+
+  - id: "31.2"
+    title: "Backlog import tool + initial import"
+    type: "implementation"
+    track: 1
+    branch_name: "sprint-31/t31.2-backlog-import"
+    labels: ["tooling", "automation"]
+    depends_on: ["31.1"]
+
+  - id: "31.G1"
+    title: "Mid Review Gate"
+    type: "gate"
+    branch_exempt: true
+    blocks: ["31.3", "31.4", "31.5"]
+    labels: ["gate"]
+
+  - id: "31.3"
+    title: "Project V2 field/view normalization"
+    type: "implementation"
+    track: 2
+    branch_name: "sprint-31/t31.3-project-fields"
+    labels: ["github", "automation"]
+    depends_on: ["31.G1"]
+
+  - id: "31.4"
+    title: "Sprint planning bridge (plan.yaml backlog linkage)"
+    type: "implementation"
+    track: 2
+    branch_name: "sprint-31/t31.4-sprint-bridge"
+    labels: ["ci", "automation"]
+    depends_on: ["31.G1"]
+
+  - id: "31.5"
+    title: "BACKLOG.md generator + closure sync"
+    type: "implementation"
+    track: 2
+    branch_name: "sprint-31/t31.5-backlog-generator"
+    labels: ["tooling", "docs"]
+    depends_on: ["31.G1"]
+
+  - id: "31.G2"
+    title: "Final Review Gate"
+    type: "gate"
+    branch_exempt: true
+    labels: ["gate"]
+
+  - id: "31.RETRO"
+    title: "Retrospective"
+    type: "gate"
+    branch_exempt: true
+    labels: ["process"]
+
+  - id: "31.CLOSURE"
+    title: "Sprint Closure"
+    type: "gate"
+    branch_exempt: true
+    labels: ["process"]
+
+validation:
+  require_doc_sync: true
+  fail_on_conflict: true

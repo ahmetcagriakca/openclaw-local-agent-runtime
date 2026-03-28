@@ -1,0 +1,71 @@
+sprint: 25
+phase: 6
+title: "Contract Execution and Frontend Reliability"
+model: "A"
+
+authority:
+  source_of_truth: "SPRINT-25-TASK-BREAKDOWN.md"
+  automation_index: "plan.yaml"
+  generated_files:
+    - "issues.json"
+  not_generated:
+    - "SPRINT-25-TASK-BREAKDOWN.md"
+    - "plan.yaml"
+    - "S25-KICKOFF.md"
+
+issue:
+  parent_title: "[S25] Contract Execution and Frontend Reliability"
+  labels: ["sprint", "phase-6"]
+  milestone: "Sprint 25"
+
+tasks:
+  - id: "25.1"
+    title: "Archive --execute on closed sprints"
+    type: "implementation"
+    track: 1
+    branch_name: "sprint-25/t25.1-archive-execute"
+    labels: ["docs", "automation"]
+
+  - id: "25.2"
+    title: "OpenAPI to TypeScript SDK generation pipeline"
+    type: "implementation"
+    track: 1
+    branch_name: "sprint-25/t25.2-openapi-sdk"
+    labels: ["ci", "frontend", "api"]
+
+  - id: "25.G1"
+    title: "Mid Review Gate"
+    type: "gate"
+    branch_exempt: true
+    blocks: ["25.3"]
+    labels: ["gate"]
+
+  - id: "25.3"
+    title: "Frontend Vitest component test baseline"
+    type: "implementation"
+    track: 2
+    branch_name: "sprint-25/t25.3-component-tests"
+    labels: ["frontend", "testing"]
+    depends_on: ["25.G1"]
+
+  - id: "25.G2"
+    title: "Final Review Gate"
+    type: "gate"
+    branch_exempt: true
+    labels: ["gate"]
+
+  - id: "25.RETRO"
+    title: "Retrospective"
+    type: "gate"
+    branch_exempt: true
+    labels: ["process"]
+
+  - id: "25.CLOSURE"
+    title: "Sprint Closure"
+    type: "gate"
+    branch_exempt: true
+    labels: ["process"]
+
+validation:
+  require_doc_sync: true
+  fail_on_conflict: true

@@ -198,6 +198,10 @@ app.add_middleware(
 # D-089: CSRF — Origin header validation for POST requests
 app.add_middleware(CSRFMiddleware)
 
+# B-012: Idempotency key middleware for mutation requests
+from api.idempotency import IdempotencyMiddleware
+app.add_middleware(IdempotencyMiddleware)
+
 
 # D-070: Host header validation middleware
 @app.middleware("http")

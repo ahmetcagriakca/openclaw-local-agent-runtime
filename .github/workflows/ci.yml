@@ -47,6 +47,45 @@ jobs:
       - name: Vitest
         run: cd frontend && npx vitest run
 
+  sdk-drift:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+
+      - name: Install Python dependencies
+        run: pip install -r agent/requirements.txt
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install frontend dependencies
+        run: cd frontend && npm ci
+
+      - name: Regenerate OpenAPI spec
+        run: python tools/export_openapi.py
+
+      - name: Regenerate TypeScript types
+        run: cd frontend && npm run generate:api
+
+      - name: Check for SDK drift
+        run: |
+          if ! git diff --exit-code docs/api/openapi.json frontend/src/api/generated.ts; then
+            echo ""
+            echo "ERROR: SDK drift detected!"
+            echo "The checked-in OpenAPI spec or TypeScript types are out of date."
+            echo "Run: python tools/export_openapi.py && cd frontend && npm run generate:api"
+            echo "Then commit the updated files."
+            exit 1
+          fi
+          echo "PASS: No SDK drift detected."
+
   e2e-smoke:
     runs-on: ubuntu-latest
     steps:

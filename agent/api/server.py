@@ -239,6 +239,7 @@ from api.signal_api import router as signal_router
 from api.sse_api import router as sse_router
 from api.telemetry_api import router as telemetry_router
 from api.telemetry_query_api import router as telemetry_query_router
+from api.templates_api import router as templates_router
 
 app.include_router(mission_router, prefix="/api/v1")
 app.include_router(approval_router, prefix="/api/v1")
@@ -254,6 +255,7 @@ app.include_router(roles_router, prefix="/api/v1")
 app.include_router(dashboard_router, prefix="/api/v1")
 app.include_router(telemetry_query_router, prefix="/api/v1")
 app.include_router(alerts_router, prefix="/api/v1")
+app.include_router(templates_router, prefix="/api/v1")
 
 
 # ── Main ────────────────────────────────────────────────────────

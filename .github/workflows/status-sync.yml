@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: Extract linked issue and update status
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.PROJECT_TOKEN != '' && secrets.PROJECT_TOKEN || secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           PR_TITLE: ${{ github.event.pull_request.title }}
           PR_STATE: ${{ github.event.pull_request.state }}

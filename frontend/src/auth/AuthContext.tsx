@@ -29,7 +29,7 @@ function loadAuth(): AuthState {
       const { apiKey, userName } = JSON.parse(stored)
       return { apiKey, userName, isAuthenticated: !!apiKey }
     }
-  } catch {}
+  } catch { /* ignore corrupt storage */ }
   return { apiKey: null, userName: null, isAuthenticated: false }
 }
 
@@ -47,7 +47,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem(STORAGE_KEY)
   }, [])
 
-  const getAuthHeaders = useCallback(() => {
+  const getAuthHeaders = useCallback((): Record<string, string> => {
     if (!auth.apiKey) return {}
     return { Authorization: `Bearer ${auth.apiKey}` }
   }, [auth.apiKey])
@@ -59,6 +59,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   )
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAuth(): AuthContextType {
   const ctx = useContext(AuthContext)
   if (!ctx) throw new Error('useAuth must be used within AuthProvider')

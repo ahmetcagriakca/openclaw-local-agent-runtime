@@ -1,5 +1,5 @@
 import { describe, test, expect, vi, beforeEach } from 'vitest'
-import { render, screen, fireEvent, act } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import { AuthProvider, useAuth } from '../auth/AuthContext'
 
 const mockStorage: Record<string, string> = {}

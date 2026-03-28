@@ -6,7 +6,7 @@ import type { SourceInfo } from '../types/api'
 describe('FreshnessIndicator', () => {
   const defaultProps = {
     freshnessMs: 5000,
-    sourcesUsed: [{ name: 'state.json', freshness: 'fresh' }] as SourceInfo[],
+    sourcesUsed: [{ name: 'state.json', ageMs: 0, status: 'fresh' }] as SourceInfo[],
     sourcesMissing: [] as string[],
     lastFetchedAt: null,
   }

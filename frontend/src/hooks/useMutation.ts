@@ -96,7 +96,7 @@ export function useMutation(options: UseMutationOptions): UseMutationResult {
       setStatus('error')
       onError?.(msg)
     }
-  }, [mutationFn, clearTimer, onError, onTimeout])
+  }, [mutationFn, clearTimer, onError, onSuccess])
 
   // SSE: listen for mutation_applied
   useSSEInvalidation('mutation_applied', () => {

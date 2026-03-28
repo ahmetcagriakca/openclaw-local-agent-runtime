@@ -35,7 +35,7 @@
 - **Vulnerabilities:** 0
 - **Backlog:** 30 open / 2 closed (32 total with backlog label)
 - **Project V2:** https://github.com/users/ahmetcagriakca/projects/4
-- **Sprint 33 progress:** 33.1-33.5 done, G2/RETRO/CLOSURE pending
+- **Sprint 33 progress:** G2 PASS, RETRO done, CLOSURE pending (operator approval)
 
 ## Sprint 33 Deliverables
 
@@ -46,10 +46,10 @@
 | 33.3 project-validator.py (29 tests) | DONE | `b5f7d00` |
 | 33.G1 Mid Review Gate | PASS | — |
 | 33.4 Closure check integration | DONE | `f2ba323` |
-| 33.5 Writer matrix + docs | DONE | this commit |
-| 33.G2 Final Review Gate | PENDING | — |
-| 33.RETRO | PENDING | — |
-| 33.CLOSURE | PENDING | — |
+| 33.5 Writer matrix + docs | DONE | `7b5ec60` |
+| 33.G2 Final Review Gate | PASS | `docs/ai/reviews/S33-REVIEW.md` |
+| 33.RETRO | DONE | `docs/sprint33/SPRINT-33-RETRO.md` |
+| 33.CLOSURE | PENDING — operator approval required | — |
 
 ## Key Infrastructure
 

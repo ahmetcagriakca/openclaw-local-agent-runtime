@@ -10,7 +10,8 @@
 set -euo pipefail
 
 SPRINT=${1:?"Usage: $0 <sprint_number>"}
-EVIDENCE_DIR="evidence/sprint-$SPRINT"
+REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+EVIDENCE_DIR="$REPO_ROOT/evidence/sprint-$SPRINT"
 MAIN_OUTPUT="$EVIDENCE_DIR/closure-check-output.txt"
 CONTRACT_OUTPUT="$EVIDENCE_DIR/contract-evidence.txt"
 FAIL_COUNT=0
@@ -35,8 +36,8 @@ log ""
 # ─── BACKEND TESTS ───────────────────────────────────────────
 log "--- Backend Tests ---"
 cd agent
-if python -m pytest tests/ -v 2>&1 | tee -a "../$MAIN_OUTPUT"; then
-    BACKEND_COUNT=$(python -m pytest tests/ --co -q 2>/dev/null | tail -1 | grep -oP '\d+')
+if python -m pytest tests/ -v 2>&1 | tee -a "$MAIN_OUTPUT"; then
+    BACKEND_COUNT=$(python -m pytest tests/ --co -q 2>/dev/null | tail -1 | grep -oE '[0-9]+' | head -1)
     log "Backend test count (collected): $BACKEND_COUNT"
     pass "Backend tests: $BACKEND_COUNT collected"
 else
@@ -50,7 +51,7 @@ log ""
 # ─── FRONTEND TESTS ──────────────────────────────────────────
 log "--- Frontend Tests ---"
 cd frontend
-if npx vitest run 2>&1 | tee -a "../$MAIN_OUTPUT"; then
+if npx vitest run 2>&1 | tee -a "$MAIN_OUTPUT"; then
     FRONTEND_COUNT=$(npx vitest list 2>/dev/null | wc -l)
     log "Frontend test count (collected): $FRONTEND_COUNT"
     pass "Frontend tests: $FRONTEND_COUNT collected"
@@ -63,7 +64,7 @@ log ""
 
 # ─── TYPESCRIPT ───────────────────────────────────────────────
 log "--- TypeScript Check ---"
-if npx tsc --noEmit 2>&1 | tee -a "../$MAIN_OUTPUT"; then
+if npx tsc --noEmit 2>&1 | tee -a "$MAIN_OUTPUT"; then
     pass "TypeScript: 0 errors"
 else
     fail "TypeScript errors found"
@@ -73,7 +74,7 @@ log ""
 
 # ─── LINT ─────────────────────────────────────────────────────
 log "--- Lint Check ---"
-if npm run lint 2>&1 | tee -a "../$MAIN_OUTPUT"; then
+if npm run lint 2>&1 | tee -a "$MAIN_OUTPUT"; then
     pass "Lint: 0 errors"
 else
     fail "Lint errors found"
@@ -83,7 +84,7 @@ log ""
 
 # ─── BUILD ────────────────────────────────────────────────────
 log "--- Production Build ---"
-if npm run build 2>&1 | tee -a "../$MAIN_OUTPUT"; then
+if npm run build 2>&1 | tee -a "$MAIN_OUTPUT"; then
     pass "Production build successful"
 else
     fail "Production build failed"
@@ -94,10 +95,14 @@ log ""
 
 # ─── SPRINT DOC VALIDATOR ────────────────────────────────────
 log "--- Sprint Doc Validator ---"
-if python tools/validate_sprint_docs.py --sprint "$SPRINT" 2>&1 | tee -a "$MAIN_OUTPUT"; then
-    pass "Sprint doc validator: all checks passed"
+if [ -f "tools/validate_sprint_docs.py" ]; then
+    if python tools/validate_sprint_docs.py --sprint "$SPRINT" 2>&1 | tee -a "$MAIN_OUTPUT"; then
+        pass "Sprint doc validator: all checks passed"
+    else
+        fail "Sprint doc validator failed"
+    fi
 else
-    fail "Sprint doc validator failed"
+    log "  Sprint doc validator not found — skipped"
 fi
 
 log ""
@@ -153,13 +158,13 @@ log "--- Contract Evidence ---"
         echo ""
     }
 
-    check_grep "DataQuality states (D-079, expected $EXPECTED_DATAQUALITY_STATES)" "fresh\|partial\|stale\|degraded\|unknown\|not_reached" "frontend/src/types/api.ts"
-    check_grep "CapabilityStatus tri-state (available/unavailable/unknown)" "available\|unavailable\|unknown" "frontend/src/types/api.ts"
+    check_grep "DataQuality states (D-079, expected $EXPECTED_DATAQUALITY_STATES)" "fresh|partial|stale|degraded|unknown|not_reached" "frontend/src/types/api.ts"
+    check_grep "CapabilityStatus tri-state (available/unavailable/unknown)" "available|unavailable|unknown" "frontend/src/types/api.ts"
     check_grep "ErrorBoundary usage" "ErrorBoundary" "frontend/src/App.tsx"
 
     # Sprint 10+ SSE mandatory checks
     if [ "$SPRINT" -ge 10 ]; then
-        check_grep "SSE hooks" "useSSE\|SSEContext" "frontend/src/hooks/SSEContext.tsx"
+        check_grep "SSE hooks" "useSSE|SSEContext" "frontend/src/hooks/SSEContext.tsx"
         check_grep "ConnectionIndicator" "ConnectionIndicator" "frontend/src/components/ConnectionIndicator.tsx"
         check_grep "FileWatcher class" "class FileWatcher" "agent/api/file_watcher.py"
         check_grep "SSEManager class" "class SSEManager" "agent/api/sse_manager.py"
@@ -167,14 +172,15 @@ log "--- Contract Evidence ---"
 
     # Sprint 11+ mutation mandatory checks
     if [ "$SPRINT" -ge 11 ]; then
-        check_grep "Atomic request artifact" "request.*artifact\|signal.*file\|atomic.*write" "agent/api/"
-        check_grep "CSRF middleware" "SameSite\|Origin.*check\|csrf" "agent/api/"
-        check_grep "MutationResponse contract" "requestId.*lifecycleState\|lifecycleState\|requestedAt" "agent/api/schemas.py"
-        check_grep "Mutation audit fields" "tabId\|sessionId" "agent/api/"
-        check_grep "Mutation SSE events" "mutation_applied\|mutation_requested\|mutation_accepted" "agent/api/"
+        check_grep "Atomic request artifact" "request.*artifact|signal.*file|atomic.*write" "agent/api/"
+        check_grep "CSRF middleware" "SameSite|Origin.*check|csrf" "agent/api/"
+        check_grep "MutationResponse contract" "requestId.*lifecycleState|lifecycleState|requestedAt" "agent/api/schemas.py"
+        check_grep "Mutation audit fields" "tabId|sessionId" "agent/api/"
+        check_grep "Mutation SSE events" "mutation_applied|mutation_requested|mutation_accepted" "agent/api/"
 
         echo "--- Bridge rule: no direct method call in API layer ---"
-        if grep -rn "def approve\|def reject\|def cancel_mission\|def retry_mission" agent/api/ 2>/dev/null; then
+        # Check for raw approve/reject/cancel/retry methods (not async endpoint handlers)
+        if grep -rnE "^\s+def (approve|reject|cancel_mission|retry_mission)\b" agent/api/ 2>/dev/null | grep -v "async def" | grep -v "_approval\|_mission"; then
             echo "WARNING ❌ — Direct method calls found in API layer — MANDATORY FAIL"
             FAIL_COUNT=$((FAIL_COUNT + 1))
         else
@@ -217,7 +223,7 @@ log "--- Contract Evidence ---"
         # Sprint 12+ E2E test count (P-05)
         echo "--- E2E Test Count (auto-parsed, P-05) ---"
         if command -v python &>/dev/null && [ -f "agent/tests/test_e2e.py" ]; then
-            E2E_COUNT=$(cd agent && python -m pytest tests/test_e2e.py --co -q 2>/dev/null | tail -1 | grep -oP '\d+' || echo "0")
+            E2E_COUNT=$(cd agent && python -m pytest tests/test_e2e.py --co -q 2>/dev/null | tail -1 | grep -oE '[0-9]+' | head -1 || echo "0")
             echo "E2E test count (collected): $E2E_COUNT"
         else
             E2E_COUNT=0

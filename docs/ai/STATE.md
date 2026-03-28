@@ -87,7 +87,7 @@
 | Sprint 30 | Repeatable Automation (D-119/120/121, templates, timeline, guardrails) | Closed |
 | Sprint 31 | Backlog Pipeline (D-122, import tool, generator, sprint bridge) | Closed |
 | Sprint 32 | API Throttling + Idempotency (B-005, B-012) | Closed |
-| Sprint 33 | Project V2 Contract Hardening (D-123/124/125) | In Progress |
+| Sprint 33 | Project V2 Contract Hardening (D-123/124/125) | G2 PASS — awaiting operator close |
 
 ## Test Evidence
 

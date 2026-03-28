@@ -1,6 +1,10 @@
 # conftest.py - pytest configuration
 # Disable pytest-anyio plugin to prevent event loop conflicts
 # with asyncio.run() used in SSE tests and TestClient.
+import os
+
+# Ensure throttle middleware is disabled during tests (B-005)
+os.environ["TESTING"] = "1"
 
 # Auth test headers (D-117) — use test operator key for mutation tests
 AUTH_HEADERS = {"Authorization": "Bearer vz_test_operator_key_001"}

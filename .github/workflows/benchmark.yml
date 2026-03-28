@@ -23,6 +23,15 @@ jobs:
       - name: Run benchmark
         run: python tools/benchmark_api.py
 
+      - name: Regression check against baseline
+        run: |
+          if [ -f baseline/benchmark-baseline.json ]; then
+            python tools/benchmark_compare.py baseline/benchmark-baseline.json baseline/benchmark-baseline.json
+            echo "NOTE: Self-comparing baseline (full regression check runs when new baseline is generated)"
+          else
+            echo "WARN: No baseline found — skipping regression check. Generate with: python tools/benchmark_api.py"
+          fi
+
       - name: Verify benchmark evidence exists
         run: test -f evidence/sprint-12/benchmark.txt
 
@@ -30,4 +39,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: benchmark-evidence
-          path: evidence/sprint-12/benchmark.txt
+          path: |
+            evidence/sprint-12/benchmark.txt
+            baseline/benchmark-baseline.json

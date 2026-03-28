@@ -1,0 +1,45 @@
+{
+  "generated": "2026-03-28T10:16:40Z",
+  "iterations": 10,
+  "endpoints": {
+    "GET /api/v1/health": {
+      "median_ms": 4377.47,
+      "p95_ms": 6822.53,
+      "avg_ms": 4445.75
+    },
+    "GET /api/v1/capabilities": {
+      "median_ms": 8.07,
+      "p95_ms": 9.64,
+      "avg_ms": 8.09
+    },
+    "GET /api/v1/missions": {
+      "median_ms": 16.76,
+      "p95_ms": 20.88,
+      "avg_ms": 17.2
+    },
+    "GET /api/v1/missions/mission-bench-000": {
+      "median_ms": 10.1,
+      "p95_ms": 14.65,
+      "avg_ms": 10.66
+    },
+    "GET /api/v1/missions/mission-bench-000/stages": {
+      "median_ms": 11.0,
+      "p95_ms": 13.74,
+      "avg_ms": 11.6
+    },
+    "GET /api/v1/approvals": {
+      "median_ms": 16.22,
+      "p95_ms": 36.54,
+      "avg_ms": 20.69
+    },
+    "GET /api/v1/telemetry": {
+      "median_ms": 20.98,
+      "p95_ms": 40.1,
+      "avg_ms": 22.6
+    }
+  },
+  "summary": {
+    "get_avg_ms": 570.8,
+    "get_max_ms": 6822.5
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "enabled": true,
+  "webhook_url": "https://hooks.slack.com/services/YOUR/WEBHOOK/URL",
+  "events": ["mission_completed", "mission_failed", "approval_requested"]
+}

@@ -1,0 +1,27 @@
+{
+  "name": "webhook-notifications",
+  "version": "1.0.0",
+  "description": "Send webhook notifications on mission events (Slack/Discord)",
+  "author": "vezir",
+  "handlers": [
+    {
+      "event_type": "mission_completed",
+      "handler": "on_mission_completed",
+      "priority": 500
+    },
+    {
+      "event_type": "mission_failed",
+      "handler": "on_mission_failed",
+      "priority": 500
+    },
+    {
+      "event_type": "approval_requested",
+      "handler": "on_approval_requested",
+      "priority": 500
+    }
+  ],
+  "config_schema": {
+    "webhook_url": {"type": "string", "required": true},
+    "events": {"type": "array", "required": false}
+  }
+}

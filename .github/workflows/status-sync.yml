@@ -49,21 +49,32 @@ jobs:
 
           echo "Issue reference: $ISSUE_REF"
 
-          # Find linked issue by searching
-          SPRINT=$(echo "$ISSUE_REF" | grep -oP 'S\K\d+')
-          TASK_ID=$(echo "$ISSUE_REF" | grep -oP 'S\d+-\K[\d.]+\w*')
-          SEARCH="${ISSUE_REF}"
-
+          # Find linked issue — deterministic resolution
           REPO="${GITHUB_REPOSITORY}"
-          ISSUE_NUMBER=$(gh issue list --repo "$REPO" --search "$SEARCH in:title" --json number,title --limit 5 \
-            --jq ".[] | select(.title | contains(\"$SEARCH\")) | .number" | head -1 || true)
 
+          # Method 1: Extract from PR body closing references (Closes #N, Fixes #N)
+          PR_BODY=$(gh pr view "$PR_NUMBER" --repo "$REPO" --json body --jq '.body' 2>/dev/null || true)
+          ISSUE_NUMBER=$(echo "$PR_BODY" | grep -oP '(?:Closes|Fixes|Resolves)\s+#\K\d+' | head -1 || true)
+
+          # Method 2: Use GitHub API to get linked issues via timeline
           if [ -z "$ISSUE_NUMBER" ]; then
-            echo "Could not find issue matching $SEARCH. Skipping."
+            ISSUE_NUMBER=$(gh api "repos/${REPO}/issues?labels=sprint&state=all&per_page=100" \
+              --jq ".[] | select(.title | contains(\"$ISSUE_REF\")) | .number" 2>/dev/null | head -1 || true)
+          fi
+
+          # Method 3: Fallback to search with escaped brackets
+          if [ -z "$ISSUE_NUMBER" ]; then
+            SEARCH_TERM=$(echo "$ISSUE_REF" | sed 's/\[//g; s/\]//g')
+            ISSUE_NUMBER=$(gh issue list --repo "$REPO" --search "\"$SEARCH_TERM\" in:title" --json number,title --limit 5 \
+              --jq ".[0].number" 2>/dev/null || true)
+          fi
+
+          if [ -z "$ISSUE_NUMBER" ] || [ "$ISSUE_NUMBER" = "null" ]; then
+            echo "Could not find issue for $ISSUE_REF via closing refs, API, or search. Skipping."
             exit 0
           fi
 
-          echo "Linked issue: #$ISSUE_NUMBER"
+          echo "Linked issue: #$ISSUE_NUMBER (resolved for $ISSUE_REF)"
 
           # Get project and update status field
           PROJECT_ID=$(gh api graphql -f query='

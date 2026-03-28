@@ -1,0 +1,79 @@
+sprint: 24
+phase: 6
+title: "CI Gate Hardening / Operational Safety"
+model: "A"
+
+authority:
+  source_of_truth: "SPRINT-24-TASK-BREAKDOWN.md"
+  automation_index: "plan.yaml"
+  generated_files:
+    - "issues.json"
+  not_generated:
+    - "SPRINT-24-TASK-BREAKDOWN.md"
+    - "plan.yaml"
+    - "S24-KICKOFF.md"
+
+issue:
+  parent_title: "[S24] CI Gate Hardening / Operational Safety"
+  labels: ["sprint", "phase-6", "ci"]
+  milestone: "Sprint 24"
+
+tasks:
+  - id: "24.1"
+    title: "Benchmark regression gate"
+    type: "implementation"
+    track: 1
+    branch_name: "sprint-24/t24.1-benchmark-gate"
+    labels: ["ci", "benchmark"]
+
+  - id: "24.2"
+    title: "Playwright API smoke in GitHub Actions"
+    type: "implementation"
+    track: 1
+    branch_name: "sprint-24/t24.2-playwright-ci"
+    labels: ["ci", "e2e", "playwright"]
+
+  - id: "24.G1"
+    title: "Mid Review Gate"
+    type: "gate"
+    branch_exempt: true
+    blocks: ["24.3", "24.4"]
+    labels: ["gate"]
+
+  - id: "24.3"
+    title: "Dependabot moderate vulnerability remediation"
+    type: "implementation"
+    track: 2
+    branch_name: "sprint-24/t24.3-dependabot-fix"
+    labels: ["security", "dependencies"]
+    depends_on: ["24.G1"]
+
+  - id: "24.4"
+    title: "PROJECT_TOKEN operational hardening"
+    type: "implementation"
+    track: 2
+    branch_name: "sprint-24/t24.4-token-docs"
+    labels: ["docs", "security"]
+    depends_on: ["24.G1"]
+
+  - id: "24.G2"
+    title: "Final Review Gate"
+    type: "gate"
+    branch_exempt: true
+    labels: ["gate"]
+
+  - id: "24.RETRO"
+    title: "Retrospective"
+    type: "gate"
+    branch_exempt: true
+    labels: ["process"]
+
+  - id: "24.CLOSURE"
+    title: "Sprint Closure"
+    type: "gate"
+    branch_exempt: true
+    labels: ["process"]
+
+validation:
+  require_doc_sync: true
+  fail_on_conflict: true

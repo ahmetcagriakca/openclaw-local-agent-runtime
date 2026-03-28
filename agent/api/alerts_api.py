@@ -8,7 +8,9 @@ import logging
 from datetime import datetime, timezone
 from typing import Optional
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query
+
+from auth.middleware import require_operator
 from pydantic import BaseModel
 
 logger = logging.getLogger("mcc.api.alerts")
@@ -68,7 +70,7 @@ class RuleUpdate(BaseModel):
 
 
 @router.put("/rules/{rule_id}")
-async def update_rule(rule_id: str, body: RuleUpdate):
+async def update_rule(rule_id: str, body: RuleUpdate, _operator=Depends(require_operator)):
     """Update alert rule threshold, enable/disable."""
     engine = _get_engine()
     updates = {k: v for k, v in body.model_dump().items() if v is not None}
@@ -90,7 +92,7 @@ class RuleCreate(BaseModel):
 
 
 @router.post("/rules")
-async def create_rule(body: RuleCreate):
+async def create_rule(body: RuleCreate, _operator=Depends(require_operator)):
     """Add a custom alert rule."""
     engine = _get_engine()
     rule = engine.add_rule(body.model_dump())

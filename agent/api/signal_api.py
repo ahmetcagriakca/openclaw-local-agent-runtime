@@ -1,7 +1,9 @@
 """Signal Artifact API — view and delete pending signal artifacts."""
 import logging
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
+
+from auth.middleware import require_operator
 
 from api.schemas import APIError
 
@@ -19,7 +21,7 @@ def _get_missions_dir():
     "/signals/{request_id}",
     responses={404: {"model": APIError}},
 )
-async def delete_signal(request_id: str):
+async def delete_signal(request_id: str, _operator=Depends(require_operator)):
     """Delete a pending signal artifact by requestId."""
     missions_dir = _get_missions_dir()
 

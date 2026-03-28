@@ -13,8 +13,9 @@ import logging
 from datetime import datetime, timedelta
 from pathlib import Path
 
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Request
 
+from auth.middleware import require_operator
 from api.mutation_audit import log_mutation
 from api.mutation_bridge import has_pending_signal, write_signal_artifact
 from api.schemas import APIError, MutationResponse
@@ -90,7 +91,7 @@ async def _emit_mutation_requested(request: Request, request_id: str,
     response_model=MutationResponse,
     responses={404: {"model": APIError}, 409: {"model": APIError}},
 )
-async def approve_approval(apv_id: str, request: Request):
+async def approve_approval(apv_id: str, request: Request, _operator=Depends(require_operator)):
     """Approve a pending approval.
 
     Signal flow: validate → check duplicate → write artifact → SSE → respond.
@@ -160,7 +161,7 @@ async def approve_approval(apv_id: str, request: Request):
     response_model=MutationResponse,
     responses={404: {"model": APIError}, 409: {"model": APIError}},
 )
-async def reject_approval(apv_id: str, request: Request):
+async def reject_approval(apv_id: str, request: Request, _operator=Depends(require_operator)):
     """Reject a pending approval (D-090: destructive — requires confirmation).
 
     Signal flow: validate → check duplicate → write artifact → SSE → respond.

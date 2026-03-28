@@ -1024,8 +1024,9 @@ Sprint 8 did not start until this document was FROZEN.
 *D-108: Session/auth model — Single-operator foundation — Sprint 16 (frozen)*
 *BF-1 → BF-4: Phase 5 Freeze Addendum (frozen)*
 
-## Phase 6 / Sprint 26-27 Decisions (D-115 → D-117)
+## Phase 6 / Sprint 26-29 Decisions (D-115 → D-118)
 
 *D-115: Backend physical topology — no restructure needed, current modular architecture is clean and acyclic (138 files, 12 modules, 0 circular deps). Import rules codified. S14A/14B carryover RETIRED. — Sprint 26 (frozen)*
 *D-116: Docker dev runtime topology — see `docs/decisions/D-116-docker-dev.md` — Sprint 26 (frozen)*
 *D-117: Multi-user auth contract — API key auth, operator/viewer roles, fail-closed, file-based key registry. Supersedes D-108. — Sprint 27 (frozen)*
+*D-118: Plugin runtime contract — file-based plugins, JSON manifest, EventBus integration, config-driven loading, 30s timeout, error isolation, priority 500+. — Sprint 29 (frozen)*

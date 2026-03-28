@@ -1036,3 +1036,4 @@ Sprint 8 did not start until this document was FROZEN.
 *D-119: Mission template lifecycle — JSON schema, CRUD API, parameter validation, run-from-template, draft/published/archived states. — Sprint 30 (frozen)*
 *D-120: Scheduled/triggered missions — cron scheduling, event triggers, execution queue. Decision frozen, implementation deferred to S31+. — Sprint 30 (frozen)*
 *D-121: Approval gate contract — centralized inbox, lifecycle (pending/approved/rejected/expired), actor-chain audit, 30min default timeout. — Sprint 30 (frozen)*
+*D-122: Backlog-to-Project-to-Sprint contract — GitHub Issues canonical, BACKLOG.md generated, separate backlog/sprint issues, milestone as sprint container. — Sprint 31 (frozen)*

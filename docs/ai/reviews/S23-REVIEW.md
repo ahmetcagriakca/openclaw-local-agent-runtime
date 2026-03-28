@@ -1,4 +1,4 @@
-# Sprint 23 — Pre-Sprint Review
+# Sprint 23 — Review Summary (Pre-Sprint + G1 + G2)
 
 **Date:** 2026-03-28
 **Reviewer:** GPT-4o (Custom GPT: Vezir)
@@ -56,9 +56,30 @@ Kickoff freeze eligible.
 3. Carry-forward records updated in canonical docs
 4. Evidence naming per closure packet standard
 
-## Next Step
+---
 
-- Freeze S23 task doc
-- Open 23.1 branch, begin implementation
-- Do not open new scope before 23.2 complete
-- 23.3 after G1 only
+## G1 Mid Review — PASS
+
+**Date:** 2026-03-28
+Track 1 (23.1 + 23.2) implementation complete. No blocking findings.
+
+## G2 Final Review — PASS (Round 5)
+
+**Date:** 2026-03-28
+**Rounds:** 5 (HOLD×4 → PASS)
+
+**HOLD reasons resolved:**
+1. Round 1-2: Raw runtime evidence needed (not just code review)
+2. Round 3: Issue search bracket bug — fixed with 3-tier resolution
+3. Round 4: GITHUB_TOKEN project scope — fixed with PROJECT_TOKEN secret
+4. Round 5: closed-unmerged→Todo evidence — live test PR #111
+
+**Final acceptance matrix (all LIVE):**
+- opened → In Progress ✅ (PR #110)
+- merged → Done ✅ (PR #110 merge)
+- closed unmerged → Todo ✅ (PR #111)
+- auto-add to project ✅
+- body section validation ✅ (PR #105)
+- stale refs 4→0 ✅
+
+**GPT verdict:** PASS — eligible for closure review

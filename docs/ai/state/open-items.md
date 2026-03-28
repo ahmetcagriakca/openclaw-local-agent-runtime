@@ -17,9 +17,10 @@
 
 | Item | Source | Decision |
 |------|--------|----------|
-| ~~status-sync full project-field mutation~~ | ~~S20 partial~~ | **S23 task 23.1** |
-| ~~pr-validator body required sections~~ | ~~S20 partial~~ | **S23 task 23.2** |
-| ~~4 stale refs (DECISIONS.md + handoffs/README.md)~~ | ~~S22 retro~~ | **S23 task 23.3** |
+| ~~status-sync full project-field mutation~~ | ~~S20 partial~~ | ✅ S23 task 23.1 DONE |
+| ~~pr-validator body required sections~~ | ~~S20 partial~~ | ✅ S23 task 23.2 DONE |
+| ~~4 stale refs (DECISIONS.md + handoffs/README.md)~~ | ~~S22 retro~~ | ✅ S23 task 23.3 DONE |
+| PROJECT_TOKEN rotation/docs | S23 retro | S24 carry-forward |
 | Benchmark regression gate (D-109) | S22 retro / GPT | S24 carry-forward |
 | Playwright live API test in CI | S22 retro | S24 carry-forward |
 | Dependabot moderate vuln (1) | default branch | S24 carry-forward, owner AKCA |
@@ -59,7 +60,11 @@
 ## Next Sprint
 
 **Sprint 23 — Phase 6**
-- Status: GPT PASS, implementation `not_started`
-- Kickoff gate: GPT pre-sprint PASS ✅ (2 rounds, `docs/ai/reviews/S23-REVIEW.md`)
-- Next: milestone creation + `issue-from-plan.yml` dispatch + branch 23.1
-- Sprint 22 closed (Model A); S23 Model A
+- Status: implementation `done`, closure_status `review_pending`
+- GPT: Pre-sprint PASS (2 rounds), G1 PASS, G2 PASS (5 rounds)
+- RETRO complete
+- Awaiting operator `closure_status=closed`
+
+**Sprint 24 — Phase 6**
+- Status: NOT STARTED
+- Candidates: Benchmark regression gate (D-109), Playwright CI, Dependabot fix

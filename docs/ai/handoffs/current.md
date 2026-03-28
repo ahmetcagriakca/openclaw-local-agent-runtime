@@ -7,7 +7,7 @@
 
 ## Session Summary
 
-Sprint 23 planlandı ve GPT pre-sprint review PASS aldı (2 round: HOLD → revised → PASS).
+Sprint 23 tamamlandı — GPT pre-sprint PASS (2 round), G1 PASS, G2 PASS (5 round).
 
 | Sprint | Scope | Model | GPT Rounds | Status |
 |--------|-------|-------|-----------|--------|
@@ -15,51 +15,50 @@ Sprint 23 planlandı ve GPT pre-sprint review PASS aldı (2 round: HOLD → revi
 | 20 | Project Integration + PR Traceability | A | 4 | Closed |
 | 21 | Closure + Archive Automation | A | 2 | Closed |
 | 22 | Automation Hardening / Operationalization | A | 2 | Closed |
-| **23** | **Governance Debt Closure + CI Hygiene** | **A** | **2** | **GPT PASS — implementation not_started** |
+| **23** | **Governance Debt Closure + CI Hygiene** | **A** | **8** | **GPT PASS — closure pending operator** |
 
 ---
 
-## Sprint 23 Scope (canonical in repo)
+## Sprint 23 Deliverables
 
-- **Title:** Governance Debt Closure + CI Hygiene
-- **Artifacts:** `docs/sprints/sprint-23/SPRINT-23-TASK-BREAKDOWN.md`, `plan.yaml`, `S23-KICKOFF.md`
-- **GPT Review:** `docs/ai/reviews/S23-REVIEW.md` — PASS (Round 2)
+**23.1 — status-sync full project-field mutation:**
+- GraphQL mutation: field/option ID extraction + updateProjectV2ItemFieldValue
+- 3-tier issue discovery (PR closing refs → API → search)
+- Auto-add issue to project if missing
+- PROJECT_TOKEN secret for Project V2 write access
+- PRs: #102, #106, #108, #109, #110
 
-| ID | Task | Source |
-|----|------|--------|
-| 23.1 | status-sync full project-field mutation | S20 partial |
-| 23.2 | pr-validator body required sections | S20 partial |
-| 23.G1 | Mid Review Gate | — |
-| 23.3 | Stale doc reference remediation | S22 retro |
-| 23.G2 | Final Review Gate | — |
-| 23.RETRO | Retrospective | — |
-| 23.CLOSURE | Sprint Closure | — |
+**23.2 — pr-validator body required sections:**
+- Sprint PRs require `## Summary` + `## Test Plan` with content
+- Empty body/sections → error; non-sprint PR → warn; bot → exempt
+- PR: #103
 
-**Next steps:**
-1. Create GitHub milestone Sprint 23
-2. Run `issue-from-plan.yml` workflow dispatch with sprint 23
-3. Open branch `sprint-23/t23.1-status-sync-mutation`, begin implementation
+**23.3 — Stale doc reference remediation:**
+- 4 stale refs fixed (DECISIONS.md×3, handoffs/README.md×1)
+- check-stale-refs.py: 0 stale refs
+- PR: #104
 
 ---
 
 ## Current State
 
 - **Phase:** 6
-- **Last closed sprint:** 22
+- **Last closed sprint:** 22 (23 GPT PASS, closure pending)
 - **Decisions:** 114 frozen (D-001→D-114)
 - **Tests:** 458 backend + 29 frontend PASS
-- **Sprint 23:** GPT PASS, implementation_status=not_started
+- **Sprint 24:** NOT STARTED
 
-## Open Items
+## Open Items (post-S23)
 
-- status-sync full project-field mutation → **S23 task 23.1**
-- pr-validator body required sections → **S23 task 23.2**
-- 4 stale refs (DECISIONS.md + handoffs/README.md) → **S23 task 23.3**
 - Archive --execute on closed sprints (operator decision, TBD)
 - Dependabot moderate vulnerability (1) → S24 carry-forward, owner AKCA
-- Playwright live API test → S24 carry-forward
-- Benchmark regression gate (D-109) → S24 carry-forward
+- Benchmark regression gate (D-109) → S24
+- Playwright API smoke in CI → S24
+- PROJECT_TOKEN rotation policy → document in shared governance
 
-## New Capabilities
+## New Capabilities (this session)
 
-- **Chat bridge** operational (`C:\Users\AKCA\chatbridge\bridge.js`) — Playwright-based headless bridge for Claude Code ↔ ChatGPT programmatic communication. Cloudflare bypass via headed Chrome + challenge wait loop.
+- **Chat bridge** operational — Playwright-based headless bridge for Claude Code ↔ ChatGPT
+- **PROJECT_TOKEN** secret — enables Project V2 field mutations from GitHub Actions
+- **status-sync live** — PR events auto-update Project V2 Status field
+- **pr-validator enforced** — Sprint PRs require Summary + Test Plan sections

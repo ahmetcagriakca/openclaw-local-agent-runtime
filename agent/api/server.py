@@ -202,6 +202,10 @@ app.add_middleware(CSRFMiddleware)
 from api.throttle import ThrottleMiddleware
 app.add_middleware(ThrottleMiddleware)
 
+# B-012: Idempotency key middleware for mutation requests
+from api.idempotency import IdempotencyMiddleware
+app.add_middleware(IdempotencyMiddleware)
+
 
 # D-070: Host header validation middleware
 @app.middleware("http")

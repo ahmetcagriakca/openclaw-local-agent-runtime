@@ -45,9 +45,48 @@ jobs:
             WARNINGS="${WARNINGS}\n- Title is ${TITLE_LEN} chars (recommended: <100)"
           fi
 
-          # Rule 3: Body should not be empty for sprint PRs
-          if echo "$PR_TITLE" | grep -qP '^\[S\d+-' && [ -z "$PR_BODY" ]; then
-            WARNINGS="${WARNINGS}\n- Sprint PR has empty body. Consider adding description."
+          # Rule 3: Body validation for sprint PRs
+          IS_SPRINT_PR=false
+          if echo "$PR_TITLE" | grep -qP '^\[S\d+-'; then
+            IS_SPRINT_PR=true
+          fi
+
+          if [ "$IS_SPRINT_PR" = "true" ]; then
+            if [ -z "$PR_BODY" ]; then
+              ERRORS="${ERRORS}\n- Sprint PR has empty body. Required sections: ## Summary, ## Test Plan"
+            else
+              MISSING_SECTIONS=""
+
+              # Check for ## Summary section
+              if ! echo "$PR_BODY" | grep -qiP '^##\s*summary'; then
+                MISSING_SECTIONS="${MISSING_SECTIONS}\n  - ## Summary"
+              else
+                # Check section has content (at least one non-empty line after header)
+                SUMMARY_CONTENT=$(echo "$PR_BODY" | sed -n '/^##\s*[Ss]ummary/,/^##/p' | sed '1d;/^##/d' | grep -v '^\s*$' | head -1)
+                if [ -z "$SUMMARY_CONTENT" ]; then
+                  MISSING_SECTIONS="${MISSING_SECTIONS}\n  - ## Summary (header exists but no content)"
+                fi
+              fi
+
+              # Check for ## Test Plan section
+              if ! echo "$PR_BODY" | grep -qiP '^##\s*test\s*plan'; then
+                MISSING_SECTIONS="${MISSING_SECTIONS}\n  - ## Test Plan"
+              else
+                TEST_CONTENT=$(echo "$PR_BODY" | sed -n '/^##\s*[Tt]est\s*[Pp]lan/,/^##/p' | sed '1d;/^##/d' | grep -v '^\s*$' | head -1)
+                if [ -z "$TEST_CONTENT" ]; then
+                  MISSING_SECTIONS="${MISSING_SECTIONS}\n  - ## Test Plan (header exists but no content)"
+                fi
+              fi
+
+              if [ -n "$MISSING_SECTIONS" ]; then
+                ERRORS="${ERRORS}\n- Sprint PR missing required body sections:${MISSING_SECTIONS}"
+              fi
+            fi
+          else
+            # Non-sprint PR — sections recommended but not required
+            if [ -z "$PR_BODY" ]; then
+              WARNINGS="${WARNINGS}\n- PR body is empty. Consider adding ## Summary and ## Test Plan sections."
+            fi
           fi
 
           # Report
@@ -55,7 +94,7 @@ jobs:
             echo "ERRORS found:"
             echo -e "$ERRORS"
             echo ""
-            echo "FAIL: PR title validation failed."
+            echo "FAIL: PR validation failed."
             exit 1
           fi
 

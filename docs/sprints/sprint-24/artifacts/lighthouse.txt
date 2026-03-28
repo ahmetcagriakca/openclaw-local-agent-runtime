@@ -1,2 +1,1 @@
-Sprint 24 scope: CI gates + Dependabot fix. No UI changes.
-Frontend Lighthouse deferred — no visual/UX changes in this sprint.
+NO EVIDENCE — Sprint 24 scope has no UI changes. Frontend Lighthouse deferred.

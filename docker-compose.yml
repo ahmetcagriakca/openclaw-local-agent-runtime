@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  vezir-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8003:8003"
+    environment:
+      - PYTHONDONTWRITEBYTECODE=1
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./agent/missions:/app/agent/missions
+      - ./agent/approvals:/app/agent/approvals
+      - ./agent/logs:/app/agent/logs
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8003/api/v1/health')"]
+      interval: 10s
+      timeout: 5s
+      start_period: 15s
+      retries: 3
+    restart: unless-stopped

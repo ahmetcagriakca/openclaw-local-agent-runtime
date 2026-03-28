@@ -1,0 +1,17 @@
+NOTE: Self-comparing baseline (no new run provided). This should always pass.
+============================================================
+  Benchmark Regression Check
+  Baseline: C:\Users\AKCA\oc\baseline\benchmark-baseline.json
+  Current:  C:\Users\AKCA\oc\baseline\benchmark-baseline.json
+  Threshold: ±25%
+  Baseline generated: 2026-03-28T10:16:40Z
+============================================================
+  OK: GET /api/v1/health — baseline=4377.5ms current=4377.5ms (+0.0%)
+  OK: GET /api/v1/capabilities — baseline=8.1ms current=8.1ms (+0.0%)
+  OK: GET /api/v1/missions — baseline=16.8ms current=16.8ms (+0.0%)
+  OK: GET /api/v1/missions/mission-bench-000 — baseline=10.1ms current=10.1ms (+0.0%)
+  OK: GET /api/v1/missions/mission-bench-000/stages — baseline=11.0ms current=11.0ms (+0.0%)
+  OK: GET /api/v1/approvals — baseline=16.2ms current=16.2ms (+0.0%)
+  OK: GET /api/v1/telemetry — baseline=21.0ms current=21.0ms (+0.0%)
+
+PASS: No performance regressions detected.

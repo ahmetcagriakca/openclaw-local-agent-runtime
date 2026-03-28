@@ -1,0 +1,83 @@
+sprint: 28
+phase: 6
+title: "Auth Hardening + Operational Observability"
+model: "A"
+
+authority:
+  source_of_truth: "SPRINT-28-TASK-BREAKDOWN.md"
+  automation_index: "plan.yaml"
+  generated_files:
+    - "issues.json"
+
+issue:
+  parent_title: "[S28] Auth Hardening + Operational Observability"
+  labels: ["sprint", "phase-6"]
+  milestone: "Sprint 28"
+
+tasks:
+  - id: "28.1"
+    title: "Auth integration test baseline"
+    type: "implementation"
+    track: 1
+    branch_name: "sprint-28/t28.1-auth-integration-tests"
+    labels: ["testing", "auth"]
+
+  - id: "28.2"
+    title: "Session expiration and token rotation"
+    type: "implementation"
+    track: 1
+    branch_name: "sprint-28/t28.2-session-expiration"
+    labels: ["auth", "security"]
+
+  - id: "28.G1"
+    title: "Mid Review Gate"
+    type: "gate"
+    branch_exempt: true
+    blocks: ["28.3", "28.4", "28.5"]
+    labels: ["gate"]
+
+  - id: "28.3"
+    title: "Frontend auth/session test expansion"
+    type: "implementation"
+    track: 2
+    branch_name: "sprint-28/t28.3-frontend-auth-tests"
+    labels: ["frontend", "testing"]
+    depends_on: ["28.G1"]
+
+  - id: "28.4"
+    title: "Jaeger/Grafana deployment baseline"
+    type: "implementation"
+    track: 2
+    branch_name: "sprint-28/t28.4-observability-stack"
+    labels: ["infra", "observability"]
+    depends_on: ["28.G1"]
+
+  - id: "28.5"
+    title: "Auth + observability closure gate"
+    type: "implementation"
+    track: 2
+    branch_name: "sprint-28/t28.5-closure-gate"
+    labels: ["ci", "governance"]
+    depends_on: ["28.G1"]
+
+  - id: "28.G2"
+    title: "Final Review Gate"
+    type: "gate"
+    branch_exempt: true
+    labels: ["gate"]
+
+  - id: "28.RETRO"
+    title: "Retrospective"
+    type: "gate"
+    branch_exempt: true
+    labels: ["process"]
+
+  - id: "28.CLOSURE"
+    title: "Sprint Closure"
+    type: "gate"
+    branch_exempt: true
+    labels: ["process"]
+
+validation:
+  require_doc_sync: true
+  fail_on_conflict: true

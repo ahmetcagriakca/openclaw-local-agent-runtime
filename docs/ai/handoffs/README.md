@@ -11,7 +11,7 @@ Replaces manual upload of SESSION-HANDOFF.md files.
 
 ## Archive
 
-Previous handoffs move to `archive/YYYY-MM-DD-vN.md` when a new one is written.
+Previous handoffs move to the `archive/` subdirectory with naming pattern `YYYY-MM-DD-vN.md` when a new one is written.
 
 ## current.md Format
 

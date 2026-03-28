@@ -18,7 +18,7 @@ Project V2 board has 57 items across 6 custom fields. Field completeness: Status
 | Truth | Source | Writer | Scope | Enforcement |
 |-------|--------|--------|-------|-------------|
 | **Project Status** | Project V2 field | `status-sync.yml` (PR events) | All items | Blank = FAIL |
-| **Sprint identity** | Project V2 `Sprint` text field | `issue-from-plan.yml` sets at creation; validator checks format | Sprint tasks | Regex `^\d+$`; blank on sprint-labeled item = FAIL |
+| **Sprint identity** | Project V2 `Sprint` number field | `issue-from-plan.yml` sets at creation; validator checks presence | Sprint tasks | Non-null integer required; blank on sprint-labeled item = FAIL |
 | **Priority** | GitHub label (`priority:P1/P2/P3`) | `backlog-import.py` for backlog; `issue-from-plan.yml` for sprint tasks | Backlog items (mandatory), sprint tasks (optional) | Backlog item without priority label = FAIL |
 | **Task ID** | Issue title pattern `[SN-N.M]` | `issue-from-plan.yml` generates title | Sprint tasks only | Sprint-labeled item without `[SN-N.M]` title = FAIL (S31+), WARN (legacy) |
 | **Issue State** | GitHub issue open/closed | Operator or automation at closure | All items | Done + open = FAIL; closed sprint + open issue = FAIL |
@@ -38,7 +38,7 @@ Every canonical truth must have an identified automation writer. A truth with no
 
 ### Sprint Identity — Two-Phase Approach
 
-- **v1 (Sprint 33):** Sprint text field stays. Validator enforces `^\d+$` regex. `issue-from-plan.yml` sets value at creation. Milestone also assigned as belt-and-suspenders.
+- **v1 (Sprint 33):** Sprint number field stays. Validator enforces non-null integer. `issue-from-plan.yml` sets value at creation. Milestone also assigned as belt-and-suspenders.
 - **v2 (future, requires separate decision):** If milestone-based filtering proves equivalent, Sprint text field may be retired. Requires evidence from at least 2 sprints of dual-mode operation.
 
 ### Sprint 0 / Backlog Model

@@ -1,0 +1,18 @@
+=== Issue Closure Evidence ===
+Generated: 2026-03-28T16:07:18Z
+
+--- #100 ---
+{"closedAt":"2026-03-28T16:05:27Z","number":100,"state":"CLOSED","title":"[S23-23.1] status-sync full project-field mutation"}
+
+--- #98 ---
+{"closedAt":"2026-03-28T16:05:40Z","number":98,"state":"CLOSED","title":"[S23] Governance Debt Closure + CI Hygiene"}
+
+--- #112 ---
+{"closedAt":"2026-03-28T16:05:45Z","number":112,"state":"CLOSED","title":"[S24] CI Gate Hardening / Operational Safety"}
+
+--- #153 ---
+{"closedAt":"2026-03-28T12:34:23Z","number":153,"state":"CLOSED","title":"[B-012] Full request idempotency"}
+
+--- #154 ---
+{"closedAt":"2026-03-28T12:34:20Z","number":154,"state":"CLOSED","title":"[B-005] HTTP rate limiting"}
+

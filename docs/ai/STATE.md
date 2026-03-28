@@ -1,9 +1,9 @@
 # Current State
 
-**Last updated:** 2026-03-27
-**Active phase:** Sprint 22 CLOSED — Automation Hardening (2026-03-28)
+**Last updated:** 2026-03-28
+**Active phase:** Phase 7 — Sprint 33 in progress
 **Doc model:** This file is canonical for system state. Session context lives in `docs/ai/handoffs/current.md`.
-**Note:** All sprints through 16 closed. Phase 6 ready to start. Phase 2 deferred — single-user localhost, security hardening not urgent.
+**Note:** All sprints through 32 closed. Phase 7 active. 125 frozen decisions (D-001 → D-125).
 **Persistence:** State is file-persisted (state.json, mission.json). Mission history via persistence layer (Sprint 16).
 **API:** Vezir API on 127.0.0.1:8003 (FastAPI + Uvicorn). Schemas FROZEN (D-067). SSE on /api/v1/events/stream. Dashboard API + Alert API + Telemetry Query API (Sprint 16).
 **Frontend:** React dashboard on localhost:3000 (Vite + Tailwind). SSE live updates + polling fallback + intervention buttons + monitoring dashboard. Node.js 20 required.
@@ -77,6 +77,17 @@
 | Sprint 20 | Project Integration + PR Traceability | Closed |
 | Sprint 21 | Closure + Archive Automation | Closed |
 | Sprint 22 | Automation Hardening / Operationalization | Closed |
+| Sprint 23 | Governance Debt Closure (status-sync, pr-validator, stale refs) | Closed |
+| Sprint 24 | CI Gate Hardening (benchmark, Playwright, Dependabot, secrets) | Closed |
+| Sprint 25 | Contract Execution (archive, OpenAPI SDK, component tests) | Closed |
+| Sprint 26 | Foundation Hardening (D-115/116, Docker, SDK drift, live E2E) | Closed |
+| Sprint 27 | Identity Foundation (D-117 auth, frontend auth, mock LLM, Docker CI) | Closed |
+| Sprint 28 | Auth Hardening (integration tests, token expiry, Jaeger/Grafana) | Closed |
+| Sprint 29 | Plugin Foundation (D-118, plugin registry, webhook, session UI) | Closed |
+| Sprint 30 | Repeatable Automation (D-119/120/121, templates, timeline, guardrails) | Closed |
+| Sprint 31 | Backlog Pipeline (D-122, import tool, generator, sprint bridge) | Closed |
+| Sprint 32 | API Throttling + Idempotency (B-005, B-012) | Closed |
+| Sprint 33 | Project V2 Contract Hardening (D-123/124/125) | In Progress |
 
 ## Test Evidence
 
@@ -92,7 +103,7 @@
 
 ## Architectural Decisions
 
-114 frozen decisions (D-001 through D-114). See `docs/ai/DECISIONS.md`. Governance rules in `docs/ai/GOVERNANCE.md` (D-112).
+125 frozen decisions (D-001 through D-125). See `docs/ai/DECISIONS.md`. Governance rules in `docs/ai/GOVERNANCE.md` (D-112). D-123/D-124/D-125: Project V2 contract, legacy normalization, closure state sync (Sprint 33).
 
 ## Port Map
 

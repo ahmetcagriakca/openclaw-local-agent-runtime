@@ -1,4 +1,4 @@
-# Session Handoff — 2026-03-28 (Session 9)
+# Session Handoff — 2026-03-28 (Session 10)
 
 **Platform:** Vezir Platform
 **Operator:** GPT (Custom GPT: Vezir) — AKCA delegated
@@ -7,7 +7,7 @@
 
 ## Session Summary
 
-10 sprint kapatıldı (S23-S32). Phase 6 tamamlandı, Phase 7 aktif.
+11 sprint kapatıldı (S23-S33). Phase 7 aktif. Sprint 33 in progress.
 
 | Sprint | Scope | Phase | Status |
 |--------|-------|-------|--------|
@@ -21,6 +21,7 @@
 | 30 | Repeatable Automation (D-119/120/121, templates, timeline, guardrails) | 7 | Closed |
 | 31 | Backlog Pipeline (D-122, import tool, generator, sprint bridge) | 7 | Closed |
 | 32 | API Throttling + Idempotency (B-005, B-012) | 7 | Closed |
+| 33 | Project V2 Contract Hardening (D-123/124/125) | 7 | In Progress |
 
 ---
 
@@ -28,12 +29,27 @@
 
 - **Phase:** 7
 - **Last closed sprint:** 32
-- **Decisions:** 122 frozen (D-001 → D-122)
-- **Tests:** 465 backend + 75 frontend + 7 e2e PASS
+- **Active sprint:** 33 (Project V2 Contract Hardening)
+- **Decisions:** 125 frozen (D-001 → D-125)
+- **Tests:** 465 backend + 75 frontend + 7 e2e + 29 validator PASS
 - **Vulnerabilities:** 0
-- **Backlog:** 37 open / 2 closed (39 total GitHub issues #149-#187)
+- **Backlog:** 30 open / 2 closed (32 total with backlog label)
 - **Project V2:** https://github.com/users/ahmetcagriakca/projects/4
-- **Sprint 33:** NOT STARTED
+- **Sprint 33 progress:** 33.1-33.5 done, G2/RETRO/CLOSURE pending
+
+## Sprint 33 Deliverables
+
+| Task | Status | Commit |
+|------|--------|--------|
+| 33.1 Decision freeze (D-123/124/125) | DONE | `5afc835` |
+| 33.2 Legacy normalization + drift closure | DONE | `24b51d5` |
+| 33.3 project-validator.py (29 tests) | DONE | `b5f7d00` |
+| 33.G1 Mid Review Gate | PASS | — |
+| 33.4 Closure check integration | DONE | `f2ba323` |
+| 33.5 Writer matrix + docs | DONE | this commit |
+| 33.G2 Final Review Gate | PENDING | — |
+| 33.RETRO | PENDING | — |
+| 33.CLOSURE | PENDING | — |
 
 ## Key Infrastructure
 
@@ -47,32 +63,13 @@
 | Scheduled missions | D-120 | Decision frozen, impl deferred |
 | Approval gate | D-121 | Expiration checker |
 | Backlog pipeline | D-122 | GitHub Issues canonical |
+| Project V2 contract | D-123 | Validator enforces 5 canonical truths |
+| Legacy normalization | D-124 | 16 items normalized, 0 unclassified |
+| Closure state sync | D-125 | Triple consistency + backlog evidence |
 | Docker dev env | D-116 | Dockerfile + compose + Jaeger + Grafana |
-| Backend topology | D-115 | No restructure needed (138 files, 0 circular deps) |
 | API throttling | B-005 | 100/min GET, 20/min POST, 429+Retry-After |
 | Mutation idempotency | B-012 | Idempotency-Key header, cache, 24h TTL |
-| Benchmark gate | — | CI enforcement, ±25% threshold |
-| Playwright CI | — | API smoke in GitHub Actions |
-| SDK drift gate | — | OpenAPI → TypeScript, CI diff check |
-| Mock LLM provider | — | Deterministic E2E testing |
-| Chat bridge | — | Claude Code ↔ ChatGPT (Playwright) |
-
-## Project V2 Field Status
-
-| Field | Doluluk | Not |
-|-------|---------|-----|
-| Status | 57/57 (100%) | Todo, In Progress, Done |
-| Sprint | 41/57 (72%) | 0=Backlog, 32=son sprint |
-| Type | 2/57 (4%) | Sadece S32'de dolu |
-| Track | 2/57 (4%) | Sadece S32'de dolu |
-| Task ID | 2/57 (4%) | Sadece S32'de dolu |
-| PR Link | 2/57 (4%) | Sadece S32'de dolu |
-
-**Bilinen sorunlar:**
-- 16 eski sprint issue'nun Sprint field'ı yok (S20, S23, S24)
-- Issue #100 hâlâ OPEN (S23'te çözüldü)
-- Type/Track field'ları backlog item'larda boş (API ile option eklenemiyor)
-- Bridge "rate limit" keyword conflict (mesajda bu kelime geçince false positive)
+| Board validator | — | `tools/project-validator.py`, integrated into closure gate |
 
 ## Operating Model
 

@@ -1,0 +1,3 @@
+No build step required — FastAPI + uvicorn direct run
+Python deps installed via pip install -r requirements.txt
+Frontend built via vite (handled by vitest)

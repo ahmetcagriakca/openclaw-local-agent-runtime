@@ -1,0 +1,2 @@
+Sprint 24 scope: CI gates + operational safety. No state mutations.
+status-sync mutation tested in Sprint 23 with full lifecycle matrix.

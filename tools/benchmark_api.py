@@ -183,6 +183,36 @@ def main():
 
     print(f"\nEvidence saved: {evidence_path}")
 
+    # JSON baseline output (for regression gate)
+    baseline_data = {
+        "generated": time.strftime('%Y-%m-%dT%H:%M:%SZ'),
+        "iterations": ITERATIONS,
+        "endpoints": {},
+        "summary": {
+            "get_avg_ms": round(get_avg, 1),
+            "get_max_ms": round(get_max, 1),
+            "post_avg_ms": round(post_avg, 1),
+            "post_max_ms": round(post_max, 1),
+        },
+    }
+    for method, path, headers in endpoints:
+        key = f"{method} {path.split('?')[0]}"
+        if method == "POST":
+            # POST mutations can only run once; skip for baseline JSON
+            continue
+        endpoint_times = bench(client, method, path, headers, n=ITERATIONS)
+        baseline_data["endpoints"][key] = {
+            "median_ms": round(statistics.median(endpoint_times), 2),
+            "p95_ms": round(sorted(endpoint_times)[int(len(endpoint_times) * 0.95)], 2),
+            "avg_ms": round(statistics.mean(endpoint_times), 2),
+        }
+
+    json_path = oc_root / "baseline" / "benchmark-baseline.json"
+    json_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(json_path, "w", encoding="utf-8") as f:
+        json.dump(baseline_data, f, indent=2)
+    print(f"JSON baseline saved: {json_path}")
+
     shutil.rmtree(tmpdir, ignore_errors=True)
 
 

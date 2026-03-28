@@ -54,7 +54,8 @@ jobs:
           TASK_ID=$(echo "$ISSUE_REF" | grep -oP 'S\d+-\K[\d.]+\w*')
           SEARCH="${ISSUE_REF}"
 
-          ISSUE_NUMBER=$(gh issue list --search "$SEARCH in:title" --json number,title --limit 5 \
+          REPO="${GITHUB_REPOSITORY}"
+          ISSUE_NUMBER=$(gh issue list --repo "$REPO" --search "$SEARCH in:title" --json number,title --limit 5 \
             --jq ".[] | select(.title | contains(\"$SEARCH\")) | .number" | head -1 || true)
 
           if [ -z "$ISSUE_NUMBER" ]; then

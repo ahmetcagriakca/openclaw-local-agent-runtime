@@ -26,7 +26,7 @@
 **Model:** A (implementation)
 **Scope:** plan.yaml schema, validator, issue-from-plan workflow, branch naming contract, main protection, governance rules
 **Deliverables:** 7 implementation tasks, 2 gates, retrospective
-**Review:** PASS (3 rounds) — `docs/sprints/sprint-19/S19-FINAL-REVIEW.md`
+**Review:** PASS (3 rounds) — archived to `docs/archive/sprints/sprint-19/S19-FINAL-REVIEW.md`
 **Key artifacts:** `plan.yaml`, `issues.json`, `issue-from-plan.yml`, `BRANCH-CONTRACT.md`, `GOVERNANCE.md`
 
 ## Sprint 18 — Repo Cleanup (CLOSED)

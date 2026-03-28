@@ -92,12 +92,34 @@ cd ..
 
 log ""
 
-# ─── VALIDATOR ────────────────────────────────────────────────
+# ─── SPRINT DOC VALIDATOR ────────────────────────────────────
 log "--- Sprint Doc Validator ---"
 if python tools/validate_sprint_docs.py --sprint "$SPRINT" 2>&1 | tee -a "$MAIN_OUTPUT"; then
-    pass "Validator: all checks passed"
+    pass "Sprint doc validator: all checks passed"
 else
-    fail "Validator failed"
+    fail "Sprint doc validator failed"
+fi
+
+log ""
+
+# ─── PROJECT V2 BOARD VALIDATOR (D-123/D-124/D-125) ─────────
+log "--- Project V2 Board Validator ---"
+VALIDATOR_OUTPUT=$(python tools/project-validator.py 2>&1)
+VALIDATOR_EXIT=$?
+echo "$VALIDATOR_OUTPUT" | tee -a "$MAIN_OUTPUT"
+
+if [ $VALIDATOR_EXIT -eq 0 ]; then
+    pass "Project V2 board validator: VALID"
+    # Save JSON output for evidence
+    python tools/project-validator.py --json > "$EVIDENCE_DIR/validator-board.json" 2>/dev/null
+else
+    fail "Project V2 board validator: NOT VALID"
+fi
+
+# Log warnings from validator (non-blocking)
+WARN_COUNT=$(echo "$VALIDATOR_OUTPUT" | grep -c "WARN" || true)
+if [ "$WARN_COUNT" -gt 0 ]; then
+    log "  Board validator warnings: $WARN_COUNT (non-blocking)"
 fi
 
 log ""

@@ -1,6 +1,6 @@
 sprint: 23
 phase: 6
-title: "Regression Guards & Live E2E CI"
+title: "Governance Debt Closure + CI Hygiene"
 model: "A"
 
 authority:
@@ -14,24 +14,24 @@ authority:
     - "S23-KICKOFF.md"
 
 issue:
-  parent_title: "[S23] Regression Guards & Live E2E CI"
-  labels: ["sprint", "phase-6", "ci"]
+  parent_title: "[S23] Governance Debt Closure + CI Hygiene"
+  labels: ["sprint", "phase-6", "governance"]
   milestone: "Sprint 23"
 
 tasks:
   - id: "23.1"
-    title: "Stale documentation reference remediation"
+    title: "status-sync full project-field mutation"
     type: "implementation"
     track: 1
-    branch_name: "sprint-23/t23.1-stale-ref-remediation"
-    labels: ["docs", "automation"]
+    branch_name: "sprint-23/t23.1-status-sync-mutation"
+    labels: ["ci", "governance", "workflow"]
 
   - id: "23.2"
-    title: "Benchmark regression baseline gate"
+    title: "pr-validator body required sections"
     type: "implementation"
     track: 1
-    branch_name: "sprint-23/t23.2-benchmark-regression-gate"
-    labels: ["ci", "tooling", "benchmark"]
+    branch_name: "sprint-23/t23.2-pr-validator-body"
+    labels: ["ci", "governance", "workflow"]
 
   - id: "23.G1"
     title: "Mid Review Gate"
@@ -41,11 +41,11 @@ tasks:
     labels: ["gate"]
 
   - id: "23.3"
-    title: "Playwright API smoke in GitHub Actions"
+    title: "Stale documentation reference remediation"
     type: "implementation"
     track: 2
-    branch_name: "sprint-23/t23.3-playwright-ci"
-    labels: ["ci", "e2e", "playwright"]
+    branch_name: "sprint-23/t23.3-stale-ref-remediation"
+    labels: ["docs", "cleanup"]
     depends_on: ["23.G1"]
 
   - id: "23.G2"

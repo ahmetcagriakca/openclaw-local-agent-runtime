@@ -17,6 +17,13 @@
 
 | Item | Source | Decision |
 |------|--------|----------|
+| ~~status-sync full project-field mutation~~ | ~~S20 partial~~ | **S23 task 23.1** |
+| ~~pr-validator body required sections~~ | ~~S20 partial~~ | **S23 task 23.2** |
+| ~~4 stale refs (DECISIONS.md + handoffs/README.md)~~ | ~~S22 retro~~ | **S23 task 23.3** |
+| Benchmark regression gate (D-109) | S22 retro / GPT | S24 carry-forward |
+| Playwright live API test in CI | S22 retro | S24 carry-forward |
+| Dependabot moderate vuln (1) | default branch | S24 carry-forward, owner AKCA |
+| Archive --execute on closed sprints | S21 | TBD, operator decision |
 | Backend physical restructure | S14A/14B | Unassigned |
 | Docker dev environment | S14B | Unassigned |
 | Live mission E2E | S14A WAIVER | Unassigned |
@@ -52,6 +59,7 @@
 ## Next Sprint
 
 **Sprint 23 — Phase 6**
-- Status: PLANNED (implementation `not_started`; see `docs/sprints/sprint-23/S23-KICKOFF.md`)
-- Kickoff gate: OPEN until pre-sprint GPT review PASS + operator issue creation from `plan.yaml`
-- Sprint 22 closed (Model A); S23 Model A in kickoff doc
+- Status: GPT PASS, implementation `not_started`
+- Kickoff gate: GPT pre-sprint PASS ✅ (2 rounds, `docs/ai/reviews/S23-REVIEW.md`)
+- Next: milestone creation + `issue-from-plan.yml` dispatch + branch 23.1
+- Sprint 22 closed (Model A); S23 Model A

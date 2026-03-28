@@ -198,6 +198,10 @@ app.add_middleware(
 # D-089: CSRF — Origin header validation for POST requests
 app.add_middleware(CSRFMiddleware)
 
+# B-005: Request throttling — per-IP sliding window
+from api.throttle import ThrottleMiddleware
+app.add_middleware(ThrottleMiddleware)
+
 
 # D-070: Host header validation middleware
 @app.middleware("http")

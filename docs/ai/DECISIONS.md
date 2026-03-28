@@ -1,6 +1,6 @@
 # Architectural Decisions
 
-**Last updated:** 2026-03-28
+**Last updated:** 2026-03-28 (D-125)
 
 All decisions below are frozen unless marked otherwise.
 Reopening requires explicit phase gate approval + operator sign-off.
@@ -1031,9 +1031,12 @@ Sprint 8 did not start until this document was FROZEN.
 *D-117: Multi-user auth contract — API key auth, operator/viewer roles, fail-closed, file-based key registry. Supersedes D-108. — Sprint 27 (frozen)*
 *D-118: Plugin runtime contract — file-based plugins, JSON manifest, EventBus integration, config-driven loading, 30s timeout, error isolation, priority 500+. — Sprint 29 (frozen)*
 
-## Phase 7 / Sprint 30 Decisions (D-119 → D-121)
+## Phase 7 / Sprint 30-33 Decisions (D-119 → D-125)
 
 *D-119: Mission template lifecycle — JSON schema, CRUD API, parameter validation, run-from-template, draft/published/archived states. — Sprint 30 (frozen)*
 *D-120: Scheduled/triggered missions — cron scheduling, event triggers, execution queue. Decision frozen, implementation deferred to S31+. — Sprint 30 (frozen)*
 *D-121: Approval gate contract — centralized inbox, lifecycle (pending/approved/rejected/expired), actor-chain audit, 30min default timeout. — Sprint 30 (frozen)*
 *D-122: Backlog-to-Project-to-Sprint contract — GitHub Issues canonical, BACKLOG.md generated, separate backlog/sprint issues, milestone as sprint container. — Sprint 31 (frozen)*
+*D-123: Project V2 Item Contract v1 — canonical truth definition (5 truths: Status, Sprint, Priority, Task ID, Issue State), write authority rule, non-canonical fields kept. See `decisions/D-123-project-item-contract.md`. — Sprint 33 (frozen)*
+*D-124: Legacy Normalization Boundary — 5-class taxonomy (backlog, sprint-task, legacy-sprint, normalized-legacy, unclassified), minimum normalization for pre-S31 items, unclassified=FAIL. See `decisions/D-124-legacy-normalization.md`. — Sprint 33 (frozen)*
+*D-125: Closure State Sync — triple consistency rule (issue state + project status + sprint identity), backlog closure evidence rule, forbidden states. See `decisions/D-125-closure-state-sync.md`. — Sprint 33 (frozen)*

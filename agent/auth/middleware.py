@@ -4,10 +4,10 @@ Enforces API key authentication on mutation endpoints.
 GET requests pass through without auth (read-only public access).
 Sprint 40: Extracts user_id from API key for data isolation.
 """
-from fastapi import Depends, HTTPException, Request
+from fastapi import Depends, HTTPException
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
-from auth.keys import ApiKey, validate_key, is_auth_enabled
+from auth.keys import ApiKey, is_auth_enabled, validate_key
 
 # Optional bearer — doesn't fail on missing header (GET endpoints don't need it)
 _bearer = HTTPBearer(auto_error=False)

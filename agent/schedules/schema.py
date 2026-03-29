@@ -2,10 +2,10 @@
 
 Defines schedule structure for cron-based mission execution.
 """
+import uuid
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Optional
-import uuid
 
 
 @dataclass

@@ -131,9 +131,10 @@ async def run_schedule_now(schedule_id: str):
     if not sched:
         raise HTTPException(status_code=404, detail=f"Schedule {schedule_id} not found")
 
-    from schedules.scheduler import MissionScheduler
-    from pathlib import Path
     import os
+    from pathlib import Path
+
+    from schedules.scheduler import MissionScheduler
 
     oc_root = Path(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
     missions_dir = oc_root / "logs" / "missions"

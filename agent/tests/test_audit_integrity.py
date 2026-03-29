@@ -3,8 +3,10 @@ import json
 import os
 import subprocess
 import sys
+
 import pytest
-from persistence.audit_integrity import append_entry, verify_chain, GENESIS_HASH
+
+from persistence.audit_integrity import GENESIS_HASH, append_entry, verify_chain
 
 
 @pytest.fixture

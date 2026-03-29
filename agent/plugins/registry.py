@@ -7,10 +7,9 @@ import importlib
 import json
 import logging
 from pathlib import Path
-from typing import Callable
 
-from plugins.manifest import PluginManifest, load_manifest
 from plugins.executor import execute_handler
+from plugins.manifest import load_manifest
 
 logger = logging.getLogger("mcc.plugins.registry")
 

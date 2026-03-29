@@ -1,18 +1,21 @@
 """Tests for mission scheduling — D-120 / B-101 (Sprint 38)."""
-import json
 import os
 import sys
 import tempfile
 import unittest
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timezone
 from pathlib import Path
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from schedules.schema import (
-    MissionSchedule, parse_cron, cron_matches, next_cron_time,
-    _parse_cron_field, _weekday_convert,
+    MissionSchedule,
+    _parse_cron_field,
+    _weekday_convert,
+    cron_matches,
+    next_cron_time,
+    parse_cron,
 )
 from schedules.store import ScheduleStore
 
@@ -188,8 +191,8 @@ class TestScheduleStore(unittest.TestCase):
 
     def test_list_enabled_only(self):
         """enabled_only filter should exclude disabled schedules."""
-        s1 = self.store.create({"name": "Enabled", "template_id": "t1", "cron": "0 9 * * *", "enabled": True})
-        s2 = self.store.create({"name": "Disabled", "template_id": "t2", "cron": "0 18 * * *", "enabled": False})
+        self.store.create({"name": "Enabled", "template_id": "t1", "cron": "0 9 * * *", "enabled": True})
+        self.store.create({"name": "Disabled", "template_id": "t2", "cron": "0 18 * * *", "enabled": False})
         result = self.store.list(enabled_only=True)
         self.assertEqual(len(result), 1)
         self.assertEqual(result[0]["name"], "Enabled")
@@ -249,9 +252,10 @@ class TestScheduleAPI(unittest.TestCase):
         os.environ.setdefault("TESTING", "1")
 
     def _get_client(self):
-        from fastapi.testclient import TestClient
-        from api.schedules_api import router
         from fastapi import FastAPI
+        from fastapi.testclient import TestClient
+
+        from api.schedules_api import router
         test_app = FastAPI()
         test_app.include_router(router, prefix="/api/v1")
         return TestClient(test_app)

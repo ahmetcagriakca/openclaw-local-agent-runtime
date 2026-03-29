@@ -2,8 +2,10 @@
 import os
 import sys
 import tempfile
+
 import pytest
-from services.filesystem_guard import FilesystemGuard, ConfinementError
+
+from services.filesystem_guard import ConfinementError, FilesystemGuard
 
 IS_WINDOWS = sys.platform == "win32"
 

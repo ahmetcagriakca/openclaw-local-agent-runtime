@@ -135,9 +135,10 @@ async def run_template(template_id: str, body: RunTemplateRequest, request: Requ
     goal = tmpl.render_goal(body.parameters)
 
     # B-103: Actually create and execute the mission
-    from api.mission_create_api import _get_dirs, _generate_mission_id, _run_mission_background
-    from utils.atomic_write import atomic_write_json
     import threading
+
+    from api.mission_create_api import _generate_mission_id, _get_dirs, _run_mission_background
+    from utils.atomic_write import atomic_write_json
 
     missions_dir = _get_dirs()
     mission_id = _generate_mission_id()

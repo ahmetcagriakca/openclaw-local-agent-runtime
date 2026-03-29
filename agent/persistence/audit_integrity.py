@@ -5,8 +5,8 @@ Single append owner. JSONL format.
 """
 import hashlib
 import json
-import os
 import logging
+import os
 from datetime import datetime, timezone
 
 logger = logging.getLogger("mcc.audit_integrity")

@@ -133,8 +133,8 @@ async def lifespan(app: FastAPI):
     heartbeat_task = asyncio.create_task(_heartbeat_loop())
 
     # Step 6: Mission Scheduler (D-120 / B-101)
-    from schedules.store import ScheduleStore
     from schedules.scheduler import MissionScheduler
+    from schedules.store import ScheduleStore
     schedule_store = ScheduleStore()
     scheduler = MissionScheduler(schedule_store, MISSIONS_DIR)
     await scheduler.start()
@@ -211,10 +211,12 @@ app.add_middleware(CSRFMiddleware)
 
 # B-005: Request throttling — per-IP sliding window
 from api.throttle import ThrottleMiddleware
+
 app.add_middleware(ThrottleMiddleware)
 
 # B-012: Idempotency key middleware for mutation requests
 from api.idempotency import IdempotencyMiddleware
+
 app.add_middleware(IdempotencyMiddleware)
 
 
@@ -254,12 +256,12 @@ from api.mission_api import router as mission_router
 from api.mission_create_api import router as mission_create_router
 from api.mission_mutation_api import router as mission_mutation_router
 from api.roles_api import router as roles_router
+from api.schedules_api import router as schedules_router
 from api.signal_api import router as signal_router
 from api.sse_api import router as sse_router
 from api.telemetry_api import router as telemetry_router
 from api.telemetry_query_api import router as telemetry_query_router
 from api.templates_api import router as templates_router
-from api.schedules_api import router as schedules_router
 
 app.include_router(mission_router, prefix="/api/v1")
 app.include_router(approval_router, prefix="/api/v1")

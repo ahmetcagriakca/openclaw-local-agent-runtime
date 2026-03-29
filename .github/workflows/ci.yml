@@ -171,7 +171,7 @@ jobs:
         run: |
           HEALTH=$(curl -sf http://127.0.0.1:8003/api/v1/health)
           echo "Health response: $HEALTH"
-          echo "$HEALTH" | python3 -c "import sys,json; d=json.load(sys.stdin); assert 'data' in d, 'Missing data field'"
+          echo "$HEALTH" | python3 -c "import sys,json; d=json.load(sys.stdin); assert 'status' in d, 'Missing status field'; assert d['status'] in ('ok','degraded','error'), f'Bad status: {d[\"status\"]}'"
           echo "PASS: Docker container health check passed."
 
       - name: Stop container

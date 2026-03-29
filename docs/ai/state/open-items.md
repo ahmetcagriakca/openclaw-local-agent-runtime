@@ -47,6 +47,6 @@
 
 ## Next Sprint
 
-**Sprint 40 — Phase 7**
+**Sprint 41 — Phase 7**
 - Status: NOT STARTED
-- Candidates: Frontend Vitest components, CONTEXT_ISOLATION, Alert scoping, Docker dev, Backend restructure
+- Candidates: B-104 Template parameter UI, Frontend Vitest components, CONTEXT_ISOLATION, Alert scoping, Docker dev, Backend restructure

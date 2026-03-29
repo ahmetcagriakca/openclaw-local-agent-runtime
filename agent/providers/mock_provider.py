@@ -5,7 +5,6 @@ Enables deterministic mission execution without real LLM calls.
 """
 from providers.base import AgentProvider, AgentResponse
 
-
 # Fixture responses keyed by role
 _ROLE_RESPONSES = {
     "analyst": "Analysis complete. The system shows 3 active components with no anomalies detected.",

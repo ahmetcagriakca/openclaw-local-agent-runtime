@@ -63,7 +63,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
       }
     },
     "/api/v1/missions/{mission_id}": {
@@ -474,6 +479,11 @@
         "summary": "Approve Approval",
         "description": "Approve a pending approval.\n\nSignal flow: validate → check duplicate → write artifact → SSE → respond.",
         "operationId": "approve_approval_api_v1_approvals__apv_id__approve_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "apv_id",
@@ -537,6 +547,11 @@
         "summary": "Reject Approval",
         "description": "Reject a pending approval (D-090: destructive — requires confirmation).\n\nSignal flow: validate → check duplicate → write artifact → SSE → respond.",
         "operationId": "reject_approval_api_v1_approvals__apv_id__reject_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "apv_id",
@@ -600,6 +615,11 @@
         "summary": "Cancel Mission",
         "description": "Cancel a running/active mission (D-090: destructive — requires confirmation).\n\nValid states: pending, planning, executing, gate_check, rework, approval_wait.\nCompleted/failed/aborted/timed_out → 409.",
         "operationId": "cancel_mission_api_v1_missions__mission_id__cancel_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "mission_id",
@@ -663,6 +683,11 @@
         "summary": "Retry Mission",
         "description": "Retry a failed/aborted mission (OD-10: creates new mission via controller).\n\nValid states: failed, aborted, timed_out.\nRunning/pending/completed → 409.",
         "operationId": "retry_mission_api_v1_missions__mission_id__retry_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "mission_id",
@@ -726,6 +751,11 @@
         "summary": "Pause Mission",
         "description": "Pause a running mission — pauses after current stage completes.\n\nValid states: pending, planning, executing, gate_check, rework, approval_wait.\nAlready paused / completed / failed → 409.",
         "operationId": "pause_mission_api_v1_missions__mission_id__pause_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "mission_id",
@@ -789,6 +819,11 @@
         "summary": "Resume Mission",
         "description": "Resume a paused mission.\n\nValid states: paused.\nRunning / completed / failed → 409.",
         "operationId": "resume_mission_api_v1_missions__mission_id__resume_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "mission_id",
@@ -852,6 +887,11 @@
         "summary": "Skip Stage",
         "description": "Skip the current stage in a running mission.\n\nValid states: pending, planning, executing, gate_check, rework, approval_wait.\nPaused / completed / failed → 409.",
         "operationId": "skip_stage_api_v1_missions__mission_id__skip_stage_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "mission_id",
@@ -915,6 +955,11 @@
         "summary": "Delete Signal",
         "description": "Delete a pending signal artifact by requestId.",
         "operationId": "delete_signal_api_v1_signals__request_id__delete",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "request_id",
@@ -1675,7 +1720,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
       }
     },
     "/api/v1/alerts/rules/{rule_id}": {
@@ -1725,6 +1775,11 @@
         "summary": "Update Rule",
         "description": "Update alert rule threshold, enable/disable.",
         "operationId": "update_rule_api_v1_alerts_rules__rule_id__put",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "rule_id",
@@ -1851,6 +1906,575 @@
           }
         }
       }
+    },
+    "/api/v1/templates": {
+      "get": {
+        "tags": [
+          "templates"
+        ],
+        "summary": "List Templates",
+        "description": "List all templates.",
+        "operationId": "list_templates_api_v1_templates_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "templates"
+        ],
+        "summary": "Create Template",
+        "description": "Create a new template (operator only).",
+        "operationId": "create_template_api_v1_templates_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTemplateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/templates/presets": {
+      "get": {
+        "tags": [
+          "templates"
+        ],
+        "summary": "List Presets",
+        "description": "List built-in mission presets for quick-run.\n\nB-103: Presets are published templates marked for quick access.\nReturns templates with status=published, sorted by name.",
+        "operationId": "list_presets_api_v1_templates_presets_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/templates/{template_id}": {
+      "get": {
+        "tags": [
+          "templates"
+        ],
+        "summary": "Get Template",
+        "description": "Get template by ID.",
+        "operationId": "get_template_api_v1_templates__template_id__get",
+        "parameters": [
+          {
+            "name": "template_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Template Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "templates"
+        ],
+        "summary": "Update Template",
+        "description": "Update template (operator only).",
+        "operationId": "update_template_api_v1_templates__template_id__put",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "template_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Template Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTemplateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "templates"
+        ],
+        "summary": "Delete Template",
+        "description": "Delete template (operator only).",
+        "operationId": "delete_template_api_v1_templates__template_id__delete",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "template_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Template Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/templates/{template_id}/run": {
+      "post": {
+        "tags": [
+          "templates"
+        ],
+        "summary": "Run Template",
+        "description": "Create and run a mission from template (operator only).\n\nB-103: Quick-run — renders goal from template parameters and\nspawns a real mission via the mission create pipeline.",
+        "operationId": "run_template_api_v1_templates__template_id__run_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "template_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Template Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RunTemplateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/schedules": {
+      "get": {
+        "tags": [
+          "schedules"
+        ],
+        "summary": "List Schedules",
+        "description": "List all mission schedules.",
+        "operationId": "list_schedules_api_v1_schedules_get",
+        "parameters": [
+          {
+            "name": "enabled_only",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Enabled Only"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "schedules"
+        ],
+        "summary": "Create Schedule",
+        "description": "Create a new mission schedule.",
+        "operationId": "create_schedule_api_v1_schedules_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateScheduleRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/schedules/{schedule_id}": {
+      "get": {
+        "tags": [
+          "schedules"
+        ],
+        "summary": "Get Schedule",
+        "description": "Get a specific schedule.",
+        "operationId": "get_schedule_api_v1_schedules__schedule_id__get",
+        "parameters": [
+          {
+            "name": "schedule_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Schedule Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "schedules"
+        ],
+        "summary": "Update Schedule",
+        "description": "Update an existing schedule.",
+        "operationId": "update_schedule_api_v1_schedules__schedule_id__put",
+        "parameters": [
+          {
+            "name": "schedule_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Schedule Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateScheduleRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "schedules"
+        ],
+        "summary": "Delete Schedule",
+        "description": "Delete a schedule.",
+        "operationId": "delete_schedule_api_v1_schedules__schedule_id__delete",
+        "parameters": [
+          {
+            "name": "schedule_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Schedule Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/schedules/{schedule_id}/run": {
+      "post": {
+        "tags": [
+          "schedules"
+        ],
+        "summary": "Run Schedule Now",
+        "description": "Manually trigger a scheduled mission immediately.",
+        "operationId": "run_schedule_now_api_v1_schedules__schedule_id__run_post",
+        "parameters": [
+          {
+            "name": "schedule_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Schedule Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/schedules/{schedule_id}/toggle": {
+      "post": {
+        "tags": [
+          "schedules"
+        ],
+        "summary": "Toggle Schedule",
+        "description": "Toggle a schedule's enabled/disabled state.",
+        "operationId": "toggle_schedule_api_v1_schedules__schedule_id__toggle_post",
+        "parameters": [
+          {
+            "name": "schedule_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Schedule Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1949,6 +2573,61 @@
               }
             ],
             "title": "Respondedat"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          },
+          "requestedByRole": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Requestedbyrole"
+          },
+          "expiresAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expiresat"
+          },
+          "decidedBy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Decidedby"
+          },
+          "stageId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stageid"
           }
         },
         "type": "object",
@@ -1956,7 +2635,7 @@
           "id"
         ],
         "title": "ApprovalEntry",
-        "description": "Approval record."
+        "description": "Approval record — B-102 enriched."
       },
       "ApprovalListResponse": {
         "properties": {
@@ -2128,6 +2807,100 @@
           "goal"
         ],
         "title": "CreateMissionResponse"
+      },
+      "CreateScheduleRequest": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "template_id": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Template Id"
+          },
+          "cron": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 9,
+            "title": "Cron",
+            "description": "Cron expression: minute hour day month weekday"
+          },
+          "timezone": {
+            "type": "string",
+            "title": "Timezone",
+            "default": "Europe/Istanbul"
+          },
+          "parameters": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Parameters"
+          },
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled",
+            "default": true
+          },
+          "max_concurrent": {
+            "type": "integer",
+            "maximum": 10.0,
+            "minimum": 1.0,
+            "title": "Max Concurrent",
+            "default": 1
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "template_id",
+          "cron"
+        ],
+        "title": "CreateScheduleRequest"
+      },
+      "CreateTemplateRequest": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description",
+            "default": ""
+          },
+          "version": {
+            "type": "string",
+            "title": "Version",
+            "default": "1.0.0"
+          },
+          "author": {
+            "type": "string",
+            "title": "Author",
+            "default": ""
+          },
+          "parameters": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Parameters",
+            "default": []
+          },
+          "mission_config": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Mission Config",
+            "default": {}
+          }
+        },
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "title": "CreateTemplateRequest"
       },
       "DataQuality": {
         "type": "string",
@@ -2806,6 +3579,18 @@
         "type": "object",
         "title": "RuleUpdate"
       },
+      "RunTemplateRequest": {
+        "properties": {
+          "parameters": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Parameters",
+            "default": {}
+          }
+        },
+        "type": "object",
+        "title": "RunTemplateRequest"
+      },
       "SignalArtifact": {
         "properties": {
           "requestId": {
@@ -3177,6 +3962,131 @@
         "title": "ToolCallDetail",
         "description": "Single tool call within a stage."
       },
+      "UpdateScheduleRequest": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "cron": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cron"
+          },
+          "timezone": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Timezone"
+          },
+          "parameters": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parameters"
+          },
+          "enabled": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Enabled"
+          },
+          "max_concurrent": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 10.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Concurrent"
+          }
+        },
+        "type": "object",
+        "title": "UpdateScheduleRequest"
+      },
+      "UpdateTemplateRequest": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status"
+          }
+        },
+        "type": "object",
+        "title": "UpdateTemplateRequest"
+      },
       "ValidationError": {
         "properties": {
           "loc": {
@@ -3216,6 +4126,12 @@
           "type"
         ],
         "title": "ValidationError"
+      }
+    },
+    "securitySchemes": {
+      "HTTPBearer": {
+        "type": "http",
+        "scheme": "bearer"
       }
     }
   }

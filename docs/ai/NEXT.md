@@ -1,7 +1,7 @@
 # Next Steps — Vezir Platform
 
 **Last updated:** 2026-03-29
-**Current:** Phase 7 active. Sprint 39 closed. Sprint 40 pending.
+**Current:** Phase 7 active. Sprint 40 closed. Sprint 41 pending.
 
 ---
 
@@ -26,6 +26,7 @@
 | PROJECT_TOKEN rotation | S23 retro | AKCA-owned |
 | Frontend Vitest component tests | S16 | Ongoing quality lane |
 | CONTEXT_ISOLATION feature flag | D-102 | Unassigned |
+| D-102 validation criteria 3-8 | D-102 | Unassigned |
 | Alert namespace scoping | S16 | Unassigned |
 | Multi-user auth | D-104/D-108 | Unassigned |
 | Jaeger deployment | S16 | Unassigned |

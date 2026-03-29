@@ -5,7 +5,7 @@ Default timeout: 30 minutes.
 """
 import json
 import logging
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 logger = logging.getLogger("mcc.approval.expiry")

@@ -21,10 +21,10 @@ from pathlib import Path
 
 from fastapi import APIRouter, Depends, HTTPException, Request
 
-from auth.middleware import require_operator
 from api.mutation_audit import log_mutation
 from api.mutation_bridge import has_pending_signal, write_signal_artifact
 from api.schemas import APIError, MutationResponse
+from auth.middleware import require_operator
 
 logger = logging.getLogger("mcc.mutation.mission")
 

@@ -2,15 +2,13 @@
 import json
 import os
 import sys
-import tempfile
 import unittest
 from pathlib import Path
-from unittest.mock import patch, MagicMock, AsyncMock
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 os.environ.setdefault("TESTING", "1")
 
-from templates.schema import MissionTemplate, TemplateParameter, MissionConfig
+from templates.schema import MissionConfig, MissionTemplate, TemplateParameter
 from templates.store import TemplateStore
 
 

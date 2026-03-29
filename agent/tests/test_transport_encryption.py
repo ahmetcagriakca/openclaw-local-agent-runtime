@@ -1,7 +1,5 @@
 """D-130 / B-011: Transport encryption tests."""
 import os
-import sys
-import pytest
 
 
 class TestTLSConfig:

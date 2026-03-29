@@ -3,7 +3,7 @@
 **Last updated:** 2026-03-29
 **Active phase:** Phase 7 — Sprint 40 closed, Sprint 41 pending
 **Doc model:** This file is canonical for system state. Session context lives in `docs/ai/handoffs/current.md`.
-**Note:** All sprints through 36 closed. Phase 7 active. 131 frozen decisions (D-001 → D-130, D-126 skipped).
+**Note:** All sprints through 40 closed. Phase 7 active. 129 frozen decisions (D-001 → D-130, D-126 skipped).
 **Persistence:** State is file-persisted (state.json, mission.json). Mission history via persistence layer (Sprint 16).
 **API:** Vezir API on 127.0.0.1:8003 (FastAPI + Uvicorn). Schemas FROZEN (D-067). SSE on /api/v1/events/stream. Dashboard API + Alert API + Telemetry Query API (Sprint 16).
 **Frontend:** React dashboard on localhost:3000 (Vite + Tailwind). SSE live updates + polling fallback + intervention buttons + monitoring dashboard. Node.js 20 required.
@@ -42,7 +42,7 @@
 | Context Assembler | Operational (5-tier delivery) | `agent/context/assembler.py` |
 | Role Registry | Operational (9 canonical roles) | `agent/mission/role_registry.py` |
 | Quality Gates | Operational (3 gates) | `agent/mission/quality_gates.py` |
-| Mission State Machine | Operational (10 states) | `agent/mission/mission_state.py` |
+| Mission State Machine | Operational (11 states) | `agent/mission/mission_state.py` |
 | Complexity Router | Operational (4 tiers) | `agent/mission/complexity_router.py` |
 | Mission Scheduler | Operational (cron-based, D-120/B-101) | `agent/schedules/` |
 | Mission Presets | Operational (3 built-in, B-103) | `config/templates/preset_*.json` |
@@ -106,10 +106,11 @@
 | Sprint 16 | 458 tests, 0 fail | 29 tests, 0 TS errors | +39 new (persistence, API, alerts) |
 | **Cleanup** | **458 tests, 0 fail** | **0 TS errors** | **Ruff 0 errors, 169 lint fixes** |
 | Sprint 36 | 521 tests, 0 fail | 75 tests, 0 TS errors | +63 backend, +46 frontend (S17-S36 cumulative) |
+| Sprint 40 | 618 tests, 0 fail | 82 tests, 0 TS errors | +97 backend, +7 frontend (S37-S40 cumulative) |
 
 ## Architectural Decisions
 
-131 frozen decisions (D-001 through D-130, D-126 skipped). See `docs/ai/DECISIONS.md`. Governance rules in `docs/ai/GOVERNANCE.md` (D-112). Recent: D-127 closure class taxonomy (S34), D-128 risk classification (S35), D-129 secret+audit (S36), D-130 transport encryption (S37).
+129 frozen decisions (D-001 through D-130, D-126 skipped). See `docs/ai/DECISIONS.md`. Governance rules in `docs/ai/GOVERNANCE.md` (D-112). Recent: D-127 closure class taxonomy (S34), D-128 risk classification (S35), D-129 secret+audit (S36), D-130 transport encryption (S37).
 
 ## Port Map
 

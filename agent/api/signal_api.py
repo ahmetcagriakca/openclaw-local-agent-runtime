@@ -3,9 +3,8 @@ import logging
 
 from fastapi import APIRouter, Depends, HTTPException
 
-from auth.middleware import require_operator
-
 from api.schemas import APIError
+from auth.middleware import require_operator
 
 logger = logging.getLogger("mcc.signal")
 

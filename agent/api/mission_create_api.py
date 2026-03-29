@@ -14,11 +14,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from fastapi import APIRouter, Depends, Request
-
-from auth.middleware import require_operator
 from pydantic import BaseModel, Field
 
 from api.schemas import DataQuality, ResponseMeta
+from auth.middleware import require_operator
 from utils.atomic_write import atomic_write_json
 
 logger = logging.getLogger("mcc.mission.create")

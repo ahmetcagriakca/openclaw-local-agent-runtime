@@ -3,7 +3,6 @@
 Dispatches events to plugin handlers with timeout and error isolation.
 """
 import logging
-import signal
 import threading
 from typing import Callable
 

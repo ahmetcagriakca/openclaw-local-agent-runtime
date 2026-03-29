@@ -5,8 +5,8 @@ Compatible with Slack incoming webhooks and Discord webhooks.
 """
 import json
 import logging
-from urllib.request import Request, urlopen
 from urllib.error import URLError
+from urllib.request import Request, urlopen
 
 logger = logging.getLogger("mcc.plugins.webhooks")
 

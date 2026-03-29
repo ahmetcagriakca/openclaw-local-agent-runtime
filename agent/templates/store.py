@@ -8,7 +8,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
 
-from templates.schema import MissionTemplate, TemplateParameter, MissionConfig
+from templates.schema import MissionConfig, MissionTemplate, TemplateParameter
 
 logger = logging.getLogger("mcc.templates")
 

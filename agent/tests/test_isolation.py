@@ -15,8 +15,8 @@ from unittest.mock import patch
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 os.environ.setdefault("TESTING", "1")
 
+from auth.isolation import check_ownership, filter_by_owner, get_user_id
 from auth.keys import ApiKey
-from auth.isolation import get_user_id, filter_by_owner, check_ownership
 
 
 class TestGetUserId(unittest.TestCase):

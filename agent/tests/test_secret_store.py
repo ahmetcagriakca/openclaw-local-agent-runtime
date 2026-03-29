@@ -2,7 +2,9 @@
 import base64
 import json
 import os
+
 import pytest
+
 from services.secret_store import SecretStore, SecretStoreError
 
 

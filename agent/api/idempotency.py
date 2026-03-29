@@ -7,10 +7,10 @@ No key = normal execution (backward compatible).
 TTL: 24 hours.
 """
 import hashlib
-import json
 import logging
 import time
 from dataclasses import dataclass
+
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 from starlette.responses import JSONResponse, Response

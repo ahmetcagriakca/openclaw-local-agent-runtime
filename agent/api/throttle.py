@@ -7,6 +7,7 @@ Health endpoint exempt.
 import logging
 import time
 from collections import defaultdict
+
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 from starlette.responses import JSONResponse
@@ -20,6 +21,7 @@ WINDOW_SECONDS = 60
 
 # Disable in test environment
 import os
+
 _TESTING = os.environ.get("TESTING", "") == "1" or "pytest" in os.environ.get("_", "")
 
 # Exempt paths

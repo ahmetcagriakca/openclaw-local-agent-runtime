@@ -8,7 +8,6 @@ import os
 import tempfile
 import unittest
 from pathlib import Path
-from unittest.mock import patch
 
 # Setup test environment before importing app
 _tmpdir = tempfile.mkdtemp(prefix="auth_test_")
@@ -37,9 +36,11 @@ _auth_path = _auth_dir / "auth.json"
 _auth_path.write_text(json.dumps(_auth_config))
 
 import sys
+
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import api.server as srv
+
 srv.MISSIONS_DIR = _missions_dir
 srv.APPROVALS_DIR = _approvals_dir
 srv.TELEMETRY_PATH = _telemetry_path
@@ -47,8 +48,9 @@ srv.CAPABILITIES_PATH = _caps_path
 srv.SERVICES_PATH = _services_path
 srv.API_LOG_PATH = _log_path
 
-from api.normalizer import MissionNormalizer
 from api.capabilities import CapabilityChecker
+from api.normalizer import MissionNormalizer
+
 srv.normalizer = MissionNormalizer(_missions_dir, _telemetry_path, _caps_path, _approvals_dir)
 srv.capability_checker = CapabilityChecker(str(_caps_path))
 
@@ -56,6 +58,7 @@ from fastapi.testclient import TestClient
 
 # Patch keys module to load from our test config
 import auth.keys as keys_mod
+
 _original_load = keys_mod._load_keys
 
 

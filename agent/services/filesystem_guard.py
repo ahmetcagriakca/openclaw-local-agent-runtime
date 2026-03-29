@@ -6,8 +6,8 @@ Restricts file operations to allowed directories only.
 - Symlinks resolved to real path, then checked
 - Deny behavior: raise ConfinementError, log to audit
 """
-import os
 import logging
+import os
 
 logger = logging.getLogger("mcc.filesystem_guard")
 

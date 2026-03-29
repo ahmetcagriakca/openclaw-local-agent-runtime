@@ -12,9 +12,9 @@
 
 | # | Item | State |
 |---|------|-------|
-| #156 | [B-101] Scheduled mission execution | Open |
-| #157 | [B-102] Full approval inbox UI | Open |
-| #158 | [B-103] Mission presets / quick-run | Open |
+| #156 | [B-101] Scheduled mission execution | Done (S38) |
+| #157 | [B-102] Full approval inbox UI | Done (S39) |
+| #158 | [B-103] Mission presets / quick-run | Done (S38) |
 | #159 | [B-104] Template parameter UI | Open |
 
 ### Security

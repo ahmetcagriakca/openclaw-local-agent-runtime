@@ -1,5 +1,5 @@
 """D-128: Risk classification tests."""
-from services.risk_engine import RiskEngine, TOOL_RISK_MAP
+from services.risk_engine import TOOL_RISK_MAP, RiskEngine
 
 
 class TestRiskClassifyMission:

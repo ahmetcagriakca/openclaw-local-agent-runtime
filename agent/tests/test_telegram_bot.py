@@ -1,9 +1,8 @@
 """Tests for telegram_bot.py — Sprint 38 regression coverage."""
-import json
 import os
 import sys
 import unittest
-from unittest.mock import MagicMock, patch, call
+from unittest.mock import MagicMock, patch
 
 # Add agent directory to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))

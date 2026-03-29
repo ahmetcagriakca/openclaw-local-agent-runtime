@@ -1044,3 +1044,7 @@ Sprint 8 did not start until this document was FROZEN.
 ## Sprint 34 Decisions (D-126 → D-127)
 
 *D-127: Sprint Closure Class Taxonomy — product vs governance sprint classes, class-aware evidence manifests, sprint-class.txt metadata, NO EVIDENCE rules, auto-detect class resolution. See `decisions/D-127-closure-class-taxonomy.md`. — Sprint 34 (frozen)*
+
+## Sprint 35 Decisions (D-128)
+
+*D-128: Risk Classification Contract — 4-level risk taxonomy (low/medium/high/critical), static tool mapping, unknown=high fail-safe, computed once at creation, persisted in mission state, internal-only (no API exposure in S35). See `decisions/D-128-risk-classification.md`. — Sprint 35 (frozen)*

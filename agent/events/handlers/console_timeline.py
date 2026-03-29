@@ -5,8 +5,11 @@ on stdout for operator monitoring during mission execution.
 """
 from __future__ import annotations
 
+import logging
 import sys
 from datetime import datetime
+
+logger = logging.getLogger("mcc.events.console_timeline")
 
 from events.bus import Event, HandlerResult
 from events.catalog import EventType
@@ -63,8 +66,8 @@ class ConsoleTimelineHandler:
         self.lines.append(line)
         try:
             print(line, file=self._out, flush=True)
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug("console output: %s", e)
 
         return HandlerResult.proceed()
 

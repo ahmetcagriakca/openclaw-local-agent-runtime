@@ -75,7 +75,8 @@ class TestRiskPersistence:
         """D-128: MissionSummary must NOT expose risk_level."""
         from api.schemas import MissionSummary
         # Verify risk_level is not a field in MissionSummary
-        fields = MissionSummary.__fields__ if hasattr(MissionSummary, '__fields__') else {}
+        # Pydantic V2+: use model_fields; V1 fallback for compat
+        fields = getattr(MissionSummary, 'model_fields', None) or getattr(MissionSummary, '__fields__', {})
         field_names = set(fields.keys()) if fields else set()
         assert "risk_level" not in field_names, "risk_level must not be exposed in MissionSummary (D-128)"
 

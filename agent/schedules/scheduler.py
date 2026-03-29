@@ -160,8 +160,8 @@ class MissionScheduler:
                     mission_data["error"] = str(e)
                     mission_data["finishedAt"] = datetime.now(timezone.utc).isoformat()
                     mission_path.write_text(json.dumps(mission_data, indent=2), encoding="utf-8")
-                except Exception:
-                    pass
+                except Exception as e:
+                    logger.debug("mission status update: %s", e)
 
         thread = threading.Thread(target=_run, daemon=True, name=f"sched-mission-{mission_id[:20]}")
         thread.start()

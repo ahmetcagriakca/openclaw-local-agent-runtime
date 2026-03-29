@@ -1,8 +1,11 @@
 """Logs API — expose recent errors and audit trail for the dashboard."""
 import json
+import logging
 import re
 
 from fastapi import APIRouter
+
+logger = logging.getLogger("mcc.api.logs")
 from pydantic import BaseModel, Field
 
 router = APIRouter(tags=["logs"])
@@ -56,8 +59,8 @@ async def get_recent_logs(limit: int = 50):
                                 source="mutation",
                                 message=f"{data.get('operation','')} {data.get('targetId','')} → {data.get('outcome','')}",
                             ))
-                        except Exception:
-                            pass
+                        except Exception as e:
+                            logger.debug("log parse: %s", e)
 
                 elif ("WARNING" in line or "ERROR" in line) and len(errors) < limit:
                     # Parse log line: timestamp LEVEL logger: message
@@ -69,8 +72,8 @@ async def get_recent_logs(limit: int = 50):
                             source="api",
                             message=match.group(3),
                         ))
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug("log parse: %s", e)
 
     # 2. Parse telemetry for stage_failed and mission_failed events
     if telemetry_path.exists():
@@ -96,8 +99,8 @@ async def get_recent_logs(limit: int = 50):
                         ))
                 except Exception:
                     continue
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug("log parse: %s", e)
 
     # Sort by timestamp descending
     errors.sort(key=lambda e: e.timestamp, reverse=True)

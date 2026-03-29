@@ -169,8 +169,8 @@ class AlertEngine:
             try:
                 data = json.loads(self._config_path.read_text(encoding="utf-8"))
                 self._rules = data.get("rules", self._rules)
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug("alert config load: %s", e)
 
     def _save_config(self) -> None:
         try:

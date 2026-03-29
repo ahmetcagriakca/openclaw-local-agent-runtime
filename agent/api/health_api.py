@@ -1,11 +1,14 @@
 """Health and capabilities API — comprehensive system status."""
 import glob
 import json
+import logging
 import os
 from datetime import datetime, timezone
 from pathlib import Path
 
 from fastapi import APIRouter, Request
+
+logger = logging.getLogger("mcc.api.health")
 
 from api.schemas import (
     CapabilitiesResponse,
@@ -49,8 +52,8 @@ def _count_missions() -> dict:
                 try:
                     sd = json.loads(state_path.read_text(encoding="utf-8"))
                     status = sd.get("status", status)
-                except Exception:
-                    pass
+                except Exception as e:
+                    logger.debug("health check: %s", e)
             if status in ("completed",):
                 counts["completed"] += 1
             elif status in ("failed", "aborted", "timed_out"):
@@ -59,8 +62,8 @@ def _count_missions() -> dict:
                 counts["pending"] += 1
             elif status in ("planning", "executing", "gate_check", "rework", "approval_wait"):
                 counts["active"] += 1
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug("health check: %s", e)
     return counts
 
 
@@ -81,8 +84,8 @@ def _count_approvals() -> dict:
                 counts["approved"] += 1
             elif status in ("denied", "timeout"):
                 counts["denied"] += 1
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug("health check: %s", e)
     return counts
 
 
@@ -185,8 +188,8 @@ async def get_health(request: Request):
                     name="Service Heartbeat", status=hb_status,
                     detail=f"last: {int(age_s)}s ago, uptime: {uptime_str}",
                     lastCheckAt=hb)
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug("health check: %s", e)
 
     # 6. Mission Stats
     mission_counts = _count_missions()
@@ -258,8 +261,8 @@ async def get_health(request: Request):
                 )
                 if _r.returncode == 0 and "=" in _r.stdout:
                     tg_token = _r.stdout.strip().split("=", 1)[1].strip()
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug("health check: %s", e)
 
         if tg_token:
             import urllib.request

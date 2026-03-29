@@ -1,18 +1,21 @@
-total 91
-drwxr-xr-x 1 AKCA 197609     0 Mar 29 16:35 .
-drwxr-xr-x 1 AKCA 197609     0 Mar 29 16:33 ..
--rw-r--r-- 1 AKCA 197609   572 Mar 29 16:35 build-output.txt
--rw-r--r-- 1 AKCA 197609  1855 Mar 29 16:35 e2e-output.txt
--rw-r--r-- 1 AKCA 197609     0 Mar 29 16:35 file-manifest.txt
--rw-r--r-- 1 AKCA 197609   524 Mar 29 16:35 grep-evidence.txt
--rw-r--r-- 1 AKCA 197609    75 Mar 29 16:35 lighthouse.txt
--rw-r--r-- 1 AKCA 197609     0 Mar 29 16:34 lint-output.txt
--rw-r--r-- 1 AKCA 197609  1792 Mar 29 16:35 live-checks.txt
--rw-r--r-- 1 AKCA 197609   427 Mar 29 16:35 mutation-drill.txt
--rw-r--r-- 1 AKCA 197609  1855 Mar 29 16:35 playwright-output.txt
--rw-r--r-- 1 AKCA 197609 57562 Mar 29 16:34 pytest-output.txt
--rw-r--r-- 1 AKCA 197609   271 Mar 29 16:35 review-summary.md
--rw-r--r-- 1 AKCA 197609     8 Mar 29 16:33 sprint-class.txt
--rw-r--r-- 1 AKCA 197609     0 Mar 29 16:34 tsc-output.txt
--rw-r--r-- 1 AKCA 197609  1122 Mar 29 16:35 validator-output.txt
--rw-r--r-- 1 AKCA 197609   222 Mar 29 16:34 vitest-output.txt
+Sprint 40 — Canonical Evidence Manifest (19 files)
+
+pytest-output.txt          — Backend test results (616 passed)
+vitest-output.txt          — Frontend test results (82 passed)
+playwright-output.txt      — Playwright E2E results (13 passed)
+e2e-output.txt             — E2E evidence (copy of playwright-output.txt)
+tsc-output.txt             — TypeScript check (0 errors)
+lint-output.txt            — ESLint check (0 errors)
+build-output.txt           — Production build (successful)
+validator-output.txt       — Board validator (VALID, 0 FAIL)
+validator-board.json       — Board state JSON
+closure-check-output.txt   — Closure gate (Failures: 0, ELIGIBLE FOR CLOSURE REVIEW)
+contract-evidence.txt      — Contract checks (all FOUND)
+live-checks.txt            — Live endpoint checks (health 200, SSE 200, host 403)
+mutation-drill.txt         — Mutation evidence (isolation + auth + alerts)
+grep-evidence.txt          — Grep evidence for Sprint 40 artifacts
+review-summary.md          — Review summary
+file-manifest.txt          — This file
+sprint-class.txt           — Sprint class: product
+lighthouse.txt             — NO EVIDENCE (no UI visual changes)
+SPRINT-40-RETRO.md         — Retrospective (at docs/sprint40/)

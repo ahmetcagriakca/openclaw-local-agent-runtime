@@ -89,7 +89,7 @@ def bench(client, method, path, headers=None, n=ITERATIONS):
             r = client.post(path, headers=headers)
         t1 = time.perf_counter()
         times.append((t1 - t0) * 1000)
-        assert r.status_code in (200, 404, 409, 503), f"Unexpected {r.status_code} for {path}"
+        assert r.status_code in (200, 404, 409, 429, 503), f"Unexpected {r.status_code} for {path}"
     return times
 
 

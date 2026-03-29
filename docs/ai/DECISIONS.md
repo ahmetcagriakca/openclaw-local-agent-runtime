@@ -1040,3 +1040,7 @@ Sprint 8 did not start until this document was FROZEN.
 *D-123: Project V2 Item Contract v1 — canonical truth definition (5 truths: Status, Sprint, Priority, Task ID, Issue State), write authority rule, non-canonical fields kept. See `decisions/D-123-project-item-contract.md`. — Sprint 33 (frozen)*
 *D-124: Legacy Normalization Boundary — 5-class taxonomy (backlog, sprint-task, legacy-sprint, normalized-legacy, unclassified), minimum normalization for pre-S31 items, unclassified=FAIL. See `decisions/D-124-legacy-normalization.md`. — Sprint 33 (frozen)*
 *D-125: Closure State Sync — triple consistency rule (issue state + project status + sprint identity), backlog closure evidence rule, forbidden states. See `decisions/D-125-closure-state-sync.md`. — Sprint 33 (frozen)*
+
+## Sprint 34 Decisions (D-126 → D-127)
+
+*D-127: Sprint Closure Class Taxonomy — product vs governance sprint classes, class-aware evidence manifests, sprint-class.txt metadata, NO EVIDENCE rules, auto-detect class resolution. See `decisions/D-127-closure-class-taxonomy.md`. — Sprint 34 (frozen)*

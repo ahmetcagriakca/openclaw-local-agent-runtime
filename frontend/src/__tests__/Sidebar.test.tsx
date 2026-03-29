@@ -39,7 +39,7 @@ describe('Sidebar', () => {
     renderSidebar({ collapsed: false, onToggle })
     // The toggle button is the last button in the sidebar
     const buttons = screen.getAllByRole('button')
-    const toggleBtn = buttons[buttons.length - 1]
+    const toggleBtn = buttons[buttons.length - 1]!
     fireEvent.click(toggleBtn)
     expect(onToggle).toHaveBeenCalledOnce()
   })

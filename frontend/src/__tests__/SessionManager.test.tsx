@@ -70,7 +70,7 @@ describe('SessionManager', () => {
 
   test('shows Unknown for userName when userName is null', () => {
     const originalName = mockAuth.userName
-    mockAuth.userName = null
+    mockAuth.userName = null as unknown as string
     render(<SessionManager />)
     expect(screen.getByText('Unknown')).toBeTruthy()
     mockAuth.userName = originalName

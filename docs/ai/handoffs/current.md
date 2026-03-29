@@ -7,55 +7,46 @@
 
 ## Session Summary
 
-Sprint 38 CLOSED. Sprint 39 kickoff — 4 product tasks (B-102 inbox + Live E2E + Playwright CI + Benchmark D-109).
+2 sprints closed this session: S38 (Telegram fix + scheduled missions + presets) and S39 (approval inbox + live E2E + Playwright CI + benchmark gate).
 
 ## Current State
 
 - **Phase:** 7
-- **Last closed sprint:** 38
-- **Active sprint:** 39 (kickoff done, implementation starting)
+- **Last closed sprint:** 39
+- **Active sprint:** None — awaiting Sprint 40 kickoff
 - **Decisions:** 130 frozen (D-001 → D-130, D-126 skipped)
-- **Tests:** 598 backend + 75 frontend + 39 e2e = 712 total
-- **Coverage:** 75% (13,392 lines)
-- **Backlog:** ~32 open (B-101, B-103 closed this sprint)
+- **Tests:** 598 backend + 75 frontend + 13 Playwright = 712+ total
+- **Coverage:** 75%
+- **Backlog:** ~30 open
 - **Board:** VALID
 
-## Sprint 38 — Closed
+## Sprint 38 — Closed (G2 PASS 2nd round)
 
-| Task | Title | Status |
-|------|-------|--------|
-| 38.1 | Telegram bridge fix | DONE (21 tests) |
-| 38.2 | B-101 Scheduled mission execution | DONE (34 tests) |
-| 38.3 | B-103 Mission presets / quick-run | DONE (14 tests) |
-| Pre-kickoff | D-111→D-114 formal records | DONE |
+| Task | Title |
+|------|-------|
+| 38.1 | Telegram bridge fix (21 tests) |
+| 38.2 | B-101 Scheduled mission execution (34 tests) |
+| 38.3 | B-103 Mission presets / quick-run (14 tests) |
 
-**Commits:**
-- `bc12623` feat: Sprint 38 implementation
-- `e25b3e6` chore: evidence packet
-- `c3676a9` chore: mutation drill + extended live checks
-- `(pending)` fix: README Mermaid + Sprint 38 closure
+## Sprint 39 — Closed (G2 PASS 2nd round)
 
-**G2 Review:** PASS (2nd round — mutation drill evidence added after HOLD)
+| Task | Title |
+|------|-------|
+| 39.1 | B-102 Full approval inbox UI |
+| 39.2 | Live mission E2E (6 Playwright tests) |
+| 39.3 | Playwright live API test in CI (GitHub Actions) |
+| 39.4 | Benchmark regression gate D-109 |
 
 ## Carry-Forward
 
 | # | Item | Source |
 |---|------|--------|
-| 1 | B-102 Full approval inbox UI | GPT deferred to S39 |
-| 2 | Playwright live API test in CI | Gate hardening |
-| 3 | Live mission E2E | Gate hardening |
-| 4 | Benchmark regression gate D-109 | Gate hardening |
-| 5 | PROJECT_TOKEN rotation | AKCA-owned |
-
-## Sprint 39 Scope (Model A, Class: Product)
-
-| Task | Title | Issue |
-|------|-------|-------|
-| 39.1 | B-102 Full approval inbox UI | #224 |
-| 39.2 | Live mission E2E | #225 |
-| 39.3 | Playwright live API test in CI | #226 |
-| 39.4 | Benchmark regression gate D-109 | #227 |
+| 1 | PROJECT_TOKEN rotation | AKCA-owned |
+| 2 | Frontend Vitest component tests | Ongoing quality |
+| 3 | CONTEXT_ISOLATION feature flag | D-102 |
+| 4 | Alert namespace scoping | S16 |
+| 5 | Multi-user auth | D-104/D-108 |
 
 ## GPT Memo
 
-Sprint 38 closed 2026-03-29. Sprint 39 kicked off same day. Scope: B-102 inbox + Live E2E + Playwright CI + Benchmark D-109.
+Session 17: S38 + S39 closed 2026-03-29. 130 decisions. 712+ tests. Carry-forward: PROJECT_TOKEN, Vitest components, auth, alert scoping.

@@ -52,6 +52,13 @@ API server on `127.0.0.1:8003` serves plaintext HTTP. No transport encryption. B
 - Test: TLS 1.2+ enforced
 - Test: HSTS header present
 
+### Trade-off
+
+**Chosen:** Fail-closed default + explicit dev-mode HTTP fallback.
+**Why:** Production systems must never silently serve plaintext. Dev convenience is secondary to security posture.
+**Rejected:** Warning-only HTTP fallback in all modes — this would leave B-011 effectively unclosed since plaintext would remain the default runtime path.
+**Deferred:** CA-signed certificates, mutual TLS, automatic cert renewal — these add operational complexity without immediate security value for a single-operator platform.
+
 ### Rollback Condition
 - If TLS enforcement breaks existing CI/test pipelines, revert to HTTP-only and keep D-130 frozen for re-implementation with proper CI cert provisioning.
 

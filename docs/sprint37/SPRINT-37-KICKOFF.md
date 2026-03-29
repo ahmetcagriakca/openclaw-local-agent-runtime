@@ -112,7 +112,7 @@ Close the last P1 security item (B-011 transport encryption) and fix the chatbri
 ## Dependencies
 
 - 37.1 depends on 37.0 (D-130 frozen)
-- 37.2 is independent (can run in parallel with 37.1 after 37.0)
+- 37.2 depends on G1 passing (blocker-first rule: no parallel tracks while blocker work remains)
 
 ## Blocking Risks
 

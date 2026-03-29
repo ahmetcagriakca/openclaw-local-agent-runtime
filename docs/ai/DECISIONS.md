@@ -1,6 +1,6 @@
 # Architectural Decisions
 
-**Last updated:** 2026-03-28 (D-125)
+**Last updated:** 2026-03-29 (D-130)
 
 All decisions below are frozen unless marked otherwise.
 Reopening requires explicit phase gate approval + operator sign-off.

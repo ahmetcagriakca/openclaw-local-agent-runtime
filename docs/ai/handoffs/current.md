@@ -19,7 +19,7 @@
 
 - **Phase:** 7
 - **Last closed sprint:** 35
-- **Active sprint:** None — awaiting Sprint 36 kickoff
+- **Active sprint:** 36 (not started — awaiting kickoff)
 - **Decisions:** 128 frozen (D-001 → D-128, D-126 skipped)
 - **Tests:** 497 backend + 75 frontend + 7 Playwright + 39 e2e = 611+
 - **Backlog:** ~37 open (B-003, B-004, B-005, B-012 closed)

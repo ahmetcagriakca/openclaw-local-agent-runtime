@@ -90,6 +90,7 @@
 | Sprint 33 | Project V2 Contract Hardening (D-123/124/125) | Closed |
 | Sprint 34 | Closure Tooling Hardening (D-127) | Closed |
 | Sprint 35 | Security Hardening Baseline (D-128, B-003, B-004) | Closed |
+| Sprint 36 | TBD | Not Started |
 
 ## Test Evidence
 

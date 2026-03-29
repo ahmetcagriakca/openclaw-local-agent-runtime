@@ -2475,6 +2475,257 @@
           }
         }
       }
+    },
+    "/api/v1/dlq": {
+      "get": {
+        "tags": [
+          "dlq"
+        ],
+        "summary": "List Dlq",
+        "description": "List DLQ entries.",
+        "operationId": "list_dlq_api_v1_dlq_get",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/dlq/summary": {
+      "get": {
+        "tags": [
+          "dlq"
+        ],
+        "summary": "Dlq Summary",
+        "description": "DLQ summary statistics.",
+        "operationId": "dlq_summary_api_v1_dlq_summary_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/dlq/{dlq_id}": {
+      "get": {
+        "tags": [
+          "dlq"
+        ],
+        "summary": "Get Dlq Entry",
+        "description": "Get a single DLQ entry.",
+        "operationId": "get_dlq_entry_api_v1_dlq__dlq_id__get",
+        "parameters": [
+          {
+            "name": "dlq_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Dlq Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "dlq"
+        ],
+        "summary": "Purge Dlq Entry",
+        "description": "Purge a single DLQ entry.",
+        "operationId": "purge_dlq_entry_api_v1_dlq__dlq_id__delete",
+        "parameters": [
+          {
+            "name": "dlq_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Dlq Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/dlq/{dlq_id}/retry": {
+      "post": {
+        "tags": [
+          "dlq"
+        ],
+        "summary": "Retry Dlq Entry",
+        "description": "Retry a failed mission from DLQ.\n\nMarks entry as retrying and re-submits the mission using the\nstored snapshot (retry_from_mission).",
+        "operationId": "retry_dlq_entry_api_v1_dlq__dlq_id__retry_post",
+        "parameters": [
+          {
+            "name": "dlq_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Dlq Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DLQRetryResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/dlq/purge-resolved": {
+      "post": {
+        "tags": [
+          "dlq"
+        ],
+        "summary": "Purge Resolved",
+        "description": "Purge all resolved DLQ entries.",
+        "operationId": "purge_resolved_api_v1_dlq_purge_resolved_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/features": {
+      "get": {
+        "tags": [
+          "features"
+        ],
+        "summary": "List Features",
+        "description": "Return current feature flag states.",
+        "operationId": "list_features_api_v1_features_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -2901,6 +3152,34 @@
           "name"
         ],
         "title": "CreateTemplateRequest"
+      },
+      "DLQRetryResponse": {
+        "properties": {
+          "dlq_id": {
+            "type": "string",
+            "title": "Dlq Id"
+          },
+          "mission_id": {
+            "type": "string",
+            "title": "Mission Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "dlq_id",
+          "mission_id",
+          "status",
+          "message"
+        ],
+        "title": "DLQRetryResponse"
       },
       "DataQuality": {
         "type": "string",

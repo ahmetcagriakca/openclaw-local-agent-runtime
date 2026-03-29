@@ -1,178 +1,90 @@
-# Vezir Local Agent Runtime
+# Vezir
 
-Personal AI-powered Windows automation system with Telegram integration. 9 governed agent roles orchestrated by Mission Controller with quality gates, feedback loops, and artifact-driven context economy. Supports GPT-4o, Claude, and Ollama providers with 24 specialized tools executed via MCP on Windows.
+[![CI](https://github.com/ahmetcagriakca/vezir/actions/workflows/ci.yml/badge.svg)](https://github.com/ahmetcagriakca/vezir/actions/workflows/ci.yml)
+[![Tests](https://img.shields.io/badge/tests-521%20backend%20%C2%B7%2075%20frontend-brightgreen)]()
+[![Decisions](https://img.shields.io/badge/decisions-129%20frozen-blueviolet)]()
+[![Phase](https://img.shields.io/badge/phase-7-blue)]()
+
+Governed multi-agent mission platform for Windows. Natural language goals become structured, auditable missions executed by 9 specialist AI roles with quality gates, risk classification, and encrypted audit trails.
+
+**3 LLM providers** (GPT-4o, Claude, Ollama) | **24 MCP tools** via PowerShell | **11-state mission FSM** | **React dashboard** with SSE live updates
 
 ## Architecture
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│  USER LAYER                                                     │
-│  Telegram Bot (WSL gateway)          React Dashboard (:3000)    │
-│  natural language intent             SSE live updates, Vite 6   │
-└──────────────┬──────────────────────────────┬───────────────────┘
-               │           requests           │
-               ▼                              ▼
-┌─────────────────────────────────────────────────────────────────┐
-│  API LAYER — Vezir API (:8003, FastAPI + Uvicorn)               │
-│                                                                 │
-│  Auth (API key, operator/viewer)    Throttling (100/20 rpm)     │
-│  Idempotency (24h TTL cache)        SSE Manager (30s heartbeat) │
-└──────────────────────────┬──────────────────────────────────────┘
-                           │
-                           ▼
-┌─────────────────────────────────────────────────────────────────┐
-│  MISSION ENGINE                                                 │
-│                                                                 │
-│  MissionController ─── 11-state FSM ─── Complexity Router       │
-│       │                                   (4 tiers)             │
-│       ├── 9 Governed Roles (PO→Analyst→Architect→PM→Dev→        │
-│       │                      Tester→Reviewer→Manager→RemoteOp)  │
-│       ├── Quality Gates (3) + Feedback Loops (2)                │
-│       ├── Context Assembler (5-tier delivery + token budgets)   │
-│       └── Working Set Enforcer (bounded filesystem)             │
-│                                                                 │
-│  Single-agent mode: GPT-4o / Claude / Ollama + 24 tools        │
-└──────────┬──────────────────────────────────┬───────────────────┘
-           │                                  │
-           ▼                                  ▼
-┌──────────────────────────┐  ┌───────────────────────────────────┐
-│  SERVICES                │  │  EVENTBUS                         │
-│                          │  │  28 event types                   │
-│  Risk Engine (4-level)   │  │  14 governance handlers           │
-│  Approval Inbox (D-121)  │  │  chain-hash audit trail           │
-│  Encrypted Secrets       │  └───────────────┬───────────────────┘
-│    (AES-256-GCM)         │                  │
-│  Audit Trail (SHA-256)   │                  ▼
-│  Plugin System (D-118)   │  ┌───────────────────────────────────┐
-│  Templates (D-119)       │  │  OBSERVABILITY                    │
-│  Artifact Store          │  │  OTel Traces (28/28 events)       │
-│    (12 typed outputs)    │  │  OTel Metrics (17 instruments)    │
-└──────────────────────────┘  │  Structured Logs (JSON + trace)   │
-                              │  Alert Engine (9 rules → Telegram) │
-                              └───────────────────────────────────┘
-                           │
-                           ▼
-┌─────────────────────────────────────────────────────────────────┐
-│  INFRASTRUCTURE                                                 │
-│                                                                 │
-│  Persistence         MCP Client → WMCP (:8001) → PowerShell    │
-│  (JSON file stores,  LLM Providers (GPT-4o, Claude, Ollama)    │
-│   atomic writes)     CI/CD (7 GitHub Actions workflows)         │
-└─────────────────────────────────────────────────────────────────┘
-```
+```mermaid
+graph TB
+    subgraph User["User Layer"]
+        TG["Telegram Bot<br/><small>WSL gateway</small>"]
+        UI["React Dashboard<br/><small>:3000 · Vite · SSE</small>"]
+    end
 
-## Key Components
+    subgraph API["API Layer · :8003"]
+        FA["FastAPI + Uvicorn"]
+        AUTH["Auth<br/><small>API key · operator/viewer</small>"]
+        THR["Throttling<br/><small>100/20 rpm</small>"]
+        SSE["SSE Manager<br/><small>30s heartbeat</small>"]
+    end
 
-| Component | Location | Purpose |
-|-----------|----------|---------|
-| Agent Runner | `agent/oc-agent-runner.py` | Multi-provider orchestrator with multi-turn tool calling |
-| Mission Controller | `agent/mission/controller.py` | 9-role mission orchestration with state machine |
-| Role Registry | `agent/mission/role_registry.py` | 9 canonical roles with tool policies and budgets |
-| Skill Contracts | `agent/mission/skill_contracts.py` | 10 skill contracts with typed input/output |
-| Quality Gates | `agent/mission/quality_gates.py` | 3 gates validating artifacts between stage groups |
-| Feedback Loops | `agent/mission/feedback_loops.py` | 2 feedback loops for rework detection |
-| Complexity Router | `agent/mission/complexity_router.py` | 4-tier routing (trivial→complex) |
-| Mission State Machine | `agent/mission/mission_state.py` | 11-state mission lifecycle |
-| Context Assembler | `agent/context/assembler.py` | 5-tier artifact delivery (metadata→full+neighbors) |
-| Working Set Enforcer | `agent/context/working_set_enforcer.py` | Bounded filesystem access per stage |
-| Policy Telemetry | `agent/context/policy_telemetry.py` | 20 mandatory telemetry event types |
-| Tool Catalog | `agent/services/tool_catalog.py` | 24 named tools mapped to PowerShell commands |
-| Risk Engine | `agent/services/risk_engine.py` | Deterministic risk classification + blocked patterns |
-| Approval Service | `agent/services/approval_service.py` | Telegram-based approval for high-risk operations |
-| Approval Store | `agent/services/approval_store.py` | Persistent approval records |
-| Artifact Store | `agent/services/artifact_store.py` | Typed output (12 artifact types) |
-| Schema Validator | `agent/artifacts/schema_validator.py` | Artifact schema validation |
-| MCP Client | `agent/services/mcp_client.py` | HTTP client for windows-mcp server |
-| Provider Factory | `agent/providers/factory.py` | Multi-provider: GPT-4o, Claude, Ollama |
-| Bridge | `bridge/oc-bridge.ps1` | Stateless adapter for legacy task system |
-| oc runtime | `bin/` | Task queue, worker, watchdog, health engine |
-| WSL Guardian | `bin/oc-wsl-guardian.ps1` | Active WSL + Vezir monitor with auto-restart |
+    subgraph Engine["Mission Engine"]
+        MC["MissionController<br/><small>11-state FSM</small>"]
+        CR["Complexity Router<br/><small>4 tiers</small>"]
+        ROLES["9 Governed Roles<br/><small>PO → Analyst → Architect → PM<br/>Dev → Tester → Reviewer → Manager → RemoteOp</small>"]
+        GATES["3 Quality Gates + 2 Feedback Loops"]
+        CTX["Context Assembler<br/><small>5-tier delivery · token budgets</small>"]
+    end
 
-## 9 Governed Roles
+    subgraph Services["Services"]
+        RISK["Risk Engine<br/><small>4-level classification</small>"]
+        SEC["Encrypted Secrets<br/><small>AES-256-GCM</small>"]
+        AUDIT["Audit Trail<br/><small>SHA-256 hash chain</small>"]
+        TMPL["Templates + Plugins"]
+    end
 
-| Role | Default Skill | Tool Policy | Model | Discovery |
-|------|---------------|-------------|-------|-----------|
-| product-owner | requirement_structuring | no_tools | gpt-4o | forbidden |
-| analyst | repository_discovery | read_only (14 tools) | claude-sonnet | primary |
-| architect | architecture_synthesis | read_only (14 tools) | claude-sonnet | primary |
-| project-manager | work_breakdown | no_tools | gpt-4o | forbidden |
-| developer | targeted_code_change | dev (14 tools) | claude-sonnet | forbidden |
-| tester | test_validation | test tools | claude-sonnet | forbidden |
-| reviewer | quality_review | review tools | claude-sonnet | forbidden |
-| manager | summary_compression | no_tools | gpt-4o | forbidden |
-| remote-operator | controlled_execution | operational | gpt-4o | forbidden |
+    subgraph Bus["EventBus"]
+        EB["28 events · 14 handlers<br/><small>chain-hash audit</small>"]
+    end
 
-## Quality Gates
+    subgraph Obs["Observability"]
+        OTEL["OTel Traces + Metrics<br/><small>28/28 events · 17 instruments</small>"]
+        ALERT["Alert Engine<br/><small>9 rules → Telegram</small>"]
+    end
 
-| Gate | Runs After | Runs Before | Validates |
-|------|-----------|-------------|-----------|
-| Gate 1 | PO, Analyst, Architect, PM | Developer | Requirements + Design artifacts |
-| Gate 2 | Developer, Tester | Reviewer | Code delivery + Test report |
-| Gate 3 | All stages | Final | All artifact schemas validated |
+    subgraph Infra["Infrastructure"]
+        STORE["Persistence<br/><small>JSON · atomic writes</small>"]
+        MCP["WMCP :8001 → PowerShell"]
+        LLM["GPT-4o · Claude · Ollama"]
+    end
 
-## Repository Structure
-
-```
-agent/                 AI agent system (Phase 3-4)
-  oc-agent-runner.py     Main orchestrator
-  oc_agent_runner_lib.py Agent orchestration logic
-  providers/             LLM providers (GPT-4o, Claude, Ollama)
-  services/              MCP client, tool catalog, risk engine, approval, artifacts, audit
-  mission/               Controller, roles, skills, gates, loops, state machine, router
-  context/               Context Assembler, Working Set, Path Resolver, Telemetry
-  artifacts/             Schema Validator
-bin/                   Runtime scripts (worker, watchdog, enqueue, health, dashboard, etc.)
-bridge/                Bridge entrypoint + allowlist
-wsl/                   WSL-side wrappers (oc-agent-run, oc-approve, bridge wrappers)
-actions/               Action scripts + manifest
-defs/tasks/            Task definitions
-config/                Environment variable templates
-logs/                  Audit logs, approval records, session artifacts
-results/               Agent output files (screenshots, generated files)
-frontend/              Vezir UI — React dashboard (port 3000)
-docs/ai/               Living project state (STATE, NEXT, DECISIONS, BACKLOG, PROTOCOL)
-docs/architecture/     Frozen design documents
-docs/phase-reports/    Completed phase reports (Phase 1 through Phase 4 Sprint 6C)
+    TG --> FA
+    UI --> FA
+    FA --> MC
+    MC --> CR
+    MC --> ROLES
+    ROLES --> GATES
+    MC --> CTX
+    MC --> RISK
+    MC --> SEC
+    MC --> AUDIT
+    MC --> TMPL
+    MC --> EB
+    EB --> OTEL
+    EB --> ALERT
+    MC --> MCP
+    MC --> LLM
+    MC --> STORE
 ```
 
-## Tool Catalog (24 Tools)
+## Key Features
 
-| Tool | Risk | Description |
-|------|------|-------------|
-| get_system_info | low | CPU, RAM, disk, uptime |
-| list_processes | low | Top N processes by CPU |
-| read_file | low | Read file contents |
-| write_file | medium | Write to results/ directory |
-| list_directory | low | List directory contents |
-| search_files | low | Search files by name pattern |
-| find_in_files | low | Search text inside files |
-| get_clipboard | low | Read clipboard |
-| set_clipboard | medium | Write to clipboard |
-| open_application | medium | Open allowed apps |
-| open_url | medium | Open URL in browser |
-| close_application | high | Kill process (requires approval) |
-| take_screenshot | low | Capture screen |
-| lock_screen | medium | Lock workstation |
-| system_shutdown | critical | Shutdown (requires approval) |
-| system_restart | critical | Restart (requires approval) |
-| get_system_health | low | Vezir health check (11 components) |
-| get_process_details | low | Detailed process info |
-| get_network_info | low | IP addresses + connectivity |
-| list_scheduled_tasks | low | Windows scheduled tasks |
-| submit_runtime_task | medium | Submit task to oc runtime |
-| check_runtime_task | low | Check runtime task status |
-| mcp_status | low | Check WMCP server health |
-| mcp_restart | high | Restart WMCP server (requires approval) |
-
-## Risk Levels
-
-| Risk | Action | Examples |
-|------|--------|----------|
-| low | Auto-execute | System info, file read, process list |
-| medium | Auto-execute | File write, clipboard, open app |
-| high | Telegram approval required | Close app, restart MCP |
-| critical | Telegram approval required | Shutdown, restart |
-| blocked | Never executed | Dangerous patterns (Invoke-Expression+http, encodedcommand, etc.) |
+| Category | What |
+|----------|------|
+| **Mission Orchestration** | 9 specialist roles, 11-state FSM, 4-tier complexity routing, 3 quality gates |
+| **Security** | 4-level risk classification, AES-256-GCM secret store, SHA-256 audit chain, filesystem confinement, API key auth |
+| **Observability** | OpenTelemetry traces (28/28), 17 metrics, structured JSON logs, 9 alert rules with Telegram notification |
+| **API** | ~35 REST endpoints, SSE live updates, per-endpoint throttling, idempotency keys, OpenAPI schema |
+| **Dashboard** | React + Vite + Tailwind, mission timeline, approval inbox, health monitoring, SSE connection indicator |
+| **Automation** | 7 GitHub Actions workflows, plan.yaml → issues, PR validator, status sync, evidence collection |
+| **Extensibility** | Plugin system (D-118), mission templates (D-119), webhook integration, multi-provider LLM abstraction |
 
 ## Quick Start
 
@@ -180,90 +92,99 @@ docs/phase-reports/    Completed phase reports (Phase 1 through Phase 4 Sprint 6
 
 - Windows 11 with WSL2 (Ubuntu)
 - Python 3.14+ on Windows
-- OpenAI API key (`OPENAI_API_KEY` environment variable)
-- Optional: Anthropic API key (`ANTHROPIC_API_KEY`) for Claude provider
+- Node.js 20+ (for dashboard)
+- `OPENAI_API_KEY` environment variable (optional: `ANTHROPIC_API_KEY` for Claude)
 
-### Run Agent (Single-agent mode)
+### Run
 
 ```powershell
-# Install dependencies
+# Install backend dependencies
 pip install -r agent/requirements.txt
 
-# Test agent (from PowerShell with OPENAI_API_KEY set)
-python agent/oc-agent-runner.py -m "CPU ve RAM kullanımı ne?"
-python agent/oc-agent-runner.py -m "en çok CPU kullanan 5 process ne?"
-python agent/oc-agent-runner.py -m "ekran görüntüsü al"
+# Start WMCP server (required for tool execution)
+pwsh -NoProfile -ExecutionPolicy Bypass -File bin\start-wmcp-server.ps1
+
+# Start API server (:8003)
+bash scripts/dev-backend.sh
+
+# Start dashboard (:3000)
+bash scripts/dev-frontend.sh
 ```
 
-### Run Agent (Mission mode)
+### Agent Usage
 
 ```powershell
-# Mission mode — breaks complex goals into governed stages
-python agent/oc-agent-runner.py --mission -m "tool_catalog.py'ye yeni tool ekle"
+# Single-agent mode — direct tool execution
+python agent/oc-agent-runner.py -m "CPU ve RAM kullanimi ne?"
+
+# Mission mode — governed multi-role orchestration
 python agent/oc-agent-runner.py --mission -m "dashboard'a CPU grafik ekle"
 ```
 
-### Approve High-Risk Operations
+### Test
 
-```powershell
-# Agent requests approval via Telegram for high-risk tools
-# Approve from Telegram: reply "evet" or "approve apv-XXX"
-# Or from terminal:
-python bin/oc-approve.py list
-python bin/oc-approve.py approve apv-XXXXXXXX-XXXXX
+```bash
+# Backend (521 tests)
+cd agent && python -m pytest tests/ -v
+
+# Frontend (75 tests)
+cd frontend && npx vitest run
+
+# Type check
+cd frontend && npx tsc --noEmit
 ```
 
-### Start Infrastructure
+## Project Structure
 
-```powershell
-# Start WMCP server (required for agent)
-pwsh -NoProfile -ExecutionPolicy Bypass -File bin\start-wmcp-server.ps1
-
-# Start Vezir UI (port 3000, requires Node.js 20)
-bash scripts/dev-frontend.sh
-
-# Start Vezir API (port 8003)
-bash scripts/dev-backend.sh
+```
+agent/                  Python backend
+  mission/                Mission controller, roles, gates, FSM, router
+  api/                    FastAPI endpoints, SSE, schemas
+  events/                 EventBus + governance handlers
+  observability/          OTel traces, metrics, alerts
+  services/               Risk engine, approval, secrets, audit, tools
+  providers/              LLM abstraction (GPT-4o, Claude, Ollama)
+  persistence/            JSON file stores
+  context/                Context assembler, working set, telemetry
+  auth/                   API key auth + session
+  tests/                  521 pytest tests
+frontend/               React dashboard (Vite + Tailwind)
+bridge/                 PowerShell bridge to Windows
+bin/                    Runtime scripts (WMCP, watchdog, health)
+config/                 Environment templates, capabilities manifest
+decisions/              Formal decision records (D-105+)
+docs/
+  ai/                     Living state: STATE, NEXT, DECISIONS, GOVERNANCE, BACKLOG
+  architecture/           Architecture overview (HTML interactive)
+  archive/                Historical sprint data
+.github/workflows/      9 CI/CD workflows
 ```
 
-## Scheduled Tasks
+## Ports
 
-| Task | Trigger | Purpose |
-|------|---------|---------|
-| VezirTaskWorker | AtLogOn | Ephemeral -RunOnce worker |
-| VezirRuntimeWatchdog | Every 15min | Health + stuck task + worker kick |
-| VezirStartupPreflight | AtBoot | Stale recovery + layout validation |
-| VezirWmcpServer | AtLogOn | windows-mcp HTTP server on :8001 |
-| VezirWslGuardian | AtLogOn | WSL + Vezir active guardian |
+| Port | Service |
+|------|---------|
+| 3000 | React Dashboard |
+| 8003 | Vezir API (FastAPI) |
+| 8001 | WMCP (Windows MCP Proxy) |
 
-## Completed Phases
+## Governance
 
-| Phase | Scope |
-|-------|-------|
-| 1 | Runtime Stabilization |
-| 1.5 | Bridge + Security Baseline |
-| 1.6 | Operational Monitoring (WSL Guardian) |
-| 1.7 | Proactive Telegram Notifications |
-| 3-A | Agent-MCP Architecture Design Freeze |
-| 3-B | Core Agent Runner (GPT-4o + MCP) |
-| 3-C | Risk Engine + Telegram Approval Service |
-| 3-D | Full Tool Catalog (24 tools) + Typed Artifacts |
-| 3-E | Multi-Provider Support (GPT, Claude, Ollama) |
-| 3-F | Multi-Agent Foundation (hub-and-spoke, 2 specialists) |
-| 4 | Agent Governance (9 roles, quality gates, state machine, context economy) |
-| 4.5 | Telemetry + E2E + Operational Tuning |
-| 5A-5D | React Dashboard (read model → SSE → intervention → polish) |
-| 5.5 | EventBus + OTel Observability + Presentation Layer + CI/CD |
-| 6 | Foundation Hardening (Docker, auth, plugins, templates, automation) |
-| 7 (active) | Security Hardening + Transport Encryption |
+The project follows a sprint-based governance model with 129 frozen architectural decisions, formal quality gates, and GPT-assisted cross-review. Every sprint produces auditable evidence packets.
 
-**Current:** Phase 7 — Sprint 37 (transport encryption + chatbridge repair)
+See [`docs/ai/GOVERNANCE.md`](docs/ai/GOVERNANCE.md) for sprint rules and [`docs/ai/DECISIONS.md`](docs/ai/DECISIONS.md) for the full decision log.
 
 ## Documentation
 
-- `docs/ai/STATE.md` — Current system state and component status
-- `docs/ai/NEXT.md` — Roadmap and carry-forward items
-- `docs/ai/DECISIONS.md` — 129 architectural decisions (frozen, D-001→D-130, D-126 skipped)
-- `docs/ai/GOVERNANCE.md` — Sprint governance rules (D-112)
-- `docs/ai/BACKLOG.md` — Open backlog items
-- `docs/phase-reports/` — Active phase/sprint reports (historical in `docs/archive/`)
+| Doc | Purpose |
+|-----|---------|
+| [`docs/ai/STATE.md`](docs/ai/STATE.md) | Canonical system state |
+| [`docs/ai/DECISIONS.md`](docs/ai/DECISIONS.md) | 129 frozen decisions (D-001 → D-130) |
+| [`docs/ai/GOVERNANCE.md`](docs/ai/GOVERNANCE.md) | Sprint governance rules |
+| [`docs/ai/BACKLOG.md`](docs/ai/BACKLOG.md) | Open backlog (33 items) |
+| [`docs/ai/NEXT.md`](docs/ai/NEXT.md) | Roadmap + carry-forward |
+| [`docs/architecture/`](docs/architecture/) | Architecture overview (interactive HTML) |
+
+## License
+
+Private repository. All rights reserved.

@@ -1,23 +1,45 @@
 #!/bin/bash
 # tools/sprint-closure-check.sh
-# Sprint closure evidence generator
-# Usage: bash tools/sprint-closure-check.sh <sprint_number>
-# Output: evidence/sprint-{N}/closure-check-output.txt (produced by script)
-#         evidence/sprint-{N}/contract-evidence.txt (produced by script)
-# Verifies: mutation-drill.txt, e2e-output.txt, lighthouse.txt (produced by sprint work)
+# Sprint closure evidence checker per D-127 class taxonomy.
+# Usage: bash tools/sprint-closure-check.sh <sprint_number> [--governance]
+# Class detection: reads evidence/sprint-{N}/sprint-class.txt (D-127)
+#   --governance flag: explicit override to force governance rules
+# Output: evidence/sprint-{N}/closure-check-output.txt
 # Result: "ELIGIBLE FOR CLOSURE REVIEW" or "NOT CLOSEABLE"
 
 set -euo pipefail
 
-SPRINT=${1:?"Usage: $0 <sprint_number>"}
+SPRINT=${1:?"Usage: $0 <sprint_number> [--governance]"}
+GOVERNANCE_OVERRIDE=false
+if [[ "${2:-}" == "--governance" ]]; then
+    GOVERNANCE_OVERRIDE=true
+fi
+
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 EVIDENCE_DIR="$REPO_ROOT/evidence/sprint-$SPRINT"
 MAIN_OUTPUT="$EVIDENCE_DIR/closure-check-output.txt"
 CONTRACT_OUTPUT="$EVIDENCE_DIR/contract-evidence.txt"
 FAIL_COUNT=0
 
-# Decision-driven config — update when D-068 amendment is resolved
-EXPECTED_DATAQUALITY_STATES=6  # D-079 amendment: fresh,partial,stale,degraded,unknown,not_reached
+# D-127: Resolve sprint class from packet metadata
+CLASS_FILE="$EVIDENCE_DIR/sprint-class.txt"
+if [ "$GOVERNANCE_OVERRIDE" = true ]; then
+    SPRINT_CLASS="governance"
+elif [ -f "$CLASS_FILE" ]; then
+    SPRINT_CLASS="$(cat "$CLASS_FILE" | tr -d '[:space:]')"
+else
+    echo "ERROR: sprint-class.txt not found at $CLASS_FILE"
+    echo "Run: bash tools/generate-evidence-packet.sh $SPRINT <class> first"
+    exit 1
+fi
+
+if [[ "$SPRINT_CLASS" != "governance" && "$SPRINT_CLASS" != "product" ]]; then
+    echo "ERROR: invalid sprint class '$SPRINT_CLASS' in $CLASS_FILE"
+    exit 1
+fi
+
+# Decision-driven config
+EXPECTED_DATAQUALITY_STATES=6  # D-079 amendment
 
 mkdir -p "$EVIDENCE_DIR"
 
@@ -30,6 +52,7 @@ fail() { log "❌ FAIL: $1"; FAIL_COUNT=$((FAIL_COUNT + 1)); }
 > "$CONTRACT_OUTPUT"
 
 log "=== Sprint $SPRINT Closure Check ==="
+log "Class: $SPRINT_CLASS ($([ "$GOVERNANCE_OVERRIDE" = true ] && echo 'override' || echo 'auto-detected'))"
 log "Date: $(date -Iseconds)"
 log ""
 
@@ -129,7 +152,8 @@ fi
 
 log ""
 
-# ─── CONTRACT EVIDENCE ────────────────────────────────────────
+# ─── CONTRACT EVIDENCE (product class only, D-127) ───────────
+if [ "$SPRINT_CLASS" = "product" ]; then
 log "--- Contract Evidence ---"
 {
     echo "=== Contract Evidence for Sprint $SPRINT ==="
@@ -264,7 +288,7 @@ pass "Contract evidence generated"
 
 log ""
 
-# ─── LIVE ENDPOINT CHECKS (MANDATORY) ─────────────────────────
+# ─── LIVE ENDPOINT CHECKS (product class only, D-127) ────────
 log "--- Live Endpoint Checks ---"
 {
     echo "=== Live Endpoint Checks ==="
@@ -307,6 +331,16 @@ log "--- Live Endpoint Checks ---"
 } >> "$CONTRACT_OUTPUT" 2>&1
 
 log ""
+
+else
+    # Governance class: skip contract evidence and live checks (D-127)
+    log "--- Contract Evidence ---"
+    log "  SKIPPED (governance class per D-127)"
+    log ""
+    log "--- Live Endpoint Checks ---"
+    log "  SKIPPED (governance class per D-127)"
+    log ""
+fi  # end product-class-only block
 
 # ─── SUMMARY ─────────────────────────────────────────────────
 log "==========================================="

@@ -1,9 +1,9 @@
 # Current State
 
 **Last updated:** 2026-03-29
-**Active phase:** Phase 7 — Sprint 41 closed, Sprint 42 pending
+**Active phase:** Phase 7 — Sprint 42 in progress
 **Doc model:** This file is canonical for system state. Session context lives in `docs/ai/handoffs/current.md`.
-**Note:** All sprints through 41 closed. Phase 7 active. 129 frozen decisions (D-001 → D-130, D-126 skipped).
+**Note:** All sprints through 41 closed, Sprint 42 in progress. Phase 7 active. 129 frozen decisions (D-001 → D-130, D-126 skipped).
 **Persistence:** State is file-persisted (state.json, mission.json). Mission history via persistence layer (Sprint 16).
 **API:** Vezir API on 127.0.0.1:8003 (FastAPI + Uvicorn). Schemas FROZEN (D-067). SSE on /api/v1/events/stream. Dashboard API + Alert API + Telemetry Query API (Sprint 16).
 **Frontend:** React dashboard on localhost:3000 (Vite + Tailwind). SSE live updates + polling fallback + intervention buttons + monitoring dashboard. Node.js 20 required.
@@ -46,7 +46,10 @@
 | Complexity Router | Operational (4 tiers) | `agent/mission/complexity_router.py` |
 | Mission Scheduler | Operational (cron-based, D-120/B-101) | `agent/schedules/` |
 | Mission Presets | Operational (3 built-in, B-103) | `config/templates/preset_*.json` |
-| Mission Control API | Operational (~40 endpoints) | `agent/api/server.py` on :8003 |
+| Dead Letter Queue | Operational (B-106, 7 API endpoints) | `agent/persistence/dlq_store.py` + `agent/api/dlq_api.py` |
+| Resilience Engine | Operational (backoff, circuit breaker, poison pill) | `agent/mission/resilience.py` |
+| Auto-Resume | Operational (--resume, --auto-resume) | `agent/mission/auto_resume.py` |
+| Mission Control API | Operational (~47 endpoints) | `agent/api/server.py` on :8003 |
 | SSE Manager | Operational (broadcast, heartbeat 30s) | `agent/api/sse_manager.py` |
 | Session Model | Foundation (operator identity, no auth flow) | `agent/auth/session.py` |
 | CI/CD Pipeline | 7 GitHub Actions workflows | `.github/workflows/` |
@@ -108,6 +111,7 @@
 | Sprint 36 | 521 tests, 0 fail | 75 tests, 0 TS errors | +63 backend, +46 frontend (S17-S36 cumulative) |
 | Sprint 40 | 618 tests, 0 fail | 82 tests, 0 TS errors | +97 backend, +7 frontend (S37-S40 cumulative) |
 | Sprint 41 | 618 tests, 0 fail | 82 tests, 0 TS errors | +1 guard test (atomic write compliance) |
+| Sprint 42 | 662 tests, 0 fail | 82 tests, 0 TS errors | +44 backend (DLQ, resilience, auto-resume) |
 
 ## Architectural Decisions
 

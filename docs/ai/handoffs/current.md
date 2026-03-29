@@ -1,4 +1,4 @@
-# Session Handoff — 2026-03-29 (Session 18)
+# Session Handoff — 2026-03-29 (Session 19)
 
 **Platform:** Vezir Platform
 **Operator:** Claude Code (Opus) — AKCA delegated
@@ -7,71 +7,54 @@
 
 ## Session Summary
 
-Full system audit (5 parallel agents) + Sprint 41 governance hardening. CI pipeline fixed, all documentation synchronized, GitHub milestones and board aligned, Sprint 41 designed by GPT, implemented, reviewed (G2 PASS), and closed.
+Sprint 42 implementation — B-106 runner resilience. DLQ system, exponential backoff, circuit breaker, poison pill detection, auto-resume from persisted state.
 
 ## Current State
 
 - **Phase:** 7
-- **Last closed sprint:** 41 (G2 PASS)
+- **Last sprint:** 42 (in progress)
 - **Decisions:** 129 frozen (D-001 → D-130, D-126 skipped)
-- **Tests:** 618 backend + 82 frontend + 13 Playwright = 713 total
+- **Tests:** 662 backend + 82 frontend + 13 Playwright = 757 total
 - **Lint:** Ruff 0 errors, TSC 0 errors
 - **Coverage:** ~75%
-- **Backlog:** 29 open
-- **Board:** VALID (65 Done, 29 Todo, 0 In Progress)
-- **CI:** Green (lint, SDK drift, Docker health all fixed this session)
+- **Backlog:** 28 open (B-106 in progress)
+- **CI:** Green
 
 ## Work Done This Session
 
-### Phase 1: System Audit (5 parallel agents)
-- GitHub audit: 3 missing milestones (S38-40), 31 orphan issue-milestone links, B-101/B-102/B-103 still open
-- Governance audit: 4 atomic write violations (D-071), DECISIONS.md footer stale, review/evidence gaps
-- Folder audit: .gitignore malformed, stale files, missing patterns
-- Cross-doc audit: test counts wrong, decision counts wrong, sprint status stale
-- CI/test audit: 97 ruff errors, SDK drift, Docker health check broken
+### Sprint 42 — B-106 Runner Resilience
 
-### Phase 2: Audit Fixes (commit `0f7d4be`, 44 files)
-- 97 ruff lint errors fixed across agent/
-- OpenAPI spec regenerated (+1220 lines), TypeScript types regenerated (+733 lines)
-- Docker health check assertion fixed in ci.yml
-- All doc counts synchronized (618/82/13 tests, 129 decisions, 11 states)
-- .gitignore repaired, stale files deleted
-- 3 GitHub milestones created (S38-40), 31 orphan links fixed, 3 backlog issues closed
+**42.1 Dead Letter Queue (DLQ):**
+- `persistence/dlq_store.py`: DLQEntry + DLQStore (enqueue, list, get, mark_retrying, mark_resolved, purge, purge_resolved, summary)
+- `api/dlq_api.py`: 7 REST endpoints (GET /dlq, GET /dlq/summary, GET /dlq/{id}, POST /dlq/{id}/retry, DELETE /dlq/{id}, POST /dlq/purge-resolved)
+- Controller integration: `_enqueue_to_dlq()` called on all mission failure paths
 
-### Phase 3: Sprint 41 — Integrity Hardening (GPT kickoff PASS)
-- **41.1** D-071 atomic write remediation — 8 write sites → atomic_write_json() in 4 files + guard test
-- **41.2** DECISIONS.md footer index repair — 129 entries (D-001→D-130, complete)
-- **41.3** Closure/read-model drift hardening — doc_drift_check.py (7 checks) + closure pipeline integration
+**42.2 Exponential Backoff + Circuit Breaker:**
+- `mission/resilience.py`: backoff_delay() (0.5s base, 2x multiplier, 30s max), CircuitBreaker class (per-specialist, configurable threshold/timeout), poison pill detection via error hash
+- Controller integration: backoff before retry, circuit check before stage execution, reset on success
 
-### Phase 4: Sprint 41 Closure (GPT G2 PASS)
-- Evidence packet: 19 canonical files in evidence/sprint-41/
-- Retrospective committed
-- Issues #231-233 closed, Sprint 41 milestone closed
-- All state docs updated, review record created
+**42.3 Auto-Resume:**
+- `mission/auto_resume.py`: find_incomplete_missions(), resume_mission(), scan_and_resume()
+- Runner flags: `--resume MISSION_ID`, `--auto-resume`
 
-## Commits (7 total)
+**42.4 Tests:**
+- `tests/test_dlq_resilience.py`: 45 tests (DLQ CRUD 16, backoff 6, circuit breaker 9, poison pill 5, auto-resume 2, API 6, integration 1)
+
+## Commits
 
 | Commit | Description |
 |--------|-------------|
-| `0f7d4be` | System audit fix (44 files, +1953/-258) |
-| `685acaf` | Sprint 41 implementation (9 files, +722/-20) |
-| `1e69d84` | Evidence packet (13 files) |
-| `f39562a` | Canonical evidence patch (+3 files) |
-| `e36d192` | Closure-check + final canonical files |
-| `7f81a9c` | Sprint 41 closure — G2 PASS, state sync |
-| `04289fd` | Final closure polish — NEXT.md entries, grep fix |
+| `cae2bfa` | Sprint 42 — B-106 runner resilience (9 files, +1308/-6) |
 
-## Sprint 42 Candidates
+## Sprint 42 Remaining / Next
 
-| Item | Source | Priority |
-|------|--------|----------|
-| B-104 Template parameter UI | Backlog P1 | HIGH |
-| Frontend Vitest component tests | S16 carry-forward | MEDIUM |
-| CONTEXT_ISOLATION feature flag | D-102 | MEDIUM |
-| Alert namespace scoping | S16 | MEDIUM |
-| Multi-user auth | D-104/D-108 | MEDIUM |
-| Docker dev environment | S14B | LOW |
-| Backend physical restructure | S14A/14B | LOW |
+| Item | Status |
+|------|--------|
+| B-106 core implementation | DONE |
+| Sprint closure (GPT review, evidence, issues) | PENDING |
+| B-104 Template parameter UI | Backlog P1 |
+| Frontend Vitest component tests | Carry-forward |
+| CONTEXT_ISOLATION feature flag | Carry-forward |
 
 ## Known Remaining Debt
 
@@ -81,4 +64,4 @@ Full system audit (5 parallel agents) + Sprint 41 governance hardening. CI pipel
 
 ## GPT Memo
 
-Session 18: System audit + S41 governance hardening. CI fixed (97 lint, SDK drift, Docker health). S41 G2 PASS (3 tasks: atomic write D-071, DECISIONS index, drift checker). 7 commits pushed. 129 decisions, 713 tests (618+82+13). All state synced. Sprint 42 pending.
+Session 19: Sprint 42 B-106 runner resilience. DLQ store + 7 API endpoints, exponential backoff (0.5-30s), circuit breaker per specialist (3 fail → open, 5min reset), poison pill detection, auto-resume (--resume/--auto-resume). 45 new tests (662 backend total). 1 commit pushed. Sprint closure pending.

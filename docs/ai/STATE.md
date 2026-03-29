@@ -3,7 +3,7 @@
 **Last updated:** 2026-03-29
 **Active phase:** Phase 7 — Sprint 36 closed, Sprint 37 kickoff pending
 **Doc model:** This file is canonical for system state. Session context lives in `docs/ai/handoffs/current.md`.
-**Note:** All sprints through 36 closed. Phase 7 active. 130 frozen decisions (D-001 → D-130, D-126 skipped).
+**Note:** All sprints through 36 closed. Phase 7 active. 129 frozen decisions (D-001 → D-130, D-126 skipped).
 **Persistence:** State is file-persisted (state.json, mission.json). Mission history via persistence layer (Sprint 16).
 **API:** Vezir API on 127.0.0.1:8003 (FastAPI + Uvicorn). Schemas FROZEN (D-067). SSE on /api/v1/events/stream. Dashboard API + Alert API + Telemetry Query API (Sprint 16).
 **Frontend:** React dashboard on localhost:3000 (Vite + Tailwind). SSE live updates + polling fallback + intervention buttons + monitoring dashboard. Node.js 20 required.
@@ -103,10 +103,11 @@
 | Sprint 15 | 419 tests, 0 fail | — | +27 new (OTel coverage + E2E) |
 | Sprint 16 | 458 tests, 0 fail | 29 tests, 0 TS errors | +39 new (persistence, API, alerts) |
 | **Cleanup** | **458 tests, 0 fail** | **0 TS errors** | **Ruff 0 errors, 169 lint fixes** |
+| Sprint 36 | 521 tests, 0 fail | 75 tests, 0 TS errors | +63 backend, +46 frontend (S17-S36 cumulative) |
 
 ## Architectural Decisions
 
-125 frozen decisions (D-001 through D-125). See `docs/ai/DECISIONS.md`. Governance rules in `docs/ai/GOVERNANCE.md` (D-112). D-123/D-124/D-125: Project V2 contract, legacy normalization, closure state sync (Sprint 33).
+129 frozen decisions (D-001 through D-130, D-126 skipped). See `docs/ai/DECISIONS.md`. Governance rules in `docs/ai/GOVERNANCE.md` (D-112). Recent: D-127 closure class taxonomy (S34), D-128 risk classification (S35), D-129 secret+audit (S36), D-130 transport encryption (S37).
 
 ## Port Map
 

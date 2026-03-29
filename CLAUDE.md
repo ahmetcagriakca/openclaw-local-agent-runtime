@@ -28,7 +28,7 @@ Windows 11 + WSL2 + Python 3.14 + PowerShell.
 |-----|---------|
 | `docs/ai/STATE.md` | Canonical system state |
 | `docs/ai/NEXT.md` | Roadmap + carry-forward |
-| `docs/ai/DECISIONS.md` | Frozen decisions (D-001→D-114) |
+| `docs/ai/DECISIONS.md` | Frozen decisions (D-001→D-130, D-126 skipped) |
 | `docs/ai/GOVERNANCE.md` | Sprint governance rules |
 | `docs/ai/BACKLOG.md` | Open backlog items |
 | `docs/ai/handoffs/current.md` | Session context (supplementary) |
@@ -38,10 +38,10 @@ Windows 11 + WSL2 + Python 3.14 + PowerShell.
 ## Build & Test
 
 ```bash
-# Backend (458 tests)
+# Backend (521 tests)
 cd agent && python -m pytest tests/ -v
 
-# Frontend (29 tests, requires Node.js 20)
+# Frontend (75 tests, requires Node.js 20)
 cd frontend && npx tsc --noEmit
 cd frontend && npx vitest run
 

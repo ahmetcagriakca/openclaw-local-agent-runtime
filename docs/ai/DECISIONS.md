@@ -1026,33 +1026,147 @@ Sprint 8 did not start until this document was FROZEN.
 
 ## Phase 6 / Sprint 26-29 Decisions (D-115 → D-118)
 
-*D-115: Backend physical topology — no restructure needed, current modular architecture is clean and acyclic (138 files, 12 modules, 0 circular deps). Import rules codified. S14A/14B carryover RETIRED. — Sprint 26 (frozen)*
-*D-116: Docker dev runtime topology — see `docs/decisions/D-116-docker-dev.md` — Sprint 26 (frozen)*
-*D-117: Multi-user auth contract — API key auth, operator/viewer roles, fail-closed, file-based key registry. Supersedes D-108. — Sprint 27 (frozen)*
-*D-118: Plugin runtime contract — file-based plugins, JSON manifest, EventBus integration, config-driven loading, 30s timeout, error isolation, priority 500+. — Sprint 29 (frozen)*
+### D-115: Backend Physical Topology
+
+**Phase:** Sprint 26 | **Status:** Frozen
+
+No restructure needed — current modular architecture is clean and acyclic (138 files, 12 modules, 0 circular deps). Import rules codified. S14A/14B carryover RETIRED.
+Formal record: `docs/decisions/D-115-backend-restructure.md`.
+
+---
+
+### D-116: Docker Dev Runtime Topology
+
+**Phase:** Sprint 26 | **Status:** Frozen
+
+Docker Compose dev environment with hot-reload, volume mounts, health checks.
+Formal record: `docs/decisions/D-116-docker-dev.md`.
+
+---
+
+### D-117: Multi-User Auth Contract
+
+**Phase:** Sprint 27 | **Status:** Frozen
+
+API key auth, operator/viewer roles, fail-closed, file-based key registry. Supersedes D-108.
+Formal record: `docs/decisions/D-117-auth-contract.md`.
+
+---
+
+### D-118: Plugin Runtime Contract
+
+**Phase:** Sprint 29 | **Status:** Frozen
+
+File-based plugins, JSON manifest, EventBus integration, config-driven loading, 30s timeout, error isolation, priority 500+.
+Formal record: `docs/decisions/D-118-plugin-contract.md`.
+
+---
 
 ## Phase 7 / Sprint 30-33 Decisions (D-119 → D-125)
 
-*D-119: Mission template lifecycle — JSON schema, CRUD API, parameter validation, run-from-template, draft/published/archived states. — Sprint 30 (frozen)*
-*D-120: Scheduled/triggered missions — cron scheduling, event triggers, execution queue. Decision frozen, implementation deferred to S31+. — Sprint 30 (frozen)*
-*D-121: Approval gate contract — centralized inbox, lifecycle (pending/approved/rejected/expired), actor-chain audit, 30min default timeout. — Sprint 30 (frozen)*
-*D-122: Backlog-to-Project-to-Sprint contract — GitHub Issues canonical, BACKLOG.md generated, separate backlog/sprint issues, milestone as sprint container. — Sprint 31 (frozen)*
-*D-123: Project V2 Item Contract v1 — canonical truth definition (5 truths: Status, Sprint, Priority, Task ID, Issue State), write authority rule, non-canonical fields kept. See `decisions/D-123-project-item-contract.md`. — Sprint 33 (frozen)*
-*D-124: Legacy Normalization Boundary — 5-class taxonomy (backlog, sprint-task, legacy-sprint, normalized-legacy, unclassified), minimum normalization for pre-S31 items, unclassified=FAIL. See `decisions/D-124-legacy-normalization.md`. — Sprint 33 (frozen)*
-*D-125: Closure State Sync — triple consistency rule (issue state + project status + sprint identity), backlog closure evidence rule, forbidden states. See `decisions/D-125-closure-state-sync.md`. — Sprint 33 (frozen)*
+### D-119: Mission Template Lifecycle
 
-## Sprint 34 Decisions (D-126 → D-127)
+**Phase:** Sprint 30 | **Status:** Frozen
 
-*D-127: Sprint Closure Class Taxonomy — product vs governance sprint classes, class-aware evidence manifests, sprint-class.txt metadata, NO EVIDENCE rules, auto-detect class resolution. See `decisions/D-127-closure-class-taxonomy.md`. — Sprint 34 (frozen)*
+JSON schema, CRUD API, parameter validation, run-from-template, draft/published/archived states.
+Formal record: `docs/decisions/D-119-mission-templates.md`.
+
+---
+
+### D-120: Scheduled/Triggered Missions
+
+**Phase:** Sprint 30 | **Status:** Frozen
+
+Cron scheduling, event triggers, execution queue. Decision frozen, implementation deferred to S31+.
+Formal record: `docs/decisions/D-120-scheduled-missions.md`.
+
+---
+
+### D-121: Approval Gate Contract
+
+**Phase:** Sprint 30 | **Status:** Frozen
+
+Centralized inbox, lifecycle (pending/approved/rejected/expired), actor-chain audit, 30min default timeout.
+Formal record: `docs/decisions/D-121-approval-gate.md`.
+
+---
+
+### D-122: Backlog-to-Project-to-Sprint Contract
+
+**Phase:** Sprint 31 | **Status:** Frozen
+
+GitHub Issues canonical, BACKLOG.md generated, separate backlog/sprint issues, milestone as sprint container.
+Formal record: `docs/decisions/D-122-backlog-project-sprint.md`.
+
+---
+
+### D-123: Project V2 Item Contract v1
+
+**Phase:** Sprint 33 | **Status:** Frozen
+
+Canonical truth definition (5 truths: Status, Sprint, Priority, Task ID, Issue State), write authority rule, non-canonical fields kept.
+Formal record: `decisions/D-123-project-item-contract.md`.
+
+---
+
+### D-124: Legacy Normalization Boundary
+
+**Phase:** Sprint 33 | **Status:** Frozen
+
+5-class taxonomy (backlog, sprint-task, legacy-sprint, normalized-legacy, unclassified), minimum normalization for pre-S31 items, unclassified=FAIL.
+Formal record: `decisions/D-124-legacy-normalization.md`.
+
+---
+
+### D-125: Closure State Sync
+
+**Phase:** Sprint 33 | **Status:** Frozen
+
+Triple consistency rule (issue state + project status + sprint identity), backlog closure evidence rule, forbidden states.
+Formal record: `decisions/D-125-closure-state-sync.md`.
+
+---
+
+## Sprint 34 Decisions (D-127)
+
+*Note: D-126 was skipped (number reserved but not used).*
+
+### D-127: Sprint Closure Class Taxonomy
+
+**Phase:** Sprint 34 | **Status:** Frozen
+
+Product vs governance sprint classes, class-aware evidence manifests, sprint-class.txt metadata, NO EVIDENCE rules, auto-detect class resolution.
+Formal record: `decisions/D-127-closure-class-taxonomy.md`.
+
+---
 
 ## Sprint 35 Decisions (D-128)
 
-*D-128: Risk Classification Contract — 4-level risk taxonomy (low/medium/high/critical), static tool mapping, unknown=high fail-safe, computed once at creation, persisted in mission state, internal-only (no API exposure in S35). See `decisions/D-128-risk-classification.md`. — Sprint 35 (frozen)*
+### D-128: Risk Classification Contract
+
+**Phase:** Sprint 35 | **Status:** Frozen
+
+4-level risk taxonomy (low/medium/high/critical), static tool mapping, unknown=high fail-safe, computed once at creation, persisted in mission state, internal-only (no API exposure in S35).
+Formal record: `decisions/D-128-risk-classification.md`.
+
+---
 
 ## Sprint 36 Decisions (D-129)
 
-*D-129: Secret Storage + Audit Integrity Contract — AES-256-GCM encryption, base64 32-byte key from env, read-only on missing/invalid key, atomic write, SHA-256 hash chain audit with CLI verify. See `decisions/D-129-secret-audit-contract.md`. — Sprint 36 (frozen)*
+### D-129: Secret Storage + Audit Integrity Contract
+
+**Phase:** Sprint 36 | **Status:** Frozen
+
+AES-256-GCM encryption, base64 32-byte key from env, read-only on missing/invalid key, atomic write, SHA-256 hash chain audit with CLI verify.
+Formal record: `decisions/D-129-secret-audit-contract.md`.
+
+---
 
 ## Sprint 37 Decisions (D-130)
 
-*D-130: Transport Encryption Contract — TLS 1.2+, fail-closed default (no cert = startup deny), dev-mode explicit HTTP fallback, HSTS, self-signed cert generator. See `decisions/D-130-transport-encryption.md`. — Sprint 37 (frozen)*
+### D-130: Transport Encryption Contract
+
+**Phase:** Sprint 37 | **Status:** Frozen
+
+TLS 1.2+, fail-closed default (no cert = startup deny), dev-mode explicit HTTP fallback, HSTS, self-signed cert generator.
+Formal record: `decisions/D-130-transport-encryption.md`.

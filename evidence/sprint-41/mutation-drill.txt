@@ -1,0 +1,2 @@
+NO EVIDENCE — Governance sprint, no mutation endpoints modified.
+Sprint 41 scope: atomic write pattern fix + docs + tooling only.

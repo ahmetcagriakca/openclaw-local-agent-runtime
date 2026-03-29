@@ -1,0 +1,2 @@
+NO EVIDENCE — Governance sprint, no UI/API changes requiring E2E tests.
+Sprint 41 scope: atomic write pattern fix + docs + tooling only.

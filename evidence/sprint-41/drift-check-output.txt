@@ -1,0 +1,19 @@
+============================================================
+Documentation Drift Check
+============================================================
+
+[1] DECISIONS.md heading completeness
+  PASS: 129 headings found, D-001..D-130 complete (known skips: D-126)
+
+[2] Decision count: DECISIONS.md vs STATE.md
+  PASS: STATE.md claims 129 frozen decisions, DECISIONS.md has 129 headings
+  PASS: STATE.md range claim D-001..D-130 matches actual max D-130
+
+[3] Test count consistency
+  PASS: Backend count: STATE.md (618) == CLAUDE.md (618)
+  PASS: Frontend count: STATE.md (82) == CLAUDE.md (82)
+  (--skip-tests: skipping actual test collection)
+
+============================================================
+RESULT: ALL CHECKS PASSED
+============================================================

@@ -1,0 +1,16 @@
+total 85
+drwxr-xr-x 1 AKCA 197609     0 Mar 29 19:40 .
+drwxr-xr-x 1 AKCA 197609     0 Mar 29 19:38 ..
+-rw-r--r-- 1 AKCA 197609   164 Mar 29 19:40 build-output.txt
+-rw-r--r-- 1 AKCA 197609   806 Mar 29 19:40 drift-check-output.txt
+-rw-r--r-- 1 AKCA 197609     0 Mar 29 19:40 file-manifest.txt
+-rw-r--r-- 1 AKCA 197609     0 Mar 29 19:40 grep-evidence.txt
+-rw-r--r-- 1 AKCA 197609     0 Mar 29 19:40 lint-output.txt
+-rw-r--r-- 1 AKCA 197609   176 Mar 29 19:40 live-checks.txt
+-rw-r--r-- 1 AKCA 197609   132 Mar 29 19:40 mutation-drill.txt
+-rw-r--r-- 1 AKCA 197609   139 Mar 29 19:40 playwright-output.txt
+-rw-r--r-- 1 AKCA 197609 57647 Mar 29 19:39 pytest-output.txt
+-rw-r--r-- 1 AKCA 197609   852 Mar 29 19:40 retrospective.md
+-rw-r--r-- 1 AKCA 197609  1237 Mar 29 19:40 review-summary.md
+-rw-r--r-- 1 AKCA 197609     0 Mar 29 19:39 tsc-output.txt
+-rw-r--r-- 1 AKCA 197609   222 Mar 29 19:40 vitest-output.txt

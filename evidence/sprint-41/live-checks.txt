@@ -1,0 +1,3 @@
+NO EVIDENCE — Governance sprint, no API/runtime changes.
+Sprint 41 scope: atomic write pattern fix + docs + tooling only.
+No endpoints modified, no runtime behavior changed.

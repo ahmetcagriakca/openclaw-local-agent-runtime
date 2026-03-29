@@ -36,7 +36,7 @@ Legacy path (predefined tasks):
 | Quality Gates | `agent/mission/quality_gates.py` | 3 gates validating artifacts between stage groups |
 | Feedback Loops | `agent/mission/feedback_loops.py` | 2 feedback loops for rework detection |
 | Complexity Router | `agent/mission/complexity_router.py` | 4-tier routing (trivial→complex) |
-| Mission State Machine | `agent/mission/mission_state.py` | 10-state mission lifecycle |
+| Mission State Machine | `agent/mission/mission_state.py` | 11-state mission lifecycle |
 | Context Assembler | `agent/context/assembler.py` | 5-tier artifact delivery (metadata→full+neighbors) |
 | Working Set Enforcer | `agent/context/working_set_enforcer.py` | Bounded filesystem access per stage |
 | Policy Telemetry | `agent/context/policy_telemetry.py` | 20 mandatory telemetry event types |
@@ -215,14 +215,19 @@ bash scripts/dev-backend.sh
 | 3-E | Multi-Provider Support (GPT, Claude, Ollama) |
 | 3-F | Multi-Agent Foundation (hub-and-spoke, 2 specialists) |
 | 4 | Agent Governance (9 roles, quality gates, state machine, context economy) |
+| 4.5 | Telemetry + E2E + Operational Tuning |
+| 5A-5D | React Dashboard (read model → SSE → intervention → polish) |
+| 5.5 | EventBus + OTel Observability + Presentation Layer + CI/CD |
+| 6 | Foundation Hardening (Docker, auth, plugins, templates, automation) |
+| 7 (active) | Security Hardening + Transport Encryption |
 
-**Next:** Phase 4.5 — Operational Tuning (structured extraction, strict approval, crash resume)
+**Current:** Phase 7 — Sprint 37 (transport encryption + chatbridge repair)
 
 ## Documentation
 
 - `docs/ai/STATE.md` — Current system state and component status
 - `docs/ai/NEXT.md` — Roadmap and carry-forward items
-- `docs/ai/DECISIONS.md` — 114 architectural decisions (frozen)
+- `docs/ai/DECISIONS.md` — 129 architectural decisions (frozen, D-001→D-130, D-126 skipped)
 - `docs/ai/GOVERNANCE.md` — Sprint governance rules (D-112)
 - `docs/ai/BACKLOG.md` — Open backlog items
 - `docs/phase-reports/` — Active phase/sprint reports (historical in `docs/archive/`)

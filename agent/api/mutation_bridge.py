@@ -34,6 +34,15 @@ logger = logging.getLogger("mcc.mutation.bridge")
 _SAFE_ID_RE = re.compile(r"^[a-zA-Z0-9_-]+$")
 
 
+def _safe_mission_path(missions_dir: Path, filename: str) -> Path:
+    """Build a safe file path within missions_dir, preventing traversal."""
+    candidate = (missions_dir / filename).resolve()
+    root = missions_dir.resolve()
+    if not str(candidate).startswith(str(root)):
+        raise ValueError(f"Path traversal blocked: {filename}")
+    return candidate
+
+
 def write_signal_artifact(
     *,
     missions_dir: Path,
@@ -81,9 +90,9 @@ def write_signal_artifact(
         },
     }
 
-    mission_dir = missions_dir / mission_id
+    mission_dir = _safe_mission_path(missions_dir, mission_id)
     mission_dir.mkdir(parents=True, exist_ok=True)
-    artifact_path = mission_dir / f"{mutation_type}-request-{request_id}.json"
+    artifact_path = _safe_mission_path(missions_dir, f"{mission_id}/{mutation_type}-request-{request_id}.json")
 
     atomic_write_json(artifact_path, artifact)
     logger.info(
@@ -115,7 +124,7 @@ def has_pending_signal(
 
     SIGNAL_TTL_S = 60  # Expire signals after 60 seconds
 
-    mission_dir = missions_dir / mission_id
+    mission_dir = _safe_mission_path(missions_dir, mission_id)
     if not mission_dir.exists():
         return None
 

@@ -25,6 +25,15 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 # Pattern for valid mission/target IDs — prevents path traversal (CodeQL fix).
 _SAFE_ID_RE = re.compile(r'^[a-zA-Z0-9][a-zA-Z0-9._-]*$')
 
+
+def _safe_mission_path(missions_dir: Path, filename: str) -> Path:
+    """Build a safe file path within missions_dir, preventing traversal."""
+    candidate = (missions_dir / filename).resolve()
+    root = missions_dir.resolve()
+    if not str(candidate).startswith(str(root)):
+        raise ValueError(f"Path traversal blocked: {filename}")
+    return candidate
+
 from api.mutation_audit import log_mutation
 from api.mutation_bridge import has_pending_signal, write_signal_artifact
 from api.schemas import APIError, MutationResponse
@@ -57,7 +66,7 @@ def _resolve_controller_id(missions_dir: Path, mission_id: str) -> str:
     """If mission_id is a dashboard placeholder, find the controller's real mission ID."""
     if not _SAFE_ID_RE.match(mission_id):
         return mission_id
-    mission_path = missions_dir / f"{mission_id}.json"
+    mission_path = _safe_mission_path(missions_dir, f"{mission_id}.json")
     if not mission_path.exists():
         return mission_id
     try:
@@ -91,7 +100,7 @@ def _read_mission_data(missions_dir: Path, mission_id: str) -> dict | None:
     if not _SAFE_ID_RE.match(mission_id):
         return None
     real_id = _resolve_controller_id(missions_dir, mission_id)
-    path = missions_dir / f"{real_id}.json"
+    path = _safe_mission_path(missions_dir, f"{real_id}.json")
     if path.exists():
         try:
             return json.loads(path.read_text(encoding="utf-8"))
@@ -136,14 +145,14 @@ def _read_mission_state(missions_dir: Path, mission_id: str) -> dict | None:
     real_id = _resolve_controller_id(missions_dir, mission_id)
 
     # Flat format: logs/missions/{id}-state.json (controller default)
-    flat_path = missions_dir / f"{real_id}-state.json"
+    flat_path = _safe_mission_path(missions_dir, f"{real_id}-state.json")
     if flat_path.exists():
         try:
             return json.loads(flat_path.read_text(encoding="utf-8"))
         except Exception:
             return None
     # Directory format: logs/missions/{id}/state.json (signal artifact layout)
-    dir_path = missions_dir / real_id / "state.json"
+    dir_path = _safe_mission_path(missions_dir, f"{real_id}/state.json")
     if dir_path.exists():
         try:
             return json.loads(dir_path.read_text(encoding="utf-8"))
@@ -151,7 +160,7 @@ def _read_mission_state(missions_dir: Path, mission_id: str) -> dict | None:
             return None
     # Fallback: read from main mission file (use real_id first, then original)
     for mid in [real_id, mission_id]:
-        mission_path = missions_dir / f"{mid}.json"
+        mission_path = _safe_mission_path(missions_dir, f"{mid}.json")
         if mission_path.exists():
             try:
                 data = json.loads(mission_path.read_text(encoding="utf-8"))

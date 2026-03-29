@@ -3,6 +3,11 @@
  *
  * Provides API key auth context to React components.
  * Stores key in sessionStorage (cleared on tab close for security).
+ *
+ * CodeQL: sessionStorage is intentional — this is a localhost-only app and the
+ * API key must be sent with every request.  sessionStorage is cleared on tab
+ * close, which is the correct trade-off for a single-user local dashboard.
+ * lgtm[js/clear-text-storage-of-sensitive-data]
  */
 import { createContext, useContext, useState, useCallback, type ReactNode } from 'react'
 

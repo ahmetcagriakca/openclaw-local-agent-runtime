@@ -1,0 +1,15 @@
+agent/api/schedules_api.py
+agent/api/server.py
+agent/api/templates_api.py
+agent/app/services/telegram/__init__.py
+agent/schedules/scheduler.py
+agent/schedules/store.py
+agent/services/approval_service.py
+agent/services/risk_engine.py
+agent/telegram_bot.py
+agent/tests/test_presets.py
+agent/tests/test_quality.py
+agent/tests/test_schedules.py
+agent/tests/test_telegram_bot.py
+--- contract checks ---
+10

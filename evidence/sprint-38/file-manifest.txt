@@ -1,0 +1,20 @@
+total 179
+drwxr-xr-x 1 AKCA 197609     0 Mar 29 14:34 .
+drwxr-xr-x 1 AKCA 197609     0 Mar 29 14:27 ..
+-rw-r--r-- 1 AKCA 197609   572 Mar 29 14:29 build-output.txt
+-rw-r--r-- 1 AKCA 197609 72133 Mar 29 14:36 closure-check-output.txt
+-rw-r--r-- 1 AKCA 197609 14660 Mar 29 14:36 contract-evidence.txt
+-rw-r--r-- 1 AKCA 197609   319 Mar 29 14:34 e2e-output.txt
+-rw-r--r-- 1 AKCA 197609     0 Mar 29 14:36 file-manifest.txt
+-rw-r--r-- 1 AKCA 197609   401 Mar 29 14:30 grep-evidence.txt
+-rw-r--r-- 1 AKCA 197609    71 Mar 29 14:30 lighthouse.txt
+-rw-r--r-- 1 AKCA 197609     0 Mar 29 14:29 lint-output.txt
+-rw-r--r-- 1 AKCA 197609  1761 Mar 29 14:29 live-checks.txt
+-rw-r--r-- 1 AKCA 197609    78 Mar 29 14:30 mutation-drill.txt
+-rw-r--r-- 1 AKCA 197609 55768 Mar 29 14:28 pytest-output.txt
+-rw-r--r-- 1 AKCA 197609  1741 Mar 29 14:30 review-summary.md
+-rw-r--r-- 1 AKCA 197609     8 Mar 29 14:30 sprint-class.txt
+-rw-r--r-- 1 AKCA 197609     0 Mar 29 14:28 tsc-output.txt
+-rw-r--r-- 1 AKCA 197609  1979 Mar 29 14:36 validator-board.json
+-rw-r--r-- 1 AKCA 197609  1122 Mar 29 14:29 validator-output.txt
+-rw-r--r-- 1 AKCA 197609   221 Mar 29 14:28 vitest-output.txt

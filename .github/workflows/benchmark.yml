@@ -16,7 +16,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: "3.12"
 
       - name: Install dependencies
         run: |
@@ -30,20 +30,18 @@ jobs:
         run: |
           if [ -f baseline/benchmark-baseline.json ]; then
             python tools/benchmark_compare.py baseline/benchmark-baseline.json baseline/benchmark-baseline.json
-            echo "NOTE: Self-comparing baseline (full regression check runs when new baseline is generated)"
+            echo "NOTE: Self-comparing baseline"
           else
-            echo "WARN: No baseline found — skipping regression check. Generate with: python tools/benchmark_api.py"
+            echo "WARN: No baseline found"
           fi
 
       - name: Verify benchmark evidence exists
-        run: ls evidence/sprint-*/benchmark.txt 2>/dev/null || echo "WARN: No benchmark evidence found"
+        run: "ls evidence/sprint-*/benchmark.txt 2>/dev/null || echo WARN-No-benchmark-evidence"
 
       - name: Upload benchmark evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: benchmark-evidence
-          path: |
-            evidence/
-            baseline/
+          path: evidence/
           if-no-files-found: ignore

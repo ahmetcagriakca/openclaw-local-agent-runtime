@@ -10,6 +10,7 @@ D-090: Destructive action (reject) — confirmation handled by frontend.
 """
 import json
 import logging
+import re
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -27,6 +28,9 @@ router = APIRouter(tags=["approval-mutations"])
 # D-096: Timeout window for mutation lifecycle
 MUTATION_TIMEOUT_S = 10
 
+# Pattern for valid approval IDs — prevents path traversal.
+_SAFE_ID_RE = re.compile(r'^[a-zA-Z0-9][a-zA-Z0-9._-]*$')
+
 
 def _get_dirs():
     """Get directory paths from server module."""
@@ -34,9 +38,20 @@ def _get_dirs():
     return APPROVALS_DIR, MISSIONS_DIR
 
 
+def _safe_approval_path(approvals_dir: Path, filename: str) -> Path:
+    """Build a safe file path within approvals_dir, preventing traversal."""
+    candidate = (approvals_dir / filename).resolve()
+    root = approvals_dir.resolve()
+    if not str(candidate).startswith(str(root)):
+        raise ValueError(f"Path traversal blocked: {filename}")
+    return candidate
+
+
 def _read_approval(approvals_dir: Path, apv_id: str) -> dict | None:
     """Read an approval JSON file. Returns None if not found."""
-    fpath = approvals_dir / f"{apv_id}.json"
+    if not _SAFE_ID_RE.match(apv_id):
+        return None
+    fpath = _safe_approval_path(approvals_dir, f"{apv_id}.json")
     if not fpath.exists():
         return None
     try:

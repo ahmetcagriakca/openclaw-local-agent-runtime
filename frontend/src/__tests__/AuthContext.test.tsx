@@ -2,9 +2,9 @@ import { describe, test, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { AuthProvider, useAuth } from '../auth/AuthContext'
 
-// Mock localStorage
+// Mock sessionStorage
 const mockStorage: Record<string, string> = {}
-vi.stubGlobal('localStorage', {
+vi.stubGlobal('sessionStorage', {
   getItem: (key: string) => mockStorage[key] ?? null,
   setItem: (key: string, value: string) => { mockStorage[key] = value },
   removeItem: (key: string) => { delete mockStorage[key] },
@@ -55,7 +55,7 @@ describe('AuthContext', () => {
     expect(screen.getByTestId('headers').textContent).toBe('{}')
   })
 
-  test('persists to localStorage', () => {
+  test('persists to sessionStorage', () => {
     render(<AuthProvider><TestComponent /></AuthProvider>)
     fireEvent.click(screen.getByText('Login'))
     expect(mockStorage['vezir_auth']).toContain('vz_test_key')

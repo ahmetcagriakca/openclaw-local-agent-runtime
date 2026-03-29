@@ -10,9 +10,9 @@ import { describe, test, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { AuthProvider, useAuth } from '../auth/AuthContext'
 
-// Mock localStorage
+// Mock sessionStorage (AuthContext uses sessionStorage for security)
 const mockStorage: Record<string, string> = {}
-vi.stubGlobal('localStorage', {
+vi.stubGlobal('sessionStorage', {
   getItem: (key: string) => mockStorage[key] ?? null,
   setItem: (key: string, value: string) => { mockStorage[key] = value },
   removeItem: (key: string) => { delete mockStorage[key] },
@@ -100,18 +100,18 @@ describe('Isolation Regression — Sprint 40', () => {
     expect(screen.getByTestId('auth-header').textContent).toContain('key_alice')
   })
 
-  test('localStorage persists auth state', () => {
+  test('sessionStorage persists auth state', () => {
     render(<AuthProvider><AuthStateDisplay /></AuthProvider>)
 
     fireEvent.click(screen.getByTestId('login-alice'))
 
-    // Check localStorage was updated (stored as JSON under vezir_auth key)
+    // Check sessionStorage was updated (stored as JSON under vezir_auth key)
     const stored = JSON.parse(mockStorage['vezir_auth'] ?? '{}')
     expect(stored.apiKey).toBe('key_alice')
     expect(stored.userName).toBe('alice')
   })
 
-  test('localStorage cleared on logout', () => {
+  test('sessionStorage cleared on logout', () => {
     render(<AuthProvider><AuthStateDisplay /></AuthProvider>)
 
     fireEvent.click(screen.getByTestId('login-alice'))

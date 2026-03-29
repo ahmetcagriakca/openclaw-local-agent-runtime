@@ -3,9 +3,9 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import { AuthProvider } from '../auth/AuthContext'
 import { LoginPage } from '../auth/LoginPage'
 
-// Mock localStorage
+// Mock sessionStorage
 const mockStorage: Record<string, string> = {}
-vi.stubGlobal('localStorage', {
+vi.stubGlobal('sessionStorage', {
   getItem: (key: string) => mockStorage[key] ?? null,
   setItem: (key: string, value: string) => { mockStorage[key] = value },
   removeItem: (key: string) => { delete mockStorage[key] },
@@ -55,7 +55,7 @@ describe('LoginPage', () => {
     expect(screen.queryByText(/Invalid key format/)).toBeNull()
   })
 
-  test('stores key in localStorage on login', () => {
+  test('stores key in sessionStorage on login', () => {
     renderLogin()
     const input = screen.getByLabelText('API Key')
     fireEvent.change(input, { target: { value: 'vz_test_key_001' } })

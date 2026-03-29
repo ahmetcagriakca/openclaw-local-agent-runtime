@@ -1,9 +1,9 @@
 # Current State
 
 **Last updated:** 2026-03-29
-**Active phase:** Phase 7 — Sprint 42 implementation done, G2 review pending
+**Active phase:** Phase 7 — Sprint 42 closed (G2 PASS), Sprint 43 pending
 **Doc model:** This file is canonical for system state. Session context lives in `docs/ai/handoffs/current.md`.
-**Note:** All sprints through 41 closed, Sprint 42 done (G2 pending). Phase 7 active. 129 frozen decisions (D-001 → D-130, D-126 skipped).
+**Note:** All sprints through 42 closed. Phase 7 active. 129 frozen decisions (D-001 → D-130, D-126 skipped).
 **Persistence:** State is file-persisted (state.json, mission.json). Mission history via persistence layer (Sprint 16).
 **API:** Vezir API on 127.0.0.1:8003 (FastAPI + Uvicorn). Schemas FROZEN (D-067). SSE on /api/v1/events/stream. Dashboard API + Alert API + Telemetry Query API (Sprint 16).
 **Frontend:** React dashboard on localhost:3000 (Vite + Tailwind). SSE live updates + polling fallback + intervention buttons + monitoring dashboard. Node.js 20 required.
@@ -96,6 +96,7 @@
 | Sprint 34 | Closure Tooling Hardening (D-127) | Closed |
 | Sprint 35 | Security Hardening Baseline (D-128, B-003, B-004) | Closed |
 | Sprint 36 | Encrypted Secrets + Audit Integrity (D-129, B-006, B-008) | Closed |
+| Sprint 42 | Runner Resilience (B-106: DLQ, backoff, circuit breaker, auto-resume) | Closed |
 
 ## Test Evidence
 
@@ -111,7 +112,7 @@
 | Sprint 36 | 521 tests, 0 fail | 75 tests, 0 TS errors | +63 backend, +46 frontend (S17-S36 cumulative) |
 | Sprint 40 | 618 tests, 0 fail | 82 tests, 0 TS errors | +97 backend, +7 frontend (S37-S40 cumulative) |
 | Sprint 41 | 618 tests, 0 fail | 82 tests, 0 TS errors | +1 guard test (atomic write compliance) |
-| Sprint 42 | 662 tests, 0 fail | 82 tests, 0 TS errors | +44 backend (DLQ, resilience, auto-resume) |
+| Sprint 42 | 669 tests, 0 fail | 82 tests, 0 TS errors | +51 backend (DLQ, resilience, auto-resume, G2 patch) |
 
 ## Architectural Decisions
 

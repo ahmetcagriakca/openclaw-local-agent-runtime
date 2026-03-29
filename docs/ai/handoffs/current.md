@@ -7,65 +7,56 @@
 
 ## Session Summary
 
-Sprint 42 implementation — B-106 runner resilience. DLQ system, exponential backoff, circuit breaker, poison pill detection, auto-resume from persisted state. GPT G2 review submitted, awaiting response.
+Sprint 42 — B-106 runner resilience. Full implementation + G2 review (2nd round PASS). DLQ system, exponential backoff, circuit breaker with proper half-open state machine, poison pill detection, auto-resume with canonical file filtering.
 
 ## Current State
 
 - **Phase:** 7
-- **Last sprint:** 42 (implementation done, G2 review pending)
+- **Last closed sprint:** 42 (G2 PASS, 2nd round)
 - **Decisions:** 129 frozen (D-001 → D-130, D-126 skipped)
-- **Tests:** 662 backend + 82 frontend + 13 Playwright = 757 total
+- **Tests:** 669 backend + 82 frontend + 13 Playwright = 764 total
 - **Lint:** Ruff 0 errors, TSC 0 errors
-- **Coverage:** ~75%
-- **Backlog:** 28 open (B-106 implementation done)
+- **Backlog:** 28 open (B-106 closed)
 - **CI:** Green
 
 ## Work Done This Session
 
-### Sprint 42 — B-106 Runner Resilience (4 tasks, all DONE)
+### Sprint 42 — B-106 Runner Resilience (CLOSED)
 
-**42.1 Dead Letter Queue (DLQ):**
-- `persistence/dlq_store.py`: DLQEntry + DLQStore (enqueue, list, get, mark_retrying, mark_resolved, purge, purge_resolved, summary) — atomic writes D-071
-- `api/dlq_api.py`: 7 REST endpoints (GET /dlq, GET /dlq/summary, GET /dlq/{id}, POST /dlq/{id}/retry, DELETE /dlq/{id}, POST /dlq/purge-resolved)
-- Controller integration: `_enqueue_to_dlq()` called on all mission failure paths (planning + execution abort/escalate)
+**Implementation (commit `cae2bfa`):**
+- DLQ store + 7 API endpoints
+- Exponential backoff (0.5s base, 2x, 30s max)
+- Circuit breaker per specialist (3 fail → open, 5min reset)
+- Poison pill detection (error hash)
+- Auto-resume (--resume, --auto-resume)
+- 45 tests
 
-**42.2 Exponential Backoff + Circuit Breaker:**
-- `mission/resilience.py`: backoff_delay() (0.5s base, 2x multiplier, 30s max), CircuitBreaker class (per-specialist, threshold=3, reset=5min, half-open after timeout), poison pill detection via error hash
-- Controller `_handle_stage_failure()` enhanced: circuit check → poison pill → record failure → backoff sleep → retry. Reset on stage success.
+**G2 Patch (commit `6ca6af5`):**
+- P1: Circuit breaker explicit CLOSED/OPEN/HALF_OPEN state machine
+- P2: Auto-resume canonical file filtering + dedup
+- P3: All 7 terminal failure paths → DLQ enqueue (was 2/7)
+- P4: DLQ duplicate prevention + _dlq_suppress for retry mode
+- +7 tests (669 total)
 
-**42.3 Auto-Resume:**
-- `mission/auto_resume.py`: find_incomplete_missions(), resume_mission(), scan_and_resume()
-- Runner flags: `--resume MISSION_ID`, `--auto-resume`
+**GPT G2 Review:** PASS (2nd round, conversation `69c97bad`)
 
-**42.4 Tests:**
-- `tests/test_dlq_resilience.py`: 45 tests (DLQ CRUD 16, backoff 6, circuit breaker 9, poison pill 5, auto-resume 2, API 6, integration 1)
-
-### GPT G2 Review
-- Submitted to Vezir GPT project, conversation `69c97bad`
-- Status: Extended thinking, awaiting response
-- Next session should check GPT review result and close sprint accordingly
-
-## Commits (3 total)
+## Commits (4 total)
 
 | Commit | Description |
 |--------|-------------|
-| `cae2bfa` | feat: Sprint 42 — B-106 runner resilience (9 files, +1308/-6) |
-| `4ab8ceb` | docs: Sprint 42 state sync — handoff, STATE, NEXT |
-| *(this)* | docs: Session 19 final handoff |
+| `cae2bfa` | feat: Sprint 42 — B-106 runner resilience (9 files, +1308) |
+| `4ab8ceb` | docs: Sprint 42 state sync |
+| `916b6b6` | docs: Session 19 handoff |
+| `6ca6af5` | fix: G2 patch P1-P4 (6 files, +236) |
 
-## Next Session Actions
+## Sprint 43 Candidates
 
-1. Check GPT G2 review result in ChatGPT conversation `69c97bad`
-2. If PASS → close Sprint 42 (evidence, issues, milestone)
-3. If FAIL → address findings, re-submit
-4. Sprint 43 candidates: B-104 Template parameter UI (P1), Frontend Vitest tests, CONTEXT_ISOLATION
-
-## Known Remaining Debt
-
-- Historical evidence/review gaps S15-S32 (non-actionable)
-- Pydantic V1 `__fields__` deprecation (2 test warnings, breaks on V3)
-- D-021→D-058 extraction (AKCA-assigned, non-blocking)
+| Item | Source | Priority |
+|------|--------|----------|
+| B-104 Template parameter UI | Backlog P1 | HIGH |
+| Frontend Vitest component tests | S16 carry-forward | MEDIUM |
+| CONTEXT_ISOLATION feature flag | D-102 | MEDIUM |
 
 ## GPT Memo
 
-Session 19: Sprint 42 B-106 runner resilience complete. DLQ store + 7 API endpoints, exponential backoff (0.5-30s), circuit breaker per specialist (3 fail → open, 5min reset), poison pill detection, auto-resume (--resume/--auto-resume). 45 new tests (662 backend total). 2 commits pushed. GPT G2 review submitted (conversation 69c97bad), awaiting verdict. Sprint closure pending review result.
+Session 19: Sprint 42 B-106 runner resilience CLOSED. G2 PASS (2nd round). DLQ store + 7 API, exponential backoff, circuit breaker (CLOSED/OPEN/HALF_OPEN state machine), poison pill, auto-resume with canonical file filtering + dedup. All 7 failure paths → DLQ. DLQ duplicate prevention + suppress flag. 669 backend tests total (+51 net). 4 commits pushed. Sprint 43 pending.

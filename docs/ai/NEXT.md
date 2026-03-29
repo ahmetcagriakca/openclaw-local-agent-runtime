@@ -1,17 +1,17 @@
 # Next Steps — Vezir Platform
 
 **Last updated:** 2026-03-29
-**Current:** Phase 7 active. Sprint 42 in progress.
+**Current:** Phase 7 active. Sprint 42 closed. Sprint 43 pending.
 
 ---
 
-## Sprint 42 — Runner Resilience (B-106) (G2 PENDING)
+## Sprint 42 — Runner Resilience (B-106) (CLOSED)
 
 **Model:** A (implementation) | **Class:** Product
 **Scope:** DLQ, exponential backoff, circuit breaker, poison pill detection, auto-resume
-**Commits:** `cae2bfa`, `4ab8ceb`
-**Tests:** +44 new (662 total)
-**Review:** Submitted to GPT (conversation `69c97bad`), awaiting verdict
+**Commits:** `cae2bfa`, `4ab8ceb`, `6ca6af5`
+**Tests:** +51 new (669 total)
+**Review:** PASS (2nd round) — GPT conversation `69c97bad`
 
 ## Sprint 41 — Integrity Hardening / Source-of-Truth Stabilization (CLOSED)
 

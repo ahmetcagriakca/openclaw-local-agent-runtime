@@ -35,6 +35,7 @@ Desktop.ini
 # Frontend
 frontend/node_modules/
 frontend/dist/
+frontend/coverage/
 
 # Root-level Node artifacts (tooling)
 node_modules/

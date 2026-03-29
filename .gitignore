@@ -38,8 +38,6 @@ frontend/dist/
 
 # Root-level Node artifacts (tooling)
 node_modules/
-package-lock.json
-package.json
 test-results/
 
 # Bootstrap backups

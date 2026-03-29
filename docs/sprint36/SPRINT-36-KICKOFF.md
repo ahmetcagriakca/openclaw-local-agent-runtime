@@ -125,11 +125,11 @@ Continue P1 security hardening: encrypt secrets at rest and add audit log tamper
 
 ### CLOSURE
 
-- **Owner:** Claude Code
-- **Produced:** updated `docs/ai/handoffs/current.md`, updated `docs/ai/STATE.md`
-- **Verification:** `grep "Sprint 36" docs/ai/STATE.md` shows Closed
-- **Evidence:** commit on main with state/handoff sync
-- Actions: handoff update + state sync + GPT memo update via chatbridge
+- **Owner:** Operator (GPT) — Claude Code prepares artifacts only
+- **Claude Code actions:** update handoff, sync evidence references, set `implementation_status=done` and `closure_status=review_pending` in STATE.md
+- **Operator action:** set `closure_status=closed` (operator-only per governance rules)
+- **Verification:** `docs/ai/STATE.md` reflects `implementation_status=done` and `closure_status=review_pending` after evidence + review completion; operator sets closed separately
+- **Evidence:** commit on main with handoff/state sync for review; operator closure commit/state transition handled separately
 
 ## Dependencies
 

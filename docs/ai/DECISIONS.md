@@ -1048,3 +1048,7 @@ Sprint 8 did not start until this document was FROZEN.
 ## Sprint 35 Decisions (D-128)
 
 *D-128: Risk Classification Contract — 4-level risk taxonomy (low/medium/high/critical), static tool mapping, unknown=high fail-safe, computed once at creation, persisted in mission state, internal-only (no API exposure in S35). See `decisions/D-128-risk-classification.md`. — Sprint 35 (frozen)*
+
+## Sprint 36 Decisions (D-129)
+
+*D-129: Secret Storage + Audit Integrity Contract — AES-256-GCM encryption, base64 32-byte key from env, read-only on missing/invalid key, atomic write, SHA-256 hash chain audit with CLI verify. See `decisions/D-129-secret-audit-contract.md`. — Sprint 36 (frozen)*

@@ -45,8 +45,14 @@
 
 ---
 
+## Completed This Phase
+
+| Sprint | Scope | Status |
+|--------|-------|--------|
+| Sprint 42 | B-106 Runner Resilience (DLQ, backoff, circuit breaker, auto-resume) | CLOSED (G2 PASS) |
+
 ## Next Sprint
 
-**Sprint 42 — Phase 7**
+**Sprint 43 — Phase 7**
 - Status: NOT STARTED
-- Candidates: B-104 Template parameter UI, Frontend Vitest components, CONTEXT_ISOLATION, Alert scoping, Docker dev, Backend restructure
+- Candidates: B-104 Template parameter UI (P1), Frontend Vitest components, CONTEXT_ISOLATION, Alert scoping

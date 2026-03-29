@@ -52,7 +52,7 @@
 | #166 | [B-023] Corrupted runtime recovery | Open |
 | #167 | [B-026] Dead-letter retention policy | Open |
 | #160 | [B-105] Cost/outcome dashboard | Open |
-| #161 | [B-106] Retry/DLQ/replay/resume | Open |
+| #161 | [B-106] Retry/DLQ/replay/resume | Done (S42) |
 | #162 | [B-107] Policy engine | Open |
 | #163 | [B-108] Agent health / capability view | Open |
 

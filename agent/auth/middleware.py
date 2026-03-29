@@ -1,7 +1,8 @@
-"""Auth middleware — D-117.
+"""Auth middleware — D-117 + Sprint 40 user isolation.
 
 Enforces API key authentication on mutation endpoints.
 GET requests pass through without auth (read-only public access).
+Sprint 40: Extracts user_id from API key for data isolation.
 """
 from fastapi import Depends, HTTPException, Request
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer

@@ -287,19 +287,28 @@ class AlertEngine:
 
     # ── Query ──────────────────────────────────────────────────
 
-    def get_active(self) -> list[dict]:
+    def get_active(self, user_id: str | None = None) -> list[dict]:
+        """Get active alerts, optionally filtered by user namespace."""
         with self._lock:
-            return [a.to_dict() for a in self._active if not a.acknowledged]
+            alerts = [a.to_dict() for a in self._active if not a.acknowledged]
+        if user_id:
+            alerts = [a for a in alerts if a.get("user_id") in (None, "", user_id)]
+        return alerts
 
     def get_history(self, from_ts: str | None = None,
-                    to_ts: str | None = None) -> list[dict]:
+                    to_ts: str | None = None,
+                    user_id: str | None = None) -> list[dict]:
+        """Get alert history, optionally filtered by user namespace."""
         with self._lock:
             items = self._history[:]
         if from_ts:
             items = [a for a in items if a.ts >= from_ts]
         if to_ts:
             items = [a for a in items if a.ts <= to_ts]
-        return [a.to_dict() for a in items]
+        alerts = [a.to_dict() for a in items]
+        if user_id:
+            alerts = [a for a in alerts if a.get("user_id") in (None, "", user_id)]
+        return alerts
 
     def acknowledge(self, index: int) -> bool:
         with self._lock:

@@ -138,6 +138,10 @@ async def create_mission(body: CreateMissionRequest, request: Request, _operator
     mission_id = _generate_mission_id()
     now = datetime.now(timezone.utc).isoformat()
 
+    # Sprint 40: Track creating user for isolation
+    from auth.isolation import get_user_id
+    user_id = get_user_id(_operator) or "dashboard"
+
     mission_data = {
         "missionId": mission_id,
         "status": "pending",
@@ -146,6 +150,7 @@ async def create_mission(body: CreateMissionRequest, request: Request, _operator
         "stages": [],
         "startedAt": now,
         "createdFrom": "dashboard",
+        "userId": user_id,
     }
 
     mission_file = missions_dir / f"{mission_id}.json"

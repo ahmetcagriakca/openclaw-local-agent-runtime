@@ -18,6 +18,7 @@ class ApiKey:
     role: str  # "operator" or "viewer"
     created: str
     expires_at: str = ""  # ISO 8601, empty = no expiration
+    user_id: str = ""  # Sprint 40: user isolation scope
 
 
 _keys: dict[str, ApiKey] = {}
@@ -41,6 +42,7 @@ def _load_keys() -> None:
                 role=entry["role"],
                 created=entry.get("created", ""),
                 expires_at=entry.get("expires_at", ""),
+                user_id=entry.get("user_id", entry.get("name", "")),
             )
             for entry in data.get("keys", [])
         }

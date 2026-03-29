@@ -178,6 +178,11 @@ export interface ApprovalEntry {
   status: string
   requestedAt: string | null
   respondedAt: string | null
+  reason: string | null
+  requestedByRole: string | null
+  expiresAt: string | null
+  decidedBy: string | null
+  stageId: string | null
 }
 
 // ── Telemetry ───────────────────────────────────────────────────

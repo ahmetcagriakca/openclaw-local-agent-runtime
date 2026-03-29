@@ -196,7 +196,7 @@ class ComponentHealth(BaseModel):
 # ── Approval ─────────────────────────────────────────────────────
 
 class ApprovalEntry(BaseModel):
-    """Approval record."""
+    """Approval record — B-102 enriched."""
     id: str
     missionId: Optional[str] = None
     toolName: Optional[str] = None
@@ -204,6 +204,11 @@ class ApprovalEntry(BaseModel):
     status: str = "unknown"
     requestedAt: Optional[str] = None
     respondedAt: Optional[str] = None
+    reason: Optional[str] = None
+    requestedByRole: Optional[str] = None
+    expiresAt: Optional[str] = None
+    decidedBy: Optional[str] = None
+    stageId: Optional[str] = None
 
 
 # ── Telemetry (GPT Fix 8: missionId + sourceFile) ───────────────

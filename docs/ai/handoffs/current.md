@@ -7,13 +7,13 @@
 
 ## Session Summary
 
-Sprint 38 CLOSED (G2 PASS, 2nd round). 3 product tasks + D-111→D-114 formalized. README Mermaid fix.
+Sprint 38 CLOSED. Sprint 39 kickoff — 4 product tasks (B-102 inbox + Live E2E + Playwright CI + Benchmark D-109).
 
 ## Current State
 
 - **Phase:** 7
 - **Last closed sprint:** 38
-- **Active sprint:** None — awaiting Sprint 39 kickoff
+- **Active sprint:** 39 (kickoff done, implementation starting)
 - **Decisions:** 130 frozen (D-001 → D-130, D-126 skipped)
 - **Tests:** 598 backend + 75 frontend + 39 e2e = 712 total
 - **Coverage:** 75% (13,392 lines)
@@ -47,6 +47,15 @@ Sprint 38 CLOSED (G2 PASS, 2nd round). 3 product tasks + D-111→D-114 formalize
 | 4 | Benchmark regression gate D-109 | Gate hardening |
 | 5 | PROJECT_TOKEN rotation | AKCA-owned |
 
+## Sprint 39 Scope (Model A, Class: Product)
+
+| Task | Title | Issue |
+|------|-------|-------|
+| 39.1 | B-102 Full approval inbox UI | #224 |
+| 39.2 | Live mission E2E | #225 |
+| 39.3 | Playwright live API test in CI | #226 |
+| 39.4 | Benchmark regression gate D-109 | #227 |
+
 ## GPT Memo
 
-Sprint 38 closed 2026-03-29. 130 decisions. G2 PASS 2nd round. 712 tests. Next: Sprint 39 kickoff.
+Sprint 38 closed 2026-03-29. Sprint 39 kicked off same day. Scope: B-102 inbox + Live E2E + Playwright CI + Benchmark D-109.

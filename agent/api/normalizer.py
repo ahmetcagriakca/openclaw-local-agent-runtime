@@ -626,10 +626,15 @@ class MissionNormalizer:
     def _approval_from_data(self, data: dict) -> ApprovalEntry:
         return ApprovalEntry(
             id=data.get("approvalId", ""),
-            missionId=data.get("sessionId"),
-            toolName=data.get("toolName"),
+            missionId=data.get("sessionId") or data.get("missionId"),
+            toolName=data.get("toolName") or data.get("tool"),
             risk=data.get("risk"),
             status=data.get("status", "unknown"),
             requestedAt=data.get("requestedAt"),
             respondedAt=data.get("decidedAt"),
+            reason=data.get("reason"),
+            requestedByRole=data.get("requestedByRole"),
+            expiresAt=data.get("expiresAt"),
+            decidedBy=data.get("decidedBy"),
+            stageId=data.get("stageId"),
         )

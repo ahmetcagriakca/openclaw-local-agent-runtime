@@ -7,7 +7,7 @@
 
 ## Session Summary
 
-Full system audit + Sprint 41 (governance hardening). CI pipeline fixed, all docs synchronized, GitHub milestones aligned, Sprint 41 implemented and closed.
+Full system audit (5 parallel agents) + Sprint 41 governance hardening. CI pipeline fixed, all documentation synchronized, GitHub milestones and board aligned, Sprint 41 designed by GPT, implemented, reviewed (G2 PASS), and closed.
 
 ## Current State
 
@@ -18,30 +18,67 @@ Full system audit + Sprint 41 (governance hardening). CI pipeline fixed, all doc
 - **Lint:** Ruff 0 errors, TSC 0 errors
 - **Coverage:** ~75%
 - **Backlog:** 29 open
-- **Board:** VALID
+- **Board:** VALID (65 Done, 29 Todo, 0 In Progress)
+- **CI:** Green (lint, SDK drift, Docker health all fixed this session)
 
-## Sprints This Session
+## Work Done This Session
 
-| Sprint | Scope | G2 |
-|--------|-------|-----|
-| (audit) | System audit + CI fix + doc sync + GitHub alignment | N/A |
-| S41 | D-071 atomic write fix + DECISIONS index + drift checker | PASS |
+### Phase 1: System Audit (5 parallel agents)
+- GitHub audit: 3 missing milestones (S38-40), 31 orphan issue-milestone links, B-101/B-102/B-103 still open
+- Governance audit: 4 atomic write violations (D-071), DECISIONS.md footer stale, review/evidence gaps
+- Folder audit: .gitignore malformed, stale files, missing patterns
+- Cross-doc audit: test counts wrong, decision counts wrong, sprint status stale
+- CI/test audit: 97 ruff errors, SDK drift, Docker health check broken
 
-## Key Deliverables
+### Phase 2: Audit Fixes (commit `0f7d4be`, 44 files)
+- 97 ruff lint errors fixed across agent/
+- OpenAPI spec regenerated (+1220 lines), TypeScript types regenerated (+733 lines)
+- Docker health check assertion fixed in ci.yml
+- All doc counts synchronized (618/82/13 tests, 129 decisions, 11 states)
+- .gitignore repaired, stale files deleted
+- 3 GitHub milestones created (S38-40), 31 orphan links fixed, 3 backlog issues closed
 
-- **Session 18 Audit:** 97 lint errors fixed, OpenAPI+TS regenerated, Docker health fix, 3 milestones created, 31 orphan links fixed, .gitignore repaired
-- **41.1:** 8 non-atomic writes → atomic_write_json() in 4 files + guard test
-- **41.2:** DECISIONS.md footer index completed (129 entries, D-001→D-130)
-- **41.3:** doc_drift_check.py (7 checks) integrated into closure pipeline
+### Phase 3: Sprint 41 — Integrity Hardening (GPT kickoff PASS)
+- **41.1** D-071 atomic write remediation — 8 write sites → atomic_write_json() in 4 files + guard test
+- **41.2** DECISIONS.md footer index repair — 129 entries (D-001→D-130, complete)
+- **41.3** Closure/read-model drift hardening — doc_drift_check.py (7 checks) + closure pipeline integration
 
-## Commits
+### Phase 4: Sprint 41 Closure (GPT G2 PASS)
+- Evidence packet: 19 canonical files in evidence/sprint-41/
+- Retrospective committed
+- Issues #231-233 closed, Sprint 41 milestone closed
+- All state docs updated, review record created
 
-- `0f7d4be` — System audit fix (44 files)
-- `685acaf` — Sprint 41 implementation (9 files)
-- `1e69d84` — Evidence packet
-- `f39562a` — Canonical evidence patch
-- `e36d192` — Closure-check + final canonical files
+## Commits (7 total)
+
+| Commit | Description |
+|--------|-------------|
+| `0f7d4be` | System audit fix (44 files, +1953/-258) |
+| `685acaf` | Sprint 41 implementation (9 files, +722/-20) |
+| `1e69d84` | Evidence packet (13 files) |
+| `f39562a` | Canonical evidence patch (+3 files) |
+| `e36d192` | Closure-check + final canonical files |
+| `7f81a9c` | Sprint 41 closure — G2 PASS, state sync |
+| `04289fd` | Final closure polish — NEXT.md entries, grep fix |
+
+## Sprint 42 Candidates
+
+| Item | Source | Priority |
+|------|--------|----------|
+| B-104 Template parameter UI | Backlog P1 | HIGH |
+| Frontend Vitest component tests | S16 carry-forward | MEDIUM |
+| CONTEXT_ISOLATION feature flag | D-102 | MEDIUM |
+| Alert namespace scoping | S16 | MEDIUM |
+| Multi-user auth | D-104/D-108 | MEDIUM |
+| Docker dev environment | S14B | LOW |
+| Backend physical restructure | S14A/14B | LOW |
+
+## Known Remaining Debt
+
+- Historical evidence/review gaps S15-S32 (non-actionable)
+- Pydantic V1 `__fields__` deprecation (2 test warnings, breaks on V3)
+- D-021→D-058 extraction (AKCA-assigned, non-blocking)
 
 ## GPT Memo
 
-Session 18: System audit + S41 governance hardening. CI fixed. S41 G2 PASS. 129 decisions, 713 tests. Atomic write compliance enforced. DECISIONS index complete. Drift checker operational.
+Session 18: System audit + S41 governance hardening. CI fixed (97 lint, SDK drift, Docker health). S41 G2 PASS (3 tasks: atomic write D-071, DECISIONS index, drift checker). 7 commits pushed. 129 decisions, 713 tests (618+82+13). All state synced. Sprint 42 pending.

@@ -2,12 +2,13 @@
 
 **Phase:** 7 | **Model:** A | **Class:** product
 **Output root:** evidence/sprint-36/
+**Predecessor:** Sprint 35 `closure_status=closed` (STATE.md line 92, commits e013d47/4f62b5a)
 
 ---
 
 ## Goal
 
-Continue P1 security hardening: encrypt secrets at rest and add audit log tamper resistance. Decision-first approach per established protocol.
+Continue P1 security hardening: encrypt secrets at rest and add audit log tamper resistance. Decision-first approach. No new API endpoints.
 
 ## Sequence
 
@@ -17,60 +18,79 @@ Continue P1 security hardening: encrypt secrets at rest and add audit log tamper
 
 ### 36.0 Freeze D-129: Secret storage + audit integrity contract
 
+- **Owner:** Claude Code
 - **Secret storage contract:**
   - Encryption: AES-256-GCM (symmetric, authenticated)
-  - Key source: `VEZIR_SECRET_KEY` environment variable (single source, no passphrase flow in S36)
-  - Missing key at startup: read-only mode (can read unencrypted legacy, cannot write new secrets)
-  - Storage location: `config/secrets.enc.json`
-  - Migration: new writes encrypted, legacy plaintext readable, no backfill in S36
+  - Key: `VEZIR_SECRET_KEY` env var, base64-encoded 32-byte key
+  - Key validation at startup: decode base64, verify length=32 bytes
+  - Invalid/malformed key: startup warning + read-only mode (deny all writes)
+  - Missing key: read-only mode (read legacy plaintext, deny new writes, log warning)
+  - Legacy source: `config/secrets.json` (plaintext, current repo)
+  - Encrypted target: `config/secrets.enc.json`
+  - Read precedence: try encrypted first, fall back to plaintext legacy
+  - Write semantics: temp + fsync + `os.replace()` (atomic per D-071), never partial overwrite
+  - Migration: new writes encrypted only, legacy readable, no backfill in S36
   - Rotation: not in S36 scope (deferred)
 - **Audit integrity contract:**
-  - Mechanism: SHA-256 hash chain (each entry includes hash of previous entry)
-  - Tamper detection: verify chain integrity on demand
-  - Missing/corrupted entry: chain broken = integrity FAIL
-  - No HMAC (simpler, no key dependency between audit and secrets)
-- **Owner:** Claude Code
-- **Acceptance:** `cat decisions/D-129-secret-audit-contract.md | head -20`
+  - Mechanism: SHA-256 hash chain
+  - Verification surface: CLI only in S36 (`tools/verify-audit-chain.py`), no API endpoint
+  - Hash payload: canonical JSON with sorted keys, UTF-8, `entry_hash` field excluded from hashed payload
+  - Genesis `prev_hash`: SHA-256 of empty string (`e3b0c44298fc1c149afbf4c8996fb924...`)
+  - Tamper detection output: `INTEGRITY_FAIL` + `broken_entry_index`
+  - Intact chain output: `INTEGRITY_OK` + `entry_count`
+- **Acceptance:** `decisions/D-129-secret-audit-contract.md` committed on main
+- **Verification:** `cat decisions/D-129-secret-audit-contract.md | head -20`
 - **Artifacts:** `decisions/D-129-secret-audit-contract.md`
 
 ### 36.1 Encrypted secret storage (B-006, #151)
 
-- Implement per D-129 secret storage contract
-- AES-256-GCM encryption/decryption
-- Key from `VEZIR_SECRET_KEY` env var
-- Missing key: read-only mode, log warning
-- Store: `config/secrets.enc.json`
-- Legacy plaintext readable, new writes encrypted
 - **Owner:** Claude Code
 - **Depends on:** 36.0 (D-129 frozen)
-- **Acceptance:** `cd agent && python -m pytest tests/ -v -k secret 2>&1 | tail -3`
-- **Verification:** `cd agent && python -m pytest tests/ -v -k secret 2>&1 | tail -5`
+- **Produced files:**
+  - `agent/services/secret_store.py` — encrypt/decrypt, read/write, key validation
+  - `agent/tests/test_secret_store.py` — all acceptance criteria as tests
+- **Acceptance criteria:**
+  - Encrypted write goes only to `config/secrets.enc.json`
+  - Plaintext legacy read from `config/secrets.json` works
+  - Missing `VEZIR_SECRET_KEY` → read-only mode, writes denied, warning logged
+  - Invalid base64 key → startup warning + read-only mode
+  - Decoded key length != 32 → startup warning + read-only mode
+  - Atomic write path: temp + fsync + `os.replace()`
+  - Read precedence: encrypted first, legacy fallback
+- **Verification:** `cd agent && python -m pytest tests/test_secret_store.py -v 2>&1 | tail -5`
+- **Failure-path verification:**
+  - `python -m pytest tests/test_secret_store.py -v -k invalid_key 2>&1 | tail -3`
+  - `python -m pytest tests/test_secret_store.py -v -k missing_key 2>&1 | tail -3`
 - **Evidence:** `evidence/sprint-36/secret-tests-output.txt`
-- **Artifacts:** `agent/services/secret_store.py`, tests
 
 ### G1 Mid Review Gate (after 36.1)
 
 - **Inputs:** D-129 frozen, secret store tests pass
-- **Pass criteria:** D-129 committed, pytest -k secret all PASS, missing-key graceful degradation verified
+- **Pass criteria:** D-129 committed, `test_secret_store.py` all PASS, missing-key read-only verified, invalid-key read-only verified
 - **Evidence:** `evidence/sprint-36/g1-review.md`
 
 ### 36.2 Audit log tamper resistance (B-008, #155)
 
-- Implement per D-129 audit integrity contract
-- SHA-256 hash chain on structured audit log entries
-- Verify chain integrity on demand (CLI or API)
-- Chain break detection with entry index
 - **Owner:** Claude Code
 - **Depends on:** None (independent of 36.1)
-- **Acceptance:** `cd agent && python -m pytest tests/ -v -k audit_integrity 2>&1 | tail -3`
-- **Verification:** `cd agent && python -m pytest tests/ -v -k audit_integrity 2>&1 | tail -5`
+- **Produced files:**
+  - `agent/persistence/audit_integrity.py` — hash chain append, verify
+  - `tools/verify-audit-chain.py` — CLI verification tool
+  - `agent/tests/test_audit_integrity.py` — all acceptance criteria as tests
+- **Acceptance criteria:**
+  - CLI verify returns `INTEGRITY_OK` + `entry_count` on intact chain
+  - Tampered entry returns `INTEGRITY_FAIL` + `broken_entry_index`
+  - Hash = SHA-256 of canonical sorted-key JSON, UTF-8, `entry_hash` excluded
+  - Genesis `prev_hash` = SHA-256 of empty string
+- **Verification:** `cd agent && python -m pytest tests/test_audit_integrity.py -v 2>&1 | tail -5`
+- **Failure-path verification:** `python -m pytest tests/test_audit_integrity.py -v -k tamper 2>&1 | tail -3`
 - **Evidence:** `evidence/sprint-36/audit-tests-output.txt`
-- **Artifacts:** `agent/persistence/audit_integrity.py`, tests
 
 ### G2 Final Review Gate (after 36.2)
 
 - **Pass criteria:** all tests green, closure-check ELIGIBLE, D-129 frozen, B-006+B-008 closed
-- **Evidence:** `docs/ai/reviews/S36-REVIEW.md`
+- **Verification:** `bash tools/sprint-closure-check.sh 36 2>&1 | tee evidence/sprint-36/closure-check-output.txt`
+- **Evidence:** `docs/ai/reviews/S36-REVIEW.md`, `evidence/sprint-36/closure-check-output.txt`
 
 ### RETRO + CLOSURE
 
@@ -83,13 +103,17 @@ Per sprint-end protocol.
 
 ## Blocking Risks
 
-None identified. Both tasks are internal security hardening.
+- Startup mode regression if key validation order wrong → test missing/invalid key paths explicitly
+- Legacy/encrypted precedence confusion → D-129 freezes read order: encrypted first, legacy fallback
+- Canonical JSON drift in audit hash → D-129 freezes sorted keys + UTF-8 + excluded fields
 
 ## Exit Criteria
 
-- D-129 frozen
-- B-006 (encrypted secrets) + B-008 (audit integrity) closed with tests
-- closure-check ELIGIBLE
+- D-129 frozen and committed
+- `test_secret_store.py` all PASS (including failure paths)
+- `test_audit_integrity.py` all PASS (including tamper detection)
+- Evidence packet complete under `evidence/sprint-36/`
+- `bash tools/sprint-closure-check.sh 36` returns `ELIGIBLE FOR CLOSURE REVIEW`
 
 ## Evidence Checklist
 
@@ -99,6 +123,7 @@ Plus sprint-specific:
 - `secret-tests-output.txt`
 - `audit-tests-output.txt`
 - `g1-review.md`
+- `closure-check-output.txt`
 
 ## Implementation Notes
 

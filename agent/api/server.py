@@ -6,6 +6,7 @@ D-074: Startup sequence (config → FS validation → cache warm → normalizer 
 """
 import logging
 import os
+import sys
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 from logging.handlers import RotatingFileHandler
@@ -266,17 +267,66 @@ app.include_router(alerts_router, prefix="/api/v1")
 app.include_router(templates_router, prefix="/api/v1")
 
 
+# ── TLS Configuration (D-130) ───────────────────────────────────
+
+def _get_tls_config() -> dict:
+    """Get TLS configuration per D-130.
+
+    Default mode: TLS required (fail-closed). Missing cert = startup deny.
+    Dev mode (--dev or VEZIR_DEV=1): HTTP fallback with warning.
+    """
+    import ssl
+    cert_path = os.path.join(
+        os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+        "config", "tls", "server.pem"
+    )
+    key_path = os.path.join(
+        os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+        "config", "tls", "server-key.pem"
+    )
+
+    dev_mode = os.environ.get("VEZIR_DEV", "") == "1" or "--dev" in sys.argv
+
+    if os.path.exists(cert_path) and os.path.exists(key_path):
+        return {
+            "ssl_certfile": cert_path,
+            "ssl_keyfile": key_path,
+            "ssl_version": ssl.TLSVersion.TLSv1_2,
+        }
+
+    if dev_mode:
+        logger.warning("TLS cert not found — running HTTP in dev mode (INSECURE)")
+        return {}
+
+    logger.error("TLS cert not found and not in dev mode — refusing to start (D-130)")
+    sys.exit(1)
+
+
+# ── HSTS Middleware (D-130) ─────────────────────────────────────
+
+@app.middleware("http")
+async def hsts_middleware(request, call_next):
+    """Add HSTS header when TLS is active (D-130)."""
+    response = await call_next(request)
+    if request.url.scheme == "https":
+        response.headers["Strict-Transport-Security"] = "max-age=31536000"
+    return response
+
+
 # ── Main ────────────────────────────────────────────────────────
 
 def main():
     import uvicorn
+    tls_config = _get_tls_config()
     uvicorn.run(
         "api.server:app",
         host="127.0.0.1",
         port=PORT,
         log_level="info",
+        **tls_config,
     )
 
 
 if __name__ == "__main__":
+    import sys
     main()

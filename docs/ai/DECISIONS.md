@@ -1052,3 +1052,7 @@ Sprint 8 did not start until this document was FROZEN.
 ## Sprint 36 Decisions (D-129)
 
 *D-129: Secret Storage + Audit Integrity Contract — AES-256-GCM encryption, base64 32-byte key from env, read-only on missing/invalid key, atomic write, SHA-256 hash chain audit with CLI verify. See `decisions/D-129-secret-audit-contract.md`. — Sprint 36 (frozen)*
+
+## Sprint 37 Decisions (D-130)
+
+*D-130: Transport Encryption Contract — TLS 1.2+, fail-closed default (no cert = startup deny), dev-mode explicit HTTP fallback, HSTS, self-signed cert generator. See `decisions/D-130-transport-encryption.md`. — Sprint 37 (frozen)*

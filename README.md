@@ -1,8 +1,8 @@
 # Vezir
 
 [![CI](https://github.com/ahmetcagriakca/vezir/actions/workflows/ci.yml/badge.svg)](https://github.com/ahmetcagriakca/vezir/actions/workflows/ci.yml)
-[![Tests](https://img.shields.io/badge/tests-521%20backend%20%C2%B7%2075%20frontend-brightgreen)]()
-[![Decisions](https://img.shields.io/badge/decisions-129%20frozen-blueviolet)]()
+[![Tests](https://img.shields.io/badge/tests-598%20backend%20%C2%B7%2075%20frontend-brightgreen)]()
+[![Decisions](https://img.shields.io/badge/decisions-130%20frozen-blueviolet)]()
 [![Phase](https://img.shields.io/badge/phase-7-blue)]()
 
 Governed multi-agent mission platform for Windows. Natural language goals become structured, auditable missions executed by 9 specialist AI roles with quality gates, risk classification, and encrypted audit trails.
@@ -14,45 +14,46 @@ Governed multi-agent mission platform for Windows. Natural language goals become
 ```mermaid
 graph TB
     subgraph User["User Layer"]
-        TG["Telegram Bot<br/><small>WSL gateway</small>"]
-        UI["React Dashboard<br/><small>:3000 · Vite · SSE</small>"]
+        TG["Telegram Bot\nWSL gateway"]
+        UI["React Dashboard\n:3000 Vite SSE"]
     end
 
-    subgraph API["API Layer · :8003"]
+    subgraph API["API Layer :8003"]
         FA["FastAPI + Uvicorn"]
-        AUTH["Auth<br/><small>API key · operator/viewer</small>"]
-        THR["Throttling<br/><small>100/20 rpm</small>"]
-        SSE["SSE Manager<br/><small>30s heartbeat</small>"]
+        AUTH["Auth\nAPI key operator/viewer"]
+        THR["Throttling\n100/20 rpm"]
+        SSE["SSE Manager\n30s heartbeat"]
     end
 
     subgraph Engine["Mission Engine"]
-        MC["MissionController<br/><small>11-state FSM</small>"]
-        CR["Complexity Router<br/><small>4 tiers</small>"]
-        ROLES["9 Governed Roles<br/><small>PO → Analyst → Architect → PM<br/>Dev → Tester → Reviewer → Manager → RemoteOp</small>"]
-        GATES["3 Quality Gates + 2 Feedback Loops"]
-        CTX["Context Assembler<br/><small>5-tier delivery · token budgets</small>"]
+        MC["MissionController\n11-state FSM"]
+        CR["Complexity Router\n4 tiers"]
+        ROLES["9 Governed Roles"]
+        GATES["3 Quality Gates\n2 Feedback Loops"]
+        CTX["Context Assembler\n5-tier delivery"]
     end
 
     subgraph Services["Services"]
-        RISK["Risk Engine<br/><small>4-level classification</small>"]
-        SEC["Encrypted Secrets<br/><small>AES-256-GCM</small>"]
-        AUDIT["Audit Trail<br/><small>SHA-256 hash chain</small>"]
-        TMPL["Templates + Plugins"]
+        RISK["Risk Engine\n4-level"]
+        SEC["Encrypted Secrets\nAES-256-GCM"]
+        AUDIT["Audit Trail\nSHA-256 chain"]
+        TMPL["Templates + Presets"]
+        SCHED["Scheduler\nCron-based"]
     end
 
     subgraph Bus["EventBus"]
-        EB["28 events · 14 handlers<br/><small>chain-hash audit</small>"]
+        EB["28 events\n14 handlers"]
     end
 
     subgraph Obs["Observability"]
-        OTEL["OTel Traces + Metrics<br/><small>28/28 events · 17 instruments</small>"]
-        ALERT["Alert Engine<br/><small>9 rules → Telegram</small>"]
+        OTEL["OTel Traces + Metrics\n28 events 17 instruments"]
+        ALERT["Alert Engine\n9 rules Telegram"]
     end
 
     subgraph Infra["Infrastructure"]
-        STORE["Persistence<br/><small>JSON · atomic writes</small>"]
-        MCP["WMCP :8001 → PowerShell"]
-        LLM["GPT-4o · Claude · Ollama"]
+        STORE["Persistence\nJSON atomic writes"]
+        MCP["WMCP :8001\nPowerShell"]
+        LLM["GPT-4o Claude Ollama"]
     end
 
     TG --> FA
@@ -66,6 +67,7 @@ graph TB
     MC --> SEC
     MC --> AUDIT
     MC --> TMPL
+    MC --> SCHED
     MC --> EB
     EB --> OTEL
     EB --> ALERT
@@ -81,10 +83,10 @@ graph TB
 | **Mission Orchestration** | 9 specialist roles, 11-state FSM, 4-tier complexity routing, 3 quality gates |
 | **Security** | 4-level risk classification, AES-256-GCM secret store, SHA-256 audit chain, filesystem confinement, API key auth |
 | **Observability** | OpenTelemetry traces (28/28), 17 metrics, structured JSON logs, 9 alert rules with Telegram notification |
-| **API** | ~35 REST endpoints, SSE live updates, per-endpoint throttling, idempotency keys, OpenAPI schema |
+| **API** | ~40 REST endpoints, SSE live updates, per-endpoint throttling, idempotency keys, OpenAPI schema |
 | **Dashboard** | React + Vite + Tailwind, mission timeline, approval inbox, health monitoring, SSE connection indicator |
 | **Automation** | 7 GitHub Actions workflows, plan.yaml → issues, PR validator, status sync, evidence collection |
-| **Extensibility** | Plugin system (D-118), mission templates (D-119), webhook integration, multi-provider LLM abstraction |
+| **Extensibility** | Plugin system (D-118), mission templates (D-119), scheduled execution (D-120), presets/quick-run, multi-provider LLM |
 
 ## Quick Start
 
@@ -124,7 +126,7 @@ python agent/oc-agent-runner.py --mission -m "dashboard'a CPU grafik ekle"
 ### Test
 
 ```bash
-# Backend (521 tests)
+# Backend (598 tests)
 cd agent && python -m pytest tests/ -v
 
 # Frontend (75 tests)
@@ -147,7 +149,8 @@ agent/                  Python backend
   persistence/            JSON file stores
   context/                Context assembler, working set, telemetry
   auth/                   API key auth + session
-  tests/                  521 pytest tests
+  tests/                  598 pytest tests
+  schedules/              Cron-based mission scheduling
 frontend/               React dashboard (Vite + Tailwind)
 bridge/                 PowerShell bridge to Windows
 bin/                    Runtime scripts (WMCP, watchdog, health)
@@ -170,7 +173,7 @@ docs/
 
 ## Governance
 
-The project follows a sprint-based governance model with 129 frozen architectural decisions, formal quality gates, and GPT-assisted cross-review. Every sprint produces auditable evidence packets.
+The project follows a sprint-based governance model with 130 frozen architectural decisions, formal quality gates, and GPT-assisted cross-review. Every sprint produces auditable evidence packets.
 
 See [`docs/ai/GOVERNANCE.md`](docs/ai/GOVERNANCE.md) for sprint rules and [`docs/ai/DECISIONS.md`](docs/ai/DECISIONS.md) for the full decision log.
 
@@ -179,7 +182,7 @@ See [`docs/ai/GOVERNANCE.md`](docs/ai/GOVERNANCE.md) for sprint rules and [`docs
 | Doc | Purpose |
 |-----|---------|
 | [`docs/ai/STATE.md`](docs/ai/STATE.md) | Canonical system state |
-| [`docs/ai/DECISIONS.md`](docs/ai/DECISIONS.md) | 129 frozen decisions (D-001 → D-130) |
+| [`docs/ai/DECISIONS.md`](docs/ai/DECISIONS.md) | 130 frozen decisions (D-001 → D-130) |
 | [`docs/ai/GOVERNANCE.md`](docs/ai/GOVERNANCE.md) | Sprint governance rules |
 | [`docs/ai/BACKLOG.md`](docs/ai/BACKLOG.md) | Open backlog (33 items) |
 | [`docs/ai/NEXT.md`](docs/ai/NEXT.md) | Roadmap + carry-forward |

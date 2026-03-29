@@ -76,7 +76,7 @@ Close the last P1 security item (B-011 transport encryption) and fix the chatbri
 ### 37.2 Chatbridge selector repair
 
 - **Owner:** Claude Code
-- **Depends on:** None (independent)
+- **Depends on:** G1 passing (blocker-first rule)
 - **Produced files:**
   - `C:/Users/AKCA/chatbridge/lib/selectors.js` (external dependency, exact path)
 - **Acceptance criteria:**

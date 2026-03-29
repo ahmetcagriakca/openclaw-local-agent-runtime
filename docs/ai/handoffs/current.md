@@ -1,4 +1,4 @@
-# Session Handoff — 2026-03-29 (Session 12)
+# Session Handoff — 2026-03-29 (Session 13)
 
 **Platform:** Vezir Platform
 **Operator:** GPT (Custom GPT: Vezir) — AKCA delegated
@@ -7,61 +7,45 @@
 
 ## Session Summary
 
-Sprint 33 + Sprint 34 both closed in same session. Phase 7 active. Next: Sprint 35.
+3 sprints closed in one session: S33, S34, S35. Phase 7 active. Next: Sprint 36.
 
-- **Sprint 33:** Project V2 Contract Hardening (D-123/124/125) — CLOSED 2026-03-28
-- **Sprint 34:** Closure Tooling Hardening (D-127) — CLOSED 2026-03-29
-
----
+| Sprint | Scope | GPT Rounds | Commits |
+|--------|-------|-----------|---------|
+| S33 | Project V2 Contract Hardening (D-123/124/125) | 4 | 8 |
+| S34 | Closure Tooling Hardening (D-127) | 1 | 6 |
+| S35 | Security Hardening Baseline (D-128, B-003, B-004) | 1 | 4 |
 
 ## Current State
 
 - **Phase:** 7
-- **Last closed sprint:** 34
-- **Active sprint:** None — awaiting Sprint 35 kickoff
-- **Decisions:** 127 frozen (D-001 → D-127, D-126 skipped)
-- **Tests:** 465 backend + 75 frontend + 7 Playwright + 29 validator = 576 PASS
-- **Vulnerabilities:** 0
-- **Backlog:** ~39 open (GitHub Issues)
+- **Last closed sprint:** 35
+- **Active sprint:** None — awaiting Sprint 36 kickoff
+- **Decisions:** 128 frozen (D-001 → D-128, D-126 skipped)
+- **Tests:** 497 backend + 75 frontend + 7 Playwright + 39 e2e = 611+
+- **Backlog:** ~37 open (B-003, B-004, B-005, B-012 closed)
 
----
+## Key Deliverables This Session
 
-## Sprint 34 Closure Summary
+- **D-123/124/125:** Project V2 contract, legacy normalization, closure state sync
+- **D-127:** Sprint closure class taxonomy (governance vs product)
+- **D-128:** Risk classification contract (4-level, internal-only)
+- **tools/generate-evidence-packet.sh:** Class-aware evidence generation
+- **tools/sprint-closure-check.sh:** Governance mode (`--governance` + auto-detect)
+- **tools/project-validator.py:** Board validation (29 tests)
+- **agent/services/risk_engine.py:** Mission-level risk classification (17 tests)
+- **agent/services/filesystem_guard.py:** Filesystem confinement (15 tests)
+- **tests/README.md:** Test taxonomy documentation
+- **Playwright:** 7/7 PASS (envelope fix)
 
-**Verdict:** GPT G2 PASS (2026-03-29, 1st round)
-
-| Task | Commit |
-|------|--------|
-| 34.0 D-127 freeze | `a563d00` |
-| 34.1 Playwright repair (7/7) | `b5f7448` |
-| 34.2 Evidence generator | `ce95172` |
-| 34.3 Test taxonomy | `369fd1d` |
-| 34.4 Governance mode | `3c12853` |
-
-Key deliverables:
-- `tools/generate-evidence-packet.sh` — class-aware evidence generation
-- `tools/canonical-evidence-manifest-{product,governance}.txt` — D-127 manifests
-- `tests/README.md` — 5-suite taxonomy
-- Closure-check `--governance` flag with auto-detect from `sprint-class.txt`
-
----
-
-## Carry-Forward to S35+
+## Carry-Forward
 
 | # | Item | Source |
 |---|------|--------|
-| 1 | Telegram bridge "prompt gonderilemedi" fix | S33 |
-| 2 | Chatbridge cache reliability | S34 |
+| 1 | Telegram bridge fix | S33 |
+| 2 | Chatbridge selector drift fix | S34/S35 |
 | 3 | Tighter GPT kickoff proposals | S34 |
-
----
 
 ## GPT Memo Update
 
-GPT: Bu handoff'u oku ve memo'nu güncelle:
-1. Sprint 34 = CLOSED (2026-03-29)
-2. 127 frozen decisions (D-001 → D-127)
-3. D-127 = sprint closure class taxonomy (governance vs product)
-4. Playwright now 7/7 PASS
-5. Evidence generator + governance mode operational
-6. Next: Sprint 35 kickoff
+Sprint 35 = CLOSED (2026-03-29). 128 decisions. 611+ tests.
+D-128 = risk classification. B-003 + B-004 closed.

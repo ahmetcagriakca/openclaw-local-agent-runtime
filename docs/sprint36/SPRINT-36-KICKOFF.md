@@ -10,6 +10,21 @@
 
 Continue P1 security hardening: encrypt secrets at rest and add audit log tamper resistance. Decision-first approach. No new API endpoints.
 
+## Scope
+
+**In scope:**
+- D-129 freeze (secret storage + audit integrity contract)
+- Encrypted secret storage implementation + tests
+- Audit hash-chain append/verify CLI + tests
+- Gates, retrospective, closure packet
+
+**Out of scope:**
+- Key rotation
+- API endpoint for audit verification
+- Plaintext backfill migration
+- Non-CLI audit verification surface
+- Transport encryption (B-011, deferred)
+
 ## Sequence
 
 36.0 -> 36.1 -> G1 -> 36.2 -> G2 -> RETRO -> CLOSURE
@@ -110,7 +125,11 @@ Continue P1 security hardening: encrypt secrets at rest and add audit log tamper
 
 ### CLOSURE
 
-Per sprint-end protocol: handoff update + state sync + GPT memo update.
+- **Owner:** Claude Code
+- **Produced:** updated `docs/ai/handoffs/current.md`, updated `docs/ai/STATE.md`
+- **Verification:** `grep "Sprint 36" docs/ai/STATE.md` shows Closed
+- **Evidence:** commit on main with state/handoff sync
+- Actions: handoff update + state sync + GPT memo update via chatbridge
 
 ## Dependencies
 
@@ -168,11 +187,22 @@ Missing raw output must be saved as NO EVIDENCE, not omitted.
 
 ## Implementation Notes
 
-(updated during sprint)
+- **36.0 planned:** Freeze D-129; no code before decision commit on main.
+- **36.1 planned:** Implement `agent/services/secret_store.py`, route all reads/writes through owner, add failure-path tests for invalid/missing key and encrypted-exists-but-undecryptable.
+- **36.2 planned:** Implement hash-chain append/verify in `agent/persistence/audit_integrity.py` + CLI `tools/verify-audit-chain.py`, add exit-code tests.
 
 ## File Manifest
 
-(updated during sprint)
+| Path | Action | Task | Reason |
+|------|--------|------|--------|
+| `decisions/D-129-secret-audit-contract.md` | create | 36.0 | Decision freeze |
+| `agent/services/secret_store.py` | create | 36.1 | Encrypted secret storage |
+| `agent/tests/test_secret_store.py` | create | 36.1 | Secret store tests |
+| `agent/persistence/audit_integrity.py` | create | 36.2 | Hash chain append/verify |
+| `tools/verify-audit-chain.py` | create | 36.2 | CLI verification |
+| `agent/tests/test_audit_integrity.py` | create | 36.2 | Audit integrity tests |
+| `docs/ai/reviews/S36-REVIEW.md` | create | G2 | Final review |
+| `docs/sprint36/SPRINT-36-RETRO.md` | create | RETRO | Retrospective |
 
 ## State
 

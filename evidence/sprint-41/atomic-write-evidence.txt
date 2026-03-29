@@ -1,0 +1,1 @@
+Atomic write compliance: 8 sites fixed in 4 files. grep open('w') agent/ = 0 matches in production code. Guard test: test_atomic_write_compliance.py PASSED.

@@ -1,7 +1,7 @@
 # Backlog -- Vezir Platform
 
 **Auto-generated from GitHub issues.** Do not edit directly.
-**Generated:** 2026-03-29 07:22 UTC
+**Generated:** 2026-03-29 07:33 UTC
 **Source:** `python tools/generate-backlog.py`
 
 ---
@@ -24,8 +24,8 @@
 | #149 | [B-003] Task risk classification | Done |
 | #150 | [B-004] Filesystem confinement | Done |
 | #154 | [B-005] HTTP rate limiting | Done |
-| #151 | [B-006] Encrypted secret storage | Open |
-| #155 | [B-008] Audit log tamper resistance | Open |
+| #151 | [B-006] Encrypted secret storage | Done |
+| #155 | [B-008] Audit log tamper resistance | Done |
 | #152 | [B-011] Transport encryption | Open |
 | #153 | [B-012] Full request idempotency | Done |
 
@@ -98,4 +98,4 @@
 
 ---
 
-**Total:** 39 items (35 open)
+**Total:** 39 items (33 open)

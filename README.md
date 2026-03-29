@@ -1,8 +1,9 @@
 # Vezir
 
 [![CI](https://github.com/ahmetcagriakca/vezir/actions/workflows/ci.yml/badge.svg)](https://github.com/ahmetcagriakca/vezir/actions/workflows/ci.yml)
-[![CodeQL](https://github.com/ahmetcagriakca/vezir/actions/workflows/codeql.yml/badge.svg)](https://github.com/ahmetcagriakca/vezir/actions/workflows/codeql.yml)
+[![Playwright](https://github.com/ahmetcagriakca/vezir/actions/workflows/playwright.yml/badge.svg)](https://github.com/ahmetcagriakca/vezir/actions/workflows/playwright.yml)
 [![Tests](https://img.shields.io/badge/tests-682%20backend%20%C2%B7%20168%20frontend-brightgreen)]()
+[![Coverage](https://img.shields.io/badge/coverage-74%25%20backend%20%C2%B7%2031%25%20frontend-yellow)]()
 [![Decisions](https://img.shields.io/badge/decisions-129%20frozen-blueviolet)]()
 [![Phase](https://img.shields.io/badge/phase-7-blue)]()
 

@@ -132,7 +132,16 @@ async def lifespan(app: FastAPI):
     import asyncio
     heartbeat_task = asyncio.create_task(_heartbeat_loop())
 
-    # Step 6: FileWatcher + SSE Manager (Sprint 10)
+    # Step 6: Mission Scheduler (D-120 / B-101)
+    from schedules.store import ScheduleStore
+    from schedules.scheduler import MissionScheduler
+    schedule_store = ScheduleStore()
+    scheduler = MissionScheduler(schedule_store, MISSIONS_DIR)
+    await scheduler.start()
+    app.state.scheduler = scheduler
+    logger.info("MCC startup: scheduler ready")
+
+    # Step 7: FileWatcher + SSE Manager (Sprint 10)
     event_queue: asyncio.Queue = asyncio.Queue(maxsize=200)
     file_watcher = FileWatcher(
         missions_dir=MISSIONS_DIR,
@@ -153,6 +162,7 @@ async def lifespan(app: FastAPI):
     yield
 
     # Shutdown
+    await scheduler.stop()
     await file_watcher.stop()
     await sse_manager.shutdown()
     heartbeat_task.cancel()
@@ -249,6 +259,7 @@ from api.sse_api import router as sse_router
 from api.telemetry_api import router as telemetry_router
 from api.telemetry_query_api import router as telemetry_query_router
 from api.templates_api import router as templates_router
+from api.schedules_api import router as schedules_router
 
 app.include_router(mission_router, prefix="/api/v1")
 app.include_router(approval_router, prefix="/api/v1")
@@ -265,6 +276,7 @@ app.include_router(dashboard_router, prefix="/api/v1")
 app.include_router(telemetry_query_router, prefix="/api/v1")
 app.include_router(alerts_router, prefix="/api/v1")
 app.include_router(templates_router, prefix="/api/v1")
+app.include_router(schedules_router, prefix="/api/v1")
 
 
 # ── TLS Configuration (D-130) ───────────────────────────────────

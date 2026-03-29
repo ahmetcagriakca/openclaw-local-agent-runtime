@@ -6,7 +6,7 @@ import logging
 from datetime import datetime, timezone
 from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel
 
 from auth.middleware import require_operator
@@ -60,6 +60,20 @@ async def list_templates():
     return {"meta": _meta(), "data": store.list()}
 
 
+@router.get("/presets")
+async def list_presets():
+    """List built-in mission presets for quick-run.
+
+    B-103: Presets are published templates marked for quick access.
+    Returns templates with status=published, sorted by name.
+    """
+    store = _get_store()
+    all_templates = store.list()
+    presets = [t for t in all_templates if t.get("status") == "published"]
+    presets.sort(key=lambda t: t.get("name", ""))
+    return {"meta": _meta(), "presets": presets, "total": len(presets)}
+
+
 @router.get("/{template_id}")
 async def get_template(template_id: str):
     """Get template by ID."""
@@ -99,8 +113,13 @@ async def delete_template(template_id: str, _op=Depends(require_operator)):
 
 
 @router.post("/{template_id}/run", status_code=201)
-async def run_template(template_id: str, body: RunTemplateRequest, _op=Depends(require_operator)):
-    """Create and run a mission from template (operator only)."""
+async def run_template(template_id: str, body: RunTemplateRequest, request: Request,
+                       _op=Depends(require_operator)):
+    """Create and run a mission from template (operator only).
+
+    B-103: Quick-run — renders goal from template parameters and
+    spawns a real mission via the mission create pipeline.
+    """
     store = _get_store()
     tmpl = store.get(template_id)
     if not tmpl:
@@ -115,13 +134,58 @@ async def run_template(template_id: str, body: RunTemplateRequest, _op=Depends(r
 
     goal = tmpl.render_goal(body.parameters)
 
+    # B-103: Actually create and execute the mission
+    from api.mission_create_api import _get_dirs, _generate_mission_id, _run_mission_background
+    from utils.atomic_write import atomic_write_json
+    import threading
+
+    missions_dir = _get_dirs()
+    mission_id = _generate_mission_id()
+    now = datetime.now(timezone.utc).isoformat()
+
+    mission_data = {
+        "missionId": mission_id,
+        "status": "pending",
+        "goal": goal,
+        "complexity": tmpl.mission_config.specialist,
+        "stages": [],
+        "startedAt": now,
+        "createdFrom": f"template:{template_id}",
+    }
+
+    mission_file = missions_dir / f"{mission_id}.json"
+    atomic_write_json(mission_file, mission_data)
+    logger.info("Quick-run mission created: %s template=%s", mission_id, template_id)
+
+    # Emit SSE
+    try:
+        sse_mgr = getattr(request.app.state, "sse_manager", None)
+        if sse_mgr:
+            await sse_mgr.broadcast("mission_list_changed", {
+                "missionId": mission_id,
+                "action": "created",
+                "source": f"template:{template_id}",
+            })
+    except Exception:
+        pass
+
+    # Start execution
+    thread = threading.Thread(
+        target=_run_mission_background,
+        args=(mission_id, goal, missions_dir),
+        daemon=True,
+        name=f"tmpl-mission-{mission_id}",
+    )
+    thread.start()
+
     return {
         "meta": _meta(),
         "data": {
+            "missionId": mission_id,
             "template_id": template_id,
             "goal": goal,
             "specialist": tmpl.mission_config.specialist,
             "provider": tmpl.mission_config.provider,
-            "status": "created",
+            "status": "pending",
         },
     }

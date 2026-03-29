@@ -1,7 +1,7 @@
 # Current State
 
 **Last updated:** 2026-03-29
-**Active phase:** Phase 7 — Sprint 36 closed, Sprint 37 closed, Sprint 38 pending
+**Active phase:** Phase 7 — Sprint 37 closed, Sprint 38 implementation done (G2 pending)
 **Doc model:** This file is canonical for system state. Session context lives in `docs/ai/handoffs/current.md`.
 **Note:** All sprints through 36 closed. Phase 7 active. 131 frozen decisions (D-001 → D-130, D-126 skipped).
 **Persistence:** State is file-persisted (state.json, mission.json). Mission history via persistence layer (Sprint 16).
@@ -44,7 +44,9 @@
 | Quality Gates | Operational (3 gates) | `agent/mission/quality_gates.py` |
 | Mission State Machine | Operational (10 states) | `agent/mission/mission_state.py` |
 | Complexity Router | Operational (4 tiers) | `agent/mission/complexity_router.py` |
-| Mission Control API | Operational (~35 endpoints) | `agent/api/server.py` on :8003 |
+| Mission Scheduler | Operational (cron-based, D-120/B-101) | `agent/schedules/` |
+| Mission Presets | Operational (3 built-in, B-103) | `config/templates/preset_*.json` |
+| Mission Control API | Operational (~40 endpoints) | `agent/api/server.py` on :8003 |
 | SSE Manager | Operational (broadcast, heartbeat 30s) | `agent/api/sse_manager.py` |
 | Session Model | Foundation (operator identity, no auth flow) | `agent/auth/session.py` |
 | CI/CD Pipeline | 7 GitHub Actions workflows | `.github/workflows/` |

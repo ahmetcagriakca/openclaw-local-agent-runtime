@@ -53,5 +53,5 @@
 ## Decision Debt
 
 - D-001→D-130: 130 frozen (D-126 skipped)
-- D-111→D-114: missing formal record files under `docs/decisions/`
+- ~~D-111→D-114: missing formal record files under `docs/decisions/`~~ ✅ Created S38 pre-kickoff
 - D-021→D-058 extraction (AKCA-assigned, non-blocking)

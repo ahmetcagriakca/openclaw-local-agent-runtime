@@ -39,12 +39,41 @@ PYTHON_EXE = sys.executable
 POLL_TIMEOUT = 30  # long-polling seconds
 AGENT_TIMEOUT = 300  # max agent execution seconds
 
+# Token resolution sources (tried in order)
+_TOKEN_SOURCES = [
+    # 1. Direct env var
+    lambda: os.environ.get("OC_TELEGRAM_BOT_TOKEN"),
+    # 2. .env file in agent directory
+    lambda: _read_env_file(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env"),
+                           "OC_TELEGRAM_BOT_TOKEN"),
+    # 3. .env file in project root
+    lambda: _read_env_file(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".env"),
+                           "OC_TELEGRAM_BOT_TOKEN"),
+    # 4. Legacy: TELEGRAM_BOT_TOKEN env var
+    lambda: os.environ.get("TELEGRAM_BOT_TOKEN"),
+    # 5. WSL fallback
+    lambda: _read_wsl_token(),
+]
 
-def _resolve_token():
-    """Try to get bot token from WSL if not in env."""
-    global BOT_TOKEN
-    if BOT_TOKEN:
-        return
+
+def _read_env_file(path: str, key: str):
+    """Read a key from a .env file."""
+    try:
+        path = os.path.abspath(path)
+        if not os.path.isfile(path):
+            return None
+        with open(path, encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if line.startswith(f"{key}="):
+                    return line.split("=", 1)[1].strip().strip('"').strip("'")
+    except Exception:
+        return None
+    return None
+
+
+def _read_wsl_token():
+    """Try to get bot token from WSL (legacy fallback)."""
     try:
         r = subprocess.run(
             ["wsl", "-d", "Ubuntu-E", "--", "bash", "-c",
@@ -52,13 +81,33 @@ def _resolve_token():
             capture_output=True, text=True, timeout=10
         )
         if r.returncode == 0 and "=" in r.stdout:
-            BOT_TOKEN = r.stdout.strip().split("=", 1)[1].strip()
+            return r.stdout.strip().split("=", 1)[1].strip()
     except Exception:
-        pass
+        return None
+    return None
+
+
+def _resolve_token():
+    """Resolve bot token from multiple sources."""
+    global BOT_TOKEN
+    if BOT_TOKEN:
+        return
+    for source in _TOKEN_SOURCES:
+        try:
+            token = source()
+            if token:
+                BOT_TOKEN = token
+                log.info("Bot token resolved from %s", source.__name__ if hasattr(source, '__name__') else 'source')
+                return
+        except Exception:
+            continue
+    log.error("Bot token could not be resolved from any source.")
 
 
 def tg_api(method: str, params: dict = None) -> dict:
     """Call Telegram Bot API."""
+    if not BOT_TOKEN:
+        raise RuntimeError("BOT_TOKEN not set — cannot call Telegram API")
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/{method}"
     if params:
         data = json.dumps(params).encode("utf-8")
@@ -66,12 +115,27 @@ def tg_api(method: str, params: dict = None) -> dict:
                                      headers={"Content-Type": "application/json"})
     else:
         req = urllib.request.Request(url)
-    with urllib.request.urlopen(req, timeout=POLL_TIMEOUT + 10) as resp:
-        return json.loads(resp.read())
+    try:
+        with urllib.request.urlopen(req, timeout=POLL_TIMEOUT + 10) as resp:
+            result = json.loads(resp.read())
+            if not result.get("ok"):
+                log.error("Telegram API error: %s %s", method, result.get("description", ""))
+            return result
+    except urllib.error.HTTPError as e:
+        body = e.read().decode("utf-8", errors="replace")[:200]
+        log.error("Telegram API HTTP %d for %s: %s", e.code, method, body)
+        raise
+    except urllib.error.URLError as e:
+        log.error("Telegram API network error for %s: %s", method, e.reason)
+        raise
 
 
-def send_message(chat_id: str, text: str):
-    """Send a text message to Telegram chat."""
+def send_message(chat_id, text: str) -> bool:
+    """Send a text message to Telegram chat. Returns True if all chunks sent."""
+    if not text:
+        return True
+    chat_id = str(chat_id)
+    success = True
     # Telegram limit: 4096 chars
     for i in range(0, len(text), 4000):
         chunk = text[i:i + 4000]
@@ -81,7 +145,8 @@ def send_message(chat_id: str, text: str):
                 "text": chunk,
                 "parse_mode": "Markdown",
             })
-        except Exception:
+        except Exception as md_err:
+            log.warning("Markdown send failed, retrying plain: %s", md_err)
             # Retry without markdown if parsing fails
             try:
                 tg_api("sendMessage", {
@@ -89,11 +154,14 @@ def send_message(chat_id: str, text: str):
                     "text": chunk,
                 })
             except Exception as e:
-                log.error("Failed to send message: %s", e)
+                log.error("Failed to send message chunk %d: %s", i // 4000, e)
+                success = False
+    return success
 
 
-def handle_health(chat_id: str):
+def handle_health(chat_id):
     """Return system health summary."""
+    chat_id = str(chat_id)
     try:
         url = "http://localhost:8003/api/v1/health"
         req = urllib.request.Request(url, headers={"Origin": "http://localhost:3000"})
@@ -108,8 +176,9 @@ def handle_health(chat_id: str):
         send_message(chat_id, f"Health check failed: {e}")
 
 
-def handle_status(chat_id: str):
+def handle_status(chat_id):
     """Return running missions."""
+    chat_id = str(chat_id)
     try:
         url = "http://localhost:8003/api/v1/missions"
         req = urllib.request.Request(url, headers={"Origin": "http://localhost:3000"})
@@ -129,10 +198,17 @@ def handle_status(chat_id: str):
         send_message(chat_id, f"Status check failed: {e}")
 
 
-def handle_agent_message(chat_id: str, text: str, mission_mode: bool = False):
+def handle_agent_message(chat_id, text: str, mission_mode: bool = False):
     """Run oc-agent-runner and return result."""
+    chat_id = str(chat_id)
     mode_label = "MISSION" if mission_mode else "AGENT"
     send_message(chat_id, f"⏳ {mode_label} calisiyor...")
+
+    # Verify agent script exists
+    if not os.path.isfile(AGENT_SCRIPT):
+        log.error("Agent script not found: %s", AGENT_SCRIPT)
+        send_message(chat_id, f"❌ Agent script bulunamadi: {AGENT_SCRIPT}")
+        return
 
     cmd = [
         PYTHON_EXE, AGENT_SCRIPT,
@@ -147,12 +223,18 @@ def handle_agent_message(chat_id: str, text: str, mission_mode: bool = False):
 
     def _run():
         try:
+            log.info("Running %s: %s", mode_label, " ".join(cmd[:4]) + "...")
             r = subprocess.run(
                 cmd, capture_output=True, text=True,
                 timeout=AGENT_TIMEOUT,
                 cwd=os.path.dirname(AGENT_SCRIPT),
                 env={**os.environ, "PYTHONIOENCODING": "utf-8"},
             )
+            if r.returncode != 0:
+                log.warning("%s exited with code %d", mode_label, r.returncode)
+                if r.stderr:
+                    log.warning("%s stderr: %s", mode_label, r.stderr[:500])
+
             output = r.stdout.strip()
             if output:
                 try:
@@ -171,15 +253,20 @@ def handle_agent_message(chat_id: str, text: str, mission_mode: bool = False):
                 except json.JSONDecodeError:
                     reply = output[:3000]
             else:
-                reply = f"Agent cikti vermedi.\nstderr: {r.stderr[:500]}" if r.stderr else "Bos yanit."
-            send_message(chat_id, reply)
+                stderr_info = r.stderr[:500] if r.stderr else "no output"
+                reply = f"Agent cikti vermedi (exit={r.returncode}).\n{stderr_info}"
+                log.error("Agent produced no output. exit=%d stderr=%s", r.returncode, stderr_info[:200])
+            if not send_message(chat_id, reply):
+                log.error("Prompt gonderilemedi — message delivery failed for chat %s", chat_id)
         except subprocess.TimeoutExpired:
+            log.error("%s timeout after %ds", mode_label, AGENT_TIMEOUT)
             send_message(chat_id, f"⏰ {mode_label} {AGENT_TIMEOUT}s timeout.")
         except Exception as e:
+            log.error("%s error: %s: %s", mode_label, type(e).__name__, e)
             send_message(chat_id, f"❌ Hata: {type(e).__name__}: {e}")
 
     # Run in thread to not block polling
-    t = threading.Thread(target=_run, daemon=True)
+    t = threading.Thread(target=_run, daemon=True, name=f"agent-{int(time.time())}")
     t.start()
 
 

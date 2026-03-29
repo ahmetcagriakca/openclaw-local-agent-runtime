@@ -5,6 +5,12 @@ import time
 from datetime import datetime, timezone
 
 from mission.mission_state import MissionState, MissionStatus
+from mission.resilience import (
+    CircuitBreaker,
+    is_poison_pill,
+    sleep_with_backoff,
+)
+from persistence.dlq_store import DLQStore
 
 MISSIONS_DIR = os.path.join(
     os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
@@ -21,6 +27,11 @@ class MissionController:
         """
         self.planner_agent_id = planner_agent_id
         os.makedirs(MISSIONS_DIR, exist_ok=True)
+
+        # B-106: Resilience — DLQ + circuit breaker
+        self._dlq_store = DLQStore()
+        self._circuit_breaker = CircuitBreaker(
+            failure_threshold=3, reset_timeout_s=300.0)
 
         # 7.9: Auto-generate capability manifest on startup
         self._update_capability_manifest()
@@ -123,6 +134,8 @@ class MissionController:
                                         f"planning failed: {e}")
             self._save_mission(mission)
             self._persist_mission_state(mission_state)
+            # B-106: Enqueue to DLQ for later retry
+            self._enqueue_to_dlq(mission)
             self._emit_mission_summary(mission_id, mission, assembler,
                                        expansion_broker, "failed",
                                        mission_state=mission_state)
@@ -247,6 +260,8 @@ class MissionController:
                 stage["finished_at"] = datetime.now(timezone.utc).isoformat()
                 stage["result"] = result.get("response", "")
                 stage["artifacts"] = result.get("artifacts", [])
+                # B-106: Reset circuit breaker on success
+                self._circuit_breaker.record_success(specialist)
                 # Save immediately so UI sees progress
                 self._save_mission(mission)
                 self._persist_mission_state(mission_state)
@@ -334,6 +349,8 @@ class MissionController:
                     self._save_mission(mission)
                     self._persist_mission_state(mission_state)
                     self._save_token_report(mission)
+                    # B-106: Enqueue to DLQ for later retry
+                    self._enqueue_to_dlq(mission)
                     self._emit_mission_summary(
                         mission_id, mission, assembler,
                         expansion_broker, "failed",
@@ -1492,6 +1509,9 @@ Respond ONLY with a JSON object, no markdown:
                               expansion_broker):
         """D-056: First reflex is recovery_triage, NOT restart.
 
+        B-106: Enhanced with exponential backoff, circuit breaker,
+        and poison pill detection.
+
         Returns: {"action": "retry_stage"|"abort"|"escalate"|"retry_from",
                   "reason": ..., ...}
         """
@@ -1499,6 +1519,33 @@ Respond ONLY with a JSON object, no markdown:
 
         stage_id = failed_stage.get("id",
                                     failed_stage.get("stage_id", "unknown"))
+        specialist = failed_stage.get("specialist", "unknown")
+
+        # B-106: Circuit breaker check — fail-fast if circuit is open
+        if self._circuit_breaker.is_open(specialist):
+            emit_policy_event("recovery_triage_decision", {
+                "mission_id": mission_state.mission_id,
+                "stage_id": stage_id,
+                "action": "abort",
+                "reason": f"Circuit open for {specialist}"
+            })
+            return {"action": "abort",
+                    "reason": f"circuit_open:{specialist}"}
+
+        # B-106: Poison pill detection — same error repeating
+        if is_poison_pill(specialist, error_context, self._circuit_breaker):
+            self._circuit_breaker.record_failure(specialist, error_context)
+            emit_policy_event("recovery_triage_decision", {
+                "mission_id": mission_state.mission_id,
+                "stage_id": stage_id,
+                "action": "abort",
+                "reason": "Poison pill — identical error repeating"
+            })
+            return {"action": "abort",
+                    "reason": "poison_pill_detected"}
+
+        # Record failure in circuit breaker
+        self._circuit_breaker.record_failure(specialist, error_context)
 
         # Check retry budget
         attempt = mission_state.increment_stage_attempt(stage_id)
@@ -1511,6 +1558,9 @@ Respond ONLY with a JSON object, no markdown:
             })
             return {"action": "abort",
                     "reason": "max_attempts_exceeded"}
+
+        # B-106: Exponential backoff before retry
+        sleep_with_backoff(attempt)
 
         # Transition to FAILED for recovery
         if mission_state.status != MissionStatus.FAILED:
@@ -1587,6 +1637,25 @@ Respond ONLY with a JSON object, no markdown:
             return {"action": "abort",
                     "reason": f"Recovery triage itself failed: "
                               f"{recovery_error}"}
+
+    def _enqueue_to_dlq(self, mission: dict) -> str | None:
+        """B-106: Enqueue failed mission to DLQ for later retry."""
+        try:
+            failed_stage_id = ""
+            for s in mission.get("stages", []):
+                if s.get("status") == "failed":
+                    failed_stage_id = s.get("id", "")
+                    break
+            return self._dlq_store.enqueue(
+                mission,
+                failed_stage_id=failed_stage_id,
+                error=mission.get("error", ""),
+            )
+        except Exception as e:
+            import logging
+            logging.getLogger("mcc.mission.controller").error(
+                "DLQ enqueue failed: %s", e)
+            return None
 
     def _find_stage_index(self, stages, target_stage_id):
         """Find index of stage by ID."""

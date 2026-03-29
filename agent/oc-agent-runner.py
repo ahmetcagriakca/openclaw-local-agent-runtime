@@ -29,6 +29,10 @@ def main():
     parser.add_argument("--max-turns", type=int, default=10, help="Max turns")
     parser.add_argument("--mission", action="store_true",
                         help="Run as multi-agent mission (breaks task into stages)")
+    parser.add_argument("--resume", metavar="MISSION_ID",
+                        help="Resume a failed/incomplete mission by ID")
+    parser.add_argument("--auto-resume", action="store_true",
+                        help="Scan for incomplete missions and resume them")
     args = parser.parse_args()
 
     # D-057: Startup metadata gate — validate tool catalog + registries
@@ -48,6 +52,23 @@ def main():
         sys.exit(1)
 
     session_id = args.session_id or f"sess-{int(time.time())}-{os.getpid()}"
+
+    # B-106: Resume incomplete mission by ID
+    if args.resume:
+        from mission.auto_resume import resume_mission
+        result = resume_mission(
+            args.resume, agent_id=args.agent,
+            user_id=args.user_id, session_id=session_id)
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+        sys.exit(0 if result.get("status") == "completed" else 1)
+
+    # B-106: Scan and resume all incomplete missions
+    if args.auto_resume:
+        from mission.auto_resume import scan_and_resume
+        results = scan_and_resume(
+            agent_id=args.agent, user_id=args.user_id)
+        print(json.dumps(results, ensure_ascii=False, indent=2))
+        sys.exit(0)
 
     if args.mission:
         from mission.controller import MissionController

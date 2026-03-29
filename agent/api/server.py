@@ -250,6 +250,7 @@ from api.alerts_api import router as alerts_router
 from api.approval_api import router as approval_router
 from api.approval_mutation_api import router as approval_mutation_router
 from api.dashboard_api import router as dashboard_router
+from api.dlq_api import router as dlq_router
 from api.health_api import router as health_router
 from api.logs_api import router as logs_router
 from api.mission_api import router as mission_router
@@ -279,6 +280,7 @@ app.include_router(telemetry_query_router, prefix="/api/v1")
 app.include_router(alerts_router, prefix="/api/v1")
 app.include_router(templates_router, prefix="/api/v1")
 app.include_router(schedules_router, prefix="/api/v1")
+app.include_router(dlq_router, prefix="/api/v1")
 
 
 # ── TLS Configuration (D-130) ───────────────────────────────────

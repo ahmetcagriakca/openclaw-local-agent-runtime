@@ -7,46 +7,38 @@
 
 ## Session Summary
 
-2 sprints closed this session: S38 (Telegram fix + scheduled missions + presets) and S39 (approval inbox + live E2E + Playwright CI + benchmark gate).
+3 sprints closed this session: S38 (Telegram + scheduling + presets), S39 (approval inbox + live E2E + Playwright CI + benchmark), S40 (multi-user isolation + auth boundaries).
 
 ## Current State
 
 - **Phase:** 7
-- **Last closed sprint:** 39
-- **Active sprint:** None — awaiting Sprint 40 kickoff
+- **Last closed sprint:** 40 (G2 pending)
 - **Decisions:** 130 frozen (D-001 → D-130, D-126 skipped)
-- **Tests:** 598 backend + 75 frontend + 13 Playwright = 712+ total
-- **Coverage:** 75%
-- **Backlog:** ~30 open
+- **Tests:** 616 backend + 82 frontend + 13 Playwright = 730+ total
+- **Coverage:** ~75%
+- **Backlog:** ~27 open
 - **Board:** VALID
 
-## Sprint 38 — Closed (G2 PASS 2nd round)
+## Sprints Closed This Session
 
-| Task | Title |
-|------|-------|
-| 38.1 | Telegram bridge fix (21 tests) |
-| 38.2 | B-101 Scheduled mission execution (34 tests) |
-| 38.3 | B-103 Mission presets / quick-run (14 tests) |
+| Sprint | Scope | G2 |
+|--------|-------|-----|
+| S38 | Telegram fix + B-101 Scheduled missions + B-103 Presets | PASS (2nd) |
+| S39 | B-102 Approval inbox + Live E2E + Playwright CI + Benchmark D-109 | PASS (2nd) |
+| S40 | Backend isolation + Auth boundary + Frontend isolation tests | Pending |
 
-## Sprint 39 — Closed (G2 PASS 2nd round)
+## Key Deliverables
 
-| Task | Title |
-|------|-------|
-| 39.1 | B-102 Full approval inbox UI |
-| 39.2 | Live mission E2E (6 Playwright tests) |
-| 39.3 | Playwright live API test in CI (GitHub Actions) |
-| 39.4 | Benchmark regression gate D-109 |
-
-## Carry-Forward
-
-| # | Item | Source |
-|---|------|--------|
-| 1 | PROJECT_TOKEN rotation | AKCA-owned |
-| 2 | Frontend Vitest component tests | Ongoing quality |
-| 3 | CONTEXT_ISOLATION feature flag | D-102 |
-| 4 | Alert namespace scoping | S16 |
-| 5 | Multi-user auth | D-104/D-108 |
+- **69 new tests** (S38) + **6 Playwright** (S39) + **27 isolation tests** (S40) = **102 new tests**
+- Telegram bridge: multi-source token resolution, error handling
+- Scheduled missions: cron parser, store, scheduler, REST API
+- Mission presets: 3 built-in templates, quick-run API
+- Approval inbox: detail panel, enriched API, pending badge
+- Playwright CI: GitHub Actions workflow
+- Benchmark gate: compare_benchmark.py with 50% threshold
+- Multi-user isolation: ApiKey user_id, filter_by_owner, alert namespace
+- README Mermaid diagram fixed
 
 ## GPT Memo
 
-Session 17: S38 + S39 closed 2026-03-29. 130 decisions. 712+ tests. Carry-forward: PROJECT_TOKEN, Vitest components, auth, alert scoping.
+Session 17: S38+S39+S40. 130 decisions. 730+ tests. 102 new tests added. Multi-user isolation foundation laid.

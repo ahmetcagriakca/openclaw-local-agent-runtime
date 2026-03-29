@@ -70,6 +70,7 @@ class MissionController:
             "error": None,
             "finishedAt": None,
             "retryFromMissionId": retry_from_mission.get("missionId") if retry_from_mission else None,
+            "risk_level": None,  # D-128: set after planning, before execution
         }
         self._save_mission(mission)
 
@@ -111,6 +112,8 @@ class MissionController:
                 mission["status"] = "executing"
                 mission_state.transition_to(MissionStatus.READY,
                                             f"planned {len(plan['stages'])} stages")
+            # D-128: Classify mission risk from planned tool usage (once, at creation)
+            mission["risk_level"] = self._classify_mission_risk(mission)
             self._save_mission(mission)
         except Exception as e:
             mission["status"] = "failed"
@@ -779,6 +782,27 @@ Respond ONLY with a JSON object, no markdown:
             result += f"\n\n[Context truncated: {total_tokens} tokens exceeded 40K budget]"
 
         return result
+
+    def _classify_mission_risk(self, mission: dict) -> str:
+        """D-128: Classify mission risk from planned stages' tool usage.
+
+        Computed once at creation, never recomputed.
+        Returns highest risk level among all tools, unknown defaults to high.
+        """
+        from services.risk_engine import RiskEngine
+        engine = RiskEngine()
+        tool_names = []
+        for stage in mission.get("stages", []):
+            tool = stage.get("tool")
+            if tool:
+                tool_names.append(tool)
+            # Also check tools list if present
+            for t in stage.get("tools", []):
+                if isinstance(t, str):
+                    tool_names.append(t)
+                elif isinstance(t, dict) and "name" in t:
+                    tool_names.append(t["name"])
+        return engine.classify_mission(tool_names)
 
     def _persist_mission_state(self, mission_state: MissionState):
         """5C-1: Persist mission state machine to disk.

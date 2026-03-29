@@ -1,0 +1,44 @@
+=== CLOSURE CHECK (Python equivalent) ===
+Date: Sun Mar 29 19:53:01 TST 2026
+
+--- Backend Tests ---
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+617 passed, 2 skipped, 2 warnings in 38.33s
+
+--- Frontend Tests ---
+ Test Files  14 passed (14)
+      Tests  82 passed (82)
+
+--- TypeScript ---
+TSC: 0 errors
+
+--- Lint ---
+Ruff: 0 errors
+
+--- Doc Drift ---
+============================================================
+Documentation Drift Check
+============================================================
+
+[1] DECISIONS.md heading completeness
+  PASS: 129 headings found, D-001..D-130 complete (known skips: D-126)
+
+[2] Decision count: DECISIONS.md vs STATE.md
+  PASS: STATE.md claims 129 frozen decisions, DECISIONS.md has 129 headings
+  PASS: STATE.md range claim D-001..D-130 matches actual max D-130
+
+[3] Test count consistency
+  PASS: Backend count: STATE.md (618) == CLAUDE.md (618)
+  PASS: Frontend count: STATE.md (82) == CLAUDE.md (82)
+  (--skip-tests: skipping actual test collection)
+
+============================================================
+RESULT: ALL CHECKS PASSED
+============================================================
+
+--- Atomic Write Grep ---
+Non-atomic writes in production: 0
+
+Failures: 0
+ELIGIBLE FOR CLOSURE REVIEW

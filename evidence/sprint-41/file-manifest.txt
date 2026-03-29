@@ -1,12 +1,15 @@
-total 92
-drwxr-xr-x 1 AKCA 197609     0 Mar 29 19:50 .
+total 102
+drwxr-xr-x 1 AKCA 197609     0 Mar 29 19:54 .
 drwxr-xr-x 1 AKCA 197609     0 Mar 29 19:38 ..
 -rw-r--r-- 1 AKCA 197609   157 Mar 29 19:50 atomic-write-evidence.txt
 -rw-r--r-- 1 AKCA 197609   164 Mar 29 19:40 build-output.txt
+-rw-r--r-- 1 AKCA 197609  1291 Mar 29 19:53 closure-check-output.txt
 -rw-r--r-- 1 AKCA 197609   117 Mar 29 19:50 decision-index-output.txt
 -rw-r--r-- 1 AKCA 197609   806 Mar 29 19:40 drift-check-output.txt
--rw-r--r-- 1 AKCA 197609     0 Mar 29 19:50 file-manifest.txt
+-rw-r--r-- 1 AKCA 197609    51 Mar 29 19:54 e2e-output.txt
+-rw-r--r-- 1 AKCA 197609     0 Mar 29 19:54 file-manifest.txt
 -rw-r--r-- 1 AKCA 197609     0 Mar 29 19:40 grep-evidence.txt
+-rw-r--r-- 1 AKCA 197609    50 Mar 29 19:54 lighthouse.txt
 -rw-r--r-- 1 AKCA 197609     0 Mar 29 19:40 lint-output.txt
 -rw-r--r-- 1 AKCA 197609   176 Mar 29 19:40 live-checks.txt
 -rw-r--r-- 1 AKCA 197609   132 Mar 29 19:40 mutation-drill.txt

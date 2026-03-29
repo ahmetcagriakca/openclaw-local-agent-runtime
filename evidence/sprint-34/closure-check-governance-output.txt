@@ -1,0 +1,659 @@
+[2026-03-29T08:06:26+03:00] === Sprint 34 Closure Check ===
+[2026-03-29T08:06:26+03:00] Class: governance (override)
+[2026-03-29T08:06:27+03:00] Date: 2026-03-29T08:06:26+03:00
+[2026-03-29T08:06:27+03:00] 
+[2026-03-29T08:06:27+03:00] --- Backend Tests ---
+============================= test session starts =============================
+platform win32 -- Python 3.14.3, pytest-7.4.4, pluggy-1.6.0 -- C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\AKCA\vezir\agent
+configfile: pyproject.toml
+plugins: anyio-4.12.1, cov-4.1.0, mock-3.12.0, timeout-2.4.0
+timeout: 30.0s
+timeout method: thread
+timeout func_only: False
+collecting ... collected 465 items
+
+tests/test_api.py::TestSchemas::test_01_data_quality_6_states PASSED     [  0%]
+tests/test_api.py::TestSchemas::test_02_mission_summary_round_trip PASSED [  0%]
+tests/test_api.py::TestSchemas::test_03_stage_detail_with_gate PASSED    [  0%]
+tests/test_api.py::TestSchemas::test_04_capability_tri_state PASSED      [  0%]
+tests/test_api.py::TestSchemas::test_05_component_health_has_name PASSED [  1%]
+tests/test_api.py::TestSchemas::test_06_telemetry_entry_has_mission_id PASSED [  1%]
+tests/test_api.py::TestSchemas::test_07_response_meta PASSED             [  1%]
+tests/test_api.py::TestSchemas::test_08_wrapper_response PASSED          [  1%]
+tests/test_api.py::TestSchemas::test_09_mission_state_enum PASSED        [  1%]
+tests/test_api.py::TestAtomicWrite::test_10_json_write_read PASSED       [  2%]
+tests/test_api.py::TestAtomicWrite::test_11_no_temp_on_success PASSED    [  2%]
+tests/test_api.py::TestAtomicWrite::test_12_creates_parent_dirs PASSED   [  2%]
+tests/test_api.py::TestCache::test_13_miss_then_hit PASSED               [  2%]
+tests/test_api.py::TestCache::test_14_error_on_missing PASSED            [  3%]
+tests/test_api.py::TestCache::test_15_error_on_corrupt PASSED            [  3%]
+tests/test_api.py::TestCache::test_16_invalidate PASSED                  [  3%]
+tests/test_api.py::TestCircuitBreaker::test_17_closed_on_success PASSED  [  3%]
+tests/test_api.py::TestCircuitBreaker::test_18_opens_after_threshold PASSED [  3%]
+tests/test_api.py::TestCircuitBreaker::test_19_source_isolation PASSED   [  4%]
+tests/test_api.py::TestCircuitBreaker::test_20_half_open_recovery PASSED [  4%]
+tests/test_api.py::TestNormalizer::test_21_list_missions PASSED          [  4%]
+tests/test_api.py::TestNormalizer::test_22_get_mission_not_found PASSED  [  4%]
+tests/test_api.py::TestNormalizer::test_23_precedence_state_over_mission PASSED [  4%]
+tests/test_api.py::TestNormalizer::test_24_freshness_max_age PASSED      [  5%]
+tests/test_api.py::TestNormalizer::test_25_missing_source_partial PASSED [  5%]
+tests/test_api.py::TestNormalizer::test_26_deny_forensics_from_summary PASSED [  5%]
+tests/test_api.py::TestNormalizer::test_27_corrupt_json_degraded PASSED  [  5%]
+tests/test_api.py::TestNormalizer::test_42_resolve_file_id_direct PASSED [  6%]
+tests/test_api.py::TestNormalizer::test_43_resolve_file_id_dashboard_placeholder PASSED [  6%]
+tests/test_api.py::TestNormalizer::test_44_resolve_file_id_nonexistent PASSED [  6%]
+tests/test_api.py::TestCapabilities::test_28_tri_state_available PASSED  [  6%]
+tests/test_api.py::TestCapabilities::test_29_missing_manifest_unknown PASSED [  6%]
+tests/test_api.py::TestCapabilities::test_30_corrupt_manifest_unknown PASSED [  7%]
+tests/test_api.py::TestAPIEndpoints::test_31_health_200_wrapper PASSED   [  7%]
+tests/test_api.py::TestAPIEndpoints::test_32_capabilities_200_wrapper PASSED [  7%]
+tests/test_api.py::TestAPIEndpoints::test_33_missions_list_200_wrapper PASSED [  7%]
+tests/test_api.py::TestAPIEndpoints::test_34_mission_detail_200_wrapper PASSED [  7%]
+tests/test_api.py::TestAPIEndpoints::test_35_mission_not_found_404 PASSED [  8%]
+tests/test_api.py::TestAPIEndpoints::test_36_stages_200_wrapper PASSED   [  8%]
+tests/test_api.py::TestAPIEndpoints::test_37_approvals_200_wrapper PASSED [  8%]
+tests/test_api.py::TestAPIEndpoints::test_38_telemetry_200_wrapper PASSED [  8%]
+tests/test_api.py::TestAPIEndpoints::test_39_host_header_attack_403 PASSED [  9%]
+tests/test_api.py::TestAPIEndpoints::test_40_meta_has_data_quality PASSED [  9%]
+tests/test_api.py::TestAPIEndpoints::test_41_meta_has_generated_at PASSED [  9%]
+tests/test_audit_trail.py::TestAuditTrailHandler::test_creates_log_file PASSED [  9%]
+tests/test_audit_trail.py::TestAuditTrailHandler::test_never_halts PASSED [  9%]
+tests/test_audit_trail.py::TestAuditTrailHandler::test_entries_have_chain_hash PASSED [ 10%]
+tests/test_audit_trail.py::TestAuditTrailHandler::test_chain_verification_passes PASSED [ 10%]
+tests/test_audit_trail.py::TestAuditTrailHandler::test_chain_detects_tampering PASSED [ 10%]
+tests/test_audit_trail.py::TestAuditTrailHandler::test_sanitizes_large_data PASSED [ 10%]
+tests/test_audit_trail.py::TestAuditTrailHandler::test_sequential_numbering PASSED [ 10%]
+tests/test_audit_trail.py::TestAuditTrailHandler::test_correlation_id_recorded PASSED [ 11%]
+tests/test_audit_trail.py::TestAuditTrailHandler::test_resumes_chain_on_restart PASSED [ 11%]
+tests/test_audit_trail.py::TestAuditTrailHandler::test_works_with_eventbus PASSED [ 11%]
+tests/test_auth_integration.py::TestAuthIntegration::test_01_get_endpoints_public PASSED [ 11%]
+tests/test_auth_integration.py::TestAuthIntegration::test_02_operator_can_create_mission PASSED [ 12%]
+tests/test_auth_integration.py::TestAuthIntegration::test_03_viewer_denied_mutation PASSED [ 12%]
+tests/test_auth_integration.py::TestAuthIntegration::test_04_invalid_key_denied PASSED [ 12%]
+tests/test_auth_integration.py::TestAuthIntegration::test_05_missing_auth_denied PASSED [ 12%]
+tests/test_auth_integration.py::TestAuthIntegration::test_06_get_still_works_without_auth PASSED [ 12%]
+tests/test_auth_integration.py::TestAuthDisabled::test_07_no_config_allows_mutations PASSED [ 13%]
+tests/test_bus_integration.py::TestBusWiredEvents::test_stage_entering_emitted PASSED [ 13%]
+tests/test_bus_integration.py::TestBusWiredEvents::test_tool_requested_permission_deny PASSED [ 13%]
+tests/test_bus_integration.py::TestBusWiredEvents::test_tool_executed_tracked PASSED [ 13%]
+tests/test_bus_integration.py::TestBusWiredEvents::test_stage_completed_in_report PASSED [ 13%]
+tests/test_bus_integration.py::TestBusWiredEvents::test_audit_trail_integrity PASSED [ 14%]
+tests/test_bus_integration.py::TestBusWiredEvents::test_full_pipeline_flow PASSED [ 14%]
+tests/test_console_timeline.py::TestConsoleTimeline::test_prints_events PASSED [ 14%]
+tests/test_console_timeline.py::TestConsoleTimeline::test_never_halts PASSED [ 14%]
+tests/test_console_timeline.py::TestConsoleTimeline::test_tool_detail PASSED [ 15%]
+tests/test_console_timeline.py::TestConsoleTimeline::test_truncation_detail PASSED [ 15%]
+tests/test_console_timeline.py::TestConsoleTimeline::test_elapsed_time PASSED [ 15%]
+tests/test_console_timeline.py::TestConsoleTimeline::test_works_with_bus PASSED [ 15%]
+tests/test_context_tiers.py::TestFormatArtifactContextWithDistance::test_basic_formatting PASSED [ 15%]
+tests/test_context_tiers.py::TestFormatArtifactContextWithDistance::test_distance_tier_a_gets_5000 PASSED [ 16%]
+tests/test_context_tiers.py::TestFormatArtifactContextWithDistance::test_distance_tier_c_gets_500 PASSED [ 16%]
+tests/test_context_tiers.py::TestFormatArtifactContextWithDistance::test_empty_context_package PASSED [ 16%]
+tests/test_context_tiers.py::TestFormatArtifactContextWithDistance::test_none_content_skipped PASSED [ 16%]
+tests/test_context_tiers.py::TestFormatArtifactContextWithDistance::test_total_budget_emergency_truncation PASSED [ 16%]
+tests/test_e2e.py::TestE2E_01_HealthCheck::test_health_meta_envelope PASSED [ 17%]
+tests/test_e2e.py::TestE2E_01_HealthCheck::test_health_returns_ok PASSED [ 17%]
+tests/test_e2e.py::TestE2E_02_Capabilities::test_capabilities_lists_seeded PASSED [ 17%]
+tests/test_e2e.py::TestE2E_02_Capabilities::test_capabilities_meta PASSED [ 17%]
+tests/test_e2e.py::TestE2E_03_MissionEmpty::test_empty_mission_list PASSED [ 18%]
+tests/test_e2e.py::TestE2E_03_MissionEmpty::test_nonexistent_mission_404 PASSED [ 18%]
+tests/test_e2e.py::TestE2E_04_MissionFlow::test_mission_appears_in_list PASSED [ 18%]
+tests/test_e2e.py::TestE2E_04_MissionFlow::test_mission_detail PASSED    [ 18%]
+tests/test_e2e.py::TestE2E_04_MissionFlow::test_mission_stages PASSED    [ 18%]
+tests/test_e2e.py::TestE2E_04_MissionFlow::test_single_stage PASSED      [ 19%]
+tests/test_e2e.py::TestE2E_04_MissionFlow::test_stage_out_of_range_404 PASSED [ 19%]
+tests/test_e2e.py::TestE2E_05_MultiMission::test_all_missions_listed PASSED [ 19%]
+tests/test_e2e.py::TestE2E_05_MultiMission::test_each_mission_accessible PASSED [ 19%]
+tests/test_e2e.py::TestE2E_06_ApprovalFlow::test_approval_detail PASSED  [ 20%]
+tests/test_e2e.py::TestE2E_06_ApprovalFlow::test_approval_not_found PASSED [ 20%]
+tests/test_e2e.py::TestE2E_06_ApprovalFlow::test_approvals_list PASSED   [ 20%]
+tests/test_e2e.py::TestE2E_07_ApproveFlow::test_approve_creates_signal_artifact PASSED [ 20%]
+tests/test_e2e.py::TestE2E_07_ApproveFlow::test_approve_returns_requested PASSED [ 20%]
+tests/test_e2e.py::TestE2E_08_RejectFlow::test_reject_returns_requested PASSED [ 21%]
+tests/test_e2e.py::TestE2E_09_ApprovalFSMGuard::test_approve_non_pending_409 PASSED [ 21%]
+tests/test_e2e.py::TestE2E_09_ApprovalFSMGuard::test_approve_not_found_404 PASSED [ 21%]
+tests/test_e2e.py::TestE2E_09_ApprovalFSMGuard::test_reject_non_pending_409 PASSED [ 21%]
+tests/test_e2e.py::TestE2E_10_MissionCancel::test_a_cancel_executing_mission PASSED [ 21%]
+tests/test_e2e.py::TestE2E_10_MissionCancel::test_b_cancel_creates_signal_artifact PASSED [ 22%]
+tests/test_e2e.py::TestE2E_11_MissionRetry::test_retry_failed_mission PASSED [ 22%]
+tests/test_e2e.py::TestE2E_12_MissionFSMGuard::test_cancel_completed_409 PASSED [ 22%]
+tests/test_e2e.py::TestE2E_12_MissionFSMGuard::test_cancel_not_found_404 PASSED [ 22%]
+tests/test_e2e.py::TestE2E_12_MissionFSMGuard::test_retry_executing_409 PASSED [ 23%]
+tests/test_e2e.py::TestE2E_13_Telemetry::test_telemetry_all PASSED       [ 23%]
+tests/test_e2e.py::TestE2E_13_Telemetry::test_telemetry_filter_by_mission PASSED [ 23%]
+tests/test_e2e.py::TestE2E_13_Telemetry::test_telemetry_limit PASSED     [ 23%]
+tests/test_e2e.py::TestE2E_14_HostSecurity::test_invalid_host_403 PASSED [ 23%]
+tests/test_e2e.py::TestE2E_14_HostSecurity::test_localhost_with_port_ok PASSED [ 24%]
+tests/test_e2e.py::TestE2E_14_HostSecurity::test_valid_host_ok PASSED    [ 24%]
+tests/test_e2e.py::TestE2E_15_CSRFValidation::test_post_with_valid_origin_ok PASSED [ 24%]
+tests/test_e2e.py::TestE2E_15_CSRFValidation::test_post_with_wrong_origin_403 PASSED [ 24%]
+tests/test_e2e.py::TestE2E_15_CSRFValidation::test_post_without_origin_403 PASSED [ 24%]
+tests/test_e2e.py::TestE2E_16_OpenAPISpec::test_openapi_has_all_tags PASSED [ 25%]
+tests/test_e2e.py::TestE2E_16_OpenAPISpec::test_openapi_json PASSED      [ 25%]
+tests/test_enforcement.py::TestEnforcement::test_01_analyst_snapshot_blocked PASSED [ 25%]
+tests/test_enforcement.py::TestEnforcement::test_02_analyst_read_file_allowed PASSED [ 25%]
+tests/test_enforcement.py::TestEnforcement::test_03_developer_all_tools_allowed PASSED [ 26%]
+tests/test_enforcement.py::TestEnforcement::test_04_po_no_tools PASSED   [ 26%]
+tests/test_enforcement.py::TestEnforcement::test_05_budget_truncate_signal PASSED [ 26%]
+tests/test_enforcement.py::TestEnforcement::test_06_budget_hard_block PASSED [ 26%]
+tests/test_enforcement.py::TestEnforcement::test_07_stage_context_over_budget PASSED [ 26%]
+tests/test_enforcement.py::TestEnforcement::test_08_bypass_detected PASSED [ 27%]
+tests/test_enforcement.py::TestEnforcement::test_09_anomaly_on_excessive_denies PASSED [ 27%]
+tests/test_enforcement.py::TestEnforcement::test_10_audit_chain_intact_after_full_flow PASSED [ 27%]
+tests/test_eventbus.py::TestEvent::test_frozen PASSED                    [ 27%]
+tests/test_eventbus.py::TestEvent::test_auto_correlation_id PASSED       [ 27%]
+tests/test_eventbus.py::TestEvent::test_auto_timestamp PASSED            [ 28%]
+tests/test_eventbus.py::TestEvent::test_child_shares_correlation PASSED  [ 28%]
+tests/test_eventbus.py::TestHandlerResult::test_proceed PASSED           [ 28%]
+tests/test_eventbus.py::TestHandlerResult::test_block PASSED             [ 28%]
+tests/test_eventbus.py::TestHandlerResult::test_skip PASSED              [ 29%]
+tests/test_eventbus.py::TestEventBus::test_emit_no_handlers PASSED       [ 29%]
+tests/test_eventbus.py::TestEventBus::test_handler_receives_event PASSED [ 29%]
+tests/test_eventbus.py::TestEventBus::test_handler_priority_order PASSED [ 29%]
+tests/test_eventbus.py::TestEventBus::test_halt_stops_propagation PASSED [ 29%]
+tests/test_eventbus.py::TestEventBus::test_global_handler_runs_for_all PASSED [ 30%]
+tests/test_eventbus.py::TestEventBus::test_global_runs_before_specific PASSED [ 30%]
+tests/test_eventbus.py::TestEventBus::test_handler_error_doesnt_crash_bus PASSED [ 30%]
+tests/test_eventbus.py::TestEventBus::test_history PASSED                [ 30%]
+tests/test_eventbus.py::TestEventBus::test_history_filter_by_type PASSED [ 30%]
+tests/test_eventbus.py::TestEventBus::test_history_filter_by_correlation PASSED [ 31%]
+tests/test_eventbus.py::TestEventBus::test_handler_count PASSED          [ 31%]
+tests/test_eventbus.py::TestEventBus::test_registered_types PASSED       [ 31%]
+tests/test_eventbus.py::TestEventBus::test_clear PASSED                  [ 31%]
+tests/test_eventbus.py::TestEventBus::test_was_halted_false PASSED       [ 32%]
+tests/test_eventbus.py::TestEventBus::test_was_halted_true PASSED        [ 32%]
+tests/test_eventbus.py::TestEventCatalog::test_has_28_types PASSED       [ 32%]
+tests/test_eventbus.py::TestEventCatalog::test_namespace_mission PASSED  [ 32%]
+tests/test_eventbus.py::TestEventCatalog::test_namespace_tool PASSED     [ 32%]
+tests/test_eventbus.py::TestEventCatalog::test_namespace_gate PASSED     [ 33%]
+tests/test_eventbus.py::TestEventCatalog::test_all_types_are_strings PASSED [ 33%]
+tests/test_eventbus.py::TestCorrelation::test_new_id_generated PASSED    [ 33%]
+tests/test_eventbus.py::TestCorrelation::test_set_id PASSED              [ 33%]
+tests/test_eventbus.py::TestCorrelation::test_new_overwrites_old PASSED  [ 33%]
+tests/test_handlers.py::TestTokenLogger::test_logs_tool_executed PASSED  [ 34%]
+tests/test_handlers.py::TestTokenLogger::test_tracks_truncations PASSED  [ 34%]
+tests/test_handlers.py::TestTokenLogger::test_tracks_blocks PASSED       [ 34%]
+tests/test_handlers.py::TestTokenLogger::test_cumulative_per_stage PASSED [ 34%]
+tests/test_handlers.py::TestTokenLogger::test_report PASSED              [ 35%]
+tests/test_handlers.py::TestTokenLogger::test_skips_irrelevant_events PASSED [ 35%]
+tests/test_handlers.py::TestToolPermissions::test_allowed_tool_proceeds PASSED [ 35%]
+tests/test_handlers.py::TestToolPermissions::test_denied_tool_halts PASSED [ 35%]
+tests/test_handlers.py::TestToolPermissions::test_none_means_all_allowed PASSED [ 35%]
+tests/test_handlers.py::TestToolPermissions::test_no_role_proceeds PASSED [ 36%]
+tests/test_handlers.py::TestToolPermissions::test_skips_non_tool_events PASSED [ 36%]
+tests/test_handlers.py::TestBudgetEnforcer::test_within_budget_proceeds PASSED [ 36%]
+tests/test_handlers.py::TestBudgetEnforcer::test_soft_limit_signals_truncate PASSED [ 36%]
+tests/test_handlers.py::TestBudgetEnforcer::test_hard_limit_blocks PASSED [ 36%]
+tests/test_handlers.py::TestBudgetEnforcer::test_stage_cumulative_halt PASSED [ 37%]
+tests/test_handlers.py::TestBudgetEnforcer::test_mission_total_abort PASSED [ 37%]
+tests/test_handlers.py::TestBudgetEnforcer::test_stage_input_check PASSED [ 37%]
+tests/test_handlers.py::TestBudgetEnforcer::test_stage_input_within_limit PASSED [ 37%]
+tests/test_handlers.py::TestBudgetEnforcer::test_skips_irrelevant PASSED [ 38%]
+tests/test_handlers.py::TestHandlerPipeline::test_permission_blocks_before_execution PASSED [ 38%]
+tests/test_handlers_2.py::TestBypassDetector::test_cleared_then_executed_ok PASSED [ 38%]
+tests/test_handlers_2.py::TestBypassDetector::test_executed_without_cleared_is_bypass PASSED [ 38%]
+tests/test_handlers_2.py::TestBypassDetector::test_different_tool_is_bypass PASSED [ 38%]
+tests/test_handlers_2.py::TestBypassDetector::test_skips_irrelevant PASSED [ 39%]
+tests/test_handlers_2.py::TestBypassDetector::test_bypass_log_recorded PASSED [ 39%]
+tests/test_handlers_2.py::TestReportCollector::test_collects_stage_data PASSED [ 39%]
+tests/test_handlers_2.py::TestReportCollector::test_mission_report PASSED [ 39%]
+tests/test_handlers_2.py::TestReportCollector::test_empty_report PASSED  [ 40%]
+tests/test_handlers_2.py::TestAnomalyDetector::test_rework_threshold PASSED [ 40%]
+tests/test_handlers_2.py::TestAnomalyDetector::test_deny_threshold PASSED [ 40%]
+tests/test_handlers_2.py::TestAnomalyDetector::test_budget_exceeded_flagged PASSED [ 40%]
+tests/test_handlers_2.py::TestAnomalyDetector::test_never_halts PASSED   [ 40%]
+tests/test_handlers_2.py::TestMetricsExporter::test_counts_events PASSED [ 41%]
+tests/test_handlers_2.py::TestMetricsExporter::test_all_counter_keys_present PASSED [ 41%]
+tests/test_handlers_2.py::TestMetricsExporter::test_mission_lifecycle PASSED [ 41%]
+tests/test_handlers_3.py::TestApprovalGate::test_requested_halts PASSED  [ 41%]
+tests/test_handlers_3.py::TestApprovalGate::test_granted_proceeds PASSED [ 41%]
+tests/test_handlers_3.py::TestApprovalGate::test_denied_halts PASSED     [ 42%]
+tests/test_handlers_3.py::TestApprovalGate::test_skips_irrelevant PASSED [ 42%]
+tests/test_handlers_3.py::TestToolExecutor::test_stub_execution PASSED   [ 42%]
+tests/test_handlers_3.py::TestToolExecutor::test_real_execution PASSED   [ 42%]
+tests/test_handlers_3.py::TestToolExecutor::test_execution_error_handled PASSED [ 43%]
+tests/test_handlers_3.py::TestToolExecutor::test_skips_non_cleared PASSED [ 43%]
+tests/test_handlers_3.py::TestLLMExecutor::test_stub_call PASSED         [ 43%]
+tests/test_handlers_3.py::TestLLMExecutor::test_real_call PASSED         [ 43%]
+tests/test_handlers_3.py::TestLLMExecutor::test_call_error PASSED        [ 43%]
+tests/test_handlers_3.py::TestLLMExecutor::test_skips_non_llm PASSED     [ 44%]
+tests/test_handlers_3.py::TestStageTransition::test_within_budget_proceeds PASSED [ 44%]
+tests/test_handlers_3.py::TestStageTransition::test_over_budget_halts PASSED [ 44%]
+tests/test_handlers_3.py::TestStageTransition::test_skips_non_stage PASSED [ 44%]
+tests/test_handlers_3.py::TestContextAssemblerHandler::test_no_assembler_returns_empty PASSED [ 44%]
+tests/test_handlers_3.py::TestContextAssemblerHandler::test_no_artifacts_returns_empty PASSED [ 45%]
+tests/test_handlers_3.py::TestContextAssemblerHandler::test_skips_non_stage PASSED [ 45%]
+tests/test_handlers_3.py::TestFullPipeline::test_13_handlers_registered PASSED [ 45%]
+tests/test_mutation_contracts.py::TestMutationContract01_LifecycleRequested::test_approve_returns_lifecycle_requested PASSED [ 45%]
+tests/test_mutation_contracts.py::TestMutationContract02_SSEMutationRequested::test_sse_mutation_requested_emitted PASSED [ 46%]
+tests/test_mutation_contracts.py::TestMutationContract03_SSERejected::test_sse_mutation_rejected_with_reason PASSED [ 46%]
+tests/test_mutation_contracts.py::TestMutationContract04_SSETimedOut::test_timeout_lifecycle PASSED [ 46%]
+tests/test_mutation_contracts.py::TestMutationContract05_DuplicateConflict::test_duplicate_approve_returns_409 PASSED [ 46%]
+tests/test_mutation_contracts.py::TestMutationContract06_InvalidFSMState::test_approve_non_pending_returns_error PASSED [ 46%]
+tests/test_mutation_contracts.py::TestMutationContract07_AuditLogFields::test_audit_log_contains_required_fields PASSED [ 47%]
+tests/test_mutation_contracts.py::TestMutationContract08_AtomicArtifactCreated::test_signal_artifact_exists_after_approve PASSED [ 47%]
+tests/test_mutation_contracts.py::TestMutationContract09_CSRFMissingOrigin::test_post_without_origin_returns_403 PASSED [ 47%]
+tests/test_mutation_contracts.py::TestMutationContract10_TwoTabRace::test_concurrent_approve_race PASSED [ 47%]
+tests/test_mutation_contracts.py::TestMutationContract11_CancelDuringExecution::test_cancel_running_mission PASSED [ 47%]
+tests/test_observability.py::TestT1_EventCoverage::test_all_event_types_handled PASSED [ 48%]
+tests/test_observability.py::TestT1_EventCoverage::test_handler_count_is_28 PASSED [ 48%]
+tests/test_observability.py::TestT2_SpanHierarchy::test_mission_stage_hierarchy PASSED [ 48%]
+tests/test_observability.py::TestT2_SpanHierarchy::test_tool_under_stage PASSED [ 48%]
+tests/test_observability.py::TestT2_SpanHierarchy::test_llm_under_stage PASSED [ 49%]
+tests/test_observability.py::TestT2_SpanHierarchy::test_approval_under_tool PASSED [ 49%]
+tests/test_observability.py::TestT2_SpanHierarchy::test_context_assembly_under_stage PASSED [ 49%]
+tests/test_observability.py::TestT2_SpanHierarchy::test_gate_under_stage PASSED [ 49%]
+tests/test_observability.py::TestT3_MetricCoverage::test_metrics_handler_covers_metric_events PASSED [ 49%]
+tests/test_observability.py::TestT3_MetricCoverage::test_instrument_count_is_17 PASSED [ 50%]
+tests/test_observability.py::TestT3_MetricCoverage::test_metrics_recorded_after_mission PASSED [ 50%]
+tests/test_observability.py::TestT4_LogTraceCorrelation::test_all_logs_have_trace_fields PASSED [ 50%]
+tests/test_observability.py::TestT4_LogTraceCorrelation::test_trace_id_non_empty_for_mission_events PASSED [ 50%]
+tests/test_observability.py::TestT4_LogTraceCorrelation::test_log_entries_have_required_fields PASSED [ 50%]
+tests/test_observability.py::TestT4_LogTraceCorrelation::test_correlation_query_returns_all_mission_logs PASSED [ 51%]
+tests/test_observability.py::TestT5_NoBlindSpots::test_e2e_no_blind_spots PASSED [ 51%]
+tests/test_observability.py::TestE2E_TraceCompleteness::test_trivial_mission PASSED [ 51%]
+tests/test_observability.py::TestE2E_TraceCompleteness::test_medium_mission PASSED [ 51%]
+tests/test_observability.py::TestE2E_TraceCompleteness::test_complex_mission PASSED [ 52%]
+tests/test_observability.py::TestOtelSetup::test_init_returns_tracer_and_meter PASSED [ 52%]
+tests/test_observability.py::TestOtelSetup::test_tracer_creates_spans PASSED [ 52%]
+tests/test_observability.py::TestOtelSetup::test_meter_creates_instruments PASSED [ 52%]
+tests/test_observability.py::TestEdgeCases::test_mission_failed_closes_span PASSED [ 52%]
+tests/test_observability.py::TestEdgeCases::test_tool_blocked_closes_span PASSED [ 53%]
+tests/test_observability.py::TestEdgeCases::test_budget_warning_creates_span_event PASSED [ 53%]
+tests/test_observability.py::TestEdgeCases::test_anomaly_and_bypass_recording PASSED [ 53%]
+tests/test_observability.py::TestEdgeCases::test_structured_log_levels PASSED [ 53%]
+tests/test_phase45a.py::TestAnalyzeTelemetry::test_01_empty_events PASSED [ 53%]
+tests/test_phase45a.py::TestAnalyzeTelemetry::test_02_event_type_counts PASSED [ 54%]
+tests/test_phase45a.py::TestAnalyzeTelemetry::test_03_deny_reasons PASSED [ 54%]
+tests/test_phase45a.py::TestAnalyzeTelemetry::test_04_deny_by_role PASSED [ 54%]
+tests/test_phase45a.py::TestAnalyzeMissions::test_05_empty_summaries PASSED [ 54%]
+tests/test_phase45a.py::TestAnalyzeMissions::test_06_basic_stats PASSED  [ 55%]
+tests/test_phase45a.py::TestAnalyzeMissions::test_07_model_usage PASSED  [ 55%]
+tests/test_phase45a.py::TestAnalyzeMissions::test_08_gate_pass_rates PASSED [ 55%]
+tests/test_phase45a.py::TestAnalyzeMissions::test_09_context_tier_distribution PASSED [ 55%]
+tests/test_phase45a.py::TestAnalyzeMissions::test_10_reworks PASSED      [ 55%]
+tests/test_phase45a.py::TestAnalyzeMissions::test_11_failed_missions PASSED [ 56%]
+tests/test_phase45a.py::TestAnalyzeMissions::test_12_cost_estimate PASSED [ 56%]
+tests/test_phase45a.py::TestReportGeneration::test_13_text_report PASSED [ 56%]
+tests/test_phase45a.py::TestReportGeneration::test_14_json_report PASSED [ 56%]
+tests/test_phase45a.py::TestFileLoading::test_15_load_telemetry PASSED   [ 56%]
+tests/test_phase45a.py::TestFileLoading::test_16_load_mission_summaries PASSED [ 57%]
+tests/test_phase45a.py::TestRunE2EImports::test_17_test_cases_defined PASSED [ 57%]
+tests/test_phase45a.py::TestRunE2EImports::test_18_test_case_structure PASSED [ 57%]
+tests/test_quality.py::TestHealthContract::test_health_api_component_present PASSED [ 57%]
+tests/test_quality.py::TestHealthContract::test_health_has_components PASSED [ 58%]
+tests/test_quality.py::TestHealthContract::test_health_has_meta PASSED   [ 58%]
+tests/test_quality.py::TestHealthContract::test_health_has_status PASSED [ 58%]
+tests/test_quality.py::TestHealthContract::test_health_returns_200 PASSED [ 58%]
+tests/test_quality.py::TestTelegramBotModule::test_chat_id_is_string PASSED [ 58%]
+tests/test_quality.py::TestTelegramBotModule::test_handlers_callable PASSED [ 59%]
+tests/test_quality.py::TestTelegramBotModule::test_module_imports PASSED [ 59%]
+tests/test_quality.py::TestWMCPToolInventory::test_known_tools_present PASSED [ 59%]
+tests/test_quality.py::TestWMCPToolInventory::test_tool_catalog_loads PASSED [ 59%]
+tests/test_quality.py::TestWMCPToolInventory::test_tool_count_at_least_18 PASSED [ 60%]
+tests/test_quality.py::TestWMCPToolInventory::test_tools_have_function_schema PASSED [ 60%]
+tests/test_rework_limiter.py::TestComplexityBasedLimits::test_trivial_limits PASSED [ 60%]
+tests/test_rework_limiter.py::TestComplexityBasedLimits::test_simple_limits PASSED [ 60%]
+tests/test_rework_limiter.py::TestComplexityBasedLimits::test_medium_limits PASSED [ 60%]
+tests/test_rework_limiter.py::TestComplexityBasedLimits::test_complex_limits PASSED [ 61%]
+tests/test_rework_limiter.py::TestComplexityBasedLimits::test_default_is_medium PASSED [ 61%]
+tests/test_rework_limiter.py::TestComplexityBasedLimits::test_unknown_complexity_uses_default PASSED [ 61%]
+tests/test_rework_limiter.py::TestSimpleMissionEscalatesEarly::test_simple_escalates_after_2_dev_test PASSED [ 61%]
+tests/test_rework_limiter.py::TestSimpleMissionEscalatesEarly::test_trivial_escalates_after_1_dev_test PASSED [ 61%]
+tests/test_rework_limiter.py::TestSimpleMissionEscalatesEarly::test_complex_allows_4_dev_test_cycles PASSED [ 62%]
+tests/test_rework_limiter.py::TestSimpleMissionEscalatesEarly::test_simple_review_escalates_after_1 PASSED [ 62%]
+tests/test_rework_limiter.py::TestReworkLimitsConfig::test_all_tiers_present PASSED [ 62%]
+tests/test_rework_limiter.py::TestReworkLimitsConfig::test_limits_are_monotonically_increasing PASSED [ 62%]
+tests/test_sprint16.py::TestMissionStore::test_list_with_filters PASSED  [ 63%]
+tests/test_sprint16.py::TestMissionStore::test_persistence_across_instances PASSED [ 63%]
+tests/test_sprint16.py::TestMissionStore::test_record_and_get PASSED     [ 63%]
+tests/test_sprint16.py::TestMissionStore::test_summary PASSED            [ 63%]
+tests/test_sprint16.py::TestTraceStore::test_get_span_tree PASSED        [ 63%]
+tests/test_sprint16.py::TestTraceStore::test_list_traces PASSED          [ 64%]
+tests/test_sprint16.py::TestTraceStore::test_record_and_get PASSED       [ 64%]
+tests/test_sprint16.py::TestMetricStore::test_history PASSED             [ 64%]
+tests/test_sprint16.py::TestMetricStore::test_snapshot_and_get PASSED    [ 64%]
+tests/test_sprint16.py::TestAlertEngine::test_alert_history PASSED       [ 64%]
+tests/test_sprint16.py::TestAlertEngine::test_budget_warning_fires_after_threshold PASSED [ 65%]
+tests/test_sprint16.py::TestAlertEngine::test_default_rules_loaded PASSED [ 65%]
+tests/test_sprint16.py::TestAlertEngine::test_mission_aborted_fires_alert PASSED [ 65%]
+tests/test_sprint16.py::TestAlertEngine::test_rule_crud PASSED           [ 65%]
+tests/test_sprint16.py::TestAlertNotifier::test_format_message PASSED    [ 66%]
+tests/test_sprint16.py::TestAlertNotifier::test_no_token_skips_send PASSED [ 66%]
+tests/test_sprint16.py::TestDashboardAPI::test_filter_by_status PASSED   [ 66%]
+tests/test_sprint16.py::TestDashboardAPI::test_get_mission PASSED        [ 66%]
+tests/test_sprint16.py::TestDashboardAPI::test_get_mission_404 PASSED    [ 66%]
+tests/test_sprint16.py::TestDashboardAPI::test_list_missions PASSED      [ 67%]
+tests/test_sprint16.py::TestDashboardAPI::test_summary PASSED            [ 67%]
+tests/test_sprint16.py::TestTelemetryQueryAPI::test_current_metrics PASSED [ 67%]
+tests/test_sprint16.py::TestTelemetryQueryAPI::test_get_trace PASSED     [ 67%]
+tests/test_sprint16.py::TestTelemetryQueryAPI::test_get_trace_404 PASSED [ 67%]
+tests/test_sprint16.py::TestTelemetryQueryAPI::test_list_traces PASSED   [ 68%]
+tests/test_sprint16.py::TestTelemetryQueryAPI::test_metric_history PASSED [ 68%]
+tests/test_sprint16.py::TestTelemetryQueryAPI::test_query_logs_empty PASSED [ 68%]
+tests/test_sprint16.py::TestAlertAPI::test_active_alerts PASSED          [ 68%]
+tests/test_sprint16.py::TestAlertAPI::test_alert_history PASSED          [ 69%]
+tests/test_sprint16.py::TestAlertAPI::test_create_rule PASSED            [ 69%]
+tests/test_sprint16.py::TestAlertAPI::test_get_rule PASSED               [ 69%]
+tests/test_sprint16.py::TestAlertAPI::test_list_rules PASSED             [ 69%]
+tests/test_sprint16.py::TestAlertAPI::test_update_rule PASSED            [ 69%]
+tests/test_sprint16.py::TestSessionModel::test_get_operator PASSED       [ 70%]
+tests/test_sprint16.py::TestSessionModel::test_session_creation PASSED   [ 70%]
+tests/test_sprint16.py::TestSessionModel::test_session_to_dict PASSED    [ 70%]
+tests/test_sprint16.py::TestFullIntegration::test_alert_e2e PASSED       [ 70%]
+tests/test_sprint16.py::TestFullIntegration::test_mission_record_to_api PASSED [ 70%]
+tests/test_sprint16.py::TestFullIntegration::test_trace_record_to_api PASSED [ 71%]
+tests/test_sprint_5c.py::TestStateMachine::test_initial_state_is_pending PASSED [ 71%]
+tests/test_sprint_5c.py::TestStateMachine::test_pending_to_planning PASSED [ 71%]
+tests/test_sprint_5c.py::TestStateMachine::test_planning_to_ready PASSED [ 71%]
+tests/test_sprint_5c.py::TestStateMachine::test_ready_to_running PASSED  [ 72%]
+tests/test_sprint_5c.py::TestStateMachine::test_running_to_completed PASSED [ 72%]
+tests/test_sprint_5c.py::TestStateMachine::test_transition_log_has_4_entries PASSED [ 72%]
+tests/test_sprint_5c.py::TestStateMachine::test_log_entry_has_required_keys PASSED [ 72%]
+tests/test_sprint_5c.py::TestStateMachine::test_to_dict_has_mission_id PASSED [ 72%]
+tests/test_sprint_5c.py::TestStateMachine::test_to_dict_has_status PASSED [ 73%]
+tests/test_sprint_5c.py::TestStateMachine::test_to_dict_has_transition_log PASSED [ 73%]
+tests/test_sprint_5c.py::TestStateMachine::test_from_dict_roundtrip PASSED [ 73%]
+tests/test_sprint_5c.py::TestStateMachine::test_from_dict_mission_id PASSED [ 73%]
+tests/test_sprint_5c.py::TestStateMachine::test_invalid_transition_rejected PASSED [ 73%]
+tests/test_sprint_5c.py::TestStateMachine::test_first_attempt_returns_1 PASSED [ 74%]
+tests/test_sprint_5c.py::TestStateMachine::test_can_retry_after_1_attempt PASSED [ 74%]
+tests/test_sprint_5c.py::TestStateMachine::test_cannot_retry_after_3_attempts PASSED [ 74%]
+tests/test_sprint_5c.py::TestStateMachine::test_4th_attempt_returns_4 PASSED [ 74%]
+tests/test_sprint_5c.py::TestStatePersistence::test_state_file_created PASSED [ 75%]
+tests/test_sprint_5c.py::TestStatePersistence::test_saved_state_has_mission_id PASSED [ 75%]
+tests/test_sprint_5c.py::TestStatePersistence::test_saved_state_has_status PASSED [ 75%]
+tests/test_sprint_5c.py::TestQualityGates::test_gate_1_returns_gate_result PASSED [ 75%]
+tests/test_sprint_5c.py::TestQualityGates::test_gate_1_has_recommendation PASSED [ 75%]
+tests/test_sprint_5c.py::TestQualityGates::test_gate_2_returns_gate_result PASSED [ 76%]
+tests/test_sprint_5c.py::TestQualityGates::test_gate_3_returns_gate_result PASSED [ 76%]
+tests/test_sprint_5c.py::TestFeedbackLoops::test_initial_dev_test_count_is_0 PASSED [ 76%]
+tests/test_sprint_5c.py::TestFeedbackLoops::test_pass_proceeds PASSED    [ 76%]
+tests/test_sprint_5c.py::TestFeedbackLoops::test_dev_test_count_unchanged_after_pass PASSED [ 76%]
+tests/test_sprint_5c.py::TestFeedbackLoops::test_fail_reworks PASSED     [ 77%]
+tests/test_sprint_5c.py::TestFeedbackLoops::test_rework_has_cycle_count PASSED [ 77%]
+tests/test_sprint_5c.py::TestFeedbackLoops::test_review_approve_proceeds PASSED [ 77%]
+tests/test_sprint_5c.py::TestFeedbackLoops::test_review_request_changes_reworks PASSED [ 77%]
+tests/test_sprint_5c.py::TestFeedbackLoops::test_review_reject_escalates PASSED [ 78%]
+tests/test_sprint_5c.py::TestFeedbackLoops::test_escalation_after_max_cycles PASSED [ 78%]
+tests/test_sprint_5c.py::TestFeedbackLoops::test_get_stats_has_dev_test_cycles PASSED [ 78%]
+tests/test_sprint_5c.py::TestFeedbackLoops::test_get_stats_has_total_reworks PASSED [ 78%]
+tests/test_sprint_5c.py::TestGateCheckIntegration::test_developer_role_proceeds PASSED [ 78%]
+tests/test_sprint_5c.py::TestGateCheckIntegration::test_rework_creates_2_stages PASSED [ 79%]
+tests/test_sprint_5c.py::TestGateCheckIntegration::test_rework_first_is_developer PASSED [ 79%]
+tests/test_sprint_5c.py::TestGateCheckIntegration::test_rework_second_is_tester PASSED [ 79%]
+tests/test_sprint_5c.py::TestGateCheckIntegration::test_rework_has_is_rework_flag PASSED [ 79%]
+tests/test_sprint_5c.py::TestGateCheckIntegration::test_rework_has_rework_cycle PASSED [ 80%]
+tests/test_sprint_5c.py::TestGateCheckIntegration::test_rework_has_working_set PASSED [ 80%]
+tests/test_sprint_5c.py::TestRecoveryTriage::test_3_attempts_exhausted PASSED [ 80%]
+tests/test_sprint_5c.py::TestRecoveryTriage::test_exhausted_budget_aborts PASSED [ 80%]
+tests/test_sprint_5c.py::TestRecoveryTriage::test_abort_reason_is_max_attempts PASSED [ 80%]
+tests/test_sprint_5c.py::TestRecoveryTriage::test_find_stage_index PASSED [ 81%]
+tests/test_sprint_5c.py::TestRecoveryTriage::test_find_nonexistent_stage_returns_none PASSED [ 81%]
+tests/test_sprint_5c.py::TestRecoveryTriage::test_latest_artifact_data PASSED [ 81%]
+tests/test_sprint_5c.py::TestRecoveryTriage::test_nonexistent_type_returns_empty_dict PASSED [ 81%]
+tests/test_sprint_5c.py::TestRecoveryTriage::test_recovery_stage_is_manager PASSED [ 81%]
+tests/test_sprint_5c.py::TestRecoveryTriage::test_recovery_has_is_recovery_flag PASSED [ 82%]
+tests/test_sprint_5c.py::TestRecoveryTriage::test_recovery_has_working_set PASSED [ 82%]
+tests/test_sprint_5c.py::TestRecoveryTriage::test_recovery_id_contains_recovery PASSED [ 82%]
+tests/test_sprint_5c.py::TestApprovalStore::test_record_created PASSED   [ 82%]
+tests/test_sprint_5c.py::TestApprovalStore::test_record_has_approval_id PASSED [ 83%]
+tests/test_sprint_5c.py::TestApprovalStore::test_record_status_is_pending PASSED [ 83%]
+tests/test_sprint_5c.py::TestApprovalStore::test_idempotency_no_approved_yet PASSED [ 83%]
+tests/test_sprint_5c.py::TestApprovalStore::test_approve_succeeds PASSED [ 83%]
+tests/test_sprint_5c.py::TestApprovalStore::test_idempotency_after_approval PASSED [ 83%]
+tests/test_sprint_5c.py::TestApprovalStore::test_deny_succeeds PASSED    [ 84%]
+tests/test_sprint_5c.py::TestApprovalStore::test_no_pending_after_decisions PASSED [ 84%]
+tests/test_sprint_5c.py::TestApprovalStore::test_get_pending_returns_list PASSED [ 84%]
+tests/test_sprint_5c.py::TestSummaryIntegration::test_summary_file_created PASSED [ 84%]
+tests/test_sprint_5c.py::TestSummaryIntegration::test_summary_has_state_transitions PASSED [ 84%]
+tests/test_sprint_5c.py::TestSummaryIntegration::test_summary_has_final_state PASSED [ 85%]
+tests/test_sprint_5c.py::TestSummaryIntegration::test_summary_has_attempt_counters PASSED [ 85%]
+tests/test_sprint_5c.py::TestSummaryIntegration::test_summary_has_feedback_loop_stats PASSED [ 85%]
+tests/test_sprint_5c.py::TestSummaryIntegration::test_summary_has_gates_checked PASSED [ 85%]
+tests/test_sprint_5c.py::TestSummaryIntegration::test_summary_gate_1_is_true PASSED [ 86%]
+tests/test_sprint_5c.py::TestSummaryIntegration::test_rework_stage_marked_in_summary PASSED [ 86%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_01_json_in_response_direct_parse PASSED [ 86%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_02_json_in_markdown_fence PASSED [ 86%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_03_json_embedded_in_text PASSED [ 86%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_04_regex_verdict_in_text PASSED [ 87%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_05_regex_verdict_fail PASSED [ 87%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_06_regex_review_approve PASSED [ 87%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_07_regex_review_approved_alias PASSED [ 87%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_08_regex_analysis_reject PASSED [ 87%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_09_heuristic_fail_indicators PASSED [ 88%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_10_heuristic_pass_indicators PASSED [ 88%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_11_heuristic_default_conditional PASSED [ 88%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_12_heuristic_review_request_changes PASSED [ 88%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_13_code_delivery_file_extraction PASSED [ 89%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_14_code_delivery_no_files PASSED [ 89%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_15_discovery_map_file_paths PASSED [ 89%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_16_requirements_brief_title PASSED [ 89%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_17_requirements_brief_fallback PASSED [ 89%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_18_work_plan_tasks PASSED [ 90%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_19_recovery_retry PASSED [ 90%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_20_recovery_escalate PASSED [ 90%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_21_recovery_abort_default PASSED [ 90%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_22_empty_response PASSED [ 90%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_23_none_response PASSED [ 91%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_24_unknown_type PASSED [ 91%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_25_review_security_concerns PASSED [ 91%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_26_review_no_security_concerns PASSED [ 91%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_27_analysis_feasibility PASSED [ 92%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_28_analysis_feasibility_default PASSED [ 92%]
+tests/test_sprint_6d.py::TestArtifactExtractor::test_29_test_report_bugs PASSED [ 92%]
+tests/test_sprint_6d.py::TestStrictApprovalEnforcement::test_30_strict_approve_with_id PASSED [ 92%]
+tests/test_sprint_6d.py::TestStrictApprovalEnforcement::test_31_strict_deny_with_id PASSED [ 92%]
+tests/test_sprint_6d.py::TestStrictApprovalEnforcement::test_32_single_pending_yes_approve_with_deprecation PASSED [ 93%]
+tests/test_sprint_6d.py::TestStrictApprovalEnforcement::test_33_multiple_pending_yes_rejected PASSED [ 93%]
+tests/test_sprint_6d.py::TestStrictApprovalEnforcement::test_34_multiple_pending_strict_id_still_works PASSED [ 93%]
+tests/test_sprint_6d.py::TestStrictApprovalEnforcement::test_35_wrong_id_returns_none PASSED [ 93%]
+tests/test_sprint_6d.py::TestStrictApprovalEnforcement::test_36_unrelated_message_returns_none PASSED [ 93%]
+tests/test_sprint_6d.py::TestStrictApprovalEnforcement::test_37_single_pending_deny_with_deprecation PASSED [ 94%]
+tests/test_sprint_6d.py::TestStrictApprovalEnforcement::test_38_multiple_pending_deny_rejected PASSED [ 94%]
+tests/test_sprint_6d.py::TestStrictApprovalEnforcement::test_39_old_message_ignored PASSED [ 94%]
+tests/test_sprint_6d.py::TestStrictApprovalEnforcement::test_40_wrong_chat_ignored PASSED [ 94%]
+tests/test_sprint_6d.py::TestCountPendingApprovals::test_41_count_pending PASSED [ 95%]
+tests/test_sse.py::TestFileWatcher::test_01_mtime_change_produces_event PASSED [ 95%]
+tests/test_sse.py::TestFileWatcher::test_02_missing_file_no_crash PASSED [ 95%]
+tests/test_sse.py::TestFileWatcher::test_03_new_mission_dir_produces_list_event PASSED [ 95%]
+tests/test_sse.py::TestFileWatcher::test_04_debounce_merges_rapid_changes PASSED [ 95%]
+tests/test_sse.py::TestFileWatcher::test_05_mission_state_file_change PASSED [ 96%]
+tests/test_sse.py::TestSSEManager::test_06_subscribe_unsubscribe PASSED  [ 96%]
+tests/test_sse.py::TestSSEManager::test_07_broadcast_reaches_all PASSED  [ 96%]
+tests/test_sse.py::TestSSEManager::test_08_max_clients_rejection PASSED  [ 96%]
+tests/test_sse.py::TestSSEManager::test_09_missed_events_replay PASSED   [ 96%]
+tests/test_sse.py::TestSSEManager::test_10_sse_event_format PASSED       [ 97%]
+tests/test_sse.py::TestSSEManager::test_11_shutdown_signals_clients PASSED [ 97%]
+tests/test_sse.py::TestSSEManager::test_12_heartbeat_fast PASSED         [ 97%]
+tests/test_sse.py::TestSSEEndpoint::test_13_stream_connected_event PASSED [ 97%]
+tests/test_sse.py::TestSSEEndpoint::test_14_host_validation_rejects PASSED [ 98%]
+tests/test_stage_result.py::TestStageResult::test_frozen_immutable PASSED [ 98%]
+tests/test_stage_result.py::TestStageResult::test_fields_preserved PASSED [ 98%]
+tests/test_stage_result.py::TestExtractStageResult::test_extracts_artifact_text_only PASSED [ 98%]
+tests/test_stage_result.py::TestExtractStageResult::test_tool_history_not_in_result PASSED [ 98%]
+tests/test_stage_result.py::TestExtractStageResult::test_metrics_extracted PASSED [ 99%]
+tests/test_stage_result.py::TestExtractStageResult::test_dict_result_converted_to_string PASSED [ 99%]
+tests/test_stage_result.py::TestExtractStageResult::test_missing_fields_handled PASSED [ 99%]
+tests/test_stage_result.py::TestExtractStageResult::test_none_result_handled PASSED [ 99%]
+tests/test_stage_result.py::TestExtractStageResult::test_large_tool_response_not_leaked PASSED [100%]
+
+============================ 465 passed in 44.16s =============================
+[2026-03-29T08:07:15+03:00] Backend test count (collected): 465
+[2026-03-29T08:07:16+03:00] ✅ PASS: Backend tests: 465 collected
+[2026-03-29T08:07:21+03:00] 
+[2026-03-29T08:07:21+03:00] --- Frontend Tests ---
+
+ RUN  v4.1.2 C:/Users/AKCA/vezir/frontend
+
+Error: Uncaught [Error: Test crash]
+    at reportException (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\helpers\runtime-script-errors.js:66:24)
+    at innerInvokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:353:9)
+    at invokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:286:3)
+    at HTMLUnknownElementImpl._dispatch (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:233:9)
+    at HTMLUnknownElementImpl.dispatchEvent (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:104:17)
+    at HTMLUnknownElement.dispatchEvent (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\generated\EventTarget.js:241:34)
+    at Object.invokeGuardedCallbackDev (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:4213:16)
+    at invokeGuardedCallback (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:4277:31)
+    at beginWork$1 (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:27490:7)
+    at performUnitOfWork (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:26599:12) Error: Test crash
+    at ThrowingComponent (C:/Users/AKCA/vezir/frontend/src/__tests__/ErrorBoundary.test.tsx:11:26)
+    at renderWithHooks (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:15486:18)
+    at mountIndeterminateComponent (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:20103:13)
+    at beginWork (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:21626:16)
+    at HTMLUnknownElement.callCallback (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:4164:14)
+    at HTMLUnknownElement.callTheUserObjectsOperation (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\generated\EventListener.js:26:30)
+    at innerInvokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:350:25)
+    at invokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:286:3)
+    at HTMLUnknownElementImpl._dispatch (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:233:9)
+    at HTMLUnknownElementImpl.dispatchEvent (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:104:17)
+Error: Uncaught [Error: Test crash]
+    at reportException (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\helpers\runtime-script-errors.js:66:24)
+    at innerInvokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:353:9)
+    at invokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:286:3)
+    at HTMLUnknownElementImpl._dispatch (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:233:9)
+    at HTMLUnknownElementImpl.dispatchEvent (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:104:17)
+    at HTMLUnknownElement.dispatchEvent (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\generated\EventTarget.js:241:34)
+    at Object.invokeGuardedCallbackDev (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:4213:16)
+    at invokeGuardedCallback (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:4277:31)
+    at beginWork$1 (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:27490:7)
+    at performUnitOfWork (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:26599:12) Error: Test crash
+    at ThrowingComponent (C:/Users/AKCA/vezir/frontend/src/__tests__/ErrorBoundary.test.tsx:11:26)
+    at renderWithHooks (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:15486:18)
+    at mountIndeterminateComponent (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:20103:13)
+    at beginWork (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:21626:16)
+    at HTMLUnknownElement.callCallback (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:4164:14)
+    at HTMLUnknownElement.callTheUserObjectsOperation (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\generated\EventListener.js:26:30)
+    at innerInvokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:350:25)
+    at invokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:286:3)
+    at HTMLUnknownElementImpl._dispatch (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:233:9)
+    at HTMLUnknownElementImpl.dispatchEvent (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:104:17)
+Error: Uncaught [Error: Test crash]
+    at reportException (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\helpers\runtime-script-errors.js:66:24)
+    at innerInvokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:353:9)
+    at invokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:286:3)
+    at HTMLUnknownElementImpl._dispatch (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:233:9)
+    at HTMLUnknownElementImpl.dispatchEvent (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:104:17)
+    at HTMLUnknownElement.dispatchEvent (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\generated\EventTarget.js:241:34)
+    at Object.invokeGuardedCallbackDev (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:4213:16)
+    at invokeGuardedCallback (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:4277:31)
+    at beginWork$1 (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:27490:7)
+    at performUnitOfWork (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:26599:12) Error: Test crash
+    at ThrowingComponent (C:/Users/AKCA/vezir/frontend/src/__tests__/ErrorBoundary.test.tsx:11:26)
+    at renderWithHooks (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:15486:18)
+    at mountIndeterminateComponent (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:20103:13)
+    at beginWork (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:21626:16)
+    at HTMLUnknownElement.callCallback (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:4164:14)
+    at HTMLUnknownElement.callTheUserObjectsOperation (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\generated\EventListener.js:26:30)
+    at innerInvokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:350:25)
+    at invokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:286:3)
+    at HTMLUnknownElementImpl._dispatch (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:233:9)
+    at HTMLUnknownElementImpl.dispatchEvent (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:104:17)
+Error: Uncaught [Error: Test crash]
+    at reportException (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\helpers\runtime-script-errors.js:66:24)
+    at innerInvokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:353:9)
+    at invokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:286:3)
+    at HTMLUnknownElementImpl._dispatch (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:233:9)
+    at HTMLUnknownElementImpl.dispatchEvent (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:104:17)
+    at HTMLUnknownElement.dispatchEvent (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\generated\EventTarget.js:241:34)
+    at Object.invokeGuardedCallbackDev (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:4213:16)
+    at invokeGuardedCallback (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:4277:31)
+    at beginWork$1 (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:27490:7)
+    at performUnitOfWork (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:26599:12) Error: Test crash
+    at ThrowingComponent (C:/Users/AKCA/vezir/frontend/src/__tests__/ErrorBoundary.test.tsx:11:26)
+    at renderWithHooks (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:15486:18)
+    at mountIndeterminateComponent (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:20103:13)
+    at beginWork (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:21626:16)
+    at HTMLUnknownElement.callCallback (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:4164:14)
+    at HTMLUnknownElement.callTheUserObjectsOperation (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\generated\EventListener.js:26:30)
+    at innerInvokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:350:25)
+    at invokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:286:3)
+    at HTMLUnknownElementImpl._dispatch (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:233:9)
+    at HTMLUnknownElementImpl.dispatchEvent (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:104:17)
+
+ Test Files  13 passed (13)
+      Tests  75 passed (75)
+   Start at  08:07:24
+   Duration  5.86s (transform 2.04s, setup 4.48s, import 8.73s, tests 2.48s, environment 23.29s)
+
+[2026-03-29T08:07:38+03:00] Frontend test count (collected): 75
+[2026-03-29T08:07:38+03:00] ✅ PASS: Frontend tests: 75 collected
+[2026-03-29T08:07:38+03:00] 
+[2026-03-29T08:07:39+03:00] --- TypeScript Check ---
+[2026-03-29T08:07:44+03:00] ✅ PASS: TypeScript: 0 errors
+[2026-03-29T08:07:44+03:00] 
+[2026-03-29T08:07:44+03:00] --- Lint Check ---
+
+> vezir-platform@1.0.0 lint
+> eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0
+
+[2026-03-29T08:07:48+03:00] ✅ PASS: Lint: 0 errors
+[2026-03-29T08:07:48+03:00] 
+[2026-03-29T08:07:48+03:00] --- Production Build ---
+
+> vezir-platform@1.0.0 build
+> tsc -b && vite build
+
+[36mvite v6.4.1 [32mbuilding for production...[36m[39m
+transforming...
+[32m✓[39m 58 modules transformed.
+rendering chunks...
+computing gzip size...
+[2mdist/[22m[32mindex.html                 [39m[1m[2m  0.76 kB[22m[1m[22m[2m │ gzip:  0.47 kB[22m
+[2mdist/[22m[35massets/index-By_l_CDp.css  [39m[1m[2m 27.82 kB[22m[1m[22m[2m │ gzip:  5.73 kB[22m
+[2mdist/[22m[36massets/index-D1aYLSa7.js   [39m[1m[2m249.70 kB[22m[1m[22m[2m │ gzip: 72.43 kB[22m
+[32m✓ built in 1.95s[39m
+[2026-03-29T08:07:57+03:00] ✅ PASS: Production build successful
+[2026-03-29T08:07:57+03:00] 
+[2026-03-29T08:07:57+03:00] --- Sprint Doc Validator ---
+[2026-03-29T08:07:57+03:00]   Sprint doc validator not found — skipped
+[2026-03-29T08:07:57+03:00] 
+[2026-03-29T08:07:57+03:00] --- Project V2 Board Validator ---
+=== Project V2 Board Validator ===
+Total items: 57
+
+Classifications:
+  backlog: 39
+  legacy-sprint: 16
+  sprint-task: 2
+
+INFO (2):
+  [BACKLOG_CLOSURE_ELIGIBLE] #154 [B-005] HTTP rate limiting
+    Backlog item closed and Done � eligible for archive
+  [BACKLOG_CLOSURE_ELIGIBLE] #153 [B-012] Full request idempotency
+    Backlog item closed and Done � eligible for archive
+
+BACKLOG_CLOSURE_ELIGIBLE: [154, 153]
+
+Summary: 0 FAIL, 0 WARN, 2 INFO
+Result: VALID
+[2026-03-29T08:07:59+03:00] ✅ PASS: Project V2 board validator: VALID
+[2026-03-29T08:08:01+03:00]   Board validator warnings: 1 (non-blocking)
+[2026-03-29T08:08:01+03:00] 
+[2026-03-29T08:08:06+03:00] --- Contract Evidence ---
+[2026-03-29T08:08:06+03:00]   SKIPPED (governance class per D-127)
+[2026-03-29T08:08:07+03:00] 
+[2026-03-29T08:08:07+03:00] --- Live Endpoint Checks ---
+[2026-03-29T08:08:07+03:00]   SKIPPED (governance class per D-127)
+[2026-03-29T08:08:07+03:00] 
+[2026-03-29T08:08:07+03:00] ===========================================
+[2026-03-29T08:08:07+03:00] Sprint 34 Closure Check Summary
+[2026-03-29T08:08:07+03:00] ===========================================
+[2026-03-29T08:08:08+03:00] Test counts (auto-parsed, P-05 rule):
+[2026-03-29T08:08:08+03:00]   Backend:  465
+[2026-03-29T08:08:08+03:00]   Frontend: 75
+[2026-03-29T08:08:08+03:00]   E2E:      0
+[2026-03-29T08:08:08+03:00]   Total:    540
+[2026-03-29T08:08:08+03:00] 
+[2026-03-29T08:08:09+03:00] Failures: 0
+[2026-03-29T08:08:09+03:00] 
+[2026-03-29T08:08:09+03:00] ✅ ELIGIBLE FOR CLOSURE REVIEW
+[2026-03-29T08:08:09+03:00] Status: implementation_status=done, closure_status=evidence_pending
+[2026-03-29T08:08:09+03:00] Next: GPT review + Claude assessment + operator sign-off → closure_status=closed
+[2026-03-29T08:08:10+03:00] 
+[2026-03-29T08:08:10+03:00] Evidence files:
+[2026-03-29T08:08:10+03:00]   /c/Users/AKCA/vezir/evidence/sprint-34/closure-check-output.txt
+[2026-03-29T08:08:10+03:00]   /c/Users/AKCA/vezir/evidence/sprint-34/contract-evidence.txt
+[2026-03-29T08:08:10+03:00] ===========================================

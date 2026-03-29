@@ -35,4 +35,4 @@ tests/test_project_validator.py::TestBacklogClosureEligible::test_closed_done_ba
 tests/test_project_validator.py::TestGatePatterns::test_gate_title_matches PASSED [ 96%]
 tests/test_project_validator.py::TestGatePatterns::test_retro_title_matches PASSED [100%]
 
-============================= 29 passed in 0.09s ==============================
+============================= 29 passed in 0.08s ==============================

@@ -82,6 +82,9 @@ def retry_dlq_entry(dlq_id: str) -> DLQRetryResponse:
         def _run_retry():
             try:
                 controller = MissionController()
+                # B-106 P4: Suppress DLQ enqueue during retry to prevent
+                # orphan entries. Lineage stays on the original DLQ entry.
+                controller._dlq_suppress = True
                 result = controller.execute_mission(
                     goal=mission_snapshot.get("goal", ""),
                     user_id=mission_snapshot.get("userId", "dlq-retry"),

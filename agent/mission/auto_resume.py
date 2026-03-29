@@ -18,6 +18,15 @@ MISSIONS_DIR = Path(
 # Statuses that indicate an incomplete/failed mission eligible for resume
 RESUMABLE_STATUSES = {"failed", "running", "executing"}
 
+# Suffixes for non-canonical mission files (state, summary, etc.)
+_EXCLUDED_SUFFIXES = ("-state.json", "-summary.json", "-token-report.json")
+
+
+def _is_canonical_mission_file(path: Path) -> bool:
+    """Check if a file is a canonical mission file (not state/summary/report)."""
+    name = path.name
+    return not any(name.endswith(suffix) for suffix in _EXCLUDED_SUFFIXES)
+
 
 def find_incomplete_missions() -> list[dict]:
     """Scan missions directory for incomplete mission files.
@@ -28,14 +37,21 @@ def find_incomplete_missions() -> list[dict]:
         return []
 
     incomplete = []
+    seen_ids: set[str] = set()
     for f in MISSIONS_DIR.glob("mission-*.json"):
+        # Skip non-canonical files (state, summary, token-report)
+        if not _is_canonical_mission_file(f):
+            continue
         try:
             data = json.loads(f.read_text(encoding="utf-8"))
+            mission_id = data.get("missionId", "")
             status = data.get("status", "")
             if status in RESUMABLE_STATUSES:
                 # Must have at least one stage to be resumable
-                if data.get("stages"):
+                # Dedup: only one entry per mission ID
+                if data.get("stages") and mission_id not in seen_ids:
                     incomplete.append(data)
+                    seen_ids.add(mission_id)
         except (json.JSONDecodeError, OSError) as e:
             logger.warning("Could not read mission file %s: %s", f, e)
 

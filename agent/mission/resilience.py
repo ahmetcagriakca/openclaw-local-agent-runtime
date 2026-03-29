@@ -7,6 +7,7 @@ import logging
 import time
 from dataclasses import dataclass
 from datetime import datetime, timezone
+from enum import Enum
 
 logger = logging.getLogger("mcc.mission.resilience")
 
@@ -40,13 +41,19 @@ def sleep_with_backoff(attempt: int) -> float:
 
 # ── Circuit Breaker ──────────────────────────────────────────────
 
+class CircuitStatus(Enum):
+    CLOSED = "closed"
+    OPEN = "open"
+    HALF_OPEN = "half_open"
+
+
 @dataclass
 class CircuitState:
     """Per-stage-type circuit breaker state."""
     failure_count: int = 0
     last_failure_at: str | None = None
     last_error_hash: str = ""
-    open: bool = False
+    status: CircuitStatus = CircuitStatus.CLOSED
     opened_at: str | None = None
 
 
@@ -55,7 +62,14 @@ class CircuitBreaker:
 
     Tracks consecutive failures per stage type (specialist role).
     Opens circuit after threshold failures, preventing further
-    attempts until reset timeout expires.
+    attempts until reset timeout expires. After timeout, enters
+    HALF_OPEN state allowing exactly one probe attempt.
+
+    State machine:
+        CLOSED --(failure_threshold reached)--> OPEN
+        OPEN --(reset_timeout elapsed)--> HALF_OPEN
+        HALF_OPEN --(probe success)--> CLOSED
+        HALF_OPEN --(probe failure)--> OPEN (timer reset)
 
     Parameters:
         failure_threshold: Consecutive failures before opening (default 3)
@@ -76,25 +90,38 @@ class CircuitBreaker:
     def is_open(self, stage_type: str) -> bool:
         """Check if circuit is open (should fail-fast).
 
-        Returns True if circuit is open and reset timeout hasn't elapsed.
+        Returns True if circuit is OPEN and reset timeout hasn't elapsed.
+        If timeout has elapsed, transitions to HALF_OPEN and returns False
+        to allow exactly one probe attempt.
         """
         circuit = self._get_circuit(stage_type)
-        if not circuit.open:
+
+        if circuit.status == CircuitStatus.CLOSED:
             return False
 
-        # Check if reset timeout has elapsed (half-open)
+        if circuit.status == CircuitStatus.HALF_OPEN:
+            # Already in half-open, allow the probe
+            return False
+
+        # Status is OPEN — check if reset timeout has elapsed
         if circuit.opened_at:
             opened = datetime.fromisoformat(circuit.opened_at)
             elapsed = (datetime.now(timezone.utc) - opened).total_seconds()
             if elapsed >= self.reset_timeout_s:
-                logger.info("Circuit half-open for %s (%.0fs elapsed)",
+                # Transition to HALF_OPEN — allow one probe
+                circuit.status = CircuitStatus.HALF_OPEN
+                logger.info("Circuit HALF_OPEN for %s (%.0fs elapsed)",
                             stage_type, elapsed)
-                return False  # Allow one attempt (half-open)
+                return False
 
         return True
 
     def record_failure(self, stage_type: str, error: str = "") -> bool:
-        """Record a stage failure. Returns True if circuit just opened."""
+        """Record a stage failure. Returns True if circuit just opened.
+
+        In HALF_OPEN state, a failure immediately re-opens the circuit
+        with a fresh timer.
+        """
         circuit = self._get_circuit(stage_type)
         now = datetime.now(timezone.utc).isoformat()
 
@@ -102,8 +129,18 @@ class CircuitBreaker:
         circuit.last_failure_at = now
         circuit.last_error_hash = _error_hash(error)
 
-        if circuit.failure_count >= self.failure_threshold and not circuit.open:
-            circuit.open = True
+        if circuit.status == CircuitStatus.HALF_OPEN:
+            # Probe failed — re-open with fresh timer
+            circuit.status = CircuitStatus.OPEN
+            circuit.opened_at = now
+            logger.warning(
+                "Circuit re-OPEN for %s (half-open probe failed)",
+                stage_type)
+            return True
+
+        if (circuit.failure_count >= self.failure_threshold
+                and circuit.status == CircuitStatus.CLOSED):
+            circuit.status = CircuitStatus.OPEN
             circuit.opened_at = now
             logger.warning(
                 "Circuit OPEN for %s after %d failures",
@@ -113,15 +150,15 @@ class CircuitBreaker:
         return False
 
     def record_success(self, stage_type: str) -> None:
-        """Record a stage success — reset circuit."""
+        """Record a stage success — reset circuit to CLOSED."""
         circuit = self._get_circuit(stage_type)
-        if circuit.failure_count > 0 or circuit.open:
-            logger.info("Circuit reset for %s (was: %d failures, open=%s)",
-                        stage_type, circuit.failure_count, circuit.open)
+        if circuit.failure_count > 0 or circuit.status != CircuitStatus.CLOSED:
+            logger.info("Circuit CLOSED for %s (was: %d failures, status=%s)",
+                        stage_type, circuit.failure_count, circuit.status.value)
         circuit.failure_count = 0
         circuit.last_failure_at = None
         circuit.last_error_hash = ""
-        circuit.open = False
+        circuit.status = CircuitStatus.CLOSED
         circuit.opened_at = None
 
     def get_state(self, stage_type: str) -> dict:
@@ -131,7 +168,7 @@ class CircuitBreaker:
             "stage_type": stage_type,
             "failure_count": circuit.failure_count,
             "last_failure_at": circuit.last_failure_at,
-            "open": circuit.open,
+            "status": circuit.status.value,
             "opened_at": circuit.opened_at,
         }
 

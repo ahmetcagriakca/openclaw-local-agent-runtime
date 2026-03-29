@@ -178,6 +178,33 @@ class TestDLQStore(unittest.TestCase):
         self.assertEqual(total, 5)
         self.assertEqual(len(entries), 2)
 
+    def test_duplicate_enqueue_updates_existing(self):
+        """Re-enqueue same mission should update, not create duplicate."""
+        self.store.enqueue(self._make_mission("m-1"), error="first error")
+        self.assertEqual(self.store.count, 1)
+        # Enqueue same mission again with different error
+        self.store.enqueue(self._make_mission("m-1"), error="second error")
+        self.assertEqual(self.store.count, 1)  # Still 1, not 2
+        entry = self.store.get("dlq-m-1")
+        self.assertEqual(entry["error"], "second error")
+
+    def test_duplicate_enqueue_preserves_dlq_id(self):
+        """Re-enqueue returns same dlq_id."""
+        id1 = self.store.enqueue(self._make_mission("m-1"), error="err1")
+        id2 = self.store.enqueue(self._make_mission("m-1"), error="err2")
+        self.assertEqual(id1, id2)
+
+    def test_dlq_suppress_flag(self):
+        """Controller with _dlq_suppress=True should not enqueue."""
+        from mission.controller import MissionController
+        with patch.object(MissionController, "__init__", lambda self, **kw: None):
+            ctrl = MissionController.__new__(MissionController)
+            ctrl._dlq_store = self.store
+            ctrl._dlq_suppress = True
+            result = ctrl._enqueue_to_dlq(self._make_mission("m-1"))
+            self.assertIsNone(result)
+            self.assertEqual(self.store.count, 0)
+
 
 # ── Backoff Tests ────────────────────────────────────────────────
 
@@ -241,6 +268,35 @@ class TestCircuitBreaker(unittest.TestCase):
         self.assertTrue(cb.is_open("tester"))
         time.sleep(0.15)
         self.assertFalse(cb.is_open("tester"))  # Half-open
+        # Verify state is HALF_OPEN
+        state = cb.get_state("tester")
+        self.assertEqual(state["status"], "half_open")
+
+    def test_half_open_probe_fail_reopens(self):
+        """OPEN → timeout → HALF_OPEN → probe fail → OPEN again."""
+        cb = CircuitBreaker(failure_threshold=1, reset_timeout_s=0.1)
+        cb.record_failure("tester", "err")
+        self.assertTrue(cb.is_open("tester"))
+        time.sleep(0.15)
+        # Should transition to HALF_OPEN
+        self.assertFalse(cb.is_open("tester"))
+        self.assertEqual(cb.get_state("tester")["status"], "half_open")
+        # Probe fails — should re-open with fresh timer
+        reopened = cb.record_failure("tester", "err again")
+        self.assertTrue(reopened)
+        self.assertTrue(cb.is_open("tester"))
+        self.assertEqual(cb.get_state("tester")["status"], "open")
+
+    def test_half_open_probe_success_closes(self):
+        """OPEN → timeout → HALF_OPEN → probe success → CLOSED."""
+        cb = CircuitBreaker(failure_threshold=1, reset_timeout_s=0.1)
+        cb.record_failure("tester", "err")
+        self.assertTrue(cb.is_open("tester"))
+        time.sleep(0.15)
+        self.assertFalse(cb.is_open("tester"))  # HALF_OPEN
+        cb.record_success("tester")
+        self.assertEqual(cb.get_state("tester")["status"], "closed")
+        self.assertFalse(cb.is_open("tester"))
 
     def test_independent_circuits(self):
         cb = CircuitBreaker(failure_threshold=2)
@@ -254,7 +310,7 @@ class TestCircuitBreaker(unittest.TestCase):
         cb.record_failure("analyst", "err")
         state = cb.get_state("analyst")
         self.assertEqual(state["failure_count"], 1)
-        self.assertFalse(state["open"])
+        self.assertEqual(state["status"], "closed")
 
     def test_all_states(self):
         cb = CircuitBreaker(failure_threshold=3)
@@ -380,6 +436,72 @@ class TestAutoResume(unittest.TestCase):
                 json.dumps(data), encoding="utf-8")
             result = ar.find_incomplete_missions()
             self.assertEqual(len(result), 0)
+        finally:
+            ar.MISSIONS_DIR = original_dir
+            shutil.rmtree(fresh_dir.parent, ignore_errors=True)
+
+    def test_excluded_suffixes_filtered(self):
+        """State/summary/token-report files should be excluded."""
+        import shutil
+        fresh_dir = Path(tempfile.mkdtemp()) / "missions"
+        fresh_dir.mkdir()
+
+        import mission.auto_resume as ar
+        original_dir = ar.MISSIONS_DIR
+        ar.MISSIONS_DIR = fresh_dir
+
+        try:
+            mid = "mission-20260329-test"
+            base_data = {
+                "missionId": mid,
+                "goal": "test",
+                "status": "failed",
+                "startedAt": datetime.now(timezone.utc).isoformat(),
+                "stages": [{"id": "stage-1", "status": "completed"}],
+            }
+            # Write canonical mission file
+            (fresh_dir / f"{mid}.json").write_text(
+                json.dumps(base_data), encoding="utf-8")
+            # Write non-canonical files that should be ignored
+            for suffix in ["-state.json", "-summary.json", "-token-report.json"]:
+                (fresh_dir / f"{mid}{suffix}").write_text(
+                    json.dumps(base_data), encoding="utf-8")
+
+            result = ar.find_incomplete_missions()
+            # Only 1 result (canonical file), not 4
+            self.assertEqual(len(result), 1)
+            self.assertEqual(result[0]["missionId"], mid)
+        finally:
+            ar.MISSIONS_DIR = original_dir
+            shutil.rmtree(fresh_dir.parent, ignore_errors=True)
+
+    def test_dedup_same_mission_id(self):
+        """Duplicate mission IDs should result in single entry."""
+        import shutil
+        fresh_dir = Path(tempfile.mkdtemp()) / "missions"
+        fresh_dir.mkdir()
+
+        import mission.auto_resume as ar
+        original_dir = ar.MISSIONS_DIR
+        ar.MISSIONS_DIR = fresh_dir
+
+        try:
+            mid = "mission-dup-test"
+            base_data = {
+                "missionId": mid,
+                "goal": "test",
+                "status": "failed",
+                "startedAt": datetime.now(timezone.utc).isoformat(),
+                "stages": [{"id": "stage-1", "status": "completed"}],
+            }
+            # Write two files with same missionId
+            (fresh_dir / f"{mid}.json").write_text(
+                json.dumps(base_data), encoding="utf-8")
+            (fresh_dir / f"{mid}-copy.json").write_text(
+                json.dumps(base_data), encoding="utf-8")
+
+            result = ar.find_incomplete_missions()
+            self.assertEqual(len(result), 1)
         finally:
             ar.MISSIONS_DIR = original_dir
             shutil.rmtree(fresh_dir.parent, ignore_errors=True)

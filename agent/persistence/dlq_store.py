@@ -110,23 +110,39 @@ class DLQStore:
 
     def enqueue(self, mission: dict, failed_stage_id: str = "",
                 error: str = "") -> str:
-        """Add a failed mission to the DLQ. Returns dlq_id."""
+        """Add a failed mission to the DLQ. Returns dlq_id.
+
+        If an entry for the same mission_id already exists, updates it
+        (bumps retry_count, refreshes error/snapshot) instead of creating
+        a duplicate — prevents orphan lineage (B-106 P4).
+        """
         mission_id = mission.get("missionId", mission.get("mission_id", ""))
         now = datetime.now(timezone.utc).isoformat()
         dlq_id = f"dlq-{mission_id}"
 
-        entry = DLQEntry(
-            dlq_id=dlq_id,
-            mission_id=mission_id,
-            goal=mission.get("goal", ""),
-            error=error or mission.get("error", ""),
-            failed_stage_id=failed_stage_id,
-            failed_at=now,
-            status="pending",
-            mission_snapshot=mission,
-        )
-
         with self._lock:
+            existing = self._entries.get(dlq_id)
+            if existing:
+                # Update existing entry instead of creating duplicate
+                existing["error"] = error or mission.get("error", "")
+                existing["failed_stage_id"] = failed_stage_id or existing.get("failed_stage_id", "")
+                existing["failed_at"] = now
+                existing["status"] = "pending"
+                existing["mission_snapshot"] = mission
+                self._save()
+                logger.info("DLQ updated existing: %s (mission=%s)", dlq_id, mission_id)
+                return dlq_id
+
+            entry = DLQEntry(
+                dlq_id=dlq_id,
+                mission_id=mission_id,
+                goal=mission.get("goal", ""),
+                error=error or mission.get("error", ""),
+                failed_stage_id=failed_stage_id,
+                failed_at=now,
+                status="pending",
+                mission_snapshot=mission,
+            )
             self._entries[dlq_id] = entry.to_dict()
             self._save()
 

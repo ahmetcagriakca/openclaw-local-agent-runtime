@@ -178,6 +178,7 @@ class MissionController:
                 mission_state.transition_to(MissionStatus.FAILED, failure_reason)
                 self._save_mission(mission)
                 self._persist_mission_state(mission_state)
+                self._enqueue_to_dlq(mission)
                 self._emit_mission_summary(mission_id, mission, assembler,
                                            expansion_broker, "failed",
                                            mission_state=mission_state)
@@ -198,6 +199,7 @@ class MissionController:
                 mission_state.transition_to(MissionStatus.FAILED, failure_reason)
                 self._save_mission(mission)
                 self._persist_mission_state(mission_state)
+                self._enqueue_to_dlq(mission)
                 self._emit_mission_summary(mission_id, mission, assembler,
                                            expansion_broker, "failed",
                                            mission_state=mission_state)
@@ -380,6 +382,7 @@ class MissionController:
                             datetime.now(timezone.utc).isoformat())
                         self._save_mission(mission)
                         self._persist_mission_state(mission_state)
+                        self._enqueue_to_dlq(mission)
                         self._emit_mission_summary(
                             mission_id, mission, assembler,
                             expansion_broker, "failed",
@@ -400,6 +403,7 @@ class MissionController:
                 self._save_mission(mission)
                 self._persist_mission_state(mission_state)
                 self._save_token_report(mission)
+                self._enqueue_to_dlq(mission)
                 self._emit_mission_summary(mission_id, mission, assembler,
                                            expansion_broker, "failed",
                                            mission_state=mission_state)
@@ -421,6 +425,7 @@ class MissionController:
                     self._save_mission(mission)
                     self._persist_mission_state(mission_state)
                     self._save_token_report(mission)
+                    self._enqueue_to_dlq(mission)
                     self._emit_mission_summary(mission_id, mission, assembler,
                                                expansion_broker, "failed",
                                                mission_state=mission_state)
@@ -1639,7 +1644,13 @@ Respond ONLY with a JSON object, no markdown:
                               f"{recovery_error}"}
 
     def _enqueue_to_dlq(self, mission: dict) -> str | None:
-        """B-106: Enqueue failed mission to DLQ for later retry."""
+        """B-106: Enqueue failed mission to DLQ for later retry.
+
+        Suppressed when _dlq_suppress is True (during DLQ retry to
+        prevent orphan entries — P4 lineage fix).
+        """
+        if getattr(self, "_dlq_suppress", False):
+            return None
         try:
             failed_stage_id = ""
             for s in mission.get("stages", []):

@@ -1,7 +1,7 @@
 # Current State
 
 **Last updated:** 2026-03-29
-**Active phase:** Phase 7 — Sprint 40 closed (G2 pending), Sprint 41 pending
+**Active phase:** Phase 7 — Sprint 40 closed, Sprint 41 pending
 **Doc model:** This file is canonical for system state. Session context lives in `docs/ai/handoffs/current.md`.
 **Note:** All sprints through 36 closed. Phase 7 active. 131 frozen decisions (D-001 → D-130, D-126 skipped).
 **Persistence:** State is file-persisted (state.json, mission.json). Mission history via persistence layer (Sprint 16).

@@ -93,6 +93,7 @@ def fetch_project_items() -> list[ProjectItem]:
               }
               sprint: fieldValueByName(name: "Sprint") {
                 ... on ProjectV2ItemFieldNumberValue { number }
+                ... on ProjectV2ItemFieldTextValue { text }
               }
               status: fieldValueByName(name: "Status") {
                 ... on ProjectV2ItemFieldSingleSelectValue { name }
@@ -113,7 +114,16 @@ def fetch_project_items() -> list[ProjectItem]:
 
         labels = [l["name"] for l in content.get("labels", {}).get("nodes", [])]
         sprint_val = node.get("sprint", {})
-        sprint_num = sprint_val.get("number") if sprint_val else None
+        sprint_num = None
+        if sprint_val:
+            # Support both number and text field types
+            if sprint_val.get("number") is not None:
+                sprint_num = sprint_val["number"]
+            elif sprint_val.get("text") is not None:
+                try:
+                    sprint_num = float(sprint_val["text"])
+                except (ValueError, TypeError):
+                    sprint_num = None
         status_val = node.get("status", {})
         status_name = status_val.get("name") if status_val else None
         milestone = content.get("milestone", {})

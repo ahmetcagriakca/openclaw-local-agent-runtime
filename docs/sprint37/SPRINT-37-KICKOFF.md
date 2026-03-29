@@ -37,8 +37,11 @@ Close the last P1 security item (B-011 transport encryption) and fix the chatbri
   - API server (`127.0.0.1:8003`) supports TLS via self-signed cert for dev
   - TLS version: TLS 1.2+ only (reject < 1.2)
   - Cert/key source: `config/tls/server.pem` + `config/tls/server-key.pem`
-  - Missing cert at startup: serve HTTP with warning log (graceful degradation, not hard fail)
-  - Cert generation: `tools/generate-dev-cert.sh` creates self-signed cert
+  - Mode matrix:
+    - **Default/production mode:** missing/invalid cert = startup DENY (refuse to serve). TLS is required.
+    - **Dev mode** (`--dev` flag or `VEZIR_DEV=1` env): missing cert = serve HTTP with warning. Explicit opt-in only.
+    - B-011 closure requires: TLS-active validation in default mode
+  - Cert generation: `tools/generate-dev-cert.sh` creates self-signed cert for dev
   - No production CA integration in S37 (deferred)
   - HSTS header when TLS active
 - **Acceptance:** `decisions/D-130-transport-encryption.md` committed on main
@@ -55,7 +58,8 @@ Close the last P1 security item (B-011 transport encryption) and fix the chatbri
   - `agent/tests/test_transport_encryption.py` — TLS tests
 - **Acceptance criteria:**
   - Server starts with TLS when cert present
-  - Server starts without TLS (HTTP) when cert absent, with warning
+  - Server starts without TLS (HTTP) when cert absent AND `--dev` flag set, with warning
+  - Server refuses to start (exit 1) when cert absent in default mode
   - TLS 1.2+ enforced (reject SSLv3, TLS 1.0, TLS 1.1)
   - HSTS header present in HTTPS responses
   - Self-signed cert generation tool works
@@ -74,16 +78,18 @@ Close the last P1 security item (B-011 transport encryption) and fix the chatbri
 - **Owner:** Claude Code
 - **Depends on:** None (independent)
 - **Produced files:**
-  - `C:/Users/AKCA/chatbridge/lib/selectors.js` or equivalent config update
+  - `C:/Users/AKCA/chatbridge/lib/selectors.js` (external dependency, exact path)
 - **Acceptance criteria:**
   - `node C:/Users/AKCA/chatbridge/bridge.js --health gpt` returns healthy with all selectors valid
   - `node C:/Users/AKCA/chatbridge/bridge.js --target gpt --new-chat --message "ping"` sends and receives response
 - **Verification:** `node C:/Users/AKCA/chatbridge/bridge.js --health gpt 2>&1 | head -3`
-- **Evidence:** `evidence/sprint-37/chatbridge-health-output.txt`
+- **Evidence:**
+  - `evidence/sprint-37/chatbridge-health-output.txt` (health check raw output)
+  - `evidence/sprint-37/chatbridge-ping-output.txt` (roundtrip send/receive raw output)
 
 ### G2 Final Review Gate (after 37.2)
 
-- **Pass criteria:** all tests green, closure-check ELIGIBLE, D-130 frozen, B-011 closed, chatbridge healthy
+- **Pass criteria:** all tests green, closure-check ELIGIBLE, D-130 frozen, B-011 closed, chatbridge healthy + roundtrip verified
 - **Verification:** `bash tools/sprint-closure-check.sh 37 2>&1 | tee evidence/sprint-37/closure-check-output.txt`
 - **Evidence:** `docs/ai/reviews/S37-REVIEW.md`, `evidence/sprint-37/closure-check-output.txt`
 
@@ -135,6 +141,7 @@ Missing raw output saved as NO EVIDENCE, not omitted.
 
 - `transport-tests-output.txt`
 - `chatbridge-health-output.txt`
+- `chatbridge-ping-output.txt`
 - `g1-review.md`
 - `closure-check-output.txt`
 
@@ -152,7 +159,7 @@ Missing raw output saved as NO EVIDENCE, not omitted.
 | `tools/generate-dev-cert.sh` | create | 37.1 | Self-signed cert generator |
 | `agent/api/server.py` | modify | 37.1 | TLS support |
 | `agent/tests/test_transport_encryption.py` | create | 37.1 | Transport tests |
-| `chatbridge selectors config` | modify | 37.2 | Selector fix |
+| `C:/Users/AKCA/chatbridge/lib/selectors.js` | modify | 37.2 | Selector fix (external dep) |
 | `docs/ai/reviews/S37-REVIEW.md` | create | G2 | Final review |
 | `docs/sprint37/SPRINT-37-RETRO.md` | create | RETRO | Retrospective |
 

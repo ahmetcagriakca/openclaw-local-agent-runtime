@@ -1,0 +1,26 @@
+=== Project V2 Board Validator ===
+Total items: 81
+
+Classifications:
+  backlog: 39
+  legacy-sprint: 16
+  sprint-task: 26
+
+INFO (6):
+  [BACKLOG_CLOSURE_ELIGIBLE] #155 [B-008] Audit log tamper resistance
+    Backlog item closed and Done — eligible for archive
+  [BACKLOG_CLOSURE_ELIGIBLE] #154 [B-005] HTTP rate limiting
+    Backlog item closed and Done — eligible for archive
+  [BACKLOG_CLOSURE_ELIGIBLE] #153 [B-012] Full request idempotency
+    Backlog item closed and Done — eligible for archive
+  [BACKLOG_CLOSURE_ELIGIBLE] #151 [B-006] Encrypted secret storage
+    Backlog item closed and Done — eligible for archive
+  [BACKLOG_CLOSURE_ELIGIBLE] #150 [B-004] Filesystem confinement
+    Backlog item closed and Done — eligible for archive
+  [BACKLOG_CLOSURE_ELIGIBLE] #149 [B-003] Task risk classification
+    Backlog item closed and Done — eligible for archive
+
+BACKLOG_CLOSURE_ELIGIBLE: [155, 154, 153, 151, 150, 149]
+
+Summary: 0 FAIL, 0 WARN, 6 INFO
+Result: VALID

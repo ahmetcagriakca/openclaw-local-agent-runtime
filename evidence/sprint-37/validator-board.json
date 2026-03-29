@@ -1,0 +1,66 @@
+{
+  "valid": true,
+  "total_items": 81,
+  "classifications": {
+    "legacy-sprint": 16,
+    "backlog": 39,
+    "sprint-task": 26
+  },
+  "findings": [
+    {
+      "code": "BACKLOG_CLOSURE_ELIGIBLE",
+      "severity": "INFO",
+      "issue": 155,
+      "title": "[B-008] Audit log tamper resistance",
+      "message": "Backlog item closed and Done \u2014 eligible for archive"
+    },
+    {
+      "code": "BACKLOG_CLOSURE_ELIGIBLE",
+      "severity": "INFO",
+      "issue": 154,
+      "title": "[B-005] HTTP rate limiting",
+      "message": "Backlog item closed and Done \u2014 eligible for archive"
+    },
+    {
+      "code": "BACKLOG_CLOSURE_ELIGIBLE",
+      "severity": "INFO",
+      "issue": 153,
+      "title": "[B-012] Full request idempotency",
+      "message": "Backlog item closed and Done \u2014 eligible for archive"
+    },
+    {
+      "code": "BACKLOG_CLOSURE_ELIGIBLE",
+      "severity": "INFO",
+      "issue": 151,
+      "title": "[B-006] Encrypted secret storage",
+      "message": "Backlog item closed and Done \u2014 eligible for archive"
+    },
+    {
+      "code": "BACKLOG_CLOSURE_ELIGIBLE",
+      "severity": "INFO",
+      "issue": 150,
+      "title": "[B-004] Filesystem confinement",
+      "message": "Backlog item closed and Done \u2014 eligible for archive"
+    },
+    {
+      "code": "BACKLOG_CLOSURE_ELIGIBLE",
+      "severity": "INFO",
+      "issue": 149,
+      "title": "[B-003] Task risk classification",
+      "message": "Backlog item closed and Done \u2014 eligible for archive"
+    }
+  ],
+  "summary": {
+    "fail": 0,
+    "warn": 0,
+    "info": 6
+  },
+  "backlog_closure_eligible": [
+    155,
+    154,
+    153,
+    151,
+    150,
+    149
+  ]
+}

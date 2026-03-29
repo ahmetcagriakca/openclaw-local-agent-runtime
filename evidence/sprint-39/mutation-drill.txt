@@ -1,0 +1,138 @@
+=== Sprint 39 Mutation Drill Evidence ===
+Date: 2026-03-29T15:53:21+03:00
+
+--- 1. Approval list (B-102 enriched fields) ---
+{
+    "meta": {
+        "freshnessMs": 0,
+        "dataQuality": "fresh",
+        "sourcesUsed": [],
+        "sourcesMissing": [],
+        "generatedAt": "2026-03-29T12:53:22.166676+00:00"
+    },
+    "approvals": [
+        {
+            "id": "apv-test-approval-flow",
+            "missionId": "test-session",
+            "toolName": "close_application",
+            "risk": "high",
+            "status": "approved",
+            "requestedAt": "2026-03-23T08:13:15.902668+00:00",
+            "respondedAt": "2026-03-23T08:13:28.215581+00:00"
+        },
+        {
+            "id": "apv-20260323082352-27720",
+            "missionId": "sess-1774254228-27720",
+            "toolName": "close_application",
+            "risk": "high",
+            "status": "approved",
+            "requestedAt": "2026-03-23T08:23:52.282266+00:00",
+            "respondedAt": "2026-03-23T08:23:56.507634+00:00"
+        },
+        {
+            "id": "apv-20260323081838-28200",
+            "missionId": "sess-1774253910-28200",
+            "toolName": "close_application",
+            "risk": "high",
+            "status": "denied",
+            "requestedAt": "2026-03-23T08:18:38.876991+00:00",
+            "respondedAt": "2026-03-23T08:19:39.526773+00:00"
+        },
+        {
+            "id": "apv-20260323081721-26532",
+            "missionId": "sess-1774253837-26532",
+            "toolName": "close_application",
+            "risk": "high",
+            "status": "denied",
+            "requestedAt": "2026-03-23T08:17:21.766134+00:00",
+            "respondedAt": "2026-03-23T08:18:22.652401+00:00"
+        },
+        {
+            "id": "apv-20260323081026-19792",
+            "missionId": "sess-1774253422-19792",
+            "toolName": "close_application",
+            "risk": "high",
+            "status": "denied",
+            "requestedAt": "2026-03-23T08:10:26.951883+00:00",
+            "respondedAt": "2026-03-23T08:11:27.579350+00:00"
+        },
+        {
+            "id": "apv-20260323080357-18164",
+            "missionId": "sess-1774253033-18164",
+            "toolName": "close_application",
+            "risk": "high",
+            "status": "approved",
+            "requestedAt": "2026-03-23T08:03:57.307832+00:00",
+            "respondedAt": "2026-03-23T08:04:17.487410+00:00"
+        },
+        {
+            "id": "apv-20260323075755-29284",
+            "missionId": "sess-1774252671-29284",
+            "toolName": "close_application",
+            "risk": "high",
+            "status": "denied",
+            "requestedAt": "2026-03-23T07:57:55.670061+00:00",
+            "respondedAt": "2026-03-23T07:58:59.085393+00:00"
+        }
+    ]
+}
+
+--- 2. Schedule create + delete (mutation path) ---
+{
+    "id": "sched_b61f1ee21eca",
+    "name": "S39 Drill",
+    "template_id": "preset_system_health",
+    "cron": "0 9 * * *",
+    "timezone": "Europe/Istanbul",
+    "parameters": {},
+    "enabled": true,
+    "last_run": null,
+    "last_mission_id": null,
+    "next_run": "2026-03-30T09:00:00+00:00",
+    "run_count": 0,
+    "max_concurrent": 1,
+    "created_at": "2026-03-29T12:53:23.096221+00:00",
+    "updated_at": "2026-03-29T12:53:23.096232+00:00"
+}
+{
+    "deleted": true,
+    "id": "sched_b61f1ee21eca"
+}
+
+--- 3. Presets list ---
+Total presets: 3
+
+--- 4. Benchmark gate ---
+============================================================
+  Benchmark Regression Gate (D-109)
+  Threshold: 50.0%
+  Baseline: baseline\benchmark-baseline.json
+  Current:  baseline\benchmark-baseline.json
+============================================================
+  PASS: GET /api/v1/health — p95 6822.5ms -> 6822.5ms (0%)
+  PASS: GET /api/v1/capabilities — p95 9.6ms -> 9.6ms (0%)
+  PASS: GET /api/v1/missions — p95 20.9ms -> 20.9ms (0%)
+  PASS: GET /api/v1/missions/mission-bench-000 — p95 14.7ms -> 14.7ms (0%)
+  PASS: GET /api/v1/missions/mission-bench-000/stages — p95 13.7ms -> 13.7ms (0%)
+  PASS: GET /api/v1/approvals — p95 36.5ms -> 36.5ms (0%)
+  PASS: GET /api/v1/telemetry — p95 40.1ms -> 40.1ms (0%)
+  PASS: GET AVG MS — 570.8ms -> 570.8ms (0%)
+  PASS: GET MAX MS — 6822.5ms -> 6822.5ms (0%)
+
+RESULT: PASS — 9 check(s), no regressions
+
+--- 5. Health after all mutations ---
+Status: ok
+  api: ok
+  cache: ok
+  capabilities: ok
+  sse: ok
+  heartbeat: ok
+  missions: ok
+  approvals: ok
+  storage: ok
+  wmcp: ok
+  telegram: ok
+  llm_providers: ok
+
+=== MUTATION DRILL COMPLETE â€” ALL PASS ===

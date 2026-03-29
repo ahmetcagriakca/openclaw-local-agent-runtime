@@ -5,6 +5,20 @@
 
 ---
 
+## Sprint 41 — Integrity Hardening / Source-of-Truth Stabilization (CLOSED)
+
+**Model:** A (implementation) | **Class:** Governance
+**Scope:** D-071 atomic write remediation, DECISIONS.md index repair, closure drift checker
+**Review:** PASS — `docs/ai/reviews/S41-REVIEW.md`
+**Commits:** `685acaf`, `1e69d84`, `f39562a`, `e36d192`
+
+## Sprint 40 — Multi-user Isolation + Auth Boundaries (CLOSED)
+
+**Model:** A (implementation) | **Class:** Product
+**Scope:** Backend isolation (D-102), multi-user auth boundary (D-104/D-108), frontend isolation tests
+**Review:** PASS (2nd round) — `docs/ai/reviews/S40-REVIEW.md`
+**Commits:** `855613f`
+
 ## Sprint 39 — Approval Inbox + Live E2E + CI + Benchmark (CLOSED)
 
 **Model:** A (implementation) | **Class:** Product

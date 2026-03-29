@@ -1,0 +1,1 @@
+grep -rn 'open(.*"w")' agent/ --include='*.py' | grep -v test | grep -v __pycache__ = 0 matches. All production JSON writes use atomic_write_json().

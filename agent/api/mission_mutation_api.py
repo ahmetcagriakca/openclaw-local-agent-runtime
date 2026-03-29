@@ -14,12 +14,16 @@ OD-10: Retry = new mission linked to failed original (controller handles).
 """
 import json
 import logging
+import re
 import threading
 import traceback
 from datetime import datetime, timedelta
 from pathlib import Path
 
 from fastapi import APIRouter, Depends, HTTPException, Request
+
+# Pattern for valid mission/target IDs — prevents path traversal (CodeQL fix).
+_SAFE_ID_RE = re.compile(r'^[a-zA-Z0-9][a-zA-Z0-9._-]*$')
 
 from api.mutation_audit import log_mutation
 from api.mutation_bridge import has_pending_signal, write_signal_artifact
@@ -51,6 +55,8 @@ def _get_dirs():
 
 def _resolve_controller_id(missions_dir: Path, mission_id: str) -> str:
     """If mission_id is a dashboard placeholder, find the controller's real mission ID."""
+    if not _SAFE_ID_RE.match(mission_id):
+        return mission_id
     mission_path = missions_dir / f"{mission_id}.json"
     if not mission_path.exists():
         return mission_id
@@ -82,6 +88,8 @@ def _resolve_controller_id(missions_dir: Path, mission_id: str) -> str:
 
 def _read_mission_data(missions_dir: Path, mission_id: str) -> dict | None:
     """Read the full mission JSON (not just state)."""
+    if not _SAFE_ID_RE.match(mission_id):
+        return None
     real_id = _resolve_controller_id(missions_dir, mission_id)
     path = missions_dir / f"{real_id}.json"
     if path.exists():
@@ -122,6 +130,8 @@ def _run_retry_background(mission_id: str, failed_mission: dict,
 
 def _read_mission_state(missions_dir: Path, mission_id: str) -> dict | None:
     """Read mission state file. Resolves dashboard placeholders to controller files."""
+    if not _SAFE_ID_RE.match(mission_id):
+        return None
     # Resolve to controller's mission ID if this is a dashboard placeholder
     real_id = _resolve_controller_id(missions_dir, mission_id)
 
@@ -184,6 +194,8 @@ async def cancel_mission(mission_id: str, request: Request, _operator=Depends(re
     Valid states: pending, planning, executing, gate_check, rework, approval_wait.
     Completed/failed/aborted/timed_out → 409.
     """
+    if not _SAFE_ID_RE.match(mission_id):
+        raise HTTPException(status_code=400, detail="Invalid mission ID format")
     missions_dir = _get_dirs()
     tab_id, session_id = _extract_operator_info(request)
 
@@ -261,6 +273,8 @@ async def retry_mission(mission_id: str, request: Request, _operator=Depends(req
     Valid states: failed, aborted, timed_out.
     Running/pending/completed → 409.
     """
+    if not _SAFE_ID_RE.match(mission_id):
+        raise HTTPException(status_code=400, detail="Invalid mission ID format")
     missions_dir = _get_dirs()
     tab_id, session_id = _extract_operator_info(request)
 
@@ -356,6 +370,8 @@ async def pause_mission(mission_id: str, request: Request, _operator=Depends(req
     Valid states: pending, planning, executing, gate_check, rework, approval_wait.
     Already paused / completed / failed → 409.
     """
+    if not _SAFE_ID_RE.match(mission_id):
+        raise HTTPException(status_code=400, detail="Invalid mission ID format")
     missions_dir = _get_dirs()
     tab_id, session_id = _extract_operator_info(request)
 
@@ -433,6 +449,8 @@ async def resume_mission(mission_id: str, request: Request, _operator=Depends(re
     Valid states: paused.
     Running / completed / failed → 409.
     """
+    if not _SAFE_ID_RE.match(mission_id):
+        raise HTTPException(status_code=400, detail="Invalid mission ID format")
     missions_dir = _get_dirs()
     tab_id, session_id = _extract_operator_info(request)
 
@@ -510,6 +528,8 @@ async def skip_stage(mission_id: str, request: Request, _operator=Depends(requir
     Valid states: pending, planning, executing, gate_check, rework, approval_wait.
     Paused / completed / failed → 409.
     """
+    if not _SAFE_ID_RE.match(mission_id):
+        raise HTTPException(status_code=400, detail="Invalid mission ID format")
     missions_dir = _get_dirs()
     tab_id, session_id = _extract_operator_info(request)
 

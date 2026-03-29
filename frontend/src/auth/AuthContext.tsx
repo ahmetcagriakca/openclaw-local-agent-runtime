@@ -2,7 +2,7 @@
  * AuthContext — D-117 frontend auth state.
  *
  * Provides API key auth context to React components.
- * Stores key in localStorage for persistence.
+ * Stores key in sessionStorage (cleared on tab close for security).
  */
 import { createContext, useContext, useState, useCallback, type ReactNode } from 'react'
 
@@ -24,7 +24,7 @@ const STORAGE_KEY = 'vezir_auth'
 
 function loadAuth(): AuthState {
   try {
-    const stored = localStorage.getItem(STORAGE_KEY)
+    const stored = sessionStorage.getItem(STORAGE_KEY)
     if (stored) {
       const { apiKey, userName } = JSON.parse(stored)
       return { apiKey, userName, isAuthenticated: !!apiKey }
@@ -39,12 +39,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = useCallback((apiKey: string, userName?: string) => {
     const state = { apiKey, userName: userName ?? null, isAuthenticated: true }
     setAuth(state)
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ apiKey, userName: state.userName }))
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify({ apiKey, userName: state.userName }))
   }, [])
 
   const logout = useCallback(() => {
     setAuth({ apiKey: null, userName: null, isAuthenticated: false })
-    localStorage.removeItem(STORAGE_KEY)
+    sessionStorage.removeItem(STORAGE_KEY)
   }, [])
 
   const getAuthHeaders = useCallback((): Record<string, string> => {

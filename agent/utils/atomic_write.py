@@ -9,6 +9,14 @@ import tempfile
 from pathlib import Path
 
 
+def _validate_path(path: Path) -> None:
+    """Validate path doesn't contain traversal or injection characters."""
+    resolved = path.resolve()
+    path_str = str(resolved)
+    if '..' in path_str.split(os.sep):
+        raise ValueError(f"Path traversal detected: {path}")
+
+
 def atomic_write_json(path: Path | str, data: dict, indent: int = 2) -> None:
     """Write JSON atomically: temp → fsync → replace.
 
@@ -22,6 +30,7 @@ def atomic_write_json(path: Path | str, data: dict, indent: int = 2) -> None:
         TypeError: If data is not JSON-serializable.
     """
     path = Path(path)
+    _validate_path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
 
     fd, tmp_path = tempfile.mkstemp(
@@ -52,6 +61,7 @@ def atomic_write_text(path: Path | str, content: str) -> None:
         OSError: If the write fails (temp file is cleaned up).
     """
     path = Path(path)
+    _validate_path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
 
     fd, tmp_path = tempfile.mkstemp(

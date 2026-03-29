@@ -134,7 +134,7 @@ async function apiPost<T>(path: string): Promise<T> {
 let _tabId: string | null = null
 function getTabId(): string {
   if (!_tabId) {
-    _tabId = sessionStorage.getItem('tabId') ?? `tab-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+    _tabId = sessionStorage.getItem('tabId') ?? `tab-${Date.now()}-${crypto.randomUUID().slice(0, 8)}`
     sessionStorage.setItem('tabId', _tabId)
   }
   return _tabId
@@ -143,7 +143,7 @@ function getTabId(): string {
 let _sessionId: string | null = null
 function getSessionId(): string {
   if (!_sessionId) {
-    _sessionId = localStorage.getItem('sessionId') ?? `sess-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+    _sessionId = localStorage.getItem('sessionId') ?? `sess-${Date.now()}-${crypto.randomUUID().slice(0, 8)}`
     localStorage.setItem('sessionId', _sessionId)
   }
   return _sessionId

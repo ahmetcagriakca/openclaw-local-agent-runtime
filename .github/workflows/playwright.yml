@@ -30,10 +30,13 @@ jobs:
       - name: Install backend dependencies
         run: pip install -r agent/requirements.txt
 
+      - name: Install root dependencies (Playwright)
+        run: npm ci
+
       - name: Install frontend dependencies
         run: cd frontend && npm ci
 
-      - name: Install Playwright
+      - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
       - name: Start API server

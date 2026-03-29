@@ -1,6 +1,7 @@
 """Mission API endpoints — read-only (D-059). GPT Fix 3: wrapper responses."""
 import json
 import os
+import re
 
 from fastapi import APIRouter, HTTPException
 
@@ -19,6 +20,10 @@ MISSIONS_DIR = os.path.join(
 
 router = APIRouter(tags=["missions"])
 
+# Pattern for valid mission IDs — alphanumeric, hyphens, underscores only.
+# Prevents path traversal via mission_id parameter.
+_SAFE_ID_RE = re.compile(r"^[a-zA-Z0-9_-]+$")
+
 
 @router.get("/missions", response_model=MissionListResponse)
 async def list_missions():
@@ -30,6 +35,8 @@ async def list_missions():
 @router.get("/missions/{mission_id}", response_model=MissionDetailResponse,
             responses={404: {"model": APIError}})
 async def get_mission(mission_id: str):
+    if not _SAFE_ID_RE.match(mission_id):
+        raise HTTPException(status_code=400, detail="Invalid mission_id format")
     from api.server import normalizer
     result = normalizer.get_mission(mission_id)
     if result is None:
@@ -42,6 +49,8 @@ async def get_mission(mission_id: str):
 @router.get("/missions/{mission_id}/stages",
             response_model=StageListResponse)
 async def get_mission_stages(mission_id: str):
+    if not _SAFE_ID_RE.match(mission_id):
+        raise HTTPException(status_code=400, detail="Invalid mission_id format")
     from api.server import normalizer
     result = normalizer.get_mission(mission_id)
     if result is None:
@@ -55,6 +64,8 @@ async def get_mission_stages(mission_id: str):
             response_model=StageDetail,
             responses={404: {"model": APIError}})
 async def get_mission_stage(mission_id: str, stage_idx: int):
+    if not _SAFE_ID_RE.match(mission_id):
+        raise HTTPException(status_code=400, detail="Invalid mission_id format")
     from api.server import normalizer
     result = normalizer.get_mission(mission_id)
     if result is None:
@@ -75,6 +86,8 @@ async def get_token_report(mission_id: str):
     Resolves dashboard placeholder IDs to controller mission IDs
     so the correct token-report.json file is found.
     """
+    if not _SAFE_ID_RE.match(mission_id):
+        raise HTTPException(status_code=400, detail="Invalid mission_id format")
     from api.server import normalizer
     file_id = normalizer.resolve_file_id(mission_id)
     report_path = os.path.join(

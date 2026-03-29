@@ -1,8 +1,9 @@
 # Vezir
 
 [![CI](https://github.com/ahmetcagriakca/vezir/actions/workflows/ci.yml/badge.svg)](https://github.com/ahmetcagriakca/vezir/actions/workflows/ci.yml)
-[![Tests](https://img.shields.io/badge/tests-598%20backend%20%C2%B7%2075%20frontend-brightgreen)]()
-[![Decisions](https://img.shields.io/badge/decisions-130%20frozen-blueviolet)]()
+[![CodeQL](https://github.com/ahmetcagriakca/vezir/actions/workflows/codeql.yml/badge.svg)](https://github.com/ahmetcagriakca/vezir/actions/workflows/codeql.yml)
+[![Tests](https://img.shields.io/badge/tests-682%20backend%20%C2%B7%20168%20frontend-brightgreen)]()
+[![Decisions](https://img.shields.io/badge/decisions-129%20frozen-blueviolet)]()
 [![Phase](https://img.shields.io/badge/phase-7-blue)]()
 
 Governed multi-agent mission platform for Windows. Natural language goals become structured, auditable missions executed by 9 specialist AI roles with quality gates, risk classification, and encrypted audit trails.
@@ -126,10 +127,10 @@ python agent/oc-agent-runner.py --mission -m "dashboard'a CPU grafik ekle"
 ### Test
 
 ```bash
-# Backend (598 tests)
+# Backend (682 tests)
 cd agent && python -m pytest tests/ -v
 
-# Frontend (75 tests)
+# Frontend (168 tests)
 cd frontend && npx vitest run
 
 # Type check
@@ -149,7 +150,7 @@ agent/                  Python backend
   persistence/            JSON file stores
   context/                Context assembler, working set, telemetry
   auth/                   API key auth + session
-  tests/                  598 pytest tests
+  tests/                  682 pytest tests
   schedules/              Cron-based mission scheduling
 frontend/               React dashboard (Vite + Tailwind)
 bridge/                 PowerShell bridge to Windows
@@ -173,7 +174,7 @@ docs/
 
 ## Governance
 
-The project follows a sprint-based governance model with 130 frozen architectural decisions, formal quality gates, and GPT-assisted cross-review. Every sprint produces auditable evidence packets.
+The project follows a sprint-based governance model with 129 frozen architectural decisions, formal quality gates, and GPT-assisted cross-review. Every sprint produces auditable evidence packets.
 
 See [`docs/ai/GOVERNANCE.md`](docs/ai/GOVERNANCE.md) for sprint rules and [`docs/ai/DECISIONS.md`](docs/ai/DECISIONS.md) for the full decision log.
 
@@ -182,7 +183,7 @@ See [`docs/ai/GOVERNANCE.md`](docs/ai/GOVERNANCE.md) for sprint rules and [`docs
 | Doc | Purpose |
 |-----|---------|
 | [`docs/ai/STATE.md`](docs/ai/STATE.md) | Canonical system state |
-| [`docs/ai/DECISIONS.md`](docs/ai/DECISIONS.md) | 130 frozen decisions (D-001 → D-130) |
+| [`docs/ai/DECISIONS.md`](docs/ai/DECISIONS.md) | 129 frozen decisions (D-001 → D-130) |
 | [`docs/ai/GOVERNANCE.md`](docs/ai/GOVERNANCE.md) | Sprint governance rules |
 | [`docs/ai/BACKLOG.md`](docs/ai/BACKLOG.md) | Open backlog (33 items) |
 | [`docs/ai/NEXT.md`](docs/ai/NEXT.md) | Roadmap + carry-forward |

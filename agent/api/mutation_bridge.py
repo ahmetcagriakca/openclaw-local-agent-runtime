@@ -20,6 +20,7 @@ Signal artifact format (SPRINT-11-TASK-BREAKDOWN.md Section 3):
 Artifact path: logs/missions/{missionId}/{type}-request-{uuid}.json
 """
 import logging
+import re
 import uuid
 from datetime import datetime, timezone
 from pathlib import Path
@@ -28,6 +29,9 @@ from typing import Optional
 from utils.atomic_write import atomic_write_json
 
 logger = logging.getLogger("mcc.mutation.bridge")
+
+# Pattern for valid mission/target IDs — prevents path traversal.
+_SAFE_ID_RE = re.compile(r"^[a-zA-Z0-9_-]+$")
 
 
 def write_signal_artifact(
@@ -55,6 +59,12 @@ def write_signal_artifact(
     Raises:
         OSError: If directory creation or file write fails.
     """
+    # Validate mission_id to prevent path traversal
+    if not _SAFE_ID_RE.match(mission_id):
+        raise ValueError(f"Invalid mission_id format: {mission_id}")
+    if not _SAFE_ID_RE.match(target_id):
+        raise ValueError(f"Invalid target_id format: {target_id}")
+
     request_id = f"req-{uuid.uuid4()}"
     requested_at = datetime.now(timezone.utc).isoformat()
 
@@ -98,6 +108,10 @@ def has_pending_signal(
     """
     import json
     import time
+
+    # Validate mission_id to prevent path traversal
+    if not _SAFE_ID_RE.match(mission_id):
+        return None
 
     SIGNAL_TTL_S = 60  # Expire signals after 60 seconds
 

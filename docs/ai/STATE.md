@@ -113,6 +113,7 @@
 | Sprint 40 | 618 tests, 0 fail | 82 tests, 0 TS errors | +97 backend, +7 frontend (S37-S40 cumulative) |
 | Sprint 41 | 618 tests, 0 fail | 82 tests, 0 TS errors | +1 guard test (atomic write compliance) |
 | Sprint 42 | 669 tests, 0 fail | 82 tests, 0 TS errors | +51 backend (DLQ, resilience, auto-resume, G2 patch) |
+| Sprint 43 | 682 tests, 0 fail | 168 tests, 0 TS errors | +13 backend (feature flags), +86 frontend (11 new files) |
 
 ## Architectural Decisions
 

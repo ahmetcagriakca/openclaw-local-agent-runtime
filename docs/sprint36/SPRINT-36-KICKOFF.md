@@ -27,10 +27,11 @@ Continue P1 security hardening: encrypt secrets at rest and add audit log tamper
   - Missing key: read-only mode (read legacy plaintext, deny new writes, log warning)
   - Legacy source: `config/secrets.json` (plaintext, current repo)
   - Encrypted target: `config/secrets.enc.json`
-  - Read precedence: try encrypted first, fall back to plaintext legacy
+  - Read precedence: `config/secrets.enc.json` is authoritative when present. Fallback to `config/secrets.json` only when encrypted file is absent. If encrypted file exists but key is missing/invalid or decrypt fails: do NOT fall back to plaintext — return read failure, log error, remain read-only
   - Write semantics: temp + fsync + `os.replace()` (atomic per D-071), never partial overwrite
   - Migration: new writes encrypted only, legacy readable, no backfill in S36
   - Rotation: not in S36 scope (deferred)
+  - Runtime ownership: `agent/services/secret_store.py` is the single owner. Key validation at module init. All secret reads/writes must route through `secret_store`. No direct production writes to `config/secrets.json` outside tests/fixtures
 - **Audit integrity contract:**
   - Mechanism: SHA-256 hash chain
   - Verification surface: CLI only in S36 (`tools/verify-audit-chain.py`), no API endpoint
@@ -38,6 +39,10 @@ Continue P1 security hardening: encrypt secrets at rest and add audit log tamper
   - Genesis `prev_hash`: SHA-256 of empty string (`e3b0c44298fc1c149afbf4c8996fb924...`)
   - Tamper detection output: `INTEGRITY_FAIL` + `broken_entry_index`
   - Intact chain output: `INTEGRITY_OK` + `entry_count`
+  - Audit log path: `logs/audit/audit.jsonl` (append-only JSONL, one JSON object per line)
+  - Entry schema: `{"timestamp", "event", "actor", "detail", "prev_hash", "entry_hash"}`
+  - Single runtime append owner: `agent/persistence/audit_integrity.py:append_entry()`
+  - CLI exit codes: exit 0 on `INTEGRITY_OK`, exit 1 on `INTEGRITY_FAIL` or malformed input
 - **Acceptance:** `decisions/D-129-secret-audit-contract.md` committed on main
 - **Verification:** `cat decisions/D-129-secret-audit-contract.md | head -20`
 - **Artifacts:** `decisions/D-129-secret-audit-contract.md`
@@ -56,7 +61,8 @@ Continue P1 security hardening: encrypt secrets at rest and add audit log tamper
   - Invalid base64 key → startup warning + read-only mode
   - Decoded key length != 32 → startup warning + read-only mode
   - Atomic write path: temp + fsync + `os.replace()`
-  - Read precedence: encrypted first, legacy fallback
+  - Read precedence: encrypted authoritative, legacy fallback only when encrypted absent
+  - Encrypted exists + key invalid/missing: read failure, NOT silent fallback to plaintext
 - **Verification:** `cd agent && python -m pytest tests/test_secret_store.py -v 2>&1 | tail -5`
 - **Failure-path verification:**
   - `python -m pytest tests/test_secret_store.py -v -k invalid_key 2>&1 | tail -3`
@@ -82,6 +88,8 @@ Continue P1 security hardening: encrypt secrets at rest and add audit log tamper
   - Tampered entry returns `INTEGRITY_FAIL` + `broken_entry_index`
   - Hash = SHA-256 of canonical sorted-key JSON, UTF-8, `entry_hash` excluded
   - Genesis `prev_hash` = SHA-256 of empty string
+  - CLI exit 0 on INTEGRITY_OK, exit 1 on INTEGRITY_FAIL
+  - Tests include exit-code verification, not only stdout text
 - **Verification:** `cd agent && python -m pytest tests/test_audit_integrity.py -v 2>&1 | tail -5`
 - **Failure-path verification:** `python -m pytest tests/test_audit_integrity.py -v -k tamper 2>&1 | tail -3`
 - **Evidence:** `evidence/sprint-36/audit-tests-output.txt`

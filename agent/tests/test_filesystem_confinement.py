@@ -68,11 +68,13 @@ class TestConfinementDeny:
         with pytest.raises(ConfinementError):
             guard.check_path(escaped)
 
+    @pytest.mark.skipif(not IS_WINDOWS, reason="Windows-specific path check")
     def test_confine_deny_windows_system(self, guard):
-        """Deny Windows system paths (works on all platforms via mock paths)."""
+        """Deny Windows system paths (Windows only)."""
         with pytest.raises(ConfinementError, match="Windows system path denied"):
             guard.check_path("C:\\Windows\\System32\\cmd.exe")
 
+    @pytest.mark.skipif(not IS_WINDOWS, reason="Windows-specific path check")
     def test_confine_deny_windows_program_files(self, guard):
         with pytest.raises(ConfinementError, match="Windows system path denied"):
             guard.check_path("C:\\Program Files\\app.exe")

@@ -5,12 +5,13 @@
 
 ---
 
-## Sprint 42 — Runner Resilience (B-106) (IN PROGRESS)
+## Sprint 42 — Runner Resilience (B-106) (G2 PENDING)
 
 **Model:** A (implementation) | **Class:** Product
 **Scope:** DLQ, exponential backoff, circuit breaker, poison pill detection, auto-resume
-**Commits:** `cae2bfa`
+**Commits:** `cae2bfa`, `4ab8ceb`
 **Tests:** +44 new (662 total)
+**Review:** Submitted to GPT (conversation `69c97bad`), awaiting verdict
 
 ## Sprint 41 — Integrity Hardening / Source-of-Truth Stabilization (CLOSED)
 

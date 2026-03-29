@@ -1,6 +1,11 @@
-"""Context Assembler — D-040/D-041/D-042 artifact distribution engine."""
+"""Context Assembler — D-040/D-041/D-042 artifact distribution engine.
+
+D-102: Context isolation controlled by CONTEXT_ISOLATION_ENABLED feature flag.
+When disabled, all artifacts are delivered at full tier (D) with no reread downgrade.
+"""
 from datetime import datetime, timezone
 
+from config.feature_flags import get_flag
 from context.artifact_identity import create_artifact_header, wrap_artifact
 from context.summary_cache import SummaryCache, generate_basic_summary, generate_metadata_view
 
@@ -52,6 +57,11 @@ class ContextAssembler:
         """
         if artifact_id not in self.artifacts:
             return None
+
+        # D-102: When context isolation is disabled, deliver full artifact
+        if not get_flag("CONTEXT_ISOLATION_ENABLED"):
+            self._log_consumption(artifact_id, requesting_role, stage_id, "D")
+            return self.artifacts[artifact_id]
 
         # D-042: Check for reread
         prior_full_reads = [
@@ -190,6 +200,17 @@ class ContextAssembler:
         Returns list of (artifactId, content, tier) tuples.
         """
         overrides = tier_overrides or {}
+
+        # D-102: When context isolation is disabled, deliver all at full tier
+        if not get_flag("CONTEXT_ISOLATION_ENABLED"):
+            context_package = []
+            for aid in artifact_ids:
+                artifact = self.artifacts.get(aid)
+                if not artifact:
+                    continue
+                content = self.get_artifact(aid, "D", role, stage_id)
+                context_package.append((aid, content, "D"))
+            return context_package
 
         context_package = []
         for aid in artifact_ids:

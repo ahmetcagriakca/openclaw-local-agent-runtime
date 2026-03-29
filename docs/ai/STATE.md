@@ -89,6 +89,7 @@
 | Sprint 32 | API Throttling + Idempotency (B-005, B-012) | Closed |
 | Sprint 33 | Project V2 Contract Hardening (D-123/124/125) | Closed |
 | Sprint 34 | Closure Tooling Hardening (D-127) | Closed |
+| Sprint 35 | Security Hardening Baseline (D-128, B-003, B-004) | G2 PASS — awaiting operator close |
 
 ## Test Evidence
 

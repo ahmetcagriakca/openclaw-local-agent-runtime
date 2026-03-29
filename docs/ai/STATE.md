@@ -3,7 +3,7 @@
 **Last updated:** 2026-03-29
 **Active phase:** Phase 7 — Sprint 36 closed, Sprint 37 kickoff pending
 **Doc model:** This file is canonical for system state. Session context lives in `docs/ai/handoffs/current.md`.
-**Note:** All sprints through 36 closed. Phase 7 active. 129 frozen decisions (D-001 → D-130, D-126 skipped).
+**Note:** All sprints through 36 closed. Phase 7 active. 130 frozen decisions (D-001 → D-130, D-126 skipped).
 **Persistence:** State is file-persisted (state.json, mission.json). Mission history via persistence layer (Sprint 16).
 **API:** Vezir API on 127.0.0.1:8003 (FastAPI + Uvicorn). Schemas FROZEN (D-067). SSE on /api/v1/events/stream. Dashboard API + Alert API + Telemetry Query API (Sprint 16).
 **Frontend:** React dashboard on localhost:3000 (Vite + Tailwind). SSE live updates + polling fallback + intervention buttons + monitoring dashboard. Node.js 20 required.

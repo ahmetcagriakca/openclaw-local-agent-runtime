@@ -14,7 +14,7 @@
 - **Phase:** 7
 - **Last closed sprint:** 36
 - **Active sprint:** 37 (kickoff review pending — GPT HOLD, P1-P4 remaining)
-- **Decisions:** 129 frozen (D-001 → D-130, D-126 skipped)
+- **Decisions:** 130 frozen (D-001 → D-130, D-126 skipped)
 - **Tests:** ~520 backend + 75 frontend + 7 Playwright = 600+
 - **Backlog:** ~35 open (B-003/004/005/006/008/012 closed)
 
@@ -45,4 +45,4 @@
 
 ## GPT Memo
 
-Sprint 36 closed 2026-03-29. 129 decisions. Sprint 37 kickoff pending.
+Sprint 36 closed 2026-03-29. 130 decisions (D-130 frozen for S37). Sprint 37 kickoff pending.

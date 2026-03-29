@@ -1,0 +1,4 @@
+src/__tests__/SessionManager.test.tsx(73,5): error TS2322: Type 'null' is not assignable to type 'string'.
+src/__tests__/Sidebar.test.tsx(43,21): error TS2345: Argument of type 'HTMLElement | undefined' is not assignable to parameter of type 'Element | Node | Document | Window'.
+  Type 'undefined' is not assignable to type 'Element | Node | Document | Window'.
+tsc exit: 2

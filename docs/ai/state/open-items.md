@@ -20,11 +20,11 @@
 | ~~Telegram bridge fix~~ | ~~S33+ deferred~~ | ✅ S38 task 38.1 DONE |
 | ~~B-101 Scheduled mission execution~~ | ~~Backlog P1~~ | ✅ S38 task 38.2 DONE |
 | ~~B-103 Mission presets / quick-run~~ | ~~Backlog P1~~ | ✅ S38 task 38.3 DONE |
-| B-102 Full approval inbox UI | Backlog P1 | Sprint 39 candidate |
+| ~~B-102 Full approval inbox UI~~ | ~~Backlog P1~~ | ✅ S39 task 39.1 DONE |
+| ~~Live mission E2E~~ | ~~S14A waiver~~ | ✅ S39 task 39.2 DONE |
+| ~~Playwright live API test in CI~~ | ~~S22 retro~~ | ✅ S39 task 39.3 DONE |
+| ~~Benchmark regression gate D-109~~ | ~~S22 retro~~ | ✅ S39 task 39.4 DONE |
 | PROJECT_TOKEN rotation/docs | S23 retro | AKCA-owned, non-blocking |
-| Benchmark regression gate (D-109) | S22 retro | Sprint 39 candidate |
-| Playwright live API test in CI | S22 retro | Sprint 39 candidate |
-| Live mission E2E | S14A waiver | Sprint 39 candidate |
 | Backend physical restructure | S14A/14B | Unassigned |
 | Docker dev environment | S14B | Unassigned |
 | UIOverview + WindowList tools | D-102 | Unassigned |
@@ -47,6 +47,6 @@
 
 ## Next Sprint
 
-**Sprint 39 — Phase 7**
+**Sprint 40 — Phase 7**
 - Status: NOT STARTED
-- Candidates: B-102 approval inbox UI, Playwright CI, Live E2E, Benchmark D-109
+- Candidates: Frontend Vitest components, CONTEXT_ISOLATION, Alert scoping, Docker dev, Backend restructure

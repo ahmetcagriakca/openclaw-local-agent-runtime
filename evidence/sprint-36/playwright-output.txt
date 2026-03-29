@@ -1,0 +1,12 @@
+
+Running 7 tests using 2 workers
+
+  ✓  2 [api-smoke] › tests\e2e\smoke.spec.ts:4:7 › Vezir API Smoke Tests › health endpoint returns 200 (2.9s)
+  ✓  3 [api-smoke] › tests\e2e\smoke.spec.ts:9:7 › Vezir API Smoke Tests › capabilities endpoint returns 200 (2.7s)
+  ✓  4 [api-smoke] › tests\e2e\smoke.spec.ts:14:7 › Vezir API Smoke Tests › docs endpoint available (229ms)
+  ✓  1 [api-smoke] › tests\e2e\mission-flow.spec.ts:4:7 › Live Mission E2E Flow › mission lifecycle: list → create → detail → stages (5.9s)
+  ✓  5 [api-smoke] › tests\e2e\smoke.spec.ts:19:7 › Vezir API Smoke Tests › missions endpoint returns 200 (288ms)
+  ✓  6 [api-smoke] › tests\e2e\mission-flow.spec.ts:42:7 › Live Mission E2E Flow › API meta envelope has required fields (288ms)
+  ✓  7 [api-smoke] › tests\e2e\mission-flow.spec.ts:50:7 › Live Mission E2E Flow › host security rejects invalid origin (19ms)
+
+  7 passed (8.0s)

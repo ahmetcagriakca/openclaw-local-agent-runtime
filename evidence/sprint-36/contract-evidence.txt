@@ -1,0 +1,285 @@
+=== Contract Evidence for Sprint 36 ===
+Date: 2026-03-29T10:31:44+03:00
+
+--- DataQuality states (D-079, expected 6) ---
+10:  Fresh = 'fresh',
+11:  Partial = 'partial',
+12:  Stale = 'stale',
+13:  Degraded = 'degraded',
+14:  Unknown = 'unknown',
+15:  NotReached = 'not_reached',
+34:  Unknown = 'unknown',
+46:  freshnessMs: number
+71:  params: Record<string, unknown>
+93:  denyForensics: Record<string, unknown> | null
+131:  denyForensics: Record<string, unknown>[]
+166:  status: string // 'ok' | 'degraded' | 'error' | 'unknown'
+190:  data: Record<string, unknown>
+FOUND ✅
+
+--- CapabilityStatus tri-state (available/unavailable/unknown) ---
+14:  Unknown = 'unknown',
+32:  Available = 'available',
+33:  Unavailable = 'unavailable',
+34:  Unknown = 'unknown',
+71:  params: Record<string, unknown>
+93:  denyForensics: Record<string, unknown> | null
+131:  denyForensics: Record<string, unknown>[]
+166:  status: string // 'ok' | 'degraded' | 'error' | 'unknown'
+190:  data: Record<string, unknown>
+FOUND ✅
+
+--- ErrorBoundary usage ---
+6:import { ErrorBoundary } from './components/ErrorBoundary'
+25:              <ErrorBoundary fallbackLabel="Missions panel error">
+27:              </ErrorBoundary>
+33:              <ErrorBoundary fallbackLabel="Mission detail panel error">
+35:              </ErrorBoundary>
+41:              <ErrorBoundary fallbackLabel="Health panel error">
+43:              </ErrorBoundary>
+49:              <ErrorBoundary fallbackLabel="Approvals panel error">
+51:              </ErrorBoundary>
+57:              <ErrorBoundary fallbackLabel="Telemetry panel error">
+59:              </ErrorBoundary>
+65:              <ErrorBoundary fallbackLabel="Monitoring panel error">
+67:              </ErrorBoundary>
+FOUND ✅
+
+--- SSE hooks ---
+7:import { useSSE, type SSEStatus } from '../hooks/useSSE'
+9:interface SSEContextValue {
+15:const SSEContext = createContext<SSEContextValue>({
+21:export function useSSEContext(): SSEContextValue {
+22:  return useContext(SSEContext)
+29:export function useSSEInvalidation(eventType: string | string[], callback: () => void) {
+30:  const { subscribe } = useSSEContext()
+60:  const { status, lastEventAt } = useSSE({ onEvent: handleEvent })
+77:    <SSEContext.Provider value={{ status, lastEventAt, subscribe }}>
+79:    </SSEContext.Provider>
+FOUND ✅
+
+--- ConnectionIndicator ---
+2: * ConnectionIndicator — shows SSE connection status.
+15:export function ConnectionIndicator() {
+FOUND ✅
+
+--- FileWatcher class ---
+35:class FileWatcher:
+FOUND ✅
+
+--- SSEManager class ---
+36:class SSEManager:
+FOUND ✅
+
+--- Atomic request artifact ---
+agent/api/approval_mutation_api.py:122:    request_id, requested_at, artifact_path = write_signal_artifact(
+agent/api/approval_mutation_api.py:192:    request_id, requested_at, artifact_path = write_signal_artifact(
+agent/api/mission_create_api.py:22:from utils.atomic_write import atomic_write_json
+agent/api/mission_create_api.py:121:        atomic_write_json(path, data)
+agent/api/mission_create_api.py:152:    atomic_write_json(mission_file, mission_data)
+agent/api/mission_mutation_api.py:216:    request_id, requested_at, artifact_path = write_signal_artifact(
+agent/api/mission_mutation_api.py:299:    request_id, requested_at, artifact_path = write_signal_artifact(
+agent/api/mission_mutation_api.py:388:    request_id, requested_at, artifact_path = write_signal_artifact(
+agent/api/mission_mutation_api.py:465:    request_id, requested_at, artifact_path = write_signal_artifact(
+agent/api/mission_mutation_api.py:542:    request_id, requested_at, artifact_path = write_signal_artifact(
+agent/api/mutation_bridge.py:3:Atomic request artifact writer. API mutation endpoints call this to write
+agent/api/mutation_bridge.py:7:  API only writes atomic request artifact; runtime/controller remains sole executor.
+agent/api/mutation_bridge.py:28:from utils.atomic_write import atomic_write_json
+agent/api/mutation_bridge.py:53:        Tuple of (requestId, requestedAt ISO string, artifact Path).
+agent/api/mutation_bridge.py:78:    atomic_write_json(artifact_path, artifact)
+agent/api/mutation_bridge.py:81:        mutation_type, target_id, request_id, artifact_path,
+agent/api/mutation_bridge.py:84:    return request_id, requested_at, artifact_path
+agent/api/normalizer.py:319:        pending_signals = self._read_signal_artifacts(mission_id_for_files)
+agent/api/server.py:23:from utils.atomic_write import atomic_write_json
+agent/api/server.py:68:    Atomic read-modify-write: read → update own key → atomic write.
+agent/api/server.py:94:        atomic_write_json(SERVICES_PATH, services)
+Binary file agent/api/__pycache__/approval_mutation_api.cpython-314.pyc matches
+Binary file agent/api/__pycache__/mission_create_api.cpython-314.pyc matches
+Binary file agent/api/__pycache__/mission_mutation_api.cpython-314.pyc matches
+Binary file agent/api/__pycache__/mutation_bridge.cpython-314.pyc matches
+Binary file agent/api/__pycache__/server.cpython-314.pyc matches
+Binary file agent/api/__pycache__/signal_api.cpython-314.pyc matches
+FOUND ✅
+
+--- CSRF middleware ---
+agent/api/csrf_middleware.py:1:"""CSRF Middleware — D-089: SameSite=Strict + Origin Header Check.
+agent/api/csrf_middleware.py:12:logger = logging.getLogger("mcc.csrf")
+agent/api/server.py:19:from api.csrf_middleware import CSRFMiddleware
+Binary file agent/api/__pycache__/csrf_middleware.cpython-314.pyc matches
+Binary file agent/api/__pycache__/server.cpython-314.pyc matches
+FOUND ✅
+
+--- MutationResponse contract ---
+133:    requestedAt: str
+205:    requestedAt: Optional[str] = None
+270:    API always returns lifecycleState=requested.
+274:    lifecycleState: str = "requested"
+276:    requestedAt: str
+FOUND ✅
+
+--- Mutation audit fields ---
+agent/api/mission_mutation_api.py:74:                    if d.get("sessionId") == session_key:
+agent/api/mutation_audit.py:4:timestamp, source, operation, targetId, outcome, requestId, tabId, sessionId.
+agent/api/mutation_audit.py:42:        "tabId": tab_id,
+agent/api/mutation_audit.py:43:        "sessionId": session_id,
+agent/api/mutation_bridge.py:17:    "operatorInfo": { "tabId": "...", "sessionId": "..." }
+agent/api/mutation_bridge.py:69:            "tabId": tab_id,
+agent/api/mutation_bridge.py:70:            "sessionId": session_id,
+agent/api/normalizer.py:103:                if data.get("sessionId") in dashboard_sessions:
+agent/api/normalizer.py:119:                                if cd.get("sessionId") == session_key:
+agent/api/normalizer.py:208:                    if d.get("sessionId") == session_key:
+agent/api/normalizer.py:237:        # If this is a dashboard placeholder, find the controller's mission by sessionId
+agent/api/normalizer.py:251:                    if d.get("sessionId") == session_key:
+agent/api/normalizer.py:629:            missionId=data.get("sessionId"),
+Binary file agent/api/__pycache__/mission_mutation_api.cpython-314.pyc matches
+Binary file agent/api/__pycache__/mutation_audit.cpython-314.pyc matches
+Binary file agent/api/__pycache__/mutation_bridge.cpython-314.pyc matches
+Binary file agent/api/__pycache__/normalizer.cpython-314.pyc matches
+FOUND ✅
+
+--- Mutation SSE events ---
+agent/api/approval_mutation_api.py:74:async def _emit_mutation_requested(request: Request, request_id: str,
+agent/api/approval_mutation_api.py:76:    """Best-effort SSE emit for mutation_requested (D-096 ordering rule)."""
+agent/api/approval_mutation_api.py:80:            await sse_mgr.broadcast("mutation_requested", {
+agent/api/approval_mutation_api.py:86:        logger.warning("Failed to emit mutation_requested SSE: %s", e)
+agent/api/approval_mutation_api.py:142:    await _emit_mutation_requested(request, request_id, apv_id, "approve")
+agent/api/approval_mutation_api.py:212:    await _emit_mutation_requested(request, request_id, apv_id, "reject")
+agent/api/mission_mutation_api.py:161:async def _emit_mutation_requested(request: Request, request_id: str,
+agent/api/mission_mutation_api.py:163:    """Best-effort SSE emit for mutation_requested."""
+agent/api/mission_mutation_api.py:167:            await sse_mgr.broadcast("mutation_requested", {
+agent/api/mission_mutation_api.py:173:        logger.warning("Failed to emit mutation_requested SSE: %s", e)
+agent/api/mission_mutation_api.py:236:    await _emit_mutation_requested(request, request_id, mission_id, "cancel")
+agent/api/mission_mutation_api.py:319:    await _emit_mutation_requested(request, request_id, mission_id, "retry")
+agent/api/mission_mutation_api.py:408:    await _emit_mutation_requested(request, request_id, mission_id, "pause")
+agent/api/mission_mutation_api.py:485:    await _emit_mutation_requested(request, request_id, mission_id, "resume")
+agent/api/mission_mutation_api.py:562:    await _emit_mutation_requested(request, request_id, mission_id, "skip-stage")
+Binary file agent/api/__pycache__/approval_mutation_api.cpython-314.pyc matches
+Binary file agent/api/__pycache__/mission_mutation_api.cpython-314.pyc matches
+FOUND ✅
+
+--- Bridge rule: no direct method call in API layer ---
+CLEAN ✅ — No direct method calls in API layer
+
+EXISTS ✅ — mutation-drill.txt
+DRILL ALL PASS ✅
+
+EXISTS ✅ — e2e-output.txt
+EXISTS ✅ — lighthouse.txt
+--- E2E Test Count (auto-parsed, P-05) ---
+E2E test count (collected): 39
+
+--- Decision Debt: D-001→D-103 zero gap check ---
+DECISION DEBT ZERO ✅ — D-001→D-103 all present
+
+=== INFORMATIVE (non-blocking) ===
+--- usePolling preserved (D-088 fallback) ---
+frontend/src/hooks/usePolling.ts:18:export function usePolling<T>(
+frontend/src/pages/ApprovalsPage.tsx:9:import { usePolling } from '../hooks/usePolling'
+frontend/src/pages/ApprovalsPage.tsx:24:  const { data, error, loading, refresh, lastFetchedAt } = usePolling(getApprovals)
+frontend/src/pages/HealthPage.tsx:6:import { usePolling } from '../hooks/usePolling'
+frontend/src/pages/HealthPage.tsx:25:  const health = usePolling(getHealth, 10_000)
+frontend/src/pages/HealthPage.tsx:26:  const caps = usePolling(getCapabilities, 30_000)
+frontend/src/pages/HealthPage.tsx:27:  const logs = usePolling(getRecentLogs, 15_000)
+frontend/src/pages/MissionDetailPage.tsx:10:import { usePolling } from '../hooks/usePolling'
+frontend/src/pages/MissionDetailPage.tsx:34:  const { data, error, loading, refresh, lastFetchedAt } = usePolling(fetcher, 10_000)
+frontend/src/pages/MissionListPage.tsx:9:import { usePolling } from '../hooks/usePolling'
+frontend/src/pages/MissionListPage.tsx:16:  const { data, error, loading, refresh, lastFetchedAt } = usePolling(getMissions, 10_000)
+frontend/src/pages/TelemetryPage.tsx:7:import { usePolling } from '../hooks/usePolling'
+frontend/src/pages/TelemetryPage.tsx:34:  const { data, error, loading, refresh } = usePolling(fetcher, 15_000)
+frontend/src/__tests__/usePolling.test.tsx:2: * usePolling hook tests — timer, visibility, refresh.
+frontend/src/__tests__/usePolling.test.tsx:6:import { usePolling } from '../hooks/usePolling'
+frontend/src/__tests__/usePolling.test.tsx:8:describe('usePolling', () => {
+frontend/src/__tests__/usePolling.test.tsx:19:    const { result } = renderHook(() => usePolling(fetcher, 30_000))
+frontend/src/__tests__/usePolling.test.tsx:32:    const { result } = renderHook(() => usePolling(fetcher, 5_000))
+frontend/src/__tests__/usePolling.test.tsx:60:    const { result } = renderHook(() => usePolling(fetcher, 5_000))
+frontend/src/__tests__/usePolling.test.tsx:78:    const { result } = renderHook(() => usePolling(fetcher, 30_000))
+
+=== Live Endpoint Checks ===
+GET /api/v1/health → 200 ✅
+{
+    "meta": {
+        "freshnessMs": 0,
+        "dataQuality": "fresh",
+        "sourcesUsed": [],
+        "sourcesMissing": [],
+        "generatedAt": "2026-03-29T07:32:14.601283+00:00"
+    },
+    "status": "ok",
+    "components": {
+        "api": {
+            "name": "Vezir API",
+            "status": "ok",
+            "lastCheckAt": "2026-03-29T07:32:12.012900+00:00",
+            "detail": "serving on :8003, PID 26248"
+        },
+        "cache": {
+            "name": "File Cache",
+            "status": "ok",
+            "lastCheckAt": "2026-03-29T07:32:12.012900+00:00",
+            "detail": "entries=399, hits=7398, errors=456"
+        },
+        "capabilities": {
+            "name": "Capability Manifest",
+            "status": "ok",
+            "lastCheckAt": "2026-03-29T07:32:12.012900+00:00",
+            "detail": "5/5 available"
+        },
+        "sse": {
+            "name": "SSE Manager",
+            "status": "ok",
+            "lastCheckAt": "2026-03-29T07:32:12.012900+00:00",
+            "detail": "0/10 clients connected"
+        },
+        "heartbeat": {
+            "name": "Service Heartbeat",
+            "status": "ok",
+            "lastCheckAt": "2026-03-29T07:32:01.628495+00:00",
+            "detail": "last: 10s ago, uptime: 14.2h"
+        },
+        "missions": {
+            "name": "Missions",
+            "status": "ok",
+            "lastCheckAt": "2026-03-29T07:32:12.012900+00:00",
+            "detail": "total=204, active=2, completed=137, failed=10, pending=0"
+        },
+        "approvals": {
+            "name": "Approvals",
+            "status": "ok",
+            "lastCheckAt": "2026-03-29T07:32:12.012900+00:00",
+            "detail": "total=7, pending=0, approved=3, denied=4"
+        },
+        "storage": {
+            "name": "Storage",
+            "status": "ok",
+            "lastCheckAt": "2026-03-29T07:32:12.012900+00:00",
+            "detail": "API log: 1.7MB, telemetry: 2.9MB, mission files: 447"
+        },
+        "wmcp": {
+            "name": "WMCP Server (MCP Proxy)",
+            "status": "ok",
+            "lastCheckAt": "2026-03-29T07:32:12.012900+00:00",
+            "detail": "v3.1.1, 18 tools on :8001"
+        },
+        "telegram": {
+            "name": "Telegram Bot",
+            "status": "ok",
+            "lastCheckAt": "2026-03-29T07:32:12.012900+00:00",
+            "detail": "@newbieakcabot active, chat=8654710624"
+        },
+        "llm_providers": {
+            "name": "LLM Providers",
+            "status": "ok",
+            "lastCheckAt": "2026-03-29T07:32:12.012900+00:00",
+            "detail": "OpenAI, Anthropic"
+        }
+    }
+}
+
+--- SSE stream (3s capture) ---
+SSE stream active ✅
+event: connected
+data: {"serverTime": "2026-03-29T07:32:14.966691+00:00", "version": "1.0.0"}
+
+--- Host attack (D-070) ---
+Host attack → 403 ✅
+

@@ -130,6 +130,20 @@ fi
 
 log ""
 
+# ─── DOC DRIFT CHECK (decision index + test counts) ─────────
+log "--- Doc Drift Check ---"
+if [ -f "tools/doc_drift_check.py" ]; then
+    if python tools/doc_drift_check.py --skip-tests 2>&1 | tee -a "$MAIN_OUTPUT"; then
+        pass "Doc drift check: all checks passed"
+    else
+        fail "Doc drift check: mismatches found"
+    fi
+else
+    log "  Doc drift check not found — skipped"
+fi
+
+log ""
+
 # ─── PROJECT V2 BOARD VALIDATOR (D-123/D-124/D-125) ─────────
 log "--- Project V2 Board Validator ---"
 VALIDATOR_OUTPUT=$(python tools/project-validator.py 2>&1)

@@ -13,6 +13,9 @@ import sys
 import time
 from datetime import datetime
 
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+from utils.atomic_write import atomic_write_json
+
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 AGENT_DIR = os.path.join(PROJECT_ROOT, "agent")
 MISSIONS_DIR = os.path.join(PROJECT_ROOT, "logs", "missions")
@@ -294,8 +297,7 @@ def main():
             PROJECT_ROOT, "logs",
             f"e2e-results-{datetime.utcnow().strftime('%Y%m%d%H%M%S')}.json")
         os.makedirs(os.path.dirname(results_path), exist_ok=True)
-        with open(results_path, "w", encoding="utf-8") as f:
-            json.dump(results, f, indent=2, ensure_ascii=False, default=str)
+        atomic_write_json(results_path, results)
         print(f"\n  Results saved to: {results_path}")
     elif args.complexity:
         run_test_case(args.complexity, custom_message=args.message,

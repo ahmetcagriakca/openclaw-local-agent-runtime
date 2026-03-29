@@ -1174,3 +1174,141 @@ Formal record: `decisions/D-129-secret-audit-contract.md`.
 
 TLS 1.2+, fail-closed default (no cert = startup deny), dev-mode explicit HTTP fallback, HSTS, self-signed cert generator.
 Formal record: `decisions/D-130-transport-encryption.md`.
+
+---
+
+## Decision Index (D-001 → D-130)
+
+129 frozen decisions. D-126 skipped (number reserved, not used).
+
+| ID | Title | Phase |
+|----|-------|-------|
+| D-001 | Single Execution Owner = oc runtime | 1.5-A |
+| D-002 | Terminology — orchestration vs conversation flow | 1.5-A |
+| D-003 | Worker model — ephemeral -RunOnce | 1.5-A |
+| D-004 | Bridge = stateless translation + auth gate | 1.5-A |
+| D-005 | External surface is task-centric | 1.5-A |
+| D-006 | Raw action invocation forbidden externally | 1.5-A |
+| D-007 | Polling-only for Phase 1.5 | 1.5-A |
+| D-008 | Stuck task policy — fail-closed + dead-letter + no auto-retry | 1.5-A |
+| D-009 | Duplicate task creation accepted in Phase 1.5 | 1.5-A |
+| D-010 | Retry not exposed externally in Phase 1.5 | 1.5-C |
+| D-011 | External Bridge operations (Phase 1.5) | 1.5-C |
+| D-012 | Approval model — definition-level preapproval | 1.5-C |
+| D-013 | Allowlist fail-closed startup | 1.5-D |
+| D-014 | Five-step validation order | 1.5-D |
+| D-015 | Operator exception — local/manual/admin-only | 1.5-A |
+| D-016 | Health response sanitized | 1.5-D |
+| D-017 | Minimum audit — 10 fields per request | 1.5-D |
+| D-018 | Bridge physical form — stateless single-invocation script | 1.5-E |
+| D-019 | Canonical caller path — OpenClaw via WSL wrappers | TG-1R |
+| D-020 | Project identity | Post-1.5 |
+| D-021 | Agent Runner — single entry point for all agent execution | 3-B |
+| D-022 | Agent architecture — registry-based, multi-agent extensible | 3-A |
+| D-023 | run_powershell denied to general-assistant, executor-only | 3-A |
+| D-024 | Tool access — role-scoped via Tool Gateway | 3-A |
+| D-025 | Approval — service interface with correlation IDs | 3-A |
+| D-026 | Artifacts — typed output, handoff contracts | 3-A |
+| D-027 | Routing — deterministic table, not context-guessed | 3-A |
+| D-028 | Framework — direct SDK calls, no LangChain | 3-A |
+| D-029 | Hub-and-spoke — all handoffs through Mission Controller | 3-F |
+| D-030 | Specialists share same LLM provider, differentiated by system prompt + tool policy | 3-F |
+| D-031 | Sequential execution only in Phase 3-F, parallel deferred | 3-F |
+| D-032 | Execution ladder — 4-tier complexity routing | 4 (Design, 3G-K) |
+| D-033 | Cost governance — per-stage budget limits | 4 (Design, 3G-K) |
+| D-034 | Discovery governance — analyst/architect only | 4 (Design, 3G-K) |
+| D-035 | Cost class routing — model selection by role cost tier | 4 (Design, 3G-K) |
+| D-036 | Skill contracts — machine-readable role-skill binding | 4 (Design, 3G-L) |
+| D-037 | Working set concept — bounded per-stage file access | 4 (Design, 3G-L) |
+| D-038 | Enforcer runs before Risk Engine | 4-0/1 |
+| D-039 | Policy telemetry event types | 4-1 |
+| D-040 | Summary cache — zero-cost reuse | 4-2 |
+| D-041 | Five-tier context delivery (A through E) | 4-2 |
+| D-042 | Reread auto-downgrade + expansion broker | 4-2 |
+| D-043 | Artifact consumption logging | 4-2 |
+| D-044 | Canonical path resolution | 4-0/1 |
+| D-045 | Write authorization scope | 4-1 |
+| D-046 | Per-stage budget isolation | 4-1H |
+| D-047 | Artifact identity header — 12 mandatory fields | 4-2 |
+| D-048 | Canonical role names + alias resolution | 4-2C |
+| D-049 | Path resolution — absolute, case-normalized, traversal-safe | 4-0/1 |
+| D-050 | Mission mode fail-closed gate | 4-1H |
+| D-051 | Mutation surface mismatch detection | 4-2C |
+| D-052 | Per-mission structured summary | 4-2C |
+| D-053 | Mission mode fail-closed — working set required | 4-1H |
+| D-054 | Feedback loops — quality improvement cycles | 4-5 |
+| D-055 | Policy telemetry — 6 enforcer event types | 4-1H/2C |
+| D-056 | Recovery triage — manager recovery before abort | 4-5C |
+| D-057 | Startup metadata validation gate | 4-1H |
+| D-058 | Path hardening — null byte + UNC rejection | 4-1H |
+| D-059 | Read-only first, Controller sole executor | 5 (design) |
+| D-060 | Polling → SSE, No WebSocket | 5B (Sprint 10) |
+| D-061 | FastAPI from day 1 | 5A-1 (Sprint 8) |
+| D-062 | Intervention via atomic file signal | 5C (Sprint 11) |
+| D-063 | Approval via service layer | 5C (Sprint 11) |
+| D-064 | Port assignment — API 8003, React 3000 | 5A (Sprint 8) |
+| D-065 | Normalized API — MissionNormalizer | 5A-1 (Sprint 8) |
+| D-066 | Legacy dashboard lives until 5D | 5D (Sprint 12) |
+| D-067 | Schema frozen after 5A-1, additive-only | 5A-1 (Sprint 8) |
+| D-068 | Unknown ≠ zero, data quality states | 5A–5B (Sprint 8–9) |
+| D-069 | No control without acknowledgement | 5C (Sprint 11) |
+| D-070 | DNS rebinding protection | 5A-1 (Sprint 8) |
+| D-071 | Atomic file writes system-wide | 4.5-C → 5 (Sprint 7+) |
+| D-072 | Per-source circuit breaker + per-panel error boundary | 5A (Sprint 8–9) |
+| D-073 | Log rotation — 10MB / 5 files / 14 days | 5A-1 (Sprint 8) |
+| D-074 | Startup sequence + ownership matrix | 5A-1 (Sprint 8) |
+| D-075 | All state on ext4, cross-OS via API | 5A-1 (Sprint 8) |
+| D-076 | SSE event ID = `{source}:{offset}` | 5B (Sprint 10) |
+| D-077 | Sprint-End Documentation Policy | 4.5-C (Sprint 7) |
+| D-078 | Sprint 7 E2E Partial Pass Waiver | 4.5-C → 5A-1 |
+| D-079 | DataQuality Enum Amendment (D-068 update) | 5A-1 (Sprint 8) |
+| D-080 | Service Registry Freshness Rule | 5A-1 (Sprint 8) |
+| D-081 | CSS Framework — Tailwind CSS Utility-First | 5A-2 (Sprint 9) |
+| D-082 | Type Generation — Manual TS Types from Frozen Pydantic Schemas | 5A-2 (Sprint 9) |
+| D-083 | Polling — Global 30s + Manual Refresh, Page Visibility Pause | 5A-2 (Sprint 9) |
+| D-084 | Error Boundary — Per-Panel Isolation, Per-Route Wrap | 5A-2 (Sprint 9) |
+| D-085 | File Watcher — Manual mtime Polling 1s, Pure Python os.stat | 5B (Sprint 10) |
+| D-086 | SSE Events — Per-Entity Invalidation Signal, Not Per-Field | 5B (Sprint 10) |
+| D-087 | SSE Auth — Localhost-Only, D-070 Extension, No Extra Token | 5B (Sprint 10) |
+| D-088 | SSE Reconnect — Backoff + Polling Fallback | 5B (Sprint 10) |
+| D-089 | CSRF — Origin Header Check (SameSite browser-dependent) | 5C (Sprint 11) |
+| D-090 | Mutation Confirm — Confirmation Dialog for Destructive Actions | 5C (Sprint 11) |
+| D-091 | Mutation UI — Server-Confirmed, No Optimistic UI | 5C (Sprint 11) |
+| D-092 | Approval Sunset Phase 1 | 5C (Sprint 11) |
+| D-093 | Reserved — reassigned to D-097 | 5D (Sprint 12) |
+| D-094 | Reserved — reassigned to D-098 | 5D (Sprint 12) |
+| D-095 | Reserved — reassigned to D-099 | 5D (Sprint 12) |
+| D-096 | Mutation Response Contract — Full Lifecycle | 5C (Sprint 11) |
+| D-097 | Legacy dashboard retired — removal deferred | 5D (Sprint 12) |
+| D-098 | API-level E2E with httpx + pytest — browser E2E deferred | 5D (Sprint 12) |
+| D-099 | Approval model changes are Phase 6 scope | 5D (Sprint 12) |
+| D-100 | OpenAPI spec auto-generated from FastAPI | 5D (Sprint 12) |
+| D-101 | SSE is Mission Control frontend transport only — amends D-068 | 5D (Sprint 12) |
+| D-102 | Token budget enforcement — 5-layer defense | Post-5D |
+| D-103 | Complexity-based rework limits | Sprint 13 |
+| D-104 | Backend Package Name = `app/` | Sprint 14A |
+| D-105 | Sprint Closure Model — Model A / Model B | Sprint 16 |
+| D-106 | Persistence Model — JSON File Store | Sprint 16 |
+| D-107 | Alert Engine — Rule-Based Threshold Evaluation | Sprint 16 |
+| D-108 | Session/Auth Model — Single-Operator Foundation | Sprint 16 |
+| D-109 | Benchmark Strategy — Evidence-Only Model | Sprint 17 |
+| D-110 | Documentation Model Hierarchy — Dual Source | Sprint 17 |
+| D-111 | CLAUDE.md Rewrite — Compact Operating Brief | Sprint 18 |
+| D-112 | Governance Consolidation — PROCESS-GATES + PROTOCOL → GOVERNANCE.md | Sprint 18 |
+| D-113 | Archive Boundary — Active vs Historical Separation | Sprint 18 |
+| D-114 | Handoff Model — Keep current.md Path | Sprint 18 |
+| D-115 | Backend Physical Topology | Sprint 26 |
+| D-116 | Docker Dev Runtime Topology | Sprint 26 |
+| D-117 | Multi-User Auth Contract | Sprint 27 |
+| D-118 | Plugin Runtime Contract | Sprint 29 |
+| D-119 | Mission Template Lifecycle | Sprint 30 |
+| D-120 | Scheduled/Triggered Missions | Sprint 30 |
+| D-121 | Approval Gate Contract | Sprint 30 |
+| D-122 | Backlog-to-Project-to-Sprint Contract | Sprint 31 |
+| D-123 | Project V2 Item Contract v1 | Sprint 33 |
+| D-124 | Legacy Normalization Boundary | Sprint 33 |
+| D-125 | Closure State Sync | Sprint 33 |
+| D-127 | Sprint Closure Class Taxonomy | Sprint 34 |
+| D-128 | Risk Classification Contract | Sprint 35 |
+| D-129 | Secret Storage + Audit Integrity Contract | Sprint 36 |
+| D-130 | Transport Encryption Contract | Sprint 37 |

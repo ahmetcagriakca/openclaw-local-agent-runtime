@@ -3,6 +3,8 @@ import json
 import os
 from datetime import datetime, timezone
 
+from utils.atomic_write import atomic_write_json
+
 ARTIFACTS_DIR = os.path.join(
     os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
     "logs", "artifacts"
@@ -81,12 +83,11 @@ class ArtifactStore:
             return
         session_file = os.path.join(ARTIFACTS_DIR, f"{self.session_id}.json")
         try:
-            with open(session_file, "w", encoding="utf-8") as f:
-                json.dump({
-                    "sessionId": self.session_id,
-                    "artifacts": self.artifacts,
-                    "savedAt": datetime.now(timezone.utc).isoformat()
-                }, f, ensure_ascii=False, indent=2)
+            atomic_write_json(session_file, {
+                "sessionId": self.session_id,
+                "artifacts": self.artifacts,
+                "savedAt": datetime.now(timezone.utc).isoformat()
+            })
         except Exception:
             pass
 

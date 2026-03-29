@@ -6,6 +6,7 @@ from dataclasses import asdict, dataclass
 from datetime import datetime, timedelta, timezone
 
 from context.policy_telemetry import emit_policy_event
+from utils.atomic_write import atomic_write_json
 
 
 @dataclass
@@ -153,7 +154,6 @@ class ApprovalStore:
     def _persist(self, record):
         path = os.path.join(self.store_path, f"{record.approvalId}.json")
         try:
-            with open(path, "w") as f:
-                json.dump(asdict(record), f, indent=2)
+            atomic_write_json(path, asdict(record))
         except Exception:
             pass

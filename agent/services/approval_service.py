@@ -27,6 +27,8 @@ import subprocess
 import time
 from datetime import datetime, timezone
 
+from utils.atomic_write import atomic_write_json
+
 logger = logging.getLogger("mcc.approval.sunset")
 
 APPROVALS_DIR = os.path.join(
@@ -92,8 +94,7 @@ class ApprovalService:
 
         # Save approval record
         record_path = os.path.join(APPROVALS_DIR, f"{apv_id}.json")
-        with open(record_path, "w", encoding="utf-8") as f:
-            json.dump(record, f, ensure_ascii=False, indent=2)
+        atomic_write_json(record_path, record)
 
         # Send Telegram notification (one-way — no getUpdates polling)
         if self.bot_token:
@@ -114,8 +115,7 @@ class ApprovalService:
             record["status"] = "denied"
             record["decision"] = "no_token"
             record["decidedAt"] = datetime.now(timezone.utc).isoformat()
-            with open(record_path, "w", encoding="utf-8") as f:
-                json.dump(record, f, ensure_ascii=False, indent=2)
+            atomic_write_json(record_path, record)
             return {
                 "approved": False,
                 "approvalId": apv_id,
@@ -168,8 +168,7 @@ class ApprovalService:
                         reply, apv_id,
                     )
 
-                    with open(record_path, "w", encoding="utf-8") as f:
-                        json.dump(record, f, ensure_ascii=False, indent=2)
+                    atomic_write_json(record_path, record)
 
                     result_emoji = "\u2705" if approved else "\u274c"
                     self._send_telegram(f"{result_emoji} {apv_id}: {'Approved' if approved else 'Denied'}")
@@ -185,8 +184,7 @@ class ApprovalService:
         record["status"] = "denied"
         record["decision"] = "timeout"
         record["decidedAt"] = datetime.now(timezone.utc).isoformat()
-        with open(record_path, "w", encoding="utf-8") as f:
-            json.dump(record, f, ensure_ascii=False, indent=2)
+        atomic_write_json(record_path, record)
 
         self._send_telegram(f"\u23f0 {apv_id}: Auto-denied (timeout)")
 
@@ -330,8 +328,7 @@ def _decide(apv_id: str, status: str) -> bool:
         record["decision"] = status
         record["decidedAt"] = datetime.now(timezone.utc).isoformat()
 
-        with open(record_path, "w", encoding="utf-8") as f:
-            json.dump(record, f, ensure_ascii=False, indent=2)
+        atomic_write_json(record_path, record)
         return True
     except Exception:
         return False

@@ -1,0 +1,159 @@
+version: 1
+project: vezir-platform
+phase: 7
+sprint:
+  number: 41
+  title: Integrity Hardening / Source-of-Truth Stabilization
+  class: governance
+  model: A
+  implementation_status: not_started
+  closure_status: not_started
+  owner: operator
+  source_of_truth:
+    handoff: docs/ai/handoffs/current.md
+    decisions_index: docs/ai/DECISIONS.md
+    closure_evidence_dir: evidence/sprint-41/
+
+current_truth:
+  sprint_40:
+    implementation_status: done
+    closure_status: closed
+  tests:
+    total: 713
+    backend: 618
+    frontend: 82
+    playwright: 13
+  decisions_frozen: 129
+  backlog_open: 29
+  known_debt:
+    - id: D-071
+      title: Atomic write contract violations in 4 files
+    - id: DOC-DECISIONS-FOOTER
+      title: DECISIONS.md footer stale
+
+kickoff_review:
+  verdict: PASS
+  closure_eligibility: eligible_for_kickoff_only
+  rationale:
+    - Previous sprint is closed
+    - Scope is bounded to integrity hardening
+    - No new feature track opened before debt closure
+    - Scope aligns with carry-forward governance needs
+  blockers: []
+  next_step: freeze_and_execute
+
+goal: >-
+  Eliminate atomic write violations, repair DECISIONS index/footer drift,
+  and harden closure/read-model checks so stale decision/index drift fails early.
+
+scope:
+  included:
+    - Atomic write remediation for 4 violating files under D-071
+    - DECISIONS.md footer/index repair and deterministic generation
+    - Closure/read-model hygiene checks for decision/index drift
+  excluded:
+    - New product features
+    - Multi-user auth
+    - Jaeger deployment
+    - Docker restructuring
+    - Backlog reprioritization
+    - Broad refactors outside violating paths
+
+dependencies:
+  frozen_decisions:
+    - D-071
+  required_state:
+    - Sprint 40 closed everywhere required
+    - Current handoff updated before implementation
+  external: []
+
+tasks:
+  - id: "41.1"
+    title: D-071 atomic write remediation
+    description: >-
+      Replace plain open()+json.dump() with atomic_write_json() in 4 violating files.
+      Add guard test to prevent future regressions.
+    files:
+      - agent/services/approval_service.py (5 write sites)
+      - agent/services/approval_store.py (1 write site)
+      - agent/services/artifact_store.py (1 write site)
+      - agent/tools/run_e2e_test.py (1 write site)
+    acceptance:
+      - All 8 write sites use atomic_write_json() or manual temp/fsync/replace pattern
+      - grep -r 'open.*\"w\".*json.dump' agent/ returns zero matches (excluding test mocks)
+      - New regression test: test_atomic_write_compliance.py verifies no plain writes
+      - All existing tests pass (618+ backend, 82 frontend)
+    exit_criteria:
+      - Zero non-atomic JSON writes in agent/ production code
+      - Guard test committed and green
+
+  - id: "41.2"
+    title: DECISIONS.md index/footer repair
+    description: >-
+      Update the stale footer index in DECISIONS.md (currently stops at D-108).
+      Make decision index generation deterministic so future drift is caught.
+    files:
+      - docs/ai/DECISIONS.md (footer section)
+      - tools/ (optional: index generator script)
+    acceptance:
+      - Footer index covers D-001 through D-130 (D-126 skipped)
+      - Index format is consistent with existing entries
+      - Optional: deterministic generator script produces same output
+    exit_criteria:
+      - DECISIONS.md footer is complete and accurate
+      - No stale references remain
+
+  - id: "41.3"
+    title: Closure/read-model drift hardening
+    description: >-
+      Add decision/index drift check to closure packet validation.
+      Ensure stale docs fail fast in future sprints.
+    files:
+      - tools/sprint-closure-check.sh (or Python equivalent)
+      - evidence/ template updates
+    acceptance:
+      - Closure check validates DECISIONS.md footer completeness
+      - Closure check validates doc test counts match actual test counts
+      - Future stale docs trigger fail-fast in closure gate
+      - All existing tests pass
+    exit_criteria:
+      - Drift check integrated into closure pipeline
+      - Validated against current sprint state
+
+stop_rule: >-
+  If task 41.1 reveals architecture-level write drift beyond the 4 known files,
+  do not silently expand scope. Open a decision record and stop.
+
+gates:
+  mid_review:
+    trigger: after task 41.1 complete
+    checks:
+      - All atomic write violations fixed
+      - Guard test green
+      - No scope creep
+  final_review:
+    trigger: after all tasks complete
+    checks:
+      - pytest passes
+      - vitest passes
+      - tsc --noEmit clean
+      - ruff check clean
+      - closure-check returns ELIGIBLE FOR CLOSURE REVIEW
+      - evidence packet complete
+
+verification_commands:
+  - cd agent && python -m pytest tests/ -v
+  - cd frontend && npx vitest run
+  - cd frontend && npx tsc --noEmit
+  - cd agent && python -m ruff check .
+  - grep -r 'open.*"w".*json.dump' agent/ --include="*.py" -l
+
+evidence_checklist:
+  - pytest-output.txt
+  - vitest-output.txt
+  - tsc-output.txt
+  - lint-output.txt
+  - closure-check-output.txt
+  - file-manifest.txt
+  - review-summary.md
+  - grep-evidence.txt

@@ -5,53 +5,60 @@ Personal AI-powered Windows automation system with Telegram integration. 9 gover
 ## Architecture
 
 ```
-User
-  ├── Telegram Bot (WSL, conversation gateway)
-  └── React Dashboard (:3000, Vite + Tailwind, SSE live updates)
-        │
-        ▼
-  Vezir API (:8003, FastAPI + Uvicorn)
-  ├── Auth (API key, operator/viewer roles, D-117)
-  ├── Throttling (100/min GET, 20/min POST, B-005)
-  ├── Idempotency (Idempotency-Key header, B-012)
-  └── SSE Manager (broadcast, 30s heartbeat)
-        │
-        ▼
-  Agent Runner (Windows, multi-provider)
-  ├── Single-agent: GPT-4o / Claude / Ollama + 24 tools
-  └── Mission mode: MissionController (11-state FSM)
-        ├── Complexity Router (trivial → complex, 4 tiers)
-        ├── 9 Governed Roles (PO→Analyst→Architect→PM→Dev→Tester→Reviewer→Manager→RemoteOp)
-        ├── Quality Gates (3) + Feedback Loops (2)
-        ├── Context Assembler (5-tier delivery + token budgets)
-        └── Working Set Enforcer (bounded filesystem, B-004)
-        │
-        ▼
-  Services
-  ├── Risk Engine (4-level: low/medium/high/critical, D-128)
-  ├── Approval Service (inbox lifecycle, D-121)
-  ├── Encrypted Secrets (AES-256-GCM, D-129)
-  ├── Audit Trail (SHA-256 hash chain, tamper detection, D-129)
-  ├── Plugin System (file-based, EventBus integration, D-118)
-  ├── Mission Templates (CRUD + run-from-template, D-119)
-  └── Artifact Store (12 typed outputs)
-        │
-        ▼
-  EventBus (28 event types, 14 governance handlers, chain-hash audit)
-        │
-        ▼
-  Observability
-  ├── OTel Tracing (28/28 event coverage)
-  ├── OTel Metrics (17 instruments)
-  ├── Structured Logs (JSON + trace context)
-  └── Alert Engine (9 rules + Telegram notification)
-        │
-        ▼
-  Infrastructure
-  ├── Persistence (JSON file stores, atomic writes, D-106)
-  ├── MCP Client → WMCP Server (:8001) → PowerShell
-  ├── LLM Providers (GPT-4o, Claude Sonnet, Ollama)
-  └── CI/CD (7 GitHub Actions workflows)
+┌─────────────────────────────────────────────────────────────────┐
+│  USER LAYER                                                     │
+│  Telegram Bot (WSL gateway)          React Dashboard (:3000)    │
+│  natural language intent             SSE live updates, Vite 6   │
+└──────────────┬──────────────────────────────┬───────────────────┘
+               │           requests           │
+               ▼                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  API LAYER — Vezir API (:8003, FastAPI + Uvicorn)               │
+│                                                                 │
+│  Auth (API key, operator/viewer)    Throttling (100/20 rpm)     │
+│  Idempotency (24h TTL cache)        SSE Manager (30s heartbeat) │
+└──────────────────────────┬──────────────────────────────────────┘
+                           │
+                           ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  MISSION ENGINE                                                 │
+│                                                                 │
+│  MissionController ─── 11-state FSM ─── Complexity Router       │
+│       │                                   (4 tiers)             │
+│       ├── 9 Governed Roles (PO→Analyst→Architect→PM→Dev→        │
+│       │                      Tester→Reviewer→Manager→RemoteOp)  │
+│       ├── Quality Gates (3) + Feedback Loops (2)                │
+│       ├── Context Assembler (5-tier delivery + token budgets)   │
+│       └── Working Set Enforcer (bounded filesystem)             │
+│                                                                 │
+│  Single-agent mode: GPT-4o / Claude / Ollama + 24 tools        │
+└──────────┬──────────────────────────────────┬───────────────────┘
+           │                                  │
+           ▼                                  ▼
+┌──────────────────────────┐  ┌───────────────────────────────────┐
+│  SERVICES                │  │  EVENTBUS                         │
+│                          │  │  28 event types                   │
+│  Risk Engine (4-level)   │  │  14 governance handlers           │
+│  Approval Inbox (D-121)  │  │  chain-hash audit trail           │
+│  Encrypted Secrets       │  └───────────────┬───────────────────┘
+│    (AES-256-GCM)         │                  │
+│  Audit Trail (SHA-256)   │                  ▼
+│  Plugin System (D-118)   │  ┌───────────────────────────────────┐
+│  Templates (D-119)       │  │  OBSERVABILITY                    │
+│  Artifact Store          │  │  OTel Traces (28/28 events)       │
+│    (12 typed outputs)    │  │  OTel Metrics (17 instruments)    │
+└──────────────────────────┘  │  Structured Logs (JSON + trace)   │
+                              │  Alert Engine (9 rules → Telegram) │
+                              └───────────────────────────────────┘
+                           │
+                           ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  INFRASTRUCTURE                                                 │
+│                                                                 │
+│  Persistence         MCP Client → WMCP (:8001) → PowerShell    │
+│  (JSON file stores,  LLM Providers (GPT-4o, Claude, Ollama)    │
+│   atomic writes)     CI/CD (7 GitHub Actions workflows)         │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
 ## Key Components

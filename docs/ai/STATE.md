@@ -88,6 +88,7 @@
 | Sprint 31 | Backlog Pipeline (D-122, import tool, generator, sprint bridge) | Closed |
 | Sprint 32 | API Throttling + Idempotency (B-005, B-012) | Closed |
 | Sprint 33 | Project V2 Contract Hardening (D-123/124/125) | Closed |
+| Sprint 34 | Closure Tooling Hardening (D-127) | Closed |
 
 ## Test Evidence
 

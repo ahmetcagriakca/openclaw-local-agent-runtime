@@ -1,15 +1,18 @@
 # Next Steps — Vezir Platform
 
 **Last updated:** 2026-03-29
-**Current:** Phase 7 active. Sprint 43 in progress (tech debt).
+**Current:** Phase 7 active. Sprint 43 closed. Sprint 44 pending.
 
 ---
 
-## Sprint 43 — Tech Debt Eritme (IN PROGRESS)
+## Sprint 43 — Tech Debt Eritme (CLOSED)
 
 **Model:** A (implementation) | **Class:** Governance/Quality
 **Scope:** Pydantic V2 compat, bare pass cleanup, frontend tests, branch prune, CONTEXT_ISOLATION flag
+**Commits:** `bd8e591`, `64c3de8`, `05bb074`, `7cc272c`
+**Tests:** +99 new (863 total: 682+168+13)
 **Issue:** #234
+**Review:** GPT conversation `69c9984b`
 
 ## Sprint 42 — Runner Resilience (B-106) (CLOSED)
 

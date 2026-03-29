@@ -28,9 +28,9 @@
 | Backend physical restructure | S14A/14B | Unassigned |
 | Docker dev environment | S14B | Unassigned |
 | UIOverview + WindowList tools | D-102 | Unassigned |
-| Feature flag CONTEXT_ISOLATION_ENABLED | D-102 | Unassigned |
+| ~~Feature flag CONTEXT_ISOLATION_ENABLED~~ | ~~D-102~~ | ✅ S43 task 43.5 DONE |
 | D-102 validation criteria 3-8 | D-102 amendment | Unassigned |
-| Frontend Vitest component tests | S16 P-16.3 | Ongoing quality lane |
+| Frontend Vitest component tests | S16 P-16.3 | ✅ S43 task 43.3 (+86 tests, 82→168) |
 | Alert "any" rule namespace scoping | S16 P-16.2 | Unassigned |
 | Jaeger deployment | S16 deferred | Unassigned |
 | Multi-user auth | D-104 / D-108 | Unassigned |
@@ -50,9 +50,10 @@
 | Sprint | Scope | Status |
 |--------|-------|--------|
 | Sprint 42 | B-106 Runner Resilience (DLQ, backoff, circuit breaker, auto-resume) | CLOSED (G2 PASS) |
+| Sprint 43 | Tech Debt Eritme (Pydantic, bare pass, frontend tests, feature flag) | CLOSED |
 
 ## Next Sprint
 
-**Sprint 43 — Phase 7**
+**Sprint 44 — Phase 7**
 - Status: NOT STARTED
-- Candidates: B-104 Template parameter UI (P1), Frontend Vitest components, CONTEXT_ISOLATION, Alert scoping
+- Candidates: B-104 Template parameter UI (P1), B-026 DLQ retention, B-105 Cost dashboard

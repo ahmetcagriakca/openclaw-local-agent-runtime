@@ -1,9 +1,9 @@
 # Current State
 
 **Last updated:** 2026-03-29
-**Active phase:** Phase 7 — Sprint 43 in progress (tech debt)
+**Active phase:** Phase 7 — Sprint 43 closed, Sprint 44 pending
 **Doc model:** This file is canonical for system state. Session context lives in `docs/ai/handoffs/current.md`.
-**Note:** All sprints through 42 closed, Sprint 43 in progress. Phase 7 active. 129 frozen decisions (D-001 → D-130, D-126 skipped).
+**Note:** All sprints through 43 closed. Phase 7 active. 129 frozen decisions (D-001 → D-130, D-126 skipped).
 **Persistence:** State is file-persisted (state.json, mission.json). Mission history via persistence layer (Sprint 16).
 **API:** Vezir API on 127.0.0.1:8003 (FastAPI + Uvicorn). Schemas FROZEN (D-067). SSE on /api/v1/events/stream. Dashboard API + Alert API + Telemetry Query API (Sprint 16).
 **Frontend:** React dashboard on localhost:3000 (Vite + Tailwind). SSE live updates + polling fallback + intervention buttons + monitoring dashboard. Node.js 20 required.
@@ -97,6 +97,7 @@
 | Sprint 35 | Security Hardening Baseline (D-128, B-003, B-004) | Closed |
 | Sprint 36 | Encrypted Secrets + Audit Integrity (D-129, B-006, B-008) | Closed |
 | Sprint 42 | Runner Resilience (B-106: DLQ, backoff, circuit breaker, auto-resume) | Closed |
+| Sprint 43 | Tech Debt Eritme (Pydantic, bare pass, frontend tests, feature flag) | Closed |
 
 ## Test Evidence
 

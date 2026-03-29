@@ -5,24 +5,53 @@ Personal AI-powered Windows automation system with Telegram integration. 9 gover
 ## Architecture
 
 ```
-User (Telegram)h
-  -> Vezir (WSL Ubuntu-E, conversation gateway)
-  -> Agent Runner (Windows, multi-provider)
-     Single-agent: GPT-4o/Claude/Ollama + 24 tools
-     Mission mode: MissionController
-       -> Complexity Router (trivial→complex)
-       -> 9 Governed Roles (PO→Analyst→Architect→PM→Dev→Tester→Reviewer→Manager)
-       -> Quality Gates (3) + Feedback Loops (2)
-       -> Context Assembler (5-tier delivery)
-       -> Working Set Enforcer (bounded filesystem)
-     -> Risk Engine (deterministic risk classification)
-     -> Approval Service (Telegram approval for high-risk ops)
-     -> MCP Client -> WMCP Server (localhost:8001) -> PowerShell
-     -> Artifact Store (typed output)
-  -> Response -> Telegram
-
-Legacy path (predefined tasks):
-  -> Bridge (stateless adapter) -> oc runtime (task queue/worker)
+User
+  ├── Telegram Bot (WSL, conversation gateway)
+  └── React Dashboard (:3000, Vite + Tailwind, SSE live updates)
+        │
+        ▼
+  Vezir API (:8003, FastAPI + Uvicorn)
+  ├── Auth (API key, operator/viewer roles, D-117)
+  ├── Throttling (100/min GET, 20/min POST, B-005)
+  ├── Idempotency (Idempotency-Key header, B-012)
+  └── SSE Manager (broadcast, 30s heartbeat)
+        │
+        ▼
+  Agent Runner (Windows, multi-provider)
+  ├── Single-agent: GPT-4o / Claude / Ollama + 24 tools
+  └── Mission mode: MissionController (11-state FSM)
+        ├── Complexity Router (trivial → complex, 4 tiers)
+        ├── 9 Governed Roles (PO→Analyst→Architect→PM→Dev→Tester→Reviewer→Manager→RemoteOp)
+        ├── Quality Gates (3) + Feedback Loops (2)
+        ├── Context Assembler (5-tier delivery + token budgets)
+        └── Working Set Enforcer (bounded filesystem, B-004)
+        │
+        ▼
+  Services
+  ├── Risk Engine (4-level: low/medium/high/critical, D-128)
+  ├── Approval Service (inbox lifecycle, D-121)
+  ├── Encrypted Secrets (AES-256-GCM, D-129)
+  ├── Audit Trail (SHA-256 hash chain, tamper detection, D-129)
+  ├── Plugin System (file-based, EventBus integration, D-118)
+  ├── Mission Templates (CRUD + run-from-template, D-119)
+  └── Artifact Store (12 typed outputs)
+        │
+        ▼
+  EventBus (28 event types, 14 governance handlers, chain-hash audit)
+        │
+        ▼
+  Observability
+  ├── OTel Tracing (28/28 event coverage)
+  ├── OTel Metrics (17 instruments)
+  ├── Structured Logs (JSON + trace context)
+  └── Alert Engine (9 rules + Telegram notification)
+        │
+        ▼
+  Infrastructure
+  ├── Persistence (JSON file stores, atomic writes, D-106)
+  ├── MCP Client → WMCP Server (:8001) → PowerShell
+  ├── LLM Providers (GPT-4o, Claude Sonnet, Ollama)
+  └── CI/CD (7 GitHub Actions workflows)
 ```
 
 ## Key Components

@@ -1,6 +1,6 @@
 # open-items.md — Active State Tracker
 
-**Last updated:** 2026-03-29
+**Last updated:** 2026-03-30
 **Updated by:** Claude (Architect)
 
 ---
@@ -51,9 +51,12 @@
 |--------|-------|--------|
 | Sprint 42 | B-106 Runner Resilience (DLQ, backoff, circuit breaker, auto-resume) | CLOSED (G2 PASS) |
 | Sprint 43 | Tech Debt Eritme (Pydantic, bare pass, frontend tests, feature flag) | CLOSED |
+| Sprint 44 | CI/CD & Repo Quality | CLOSED |
+| Sprint 45 | B-104 Template Parameter UI (last P1) | CLOSED |
+| Sprint 46 | B-105 Cost Dashboard + B-108 Agent Health View | CLOSED |
 
 ## Next Sprint
 
-**Sprint 44 — Phase 7**
+**Sprint 47 — Phase 7**
 - Status: NOT STARTED
-- Candidates: B-104 Template parameter UI (P1), B-026 DLQ retention, B-105 Cost dashboard
+- Candidates: B-026 DLQ retention, B-013 Richer policyContext, B-107 Policy engine, B-109 CLI scaffolding

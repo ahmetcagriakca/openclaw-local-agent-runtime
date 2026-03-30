@@ -325,6 +325,142 @@ export interface MissionTemplate {
   updated_at: string
 }
 
+// ── Cost Dashboard (B-105) ─────────────────────────────────────
+
+export interface ProviderBreakdown {
+  tokens: number
+  missions: number
+  estimated_cost: number
+}
+
+export interface CostSummary {
+  meta: ResponseMeta
+  total_missions: number
+  completed: number
+  failed: number
+  success_rate: number
+  total_tokens: number
+  total_estimated_cost: number
+  avg_cost_per_mission: number
+  avg_tokens_per_completed: number
+  avg_duration_ms: number
+  total_tool_calls: number
+  total_reworks: number
+  total_budget_events: number
+  provider_breakdown: Record<string, ProviderBreakdown>
+  pricing_model: Record<string, { input: number; output: number }>
+}
+
+export interface CostMission {
+  id: string
+  goal: string
+  status: string
+  complexity: string
+  tokens: number
+  estimated_cost: number
+  provider: string
+  duration_ms: number
+  stages: number
+  tool_calls: number
+  reworks: number
+  budget_pct: number
+  ts: string
+}
+
+export interface CostMissionsResponse {
+  meta: ResponseMeta
+  total: number
+  missions: CostMission[]
+}
+
+export interface TrendBucket {
+  period: string
+  tokens: number
+  estimated_cost: number
+  missions: number
+  completed: number
+  failed: number
+  success_rate: number
+}
+
+export interface CostTrendsResponse {
+  meta: ResponseMeta
+  bucket: string
+  trends: TrendBucket[]
+}
+
+// ── Agent Health (B-108) ───────────────────────────────────────
+
+export interface ProviderStatus {
+  name: string
+  provider: string
+  model: string
+  status: string
+  detail: string
+}
+
+export interface ProvidersResponse {
+  meta: ResponseMeta
+  status: string
+  providers: ProviderStatus[]
+  available_count: number
+  total_count: number
+}
+
+export interface AgentRole {
+  id: string
+  displayName: string
+  defaultSkill: string
+  allowedSkills: string[]
+  forbiddenSkills: string[]
+  toolPolicy: string
+  allowedTools: string[]
+  toolCount: number
+  defaultModelTier: number
+  preferredModel: string
+  discoveryRights: string
+  maxFileReads: number
+  maxDirectoryReads: number
+  canExpand: boolean
+}
+
+export interface AgentRolesResponse {
+  meta: ResponseMeta
+  total: number
+  roles: AgentRole[]
+}
+
+export interface CapabilityMatrixEntry {
+  role: string
+  displayName: string
+  preferredModel: string
+  modelTier: number
+  toolPolicy: string
+  toolCount: number
+  canExpand: boolean
+  discoveryRights: string
+}
+
+export interface CapabilityMatrixResponse {
+  meta: ResponseMeta
+  matrix: CapabilityMatrixEntry[]
+}
+
+export interface RolePerformance {
+  role: string
+  missions: number
+  stages: number
+  tool_calls: number
+  reworks: number
+  avg_stage_duration_ms: number
+  rework_rate: number
+}
+
+export interface AgentPerformanceResponse {
+  meta: ResponseMeta
+  performance: RolePerformance[]
+}
+
 // ── Mutation Response (D-096) ───────────────────────────────────
 
 export interface MutationResponse {

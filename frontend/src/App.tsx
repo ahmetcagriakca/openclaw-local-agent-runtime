@@ -12,6 +12,8 @@ import { ApprovalsPage } from './pages/ApprovalsPage'
 import { TelemetryPage } from './pages/TelemetryPage'
 import { MonitoringPage } from './features/monitoring/MonitoringPage'
 import { TemplatesPage } from './pages/TemplatesPage'
+import { CostDashboardPage } from './pages/CostDashboardPage'
+import { AgentHealthPage } from './pages/AgentHealthPage'
 import { NotFoundPage } from './pages/NotFoundPage'
 
 export default function App() {
@@ -73,6 +75,22 @@ export default function App() {
             element={
               <ErrorBoundary fallbackLabel="Templates panel error">
                 <TemplatesPage />
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path="/costs"
+            element={
+              <ErrorBoundary fallbackLabel="Cost dashboard panel error">
+                <CostDashboardPage />
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path="/agents"
+            element={
+              <ErrorBoundary fallbackLabel="Agent health panel error">
+                <AgentHealthPage />
               </ErrorBoundary>
             }
           />

@@ -1,9 +1,9 @@
 # Current State
 
-**Last updated:** 2026-03-29
-**Active phase:** Phase 7 — Sprint 45 closed, Sprint 46 pending
+**Last updated:** 2026-03-30
+**Active phase:** Phase 7 — Sprint 46 closed, Sprint 47 pending
 **Doc model:** This file is canonical for system state. Session context lives in `docs/ai/handoffs/current.md`.
-**Note:** All sprints through 45 closed. All P1 backlog items complete. Phase 7 active. 129 frozen decisions (D-001 → D-130, D-126 skipped).
+**Note:** All sprints through 46 closed. All P1 backlog items complete. Phase 7 active. 129 frozen decisions (D-001 → D-130, D-126 skipped).
 **Persistence:** State is file-persisted (state.json, mission.json). Mission history via persistence layer (Sprint 16).
 **API:** Vezir API on 127.0.0.1:8003 (FastAPI + Uvicorn). Schemas FROZEN (D-067). SSE on /api/v1/events/stream. Dashboard API + Alert API + Telemetry Query API (Sprint 16).
 **Frontend:** React dashboard on localhost:3000 (Vite + Tailwind). SSE live updates + polling fallback + intervention buttons + monitoring dashboard. Node.js 20 required.
@@ -49,7 +49,9 @@
 | Dead Letter Queue | Operational (B-106, 7 API endpoints) | `agent/persistence/dlq_store.py` + `agent/api/dlq_api.py` |
 | Resilience Engine | Operational (backoff, circuit breaker, poison pill) | `agent/mission/resilience.py` |
 | Auto-Resume | Operational (--resume, --auto-resume) | `agent/mission/auto_resume.py` |
-| Mission Control API | Operational (~47 endpoints) | `agent/api/server.py` on :8003 |
+| Cost Dashboard API | Operational (3 endpoints: summary, missions, trends) | `agent/api/cost_api.py` |
+| Agent Health API | Operational (4 endpoints: providers, roles, matrix, performance) | `agent/api/agents_api.py` |
+| Mission Control API | Operational (~54 endpoints) | `agent/api/server.py` on :8003 |
 | SSE Manager | Operational (broadcast, heartbeat 30s) | `agent/api/sse_manager.py` |
 | Session Model | Foundation (operator identity, no auth flow) | `agent/auth/session.py` |
 | CI/CD Pipeline | 7 GitHub Actions workflows | `.github/workflows/` |
@@ -100,6 +102,7 @@
 | Sprint 43 | Tech Debt Eritme (Pydantic, bare pass, frontend tests, feature flag) | Closed |
 | Sprint 44 | CI/CD & Repo Quality (Python fix, 22 CodeQL fix, coverage, dependabot) | Closed |
 | Sprint 45 | B-104 Template Parameter UI (last P1) | Closed |
+| Sprint 46 | B-105 Cost Dashboard + B-108 Agent Health View | Closed |
 
 ## Test Evidence
 
@@ -117,6 +120,7 @@
 | Sprint 41 | 618 tests, 0 fail | 82 tests, 0 TS errors | +1 guard test (atomic write compliance) |
 | Sprint 42 | 669 tests, 0 fail | 82 tests, 0 TS errors | +51 backend (DLQ, resilience, auto-resume, G2 patch) |
 | Sprint 43 | 682 tests, 0 fail | 168 tests, 0 TS errors | +13 backend (feature flags), +86 frontend (11 new files) |
+| Sprint 46 | 705 tests, 0 fail | 215 tests, 0 TS errors | +23 backend (cost+agent APIs), +20 frontend (2 new pages) |
 
 ## Architectural Decisions
 

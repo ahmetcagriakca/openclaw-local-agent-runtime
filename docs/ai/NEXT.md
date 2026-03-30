@@ -1,9 +1,16 @@
 # Next Steps — Vezir Platform
 
-**Last updated:** 2026-03-29
-**Current:** Phase 7 active. Sprint 45 closed. All P1 items complete. Sprint 46 pending.
+**Last updated:** 2026-03-30
+**Current:** Phase 7 active. Sprint 46 closed. All P1 items complete. Sprint 47 pending.
 
 ---
+
+## Sprint 46 — B-105 Cost Dashboard + B-108 Agent Health (CLOSED)
+
+**Model:** A (implementation) | **Class:** Product
+**Scope:** Cost/outcome dashboard API (3 endpoints), Agent health/capability API (4 endpoints), 2 new frontend pages, sidebar nav
+**Tests:** +23 backend (705 total), +20 frontend (215 total)
+**Issues:** #160, #163
 
 ## Sprint 45 — B-104 Template Parameter UI (CLOSED)
 

@@ -16,6 +16,13 @@ import type {
   RolesResponse,
   TokenReport,
   MissionTemplate,
+  CostSummary,
+  CostMissionsResponse,
+  CostTrendsResponse,
+  ProvidersResponse,
+  AgentRolesResponse,
+  CapabilityMatrixResponse,
+  AgentPerformanceResponse,
 } from '../types/api'
 
 const BASE = '/api/v1'
@@ -233,4 +240,38 @@ export function getTemplate(id: string): Promise<MissionTemplate> {
 
 export function runTemplate(id: string, parameters: Record<string, unknown>): Promise<MutationResponse> {
   return apiPostJson<MutationResponse>(`/templates/${encodeURIComponent(id)}/run`, { parameters })
+}
+
+// ── Cost Dashboard (B-105) ────────────────────────────────────
+
+export function getCostSummary(): Promise<CostSummary> {
+  return apiGet<CostSummary>('/cost/summary')
+}
+
+export function getCostMissions(sort?: string): Promise<CostMissionsResponse> {
+  const qs = sort ? `?sort=${encodeURIComponent(sort)}` : ''
+  return apiGet<CostMissionsResponse>(`/cost/missions${qs}`)
+}
+
+export function getCostTrends(bucket?: string): Promise<CostTrendsResponse> {
+  const qs = bucket ? `?bucket=${encodeURIComponent(bucket)}` : ''
+  return apiGet<CostTrendsResponse>(`/cost/trends${qs}`)
+}
+
+// ── Agent Health (B-108) ──────────────────────────────────────
+
+export function getProviders(): Promise<ProvidersResponse> {
+  return apiGet<ProvidersResponse>('/agents/providers')
+}
+
+export function getAgentRoles(): Promise<AgentRolesResponse> {
+  return apiGet<AgentRolesResponse>('/agents/roles')
+}
+
+export function getCapabilityMatrix(): Promise<CapabilityMatrixResponse> {
+  return apiGet<CapabilityMatrixResponse>('/agents/capability-matrix')
+}
+
+export function getAgentPerformance(): Promise<AgentPerformanceResponse> {
+  return apiGet<AgentPerformanceResponse>('/agents/performance')
 }

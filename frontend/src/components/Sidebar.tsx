@@ -13,6 +13,8 @@ const NAV_ITEMS = [
   { to: '/telemetry', label: 'Telemetry', icon: '📊' },
   { to: '/monitoring', label: 'Monitoring', icon: '📈' },
   { to: '/templates', label: 'Templates', icon: '📋' },
+  { to: '/costs', label: 'Costs', icon: '💰' },
+  { to: '/agents', label: 'Agents', icon: '🤖' },
 ]
 
 interface SidebarProps {

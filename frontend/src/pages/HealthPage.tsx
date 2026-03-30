@@ -63,14 +63,21 @@ export function HealthPage() {
       )}
 
       {health.data && (() => {
-        // Extract mission and approval stats from component details
+        // Extract mission and approval stats from component details (JSON or key=val)
         const missionComp = health.data.components['missions']
         const approvalComp = health.data.components['approvals']
 
         const parseStat = (detail: string | null, key: string): number => {
           if (!detail) return 0
-          const match = detail.match(new RegExp(`${key}=(\\d+)`))
-          return match?.[1] ? parseInt(match[1], 10) : 0
+          // Try JSON parse first
+          try {
+            const obj = JSON.parse(detail)
+            return typeof obj[key] === 'number' ? obj[key] : 0
+          } catch {
+            // Fallback: key=val regex
+            const match = detail.match(new RegExp(`${key}=(\\d+)`))
+            return match?.[1] ? parseInt(match[1], 10) : 0
+          }
         }
 
         const mTotal = parseStat(missionComp?.detail ?? null, 'total')
@@ -206,6 +213,12 @@ export function HealthPage() {
           <div className="flex items-center gap-2 py-4 text-gray-400">
             <div className="h-5 w-5 animate-spin rounded-full border-2 border-gray-400 border-t-transparent" />
             Loading…
+          </div>
+        )}
+
+        {caps.error && !caps.data && (
+          <div className="rounded border border-red-500/50 bg-red-950/30 p-3 text-sm text-red-300">
+            Failed to load capabilities: {caps.error.message}
           </div>
         )}
 

@@ -26,6 +26,13 @@ export function MissionDetailPage() {
   const [tokenReport, setTokenReport] = useState<TokenReport | null>(null)
   const [tokenReportOpen, setTokenReportOpen] = useState(false)
 
+  // Auto-dismiss toast after 5 seconds
+  useEffect(() => {
+    if (!toast) return
+    const timer = setTimeout(() => setToast(null), 5000)
+    return () => clearTimeout(timer)
+  }, [toast])
+
   const fetcher = useCallback(() => {
     if (!id) return Promise.reject(new Error('No mission ID'))
     return getMission(id)

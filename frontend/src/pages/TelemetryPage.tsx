@@ -74,10 +74,11 @@ export function TelemetryPage() {
           onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleFilter()}
           placeholder="Filter by mission ID…"
-          className="rounded border border-gray-600 bg-gray-800 px-3 py-1.5 text-sm text-gray-200 placeholder-gray-500 focus:border-blue-500 focus:outline-none"
+          className="w-full rounded border border-gray-600 bg-gray-800 px-3 py-1.5 text-sm text-gray-200 placeholder-gray-500 focus:border-blue-500 focus:outline-none sm:w-auto"
         />
         <button
           onClick={handleFilter}
+          aria-label="Apply mission ID filter"
           className="rounded bg-blue-700 px-3 py-1.5 text-sm hover:bg-blue-600"
         >
           Filter
@@ -166,11 +167,16 @@ export function TelemetryPage() {
                 </div>
                 {Object.keys(ev.data).length > 0 && (
                   <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-400">
-                    {Object.entries(ev.data).map(([k, v]) => (
-                      <span key={k}>
-                        {k}: <span className="text-gray-200">{String(v)}</span>
-                      </span>
-                    ))}
+                    {Object.entries(ev.data).map(([k, v]) => {
+                      const display = typeof v === 'object' && v !== null
+                        ? JSON.stringify(v).slice(0, 80) + (JSON.stringify(v).length > 80 ? '...' : '')
+                        : String(v)
+                      return (
+                        <span key={k} title={typeof v === 'object' ? JSON.stringify(v, null, 2) : String(v)}>
+                          {k}: <span className="text-gray-200">{display}</span>
+                        </span>
+                      )
+                    })}
                   </div>
                 )}
               </div>

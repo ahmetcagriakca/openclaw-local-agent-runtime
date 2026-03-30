@@ -151,7 +151,9 @@ function LiveFeed({ events, connected, onConnect, onDisconnect }: {
               {' '}
               <span className="text-cyan-400">{e.type}</span>
               {' '}
-              <span className="text-gray-500">{JSON.stringify(e.data).slice(0, 80)}</span>
+              <span className="text-gray-500" title={JSON.stringify(e.data, null, 2)}>
+                {JSON.stringify(e.data).slice(0, 80)}{JSON.stringify(e.data).length > 80 ? '...' : ''}
+              </span>
             </div>
           ))
         )}

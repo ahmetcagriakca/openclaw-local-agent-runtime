@@ -134,6 +134,16 @@ class MissionNormalizer:
                 if state_data and state_data.get("status"):
                     status = state_data["status"]
 
+                # Stale detection: running/planning missions with no file update > 1 hour
+                if status in ("running", "executing", "planning"):
+                    check_path = state_path if state_path.exists() else Path(fpath)
+                    try:
+                        file_age_s = time.time() - os.path.getmtime(str(check_path))
+                        if file_age_s > 3600:  # 1 hour
+                            status = "timed_out"
+                    except Exception:
+                        pass
+
                 # Read summary for stage count
                 summary_path = self._missions_dir / f"{file_id}-summary.json"
                 summary_data, _ = self._read_source("summary", str(summary_path)) \

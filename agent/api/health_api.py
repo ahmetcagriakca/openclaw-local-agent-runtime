@@ -198,9 +198,7 @@ async def get_health(request: Request):
         m_status = "degraded"
     components["missions"] = ComponentHealth(
         name="Missions", status=m_status,
-        detail=(f"total={mission_counts['total']}, active={mission_counts['active']}, "
-                f"completed={mission_counts['completed']}, failed={mission_counts['failed']}, "
-                f"pending={mission_counts['pending']}"),
+        detail=json.dumps(mission_counts),
         lastCheckAt=now)
 
     # 7. Approval Stats
@@ -210,8 +208,7 @@ async def get_health(request: Request):
         a_status = "degraded"
     components["approvals"] = ComponentHealth(
         name="Approvals", status=a_status,
-        detail=(f"total={approval_counts['total']}, pending={approval_counts['pending']}, "
-                f"approved={approval_counts['approved']}, denied={approval_counts['denied']}"),
+        detail=json.dumps(approval_counts),
         lastCheckAt=now)
 
     # 8. Log / Storage

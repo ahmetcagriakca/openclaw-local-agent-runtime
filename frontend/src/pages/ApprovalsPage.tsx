@@ -4,7 +4,7 @@
  * D-091: server-confirmed, no optimistic UI.
  * D-092: dashboard approve/reject is primary channel.
  */
-import { useState, useCallback, useMemo } from 'react'
+import { useState, useCallback, useEffect, useMemo } from 'react'
 import { getApprovals, approveApproval, rejectApproval } from '../api/client'
 import { usePolling } from '../hooks/usePolling'
 import { useMutation } from '../hooks/useMutation'
@@ -72,6 +72,13 @@ export function ApprovalsPage() {
   const [statusFilter, setStatusFilter] = useState<string>('all')
 
   const clearToast = useCallback(() => setToast(null), [])
+
+  // Auto-dismiss toast after 5 seconds
+  useEffect(() => {
+    if (!toast) return
+    const timer = setTimeout(clearToast, 5000)
+    return () => clearTimeout(timer)
+  }, [toast, clearToast])
 
   const counts = useMemo(() => {
     if (!data) return { all: 0, pending: 0, approved: 0, denied: 0, expired: 0 }
@@ -363,7 +370,7 @@ function DetailPanel({
 }) {
   const a = approval
   return (
-    <div className="w-80 shrink-0 rounded-lg border border-gray-700/50 bg-gray-800/80 p-4 space-y-4 overflow-y-auto">
+    <div className="w-full shrink-0 rounded-lg border border-gray-700/50 bg-gray-800/80 p-4 space-y-4 overflow-y-auto md:w-80">
       <div className="flex items-center justify-between">
         <h2 className="text-sm font-bold text-gray-200">Approval Detail</h2>
         <button onClick={onClose} className="text-gray-500 hover:text-white text-lg leading-none">&times;</button>

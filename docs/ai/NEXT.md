@@ -1,11 +1,11 @@
 # Next Steps — Vezir Platform
 
 **Last updated:** 2026-03-29
-**Current:** Phase 7 active. Sprint 44 done (CI/CD & Security), closure pending.
+**Current:** Phase 7 active. Sprint 44 closed. Sprint 45 pending.
 
 ---
 
-## Sprint 44 — CI/CD & Repo Quality (DONE, closure pending)
+## Sprint 44 — CI/CD & Repo Quality (CLOSED)
 
 **Model:** A (implementation) | **Class:** Governance/Quality
 **Scope:** CI fix, security findings, coverage, PR template, dependabot

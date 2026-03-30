@@ -7,74 +7,70 @@
 
 ## Session Summary
 
-Two sprints completed in single session:
+Three sprints completed in single session:
 - **Sprint 42** — B-106 Runner Resilience (G2 PASS, 2nd round)
-- **Sprint 43** — Tech Debt Eritme (5/5 tasks done, GPT review Round 3 pending)
-
-Repo cleanup, technical debt inventory, and comprehensive evidence packets produced.
+- **Sprint 43** — Tech Debt Eritme (5/5 tasks done)
+- **Sprint 44** — CI/CD & Repo Quality (5/5 tasks done, all pipelines green)
 
 ## Current State
 
 - **Phase:** 7
-- **Last closed sprint:** 43
+- **Last sprint:** 44 (done, closure pending)
 - **Decisions:** 129 frozen (D-001 → D-130, D-126 skipped)
 - **Tests:** 682 backend + 168 frontend + 13 Playwright = 863 total
+- **Coverage:** 74% backend, 31% frontend
 - **Lint:** Ruff 0 errors, TSC 0 errors, 0 deprecation warnings
-- **Backlog:** 27 open
-- **CI:** Green
+- **CI:** All green (CI + Playwright + Benchmark)
+- **Security:** 0 open code scanning, 0 open dependabot alerts
 
-## Work Done This Session
+## Sprint 44 — CI/CD & Repo Quality
 
-### Sprint 42 — B-106 Runner Resilience (CLOSED, G2 PASS)
-- DLQ store + 7 API endpoints
-- Exponential backoff + circuit breaker (CLOSED/OPEN/HALF_OPEN)
-- Poison pill detection + auto-resume
-- G2 patch: P1-P4 fixes (2nd round PASS)
+### 44.1 CI Fix
+- Python 3.14→3.12 in all workflows + Dockerfile
+- SDK drift: OpenAPI spec + TypeScript types regenerated
+- test_health_returns_ok exclusion removed
+- benchmark.yml: hardcoded sprint→glob pattern
 
-### Sprint 43 — Tech Debt Eritme (CLOSED)
-- 43.1: Pydantic V2 __fields__ → model_fields (0 warnings)
-- 43.2: 11 bare pass → logger.debug (5 files)
-- 43.3: +86 frontend tests (82→168, 11 new files)
-- 43.4: 99 stale branches deleted
-- 43.5: CONTEXT_ISOLATION feature flag (D-102 wire-up)
+### 44.2 Security
+- dependabot.yml: weekly pip/npm/github-actions updates
+- Path traversal: _safe_mission_path + _safe_approval_path (resolve+startswith) in 3 API files
+- atomic_write.py: _validate_and_resolve with allowed-root whitelist
+- AuthContext: localStorage→sessionStorage
+- client.ts: Math.random→crypto.randomUUID
+- All 22+ CodeQL alerts resolved and dismissed
+- npm audit: 0 vulnerabilities
 
-### Repo Cleanup
-- Stale zips/dirs deleted (architecture.zip, sprint33.zip, etc.)
-- .gitignore updated (node_modules, package-lock, test-results)
-- Technical debt inventory produced (31 items, 21 backlog)
+### 44.3 Coverage
+- vitest.config.ts with v8 coverage provider + thresholds
+- CI: frontend vitest runs with --coverage + artifact upload
+- @vitest/coverage-v8 installed
 
-## Commits (11 total)
+### 44.4 Governance
+- PR template (.github/PULL_REQUEST_TEMPLATE.md)
+- README badges: CI + Playwright + tests + coverage + decisions + phase
 
-| Commit | Description |
-|--------|-------------|
-| `cae2bfa` | S42: B-106 implementation |
-| `4ab8ceb` | S42: state sync |
-| `916b6b6` | S42: session handoff |
-| `6ca6af5` | S42: G2 patch P1-P4 |
-| `852f3ee` | S42: closure |
-| `075934e` | S42: closure artifacts |
-| `01fccc0` | Repo cleanup |
-| `bd8e591` | S43: tasks 1-2-4 |
-| `64c3de8` | S43: tasks 3+5 |
-| `05bb074` | S43: evidence packet |
-| `7cc272c` | S43: G2 patch (kickoff doc) |
+### 44.5 Cleanup
+- Grafana: env vars for admin password + anonymous access
+- requirements-dev.txt: test/dev dependencies
+- benchmark.yml: YAML parse fix (em-dash removal)
+- benchmark_api.py: 429 rate limit accepted
+- frontend/coverage/ added to .gitignore
+- package.json + package-lock.json committed (Playwright needs root deps)
 
-## Sprint 44 Candidates
+## Commits This Session
 
-| Item | Source | Priority |
-|------|--------|----------|
-| B-104 Template parameter UI | Backlog P1 | HIGH |
-| B-026 Dead-letter retention policy | Backlog P2 | MEDIUM |
-| B-105 Cost/outcome dashboard | Backlog P2 | MEDIUM |
-| B-108 Agent health / capability view | Backlog P2 | MEDIUM |
+| Sprint | Count | Key Commits |
+|--------|-------|-------------|
+| S42 | 6 | `cae2bfa` (impl), `6ca6af5` (G2 patch) |
+| S43 | 5 | `bd8e591` (tasks 1-2-4), `64c3de8` (tasks 3+5) |
+| S44 | ~15 | `ca6ebac` (CI fix), `c967198` (security), `42b73b2` (last alerts) |
+| Cleanup | 2 | `01fccc0` (repo cleanup), `2d4e37c` (coverage gitignore) |
 
-## Known Remaining Debt
+## Next Session Actions
 
-- D-021→D-058 extraction (AKCA-assigned, non-blocking)
-- Historical evidence gaps S15-S32 (non-actionable)
-- D-102 validation criteria 3-8 (unassigned)
-- Docker/Jaeger documentation gaps (low)
+1. Sprint 44 closure (evidence, review, issue, milestone)
+2. Sprint 45 planning — B-104 Template Parameter UI (last P1)
 
 ## GPT Memo
 
-Session 19: Two sprints completed. S42 B-106 runner resilience CLOSED (G2 PASS 2nd round). S43 tech debt CLOSED: Pydantic fix, bare pass cleanup, +86 frontend tests (168 total), 99 branch prune, CONTEXT_ISOLATION flag. Repo cleanup done. 863 total tests (682+168+13). 11 commits pushed. GPT S43 review conversation 69c9984b (Round 3 submitted). Sprint 44 pending — B-104 Template parameter UI recommended (last P1).
+Session 19: Three sprints. S42 B-106 runner resilience CLOSED (G2 PASS). S43 tech debt CLOSED (Pydantic, bare pass, +86 FE tests, feature flag). S44 CI/CD done: Python 3.12 fix, 22+ CodeQL alerts resolved, dependabot, coverage config, PR template, all pipelines green. 863 total tests. Security: 0 open. Next: S44 closure + S45 B-104.

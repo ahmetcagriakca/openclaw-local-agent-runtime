@@ -5,6 +5,7 @@
  * D-092: dashboard approve/reject is primary channel.
  */
 import { useState, useCallback, useEffect, useMemo } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { getApprovals, approveApproval, rejectApproval } from '../api/client'
 import { usePolling } from '../hooks/usePolling'
 import { useMutation } from '../hooks/useMutation'
@@ -69,7 +70,12 @@ export function ApprovalsPage() {
   const [confirmRejectId, setConfirmRejectId] = useState<string | null>(null)
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [toast, setToast] = useState<{ type: 'success' | 'error' | 'timeout'; message: string } | null>(null)
-  const [statusFilter, setStatusFilter] = useState<string>('all')
+  const [searchParams, setSearchParams] = useSearchParams()
+  const statusFilter = searchParams.get('status') ?? 'all'
+  const setStatusFilter = (v: string) => {
+    if (v === 'all') { setSearchParams({}) }
+    else { setSearchParams({ status: v }) }
+  }
 
   const clearToast = useCallback(() => setToast(null), [])
 

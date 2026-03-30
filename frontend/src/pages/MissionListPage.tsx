@@ -4,7 +4,7 @@
  * New Mission form for creating missions from the dashboard.
  */
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { getMissions, createMission } from '../api/client'
 import { usePolling } from '../hooks/usePolling'
 import { useSSEInvalidation } from '../hooks/SSEContext'
@@ -20,7 +20,12 @@ export function MissionListPage() {
   const [creating, setCreating] = useState(false)
   const [createError, setCreateError] = useState<string | null>(null)
   const [toast, setToast] = useState<string | null>(null)
-  const [stateFilter, setStateFilter] = useState<string>('all')
+  const [searchParams, setSearchParams] = useSearchParams()
+  const stateFilter = searchParams.get('state') ?? 'all'
+  const setStateFilter = (v: string) => {
+    if (v === 'all') { setSearchParams({}) }
+    else { setSearchParams({ state: v }) }
+  }
 
   // SSE: immediate refresh on mission changes
   useSSEInvalidation(['mission_list_changed', 'mission_updated'], refresh)

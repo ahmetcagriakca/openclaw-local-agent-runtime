@@ -249,8 +249,8 @@ async def validate_host(request: Request, call_next):
 from api.agents_api import router as agents_router
 from api.alerts_api import router as alerts_router
 from api.approval_api import router as approval_router
-from api.cost_api import router as cost_router
 from api.approval_mutation_api import router as approval_mutation_router
+from api.cost_api import router as cost_router
 from api.dashboard_api import router as dashboard_router
 from api.dlq_api import router as dlq_router
 from api.features_api import router as features_router

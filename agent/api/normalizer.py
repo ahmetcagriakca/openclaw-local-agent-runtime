@@ -184,6 +184,137 @@ class MissionNormalizer:
         )
         return items, meta
 
+    # ── Enriched Mission List (48.3a: consolidation) ────────────
+
+    def list_missions_enriched(self) -> list[dict]:
+        """Load all missions with cost/token/duration enrichment.
+
+        Consolidates the duplicate _load_file_missions() pattern from
+        cost_api.py and dashboard_api.py (D-065 compliance).
+        Returns flat dicts suitable for both cost and dashboard APIs.
+        """
+        items = []
+        pattern = str(self._missions_dir / "mission-*.json")
+        dashboard_sessions: set[str] = set()
+
+        # First pass: collect dashboard session IDs
+        for fpath in glob.glob(pattern):
+            base = os.path.basename(fpath)
+            if "-state.json" in base or "-summary.json" in base:
+                continue
+            try:
+                data = json.loads(Path(fpath).read_text(encoding="utf-8"))
+                if data.get("createdFrom") == "dashboard":
+                    dashboard_sessions.add(f"web-{data.get('missionId', '')}")
+            except Exception:
+                continue
+
+        for fpath in sorted(glob.glob(pattern)):
+            base = os.path.basename(fpath)
+            if "-state.json" in base or "-summary.json" in base or "-token-report" in base:
+                continue
+            try:
+                data = json.loads(Path(fpath).read_text(encoding="utf-8"))
+                mid = data.get("missionId", "")
+                if not mid:
+                    continue
+
+                # Skip controller-spawned missions (shown via dashboard placeholder)
+                if data.get("sessionId") in dashboard_sessions:
+                    continue
+
+                # Status from state file (precedence: state > mission)
+                status = data.get("status", "unknown")
+                state_path = self._missions_dir / f"{mid}-state.json"
+                if state_path.exists():
+                    try:
+                        sd = json.loads(state_path.read_text(encoding="utf-8"))
+                        status = sd.get("status", status)
+                    except Exception:
+                        pass
+
+                # Stale detection (>1h running → timed_out)
+                if status in ("running", "executing", "planning"):
+                    check_path = state_path if state_path.exists() else Path(fpath)
+                    try:
+                        file_age_s = time.time() - os.path.getmtime(str(check_path))
+                        if file_age_s > 3600:
+                            status = "timed_out"
+                    except Exception:
+                        pass
+
+                # Summary file for enriched stage data
+                summary_path = self._missions_dir / f"{mid}-summary.json"
+                summary_stages = []
+                if summary_path.exists():
+                    try:
+                        sm = json.loads(summary_path.read_text(encoding="utf-8"))
+                        summary_stages = sm.get("stages", [])
+                    except Exception:
+                        pass
+
+                # Use summary stages if available, fallback to mission stages
+                raw_stages = data.get("stages", [])
+                rich_stages = summary_stages if summary_stages else raw_stages
+                stage_count = len(rich_stages) if isinstance(rich_stages, list) else 0
+
+                total_tool_calls = 0
+                total_duration_ms = 0
+                reworks = 0
+                provider = "gpt-4o"
+
+                if isinstance(rich_stages, list):
+                    for s in rich_stages:
+                        if isinstance(s, dict):
+                            total_tool_calls += (
+                                s.get("toolCalls", s.get("tool_call_count", 0)) or 0)
+                            total_duration_ms += (
+                                s.get("durationMs", s.get("duration_ms", 0)) or 0)
+                            if s.get("isRework") or s.get("is_rework"):
+                                reworks += 1
+                            agent = s.get("agentUsed", s.get("agent_used", ""))
+                            if agent:
+                                al = agent.lower()
+                                if "claude" in al:
+                                    provider = "claude-sonnet"
+                                elif "ollama" in al:
+                                    provider = "ollama"
+                                elif "mock" in al:
+                                    provider = "mock"
+
+                # Token report
+                tokens = 0
+                token_path = self._missions_dir / f"{mid}-token-report.json"
+                if token_path.exists():
+                    try:
+                        tr = json.loads(token_path.read_text(encoding="utf-8"))
+                        tokens = tr.get("total_tokens", 0)
+                    except Exception:
+                        pass
+                if tokens == 0 and stage_count > 0:
+                    tokens = stage_count * 2000  # rough estimate
+
+                ts = data.get("startedAt", data.get("ts", ""))
+
+                items.append({
+                    "id": mid,
+                    "goal": data.get("goal", ""),
+                    "complexity": data.get("complexity", ""),
+                    "status": status,
+                    "tokens": tokens,
+                    "duration": total_duration_ms,
+                    "stages": stage_count,
+                    "tools": total_tool_calls,
+                    "reworks": reworks,
+                    "provider": provider,
+                    "ts": ts,
+                    "operator": data.get("userId", "akca"),
+                })
+            except Exception:
+                continue
+
+        return items
+
     def resolve_file_id(self, mission_id: str) -> str:
         """Resolve the controller mission ID for file lookups.
 

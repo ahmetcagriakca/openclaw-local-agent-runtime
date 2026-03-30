@@ -3,18 +3,14 @@
 Task 16.4: /api/v1/dashboard/missions, /summary endpoints.
 Task 16.5: /api/v1/dashboard/live SSE endpoint.
 
-Sprint 46 fix: reads from file-based missions + summary files
-when MissionStore is empty, ensuring dashboard always has data.
+48.3a: Uses MissionNormalizer.list_missions_enriched() for consolidated
+data access (D-065 compliance). MissionStore fallback retained.
 """
 from __future__ import annotations
 
 import asyncio
-import glob
-import json
 import logging
-import os
 from datetime import datetime, timezone
-from pathlib import Path
 from typing import Optional
 
 from fastapi import APIRouter, HTTPException, Query, Request
@@ -36,96 +32,22 @@ def _get_store():
     return _mission_store
 
 
-def _get_missions_dir() -> Path:
-    root = Path(__file__).resolve().parent.parent.parent
-    return root / "logs" / "missions"
+def _load_missions() -> list[dict]:
+    """Load enriched missions via normalizer (48.3a: D-065 consolidation).
 
-
-def _load_file_missions() -> list[dict]:
-    """Load missions from files when MissionStore is empty."""
-    missions_dir = _get_missions_dir()
-    items = []
-    pattern = str(missions_dir / "mission-*.json")
-    for fpath in glob.glob(pattern):
-        base = os.path.basename(fpath)
-        if "-state.json" in base or "-summary.json" in base or "-token-report" in base:
-            continue
-        try:
-            data = json.loads(Path(fpath).read_text(encoding="utf-8"))
-            mid = data.get("missionId", "")
-            if not mid:
-                continue
-
-            status = data.get("status", "unknown")
-            state_path = missions_dir / f"{mid}-state.json"
-            if state_path.exists():
-                try:
-                    sd = json.loads(state_path.read_text(encoding="utf-8"))
-                    status = sd.get("status", status)
-                except Exception:
-                    pass
-
-            # Enrich from summary file
-            summary_path = missions_dir / f"{mid}-summary.json"
-            stages_count = 0
-            tokens = 0
-            duration = 0
-            tool_calls = 0
-            reworks = 0
-
-            if summary_path.exists():
-                try:
-                    sm = json.loads(summary_path.read_text(encoding="utf-8"))
-                    stages = sm.get("stages", [])
-                    if isinstance(stages, list):
-                        stages_count = len(stages)
-                        for s in stages:
-                            if isinstance(s, dict):
-                                tool_calls += s.get("toolCalls", 0) or 0
-                                duration += s.get("durationMs", 0) or 0
-                                if s.get("isRework"):
-                                    reworks += 1
-                except Exception:
-                    pass
-
-            # Fallback stage count from mission file
-            if stages_count == 0:
-                raw_stages = data.get("stages", [])
-                if isinstance(raw_stages, list):
-                    stages_count = len(raw_stages)
-
-            # Token report
-            token_path = missions_dir / f"{mid}-token-report.json"
-            if token_path.exists():
-                try:
-                    tr = json.loads(token_path.read_text(encoding="utf-8"))
-                    tokens = tr.get("total_tokens", 0)
-                except Exception:
-                    pass
-            if tokens == 0 and stages_count > 0:
-                tokens = stages_count * 2000
-
-            ts = data.get("startedAt", data.get("ts", ""))
-
-            items.append({
-                "id": mid,
-                "goal": data.get("goal", ""),
-                "complexity": data.get("complexity", ""),
-                "status": status,
-                "tokens": tokens,
-                "duration": duration,
-                "stages": stages_count,
-                "tools": tool_calls,
-                "reworks": reworks,
-                "ts": ts,
-                "operator": data.get("userId", "akca"),
-                "budget_pct": 0,
-                "anomaly_count": 0,
-                "budget_events": 0,
-                "stages_detail": [],
-            })
-        except Exception as e:
-            logger.debug("dashboard: skip %s: %s", fpath, e)
+    Adds dashboard-specific fields (budget_pct, anomaly_count, etc.)
+    on top of normalizer's enriched data.
+    """
+    from api.server import normalizer
+    if not normalizer:
+        return []
+    items = normalizer.list_missions_enriched()
+    # Add dashboard-specific default fields
+    for item in items:
+        item.setdefault("budget_pct", 0)
+        item.setdefault("anomaly_count", 0)
+        item.setdefault("budget_events", 0)
+        item.setdefault("stages_detail", [])
     return items
 
 
@@ -148,7 +70,7 @@ def _get_missions_data() -> tuple[list[dict], dict]:
         return items, summary
 
     # Fallback: file-based
-    items = _load_file_missions()
+    items = _load_missions()
     # Filter terminal states for summary
     terminal = [m for m in items if m["status"] in ("completed", "failed", "aborted", "timed_out")]
     completed = [m for m in terminal if m["status"] == "completed"]
@@ -200,7 +122,7 @@ async def list_dashboard_missions(
         return {"meta": _meta(), "total": total, "missions": missions}
 
     # Fallback: file-based
-    items = _load_file_missions()
+    items = _load_missions()
 
     # Filters
     if status:

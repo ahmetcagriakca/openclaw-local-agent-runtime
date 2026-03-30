@@ -1,18 +1,13 @@
 """Cost & Outcome Dashboard API — B-105 (Sprint 46).
 
 Endpoints for cost/token tracking, outcome analytics, and ROI visibility.
-Reads mission data from file-based mission store (logs/missions/) via normalizer,
-falling back to MissionStore if available.
+Uses MissionNormalizer.list_missions_enriched() for consolidated data access (48.3a).
 """
 from __future__ import annotations
 
-import glob
-import json
 import logging
-import os
 from collections import defaultdict
 from datetime import datetime, timezone
-from pathlib import Path
 
 from fastapi import APIRouter, Query
 
@@ -31,109 +26,12 @@ PROVIDER_PRICING = {
 DEFAULT_PRICING = {"input": 0.005, "output": 0.015}
 
 
-def _get_missions_dir() -> Path:
-    """Get missions directory path."""
-    root = Path(__file__).resolve().parent.parent.parent
-    return root / "logs" / "missions"
-
-
-def _load_file_missions() -> list[dict]:
-    """Load missions from file-based storage (logs/missions/).
-
-    Reads mission JSON files and extracts cost-relevant fields.
-    Skips state/summary companion files.
-    """
-    missions_dir = _get_missions_dir()
-    items = []
-    pattern = str(missions_dir / "mission-*.json")
-    for fpath in glob.glob(pattern):
-        base = os.path.basename(fpath)
-        if "-state.json" in base or "-summary.json" in base or "-token-report" in base:
-            continue
-        try:
-            data = json.loads(Path(fpath).read_text(encoding="utf-8"))
-            mid = data.get("missionId", "")
-            if not mid:
-                continue
-
-            # Get status from state file if available
-            status = data.get("status", "unknown")
-            state_path = missions_dir / f"{mid}-state.json"
-            if state_path.exists():
-                try:
-                    sd = json.loads(state_path.read_text(encoding="utf-8"))
-                    status = sd.get("status", status)
-                except Exception:
-                    pass
-
-            # Prefer summary file for richer stage data (toolCalls, agentUsed, isRework)
-            summary_path = missions_dir / f"{mid}-summary.json"
-            summary_stages = []
-            if summary_path.exists():
-                try:
-                    sm = json.loads(summary_path.read_text(encoding="utf-8"))
-                    summary_stages = sm.get("stages", [])
-                except Exception:
-                    pass
-
-            # Use summary stages if available, fallback to mission stages
-            stages = data.get("stages", [])
-            rich_stages = summary_stages if summary_stages else stages
-            stage_count = len(rich_stages) if isinstance(rich_stages, list) else 0
-            total_tool_calls = 0
-            total_duration_ms = 0
-            reworks = 0
-            provider = "gpt-4o"  # default
-
-            if isinstance(rich_stages, list):
-                for s in rich_stages:
-                    if isinstance(s, dict):
-                        total_tool_calls += s.get("toolCalls", s.get("tool_call_count", 0)) or 0
-                        total_duration_ms += s.get("durationMs", s.get("duration_ms", 0)) or 0
-                        if s.get("isRework") or s.get("is_rework"):
-                            reworks += 1
-                        agent = s.get("agentUsed", s.get("agent_used", ""))
-                        if agent:
-                            al = agent.lower()
-                            if "claude" in al:
-                                provider = "claude-sonnet"
-                            elif "ollama" in al:
-                                provider = "ollama"
-                            elif "mock" in al:
-                                provider = "mock"
-
-            # Token report
-            tokens = 0
-            token_path = missions_dir / f"{mid}-token-report.json"
-            if token_path.exists():
-                try:
-                    tr = json.loads(token_path.read_text(encoding="utf-8"))
-                    tokens = tr.get("total_tokens", 0)
-                except Exception:
-                    pass
-
-            # Fallback: estimate tokens from stage count
-            if tokens == 0 and stage_count > 0:
-                tokens = stage_count * 2000  # rough estimate
-
-            ts = data.get("startedAt", data.get("ts", ""))
-
-            items.append({
-                "id": mid,
-                "goal": data.get("goal", ""),
-                "status": status,
-                "complexity": data.get("complexity", ""),
-                "tokens": tokens,
-                "duration": total_duration_ms,
-                "stages": stage_count,
-                "tools": total_tool_calls,
-                "reworks": reworks,
-                "provider": provider,
-                "ts": ts,
-            })
-        except Exception as e:
-            logger.debug("cost: skip %s: %s", fpath, e)
-    return items
+def _load_missions() -> list[dict]:
+    """Load enriched missions via normalizer (48.3a: D-065 consolidation)."""
+    from api.server import normalizer
+    if normalizer:
+        return normalizer.list_missions_enriched()
+    return []
 
 
 def _meta() -> dict:
@@ -161,7 +59,7 @@ def _estimate_cost(tokens: int, provider: str = "gpt-4o") -> float:
 @router.get("/summary")
 async def cost_summary():
     """Aggregate cost/outcome KPIs across all missions."""
-    items = _load_file_missions()
+    items = _load_missions()
 
     # Filter to terminal states only
     terminal = [m for m in items if m["status"] in ("completed", "failed", "aborted", "timed_out")]
@@ -223,7 +121,7 @@ async def cost_per_mission(
     sort: str = "cost_desc",
 ):
     """Per-mission cost breakdown, sorted by cost or tokens."""
-    items = _load_file_missions()
+    items = _load_missions()
     terminal = [m for m in items if m["status"] in ("completed", "failed", "aborted", "timed_out")]
 
     enriched = []
@@ -271,7 +169,7 @@ async def cost_trends(
     bucket: str = Query("daily", pattern="^(daily|weekly|monthly)$"),
 ):
     """Cost trends aggregated by time bucket."""
-    items = _load_file_missions()
+    items = _load_missions()
     terminal = [m for m in items if m["status"] in ("completed", "failed", "aborted", "timed_out")]
 
     buckets: dict[str, dict] = defaultdict(

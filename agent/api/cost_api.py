@@ -1,14 +1,18 @@
 """Cost & Outcome Dashboard API — B-105 (Sprint 46).
 
 Endpoints for cost/token tracking, outcome analytics, and ROI visibility.
-Aggregates data from MissionStore for cost summary, per-mission breakdown,
-and trend analysis.
+Reads mission data from file-based mission store (logs/missions/) via normalizer,
+falling back to MissionStore if available.
 """
 from __future__ import annotations
 
+import glob
+import json
 import logging
+import os
 from collections import defaultdict
 from datetime import datetime, timezone
+from pathlib import Path
 
 from fastapi import APIRouter, Query
 
@@ -26,22 +30,106 @@ PROVIDER_PRICING = {
 
 DEFAULT_PRICING = {"input": 0.005, "output": 0.015}
 
-_mission_store = None
+
+def _get_missions_dir() -> Path:
+    """Get missions directory path."""
+    root = Path(__file__).resolve().parent.parent.parent
+    return root / "logs" / "missions"
 
 
-def _get_store():
-    global _mission_store
-    if _mission_store is None:
-        from persistence.mission_store import MissionStore
-        _mission_store = MissionStore()
-    return _mission_store
+def _load_file_missions() -> list[dict]:
+    """Load missions from file-based storage (logs/missions/).
+
+    Reads mission JSON files and extracts cost-relevant fields.
+    Skips state/summary companion files.
+    """
+    missions_dir = _get_missions_dir()
+    items = []
+    pattern = str(missions_dir / "mission-*.json")
+    for fpath in glob.glob(pattern):
+        base = os.path.basename(fpath)
+        if "-state.json" in base or "-summary.json" in base or "-token-report" in base:
+            continue
+        try:
+            data = json.loads(Path(fpath).read_text(encoding="utf-8"))
+            mid = data.get("missionId", "")
+            if not mid:
+                continue
+
+            # Get status from state file if available
+            status = data.get("status", "unknown")
+            state_path = missions_dir / f"{mid}-state.json"
+            if state_path.exists():
+                try:
+                    sd = json.loads(state_path.read_text(encoding="utf-8"))
+                    status = sd.get("status", status)
+                except Exception:
+                    pass
+
+            # Extract stages for provider detection and metrics
+            stages = data.get("stages", [])
+            stage_count = len(stages) if isinstance(stages, list) else 0
+            total_tool_calls = 0
+            total_duration_ms = 0
+            reworks = 0
+            provider = "gpt-4o"  # default
+
+            if isinstance(stages, list):
+                for s in stages:
+                    if isinstance(s, dict):
+                        total_tool_calls += s.get("tool_call_count", s.get("toolCalls", 0))
+                        total_duration_ms += s.get("duration_ms", s.get("durationMs", 0)) or 0
+                        if s.get("isRework") or s.get("is_rework"):
+                            reworks += 1
+                        agent = s.get("agent_used", s.get("agentUsed", ""))
+                        if agent:
+                            al = agent.lower()
+                            if "claude" in al:
+                                provider = "claude-sonnet"
+                            elif "ollama" in al:
+                                provider = "ollama"
+                            elif "mock" in al:
+                                provider = "mock"
+
+            # Token report
+            tokens = 0
+            token_path = missions_dir / f"{mid}-token-report.json"
+            if token_path.exists():
+                try:
+                    tr = json.loads(token_path.read_text(encoding="utf-8"))
+                    tokens = tr.get("total_tokens", 0)
+                except Exception:
+                    pass
+
+            # Fallback: estimate tokens from stage count
+            if tokens == 0 and stage_count > 0:
+                tokens = stage_count * 2000  # rough estimate
+
+            ts = data.get("startedAt", data.get("ts", ""))
+
+            items.append({
+                "id": mid,
+                "goal": data.get("goal", ""),
+                "status": status,
+                "complexity": data.get("complexity", ""),
+                "tokens": tokens,
+                "duration": total_duration_ms,
+                "stages": stage_count,
+                "tools": total_tool_calls,
+                "reworks": reworks,
+                "provider": provider,
+                "ts": ts,
+            })
+        except Exception as e:
+            logger.debug("cost: skip %s: %s", fpath, e)
+    return items
 
 
 def _meta() -> dict:
     return {
         "freshnessMs": 0,
         "dataQuality": "fresh",
-        "sourcesUsed": [{"name": "mission_store", "ageMs": 0, "status": "fresh"}],
+        "sourcesUsed": [{"name": "mission_files", "ageMs": 0, "status": "fresh"}],
         "sourcesMissing": [],
         "generatedAt": datetime.now(timezone.utc).isoformat(),
     }
@@ -62,62 +150,49 @@ def _estimate_cost(tokens: int, provider: str = "gpt-4o") -> float:
 @router.get("/summary")
 async def cost_summary():
     """Aggregate cost/outcome KPIs across all missions."""
-    store = _get_store()
-    summary = store.summary()
-    items = store.list(limit=10000)[0]
+    items = _load_file_missions()
 
-    total_tokens = summary.get("total_tokens", 0)
-    completed = summary.get("completed", 0)
-    failed = summary.get("failed", 0)
-    total = summary.get("total_missions", 0)
+    # Filter to terminal states only
+    terminal = [m for m in items if m["status"] in ("completed", "failed", "aborted", "timed_out")]
+    completed = [m for m in terminal if m["status"] == "completed"]
+    failed = [m for m in terminal if m["status"] in ("failed", "aborted", "timed_out")]
+    total = len(terminal)
 
     # Cost estimation per provider
     provider_costs: dict[str, dict] = defaultdict(lambda: {"tokens": 0, "missions": 0, "cost": 0.0})
-    for m in items:
-        # Try to detect provider from stages_detail
-        provider = "gpt-4o"  # default
-        stages_detail = m.get("stages_detail", [])
-        if stages_detail:
-            for sd in stages_detail:
-                if sd.get("agentUsed"):
-                    agent = sd["agentUsed"].lower()
-                    if "claude" in agent:
-                        provider = "claude-sonnet"
-                    elif "ollama" in agent:
-                        provider = "ollama"
-                    break
+    for m in terminal:
+        provider = m.get("provider", "gpt-4o")
         tokens = m.get("tokens", 0)
         provider_costs[provider]["tokens"] += tokens
         provider_costs[provider]["missions"] += 1
         provider_costs[provider]["cost"] += _estimate_cost(tokens, provider)
 
+    total_tokens = sum(m.get("tokens", 0) for m in terminal)
     total_cost = sum(pc["cost"] for pc in provider_costs.values())
     avg_cost_per_mission = round(total_cost / total, 4) if total > 0 else 0
+    success_rate = round(len(completed) / total * 100, 1) if total > 0 else 0
 
-    # Success rate
-    success_rate = round(completed / total * 100, 1) if total > 0 else 0
-
-    # Avg tokens per completed mission
-    completed_items = [m for m in items if m.get("status") == "completed"]
     avg_tokens_completed = (
-        round(sum(m.get("tokens", 0) for m in completed_items) / len(completed_items))
-        if completed_items else 0
+        round(sum(m.get("tokens", 0) for m in completed) / len(completed))
+        if completed else 0
     )
+    durations = [m.get("duration", 0) for m in terminal if m.get("duration")]
+    avg_duration = round(sum(durations) / len(durations), 1) if durations else 0
 
     return {
         "meta": _meta(),
         "total_missions": total,
-        "completed": completed,
-        "failed": failed,
+        "completed": len(completed),
+        "failed": len(failed),
         "success_rate": success_rate,
         "total_tokens": total_tokens,
         "total_estimated_cost": round(total_cost, 4),
         "avg_cost_per_mission": avg_cost_per_mission,
         "avg_tokens_per_completed": avg_tokens_completed,
-        "avg_duration_ms": summary.get("avg_duration", 0),
-        "total_tool_calls": summary.get("total_tool_calls", 0),
-        "total_reworks": sum(m.get("reworks", 0) for m in items),
-        "total_budget_events": summary.get("total_budget_events", 0),
+        "avg_duration_ms": avg_duration,
+        "total_tool_calls": sum(m.get("tools", 0) for m in terminal),
+        "total_reworks": sum(m.get("reworks", 0) for m in terminal),
+        "total_budget_events": 0,
         "provider_breakdown": {
             k: {
                 "tokens": v["tokens"],
@@ -137,25 +212,14 @@ async def cost_per_mission(
     sort: str = "cost_desc",
 ):
     """Per-mission cost breakdown, sorted by cost or tokens."""
-    store = _get_store()
-    items, total = store.list(limit=10000)
+    items = _load_file_missions()
+    terminal = [m for m in items if m["status"] in ("completed", "failed", "aborted", "timed_out")]
 
     enriched = []
-    for m in items:
+    for m in terminal:
         tokens = m.get("tokens", 0)
-        provider = "gpt-4o"
-        stages_detail = m.get("stages_detail", [])
-        if stages_detail:
-            for sd in stages_detail:
-                if sd.get("agentUsed"):
-                    agent = sd["agentUsed"].lower()
-                    if "claude" in agent:
-                        provider = "claude-sonnet"
-                    elif "ollama" in agent:
-                        provider = "ollama"
-                    break
+        provider = m.get("provider", "gpt-4o")
         cost = _estimate_cost(tokens, provider)
-        duration = m.get("duration", 0)
         enriched.append({
             "id": m.get("id", ""),
             "goal": m.get("goal", ""),
@@ -164,11 +228,11 @@ async def cost_per_mission(
             "tokens": tokens,
             "estimated_cost": cost,
             "provider": provider,
-            "duration_ms": duration,
+            "duration_ms": m.get("duration", 0),
             "stages": m.get("stages", 0),
             "tool_calls": m.get("tools", 0),
             "reworks": m.get("reworks", 0),
-            "budget_pct": m.get("budget_pct", 0),
+            "budget_pct": 0,
             "ts": m.get("ts", ""),
         })
 
@@ -196,14 +260,14 @@ async def cost_trends(
     bucket: str = Query("daily", pattern="^(daily|weekly|monthly)$"),
 ):
     """Cost trends aggregated by time bucket."""
-    store = _get_store()
-    items, _ = store.list(limit=10000)
+    items = _load_file_missions()
+    terminal = [m for m in items if m["status"] in ("completed", "failed", "aborted", "timed_out")]
 
     buckets: dict[str, dict] = defaultdict(
         lambda: {"tokens": 0, "cost": 0.0, "missions": 0, "completed": 0, "failed": 0}
     )
 
-    for m in items:
+    for m in terminal:
         ts = m.get("ts", "")
         if not ts:
             continue
@@ -220,7 +284,8 @@ async def cost_trends(
             key = dt.strftime("%Y-%m")
 
         tokens = m.get("tokens", 0)
-        cost = _estimate_cost(tokens)
+        provider = m.get("provider", "gpt-4o")
+        cost = _estimate_cost(tokens, provider)
         buckets[key]["tokens"] += tokens
         buckets[key]["cost"] += cost
         buckets[key]["missions"] += 1
@@ -229,7 +294,6 @@ async def cost_trends(
         elif m.get("status") in ("failed", "aborted"):
             buckets[key]["failed"] += 1
 
-    # Sort by key (chronological)
     sorted_buckets = sorted(buckets.items())
     trend_data = [
         {

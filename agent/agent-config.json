@@ -27,6 +27,14 @@
       "maxTurns": 10,
       "timeoutSeconds": 180,
       "enabled": true
+    },
+    "mock-general": {
+      "provider": "mock",
+      "model": "mock-v1",
+      "maxTokens": 4096,
+      "maxTurns": 10,
+      "timeoutSeconds": 30,
+      "enabled": true
     }
   }
 }

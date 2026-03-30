@@ -6,6 +6,7 @@ structured data for dashboard consumption.
 """
 from __future__ import annotations
 
+import json
 import logging
 import os
 from datetime import datetime, timezone
@@ -177,39 +178,56 @@ async def capability_matrix():
 
 @router.get("/performance")
 async def agent_performance():
-    """Per-role performance metrics from mission history."""
-    store = _get_store()
-    items, _ = store.list(limit=10000)
+    """Per-role performance metrics from mission history (file-based)."""
+    import glob
+    from pathlib import Path
+
+    missions_dir = Path(__file__).resolve().parent.parent.parent / "logs" / "missions"
+    pattern = str(missions_dir / "mission-*.json")
 
     role_stats: dict[str, dict] = {}
-    for m in items:
-        stages_detail = m.get("stages_detail", [])
-        for sd in stages_detail:
-            role = sd.get("role", "unknown")
-            if role not in role_stats:
-                role_stats[role] = {
-                    "missions": 0,
-                    "stages": 0,
-                    "tool_calls": 0,
-                    "reworks": 0,
-                    "total_duration_ms": 0,
-                }
-            role_stats[role]["stages"] += 1
-            role_stats[role]["tool_calls"] += sd.get("toolCalls", 0)
-            if sd.get("isRework"):
-                role_stats[role]["reworks"] += 1
-            if sd.get("durationMs"):
-                role_stats[role]["total_duration_ms"] += sd["durationMs"]
+    mission_roles: dict[str, set] = {}  # mid -> set of roles
 
-    # Count missions per role (at least one stage with that role)
-    for m in items:
-        seen_roles: set[str] = set()
-        for sd in m.get("stages_detail", []):
-            role = sd.get("role", "unknown")
-            if role not in seen_roles:
-                seen_roles.add(role)
-                if role in role_stats:
-                    role_stats[role]["missions"] += 1
+    for fpath in glob.glob(pattern):
+        base = os.path.basename(fpath)
+        if "-state.json" in base or "-summary.json" in base or "-token-report" in base:
+            continue
+        try:
+            data = json.loads(Path(fpath).read_text(encoding="utf-8"))
+            mid = data.get("missionId", "")
+            stages = data.get("stages", [])
+            if not isinstance(stages, list):
+                continue
+            for s in stages:
+                if not isinstance(s, dict):
+                    continue
+                role = s.get("specialist", s.get("role", "unknown"))
+                if role not in role_stats:
+                    role_stats[role] = {
+                        "missions": 0,
+                        "stages": 0,
+                        "tool_calls": 0,
+                        "reworks": 0,
+                        "total_duration_ms": 0,
+                    }
+                role_stats[role]["stages"] += 1
+                role_stats[role]["tool_calls"] += s.get("tool_call_count", s.get("toolCalls", 0))
+                if s.get("isRework") or s.get("is_rework"):
+                    role_stats[role]["reworks"] += 1
+                dur = s.get("duration_ms", s.get("durationMs", 0)) or 0
+                role_stats[role]["total_duration_ms"] += dur
+
+                if mid not in mission_roles:
+                    mission_roles[mid] = set()
+                mission_roles[mid].add(role)
+        except Exception:
+            continue
+
+    # Count missions per role
+    for mid, roles in mission_roles.items():
+        for role in roles:
+            if role in role_stats:
+                role_stats[role]["missions"] += 1
 
     performance = []
     for role, stats in sorted(role_stats.items()):

@@ -61,5 +61,9 @@ def create_provider(agent_id: str = None):
         base_url = agent_config.get("baseUrl", "http://localhost:11434")
         return OllamaProvider(model=model, base_url=base_url), agent_config
 
+    elif provider_type == "mock":
+        from .mock_provider import MockProvider
+        return MockProvider(), agent_config
+
     else:
         raise ValueError(f"Unknown provider type: {provider_type}")

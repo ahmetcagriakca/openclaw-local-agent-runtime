@@ -66,22 +66,33 @@ def _load_file_missions() -> list[dict]:
                 except Exception:
                     pass
 
-            # Extract stages for provider detection and metrics
+            # Prefer summary file for richer stage data (toolCalls, agentUsed, isRework)
+            summary_path = missions_dir / f"{mid}-summary.json"
+            summary_stages = []
+            if summary_path.exists():
+                try:
+                    sm = json.loads(summary_path.read_text(encoding="utf-8"))
+                    summary_stages = sm.get("stages", [])
+                except Exception:
+                    pass
+
+            # Use summary stages if available, fallback to mission stages
             stages = data.get("stages", [])
-            stage_count = len(stages) if isinstance(stages, list) else 0
+            rich_stages = summary_stages if summary_stages else stages
+            stage_count = len(rich_stages) if isinstance(rich_stages, list) else 0
             total_tool_calls = 0
             total_duration_ms = 0
             reworks = 0
             provider = "gpt-4o"  # default
 
-            if isinstance(stages, list):
-                for s in stages:
+            if isinstance(rich_stages, list):
+                for s in rich_stages:
                     if isinstance(s, dict):
-                        total_tool_calls += s.get("tool_call_count", s.get("toolCalls", 0))
-                        total_duration_ms += s.get("duration_ms", s.get("durationMs", 0)) or 0
+                        total_tool_calls += s.get("toolCalls", s.get("tool_call_count", 0)) or 0
+                        total_duration_ms += s.get("durationMs", s.get("duration_ms", 0)) or 0
                         if s.get("isRework") or s.get("is_rework"):
                             reworks += 1
-                        agent = s.get("agent_used", s.get("agentUsed", ""))
+                        agent = s.get("agentUsed", s.get("agent_used", ""))
                         if agent:
                             al = agent.lower()
                             if "claude" in al:

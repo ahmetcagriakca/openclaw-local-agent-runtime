@@ -239,6 +239,11 @@ class MissionController:
                     expansion_broker=expansion_broker
                 )
 
+                # Guard: ensure result is a dict (LLM may return string on error)
+                if not isinstance(result, dict):
+                    result = {"status": "error", "response": str(result),
+                              "error": f"Unexpected result type: {type(result).__name__}"}
+
                 # Always save prompt/execution info regardless of outcome
                 stage["system_prompt"] = result.get("systemPrompt", "")
                 stage["user_prompt"] = result.get("userPrompt", "")
@@ -556,7 +561,13 @@ Respond ONLY with a JSON object, no markdown:
                     if json_match:
                         text = json_match.group(0)
 
-                plan = json.loads(text)
+                parsed = json.loads(text)
+                # Guard: ensure parsed result is a dict with stages
+                if isinstance(parsed, dict) and "stages" in parsed:
+                    plan = parsed
+                else:
+                    last_error = f"Parsed JSON is not a valid plan: {type(parsed).__name__}"
+                    continue
                 break
             except json.JSONDecodeError as e:
                 last_error = f"LLM response is not valid JSON: {e}. Response was: {(response.text or '')[:200]}"

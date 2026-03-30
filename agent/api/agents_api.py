@@ -188,20 +188,19 @@ async def agent_performance():
     role_stats: dict[str, dict] = {}
     mission_roles: dict[str, set] = {}  # mid -> set of roles
 
-    for fpath in glob.glob(pattern):
-        base = os.path.basename(fpath)
-        if "-state.json" in base or "-summary.json" in base or "-token-report" in base:
-            continue
+    # Prefer summary files for richer stage data (role, toolCalls, durationMs, isRework)
+    summary_pattern = str(missions_dir / "mission-*-summary.json")
+    for fpath in glob.glob(summary_pattern):
         try:
             data = json.loads(Path(fpath).read_text(encoding="utf-8"))
-            mid = data.get("missionId", "")
+            mid = data.get("missionId", os.path.basename(fpath).replace("-summary.json", ""))
             stages = data.get("stages", [])
             if not isinstance(stages, list):
                 continue
             for s in stages:
                 if not isinstance(s, dict):
                     continue
-                role = s.get("specialist", s.get("role", "unknown"))
+                role = s.get("role", s.get("specialist", "unknown"))
                 if role not in role_stats:
                     role_stats[role] = {
                         "missions": 0,
@@ -211,10 +210,10 @@ async def agent_performance():
                         "total_duration_ms": 0,
                     }
                 role_stats[role]["stages"] += 1
-                role_stats[role]["tool_calls"] += s.get("tool_call_count", s.get("toolCalls", 0))
+                role_stats[role]["tool_calls"] += s.get("toolCalls", s.get("tool_call_count", 0)) or 0
                 if s.get("isRework") or s.get("is_rework"):
                     role_stats[role]["reworks"] += 1
-                dur = s.get("duration_ms", s.get("durationMs", 0)) or 0
+                dur = s.get("durationMs", s.get("duration_ms", 0)) or 0
                 role_stats[role]["total_duration_ms"] += dur
 
                 if mid not in mission_roles:

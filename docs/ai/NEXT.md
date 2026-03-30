@@ -9,7 +9,7 @@
 
 **Model:** A (implementation) | **Class:** Governance/Quality
 **Scope:** 12 issues — accessibility, responsive, state badge, templates, toast, stale cleanup, telemetry, format utils, URL sync, health API
-**Tests:** 705 BE + 217 FE = 922 total (0 TS errors)
+**Tests:** 705 backend + 217 frontend + 13 Playwright = 935 total (0 TS errors) (D-131)
 **Issues:** #264-#275
 
 ## Sprint 46 — B-105 Cost Dashboard + B-108 Agent Health (CLOSED)

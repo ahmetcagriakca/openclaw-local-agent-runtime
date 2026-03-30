@@ -38,15 +38,17 @@ Windows 11 + WSL2 + Python 3.14 + PowerShell.
 ## Build & Test
 
 ```bash
-# Backend (618 tests)
+# Backend (705 tests)
 cd agent && python -m pytest tests/ -v
 
-# Frontend (82 tests, requires Node.js 20)
+# Frontend (217 tests, requires Node.js 20)
 cd frontend && npx tsc --noEmit
 cd frontend && npx vitest run
 
 # Playwright E2E (13 tests)
 cd frontend && npx playwright test
+
+# Total: 705 backend + 217 frontend + 13 Playwright = 935 (D-131)
 
 # Benchmark (evidence-only, D-109)
 python tools/benchmark_api.py

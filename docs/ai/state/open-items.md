@@ -1,7 +1,7 @@
 # open-items.md — Active State Tracker
 
 **Last updated:** 2026-03-30
-**Updated by:** Claude (Architect)
+**Updated by:** Claude Code (Sprint 48 T-1 reconciliation)
 
 ---
 
@@ -15,27 +15,32 @@
 
 ## Carry-Forward (Phase 7)
 
-| Item | Source | Decision |
-|------|--------|----------|
-| ~~Telegram bridge fix~~ | ~~S33+ deferred~~ | ✅ S38 task 38.1 DONE |
-| ~~B-101 Scheduled mission execution~~ | ~~Backlog P1~~ | ✅ S38 task 38.2 DONE |
-| ~~B-103 Mission presets / quick-run~~ | ~~Backlog P1~~ | ✅ S38 task 38.3 DONE |
-| ~~B-102 Full approval inbox UI~~ | ~~Backlog P1~~ | ✅ S39 task 39.1 DONE |
-| ~~Live mission E2E~~ | ~~S14A waiver~~ | ✅ S39 task 39.2 DONE |
-| ~~Playwright live API test in CI~~ | ~~S22 retro~~ | ✅ S39 task 39.3 DONE |
-| ~~Benchmark regression gate D-109~~ | ~~S22 retro~~ | ✅ S39 task 39.4 DONE |
+| Item | Source | Status |
+|------|--------|--------|
 | PROJECT_TOKEN rotation/docs | S23 retro | AKCA-owned, non-blocking |
-| Backend physical restructure | S14A/14B | Unassigned |
-| Docker dev environment | S14B | Unassigned |
-| UIOverview + WindowList tools | D-102 | Unassigned |
-| ~~Feature flag CONTEXT_ISOLATION_ENABLED~~ | ~~D-102~~ | ✅ S43 task 43.5 DONE |
-| D-102 validation criteria 3-8 | D-102 amendment | Unassigned |
-| ~~Frontend Vitest component tests~~ | ~~S16 P-16.3~~ | ✅ S43 (+86), S46 (+20), S47 (+2) = 217 total |
-| Alert "any" rule namespace scoping | S16 P-16.2 | Unassigned |
-| Jaeger deployment | S16 deferred | Unassigned |
-| Multi-user auth | D-104 / D-108 | Unassigned |
-| ~~Stale running missions~~ | ~~S47 audit~~ | ✅ S47 — normalizer stale detector (>1h → timed_out) |
-| ~~WMCP hard-fail on missions~~ | ~~S47 root cause~~ | ✅ S46 fix — graceful MCP degradation |
+| Docker dev environment | D-116 (S26) | Partially resolved: docker-compose operational (D-116, Jaeger included S28). Remaining: production image optimization |
+| Alert "any" namespace scoping | S16 P-16.2 | Still open, needs backlog issue (defer to S49) |
+| Multi-user auth | D-104/D-108/D-117 | Partially resolved: D-117 operational (S27), backend isolation (S40). Remaining: SSO, external auth, full RBAC |
+
+### Retired (Sprint 48 T-1 Reconciliation)
+
+| Item | Source | Reason |
+|------|--------|--------|
+| Backend physical restructure | S14A/14B | Superseded by D-115 (S26): "no restructure needed" — frozen decision |
+| UIOverview + WindowList tools | D-102 | D-102 CONTEXT_ISOLATION closed (S43). Tools exist only in observability test stubs — no production implementation planned |
+| D-102 validation criteria 3-8 | D-102 amendment | S40 multi-user isolation addressed remaining criteria. CONTEXT_ISOLATION feature flag done (S43). No open criteria remain. |
+| Jaeger deployment | S16 deferred | Resolved: Jaeger in docker-compose.yml (S28). Deployment operational. |
+| Telegram bridge fix | S33+ deferred | Done: S38 task 38.1 |
+| B-101 Scheduled mission execution | Backlog P1 | Done: S38 task 38.2 |
+| B-103 Mission presets / quick-run | Backlog P1 | Done: S38 task 38.3 |
+| B-102 Full approval inbox UI | Backlog P1 | Done: S39 task 39.1 |
+| Live mission E2E | S14A waiver | Done: S39 task 39.2 |
+| Playwright live API test in CI | S22 retro | Done: S39 task 39.3 |
+| Benchmark regression gate D-109 | S22 retro | Done: S39 task 39.4 |
+| Feature flag CONTEXT_ISOLATION_ENABLED | D-102 | Done: S43 task 43.5 |
+| Frontend Vitest component tests | S16 P-16.3 | Done: S43 (+86), S46 (+20), S47 (+2) = 217 total |
+| Stale running missions | S47 audit | Done: S47 normalizer stale detector (>1h → timed_out) |
+| WMCP hard-fail on missions | S47 root cause | Done: S46 fix — graceful MCP degradation |
 
 ---
 
@@ -60,6 +65,9 @@
 
 ## Next Sprint
 
-**Sprint 48 — Phase 7**
-- Status: NOT STARTED
-- P2 candidates: B-026 DLQ retention, B-013 Richer policyContext, B-107 Policy engine, B-109 CLI scaffolding, B-014 timeoutSeconds
+**Sprint 48 — Phase 7 (Debt-First Hybrid)**
+- Status: IN PROGRESS
+- Model: A (full closure)
+- Scope: Governance cleanup + runtime contract (B-013, B-014) + data normalization + OTel contract + D-131/D-133
+- Issues: #276-#284
+- Milestone: Sprint 48 (#23)

@@ -1,4 +1,4 @@
-# Session Handoff — 2026-03-30 (Session 20)
+# Session Handoff — 2026-03-30 (Session 21)
 
 **Platform:** Vezir Platform
 **Operator:** Claude Code (Opus) — AKCA delegated
@@ -7,86 +7,62 @@
 
 ## Session Summary
 
-Two sprints completed, major bugfixes, governance hardening:
-- **Sprint 46** — B-105 Cost Dashboard + B-108 Agent Health View (2 P2 features + 4 bugfix commits)
-- **Sprint 47** — Frontend Quality & UX Hardening (12 issues, 3 batches)
-- **Bugfixes** — MCP graceful degradation, controller defensive guards, file-based data fallback
-- **Governance** — Rule 16 added: 18-step sprint closure checklist (mandatory, autonomous)
-
-Complex mission verified: 10/10 stages, 66 tool calls, 2 reworks, 0 errors.
+Sprint 48 kickoff — Debt-First Hybrid scope. Cleanup gate (48.0) partially completed:
+- **T-1 DONE** — open-items.md reconciliation: 4 items retired (Backend restructure/D-115, UIOverview+WindowList/D-102, D-102 criteria 3-8, Jaeger deployment), 4 items kept with updated status
+- **T-2 DONE** — D-131 frozen (test count reporting contract): canonical format = `XXX backend + YYY frontend + ZZZ Playwright = NNN total`. All docs updated.
+- **T-3 DONE** — Sprint doc path audit: no duplicates found, D-132 deferred to S49
+- **T-8 IN PROGRESS** — Decision directory merge started (root `decisions/` → `docs/decisions/`), not yet committed
+- **GitHub** — Milestone #23 (Sprint 48) created, issues #276-#284 created
 
 ## Current State
 
 - **Phase:** 7
 - **Last closed sprint:** 47
-- **Decisions:** 129 frozen (D-001 → D-130, D-126 skipped)
-- **Tests:** 705 backend + 217 frontend + 13 Playwright = 935 total
+- **Sprint 48:** IN PROGRESS (cleanup gate 3/4 done)
+- **Decisions:** 130 frozen (D-001 → D-131, D-126 skipped)
+- **Tests:** 705 backend + 217 frontend + 13 Playwright = 935 total (D-131)
 - **Coverage:** 74% backend, 31% frontend
-- **CI:** All green (CI + Playwright + Benchmark)
+- **CI:** All green
 - **Security:** 0 code scanning, 0 dependabot, 0 secret scanning
 - **PRs:** 0 open
-- **P1 Backlog:** 0 remaining (all done)
-- **GitHub Project:** S46-S47 issues synced, all Done
+- **P1 Backlog:** 0 remaining
+- **GitHub Project:** S48 milestone + 9 issues created
 
-## Sprint 46 Deliverables
+## Sprint 48 Plan
 
-**Features:**
-- `agent/api/cost_api.py` — 3 endpoints: /cost/summary, /cost/missions, /cost/trends
-- `agent/api/agents_api.py` — 4 endpoints: /agents/providers, /agents/roles, /agents/capability-matrix, /agents/performance
-- `frontend/src/pages/CostDashboardPage.tsx` — KPI cards, provider breakdown, trend table, per-mission costs
-- `frontend/src/pages/AgentHealthPage.tsx` — Provider liveness, capability matrix, role cards, performance
-- Sidebar nav +2 items (Costs, Agents), routes /costs, /agents
+**File:** `docs/sprint-48-debt-first-hybrid-final-v5.md` (9 review rounds, GPT+Claude)
+**Model:** A (full closure)
 
-**Bugfixes (4 commits):**
-- File-based mission reading for Cost/Agent/Dashboard APIs (MissionStore was empty)
-- Controller `isinstance(result, dict)` guard (6 AttributeError crashes fixed)
-- Planning JSON parse validation (2 planning failures fixed)
-- MCP graceful degradation — runner continues without tools when WMCP down (63% failure root cause)
+### Tasks
 
-## Sprint 47 Deliverables (12/12 issues, #264-#275)
+| Task | Status | Issue |
+|------|--------|-------|
+| 48.0 T-1: open-items.md Reconciliation | DONE | #276 |
+| 48.0 T-2: D-131 Test Count Reporting | DONE | #277 |
+| 48.0 T-3: Sprint Doc Path Audit | DONE | #278 |
+| 48.0 T-8: Doc Fixes (merge, records, D-126) | IN PROGRESS | #279 |
+| 48.1: B-013 policyContext | NOT STARTED | #282 |
+| 48.2: B-014 timeoutSeconds | NOT STARTED | #283 |
+| 48.3: Normalizer + field + OTel | NOT STARTED | #284 |
+| 48.4: Preflight alignment | NOT STARTED | #280 |
+| 48.5: D-133 Policy contract | NOT STARTED | #281 |
 
-**P1:** Templates Run button wired, global focus-visible ring (WCAG), skip-to-content link, MissionStateBadge proper case + tooltips + running/paused states
-**P2:** Stale mission detector (>1h → timed_out), responsive ApprovalsPage panel, telemetry JSON display, monitoring truncation, toast auto-dismiss 5s, cost trend formatting, sidebar localStorage
-**P3:** format.ts utilities, URL state sync for filters, HealthPage JSON stats + error state
+### Remaining T-8 Work
 
-**Additional fixes:** Ruff lint cleanup, OpenAPI spec + SDK regeneration, README badge links
-
-## Governance Update
-
-**Rule 16 added** to GOVERNANCE.md: 18-step sprint closure checklist.
-All steps mandatory and autonomous — no operator reminders needed.
-
-## Commits (Session 20)
-
-| # | Hash | Description |
-|---|------|-------------|
-| 1 | `e252385` | S46: B-105 + B-108 implementation |
-| 2 | `e60e363` | Fix: file-based mission reading |
-| 3 | `2a3bd89` | Fix: defensive guards + summary data |
-| 4 | `498cf11` | Fix: monitoring dashboard fallback |
-| 5 | `2e53cc6` | Fix: MCP graceful degradation |
-| 6 | `bcd8580` | S47 batch 1: P1 (accessibility, templates, badge) |
-| 7 | `b8ef270` | S47 batch 2: P2/P3 (responsive, toast, stale, telemetry) |
-| 8 | `96f41b7` | S47 batch 3: URL state sync |
-| 9 | `cd621bb` | Docs: S47 closure |
-| 10 | `4c9dcf7` | Docs: open-items update |
-| 11 | `1fc7c08` | Docs: BACKLOG.md regenerate |
-| 12 | `3f070fe` | Fix: ruff lint (unused imports) |
-| 13 | `f046988` | Chore: OpenAPI spec + SDK types regenerate |
-| 14 | `2ec64f9` | Fix: ruff import sort server.py |
-| 15 | `d3cfbc3` | Fix: README badge links |
-| 16 | `0c6ab07` | Docs: S46+S47 review records + evidence |
-| 17 | `8b05986` | Governance: Rule 16 — 18-step closure checklist |
+1. Move root `decisions/D-123→D-130` files to `docs/decisions/`
+2. Update DECISIONS.md formal record paths (7 entries: `decisions/` → `docs/decisions/`)
+3. Create D-111/D-112/D-113/D-114 formal records (compact format)
+4. Add D-126 skip reason to DECISIONS.md
+5. Run `check-stale-refs.py` validation
 
 ## Next Session
 
-- **Sprint 48 planning** — P2 candidates:
-  - B-026 Dead-letter retention policy
-  - B-013 Richer policyContext
-  - B-107 Policy engine
-  - B-109 Template/plugin scaffolding CLI
-  - B-014 timeoutSeconds in contract
+1. Complete T-8 (decision merge + formal records)
+2. Track 1: 48.1 policyContext + 48.2 timeout (parallel)
+3. G1 mid-review gate
+4. Track 2: 48.3 normalizer + 48.4 preflight + 48.5 D-133
+5. G2 final review → closure
 
 ## GPT Memo
 
-Session 20: S46 closed (B-105 cost dashboard 3 API + page, B-108 agent health 4 API + page, 4 bugfix commits). S47 closed (12 frontend quality issues: accessibility, responsive, templates, toast, stale, format). Governance Rule 16 added (18-step closure checklist). 935 total tests. CI all green. Complex mission 10/10 verified. README badges fixed. Next: S48 from P2 backlog.
+Session 21: S48 kickoff, cleanup gate 3/4 done. T-1: open-items reconciled (4 retired, 4 kept). T-2: D-131 frozen (test count format). T-3: doc path audit clean, D-132 deferred. T-8 in progress (decision directory merge pending). GitHub: milestone #23 + issues #276-#284. Next: complete T-8, then Track 1 (policyContext + timeout).

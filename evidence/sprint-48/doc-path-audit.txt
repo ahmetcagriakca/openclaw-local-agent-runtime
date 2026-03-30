@@ -1,0 +1,34 @@
+# Sprint 48 T-3: Sprint Doc Path Audit
+# Date: 2026-03-30
+
+## Path Variants Found
+
+1. docs/sprint{N}/           — S33-S41 (active sprint docs, no separator)
+2. docs/archive/sprints/sprint-{N}/  — S12-S32 (archived, hyphenated)
+3. evidence/sprint-{N}/      — S8-S45 (evidence dirs, hyphenated)
+
+## Missing Path
+
+docs/sprints/sprint-{N}/  — DOES NOT EXIST (plan anticipated S23-S32 overlap, but those are already archived)
+
+## Duplicate Check
+
+Checked for overlap between docs/sprint{N}/ and docs/archive/sprints/sprint-{N}/:
+- S33-S41 exist only in docs/sprint{N}/ (active)
+- S12-S32 exist only in docs/archive/sprints/sprint-{N}/ (archived)
+- NO DUPLICATES FOUND
+
+## D-132 Decision: DEFERRED to S49
+
+No urgent naming standard needed — no duplicates, no broken references.
+Two naming conventions coexist:
+- Active: docs/sprint{N}/ (no separator, no "sprints" plural)
+- Archive: docs/archive/sprints/sprint-{N}/ (hyphenated, plural parent)
+Path migration (standardizing to one convention) is S49 scope per plan constraint.
+
+## Evidence
+
+$ ls -d docs/sprints/sprint-*/ 2>/dev/null → (none)
+$ ls -d docs/sprint[0-9]*/ → S33-S41
+$ ls -d docs/archive/sprints/sprint-*/ → S12-S32
+$ Verified: zero overlap between active and archive paths

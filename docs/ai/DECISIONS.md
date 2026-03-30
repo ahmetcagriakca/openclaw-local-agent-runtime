@@ -1177,9 +1177,18 @@ Formal record: `decisions/D-130-transport-encryption.md`.
 
 ---
 
-## Decision Index (D-001 → D-130)
+### D-131: Test Count Reporting Contract
 
-129 frozen decisions. D-126 skipped (number reserved, not used).
+**Phase:** Sprint 48 | **Status:** Frozen
+
+Canonical test total = backend + frontend + Playwright (3 components). Format: `XXX backend + YYY frontend + ZZZ Playwright = NNN total`. All canonical docs (handoff, STATE.md, NEXT.md, CLAUDE.md) use this format. Sprint closure evidence includes 3 separate output lines.
+Formal record: `docs/decisions/D-131-test-reporting.md`.
+
+---
+
+## Decision Index (D-001 → D-131)
+
+130 frozen decisions. D-126 skipped (number reserved, not used).
 
 | ID | Title | Phase |
 |----|-------|-------|
@@ -1312,3 +1321,4 @@ Formal record: `decisions/D-130-transport-encryption.md`.
 | D-128 | Risk Classification Contract | Sprint 35 |
 | D-129 | Secret Storage + Audit Integrity Contract | Sprint 36 |
 | D-130 | Transport Encryption Contract | Sprint 37 |
+| D-131 | Test Count Reporting Contract | Sprint 48 |

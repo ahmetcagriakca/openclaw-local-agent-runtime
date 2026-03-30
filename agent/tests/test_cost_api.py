@@ -1,10 +1,7 @@
 """B-105 Cost API tests — Sprint 46."""
 import os
 import sys
-import tempfile
 import unittest
-from pathlib import Path
-from unittest.mock import patch
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -47,6 +44,7 @@ class TestCostAPIEndpoints(unittest.TestCase):
     def setUpClass(cls):
         os.environ.setdefault("VEZIR_DEV", "1")
         from fastapi.testclient import TestClient
+
         from api.server import app
         cls.client = TestClient(app)
 

@@ -53,6 +53,7 @@ class TestAgentsAPIEndpoints(unittest.TestCase):
     def setUpClass(cls):
         os.environ.setdefault("VEZIR_DEV", "1")
         from fastapi.testclient import TestClient
+
         from api.server import app
         cls.client = TestClient(app)
 
@@ -114,7 +115,6 @@ class TestAgentsAPIEndpoints(unittest.TestCase):
 
 
 import unittest.mock
-
 
 if __name__ == "__main__":
     unittest.main()

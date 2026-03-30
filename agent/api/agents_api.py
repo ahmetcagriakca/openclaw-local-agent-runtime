@@ -183,7 +183,6 @@ async def agent_performance():
     from pathlib import Path
 
     missions_dir = Path(__file__).resolve().parent.parent.parent / "logs" / "missions"
-    pattern = str(missions_dir / "mission-*.json")
 
     role_stats: dict[str, dict] = {}
     mission_roles: dict[str, set] = {}  # mid -> set of roles

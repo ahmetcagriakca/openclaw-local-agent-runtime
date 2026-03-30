@@ -4,7 +4,12 @@ import os
 import time
 from datetime import datetime, timezone
 
+from context.policy_telemetry import emit_policy_event
 from mission.mission_state import MissionState, MissionStatus
+from mission.policy_context import (
+    TimeoutConfig,
+    build_policy_context,
+)
 from mission.resilience import (
     CircuitBreaker,
     is_poison_pill,
@@ -82,6 +87,8 @@ class MissionController:
             "finishedAt": None,
             "retryFromMissionId": retry_from_mission.get("missionId") if retry_from_mission else None,
             "risk_level": None,  # D-128: set after planning, before execution
+            "timeoutConfig": TimeoutConfig().to_dict(),  # B-014: timeout hierarchy
+            "policyContext": None,  # B-013: set before stage execution
         }
         self._save_mission(mission)
 
@@ -221,6 +228,40 @@ class MissionController:
                                        mission_state=mission_state)
 
             try:
+                # B-013: Build policy context for pre-stage evaluation
+                policy_ctx = build_policy_context(mission, start_time)
+                mission["policyContext"] = policy_ctx.to_dict()
+                stage["policyContext"] = policy_ctx.to_dict()
+
+                # B-014: Check mission-level timeout before starting stage
+                elapsed = time.time() - start_time
+                mission_timeout = policy_ctx.timeout_config.mission_seconds
+                if elapsed >= mission_timeout:
+                    stage["status"] = "timed_out"
+                    stage["error"] = (
+                        f"Mission timeout exceeded: {elapsed:.0f}s >= {mission_timeout}s"
+                    )
+                    mission["status"] = "timed_out"
+                    mission["error"] = stage["error"]
+                    mission["finishedAt"] = datetime.now(timezone.utc).isoformat()
+                    mission_state.transition_to(
+                        MissionStatus.TIMED_OUT,
+                        f"mission timeout: {elapsed:.0f}s >= {mission_timeout}s")
+                    emit_policy_event("mission_timed_out", {
+                        "mission_id": mission_id,
+                        "elapsed_seconds": round(elapsed, 1),
+                        "timeout_seconds": mission_timeout,
+                        "stage_id": stage_id,
+                    })
+                    self._save_mission(mission)
+                    self._persist_mission_state(mission_state)
+                    self._enqueue_to_dlq(mission)
+                    self._emit_mission_summary(
+                        mission_id, mission, assembler,
+                        expansion_broker, "timed_out",
+                        mission_state=mission_state)
+                    return mission
+
                 # Build artifact context from Assembler for this stage
                 artifact_context = ""
                 if mission["completedArtifactIds"]:
@@ -233,11 +274,27 @@ class MissionController:
                     artifact_context = self._format_artifact_context(
                         context_package, stage_results=stage_results)
 
+                # B-014: Execute stage with timeout enforcement
+                stage_timeout = policy_ctx.timeout_config.effective_stage_timeout(
+                    stage.get("timeoutSeconds"))
+                stage_start = time.time()
+
                 result = self._execute_stage(
                     stage, all_artifacts, mission_id, user_id,
                     artifact_context=artifact_context,
                     expansion_broker=expansion_broker
                 )
+
+                # B-014: Post-execution stage timeout check
+                stage_elapsed = time.time() - stage_start
+                if stage_elapsed >= stage_timeout:
+                    emit_policy_event("stage_timeout_exceeded", {
+                        "mission_id": mission_id,
+                        "stage_id": stage_id,
+                        "elapsed_seconds": round(stage_elapsed, 1),
+                        "timeout_seconds": stage_timeout,
+                        "completed": True,
+                    })
 
                 # Guard: ensure result is a dict (LLM may return string on error)
                 if not isinstance(result, dict):
@@ -324,7 +381,6 @@ class MissionController:
 
             except Exception as e:
                 # 5C-3: Recovery triage — NOT immediate abort
-                from context.policy_telemetry import emit_policy_event
                 error_context = str(e)
 
                 emit_policy_event("stage_failed", {

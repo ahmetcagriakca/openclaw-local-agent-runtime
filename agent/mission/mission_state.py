@@ -18,6 +18,7 @@ class MissionStatus(Enum):
     PAUSED = "paused"
     COMPLETED = "completed"
     FAILED = "failed"
+    TIMED_OUT = "timed_out"
 
 
 VALID_TRANSITIONS = {
@@ -31,7 +32,8 @@ VALID_TRANSITIONS = {
         MissionStatus.WAITING_REVIEW,
         MissionStatus.PAUSED,
         MissionStatus.COMPLETED,
-        MissionStatus.FAILED
+        MissionStatus.FAILED,
+        MissionStatus.TIMED_OUT
     },
     MissionStatus.PAUSED: {
         MissionStatus.RUNNING, MissionStatus.FAILED
@@ -43,6 +45,9 @@ VALID_TRANSITIONS = {
     MissionStatus.WAITING_TEST: {MissionStatus.RUNNING},
     MissionStatus.WAITING_REVIEW: {MissionStatus.RUNNING},
     MissionStatus.FAILED: {
+        MissionStatus.PLANNING, MissionStatus.READY
+    },
+    MissionStatus.TIMED_OUT: {
         MissionStatus.PLANNING, MissionStatus.READY
     },
     MissionStatus.COMPLETED: set()

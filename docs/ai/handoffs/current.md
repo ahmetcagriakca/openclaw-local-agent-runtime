@@ -7,12 +7,13 @@
 
 ## Session Summary
 
-Three sprints completed in single session:
-- **Sprint 46** — B-105 Cost Dashboard + B-108 Agent Health View (2 P2 features)
-- **Sprint 46 fixes** — 4 bugfix commits (file-based data, defensive guards, MCP graceful degradation)
+Two sprints completed, major bugfixes, governance hardening:
+- **Sprint 46** — B-105 Cost Dashboard + B-108 Agent Health View (2 P2 features + 4 bugfix commits)
 - **Sprint 47** — Frontend Quality & UX Hardening (12 issues, 3 batches)
+- **Bugfixes** — MCP graceful degradation, controller defensive guards, file-based data fallback
+- **Governance** — Rule 16 added: 18-step sprint closure checklist (mandatory, autonomous)
 
-Complex mission executed successfully: 10/10 stages, 66 tool calls, 2 reworks, 0 errors.
+Complex mission verified: 10/10 stages, 66 tool calls, 2 reworks, 0 errors.
 
 ## Current State
 
@@ -20,51 +21,72 @@ Complex mission executed successfully: 10/10 stages, 66 tool calls, 2 reworks, 0
 - **Last closed sprint:** 47
 - **Decisions:** 129 frozen (D-001 → D-130, D-126 skipped)
 - **Tests:** 705 backend + 217 frontend + 13 Playwright = 935 total
-- **CI:** All green (0 TS errors)
+- **Coverage:** 74% backend, 31% frontend
+- **CI:** All green (CI + Playwright + Benchmark)
 - **Security:** 0 code scanning, 0 dependabot, 0 secret scanning
+- **PRs:** 0 open
+- **P1 Backlog:** 0 remaining (all done)
 - **GitHub Project:** S46-S47 issues synced, all Done
 
 ## Sprint 46 Deliverables
 
-- cost_api.py (3 endpoints) + CostDashboardPage
-- agents_api.py (4 endpoints) + AgentHealthPage
-- Sidebar nav +2 items (Costs, Agents)
+**Features:**
+- `agent/api/cost_api.py` — 3 endpoints: /cost/summary, /cost/missions, /cost/trends
+- `agent/api/agents_api.py` — 4 endpoints: /agents/providers, /agents/roles, /agents/capability-matrix, /agents/performance
+- `frontend/src/pages/CostDashboardPage.tsx` — KPI cards, provider breakdown, trend table, per-mission costs
+- `frontend/src/pages/AgentHealthPage.tsx` — Provider liveness, capability matrix, role cards, performance
+- Sidebar nav +2 items (Costs, Agents), routes /costs, /agents
 
-## Sprint 46 Bugfixes
+**Bugfixes (4 commits):**
+- File-based mission reading for Cost/Agent/Dashboard APIs (MissionStore was empty)
+- Controller `isinstance(result, dict)` guard (6 AttributeError crashes fixed)
+- Planning JSON parse validation (2 planning failures fixed)
+- MCP graceful degradation — runner continues without tools when WMCP down (63% failure root cause)
 
-- Cost/Agent API: file-based mission reading (MissionStore was empty)
-- Controller: isinstance(result, dict) guard (fixed 6 AttributeError crashes)
-- Planning: JSON parse validation (fixed 2 planning failures)
-- Runner: MCP graceful degradation (fixed 63% of all failures)
-- Dashboard/Monitoring: file-based fallback when MissionStore empty
+## Sprint 47 Deliverables (12/12 issues, #264-#275)
 
-## Sprint 47 Deliverables (12 issues)
+**P1:** Templates Run button wired, global focus-visible ring (WCAG), skip-to-content link, MissionStateBadge proper case + tooltips + running/paused states
+**P2:** Stale mission detector (>1h → timed_out), responsive ApprovalsPage panel, telemetry JSON display, monitoring truncation, toast auto-dismiss 5s, cost trend formatting, sidebar localStorage
+**P3:** format.ts utilities, URL state sync for filters, HealthPage JSON stats + error state
 
-**P1:**
-- Templates Run button functional + presets API format fix
-- Global focus-visible ring (WCAG 2.1 AA) + skip-to-content link
-- MissionStateBadge proper case + tooltips + running/paused states
+**Additional fixes:** Ruff lint cleanup, OpenAPI spec + SDK regeneration, README badge links
 
-**P2:**
-- Stale mission detector (running > 1h → timed_out)
-- Responsive: ApprovalsPage panel mobile adaptive
-- Telemetry: object values JSON.stringify'd with tooltip
-- Monitoring: live feed truncation with "..." + tooltip
-- Toast auto-dismiss (5s) on MissionDetailPage + ApprovalsPage
-- Cost trend period formatting ("Mar 23" not ISO)
+## Governance Update
 
-**P3:**
-- format.ts utility (formatDate/Number/Tokens/Duration/Cost)
-- URL state sync for MissionList + Approvals filters
-- HealthPage: JSON stats instead of regex, capabilities error state
+**Rule 16 added** to GOVERNANCE.md: 18-step sprint closure checklist.
+All steps mandatory and autonomous — no operator reminders needed.
 
-## Complex Mission Evidence
+## Commits (Session 20)
 
-Mission `mission-20260330-094957-a31092` completed successfully:
-- 10/10 stages (8 planned + 2 rework)
-- 66 tool calls, 674s total, 0 errors
-- Quality gate rework triggered correctly (developer + reviewer)
+| # | Hash | Description |
+|---|------|-------------|
+| 1 | `e252385` | S46: B-105 + B-108 implementation |
+| 2 | `e60e363` | Fix: file-based mission reading |
+| 3 | `2a3bd89` | Fix: defensive guards + summary data |
+| 4 | `498cf11` | Fix: monitoring dashboard fallback |
+| 5 | `2e53cc6` | Fix: MCP graceful degradation |
+| 6 | `bcd8580` | S47 batch 1: P1 (accessibility, templates, badge) |
+| 7 | `b8ef270` | S47 batch 2: P2/P3 (responsive, toast, stale, telemetry) |
+| 8 | `96f41b7` | S47 batch 3: URL state sync |
+| 9 | `cd621bb` | Docs: S47 closure |
+| 10 | `4c9dcf7` | Docs: open-items update |
+| 11 | `1fc7c08` | Docs: BACKLOG.md regenerate |
+| 12 | `3f070fe` | Fix: ruff lint (unused imports) |
+| 13 | `f046988` | Chore: OpenAPI spec + SDK types regenerate |
+| 14 | `2ec64f9` | Fix: ruff import sort server.py |
+| 15 | `d3cfbc3` | Fix: README badge links |
+| 16 | `0c6ab07` | Docs: S46+S47 review records + evidence |
+| 17 | `8b05986` | Governance: Rule 16 — 18-step closure checklist |
+
+## Next Session
+
+- **Sprint 48 planning** — P2 candidates:
+  - B-026 Dead-letter retention policy
+  - B-013 Richer policyContext
+  - B-107 Policy engine
+  - B-109 Template/plugin scaffolding CLI
+  - B-014 timeoutSeconds in contract
 
 ## GPT Memo
 
-Session 20: S46 closed (B-105 cost dashboard + B-108 agent health, 7 API endpoints, 2 frontend pages). 4 bugfix commits (file-based data, defensive guards, MCP graceful degradation). S47 closed (12 frontend quality issues: accessibility, responsive, state badge, templates run button, toast auto-dismiss, stale missions, telemetry data display, format utils, URL state sync, health API structured data). 935 total tests. Complex mission 10/10 completed. Next: S48.
+Session 20: S46 closed (B-105 cost dashboard 3 API + page, B-108 agent health 4 API + page, 4 bugfix commits). S47 closed (12 frontend quality issues: accessibility, responsive, templates, toast, stale, format). Governance Rule 16 added (18-step closure checklist). 935 total tests. CI all green. Complex mission 10/10 verified. README badges fixed. Next: S48 from P2 backlog.

@@ -1,9 +1,16 @@
 # Next Steps — Vezir Platform
 
 **Last updated:** 2026-03-30
-**Current:** Phase 7 active. Sprint 46 closed. All P1 items complete. Sprint 47 pending.
+**Current:** Phase 7 active. Sprint 47 closed. Sprint 48 pending.
 
 ---
+
+## Sprint 47 — Frontend Quality & UX Hardening (CLOSED)
+
+**Model:** A (implementation) | **Class:** Governance/Quality
+**Scope:** 12 issues — accessibility, responsive, state badge, templates, toast, stale cleanup, telemetry, format utils, URL sync, health API
+**Tests:** 705 BE + 217 FE = 922 total (0 TS errors)
+**Issues:** #264-#275
 
 ## Sprint 46 — B-105 Cost Dashboard + B-108 Agent Health (CLOSED)
 

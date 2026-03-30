@@ -23,12 +23,12 @@ describe('MissionStateBadge — extended', () => {
 
   test('renders timed_out state label correctly', () => {
     render(<MissionStateBadge state="timed_out" />)
-    expect(screen.getByText('timed out')).toBeTruthy()
+    expect(screen.getByText('Timed Out')).toBeTruthy()
   })
 
   test('renders approval_wait state label correctly', () => {
     render(<MissionStateBadge state="approval_wait" />)
-    expect(screen.getByText('approval wait')).toBeTruthy()
+    expect(screen.getByText('Approval Wait')).toBeTruthy()
   })
 
   test('badge is an inline element (span)', () => {

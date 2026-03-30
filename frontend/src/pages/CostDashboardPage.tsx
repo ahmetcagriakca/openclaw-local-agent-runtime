@@ -12,6 +12,10 @@ const STATUS_COLORS: Record<string, string> = {
   failed: 'bg-red-600',
   aborted: 'bg-orange-600',
   timed_out: 'bg-yellow-600',
+  pending: 'bg-gray-600',
+  paused: 'bg-yellow-700',
+  running: 'bg-indigo-600',
+  executing: 'bg-indigo-600',
 }
 
 function formatCost(cost: number): string {
@@ -27,6 +31,19 @@ function formatTokens(tokens: number): string {
 function formatDuration(ms: number): string {
   if (ms >= 60_000) return `${(ms / 60_000).toFixed(1)}m`
   return `${(ms / 1000).toFixed(1)}s`
+}
+
+function formatPeriod(period: string, bucket: string): string {
+  if (bucket === 'daily') {
+    const d = new Date(period + 'T00:00:00')
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+  }
+  if (bucket === 'monthly') {
+    const [y, m] = period.split('-')
+    const d = new Date(Number(y), Number(m) - 1)
+    return d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+  }
+  return period // weekly: keep W format
 }
 
 export function CostDashboardPage() {
@@ -178,7 +195,7 @@ export function CostDashboardPage() {
               <tbody>
                 {trends.data.trends.map((t) => (
                   <tr key={t.period} className="border-b border-gray-800/50 hover:bg-gray-800/30">
-                    <td className="px-3 py-2 font-mono text-xs text-gray-300">{t.period}</td>
+                    <td className="px-3 py-2 font-mono text-xs text-gray-300">{formatPeriod(t.period, trendBucket)}</td>
                     <td className="px-3 py-2 text-right font-medium text-emerald-400">
                       {formatCost(t.estimated_cost)}
                     </td>

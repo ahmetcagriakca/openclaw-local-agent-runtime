@@ -4,12 +4,14 @@
  */
 import { useState, useEffect } from 'react'
 import type { MissionTemplate } from '../types/api'
-import { getPresets } from '../api/client'
+import { getPresets, runTemplate } from '../api/client'
 
 export function TemplatesPage() {
   const [templates, setTemplates] = useState<MissionTemplate[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<Error | null>(null)
+  const [runningId, setRunningId] = useState<string | null>(null)
+  const [toast, setToast] = useState<{ msg: string; ok: boolean } | null>(null)
 
   const fetchPresets = async () => {
     setLoading(true)
@@ -28,6 +30,26 @@ export function TemplatesPage() {
     fetchPresets()
   }, [])
 
+  const handleRun = async (t: MissionTemplate) => {
+    setRunningId(t.id)
+    try {
+      const defaults: Record<string, unknown> = {}
+      for (const p of t.parameters) {
+        if (p.default !== undefined) defaults[p.name] = p.default
+        else if (p.type === 'string') defaults[p.name] = ''
+        else if (p.type === 'number') defaults[p.name] = 0
+        else if (p.type === 'boolean') defaults[p.name] = false
+      }
+      await runTemplate(t.id, defaults)
+      setToast({ msg: `Mission started from "${t.name}"`, ok: true })
+    } catch (err) {
+      setToast({ msg: `Failed to run "${t.name}": ${err instanceof Error ? err.message : String(err)}`, ok: false })
+    } finally {
+      setRunningId(null)
+      setTimeout(() => setToast(null), 5000)
+    }
+  }
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -35,7 +57,8 @@ export function TemplatesPage() {
         <button
           onClick={fetchPresets}
           title="Refresh"
-          className="rounded bg-gray-700 p-1.5 text-gray-400 hover:bg-gray-600 hover:text-white"
+          aria-label="Refresh templates"
+          className="rounded bg-gray-700 p-1.5 text-gray-400 hover:bg-gray-600 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h5M20 20v-5h-5M4.5 15.5A8.5 8.5 0 0118 6.07M19.5 8.5A8.5 8.5 0 016 17.93" />
@@ -92,12 +115,24 @@ export function TemplatesPage() {
                 <span>{t.mission_config.specialist}</span>
               </div>
               <button
-                className="w-full rounded bg-green-700 px-3 py-2 text-sm font-medium text-white transition hover:bg-green-600"
+                onClick={() => handleRun(t)}
+                disabled={runningId === t.id}
+                aria-label={`Run template ${t.name}`}
+                className="w-full rounded bg-green-700 px-3 py-2 text-sm font-medium text-white transition hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-green-500"
               >
-                Run
+                {runningId === t.id ? 'Starting...' : 'Run'}
               </button>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* Toast */}
+      {toast && (
+        <div className={`fixed bottom-4 right-4 z-50 rounded-lg px-4 py-3 text-sm shadow-lg ${
+          toast.ok ? 'bg-green-800 text-green-200' : 'bg-red-800 text-red-200'
+        }`}>
+          {toast.msg}
         </div>
       )}
     </div>

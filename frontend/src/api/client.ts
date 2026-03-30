@@ -230,8 +230,12 @@ export function getTemplates(): Promise<MissionTemplate[]> {
   return apiGet<MissionTemplate[]>('/templates')
 }
 
-export function getPresets(): Promise<MissionTemplate[]> {
-  return apiGet<MissionTemplate[]>('/templates/presets')
+export async function getPresets(): Promise<MissionTemplate[]> {
+  const resp = await apiGet<MissionTemplate[] | { presets: MissionTemplate[] }>('/templates/presets')
+  // API may return array or {meta, presets, total} — handle both
+  if (Array.isArray(resp)) return resp
+  if (resp && 'presets' in resp) return resp.presets
+  return []
 }
 
 export function getTemplate(id: string): Promise<MissionTemplate> {

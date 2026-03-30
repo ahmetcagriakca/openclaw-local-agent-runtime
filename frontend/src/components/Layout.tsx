@@ -14,13 +14,24 @@ interface LayoutProps {
 
 export function Layout({ children }: LayoutProps) {
   const [mobileOpen, setMobileOpen] = useState(false)
-  const [collapsed, setCollapsed] = useState(true)
+  const [collapsed, setCollapsed] = useState(() => {
+    const saved = localStorage.getItem('sidebar-collapsed')
+    return saved !== null ? saved === 'true' : true
+  })
 
   return (
     <div className="flex h-screen overflow-hidden bg-gray-950 text-gray-100">
+      {/* Skip link for keyboard users */}
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-blue-600 focus:px-4 focus:py-2 focus:text-white">
+        Skip to content
+      </a>
       {/* Desktop sidebar — always rendered, width changes */}
       <div className="hidden h-full shrink-0 lg:flex">
-        <Sidebar collapsed={collapsed} onToggle={() => setCollapsed(!collapsed)} />
+        <Sidebar collapsed={collapsed} onToggle={() => {
+          const next = !collapsed
+          setCollapsed(next)
+          localStorage.setItem('sidebar-collapsed', String(next))
+        }} />
       </div>
 
       {/* Mobile overlay */}
@@ -60,7 +71,7 @@ export function Layout({ children }: LayoutProps) {
           <ConnectionIndicator />
         </header>
         {/* Content */}
-        <main className="flex-1 overflow-y-auto px-4 py-4 lg:px-6">
+        <main id="main-content" className="flex-1 overflow-y-auto px-4 py-4 lg:px-6">
           {children}
         </main>
       </div>

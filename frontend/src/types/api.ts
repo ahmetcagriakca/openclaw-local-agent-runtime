@@ -294,6 +294,37 @@ export interface TokenReport {
   stages: TokenStageReport[]
 }
 
+// ── Template (B-104) ───────────────────────────────────────────
+
+export interface TemplateParameter {
+  name: string
+  type: 'string' | 'number' | 'boolean' | 'array'
+  required: boolean
+  description: string
+  default?: string | number | boolean | string[]
+}
+
+export interface MissionConfig {
+  goal_template: string
+  specialist: string
+  provider: string
+  max_stages: number
+  timeout_minutes: number
+}
+
+export interface MissionTemplate {
+  id: string
+  name: string
+  description: string
+  version: string
+  author: string
+  status: 'draft' | 'published' | 'archived'
+  parameters: TemplateParameter[]
+  mission_config: MissionConfig
+  created_at: string
+  updated_at: string
+}
+
 // ── Mutation Response (D-096) ───────────────────────────────────
 
 export interface MutationResponse {

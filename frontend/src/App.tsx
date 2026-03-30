@@ -11,6 +11,7 @@ import { HealthPage } from './pages/HealthPage'
 import { ApprovalsPage } from './pages/ApprovalsPage'
 import { TelemetryPage } from './pages/TelemetryPage'
 import { MonitoringPage } from './features/monitoring/MonitoringPage'
+import { TemplatesPage } from './pages/TemplatesPage'
 import { NotFoundPage } from './pages/NotFoundPage'
 
 export default function App() {
@@ -64,6 +65,14 @@ export default function App() {
             element={
               <ErrorBoundary fallbackLabel="Monitoring panel error">
                 <MonitoringPage />
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path="/templates"
+            element={
+              <ErrorBoundary fallbackLabel="Templates panel error">
+                <TemplatesPage />
               </ErrorBoundary>
             }
           />

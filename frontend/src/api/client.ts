@@ -15,6 +15,7 @@ import type {
   CreateMissionResponse,
   RolesResponse,
   TokenReport,
+  MissionTemplate,
 } from '../types/api'
 
 const BASE = '/api/v1'
@@ -214,4 +215,22 @@ export async function deleteSignal(requestId: string): Promise<void> {
 
 export function createMission(goal: string, complexity?: string): Promise<CreateMissionResponse> {
   return apiPostJson<CreateMissionResponse>('/missions', { goal, complexity: complexity ?? 'medium' })
+}
+
+// ── Templates (B-104) ──────────────────────────────────────────
+
+export function getTemplates(): Promise<MissionTemplate[]> {
+  return apiGet<MissionTemplate[]>('/templates')
+}
+
+export function getPresets(): Promise<MissionTemplate[]> {
+  return apiGet<MissionTemplate[]>('/templates/presets')
+}
+
+export function getTemplate(id: string): Promise<MissionTemplate> {
+  return apiGet<MissionTemplate>(`/templates/${encodeURIComponent(id)}`)
+}
+
+export function runTemplate(id: string, parameters: Record<string, unknown>): Promise<MutationResponse> {
+  return apiPostJson<MutationResponse>(`/templates/${encodeURIComponent(id)}/run`, { parameters })
 }

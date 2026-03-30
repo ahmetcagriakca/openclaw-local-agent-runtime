@@ -30,10 +30,12 @@
 | UIOverview + WindowList tools | D-102 | Unassigned |
 | ~~Feature flag CONTEXT_ISOLATION_ENABLED~~ | ~~D-102~~ | ✅ S43 task 43.5 DONE |
 | D-102 validation criteria 3-8 | D-102 amendment | Unassigned |
-| Frontend Vitest component tests | S16 P-16.3 | ✅ S43 task 43.3 (+86 tests, 82→168) |
+| ~~Frontend Vitest component tests~~ | ~~S16 P-16.3~~ | ✅ S43 (+86), S46 (+20), S47 (+2) = 217 total |
 | Alert "any" rule namespace scoping | S16 P-16.2 | Unassigned |
 | Jaeger deployment | S16 deferred | Unassigned |
 | Multi-user auth | D-104 / D-108 | Unassigned |
+| ~~Stale running missions~~ | ~~S47 audit~~ | ✅ S47 — normalizer stale detector (>1h → timed_out) |
+| ~~WMCP hard-fail on missions~~ | ~~S47 root cause~~ | ✅ S46 fix — graceful MCP degradation |
 
 ---
 
@@ -53,10 +55,11 @@
 | Sprint 43 | Tech Debt Eritme (Pydantic, bare pass, frontend tests, feature flag) | CLOSED |
 | Sprint 44 | CI/CD & Repo Quality | CLOSED |
 | Sprint 45 | B-104 Template Parameter UI (last P1) | CLOSED |
-| Sprint 46 | B-105 Cost Dashboard + B-108 Agent Health View | CLOSED |
+| Sprint 46 | B-105 Cost Dashboard + B-108 Agent Health View + 4 bugfixes | CLOSED |
+| Sprint 47 | Frontend Quality & UX Hardening (12 issues: a11y, responsive, toast, stale, format) | CLOSED |
 
 ## Next Sprint
 
-**Sprint 47 — Phase 7**
+**Sprint 48 — Phase 7**
 - Status: NOT STARTED
-- Candidates: B-026 DLQ retention, B-013 Richer policyContext, B-107 Policy engine, B-109 CLI scaffolding
+- P2 candidates: B-026 DLQ retention, B-013 Richer policyContext, B-107 Policy engine, B-109 CLI scaffolding, B-014 timeoutSeconds

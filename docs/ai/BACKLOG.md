@@ -1,7 +1,7 @@
 # Backlog -- Vezir Platform
 
 **Auto-generated from GitHub issues.** Do not edit directly.
-**Generated:** 2026-03-29 13:10 UTC
+**Generated:** 2026-03-30 12:00 UTC
 **Source:** `python tools/generate-backlog.py`
 
 ---
@@ -12,10 +12,10 @@
 
 | # | Item | State |
 |---|------|-------|
-| #156 | [B-101] Scheduled mission execution | Done (S38) |
-| #157 | [B-102] Full approval inbox UI | Done (S39) |
-| #158 | [B-103] Mission presets / quick-run | Done (S38) |
-| #159 | [B-104] Template parameter UI | Done (S45) |
+| #156 | [B-101] Scheduled mission execution | Done |
+| #157 | [B-102] Full approval inbox UI | Done |
+| #158 | [B-103] Mission presets / quick-run | Done |
+| #159 | [B-104] Template parameter UI | Done |
 
 ### Security
 
@@ -51,10 +51,10 @@
 | #165 | [B-022] Backup / restore | Open |
 | #166 | [B-023] Corrupted runtime recovery | Open |
 | #167 | [B-026] Dead-letter retention policy | Open |
-| #160 | [B-105] Cost/outcome dashboard | Done (S46) |
-| #161 | [B-106] Retry/DLQ/replay/resume | Done (S42) |
+| #160 | [B-105] Cost/outcome dashboard | Done |
+| #161 | [B-106] Retry/DLQ/replay/resume | Done |
 | #162 | [B-107] Policy engine | Open |
-| #163 | [B-108] Agent health / capability view | Done (S46) |
+| #163 | [B-108] Agent health / capability view | Done |
 
 ## P3 -- Low Priority
 
@@ -98,4 +98,4 @@
 
 ---
 
-**Total:** 39 items (32 open)
+**Total:** 39 items (25 open)

@@ -22,3 +22,10 @@ repos:
         types: [python]
         pass_filenames: false
         stages: [pre-push]
+
+      - id: openapi-drift
+        name: OpenAPI spec drift check
+        entry: bash -c 'python tools/export_openapi.py && git diff --exit-code docs/api/openapi.json'
+        language: system
+        pass_filenames: false
+        stages: [pre-push]

@@ -87,6 +87,8 @@ Sprint-specific: as defined in kickoff doc.
 
 Test counts from raw command output only. No manual counting.
 
+**Verification strategy (48.4):** Primary evidence = pytest + vitest + playwright + API raw output. Browser/UI manual testing is supplementary, not blocking. Local preflight: `bash tools/preflight.sh` (ruff + tsc + OpenAPI drift + pytest + vitest).
+
 ---
 
 ## 8. Commit Rule

@@ -50,6 +50,9 @@ cd frontend && npx playwright test
 
 # Total: 705 backend + 217 frontend + 13 Playwright = 935 (D-131)
 
+# Preflight (all-in-one local CI)
+bash tools/preflight.sh
+
 # Benchmark (evidence-only, D-109)
 python tools/benchmark_api.py
 ```

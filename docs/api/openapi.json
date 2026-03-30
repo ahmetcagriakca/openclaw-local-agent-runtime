@@ -1278,7 +1278,7 @@
           "dashboard"
         ],
         "summary": "Dashboard Live",
-        "description": "SSE endpoint for live mission updates.\n\nStreams real-time events from SSE manager.",
+        "description": "SSE endpoint for live mission updates.",
         "operationId": "dashboard_live_api_v1_dashboard_live_get",
         "responses": {
           "200": {
@@ -2715,6 +2715,213 @@
         "summary": "List Features",
         "description": "Return current feature flag states.",
         "operationId": "list_features_api_v1_features_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/cost/summary": {
+      "get": {
+        "tags": [
+          "cost"
+        ],
+        "summary": "Cost Summary",
+        "description": "Aggregate cost/outcome KPIs across all missions.",
+        "operationId": "cost_summary_api_v1_cost_summary_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/cost/missions": {
+      "get": {
+        "tags": [
+          "cost"
+        ],
+        "summary": "Cost Per Mission",
+        "description": "Per-mission cost breakdown, sorted by cost or tokens.",
+        "operationId": "cost_per_mission_api_v1_cost_missions_get",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 200,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "title": "Offset"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "cost_desc",
+              "title": "Sort"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/cost/trends": {
+      "get": {
+        "tags": [
+          "cost"
+        ],
+        "summary": "Cost Trends",
+        "description": "Cost trends aggregated by time bucket.",
+        "operationId": "cost_trends_api_v1_cost_trends_get",
+        "parameters": [
+          {
+            "name": "bucket",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^(daily|weekly|monthly)$",
+              "default": "daily",
+              "title": "Bucket"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/agents/providers": {
+      "get": {
+        "tags": [
+          "agents"
+        ],
+        "summary": "List Providers",
+        "description": "List all LLM providers with liveness status.",
+        "operationId": "list_providers_api_v1_agents_providers_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/agents/roles": {
+      "get": {
+        "tags": [
+          "agents"
+        ],
+        "summary": "List Agent Roles",
+        "description": "List all agent roles with capability details.",
+        "operationId": "list_agent_roles_api_v1_agents_roles_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/agents/capability-matrix": {
+      "get": {
+        "tags": [
+          "agents"
+        ],
+        "summary": "Capability Matrix",
+        "description": "Role-provider capability matrix showing which role uses which provider.",
+        "operationId": "capability_matrix_api_v1_agents_capability_matrix_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/agents/performance": {
+      "get": {
+        "tags": [
+          "agents"
+        ],
+        "summary": "Agent Performance",
+        "description": "Per-role performance metrics from mission history (file-based).",
+        "operationId": "agent_performance_api_v1_agents_performance_get",
         "responses": {
           "200": {
             "description": "Successful Response",

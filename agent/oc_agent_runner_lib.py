@@ -80,21 +80,14 @@ def run_agent_with_config(message: str, agent_id: str, user_id: str,
     # Initialize MCP client
     mcp = MCPClient()
 
-    # Verify MCP server
+    # Verify MCP server — graceful degradation if unreachable
     spec = mcp.get_openapi_spec()
-    if not spec:
-        return {
-            "status": "error",
-            "agentId": agent_id,
-            "sessionId": session_id,
-            "error": "MCP server unreachable at localhost:8001",
-            "systemPrompt": "",
-            "userPrompt": message,
-            "artifacts": [{"type": "error", "data": {"error": "MCP server unreachable", "recoverable": True}}]
-        }
+    mcp_available = bool(spec)
+    if not mcp_available:
+        logger.warning("[runner] MCP server unreachable at localhost:8001 — running without tools")
 
-    # Get available tools — filter by specialist policy if set
-    all_tools = get_tools_for_openai()
+    # Get available tools — empty if MCP unavailable
+    all_tools = get_tools_for_openai() if mcp_available else []
     allowed_tool_set = None  # D-102 Layer 5: runtime enforcement set
     if tool_policy:
         from mission.specialists import get_specialist_tools

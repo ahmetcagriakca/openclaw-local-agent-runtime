@@ -1109,7 +1109,7 @@ Formal record: `docs/decisions/D-122-backlog-project-sprint.md`.
 **Phase:** Sprint 33 | **Status:** Frozen
 
 Canonical truth definition (5 truths: Status, Sprint, Priority, Task ID, Issue State), write authority rule, non-canonical fields kept.
-Formal record: `decisions/D-123-project-item-contract.md`.
+Formal record: `docs/decisions/D-123-project-item-contract.md`.
 
 ---
 
@@ -1118,7 +1118,7 @@ Formal record: `decisions/D-123-project-item-contract.md`.
 **Phase:** Sprint 33 | **Status:** Frozen
 
 5-class taxonomy (backlog, sprint-task, legacy-sprint, normalized-legacy, unclassified), minimum normalization for pre-S31 items, unclassified=FAIL.
-Formal record: `decisions/D-124-legacy-normalization.md`.
+Formal record: `docs/decisions/D-124-legacy-normalization.md`.
 
 ---
 
@@ -1127,20 +1127,20 @@ Formal record: `decisions/D-124-legacy-normalization.md`.
 **Phase:** Sprint 33 | **Status:** Frozen
 
 Triple consistency rule (issue state + project status + sprint identity), backlog closure evidence rule, forbidden states.
-Formal record: `decisions/D-125-closure-state-sync.md`.
+Formal record: `docs/decisions/D-125-closure-state-sync.md`.
 
 ---
 
 ## Sprint 34 Decisions (D-127)
 
-*Note: D-126 was skipped (number reserved but not used).*
+*D-126: Reserved, not used — number gap between Sprint 33 (D-125) and Sprint 34 (D-127). No decision was proposed for this ID.*
 
 ### D-127: Sprint Closure Class Taxonomy
 
 **Phase:** Sprint 34 | **Status:** Frozen
 
 Product vs governance sprint classes, class-aware evidence manifests, sprint-class.txt metadata, NO EVIDENCE rules, auto-detect class resolution.
-Formal record: `decisions/D-127-closure-class-taxonomy.md`.
+Formal record: `docs/decisions/D-127-closure-class-taxonomy.md`.
 
 ---
 
@@ -1151,7 +1151,7 @@ Formal record: `decisions/D-127-closure-class-taxonomy.md`.
 **Phase:** Sprint 35 | **Status:** Frozen
 
 4-level risk taxonomy (low/medium/high/critical), static tool mapping, unknown=high fail-safe, computed once at creation, persisted in mission state, internal-only (no API exposure in S35).
-Formal record: `decisions/D-128-risk-classification.md`.
+Formal record: `docs/decisions/D-128-risk-classification.md`.
 
 ---
 
@@ -1162,7 +1162,7 @@ Formal record: `decisions/D-128-risk-classification.md`.
 **Phase:** Sprint 36 | **Status:** Frozen
 
 AES-256-GCM encryption, base64 32-byte key from env, read-only on missing/invalid key, atomic write, SHA-256 hash chain audit with CLI verify.
-Formal record: `decisions/D-129-secret-audit-contract.md`.
+Formal record: `docs/decisions/D-129-secret-audit-contract.md`.
 
 ---
 
@@ -1173,7 +1173,7 @@ Formal record: `decisions/D-129-secret-audit-contract.md`.
 **Phase:** Sprint 37 | **Status:** Frozen
 
 TLS 1.2+, fail-closed default (no cert = startup deny), dev-mode explicit HTTP fallback, HSTS, self-signed cert generator.
-Formal record: `decisions/D-130-transport-encryption.md`.
+Formal record: `docs/decisions/D-130-transport-encryption.md`.
 
 ---
 
@@ -1317,6 +1317,7 @@ Formal record: `docs/decisions/D-131-test-reporting.md`.
 | D-123 | Project V2 Item Contract v1 | Sprint 33 |
 | D-124 | Legacy Normalization Boundary | Sprint 33 |
 | D-125 | Closure State Sync | Sprint 33 |
+| D-126 | *(Reserved — number gap, not used)* | — |
 | D-127 | Sprint Closure Class Taxonomy | Sprint 34 |
 | D-128 | Risk Classification Contract | Sprint 35 |
 | D-129 | Secret Storage + Audit Integrity Contract | Sprint 36 |

@@ -1,9 +1,17 @@
 # Next Steps — Vezir Platform
 
 **Last updated:** 2026-03-29
-**Current:** Phase 7 active. Sprint 44 closed. Sprint 45 pending.
+**Current:** Phase 7 active. Sprint 45 closed. All P1 items complete. Sprint 46 pending.
 
 ---
+
+## Sprint 45 — B-104 Template Parameter UI (CLOSED)
+
+**Model:** A (implementation) | **Class:** Product
+**Scope:** Frontend template UI — API client, TemplatesPage, ParameterForm, RunTemplateModal
+**Commits:** `ac4c90c`
+**Tests:** +27 frontend (195 total)
+**Issue:** #259
 
 ## Sprint 44 — CI/CD & Repo Quality (CLOSED)
 

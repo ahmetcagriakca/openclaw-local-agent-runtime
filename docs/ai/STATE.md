@@ -1,9 +1,9 @@
 # Current State
 
 **Last updated:** 2026-03-29
-**Active phase:** Phase 7 — Sprint 44 closed, Sprint 45 pending
+**Active phase:** Phase 7 — Sprint 45 closed, Sprint 46 pending
 **Doc model:** This file is canonical for system state. Session context lives in `docs/ai/handoffs/current.md`.
-**Note:** All sprints through 44 closed. Phase 7 active. 129 frozen decisions (D-001 → D-130, D-126 skipped).
+**Note:** All sprints through 45 closed. All P1 backlog items complete. Phase 7 active. 129 frozen decisions (D-001 → D-130, D-126 skipped).
 **Persistence:** State is file-persisted (state.json, mission.json). Mission history via persistence layer (Sprint 16).
 **API:** Vezir API on 127.0.0.1:8003 (FastAPI + Uvicorn). Schemas FROZEN (D-067). SSE on /api/v1/events/stream. Dashboard API + Alert API + Telemetry Query API (Sprint 16).
 **Frontend:** React dashboard on localhost:3000 (Vite + Tailwind). SSE live updates + polling fallback + intervention buttons + monitoring dashboard. Node.js 20 required.
@@ -99,6 +99,7 @@
 | Sprint 42 | Runner Resilience (B-106: DLQ, backoff, circuit breaker, auto-resume) | Closed |
 | Sprint 43 | Tech Debt Eritme (Pydantic, bare pass, frontend tests, feature flag) | Closed |
 | Sprint 44 | CI/CD & Repo Quality (Python fix, 22 CodeQL fix, coverage, dependabot) | Closed |
+| Sprint 45 | B-104 Template Parameter UI (last P1) | Closed |
 
 ## Test Evidence
 

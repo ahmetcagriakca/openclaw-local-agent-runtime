@@ -15,7 +15,7 @@
 | #156 | [B-101] Scheduled mission execution | Done (S38) |
 | #157 | [B-102] Full approval inbox UI | Done (S39) |
 | #158 | [B-103] Mission presets / quick-run | Done (S38) |
-| #159 | [B-104] Template parameter UI | Open |
+| #159 | [B-104] Template parameter UI | Done (S45) |
 
 ### Security
 

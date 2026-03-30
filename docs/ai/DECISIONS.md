@@ -1186,9 +1186,18 @@ Formal record: `docs/decisions/D-131-test-reporting.md`.
 
 ---
 
-## Decision Index (D-001 → D-131)
+### D-133: Policy Engine Contract
 
-130 frozen decisions. D-126 skipped (number reserved, not used).
+**Phase:** Sprint 48 | **Status:** Frozen
+
+Rule-based, config-driven, fail-closed policy engine. Pre-stage evaluation with policyContext (B-013), timeoutConfig (B-014), missionConfig, toolRequest inputs. Output: allow/deny/escalate/degrade. YAML rule format in `config/policies/`. S49 = implementation.
+Formal record: `docs/decisions/D-133-policy-engine.md`.
+
+---
+
+## Decision Index (D-001 → D-133)
+
+131 frozen decisions. D-126 skipped, D-132 deferred.
 
 | ID | Title | Phase |
 |----|-------|-------|
@@ -1323,3 +1332,5 @@ Formal record: `docs/decisions/D-131-test-reporting.md`.
 | D-129 | Secret Storage + Audit Integrity Contract | Sprint 36 |
 | D-130 | Transport Encryption Contract | Sprint 37 |
 | D-131 | Test Count Reporting Contract | Sprint 48 |
+| D-132 | *(Deferred — Sprint folder naming standard, S49)* | — |
+| D-133 | Policy Engine Contract | Sprint 48 |

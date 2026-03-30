@@ -62,12 +62,10 @@
 | Sprint 45 | B-104 Template Parameter UI (last P1) | CLOSED |
 | Sprint 46 | B-105 Cost Dashboard + B-108 Agent Health View + 4 bugfixes | CLOSED |
 | Sprint 47 | Frontend Quality & UX Hardening (12 issues: a11y, responsive, toast, stale, format) | CLOSED |
+| Sprint 48 | Debt-First Hybrid (governance + runtime contract + data normalization + OTel) | CLOSED |
 
 ## Next Sprint
 
-**Sprint 48 — Phase 7 (Debt-First Hybrid)**
-- Status: IN PROGRESS
-- Model: A (full closure)
-- Scope: Governance cleanup + runtime contract (B-013, B-014) + data normalization + OTel contract + D-131/D-133
-- Issues: #276-#284
-- Milestone: Sprint 48 (#23)
+**Sprint 49 — Phase 7**
+- Status: NOT STARTED
+- P2 candidates: B-107 Policy engine implementation (D-133), B-026 DLQ retention, Sprint folder naming migration (D-132), Alert namespace scoping (B-119), RFC 9457 error envelope

@@ -1,7 +1,7 @@
 # Current State
 
 **Last updated:** 2026-03-30
-**Active phase:** Phase 7 — Sprint 47 closed, Sprint 48 in progress
+**Active phase:** Phase 7 — Sprint 48 closed, Sprint 49 pending
 **Doc model:** This file is canonical for system state. Session context lives in `docs/ai/handoffs/current.md`.
 **Note:** All sprints through 47 closed. All P1 backlog items complete. Phase 7 active. 131 frozen decisions (D-001 → D-133, D-126 skipped, D-132 deferred).
 **Persistence:** State is file-persisted (state.json, mission.json). Mission history via persistence layer (Sprint 16).
@@ -104,6 +104,7 @@
 | Sprint 45 | B-104 Template Parameter UI (last P1) | Closed |
 | Sprint 46 | B-105 Cost Dashboard + B-108 Agent Health View | Closed |
 | Sprint 47 | Frontend Quality & UX Hardening (12 issues) | Closed |
+| Sprint 48 | Debt-First Hybrid (governance + runtime contract + data normalization + OTel) | Closed |
 
 ## Test Evidence
 
@@ -123,6 +124,7 @@
 | Sprint 43 | 682 tests, 0 fail | 168 tests, 0 TS errors | +13 backend (feature flags), +86 frontend (11 new files) |
 | Sprint 46 | 705 tests, 0 fail | 215 tests, 0 TS errors | +23 backend (cost+agent APIs), +20 frontend (2 new pages) |
 | Sprint 47 | 705 tests, 0 fail | 217 tests, 0 TS errors | +2 frontend (badge tests), format utils, 12 UX fixes |
+| Sprint 48 | 736 tests, 0 fail | 217 tests, 0 TS errors | +31 backend (policy context, timeout, state machine) |
 
 ## Architectural Decisions
 

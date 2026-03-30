@@ -1,9 +1,17 @@
 # Next Steps — Vezir Platform
 
 **Last updated:** 2026-03-30
-**Current:** Phase 7 active. Sprint 47 closed. Sprint 48 pending.
+**Current:** Phase 7 active. Sprint 48 closed. Sprint 49 pending.
 
 ---
+
+## Sprint 48 — Debt-First Hybrid (CLOSED)
+
+**Model:** A (full closure) | **Class:** Governance + Runtime Contract + Data Normalization
+**Scope:** Cleanup gate (open-items, D-131, doc path audit, decision merge), runtime contract (B-013 policyContext, B-014 timeout), normalizer consolidation, OTel attribute contract, preflight alignment, D-133 policy engine contract
+**Tests:** 736 backend + 217 frontend + 13 Playwright = 966 total (0 TS errors) (D-131)
+**Issues:** #276-#284
+**Decisions:** D-131 (test reporting), D-133 (policy engine contract), D-132 deferred
 
 ## Sprint 47 — Frontend Quality & UX Hardening (CLOSED)
 

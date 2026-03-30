@@ -1,7 +1,7 @@
 # Backlog -- Vezir Platform
 
 **Auto-generated from GitHub issues.** Do not edit directly.
-**Generated:** 2026-03-30 12:00 UTC
+**Generated:** 2026-03-30 17:06 UTC
 **Source:** `python tools/generate-backlog.py`
 
 ---

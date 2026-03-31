@@ -1,4 +1,4 @@
-# Session Handoff — 2026-03-30 (Session 21, continued)
+# Session Handoff — 2026-03-31 (Session 22)
 
 **Platform:** Vezir Platform
 **Operator:** Claude Code (Opus) — AKCA delegated
@@ -7,11 +7,12 @@
 
 ## Session Summary
 
-Sprint 48 completed + post-sprint fixes:
+Application review + weekly report mission launch:
 
-- **Sprint 48 (Debt-First Hybrid, Model A):** All 9 tasks done, 7 commits, 9 issues closed, milestone #23 closed.
-- **License fix:** Direct-push license commit reverted, re-applied via PR #285 (Apache 2.0).
-- **"oc" rename audit:** 112 files still reference legacy "oc/openclaw" naming. 60+ are archive/evidence (historical, no-touch). ~20 active source/script/doc files need rename. Scope TBD by operator.
+- **App review:** Full platform brought up (backend :8003, frontend :3001). Port 3000 occupied by Open WebUI (Ollama), so Vezir frontend started on :3001.
+- **CORS/CSRF fix:** Added localhost:3001 to allowed origins in `server.py` and `csrf_middleware.py` for dev flexibility.
+- **Weekly Report Mission:** Launched `mission-20260331-100942-24387b` (complex, 9-role pipeline) to design a weekly report entry screen with form input, list view, and detail page.
+- **Mission progress:** 7/8 stages completed (PO, Analyst, Architect, PM, Developer, Tester, Reviewer done; Manager pending). 6 artifacts produced.
 
 ## Current State
 
@@ -23,44 +24,32 @@ Sprint 48 completed + post-sprint fixes:
 - **Security:** 0 code scanning, 0 dependabot, 0 secret scanning
 - **PRs:** 0 open
 
-## Sprint 48 Commits
+## Changes This Session
 
-| # | Hash | Description |
-|---|------|-------------|
-| 1 | `5ece6f8` | S48 kickoff — cleanup gate T-1/T-2/T-3 |
-| 2 | `ec293dc` | T-8: Decision directory merge + D-126 |
-| 3 | `62aa90f` | 48.1+48.2: B-013 policyContext + B-014 timeout |
-| 4 | `2efa724` | 48.3: Normalizer consolidation + OTel contract |
-| 5 | `50e9506` | 48.4: Preflight alignment |
-| 6 | `8c4920c` | 48.5: D-133 Policy Engine Contract |
-| 7 | `9241c42` | S48 closure docs |
+| # | File | Change |
+|---|------|--------|
+| 1 | `agent/api/server.py` | Added localhost:3001 to CORS allowed origins |
+| 2 | `agent/api/csrf_middleware.py` | Added localhost:3001 to CSRF ALLOWED_ORIGINS |
+| 3 | `config/capabilities.json` | Auto-updated timestamps (startup) |
 
-## Post-Sprint Fixes
+## Active Mission
 
-| # | Hash | Description |
-|---|------|-------------|
-| 8 | `820dd57` | Revert license direct-push |
-| 9 | PR #285 | Apache 2.0 license via proper PR flow |
+| ID | Goal | Status | Stages |
+|----|------|--------|--------|
+| `mission-20260331-100942-24387b` | Weekly report entry screen design | Running (7/8) | PO✅ Analyst✅ Architect✅ PM✅ Developer✅ Tester✅ Reviewer✅ Manager⏳ |
 
 ## Open Item: Legacy "oc" Rename
 
-112 files still have `oc-bridge`, `oc-agent`, `openclaw`, `oc-system`, `oc-health`, `oc-wsl` references.
-
-**Active files needing rename (~20):**
-- Source: `agent/oc-agent-runner.py`, `agent/api/health_api.py`, `agent/services/approval_service.py`, `agent/services/tool_catalog.py`, `agent/telegram_bot.py`, `agent/tools/run_e2e_test.py`
-- Scripts: `bin/oc-*.ps1` (7 files), `bridge/oc-bridge.ps1`, `wsl/oc-*` (7 files)
-- Config: `.gitignore`, `.github/copilot-instructions.md`, `config/env.example`, `ops/wsl/*`
-- Docs: `README.md`, `CLAUDE.md`, `docs/ai/STATE.md`, `docs/OPERATOR-GUIDE.md`, `docs/architecture/*.md`
-
-**No-touch (historical):** `docs/archive/*`, `evidence/*`, `archive/stale/*` (~90 files)
-
-**Decision needed:** Rename scope — file names + content? Target naming convention (vezir-*)?
+112 files still have `oc-bridge`, `oc-agent`, `openclaw` references.
+~20 active files need rename, ~90 archive no-touch. Scope TBD by operator.
 
 ## Next Session
 
-1. Operator decision on "oc" rename scope
-2. Sprint 49 planning — P2 candidates: B-107 policy engine, B-026 DLQ retention, D-132 path migration
+1. Check weekly report mission completion + review artifacts
+2. Implement weekly report screen based on mission output (backend API + frontend pages)
+3. Operator decision on "oc" rename scope
+4. Sprint 49 planning — P2 candidates: B-107 policy engine, B-026 DLQ retention, D-132 path migration
 
 ## GPT Memo
 
-Session 21 continued: S48 closed (7 commits). License commit reverted from main, re-applied via PR #285 (Apache 2.0). "oc" rename audit: 112 files, ~20 active need rename, ~90 archive no-touch. Operator decision needed on rename scope. Next: S49 planning.
+Session 22: App review completed. Backend :8003, frontend :3001 (port 3000 occupied by Open WebUI). CORS/CSRF updated for :3001. Weekly report mission launched (complex 9-role, mission-20260331-100942-24387b), 7/8 stages done. Next: review mission artifacts, implement weekly report screen, S49 planning.

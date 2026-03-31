@@ -128,7 +128,7 @@
 
 ## Architectural Decisions
 
-130 frozen decisions (D-001 through D-131, D-126 skipped). See `docs/ai/DECISIONS.md`. Governance rules in `docs/ai/GOVERNANCE.md` (D-112, Rule 16: 18-step closure checklist). Recent: D-127 closure class taxonomy (S34), D-128 risk classification (S35), D-129 secret+audit (S36), D-130 transport encryption (S37), D-131 test reporting (S48), D-133 policy engine contract (S48).
+131 frozen decisions (D-001 through D-133, D-126 skipped, D-132 deferred). See `docs/ai/DECISIONS.md`. Governance rules in `docs/ai/GOVERNANCE.md` (D-112, Rule 16: 18-step closure checklist). Recent: D-127 closure class taxonomy (S34), D-128 risk classification (S35), D-129 secret+audit (S36), D-130 transport encryption (S37), D-131 test reporting (S48), D-133 policy engine contract (S48).
 
 ## Port Map
 

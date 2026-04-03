@@ -1,0 +1,6 @@
+name: timeout-enforcement
+priority: 300
+description: Deny new stages when mission timeout exceeded
+condition:
+  timeout_exceeded: true
+decision: deny

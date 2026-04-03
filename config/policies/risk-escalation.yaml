@@ -1,0 +1,7 @@
+name: risk-escalation
+priority: 200
+description: Escalate to approval when risk is critical and no approval exists
+condition:
+  risk_level: critical
+  approval_state: none
+decision: escalate

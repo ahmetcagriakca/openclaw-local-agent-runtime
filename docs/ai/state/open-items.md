@@ -1,7 +1,7 @@
 # open-items.md — Active State Tracker
 
-**Last updated:** 2026-03-31
-**Updated by:** Claude Code (Session 22 handoff)
+**Last updated:** 2026-04-04
+**Updated by:** Claude Code (Session 24 handoff)
 
 ---
 
@@ -19,7 +19,7 @@
 |------|--------|--------|
 | PROJECT_TOKEN rotation/docs | S23 retro | AKCA-owned, non-blocking |
 | Docker dev environment | D-116 (S26) | Partially resolved: docker-compose operational (D-116, Jaeger included S28). Remaining: production image optimization |
-| Alert "any" namespace scoping | S16 P-16.2 | Still open, needs backlog issue (defer to S49) |
+| ~~Alert "any" namespace scoping~~ | S16 P-16.2 | Done: S49 B-119 (#288) |
 | Multi-user auth | D-104/D-108/D-117 | Partially resolved: D-117 operational (S27), backend isolation (S40). Remaining: SSO, external auth, full RBAC |
 
 ### Retired (Sprint 48 T-1 Reconciliation)
@@ -63,9 +63,10 @@
 | Sprint 46 | B-105 Cost Dashboard + B-108 Agent Health View + 4 bugfixes | CLOSED |
 | Sprint 47 | Frontend Quality & UX Hardening (12 issues: a11y, responsive, toast, stale, format) | CLOSED |
 | Sprint 48 | Debt-First Hybrid (governance + runtime contract + data normalization + OTel) | CLOSED |
+| Sprint 49 | Policy Engine + Operational Hygiene (B-107, B-026, B-119) | CLOSED |
 
 ## Next Sprint
 
-**Sprint 49 — Phase 7**
+**Sprint 50 — Phase 7**
 - Status: NOT STARTED
-- P2 candidates: B-107 Policy engine implementation (D-133), B-026 DLQ retention, Sprint folder naming migration (D-132), Alert namespace scoping (B-119), RFC 9457 error envelope
+- P2 candidates: B-013/B-014 policyContext + timeout implementation, B-109 Template/plugin scaffolding CLI, B-112 Local dev sandbox / seeded demo, D-132 Sprint folder naming migration, RFC 9457 error envelope

@@ -1,9 +1,9 @@
 # Current State
 
-**Last updated:** 2026-03-31
-**Active phase:** Phase 7 — Sprint 48 closed, Sprint 49 pending
+**Last updated:** 2026-04-04
+**Active phase:** Phase 7 — Sprint 49 closed, Sprint 50 pending
 **Doc model:** This file is canonical for system state. Session context lives in `docs/ai/handoffs/current.md`.
-**Note:** All sprints through 47 closed. All P1 backlog items complete. Phase 7 active. 131 frozen decisions (D-001 → D-133, D-126 skipped, D-132 deferred).
+**Note:** All sprints through 49 closed. All P1 backlog items complete. Phase 7 active. 131 frozen decisions (D-001 → D-133, D-126 skipped, D-132 deferred).
 **Persistence:** State is file-persisted (state.json, mission.json). Mission history via persistence layer (Sprint 16).
 **API:** Vezir API on 127.0.0.1:8003 (FastAPI + Uvicorn). Schemas FROZEN (D-067). SSE on /api/v1/events/stream. Dashboard API + Alert API + Telemetry Query API (Sprint 16).
 **Frontend:** React dashboard on localhost:3000 (Vite + Tailwind). SSE live updates + polling fallback + intervention buttons + monitoring dashboard. Node.js 20 required.
@@ -105,6 +105,7 @@
 | Sprint 46 | B-105 Cost Dashboard + B-108 Agent Health View | Closed |
 | Sprint 47 | Frontend Quality & UX Hardening (12 issues) | Closed |
 | Sprint 48 | Debt-First Hybrid (governance + runtime contract + data normalization + OTel) | Closed |
+| Sprint 49 | Policy Engine + Operational Hygiene (B-107, B-026, B-119) | Closed |
 
 ## Test Evidence
 
@@ -125,6 +126,7 @@
 | Sprint 46 | 705 tests, 0 fail | 215 tests, 0 TS errors | +23 backend (cost+agent APIs), +20 frontend (2 new pages) |
 | Sprint 47 | 705 tests, 0 fail | 217 tests, 0 TS errors | +2 frontend (badge tests), format utils, 12 UX fixes |
 | Sprint 48 | 736 tests, 0 fail | 217 tests, 0 TS errors | +31 backend (policy context, timeout, state machine) |
+| Sprint 49 | 788 tests, 0 fail | 217 tests, 0 TS errors | +52 new (policy engine, DLQ retention, alert scoping). 13 Playwright. 1018 total |
 
 ## Architectural Decisions
 

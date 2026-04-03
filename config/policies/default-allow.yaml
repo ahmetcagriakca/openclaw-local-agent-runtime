@@ -1,0 +1,6 @@
+name: default-allow
+priority: 9999
+description: Bootstrap allow-all rule at lowest priority for backward compatibility
+condition:
+  always: true
+decision: allow

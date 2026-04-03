@@ -1,0 +1,6 @@
+name: budget-denial
+priority: 400
+description: Deny new stages when stage budget exceeded
+condition:
+  budget_exceeded: true
+decision: deny

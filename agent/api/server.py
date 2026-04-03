@@ -261,6 +261,7 @@ from api.logs_api import router as logs_router
 from api.mission_api import router as mission_router
 from api.mission_create_api import router as mission_create_router
 from api.mission_mutation_api import router as mission_mutation_router
+from api.policy_api import router as policy_router
 from api.roles_api import router as roles_router
 from api.schedules_api import router as schedules_router
 from api.signal_api import router as signal_router
@@ -289,6 +290,7 @@ app.include_router(dlq_router, prefix="/api/v1")
 app.include_router(features_router, prefix="/api/v1")
 app.include_router(cost_router, prefix="/api/v1")
 app.include_router(agents_router, prefix="/api/v1")
+app.include_router(policy_router, prefix="/api/v1")
 
 
 # ── TLS Configuration (D-130) ───────────────────────────────────

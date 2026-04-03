@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/ahmetcagriakca/vezir/actions/workflows/ci.yml/badge.svg)](https://github.com/ahmetcagriakca/vezir/actions/workflows/ci.yml)
 [![Playwright](https://github.com/ahmetcagriakca/vezir/actions/workflows/playwright.yml/badge.svg)](https://github.com/ahmetcagriakca/vezir/actions/workflows/playwright.yml)
-[![Tests](https://img.shields.io/badge/tests-736%20backend%20%C2%B7%20217%20frontend-brightgreen)](https://github.com/ahmetcagriakca/vezir/actions/workflows/ci.yml)
+[![Tests](https://img.shields.io/badge/tests-788%20backend%20%C2%B7%20217%20frontend-brightgreen)](https://github.com/ahmetcagriakca/vezir/actions/workflows/ci.yml)
 [![Coverage](https://img.shields.io/badge/coverage-74%25%20backend%20%C2%B7%2031%25%20frontend-yellow)](https://github.com/ahmetcagriakca/vezir/actions/workflows/ci.yml)
 [![Decisions](https://img.shields.io/badge/decisions-131%20frozen-blueviolet)](https://github.com/ahmetcagriakca/vezir/blob/main/docs/ai/DECISIONS.md)
 [![Phase](https://img.shields.io/badge/phase-7-blue)](https://github.com/ahmetcagriakca/vezir/blob/main/docs/ai/STATE.md)

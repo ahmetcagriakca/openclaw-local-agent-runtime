@@ -1,9 +1,19 @@
 # Next Steps — Vezir Platform
 
-**Last updated:** 2026-03-30
-**Current:** Phase 7 active. Sprint 48 closed. Sprint 49 pending.
+**Last updated:** 2026-04-04
+**Current:** Phase 7 active. Sprint 49 closed. Sprint 50 pending.
 
 ---
+
+## Sprint 49 — Policy Engine + Operational Hygiene (CLOSED)
+
+**Model:** A (full closure) | **Class:** Product + Operational Hygiene
+**Scope:** B-107 policy engine implementation (D-133), B-026 DLQ retention policy, B-119 alert namespace scoping
+**Tests:** 788 backend + 217 frontend + 13 Playwright = 1018 total (0 TS errors) (D-131)
+**Issues:** #286, #287, #288
+**New files:** `agent/mission/policy_engine.py`, `agent/api/policy_api.py`, `config/policies/*.yaml` (5 files), 3 test files
+**Modified:** `controller.py` (pre-stage hook), `dlq_store.py` (retention), `alert_engine.py` (user_id scoping), `server.py` (policy router)
+**Review:** GPT PASS + Claude Chat GO
 
 ## Sprint 48 — Debt-First Hybrid (CLOSED)
 
@@ -94,7 +104,7 @@
 | Frontend Vitest component tests | S16 | Ongoing quality lane |
 | CONTEXT_ISOLATION feature flag | D-102 | Unassigned |
 | D-102 validation criteria 3-8 | D-102 | Unassigned |
-| Alert namespace scoping | S16 | Unassigned |
+| Alert namespace scoping | S16 | Done (S49, B-119) |
 | Multi-user auth | D-104/D-108 | Unassigned |
 | Jaeger deployment | S16 | Unassigned |
 | UIOverview + WindowList tools | D-102 | Unassigned |

@@ -116,12 +116,14 @@ class Alert:
     """A fired alert instance."""
 
     def __init__(self, rule_id: str, rule_name: str, severity: str,
-                 mission_id: str, details: dict):
+                 mission_id: str, details: dict,
+                 user_id: str | None = None):
         self.rule_id = rule_id
         self.rule_name = rule_name
         self.severity = severity
         self.mission_id = mission_id
         self.details = details
+        self.user_id = user_id  # B-119: namespace scoping
         self.ts = datetime.now(timezone.utc).isoformat()
         self.acknowledged = False
 
@@ -132,6 +134,7 @@ class Alert:
             "severity": self.severity,
             "mission_id": self.mission_id,
             "details": self.details,
+            "user_id": self.user_id,
             "ts": self.ts,
             "acknowledged": self.acknowledged,
         }
@@ -206,6 +209,8 @@ class AlertEngine:
 
             fired = self._evaluate(rule, event, counters)
             if fired:
+                # B-119: Extract user_id from event data (mission.operator)
+                alert_user_id = event.data.get("operator") or event.data.get("user_id") or "system"
                 alert = Alert(
                     rule_id=rule["id"],
                     rule_name=rule["name"],
@@ -218,6 +223,7 @@ class AlertEngine:
                         **{k: v for k, v in event.data.items()
                            if isinstance(v, (str, int, float, bool))},
                     },
+                    user_id=alert_user_id,
                 )
                 self._fire(alert, rule)
 

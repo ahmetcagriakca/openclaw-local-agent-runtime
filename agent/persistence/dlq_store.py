@@ -9,6 +9,7 @@ from __future__ import annotations
 import json
 import logging
 import threading
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -79,13 +80,17 @@ class DLQStore:
     manual inspection, batch retry, or purge.
     """
 
-    def __init__(self, store_path: Path | str | None = None):
+    def __init__(self, store_path: Path | str | None = None,
+                 max_age_days: int = 30, max_entries: int = 1000):
         if store_path is None:
             root = Path(__file__).resolve().parent.parent.parent
             store_path = root / "logs" / "dlq.json"
         self._path = Path(store_path)
         self._lock = threading.Lock()
         self._entries: dict[str, dict] = {}
+        # B-026: Retention policy
+        self._max_age_days = max_age_days
+        self._max_entries = max_entries
         self._load()
 
     def _load(self) -> None:
@@ -144,6 +149,8 @@ class DLQStore:
                 mission_snapshot=mission,
             )
             self._entries[dlq_id] = entry.to_dict()
+            # B-026: Bounded cleanup on enqueue
+            self._cleanup_locked(max_batch=50)
             self._save()
 
         logger.info("DLQ enqueued: %s (mission=%s)", dlq_id, mission_id)
@@ -220,6 +227,77 @@ class DLQStore:
             if to_remove:
                 self._save()
         return len(to_remove)
+
+    def cleanup(self, max_batch: int = 50) -> dict:
+        """B-026: Bounded retention cleanup.
+
+        Order: age purge first, then count trim.
+        Eviction: oldest first (FIFO by failed_at).
+        Max batch per call: max_batch entries.
+        Emits cleanup counters for observability.
+        """
+        with self._lock:
+            return self._cleanup_locked(max_batch)
+
+    def _cleanup_locked(self, max_batch: int = 50) -> dict:
+        """Internal cleanup — must be called with lock held."""
+        start = time.perf_counter()
+        removed_age = 0
+        removed_count = 0
+
+        if not self._entries:
+            return {"removed_age": 0, "removed_count": 0, "duration_ms": 0}
+
+        now = datetime.now(timezone.utc)
+        to_remove: list[str] = []
+
+        # Phase 1: Age purge — remove entries older than max_age_days
+        for dlq_id, entry in self._entries.items():
+            if len(to_remove) >= max_batch:
+                break
+            failed_at = entry.get("failed_at", "")
+            if failed_at:
+                try:
+                    entry_time = datetime.fromisoformat(failed_at)
+                    age_days = (now - entry_time).total_seconds() / 86400
+                    if age_days > self._max_age_days:
+                        to_remove.append(dlq_id)
+                except (ValueError, TypeError):
+                    pass
+
+        removed_age = len(to_remove)
+
+        # Phase 2: Count trim — if still over max_entries, remove oldest
+        remaining_budget = max_batch - len(to_remove)
+        if remaining_budget > 0:
+            projected_count = len(self._entries) - len(to_remove)
+            if projected_count > self._max_entries:
+                excess = projected_count - self._max_entries
+                trim_count = min(excess, remaining_budget)
+                # Sort by failed_at ascending (oldest first = FIFO)
+                candidates = sorted(
+                    ((k, v) for k, v in self._entries.items() if k not in to_remove),
+                    key=lambda kv: kv[1].get("failed_at", ""),
+                )
+                for k, _ in candidates[:trim_count]:
+                    to_remove.append(k)
+                removed_count = trim_count
+
+        # Execute removal
+        for dlq_id in to_remove:
+            del self._entries[dlq_id]
+
+        elapsed_ms = (time.perf_counter() - start) * 1000
+        result = {
+            "removed_age": removed_age,
+            "removed_count": removed_count,
+            "duration_ms": round(elapsed_ms, 2),
+        }
+
+        if to_remove:
+            logger.info("DLQ cleanup: %s", result)
+
+        return result
 
     def summary(self) -> dict:
         """DLQ summary statistics."""

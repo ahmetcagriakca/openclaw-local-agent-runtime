@@ -1,0 +1,10 @@
+name: wmcp-degradation
+priority: 100
+description: Degrade to fallback provider when WMCP is unreachable
+condition:
+  dependency_state:
+    wmcp: unreachable
+decision: degrade
+fallback:
+  provider: ollama
+  tools: []

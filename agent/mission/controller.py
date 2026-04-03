@@ -10,6 +10,7 @@ from mission.policy_context import (
     TimeoutConfig,
     build_policy_context,
 )
+from mission.policy_engine import PolicyDecision, PolicyEngine
 from mission.resilience import (
     CircuitBreaker,
     is_poison_pill,
@@ -35,6 +36,8 @@ class MissionController:
 
         # B-106: Resilience — DLQ + circuit breaker
         self._dlq_store = DLQStore()
+        # B-107: Policy engine — pre-stage evaluation
+        self._policy_engine = PolicyEngine()
         self._circuit_breaker = CircuitBreaker(
             failure_threshold=3, reset_timeout_s=300.0)
 
@@ -273,6 +276,59 @@ class MissionController:
                     )
                     artifact_context = self._format_artifact_context(
                         context_package, stage_results=stage_results)
+
+                # B-107: Pre-stage policy evaluation
+                mission_config = {
+                    "goal": mission.get("goal", ""),
+                    "complexity": mission.get("complexity", "medium"),
+                    "stages": mission.get("stages", []),
+                    "approval_state": mission.get("approval_state", "none"),
+                }
+                policy_result = self._policy_engine.evaluate(
+                    policy_ctx.to_dict(), mission_config)
+                stage["policyDecision"] = policy_result.decision.value
+                stage["policyRule"] = policy_result.matched_rule
+                stage["policyEvalMs"] = round(policy_result.eval_time_ms, 2)
+
+                if policy_result.decision == PolicyDecision.DENY:
+                    stage["status"] = "skipped"
+                    stage["error"] = f"Policy denied: {policy_result.reason}"
+                    emit_policy_event("policy_denied", {
+                        "mission_id": mission_id,
+                        "stage_id": stage_id,
+                        "rule": policy_result.matched_rule,
+                        "reason": policy_result.reason,
+                    })
+                    self._save_mission(mission)
+                    continue
+
+                if policy_result.decision == PolicyDecision.ESCALATE:
+                    stage["status"] = "waiting_approval"
+                    mission["status"] = "waiting_approval"
+                    mission_state.transition_to(
+                        MissionStatus.WAITING_APPROVAL,
+                        f"Policy escalated: {policy_result.reason}")
+                    emit_policy_event("policy_escalated", {
+                        "mission_id": mission_id,
+                        "stage_id": stage_id,
+                        "rule": policy_result.matched_rule,
+                    })
+                    self._save_mission(mission)
+                    self._persist_mission_state(mission_state)
+                    self._emit_mission_summary(
+                        mission_id, mission, assembler,
+                        expansion_broker, "waiting_approval",
+                        mission_state=mission_state)
+                    return mission
+
+                if policy_result.decision == PolicyDecision.DEGRADE:
+                    emit_policy_event("policy_degraded", {
+                        "mission_id": mission_id,
+                        "stage_id": stage_id,
+                        "rule": policy_result.matched_rule,
+                        "fallback": policy_result.fallback,
+                    })
+                    # Continue with degraded mode — fallback info in stage
 
                 # B-014: Execute stage with timeout enforcement
                 stage_timeout = policy_ctx.timeout_config.effective_stage_timeout(

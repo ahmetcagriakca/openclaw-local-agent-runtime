@@ -71,7 +71,9 @@
 
 ## Next Sprint
 
-**Sprint 54 — Phase 7**
-- Status: NOT STARTED
-- All P2 items complete — entering P3 territory
-- P3 candidates: B-025 heredoc reduction, B-027 task dir retention, B-115 audit export, B-018 dynamic sourceUserId
+**Sprint 54 — Audit Export + Dynamic Source + Heredoc Cleanup**
+- Status: PLANNING (pre-sprint review pending)
+- Model: A (full closure)
+- All P2 items complete — first P3 sprint
+- Tasks: B-115 audit export (#302), B-018 dynamic sourceUserId (#303), B-025 heredoc reduction (#304)
+- Milestone: Sprint 54 (#29)

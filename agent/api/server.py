@@ -250,6 +250,7 @@ async def validate_host(request: Request, call_next):
 
 from api.agents_api import router as agents_router
 from api.alerts_api import router as alerts_router
+from api.allowlist_api import router as allowlist_router
 from api.approval_api import router as approval_router
 from api.approval_mutation_api import router as approval_mutation_router
 from api.artifacts_api import router as artifacts_router
@@ -261,6 +262,7 @@ from api.dlq_api import router as dlq_router
 from api.features_api import router as features_router
 from api.health_api import router as health_router
 from api.logs_api import router as logs_router
+from api.metrics_api import router as metrics_router
 from api.mission_api import router as mission_router
 from api.mission_create_api import router as mission_create_router
 from api.mission_mutation_api import router as mission_mutation_router
@@ -270,6 +272,7 @@ from api.replay_api import router as replay_router
 from api.retention_api import router as retention_router
 from api.roles_api import router as roles_router
 from api.schedules_api import router as schedules_router
+from api.secret_rotation_api import router as secret_rotation_router
 from api.signal_api import router as signal_router
 from api.sse_api import router as sse_router
 from api.telemetry_api import router as telemetry_router
@@ -303,6 +306,9 @@ app.include_router(recovery_router, prefix="/api/v1")
 app.include_router(replay_router, prefix="/api/v1")
 app.include_router(audit_export_router, prefix="/api/v1")
 app.include_router(retention_router, prefix="/api/v1")
+app.include_router(secret_rotation_router, prefix="/api/v1")
+app.include_router(allowlist_router, prefix="/api/v1")
+app.include_router(metrics_router, prefix="/api/v1")
 
 # ── RFC 9457 Error Envelope (Sprint 50) ─────────────────────────
 from api.error_envelope import register_error_handlers

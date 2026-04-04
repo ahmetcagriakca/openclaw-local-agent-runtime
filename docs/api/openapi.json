@@ -3949,6 +3949,395 @@
           }
         }
       }
+    },
+    "/api/v1/secrets/rotation/status": {
+      "get": {
+        "tags": [
+          "secret-rotation"
+        ],
+        "summary": "Get Rotation Status",
+        "description": "Get current secret rotation status.",
+        "operationId": "get_rotation_status_api_v1_secrets_rotation_status_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/secrets/rotation/schedule": {
+      "get": {
+        "tags": [
+          "secret-rotation"
+        ],
+        "summary": "Get Rotation Schedule",
+        "description": "Get rotation schedule and policy.",
+        "operationId": "get_rotation_schedule_api_v1_secrets_rotation_schedule_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/secrets/rotation/check": {
+      "get": {
+        "tags": [
+          "secret-rotation"
+        ],
+        "summary": "Check Rotation Due",
+        "description": "Check if rotation is due.",
+        "operationId": "check_rotation_due_api_v1_secrets_rotation_check_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/secrets/rotation/policy": {
+      "put": {
+        "tags": [
+          "secret-rotation"
+        ],
+        "summary": "Update Rotation Policy",
+        "description": "Update rotation policy parameters.",
+        "operationId": "update_rotation_policy_api_v1_secrets_rotation_policy_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PolicyUpdateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/allowlists": {
+      "get": {
+        "tags": [
+          "allowlist"
+        ],
+        "summary": "List Allowlists",
+        "description": "List all allowlist entries.",
+        "operationId": "list_allowlists_api_v1_allowlists_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "allowlist"
+        ],
+        "summary": "Create Allowlist",
+        "description": "Create a new allowlist entry.",
+        "operationId": "create_allowlist_api_v1_allowlists_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AllowlistCreateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/allowlists/{name}": {
+      "get": {
+        "tags": [
+          "allowlist"
+        ],
+        "summary": "Get Allowlist",
+        "description": "Get a specific allowlist entry.",
+        "operationId": "get_allowlist_api_v1_allowlists__name__get",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Name"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "allowlist"
+        ],
+        "summary": "Update Allowlist",
+        "description": "Update an existing allowlist entry.",
+        "operationId": "update_allowlist_api_v1_allowlists__name__put",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Name"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AllowlistUpdateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "allowlist"
+        ],
+        "summary": "Delete Allowlist",
+        "description": "Delete an allowlist entry.",
+        "operationId": "delete_allowlist_api_v1_allowlists__name__delete",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Name"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/allowlists/check": {
+      "post": {
+        "tags": [
+          "allowlist"
+        ],
+        "summary": "Check Allowlist",
+        "description": "Check if a value is allowed.",
+        "operationId": "check_allowlist_api_v1_allowlists_check_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AllowlistCheckRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/allowlists/reload": {
+      "post": {
+        "tags": [
+          "allowlist"
+        ],
+        "summary": "Reload Allowlists",
+        "description": "Reload allowlists from YAML files.",
+        "operationId": "reload_allowlists_api_v1_allowlists_reload_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/metrics": {
+      "get": {
+        "tags": [
+          "metrics"
+        ],
+        "summary": "Prometheus Metrics",
+        "description": "Prometheus-compatible metrics endpoint.",
+        "operationId": "prometheus_metrics_api_v1_metrics_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/metrics/json": {
+      "get": {
+        "tags": [
+          "metrics"
+        ],
+        "summary": "Metrics Json",
+        "description": "JSON format metrics for programmatic access.",
+        "operationId": "metrics_json_api_v1_metrics_json_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -3981,6 +4370,113 @@
         ],
         "title": "APIError",
         "description": "Standard error response."
+      },
+      "AllowlistCheckRequest": {
+        "properties": {
+          "source_type": {
+            "type": "string",
+            "title": "Source Type"
+          },
+          "value": {
+            "type": "string",
+            "title": "Value"
+          }
+        },
+        "type": "object",
+        "required": [
+          "source_type",
+          "value"
+        ],
+        "title": "AllowlistCheckRequest"
+      },
+      "AllowlistCreateRequest": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "source_type": {
+            "type": "string",
+            "title": "Source Type",
+            "default": "caller_source"
+          },
+          "values": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Values",
+            "default": []
+          },
+          "description": {
+            "type": "string",
+            "title": "Description",
+            "default": ""
+          },
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled",
+            "default": true
+          }
+        },
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "title": "AllowlistCreateRequest"
+      },
+      "AllowlistUpdateRequest": {
+        "properties": {
+          "source_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Type"
+          },
+          "values": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Values"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "enabled": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Enabled"
+          }
+        },
+        "type": "object",
+        "title": "AllowlistUpdateRequest"
       },
       "ApprovalEntry": {
         "properties": {
@@ -4901,6 +5397,45 @@
         ],
         "title": "MutationResponse",
         "description": "D-096 mutation response contract.\n\nAPI always returns lifecycleState=requested.\nSubsequent states (accepted/applied/rejected/timed_out) via SSE only."
+      },
+      "PolicyUpdateRequest": {
+        "properties": {
+          "max_age_days": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Age Days"
+          },
+          "warning_threshold_days": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Warning Threshold Days"
+          },
+          "auto_rotate": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Auto Rotate"
+          }
+        },
+        "type": "object",
+        "title": "PolicyUpdateRequest"
       },
       "ResponseMeta": {
         "properties": {

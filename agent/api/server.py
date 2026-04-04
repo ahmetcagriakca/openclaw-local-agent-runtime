@@ -250,6 +250,7 @@ async def validate_host(request: Request, call_next):
 
 from api.agents_api import router as agents_router
 from api.alerts_api import router as alerts_router
+from api.audit_export_api import router as audit_export_router
 from api.approval_api import router as approval_router
 from api.approval_mutation_api import router as approval_mutation_router
 from api.artifacts_api import router as artifacts_router
@@ -299,6 +300,7 @@ app.include_router(artifacts_router, prefix="/api/v1")
 app.include_router(backup_router, prefix="/api/v1")
 app.include_router(recovery_router, prefix="/api/v1")
 app.include_router(replay_router, prefix="/api/v1")
+app.include_router(audit_export_router, prefix="/api/v1")
 
 # ── RFC 9457 Error Envelope (Sprint 50) ─────────────────────────
 from api.error_envelope import register_error_handlers

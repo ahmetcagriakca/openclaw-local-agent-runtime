@@ -498,6 +498,9 @@ class MissionNormalizer:
             if first_err and first_err not in error_msg:
                 error_msg = f"{error_msg}\nRoot cause: {first_err}"
 
+        # B-014 Sprint 53: Include timeout config in mission detail
+        timeout_config = mission_data.get("timeoutConfig")
+
         mission = MissionSummary(
             missionId=mission_data.get("missionId", mission_id),
             state=status,
@@ -515,6 +518,7 @@ class MissionNormalizer:
             finalState=(summary_data or {}).get("finalState")
             or (state_data or {}).get("status"),
             stateTransitions=transitions,
+            timeoutConfig=timeout_config,
         )
         meta = ResponseMeta(
             freshnessMs=max_age,

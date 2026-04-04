@@ -28,6 +28,13 @@ router = APIRouter(tags=["mission-create"])
 class CreateMissionRequest(BaseModel):
     goal: str = Field(..., min_length=1, max_length=2000)
     complexity: str = Field(default="medium")
+    # B-014 Sprint 53: Configurable timeout (seconds)
+    timeout_seconds: int | None = Field(
+        default=None, ge=60, le=86400,
+        description="Mission timeout in seconds (60-86400). Default: 3600.")
+    stage_timeout_seconds: int | None = Field(
+        default=None, ge=30, le=7200,
+        description="Per-stage timeout in seconds (30-7200). Default: 600.")
 
 
 class CreateMissionResponse(BaseModel):
@@ -141,6 +148,13 @@ async def create_mission(body: CreateMissionRequest, request: Request, _operator
     from auth.isolation import get_user_id
     user_id = get_user_id(_operator) or "dashboard"
 
+    # B-014 Sprint 53: Build timeout config from request
+    timeout_config = {}
+    if body.timeout_seconds is not None:
+        timeout_config["missionSeconds"] = body.timeout_seconds
+    if body.stage_timeout_seconds is not None:
+        timeout_config["stageSeconds"] = body.stage_timeout_seconds
+
     mission_data = {
         "missionId": mission_id,
         "status": "pending",
@@ -151,6 +165,8 @@ async def create_mission(body: CreateMissionRequest, request: Request, _operator
         "createdFrom": "dashboard",
         "userId": user_id,
     }
+    if timeout_config:
+        mission_data["timeoutConfig"] = timeout_config
 
     mission_file = missions_dir / f"{mission_id}.json"
     atomic_write_json(mission_file, mission_data)

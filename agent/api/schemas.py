@@ -152,6 +152,8 @@ class MissionSummary(BaseModel):
     completedAt: Optional[str] = None
     finalState: Optional[str] = None
     stateTransitions: list[dict] = Field(default_factory=list)
+    # B-014 Sprint 53: Timeout status in mission detail
+    timeoutConfig: Optional[dict] = None
 
 
 class MissionListItem(BaseModel):

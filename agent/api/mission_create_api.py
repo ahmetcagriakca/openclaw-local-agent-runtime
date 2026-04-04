@@ -144,9 +144,21 @@ async def create_mission(body: CreateMissionRequest, request: Request, _operator
     mission_id = _generate_mission_id()
     now = datetime.now(timezone.utc).isoformat()
 
-    # Sprint 40: Track creating user for isolation
-    from auth.isolation import get_user_id
-    user_id = get_user_id(_operator) or "dashboard"
+    # D-134 Sprint 55: Dynamic source user resolution
+    from auth.source_user_resolver import resolve_source_user
+    user_id = resolve_source_user(request, _operator)
+    if user_id is None:
+        # Fail-closed per D-134: no source resolved
+        from fastapi import HTTPException
+        raise HTTPException(
+            status_code=401,
+            detail="Source user identity could not be resolved (D-134 fail-closed)")
+    # Fallback compat: also check isolation layer
+    if user_id == "dashboard":
+        from auth.isolation import get_user_id
+        isolation_user = get_user_id(_operator)
+        if isolation_user:
+            user_id = isolation_user
 
     # B-014 Sprint 53: Build timeout config from request
     timeout_config = {}

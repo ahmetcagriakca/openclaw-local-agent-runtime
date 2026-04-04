@@ -1171,7 +1171,11 @@ export interface paths {
          */
         get: operations["list_policies_api_v1_policies_get"];
         put?: never;
-        post?: never;
+        /**
+         * Create Policy
+         * @description Create a new policy rule.
+         */
+        post: operations["create_policy_api_v1_policies_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1190,9 +1194,17 @@ export interface paths {
          * @description Get a specific policy rule by name.
          */
         get: operations["get_policy_api_v1_policies__name__get"];
-        put?: never;
+        /**
+         * Update Policy
+         * @description Update an existing policy rule.
+         */
+        put: operations["update_policy_api_v1_policies__name__put"];
         post?: never;
-        delete?: never;
+        /**
+         * Delete Policy
+         * @description Delete a policy rule.
+         */
+        delete: operations["delete_policy_api_v1_policies__name__delete"];
         options?: never;
         head?: never;
         patch?: never;
@@ -4027,7 +4039,110 @@ export interface operations {
             };
         };
     };
+    create_policy_api_v1_policies_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    [key: string]: unknown;
+                };
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     get_policy_api_v1_policies__name__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                name: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_policy_api_v1_policies__name__put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                name: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    [key: string]: unknown;
+                };
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_policy_api_v1_policies__name__delete: {
         parameters: {
             query?: never;
             header?: never;

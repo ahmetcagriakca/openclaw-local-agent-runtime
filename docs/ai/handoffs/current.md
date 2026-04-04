@@ -1,4 +1,4 @@
-# Session Handoff — 2026-04-04 (Session 24)
+# Session Handoff — 2026-04-04 (Session 24 continued)
 
 **Platform:** Vezir Platform
 **Operator:** Claude Code (Opus) — AKCA delegated
@@ -7,56 +7,35 @@
 
 ## Session Summary
 
-Sprint 49 implementation and closure. Delivered B-107 policy engine (D-133 contract), B-026 DLQ retention policy, and B-119 alert namespace scoping. 52 new tests added. GPT PASS + Claude Chat GO review completed. All governance docs updated.
+Sprint 50 implementation and closure. Delivered policy write API, B-109 scaffolding CLI, D-132 folder migration, and RFC 9457 error envelope. 33 new tests added. D-132 now frozen.
 
 ## Current State
 
 - **Phase:** 7
-- **Last closed sprint:** 49
-- **Sprint 50:** NOT STARTED
-- **Decisions:** 131 frozen (D-001 → D-133, D-126 skipped, D-132 deferred)
-- **Tests:** 788 backend + 217 frontend + 13 Playwright = 1018 total (D-131)
+- **Last closed sprint:** 50
+- **Sprint 51:** NOT STARTED
+- **Decisions:** 132 frozen (D-001 → D-133, D-126 skipped, D-132 now frozen)
+- **Tests:** 821 backend + 217 frontend + 13 Playwright = 1051 total (D-131)
 - **CI:** All green
 - **Blockers:** None
 
 ## Changes This Session
 
-### Sprint 49 Deliverables
+### Sprint 50 Deliverables
 
 | Task | Issue | Scope |
 |------|-------|-------|
-| B-107 Policy Engine | #286 | `agent/mission/policy_engine.py`, `agent/api/policy_api.py`, `config/policies/*.yaml` (5 files), `controller.py` pre-stage hook, `server.py` policy router |
-| B-026 DLQ Retention | #287 | `dlq_store.py` retention policy implementation |
-| B-119 Alert Namespace Scoping | #288 | `alert_engine.py` user_id scoping |
-
-### New Files
-- `agent/mission/policy_engine.py` — Policy engine core
-- `agent/api/policy_api.py` — Policy API endpoints
-- `config/policies/*.yaml` — 5 policy definition files
-- 3 test files for the above
-
-### Modified Files
-- `agent/mission/controller.py` — Pre-stage hook for policy enforcement
-- `agent/persistence/dlq_store.py` — Retention policy logic
-- `agent/observability/alert_engine.py` — User ID scoping for alerts
-- `agent/api/server.py` — Policy router registration
-
-## Review
-
-- GPT: PASS
-- Claude Chat: GO
+| Policy Write API | #289 | Policy write/update API endpoints |
+| B-109 Scaffolding CLI | #290 | Template/plugin scaffolding CLI tool |
+| D-132 Folder Migration | #291 | Sprint folder naming migration (D-132 now frozen) |
+| RFC 9457 Error Envelope | #292 | Standardized error response format |
 
 ## Next Session
 
-1. Sprint 50 planning — pick from P2 candidates:
-   - B-013/B-014 policyContext + timeout implementation
-   - B-109 Template/plugin scaffolding CLI
-   - B-112 Local dev sandbox / seeded demo
-   - D-132 Sprint folder naming migration
-   - RFC 9457 error envelope
+1. Sprint 51 planning — pick from remaining P2 candidates
 2. Check weekly report mission completion
 3. Operator decision on "oc" rename scope
 
 ## GPT Memo
 
-Session 24: Sprint 49 closed — Policy Engine + Operational Hygiene. B-107 policy engine (D-133 contract), B-026 DLQ retention, B-119 alert namespace scoping. 52 new tests (1018 total). GPT PASS + Claude Chat GO. All P2 candidates remain for S50 planning.
+Session 24 (continued): Sprint 50 closed — API Hardening + DevEx + Governance Debt. Policy write API, B-109 scaffolding CLI, D-132 folder migration (now frozen), RFC 9457 error envelope. 33 new tests (1051 total). 132 frozen decisions. All P2 candidates remain for S51 planning.

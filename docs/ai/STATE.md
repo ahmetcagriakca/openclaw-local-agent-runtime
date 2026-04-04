@@ -1,9 +1,9 @@
 # Current State
 
 **Last updated:** 2026-04-04
-**Active phase:** Phase 7 — Sprint 49 closed, Sprint 50 pending
+**Active phase:** Phase 7 — Sprint 50 closed, Sprint 51 pending
 **Doc model:** This file is canonical for system state. Session context lives in `docs/ai/handoffs/current.md`.
-**Note:** All sprints through 49 closed. All P1 backlog items complete. Phase 7 active. 131 frozen decisions (D-001 → D-133, D-126 skipped, D-132 deferred).
+**Note:** All sprints through 50 closed. All P1 backlog items complete. Phase 7 active. 132 frozen decisions (D-001 → D-133, D-126 skipped, D-132 now frozen).
 **Persistence:** State is file-persisted (state.json, mission.json). Mission history via persistence layer (Sprint 16).
 **API:** Vezir API on 127.0.0.1:8003 (FastAPI + Uvicorn). Schemas FROZEN (D-067). SSE on /api/v1/events/stream. Dashboard API + Alert API + Telemetry Query API (Sprint 16).
 **Frontend:** React dashboard on localhost:3000 (Vite + Tailwind). SSE live updates + polling fallback + intervention buttons + monitoring dashboard. Node.js 20 required.
@@ -106,6 +106,7 @@
 | Sprint 47 | Frontend Quality & UX Hardening (12 issues) | Closed |
 | Sprint 48 | Debt-First Hybrid (governance + runtime contract + data normalization + OTel) | Closed |
 | Sprint 49 | Policy Engine + Operational Hygiene (B-107, B-026, B-119) | Closed |
+| Sprint 50 | API Hardening + DevEx + Governance Debt (policy write API, B-109, D-132, RFC 9457) | Closed |
 
 ## Test Evidence
 
@@ -127,10 +128,11 @@
 | Sprint 47 | 705 tests, 0 fail | 217 tests, 0 TS errors | +2 frontend (badge tests), format utils, 12 UX fixes |
 | Sprint 48 | 736 tests, 0 fail | 217 tests, 0 TS errors | +31 backend (policy context, timeout, state machine) |
 | Sprint 49 | 788 tests, 0 fail | 217 tests, 0 TS errors | +52 new (policy engine, DLQ retention, alert scoping). 13 Playwright. 1018 total |
+| Sprint 50 | 821 tests, 0 fail | 217 tests, 0 TS errors | +33 new (policy write API, B-109 CLI, D-132 migration, RFC 9457). 13 Playwright. 1051 total |
 
 ## Architectural Decisions
 
-131 frozen decisions (D-001 through D-133, D-126 skipped, D-132 deferred). See `docs/ai/DECISIONS.md`. Governance rules in `docs/ai/GOVERNANCE.md` (D-112, Rule 16: 18-step closure checklist). Recent: D-127 closure class taxonomy (S34), D-128 risk classification (S35), D-129 secret+audit (S36), D-130 transport encryption (S37), D-131 test reporting (S48), D-133 policy engine contract (S48).
+132 frozen decisions (D-001 through D-133, D-126 skipped, D-132 now frozen). See `docs/ai/DECISIONS.md`. Governance rules in `docs/ai/GOVERNANCE.md` (D-112, Rule 16: 18-step closure checklist). Recent: D-127 closure class taxonomy (S34), D-128 risk classification (S35), D-129 secret+audit (S36), D-130 transport encryption (S37), D-131 test reporting (S48), D-132 folder migration (S50), D-133 policy engine contract (S48).
 
 ## Port Map
 

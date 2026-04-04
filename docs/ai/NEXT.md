@@ -1,9 +1,18 @@
 # Next Steps — Vezir Platform
 
 **Last updated:** 2026-04-04
-**Current:** Phase 7 active. Sprint 49 closed. Sprint 50 pending.
+**Current:** Phase 7 active. Sprint 50 closed. Sprint 51 pending.
 
 ---
+
+## Sprint 50 — API Hardening + DevEx + Governance Debt (CLOSED)
+
+**Model:** A (full closure) | **Class:** API + DevEx + Governance
+**Scope:** Policy write API, B-109 scaffolding CLI, D-132 folder migration, RFC 9457 error envelope
+**Tests:** 821 backend + 217 frontend + 13 Playwright = 1051 total (0 TS errors) (D-131)
+**Issues:** #289, #290, #291, #292
+**Decisions:** D-132 now frozen (folder migration)
+**New tests:** +33
 
 ## Sprint 49 — Policy Engine + Operational Hygiene (CLOSED)
 

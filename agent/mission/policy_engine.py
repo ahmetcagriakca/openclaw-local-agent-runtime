@@ -15,6 +15,7 @@ Evaluation semantics (Sprint 49 v2 contract):
 
 import logging
 import os
+import threading
 import time
 from dataclasses import dataclass
 from enum import Enum
@@ -108,6 +109,7 @@ class PolicyEngine:
         self._policies_dir = policies_dir
         self._rules: list[PolicyRule] = []
         self._load_errors: list[str] = []
+        self._write_lock = threading.Lock()
         self.load_rules()
 
     def load_rules(self) -> int:
@@ -295,3 +297,66 @@ class PolicyEngine:
             }
             for r in self._rules
         ]
+
+    # ── Write API (Sprint 50) ────────────────────────────────────
+
+    def create_rule(self, data: dict) -> PolicyRule:
+        """Create a new policy rule. Validates, writes YAML, reloads.
+
+        Raises ValueError on validation failure or name conflict.
+        """
+        model = PolicyRuleModel(**data)
+        with self._write_lock:
+            if self.get_rule(model.name):
+                raise ValueError(f"Rule '{model.name}' already exists")
+            self._write_yaml(model.name, data)
+            logger.info("Policy rule created: %s", model.name)
+            self.load_rules()
+        return self.get_rule(model.name)  # type: ignore[return-value]
+
+    def update_rule(self, name: str, data: dict) -> PolicyRule:
+        """Update an existing policy rule. Validates, writes YAML, reloads.
+
+        Raises ValueError on validation failure, KeyError if not found.
+        """
+        with self._write_lock:
+            if not self.get_rule(name):
+                raise KeyError(f"Rule '{name}' not found")
+            merged = {"name": name, **data}
+            PolicyRuleModel(**merged)
+            self._write_yaml(name, merged)
+            logger.info("Policy rule updated: %s", name)
+            self.load_rules()
+        return self.get_rule(name)  # type: ignore[return-value]
+
+    def delete_rule(self, name: str) -> bool:
+        """Delete a policy rule. Removes YAML file, reloads.
+
+        Raises KeyError if not found.
+        """
+        with self._write_lock:
+            if not self.get_rule(name):
+                raise KeyError(f"Rule '{name}' not found")
+            yaml_path = Path(self._policies_dir) / f"{name}.yaml"
+            if yaml_path.exists():
+                yaml_path.unlink()
+            logger.info("Policy rule deleted: %s", name)
+            self.load_rules()
+        return True
+
+    def _write_yaml(self, name: str, data: dict) -> None:
+        """Atomic write of rule YAML file (D-071 pattern)."""
+        policies_path = Path(self._policies_dir)
+        policies_path.mkdir(parents=True, exist_ok=True)
+        target = policies_path / f"{name}.yaml"
+        tmp = target.with_suffix(".yaml.tmp")
+        try:
+            with open(tmp, "w", encoding="utf-8") as f:
+                yaml.safe_dump(data, f, default_flow_style=False, allow_unicode=True)
+                f.flush()
+                os.fsync(f.fileno())
+            tmp.replace(target)
+        except Exception:
+            if tmp.exists():
+                tmp.unlink()
+            raise

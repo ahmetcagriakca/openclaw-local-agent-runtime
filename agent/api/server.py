@@ -292,6 +292,10 @@ app.include_router(cost_router, prefix="/api/v1")
 app.include_router(agents_router, prefix="/api/v1")
 app.include_router(policy_router, prefix="/api/v1")
 
+# ── RFC 9457 Error Envelope (Sprint 50) ─────────────────────────
+from api.error_envelope import register_error_handlers
+
+register_error_handlers(app)
 
 # ── TLS Configuration (D-130) ───────────────────────────────────
 

@@ -1,7 +1,7 @@
 # open-items.md — Active State Tracker
 
 **Last updated:** 2026-04-04
-**Updated by:** Claude Code (Session 24 handoff)
+**Updated by:** Claude Code (Session 24 continued — Sprint 50 closure)
 
 ---
 
@@ -64,9 +64,10 @@
 | Sprint 47 | Frontend Quality & UX Hardening (12 issues: a11y, responsive, toast, stale, format) | CLOSED |
 | Sprint 48 | Debt-First Hybrid (governance + runtime contract + data normalization + OTel) | CLOSED |
 | Sprint 49 | Policy Engine + Operational Hygiene (B-107, B-026, B-119) | CLOSED |
+| Sprint 50 | API Hardening + DevEx + Governance Debt (policy write API, B-109, D-132, RFC 9457) | CLOSED |
 
 ## Next Sprint
 
-**Sprint 50 — Phase 7**
+**Sprint 51 — Phase 7**
 - Status: NOT STARTED
-- P2 candidates: B-013/B-014 policyContext + timeout implementation, B-109 Template/plugin scaffolding CLI, B-112 Local dev sandbox / seeded demo, D-132 Sprint folder naming migration, RFC 9457 error envelope
+- P2 candidates: B-013/B-014 policyContext + timeout implementation, B-112 Local dev sandbox / seeded demo

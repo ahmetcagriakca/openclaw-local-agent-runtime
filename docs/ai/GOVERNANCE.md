@@ -182,7 +182,7 @@ Skipping any step = governance violation. No step is optional.
 12. open-items.md       — carry-forward resolved items, next sprint candidates
 13. BACKLOG.md          — python tools/generate-backlog.py (regenerate from GitHub)
 14. Review file         — docs/ai/reviews/S{N}-REVIEW.md (verdict + evidence)
-15. Closure evidence    — docs/sprints/evidence/sprint-{N}/closure-check-output.txt
+15. Closure evidence    — docs/sprints/sprint-{N}/closure-check-output.txt (D-132)
 16. README badges       — test counts + phase current? fix if stale
 17. Claude memory       — update project status memory
 18. GPT memo            — send session memo to GPT Vezir (browser or text)

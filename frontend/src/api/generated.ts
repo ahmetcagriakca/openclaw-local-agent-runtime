@@ -1822,6 +1822,313 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/knowledge": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Knowledge
+         * @description List knowledge entries with filters.
+         */
+        get: operations["list_knowledge_api_v1_knowledge_get"];
+        put?: never;
+        /**
+         * Create Knowledge
+         * @description Create a new knowledge entry.
+         */
+        post: operations["create_knowledge_api_v1_knowledge_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/knowledge/stats": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Knowledge Stats
+         * @description Get knowledge store statistics.
+         */
+        get: operations["knowledge_stats_api_v1_knowledge_stats_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/knowledge/{entry_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Knowledge
+         * @description Get a single knowledge entry.
+         */
+        get: operations["get_knowledge_api_v1_knowledge__entry_id__get"];
+        put?: never;
+        post?: never;
+        /**
+         * Delete Knowledge
+         * @description Delete a knowledge entry.
+         */
+        delete: operations["delete_knowledge_api_v1_knowledge__entry_id__delete"];
+        options?: never;
+        head?: never;
+        /**
+         * Update Knowledge
+         * @description Update a knowledge entry.
+         */
+        patch: operations["update_knowledge_api_v1_knowledge__entry_id__patch"];
+        trace?: never;
+    };
+    "/api/v1/knowledge/mission-context": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Get Mission Knowledge
+         * @description Get knowledge entries relevant to a mission context.
+         *
+         *     Selects by explicit entry IDs or by tag matching.
+         *     Used by ContextAssembler for mission enrichment.
+         */
+        post: operations["get_mission_knowledge_api_v1_knowledge_mission_context_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tenants": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Tenants
+         * @description List all tenants.
+         */
+        get: operations["list_tenants_api_v1_tenants_get"];
+        put?: never;
+        /**
+         * Create Tenant
+         * @description Create a new tenant.
+         */
+        post: operations["create_tenant_api_v1_tenants_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tenants/current": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Current Tenant
+         * @description Get the current tenant context from request.
+         */
+        get: operations["get_current_tenant_api_v1_tenants_current_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tenants/{tenant_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Tenant
+         * @description Get a single tenant.
+         */
+        get: operations["get_tenant_api_v1_tenants__tenant_id__get"];
+        put?: never;
+        post?: never;
+        /**
+         * Delete Tenant
+         * @description Delete a tenant.
+         */
+        delete: operations["delete_tenant_api_v1_tenants__tenant_id__delete"];
+        options?: never;
+        head?: never;
+        /**
+         * Update Tenant
+         * @description Update a tenant.
+         */
+        patch: operations["update_tenant_api_v1_tenants__tenant_id__patch"];
+        trace?: never;
+    };
+    "/api/v1/tenants/{tenant_id}/quota-check": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Check Quota
+         * @description Check tenant quota for a given metric.
+         */
+        post: operations["check_quota_api_v1_tenants__tenant_id__quota_check_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/wmcp/credentials/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Wmcp Credential Status
+         * @description Get WMCP credential status summary.
+         */
+        get: operations["wmcp_credential_status_api_v1_wmcp_credentials_status_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/wmcp/credentials": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Wmcp Credentials
+         * @description List WMCP credentials (metadata only, no secrets).
+         */
+        get: operations["list_wmcp_credentials_api_v1_wmcp_credentials_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/wmcp/credentials/register": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Register Wmcp Credential
+         * @description Register a new WMCP credential.
+         */
+        post: operations["register_wmcp_credential_api_v1_wmcp_credentials_register_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/wmcp/credentials/rotate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Rotate Wmcp Credential
+         * @description Rotate a WMCP credential (deactivate old, register new).
+         */
+        post: operations["rotate_wmcp_credential_api_v1_wmcp_credentials_rotate_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/wmcp/credentials/verify": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Verify Wmcp Credential
+         * @description Verify if a value matches the active credential.
+         */
+        post: operations["verify_wmcp_credential_api_v1_wmcp_credentials_verify_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/wmcp/credentials/migrate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Migrate Wmcp Credentials
+         * @description Migrate WMCP credentials from environment variables to SecretStore.
+         */
+        post: operations["migrate_wmcp_credentials_api_v1_wmcp_credentials_migrate_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -2066,6 +2373,42 @@ export interface components {
                 [key: string]: unknown;
             };
         };
+        /** CredentialRegisterRequest */
+        CredentialRegisterRequest: {
+            /** Credential Type */
+            credential_type: string;
+            /** Secret Value */
+            secret_value: string;
+            /**
+             * Description
+             * @default
+             */
+            description: string;
+            /**
+             * Expires At
+             * @default
+             */
+            expires_at: string;
+        };
+        /** CredentialRotateRequest */
+        CredentialRotateRequest: {
+            /** Credential Type */
+            credential_type: string;
+            /** New Secret */
+            new_secret: string;
+            /**
+             * Expires At
+             * @default
+             */
+            expires_at: string;
+        };
+        /** CredentialVerifyRequest */
+        CredentialVerifyRequest: {
+            /** Credential Type */
+            credential_type: string;
+            /** Test Value */
+            test_value: string;
+        };
         /** DLQRetryResponse */
         DLQRetryResponse: {
             /** Dlq Id */
@@ -2134,6 +2477,36 @@ export interface components {
                 [key: string]: components["schemas"]["ComponentHealth"];
             };
         };
+        /** KnowledgeCreateRequest */
+        KnowledgeCreateRequest: {
+            /** Name */
+            name: string;
+            /** Connector Type */
+            connector_type: string;
+            /** Content */
+            content: string;
+            /** Metadata */
+            metadata?: {
+                [key: string]: unknown;
+            };
+            /** Tags */
+            tags?: string[];
+        };
+        /** KnowledgeUpdateRequest */
+        KnowledgeUpdateRequest: {
+            /** Name */
+            name?: string | null;
+            /** Content */
+            content?: string | null;
+            /** Metadata */
+            metadata?: {
+                [key: string]: unknown;
+            } | null;
+            /** Tags */
+            tags?: string[] | null;
+            /** Enabled */
+            enabled?: boolean | null;
+        };
         /** LogEntry */
         LogEntry: {
             /** Timestamp */
@@ -2169,6 +2542,13 @@ export interface components {
         MissionDetailResponse: {
             meta?: components["schemas"]["ResponseMeta"];
             mission: components["schemas"]["MissionSummary"];
+        };
+        /** MissionKnowledgeRequest */
+        MissionKnowledgeRequest: {
+            /** Mission Tags */
+            mission_tags?: string[];
+            /** Entry Ids */
+            entry_ids?: string[];
         };
         /**
          * MissionListItem
@@ -2302,6 +2682,13 @@ export interface components {
             warning_threshold_days?: number | null;
             /** Auto Rotate */
             auto_rotate?: boolean | null;
+        };
+        /** QuotaCheckRequest */
+        QuotaCheckRequest: {
+            /** Metric */
+            metric: string;
+            /** Current Value */
+            current_value: number;
         };
         /**
          * ResponseMeta
@@ -2582,6 +2969,36 @@ export interface components {
             meta?: components["schemas"]["ResponseMeta"];
             /** Events */
             events?: components["schemas"]["TelemetryEntry"][];
+        };
+        /** TenantCreateRequest */
+        TenantCreateRequest: {
+            /** Tenant Id */
+            tenant_id: string;
+            /** Name */
+            name: string;
+            /** Settings */
+            settings?: {
+                [key: string]: unknown;
+            };
+            /** Quota */
+            quota?: {
+                [key: string]: unknown;
+            };
+        };
+        /** TenantUpdateRequest */
+        TenantUpdateRequest: {
+            /** Name */
+            name?: string | null;
+            /** Enabled */
+            enabled?: boolean | null;
+            /** Settings */
+            settings?: {
+                [key: string]: unknown;
+            } | null;
+            /** Quota */
+            quota?: {
+                [key: string]: unknown;
+            } | null;
         };
         /**
          * ToolCallDetail
@@ -5685,6 +6102,612 @@ export interface operations {
         };
     };
     metrics_json_api_v1_metrics_json_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    list_knowledge_api_v1_knowledge_get: {
+        parameters: {
+            query?: {
+                connector_type?: string | null;
+                tag?: string | null;
+                search?: string | null;
+                enabled_only?: boolean;
+                limit?: number;
+                offset?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_knowledge_api_v1_knowledge_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["KnowledgeCreateRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    knowledge_stats_api_v1_knowledge_stats_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    get_knowledge_api_v1_knowledge__entry_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                entry_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_knowledge_api_v1_knowledge__entry_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                entry_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_knowledge_api_v1_knowledge__entry_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                entry_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["KnowledgeUpdateRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_mission_knowledge_api_v1_knowledge_mission_context_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MissionKnowledgeRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_tenants_api_v1_tenants_get: {
+        parameters: {
+            query?: {
+                enabled_only?: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_tenant_api_v1_tenants_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TenantCreateRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_current_tenant_api_v1_tenants_current_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    get_tenant_api_v1_tenants__tenant_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tenant_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_tenant_api_v1_tenants__tenant_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tenant_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_tenant_api_v1_tenants__tenant_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tenant_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TenantUpdateRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    check_quota_api_v1_tenants__tenant_id__quota_check_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tenant_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["QuotaCheckRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    wmcp_credential_status_api_v1_wmcp_credentials_status_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    list_wmcp_credentials_api_v1_wmcp_credentials_get: {
+        parameters: {
+            query?: {
+                credential_type?: string | null;
+                active_only?: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    register_wmcp_credential_api_v1_wmcp_credentials_register_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CredentialRegisterRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    rotate_wmcp_credential_api_v1_wmcp_credentials_rotate_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CredentialRotateRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    verify_wmcp_credential_api_v1_wmcp_credentials_verify_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CredentialVerifyRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    migrate_wmcp_credentials_api_v1_wmcp_credentials_migrate_post: {
         parameters: {
             query?: never;
             header?: never;

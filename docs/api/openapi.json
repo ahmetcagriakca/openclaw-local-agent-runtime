@@ -4338,6 +4338,841 @@
           }
         }
       }
+    },
+    "/api/v1/knowledge": {
+      "post": {
+        "tags": [
+          "knowledge"
+        ],
+        "summary": "Create Knowledge",
+        "description": "Create a new knowledge entry.",
+        "operationId": "create_knowledge_api_v1_knowledge_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/KnowledgeCreateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "knowledge"
+        ],
+        "summary": "List Knowledge",
+        "description": "List knowledge entries with filters.",
+        "operationId": "list_knowledge_api_v1_knowledge_get",
+        "parameters": [
+          {
+            "name": "connector_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Connector Type"
+            }
+          },
+          {
+            "name": "tag",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Tag"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Search"
+            }
+          },
+          {
+            "name": "enabled_only",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": true,
+              "title": "Enabled Only"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/knowledge/stats": {
+      "get": {
+        "tags": [
+          "knowledge"
+        ],
+        "summary": "Knowledge Stats",
+        "description": "Get knowledge store statistics.",
+        "operationId": "knowledge_stats_api_v1_knowledge_stats_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/knowledge/{entry_id}": {
+      "get": {
+        "tags": [
+          "knowledge"
+        ],
+        "summary": "Get Knowledge",
+        "description": "Get a single knowledge entry.",
+        "operationId": "get_knowledge_api_v1_knowledge__entry_id__get",
+        "parameters": [
+          {
+            "name": "entry_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Entry Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "knowledge"
+        ],
+        "summary": "Update Knowledge",
+        "description": "Update a knowledge entry.",
+        "operationId": "update_knowledge_api_v1_knowledge__entry_id__patch",
+        "parameters": [
+          {
+            "name": "entry_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Entry Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/KnowledgeUpdateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "knowledge"
+        ],
+        "summary": "Delete Knowledge",
+        "description": "Delete a knowledge entry.",
+        "operationId": "delete_knowledge_api_v1_knowledge__entry_id__delete",
+        "parameters": [
+          {
+            "name": "entry_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Entry Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/knowledge/mission-context": {
+      "post": {
+        "tags": [
+          "knowledge"
+        ],
+        "summary": "Get Mission Knowledge",
+        "description": "Get knowledge entries relevant to a mission context.\n\nSelects by explicit entry IDs or by tag matching.\nUsed by ContextAssembler for mission enrichment.",
+        "operationId": "get_mission_knowledge_api_v1_knowledge_mission_context_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MissionKnowledgeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tenants": {
+      "post": {
+        "tags": [
+          "tenants"
+        ],
+        "summary": "Create Tenant",
+        "description": "Create a new tenant.",
+        "operationId": "create_tenant_api_v1_tenants_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TenantCreateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "tenants"
+        ],
+        "summary": "List Tenants",
+        "description": "List all tenants.",
+        "operationId": "list_tenants_api_v1_tenants_get",
+        "parameters": [
+          {
+            "name": "enabled_only",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Enabled Only"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tenants/current": {
+      "get": {
+        "tags": [
+          "tenants"
+        ],
+        "summary": "Get Current Tenant",
+        "description": "Get the current tenant context from request.",
+        "operationId": "get_current_tenant_api_v1_tenants_current_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tenants/{tenant_id}": {
+      "get": {
+        "tags": [
+          "tenants"
+        ],
+        "summary": "Get Tenant",
+        "description": "Get a single tenant.",
+        "operationId": "get_tenant_api_v1_tenants__tenant_id__get",
+        "parameters": [
+          {
+            "name": "tenant_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Tenant Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "tenants"
+        ],
+        "summary": "Update Tenant",
+        "description": "Update a tenant.",
+        "operationId": "update_tenant_api_v1_tenants__tenant_id__patch",
+        "parameters": [
+          {
+            "name": "tenant_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Tenant Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TenantUpdateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "tenants"
+        ],
+        "summary": "Delete Tenant",
+        "description": "Delete a tenant.",
+        "operationId": "delete_tenant_api_v1_tenants__tenant_id__delete",
+        "parameters": [
+          {
+            "name": "tenant_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Tenant Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tenants/{tenant_id}/quota-check": {
+      "post": {
+        "tags": [
+          "tenants"
+        ],
+        "summary": "Check Quota",
+        "description": "Check tenant quota for a given metric.",
+        "operationId": "check_quota_api_v1_tenants__tenant_id__quota_check_post",
+        "parameters": [
+          {
+            "name": "tenant_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Tenant Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QuotaCheckRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/wmcp/credentials/status": {
+      "get": {
+        "tags": [
+          "wmcp-credentials"
+        ],
+        "summary": "Wmcp Credential Status",
+        "description": "Get WMCP credential status summary.",
+        "operationId": "wmcp_credential_status_api_v1_wmcp_credentials_status_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/wmcp/credentials": {
+      "get": {
+        "tags": [
+          "wmcp-credentials"
+        ],
+        "summary": "List Wmcp Credentials",
+        "description": "List WMCP credentials (metadata only, no secrets).",
+        "operationId": "list_wmcp_credentials_api_v1_wmcp_credentials_get",
+        "parameters": [
+          {
+            "name": "credential_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Credential Type"
+            }
+          },
+          {
+            "name": "active_only",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Active Only"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/wmcp/credentials/register": {
+      "post": {
+        "tags": [
+          "wmcp-credentials"
+        ],
+        "summary": "Register Wmcp Credential",
+        "description": "Register a new WMCP credential.",
+        "operationId": "register_wmcp_credential_api_v1_wmcp_credentials_register_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CredentialRegisterRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/wmcp/credentials/rotate": {
+      "post": {
+        "tags": [
+          "wmcp-credentials"
+        ],
+        "summary": "Rotate Wmcp Credential",
+        "description": "Rotate a WMCP credential (deactivate old, register new).",
+        "operationId": "rotate_wmcp_credential_api_v1_wmcp_credentials_rotate_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CredentialRotateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/wmcp/credentials/verify": {
+      "post": {
+        "tags": [
+          "wmcp-credentials"
+        ],
+        "summary": "Verify Wmcp Credential",
+        "description": "Verify if a value matches the active credential.",
+        "operationId": "verify_wmcp_credential_api_v1_wmcp_credentials_verify_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CredentialVerifyRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/wmcp/credentials/migrate": {
+      "post": {
+        "tags": [
+          "wmcp-credentials"
+        ],
+        "summary": "Migrate Wmcp Credentials",
+        "description": "Migrate WMCP credentials from environment variables to SecretStore.",
+        "operationId": "migrate_wmcp_credentials_api_v1_wmcp_credentials_migrate_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -4900,6 +5735,81 @@
         ],
         "title": "CreateTemplateRequest"
       },
+      "CredentialRegisterRequest": {
+        "properties": {
+          "credential_type": {
+            "type": "string",
+            "pattern": "^(api_key|proxy_token|bridge_secret)$",
+            "title": "Credential Type"
+          },
+          "secret_value": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Secret Value"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description",
+            "default": ""
+          },
+          "expires_at": {
+            "type": "string",
+            "title": "Expires At",
+            "default": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "credential_type",
+          "secret_value"
+        ],
+        "title": "CredentialRegisterRequest"
+      },
+      "CredentialRotateRequest": {
+        "properties": {
+          "credential_type": {
+            "type": "string",
+            "pattern": "^(api_key|proxy_token|bridge_secret)$",
+            "title": "Credential Type"
+          },
+          "new_secret": {
+            "type": "string",
+            "minLength": 1,
+            "title": "New Secret"
+          },
+          "expires_at": {
+            "type": "string",
+            "title": "Expires At",
+            "default": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "credential_type",
+          "new_secret"
+        ],
+        "title": "CredentialRotateRequest"
+      },
+      "CredentialVerifyRequest": {
+        "properties": {
+          "credential_type": {
+            "type": "string",
+            "pattern": "^(api_key|proxy_token|bridge_secret)$",
+            "title": "Credential Type"
+          },
+          "test_value": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Test Value"
+          }
+        },
+        "type": "object",
+        "required": [
+          "credential_type",
+          "test_value"
+        ],
+        "title": "CredentialVerifyRequest"
+      },
       "DLQRetryResponse": {
         "properties": {
           "dlq_id": {
@@ -5026,6 +5936,110 @@
         "title": "HealthResponse",
         "description": "System health response."
       },
+      "KnowledgeCreateRequest": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "connector_type": {
+            "type": "string",
+            "pattern": "^(file|url|text)$",
+            "title": "Connector Type"
+          },
+          "content": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Content"
+          },
+          "metadata": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Metadata"
+          },
+          "tags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Tags"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "connector_type",
+          "content"
+        ],
+        "title": "KnowledgeCreateRequest"
+      },
+      "KnowledgeUpdateRequest": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "content": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Content"
+          },
+          "metadata": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Metadata"
+          },
+          "tags": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tags"
+          },
+          "enabled": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Enabled"
+          }
+        },
+        "type": "object",
+        "title": "KnowledgeUpdateRequest"
+      },
       "LogEntry": {
         "properties": {
           "timestamp": {
@@ -5099,6 +6113,26 @@
         ],
         "title": "MissionDetailResponse",
         "description": "Wrapper for single mission detail."
+      },
+      "MissionKnowledgeRequest": {
+        "properties": {
+          "mission_tags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Mission Tags"
+          },
+          "entry_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Entry Ids"
+          }
+        },
+        "type": "object",
+        "title": "MissionKnowledgeRequest"
       },
       "MissionListItem": {
         "properties": {
@@ -5436,6 +6470,26 @@
         },
         "type": "object",
         "title": "PolicyUpdateRequest"
+      },
+      "QuotaCheckRequest": {
+        "properties": {
+          "metric": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Metric"
+          },
+          "current_value": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Current Value"
+          }
+        },
+        "type": "object",
+        "required": [
+          "metric",
+          "current_value"
+        ],
+        "title": "QuotaCheckRequest"
       },
       "ResponseMeta": {
         "properties": {
@@ -5983,6 +7037,91 @@
         "type": "object",
         "title": "TelemetryResponse",
         "description": "Wrapper for telemetry events."
+      },
+      "TenantCreateRequest": {
+        "properties": {
+          "tenant_id": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "pattern": "^[a-z0-9_-]+$",
+            "title": "Tenant Id"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "settings": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Settings"
+          },
+          "quota": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Quota"
+          }
+        },
+        "type": "object",
+        "required": [
+          "tenant_id",
+          "name"
+        ],
+        "title": "TenantCreateRequest"
+      },
+      "TenantUpdateRequest": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "enabled": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Enabled"
+          },
+          "settings": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Settings"
+          },
+          "quota": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Quota"
+          }
+        },
+        "type": "object",
+        "title": "TenantUpdateRequest"
       },
       "ToolCallDetail": {
         "properties": {

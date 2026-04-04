@@ -261,6 +261,7 @@ from api.dashboard_api import router as dashboard_router
 from api.dlq_api import router as dlq_router
 from api.features_api import router as features_router
 from api.health_api import router as health_router
+from api.knowledge_api import router as knowledge_router
 from api.logs_api import router as logs_router
 from api.metrics_api import router as metrics_router
 from api.mission_api import router as mission_router
@@ -278,6 +279,8 @@ from api.sse_api import router as sse_router
 from api.telemetry_api import router as telemetry_router
 from api.telemetry_query_api import router as telemetry_query_router
 from api.templates_api import router as templates_router
+from api.tenant_api import router as tenant_router
+from api.wmcp_credential_api import router as wmcp_credential_router
 
 app.include_router(mission_router, prefix="/api/v1")
 app.include_router(approval_router, prefix="/api/v1")
@@ -309,6 +312,9 @@ app.include_router(retention_router, prefix="/api/v1")
 app.include_router(secret_rotation_router, prefix="/api/v1")
 app.include_router(allowlist_router, prefix="/api/v1")
 app.include_router(metrics_router, prefix="/api/v1")
+app.include_router(knowledge_router, prefix="/api/v1")
+app.include_router(tenant_router, prefix="/api/v1")
+app.include_router(wmcp_credential_router, prefix="/api/v1")
 
 # ── RFC 9457 Error Envelope (Sprint 50) ─────────────────────────
 from api.error_envelope import register_error_handlers

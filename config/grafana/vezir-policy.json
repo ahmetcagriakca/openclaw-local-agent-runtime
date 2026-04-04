@@ -1,0 +1,129 @@
+{
+  "dashboard": {
+    "id": null,
+    "uid": "vezir-policy",
+    "title": "Vezir — Policy & Security",
+    "tags": ["vezir", "policy", "security"],
+    "timezone": "browser",
+    "refresh": "30s",
+    "schemaVersion": 39,
+    "panels": [
+      {
+        "id": 1,
+        "title": "Policy Decisions",
+        "type": "piechart",
+        "gridPos": {"h": 8, "w": 8, "x": 0, "y": 0},
+        "targets": [
+          {
+            "expr": "sum by (decision) (vezir_policy_decisions_total)",
+            "legendFormat": "{{decision}}"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "title": "Policy Evaluation Rate",
+        "type": "timeseries",
+        "gridPos": {"h": 8, "w": 16, "x": 8, "y": 0},
+        "targets": [
+          {
+            "expr": "rate(vezir_policy_decisions_total[5m]) * 60",
+            "legendFormat": "{{decision}}"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "Policy Evaluation Latency (ms)",
+        "type": "timeseries",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, rate(vezir_policy_eval_duration_ms_bucket[5m]))",
+            "legendFormat": "p95"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "title": "Secret Rotation Status",
+        "type": "stat",
+        "gridPos": {"h": 4, "w": 6, "x": 12, "y": 8},
+        "targets": [
+          {
+            "expr": "vezir_secret_rotation_days_remaining",
+            "legendFormat": "Days Until Rotation"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "d",
+            "thresholds": {
+              "steps": [
+                {"value": 0, "color": "red"},
+                {"value": 14, "color": "yellow"},
+                {"value": 30, "color": "green"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 5,
+        "title": "Allowlist Denials (24h)",
+        "type": "stat",
+        "gridPos": {"h": 4, "w": 6, "x": 18, "y": 8},
+        "targets": [
+          {
+            "expr": "increase(vezir_allowlist_denials_total[24h])",
+            "legendFormat": "Denials"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "thresholds": {
+              "steps": [
+                {"value": 0, "color": "green"},
+                {"value": 1, "color": "yellow"},
+                {"value": 10, "color": "red"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 6,
+        "title": "Risk Level Distribution",
+        "type": "bargauge",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 16},
+        "targets": [
+          {
+            "expr": "sum by (level) (vezir_risk_classification_total)",
+            "legendFormat": "{{level}}"
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "title": "Audit Chain Integrity",
+        "type": "stat",
+        "gridPos": {"h": 4, "w": 12, "x": 12, "y": 16},
+        "targets": [
+          {
+            "expr": "vezir_audit_chain_valid",
+            "legendFormat": "Chain Valid"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [
+              {"type": "value", "options": {"1": {"text": "VALID", "color": "green"}}},
+              {"type": "value", "options": {"0": {"text": "BROKEN", "color": "red"}}}
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "overwrite": true
+}

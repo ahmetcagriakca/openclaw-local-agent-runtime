@@ -1,9 +1,9 @@
 # Current State
 
 **Last updated:** 2026-04-04
-**Active phase:** Phase 7 — Sprint 55 closed
+**Active phase:** Phase 7 — Sprint 56 closed
 **Doc model:** This file is canonical for system state. Session context lives in `docs/ai/handoffs/current.md`.
-**Note:** All sprints through 53 closed. S54 deferred. All P1 backlog items complete. Phase 7 active. 133 frozen decisions (D-001 → D-134, D-126 skipped, D-132 deferred).
+**Note:** All sprints through 53 closed. S54 deferred. S55-S56 closed. All P1 backlog items complete. Phase 7 active. 133 frozen decisions (D-001 → D-134, D-126 skipped, D-132 deferred).
 **Persistence:** State is file-persisted (state.json, mission.json). Mission history via persistence layer (Sprint 16).
 **API:** Vezir API on 127.0.0.1:8003 (FastAPI + Uvicorn). Schemas FROZEN (D-067). SSE on /api/v1/events/stream. Dashboard API + Alert API + Telemetry Query API (Sprint 16).
 **Frontend:** React dashboard on localhost:3000 (Vite + Tailwind). SSE live updates + polling fallback + intervention buttons + monitoring dashboard. Node.js 20 required.
@@ -51,7 +51,7 @@
 | Auto-Resume | Operational (--resume, --auto-resume) | `agent/mission/auto_resume.py` |
 | Cost Dashboard API | Operational (3 endpoints: summary, missions, trends) | `agent/api/cost_api.py` |
 | Agent Health API | Operational (4 endpoints: providers, roles, matrix, performance) | `agent/api/agents_api.py` |
-| Mission Control API | Operational (~85 endpoints) | `agent/api/server.py` on :8003 |
+| Mission Control API | Operational (~90 endpoints) | `agent/api/server.py` on :8003 |
 | SSE Manager | Operational (broadcast, heartbeat 30s) | `agent/api/sse_manager.py` |
 | Session Model | Foundation (operator identity, no auth flow) | `agent/auth/session.py` |
 | CI/CD Pipeline | 7 GitHub Actions workflows | `.github/workflows/` |
@@ -112,6 +112,7 @@
 | Sprint 53 | Docs-as-Product + Policy Context + Timeout Contract (B-113, B-013, B-014) | Closed |
 | Sprint 54 | Audit Export + Dynamic Source + Heredoc Cleanup (B-115, B-018, B-025) | Deferred (not implemented, tasks → S55) |
 | Sprint 55 | Audit Export + Dynamic Source + Heredoc Cleanup (B-115, B-018, B-025) | Closed |
+| Sprint 56 | Task Dir Retention + .bak Cleanup + Intent Mapping (B-027, B-028, B-019) | Closed |
 
 ## Test Evidence
 
@@ -138,6 +139,7 @@
 | Sprint 52 | 917 tests, 0 fail | 217 tests, 0 TS errors | +46 new (recovery, replay, seed demo). 13 Playwright. 1147 total |
 | Sprint 53 | 992 tests, 0 fail | 217 tests, 0 TS errors | +75 new (docs gen, policyContext, timeout contract). 13 Playwright. 1222 total |
 | Sprint 55 | 1057 tests, 0 fail | 217 tests, 0 TS errors | +65 new (audit export 43, sourceUserId 24, compat fix). 13 Playwright. 1287 total |
+| Sprint 56 | 1128 tests, 0 fail | 217 tests, 0 TS errors | +71 new (retention 22, cleanup_bak 22, intent mapper 27). 13 Playwright. 1358 total |
 
 ## Architectural Decisions
 

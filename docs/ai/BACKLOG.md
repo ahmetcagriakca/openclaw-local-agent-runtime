@@ -1,7 +1,7 @@
 # Backlog -- Vezir Platform
 
 **Auto-generated from GitHub issues.** Do not edit directly.
-**Generated:** 2026-04-04 14:54 UTC
+**Generated:** 2026-04-04 16:02 UTC
 **Source:** `python tools/generate-backlog.py`
 
 ---
@@ -68,6 +68,8 @@
 
 | # | Item | State |
 |---|------|-------|
+| #308 | Sprint 56 Task 56.1: B-027 Task directory retention | Done |
+| #309 | Sprint 56 Task 56.2: B-028 Stale .bak files | Done |
 | #180 | [B-025] Bootstrap heredoc reduction | Open |
 | #181 | [B-027] Task directory retention | Open |
 | #182 | [B-028] Stale .bak files | Open |
@@ -89,6 +91,7 @@
 
 | # | Item | State |
 |---|------|-------|
+| #310 | Sprint 56 Task 56.3: B-019 Intent mapping refinement | Done |
 | #179 | [B-019] Intent mapping refinement | Open |
 | #183 | [B-114] Knowledge/connector input layer | Open |
 | #185 | [B-116] Multi-tenant isolation | Open |
@@ -104,4 +107,4 @@
 
 ---
 
-**Total:** 45 items (22 open)
+**Total:** 48 items (22 open)

@@ -1,7 +1,20 @@
 # Next Steps — Vezir Platform
 
 **Last updated:** 2026-04-04
-**Current:** Phase 7 active. Sprint 55 closed. Sprint 56 pending.
+**Current:** Phase 7 active. Sprint 56 closed. Sprint 57 pending.
+
+---
+
+## Sprint 56 — Task Dir Retention + .bak Cleanup + Intent Mapping (CLOSED)
+
+**Model:** A (full closure) | **Class:** Cleanup + Product
+**Scope:** B-027 task directory retention, B-028 stale .bak file cleanup, B-019 intent mapping refinement
+**Tests:** 1128 backend + 217 frontend + 13 Playwright = 1358 total (0 TS errors) (D-131)
+**Issues:** #308, #309, #310
+**New tests:** +71
+**New files:** `agent/persistence/mission_retention.py`, `agent/api/retention_api.py`, `tools/cleanup_bak.py`, `agent/mission/intent_mapper.py`
+**Modified:** `agent/api/server.py` (+retention router)
+**Review:** Claude Code PASS
 
 ---
 

@@ -7,9 +7,11 @@ from mission.policy_context import (
     DEFAULT_MISSION_TIMEOUT,
     DEFAULT_STAGE_TIMEOUT,
     DEFAULT_TOOL_TIMEOUT,
+    CallerIdentity,
     DependencyState,
     PolicyContext,
     TimeoutConfig,
+    _detect_environment,
     build_policy_context,
     check_wmcp_availability,
 )
@@ -58,6 +60,11 @@ class TestPolicyContextSerialization:
         assert "interactiveCapability" in d
         assert "tenantLimits" in d
         assert "timeoutConfig" in d
+        # B-013 Sprint 53 new fields
+        assert "caller" in d
+        assert "resourceTags" in d
+        assert "environment" in d
+        assert "evaluatedAt" in d
 
     def test_round_trip(self):
         original = PolicyContext(
@@ -266,3 +273,183 @@ class TestTimedOutState:
             "status": "timed_out",
         })
         assert state.status == MissionStatus.TIMED_OUT
+
+
+# --- B-013 Sprint 53: Caller identity tests ---
+
+
+class TestCallerIdentity:
+    """B-013 Sprint 53: CallerIdentity dataclass."""
+
+    def test_defaults(self):
+        ci = CallerIdentity()
+        assert ci.caller_id == "anonymous"
+        assert ci.caller_role == "operator"
+        assert ci.source == "unknown"
+
+    def test_custom_values(self):
+        ci = CallerIdentity(caller_id="user-123", caller_role="admin",
+                            source="dashboard")
+        assert ci.caller_id == "user-123"
+        assert ci.caller_role == "admin"
+        assert ci.source == "dashboard"
+
+    def test_to_dict(self):
+        ci = CallerIdentity(caller_id="u1", caller_role="op", source="telegram")
+        d = ci.to_dict()
+        assert d["callerId"] == "u1"
+        assert d["callerRole"] == "op"
+        assert d["source"] == "telegram"
+
+    def test_round_trip(self):
+        original = CallerIdentity(caller_id="x", caller_role="scheduler",
+                                  source="api")
+        d = original.to_dict()
+        restored = CallerIdentity.from_dict(d)
+        assert restored.caller_id == "x"
+        assert restored.caller_role == "scheduler"
+        assert restored.source == "api"
+
+    def test_from_dict_defaults(self):
+        ci = CallerIdentity.from_dict({})
+        assert ci.caller_id == "anonymous"
+        assert ci.caller_role == "operator"
+
+
+# --- B-013 Sprint 53: Enriched PolicyContext tests ---
+
+
+class TestEnrichedPolicyContext:
+    """B-013 Sprint 53: New fields in PolicyContext."""
+
+    def test_default_caller(self):
+        ctx = PolicyContext()
+        assert ctx.caller.caller_id == "anonymous"
+
+    def test_default_resource_tags_empty(self):
+        ctx = PolicyContext()
+        assert ctx.resource_tags == {}
+
+    def test_default_environment(self):
+        ctx = PolicyContext()
+        assert ctx.environment == "production"
+
+    def test_to_dict_includes_new_fields(self):
+        ctx = PolicyContext(
+            caller=CallerIdentity(caller_id="user-1", source="dashboard"),
+            resource_tags={"team": "platform", "priority": "high"},
+            environment="development",
+            evaluated_at="2026-04-04T10:00:00Z",
+        )
+        d = ctx.to_dict()
+        assert d["caller"]["callerId"] == "user-1"
+        assert d["caller"]["source"] == "dashboard"
+        assert d["resourceTags"]["team"] == "platform"
+        assert d["environment"] == "development"
+        assert d["evaluatedAt"] == "2026-04-04T10:00:00Z"
+
+    def test_round_trip_with_new_fields(self):
+        original = PolicyContext(
+            caller=CallerIdentity(caller_id="u2", caller_role="admin",
+                                  source="api"),
+            resource_tags={"env": "staging"},
+            environment="staging",
+            evaluated_at="2026-04-04T12:00:00Z",
+        )
+        d = original.to_dict()
+        restored = PolicyContext.from_dict(d)
+        assert restored.caller.caller_id == "u2"
+        assert restored.caller.source == "api"
+        assert restored.resource_tags["env"] == "staging"
+        assert restored.environment == "staging"
+        assert restored.evaluated_at == "2026-04-04T12:00:00Z"
+
+    def test_backward_compat_from_dict_without_new_fields(self):
+        """Old data without new fields still deserializes correctly."""
+        old_data = {
+            "riskLevel": "high",
+            "dependencyStates": [],
+            "sourceFreshness": {},
+        }
+        ctx = PolicyContext.from_dict(old_data)
+        assert ctx.risk_level == "high"
+        assert ctx.caller.caller_id == "anonymous"
+        assert ctx.resource_tags == {}
+        assert ctx.environment == "production"
+
+
+class TestDetectEnvironment:
+    """B-013 Sprint 53: Environment detection."""
+
+    @patch.dict("os.environ", {"VEZIR_ENV": "staging"}, clear=False)
+    def test_vezir_env_staging(self):
+        assert _detect_environment() == "staging"
+
+    @patch.dict("os.environ", {"VEZIR_ENV": "development"}, clear=False)
+    def test_vezir_env_development(self):
+        assert _detect_environment() == "development"
+
+    @patch.dict("os.environ", {"VEZIR_DEV": "1", "VEZIR_ENV": ""}, clear=False)
+    def test_vezir_dev_flag(self):
+        assert _detect_environment() == "development"
+
+    @patch.dict("os.environ", {"CI": "true", "VEZIR_ENV": "", "VEZIR_DEV": ""}, clear=False)
+    def test_ci_env(self):
+        assert _detect_environment() == "test"
+
+    @patch.dict("os.environ", {"VEZIR_ENV": "", "VEZIR_DEV": "", "CI": ""}, clear=False)
+    def test_default_production(self):
+        assert _detect_environment() == "production"
+
+
+class TestBuildPolicyContextEnriched:
+    """B-013 Sprint 53: build_policy_context populates new fields."""
+
+    @patch("mission.policy_context.check_wmcp_availability")
+    def test_caller_from_mission_userid(self, mock_wmcp):
+        mock_wmcp.return_value = DependencyState(name="wmcp", status="reachable")
+        mission = {
+            "risk_level": "medium",
+            "stages": [],
+            "timeoutConfig": {},
+            "userId": "dashboard-user",
+            "createdFrom": "dashboard",
+        }
+        ctx = build_policy_context(mission, time.time())
+        assert ctx.caller.caller_id == "dashboard-user"
+        assert ctx.caller.source == "dashboard"
+
+    @patch("mission.policy_context.check_wmcp_availability")
+    def test_resource_tags_from_mission(self, mock_wmcp):
+        mock_wmcp.return_value = DependencyState(name="wmcp", status="reachable")
+        mission = {
+            "risk_level": "low",
+            "stages": [],
+            "timeoutConfig": {},
+            "resourceTags": {"team": "ops", "sprint": "53"},
+        }
+        ctx = build_policy_context(mission, time.time())
+        assert ctx.resource_tags["team"] == "ops"
+        assert ctx.resource_tags["sprint"] == "53"
+
+    @patch("mission.policy_context.check_wmcp_availability")
+    def test_evaluated_at_set(self, mock_wmcp):
+        mock_wmcp.return_value = DependencyState(name="wmcp", status="reachable")
+        mission = {"risk_level": "medium", "stages": [], "timeoutConfig": {}}
+        ctx = build_policy_context(mission, time.time())
+        assert ctx.evaluated_at != ""
+        assert "T" in ctx.evaluated_at  # ISO format
+
+    @patch("mission.policy_context.check_wmcp_availability")
+    def test_missing_userid_defaults_anonymous(self, mock_wmcp):
+        mock_wmcp.return_value = DependencyState(name="wmcp", status="reachable")
+        mission = {"risk_level": "low", "stages": [], "timeoutConfig": {}}
+        ctx = build_policy_context(mission, time.time())
+        assert ctx.caller.caller_id == "anonymous"
+
+    @patch("mission.policy_context.check_wmcp_availability")
+    def test_empty_resource_tags(self, mock_wmcp):
+        mock_wmcp.return_value = DependencyState(name="wmcp", status="reachable")
+        mission = {"risk_level": "low", "stages": [], "timeoutConfig": {}}
+        ctx = build_policy_context(mission, time.time())
+        assert ctx.resource_tags == {}

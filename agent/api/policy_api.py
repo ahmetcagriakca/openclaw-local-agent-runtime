@@ -105,6 +105,66 @@ def delete_policy(name: str):
     return {"name": name, "deleted": True}
 
 
+@router.get("/policies/context-schema")
+def get_policy_context_schema():
+    """B-013 Sprint 53: Return the policy context schema with all available fields."""
+    return {
+        "fields": {
+            "dependencyStates": {
+                "type": "array",
+                "description": "Per-dependency availability (WMCP reachable/degraded/unreachable)",
+            },
+            "riskLevel": {
+                "type": "string",
+                "enum": ["low", "medium", "high", "critical"],
+                "description": "Mission risk level (D-128)",
+            },
+            "sourceFreshness": {
+                "type": "object",
+                "description": "Mission age and data source tracking",
+            },
+            "retryability": {
+                "type": "object",
+                "description": "Mission/stage retry eligibility",
+            },
+            "interactiveCapability": {
+                "type": "object",
+                "description": "Tool/UI availability state",
+            },
+            "tenantLimits": {
+                "type": "object",
+                "description": "Guardrail thresholds (D-121)",
+            },
+            "timeoutConfig": {
+                "type": "object",
+                "description": "Mission/stage/tool timeout hierarchy (B-014)",
+            },
+            "caller": {
+                "type": "object",
+                "description": "Caller identity: callerId, callerRole, source (B-013 S53)",
+            },
+            "resourceTags": {
+                "type": "object",
+                "description": "Mission-level labels for tag-based policy rules (B-013 S53)",
+            },
+            "environment": {
+                "type": "string",
+                "enum": ["production", "development", "staging", "test"],
+                "description": "Runtime environment (B-013 S53)",
+            },
+            "evaluatedAt": {
+                "type": "string",
+                "format": "date-time",
+                "description": "ISO 8601 evaluation timestamp (B-013 S53)",
+            },
+        },
+        "conditionTypes": [
+            "always", "dependency_state", "risk_level", "timeout_exceeded",
+            "budget_exceeded", "caller_source", "environment", "resource_tag",
+        ],
+    }
+
+
 def _audit(action: str, rule_name: str) -> None:
     """Emit structured audit log for policy mutations."""
     logger.info(

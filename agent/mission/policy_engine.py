@@ -275,6 +275,26 @@ class PolicyEngine:
             max_stages = tenant_limits.get("max_stages", 15)
             return len(stages) >= max_stages
 
+        # B-013 Sprint 53: caller_source check
+        caller_source = condition.get("caller_source")
+        if caller_source:
+            caller = policy_context.get("caller", {})
+            return caller.get("source") == caller_source
+
+        # B-013 Sprint 53: environment check
+        env_cond = condition.get("environment")
+        if env_cond:
+            return policy_context.get("environment") == env_cond
+
+        # B-013 Sprint 53: resource_tag check
+        tag_cond = condition.get("resource_tag")
+        if tag_cond and isinstance(tag_cond, dict):
+            tags = policy_context.get("resourceTags", {})
+            for key, expected in tag_cond.items():
+                if tags.get(key) != expected:
+                    return False
+            return True
+
         return False
 
     def get_rule(self, name: str) -> Optional[PolicyRule]:

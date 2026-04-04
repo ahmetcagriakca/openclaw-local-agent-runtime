@@ -366,3 +366,112 @@ class TestBenchmark:
         engine = PolicyEngine()
         result = engine.evaluate({}, {})
         assert result.eval_time_ms >= 0
+
+
+# ─── B-013 Sprint 53: New Condition Types ───
+
+class TestCallerSourceCondition:
+    """B-013 Sprint 53: caller_source condition matching."""
+
+    def _engine_with_rules(self, tmp_policies_dir, rules):
+        for i, rule in enumerate(rules):
+            _write_rule(tmp_policies_dir, f"rule_{i}.yaml", rule)
+        return PolicyEngine(policies_dir=tmp_policies_dir)
+
+    def test_caller_source_match(self, tmp_policies_dir):
+        engine = self._engine_with_rules(tmp_policies_dir, [{
+            "name": "telegram-escalate", "priority": 100,
+            "condition": {"caller_source": "telegram"},
+            "decision": "escalate",
+        }])
+        ctx = {"caller": {"callerId": "u1", "callerRole": "op", "source": "telegram"}}
+        result = engine.evaluate(ctx, {})
+        assert result.decision == PolicyDecision.ESCALATE
+
+    def test_caller_source_no_match(self, tmp_policies_dir):
+        engine = self._engine_with_rules(tmp_policies_dir, [{
+            "name": "telegram-escalate", "priority": 100,
+            "condition": {"caller_source": "telegram"},
+            "decision": "escalate",
+        }])
+        ctx = {"caller": {"source": "dashboard"}}
+        result = engine.evaluate(ctx, {})
+        assert result.decision == PolicyDecision.DENY  # fail-closed
+
+
+class TestEnvironmentCondition:
+    """B-013 Sprint 53: environment condition matching."""
+
+    def _engine_with_rules(self, tmp_policies_dir, rules):
+        for i, rule in enumerate(rules):
+            _write_rule(tmp_policies_dir, f"rule_{i}.yaml", rule)
+        return PolicyEngine(policies_dir=tmp_policies_dir)
+
+    def test_environment_match(self, tmp_policies_dir):
+        engine = self._engine_with_rules(tmp_policies_dir, [{
+            "name": "dev-allow", "priority": 100,
+            "condition": {"environment": "development"},
+            "decision": "allow",
+        }])
+        ctx = {"environment": "development"}
+        result = engine.evaluate(ctx, {})
+        assert result.decision == PolicyDecision.ALLOW
+
+    def test_environment_no_match(self, tmp_policies_dir):
+        engine = self._engine_with_rules(tmp_policies_dir, [{
+            "name": "dev-allow", "priority": 100,
+            "condition": {"environment": "development"},
+            "decision": "allow",
+        }])
+        ctx = {"environment": "production"}
+        result = engine.evaluate(ctx, {})
+        assert result.decision == PolicyDecision.DENY
+
+
+class TestResourceTagCondition:
+    """B-013 Sprint 53: resource_tag condition matching."""
+
+    def _engine_with_rules(self, tmp_policies_dir, rules):
+        for i, rule in enumerate(rules):
+            _write_rule(tmp_policies_dir, f"rule_{i}.yaml", rule)
+        return PolicyEngine(policies_dir=tmp_policies_dir)
+
+    def test_single_tag_match(self, tmp_policies_dir):
+        engine = self._engine_with_rules(tmp_policies_dir, [{
+            "name": "vip-allow", "priority": 100,
+            "condition": {"resource_tag": {"priority": "high"}},
+            "decision": "allow",
+        }])
+        ctx = {"resourceTags": {"priority": "high", "team": "platform"}}
+        result = engine.evaluate(ctx, {})
+        assert result.decision == PolicyDecision.ALLOW
+
+    def test_multi_tag_match(self, tmp_policies_dir):
+        engine = self._engine_with_rules(tmp_policies_dir, [{
+            "name": "tag-match", "priority": 100,
+            "condition": {"resource_tag": {"team": "ops", "env": "prod"}},
+            "decision": "allow",
+        }])
+        ctx = {"resourceTags": {"team": "ops", "env": "prod", "extra": "x"}}
+        result = engine.evaluate(ctx, {})
+        assert result.decision == PolicyDecision.ALLOW
+
+    def test_tag_partial_mismatch(self, tmp_policies_dir):
+        engine = self._engine_with_rules(tmp_policies_dir, [{
+            "name": "tag-match", "priority": 100,
+            "condition": {"resource_tag": {"team": "ops", "env": "prod"}},
+            "decision": "allow",
+        }])
+        ctx = {"resourceTags": {"team": "ops", "env": "staging"}}
+        result = engine.evaluate(ctx, {})
+        assert result.decision == PolicyDecision.DENY
+
+    def test_tag_missing(self, tmp_policies_dir):
+        engine = self._engine_with_rules(tmp_policies_dir, [{
+            "name": "tag-match", "priority": 100,
+            "condition": {"resource_tag": {"team": "ops"}},
+            "decision": "allow",
+        }])
+        ctx = {"resourceTags": {}}
+        result = engine.evaluate(ctx, {})
+        assert result.decision == PolicyDecision.DENY

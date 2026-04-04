@@ -1,11 +1,13 @@
 """Policy context builder for pre-stage evaluation.
 
 B-013: Richer policyContext — provides dependency state, risk level,
-source freshness, retryability, interactive capability, and tenant limits
-to the policy evaluation pipeline.
+source freshness, retryability, interactive capability, tenant limits,
+caller identity, resource tags, and environment metadata to the policy
+evaluation pipeline.
 
 B-014: Timeout configuration — mission/stage/tool timeout hierarchy.
 """
+import os
 import time
 from dataclasses import dataclass, field
 from typing import Optional
@@ -63,6 +65,29 @@ class DependencyState:
 
 
 @dataclass
+class CallerIdentity:
+    """B-013 Sprint 53: Caller identity for policy evaluation."""
+    caller_id: str = "anonymous"
+    caller_role: str = "operator"  # operator | dashboard | telegram | api | scheduler
+    source: str = "unknown"        # dashboard | telegram | api | cli | scheduler
+
+    def to_dict(self) -> dict:
+        return {
+            "callerId": self.caller_id,
+            "callerRole": self.caller_role,
+            "source": self.source,
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict) -> "CallerIdentity":
+        return cls(
+            caller_id=data.get("callerId", "anonymous"),
+            caller_role=data.get("callerRole", "operator"),
+            source=data.get("source", "unknown"),
+        )
+
+
+@dataclass
 class PolicyContext:
     """B-013: Rich policy context for pre-stage evaluation.
 
@@ -100,6 +125,18 @@ class PolicyContext:
     # B-014: Timeout configuration
     timeout_config: TimeoutConfig = field(default_factory=TimeoutConfig)
 
+    # B-013 Sprint 53: Caller identity
+    caller: CallerIdentity = field(default_factory=CallerIdentity)
+
+    # B-013 Sprint 53: Resource tags (mission-level labels)
+    resource_tags: dict = field(default_factory=dict)
+
+    # B-013 Sprint 53: Environment metadata
+    environment: str = "production"  # production | development | staging | test
+
+    # B-013 Sprint 53: Evaluation timestamp (ISO 8601)
+    evaluated_at: str = ""
+
     def to_dict(self) -> dict:
         return {
             "dependencyStates": [d.to_dict() for d in self.dependency_states],
@@ -109,6 +146,10 @@ class PolicyContext:
             "interactiveCapability": self.interactive_capability,
             "tenantLimits": self.tenant_limits,
             "timeoutConfig": self.timeout_config.to_dict(),
+            "caller": self.caller.to_dict(),
+            "resourceTags": self.resource_tags,
+            "environment": self.environment,
+            "evaluatedAt": self.evaluated_at,
         }
 
     @classmethod
@@ -123,6 +164,7 @@ class PolicyContext:
             for d in data.get("dependencyStates", [])
         ]
         timeout_data = data.get("timeoutConfig", {})
+        caller_data = data.get("caller", {})
         return cls(
             dependency_states=dep_states,
             risk_level=data.get("riskLevel", "medium"),
@@ -135,6 +177,10 @@ class PolicyContext:
                 "max_stages": 15, "max_tool_calls_per_stage": 20,
                 "max_rework_cycles": 3}),
             timeout_config=TimeoutConfig.from_dict(timeout_data),
+            caller=CallerIdentity.from_dict(caller_data),
+            resource_tags=data.get("resourceTags", {}),
+            environment=data.get("environment", "production"),
+            evaluated_at=data.get("evaluatedAt", ""),
         )
 
 
@@ -151,6 +197,18 @@ def check_wmcp_availability() -> DependencyState:
     return state
 
 
+def _detect_environment() -> str:
+    """Detect runtime environment from env vars."""
+    env = os.environ.get("VEZIR_ENV", "").lower()
+    if env in ("production", "development", "staging", "test"):
+        return env
+    if os.environ.get("VEZIR_DEV", "") == "1":
+        return "development"
+    if os.environ.get("CI", ""):
+        return "test"
+    return "production"
+
+
 def build_policy_context(
     mission: dict,
     mission_start_time: float,
@@ -161,6 +219,8 @@ def build_policy_context(
         mission: The current mission dict (has risk_level, stages, etc.)
         mission_start_time: time.time() when mission started
     """
+    from datetime import datetime, timezone as tz
+
     # Dependency states: check WMCP
     wmcp_state = check_wmcp_availability()
     dependency_states = [wmcp_state]
@@ -203,6 +263,24 @@ def build_policy_context(
     timeout_data = mission.get("timeoutConfig", {})
     timeout_config = TimeoutConfig.from_dict(timeout_data) if timeout_data else TimeoutConfig()
 
+    # B-013 Sprint 53: Caller identity from mission metadata
+    user_id = mission.get("userId") or "anonymous"
+    created_from = mission.get("createdFrom") or "unknown"
+    caller = CallerIdentity(
+        caller_id=user_id,
+        caller_role="operator",
+        source=created_from,
+    )
+
+    # B-013 Sprint 53: Resource tags from mission
+    resource_tags = mission.get("resourceTags") or {}
+
+    # B-013 Sprint 53: Environment detection
+    environment = _detect_environment()
+
+    # B-013 Sprint 53: Evaluation timestamp
+    evaluated_at = datetime.now(tz.utc).isoformat()
+
     return PolicyContext(
         dependency_states=dependency_states,
         risk_level=risk_level,
@@ -211,4 +289,8 @@ def build_policy_context(
         interactive_capability=interactive_capability,
         tenant_limits=tenant_limits,
         timeout_config=timeout_config,
+        caller=caller,
+        resource_tags=resource_tags,
+        environment=environment,
+        evaluated_at=evaluated_at,
     )

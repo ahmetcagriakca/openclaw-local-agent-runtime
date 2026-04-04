@@ -50,12 +50,11 @@ Sprint 54 deferred. Sprint 55 planned (GPT PASS Round 5), implemented, and close
 | Sprint | Claude Code | GPT |
 |--------|-------------|-----|
 | S55 (pre-sprint) | PASS | PASS (Round 5) |
-| S55 (final) | PASS | Pending (browser disconnected) |
+| S55 (final) | PASS | PASS (chatbridge, closure eligible) |
 
 ## Next Session
 
-1. Submit GPT final review for S55 (if needed)
-2. Sprint 56 planning — P3 candidates:
+1. Sprint 56 planning — P3 candidates:
    - B-027 Task directory retention
    - B-028 Stale .bak files
    - B-019 Intent mapping refinement

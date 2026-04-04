@@ -7,44 +7,59 @@
 
 ## Session Summary
 
-Sprint 54 deferred (never implemented). All 3 tasks carried to Sprint 55. D-134 frozen (Source User Identity Resolution). Plan strengthened per GPT findings (3 rounds). GPT patch v3 prepared with full exact file/path/mapping. Claude Code pre-sprint PASS.
+Sprint 54 deferred. Sprint 55 planned, reviewed (GPT PASS Round 5), and fully implemented. D-134 frozen. 3 tasks + 1 fix commit. 1057 backend tests (+65 new), 0 fail. 18-step closure pending.
 
 ## Current State
 
 - **Phase:** 7
 - **Last closed sprint:** 53
-- **Sprint 54:** DEFERRED (not implemented, tasks → S55)
-- **Sprint 55:** READY FOR IMPLEMENTATION (Claude Code PASS, GPT PASS Round 5)
+- **Sprint 55:** IMPLEMENTED (all tasks done, closure pending)
 - **Decisions:** 133 frozen (D-001 → D-134, D-126 skipped, D-132 deferred)
-- **Tests:** 992 backend + 217 frontend + 13 Playwright = 1222 total (D-131)
-- **CI:** All green
+- **Tests:** 1057 backend + 217 frontend + 13 Playwright = 1287 total (+65 new)
+- **CI:** Green (push complete)
 - **Blockers:** None
 
-## Sprint 55 Tasks
+## Sprint 55 Deliverables
 
-| # | Task | Issue | Decision | Scope |
-|---|------|-------|----------|-------|
-| 55.1 | B-115 Audit export | #305 | — | CLI + API, auth scoping, redaction, fail-closed |
-| 55.2 | B-018 Dynamic sourceUserId | #306 | D-134 | Resolver chain, fail-closed, trusted origins |
-| 55.3 | B-025 Heredoc reduction | #307 | — | Extract heredocs to templates |
+| Task | Issue | Tests | Status |
+|------|-------|-------|--------|
+| 55.1 B-115 Audit export / compliance bundle | #305 | 43 | DONE |
+| 55.2 B-018 Dynamic sourceUserId (D-134) | #306 | 24 | DONE |
+| 55.3 B-025 Bootstrap heredoc reduction | #307 | — | DONE |
+| Fix: D-134 backward compat | — | — | DONE |
 
-## GPT Review History (S55)
+## New/Modified Files
 
-| Round | Verdict | Key Findings |
-|-------|---------|-------------|
-| 1 | HOLD | 7 findings: evidence model, risks, D-XXX, exit criteria, completeness, dependencies |
-| 2 | HOLD | Substantive findings resolved. Remaining: artifact precision (exact files/paths/mapping) |
-| 3 | HOLD | Exact files/paths. Remaining: closure model, D-134 record, gate tasks |
-| 4 | HOLD | D-134 created, gates promoted. Remaining: closure convention proof |
-| 5 | **PASS** | Repo evidence (GOVERNANCE Rule 16, active paths S46-S53). All resolved. |
+| File | Change |
+|------|--------|
+| `tools/audit_export.py` | New — CLI tool (B-115) |
+| `agent/api/audit_export_api.py` | New — API router (B-115) |
+| `agent/tests/test_audit_export.py` | New — 43 tests |
+| `agent/auth/source_user_resolver.py` | New — D-134 resolver |
+| `agent/tests/test_source_user.py` | New — 24 tests |
+| `agent/api/mission_create_api.py` | Modified — D-134 integration |
+| `agent/api/server.py` | Modified — audit_export router |
+| `tools/helpers/policy_check.py` | New — extracted heredoc |
+| `tools/sprint-finalize.sh` | Modified — heredoc removed |
+| `docs/decisions/D-134-source-user-identity.md` | New — formal decision |
+
+## Commits
+
+- `275a70d` S55 GPT PASS
+- `ea69d7e` D-134 decision record + review gate tasks
+- `28611a5` Sprint 55 Task 55.1: B-115 Audit export
+- `f1b2f67` Sprint 55 Task 55.2: B-018 Dynamic sourceUserId
+- `4b56d51` Sprint 55 Task 55.3: B-025 Heredoc reduction
+- `8814af7` fix: D-134 backward compat
 
 ## Next Session
 
-1. Sprint 55 implementation — 55.1 (B-115) first
-3. Mid review after 55.1 + 55.2
-4. Final review after 55.3
-5. Full 18-step closure
+1. Sprint 55 — 18-step closure checklist
+2. OpenAPI regeneration + frontend SDK sync
+3. Issues close + milestone close
+4. GPT final review
+5. STATE.md / NEXT.md / BACKLOG.md updates
 
 ## GPT Memo
 
-Session 29: S54 DEFERRED, S55 PLANNED+APPROVED. D-134 frozen (Source User Identity Resolution). GPT 5 review rounds → PASS. Claude Code PASS. 133 decisions. 1222 tests. Implementation ready: 55.1 first, then 55.2, then 55.G1, then 55.3, then 55.G2, then closure.
+Session 29: Sprint 55 IMPLEMENTED. B-115 audit export (CLI+API, 43 tests), B-018 dynamic sourceUserId (D-134 resolver, 24 tests), B-025 heredoc reduction (4→2). Backend: 1057 pass (+65 new). D-134 frozen. GPT pre-sprint PASS (5 rounds). 18-step closure pending next session.

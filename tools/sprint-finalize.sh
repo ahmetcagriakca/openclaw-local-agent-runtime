@@ -77,25 +77,10 @@ echo "── Step 1b: Policy check (sprint-policy.yml)"
 
 POLICY_FILE="$SCRIPT_DIR/sprint-policy.yml"
 if [[ -f "$POLICY_FILE" ]]; then
-    FORCED=$(python3 - <<PYEOF 2>/dev/null
-import re, sys
-content = open("$POLICY_FILE").read()
-block = re.search(r'^\s+${SPRINT}:\s*\n((?:\s{4,}[^\n]+\n?)*)', content, re.MULTILINE)
-if block:
-    m = re.search(r'forced_model:\s*"([AB])"', block.group(1))
-    if m: print(m.group(1))
-PYEOF
-    )
+    POLICY_HELPER="$SCRIPT_DIR/helpers/policy_check.py"
+    FORCED=$(python3 "$POLICY_HELPER" "$POLICY_FILE" "$SPRINT" forced_model 2>/dev/null)
     if [[ -n "$FORCED" && "$FORCED" != "$MODEL" ]]; then
-        REASON=$(python3 - <<PYEOF 2>/dev/null
-import re
-content = open("$POLICY_FILE").read()
-block = re.search(r'^\s+${SPRINT}:\s*\n((?:\s{4,}[^\n]+\n?)*)', content, re.MULTILINE)
-if block:
-    m = re.search(r'reason:\s*"([^"]+)"', block.group(1))
-    if m: print(m.group(1))
-PYEOF
-        )
+        REASON=$(python3 "$POLICY_HELPER" "$POLICY_FILE" "$SPRINT" reason 2>/dev/null)
         echo "  ❌ POLICY VIOLATION: Sprint $SPRINT requires --model $FORCED, you passed --model $MODEL"
         echo "     Reason: $REASON"
         echo "     Fix: ./tools/sprint-finalize.sh $SPRINT --model $FORCED"

@@ -105,8 +105,10 @@
 | `agent/tests/test_audit_export.py` | New — tests (export, auth, redaction, fail-closed) |
 | `agent/api/mission_create_api.py` | Modified — D-134 resolver chain |
 | `agent/tests/test_source_user.py` | New — tests (3 tiers, fail-closed, trusted origin) |
-| Bootstrap scripts | Modified — heredoc extraction |
-| `config/templates/` | New — template files from heredoc |
+| `bin/start-wmcp-server.ps1` | Modified — heredoc extraction |
+| `bin/oc-system-health.ps1` | Modified — heredoc extraction |
+| `config/templates/wmcp-config.template` | New — extracted heredoc content |
+| `config/templates/health-check.template` | New — extracted heredoc content |
 | `docs/sprints/sprint-55/closure-check-output.txt` | Closure evidence (D-132) |
 | `docs/decisions/D-134-source-user-identity.md` | Formal decision record |
 
@@ -125,10 +127,19 @@
 
 **Note:** Project closure evidence convention per D-132 and GOVERNANCE.md Rule 16 step 15 is `docs/sprints/sprint-{N}/closure-check-output.txt` — single file containing all verification output.
 
-## Review Gates
+## Review Gate Tasks
 
-- **Mid Review:** After 55.1 + 55.2 complete → GPT mid-sprint review
-- **Final Review:** After 55.3 complete → GPT final review before closure
+### 55.G1 — Mid Review Gate
+
+**After:** 55.1 + 55.2 complete
+**Action:** Submit mid-sprint review to GPT with implementation evidence
+**Gate:** GPT PASS required before 55.3
+
+### 55.G2 — Final Review Gate
+
+**After:** 55.3 complete
+**Action:** Submit final review to GPT with full closure evidence
+**Gate:** GPT PASS required before 18-step closure
 
 ## Risks
 

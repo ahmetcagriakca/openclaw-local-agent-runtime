@@ -1,9 +1,9 @@
 # Current State
 
 **Last updated:** 2026-04-04
-**Active phase:** Phase 7 — Sprint 57 closed
+**Active phase:** Phase 7 — Sprint 58 closed
 **Doc model:** This file is canonical for system state. Session context lives in `docs/ai/handoffs/current.md`.
-**Note:** All sprints through 53 closed. S54 deferred. S55-S57 closed. All P1 backlog items complete. Phase 7 active. 134 frozen decisions (D-001 → D-135, D-126 skipped, D-132 deferred).
+**Note:** All sprints through 53 closed. S54 deferred. S55-S58 closed. All P1 backlog items complete. Phase 7 active. 134 frozen decisions (D-001 → D-135, D-126 skipped, D-132 deferred).
 **Persistence:** State is file-persisted (state.json, mission.json). Mission history via persistence layer (Sprint 16).
 **API:** Vezir API on 127.0.0.1:8003 (FastAPI + Uvicorn). Schemas FROZEN (D-067). SSE on /api/v1/events/stream. Dashboard API + Alert API + Telemetry Query API (Sprint 16).
 **Frontend:** React dashboard on localhost:3000 (Vite + Tailwind). SSE live updates + polling fallback + intervention buttons + monitoring dashboard. Node.js 20 required.
@@ -51,7 +51,7 @@
 | Auto-Resume | Operational (--resume, --auto-resume) | `agent/mission/auto_resume.py` |
 | Cost Dashboard API | Operational (3 endpoints: summary, missions, trends) | `agent/api/cost_api.py` |
 | Agent Health API | Operational (4 endpoints: providers, roles, matrix, performance) | `agent/api/agents_api.py` |
-| Mission Control API | Operational (~103 endpoints) | `agent/api/server.py` on :8003 |
+| Mission Control API | Operational (~123 endpoints) | `agent/api/server.py` on :8003 |
 | SSE Manager | Operational (broadcast, heartbeat 30s) | `agent/api/sse_manager.py` |
 | Session Model | Foundation (operator identity, no auth flow) | `agent/auth/session.py` |
 | CI/CD Pipeline | 7 GitHub Actions workflows | `.github/workflows/` |
@@ -114,6 +114,7 @@
 | Sprint 55 | Audit Export + Dynamic Source + Heredoc Cleanup (B-115, B-018, B-025) | Closed |
 | Sprint 56 | Task Dir Retention + .bak Cleanup + Intent Mapping (B-027, B-028, B-019) | Closed |
 | Sprint 57 | Secret Rotation + Allowlist + Grafana Pack (B-007, B-009, B-117) | Closed |
+| Sprint 58 | Knowledge Layer + Multi-tenant + WMCP Cred (B-114, B-116, B-010) | Closed |
 
 ## Test Evidence
 
@@ -142,10 +143,11 @@
 | Sprint 55 | 1057 tests, 0 fail | 217 tests, 0 TS errors | +65 new (audit export 43, sourceUserId 24, compat fix). 13 Playwright. 1287 total |
 | Sprint 56 | 1128 tests, 0 fail | 217 tests, 0 TS errors | +71 new (retention 22, cleanup_bak 22, intent mapper 27). 13 Playwright. 1358 total |
 | Sprint 57 | 1210 tests, 0 fail | 217 tests, 0 TS errors | +82 new (secret rotation 28, allowlist 24, grafana 30). 13 Playwright. 1440 total |
+| Sprint 58 | 1300 tests, 0 fail | 217 tests, 0 TS errors | +90 new (knowledge 37, tenant 30, wmcp-cred 23). 13 Playwright. 1530 total |
 
 ## Architectural Decisions
 
-134 frozen decisions (D-001 through D-135, D-126 skipped, D-132 deferred). See `docs/ai/DECISIONS.md`. Recent: D-135 secret rotation + allowlist + metrics contract (S57). Governance rules in `docs/ai/GOVERNANCE.md` (D-112, Rule 16: 18-step closure checklist). Recent: D-127 closure class taxonomy (S34), D-128 risk classification (S35), D-129 secret+audit (S36), D-130 transport encryption (S37), D-131 test reporting (S48), D-132 folder migration (S50), D-133 policy engine contract (S48).
+134 frozen decisions (D-001 through D-135, D-126 skipped, D-132 deferred). See `docs/ai/DECISIONS.md`. Recent: D-135 secret rotation + allowlist + metrics contract (S57). S58: no new decisions (features built on existing contracts). Governance rules in `docs/ai/GOVERNANCE.md` (D-112, Rule 16: 18-step closure checklist). Recent: D-127 closure class taxonomy (S34), D-128 risk classification (S35), D-129 secret+audit (S36), D-130 transport encryption (S37), D-131 test reporting (S48), D-132 folder migration (S50), D-133 policy engine contract (S48).
 
 ## Port Map
 

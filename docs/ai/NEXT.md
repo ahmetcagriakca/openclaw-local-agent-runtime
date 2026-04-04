@@ -1,7 +1,20 @@
 # Next Steps — Vezir Platform
 
 **Last updated:** 2026-04-04
-**Current:** Phase 7 active. Sprint 57 closed. Sprint 58 pending.
+**Current:** Phase 7 active. Sprint 58 closed. Sprint 59 pending.
+
+---
+
+## Sprint 58 — Knowledge Layer + Multi-tenant + WMCP Cred (CLOSED)
+
+**Model:** A (full closure) | **Class:** Product + Security
+**Scope:** B-114 knowledge/connector input layer, B-116 multi-tenant isolation, B-010 WMCP credential replacement
+**Tests:** 1300 backend + 217 frontend + 13 Playwright = 1530 total (0 TS errors) (D-131)
+**Issues:** #314, #315, #316
+**New tests:** +90
+**New files:** `agent/services/knowledge_store.py`, `agent/api/knowledge_api.py`, `agent/auth/tenant.py`, `agent/api/tenant_api.py`, `agent/services/wmcp_credential_manager.py`, `agent/api/wmcp_credential_api.py`
+**Modified:** `agent/api/server.py` (+3 routers: knowledge, tenant, wmcp-credential)
+**Review:** Claude Code PASS
 
 ---
 

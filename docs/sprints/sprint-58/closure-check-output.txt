@@ -1,0 +1,30 @@
+Sprint 58 Closure Check — 2026-04-04
+======================================
+
+## Backend Tests (pytest)
+1300 passed, 2 skipped in 109.22s
+New tests: +90 (knowledge 37, tenant 30, wmcp-cred 23)
+
+## Frontend Tests (vitest)
+217 passed (30 test files)
+Duration: 13.47s
+
+## TypeScript (tsc --noEmit)
+0 errors
+
+## Lint (ruff check)
+0 errors
+
+## OpenAPI
+123 endpoints, 53 schemas, 101 paths
+Delta: +20 endpoints (was 103)
+
+## SDK
+Regenerated via openapi-typescript
+tsc clean after regen
+
+## Playwright
+13 tests (stable, not re-run)
+
+## Total
+1300 backend + 217 frontend + 13 Playwright = 1530 tests

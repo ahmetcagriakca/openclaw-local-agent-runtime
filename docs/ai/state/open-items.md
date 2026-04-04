@@ -1,7 +1,7 @@
 # open-items.md — Active State Tracker
 
 **Last updated:** 2026-04-04
-**Updated by:** Claude Code (Session 31 — Sprint 57 closure)
+**Updated by:** Claude Code (Session 32 — Sprint 58 closure)
 
 ---
 
@@ -73,8 +73,11 @@
 | Sprint 56 | Task Dir Retention + .bak Cleanup + Intent Mapping (B-027, B-028, B-019) | CLOSED |
 | Sprint 57 | Secret Rotation + Allowlist + Grafana Pack (B-007, B-009, B-117) | CLOSED |
 
+| Sprint 58 | Knowledge Layer + Multi-tenant + WMCP Cred (B-114, B-116, B-010) | CLOSED |
+
 ## Next Sprint
 
-**Sprint 58 — Phase 7**
+**Sprint 59 — Phase 7**
 - Status: NOT STARTED
-- P3 candidates: B-114 knowledge layer, B-116 multi-tenant, B-118 plugin marketplace, B-010 WMCP credential replacement
+- P3 candidates: B-118 plugin marketplace / discovery
+- Carry-forward: Docker prod image, SSO/RBAC, PROJECT_TOKEN rotation

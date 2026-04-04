@@ -1195,9 +1195,17 @@ Formal record: `docs/decisions/D-133-policy-engine.md`.
 
 ---
 
-## Decision Index (D-001 → D-133)
+### D-134: Source User Identity Resolution Contract
 
-131 frozen decisions. D-126 skipped, D-132 deferred.
+**Phase:** Sprint 55 | **Status:** Frozen
+
+Mission creation `sourceUserId` resolved via 3-tier precedence: (1) authenticated session/token identity, (2) `X-Source-User` request header, (3) `config.default_user` fallback. Fail-closed: if no source resolves, request rejected (HTTP 401). Header-based resolution only accepted from trusted origins (localhost / internal). Auth context always takes precedence over header. This is an additive extension of D-117 (multi-user auth contract).
+
+---
+
+## Decision Index (D-001 → D-134)
+
+132 frozen decisions. D-126 skipped, D-132 deferred.
 
 | ID | Title | Phase |
 |----|-------|-------|
@@ -1334,3 +1342,4 @@ Formal record: `docs/decisions/D-133-policy-engine.md`.
 | D-131 | Test Count Reporting Contract | Sprint 48 |
 | D-132 | *(Deferred — Sprint folder naming standard, S49)* | — |
 | D-133 | Policy Engine Contract | Sprint 48 |
+| D-134 | Source User Identity Resolution Contract | Sprint 55 |

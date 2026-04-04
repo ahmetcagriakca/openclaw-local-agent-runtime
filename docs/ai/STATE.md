@@ -3,7 +3,7 @@
 **Last updated:** 2026-04-04
 **Active phase:** Phase 7 — Sprint 54 deferred, Sprint 55 planning
 **Doc model:** This file is canonical for system state. Session context lives in `docs/ai/handoffs/current.md`.
-**Note:** All sprints through 53 closed. All P1 backlog items complete. Phase 7 active. 132 frozen decisions (D-001 → D-133, D-126 skipped, D-132 now frozen).
+**Note:** All sprints through 53 closed. S54 deferred. All P1 backlog items complete. Phase 7 active. 133 frozen decisions (D-001 → D-134, D-126 skipped, D-132 deferred).
 **Persistence:** State is file-persisted (state.json, mission.json). Mission history via persistence layer (Sprint 16).
 **API:** Vezir API on 127.0.0.1:8003 (FastAPI + Uvicorn). Schemas FROZEN (D-067). SSE on /api/v1/events/stream. Dashboard API + Alert API + Telemetry Query API (Sprint 16).
 **Frontend:** React dashboard on localhost:3000 (Vite + Tailwind). SSE live updates + polling fallback + intervention buttons + monitoring dashboard. Node.js 20 required.
@@ -140,7 +140,7 @@
 
 ## Architectural Decisions
 
-132 frozen decisions (D-001 through D-133, D-126 skipped, D-132 now frozen). See `docs/ai/DECISIONS.md`. Governance rules in `docs/ai/GOVERNANCE.md` (D-112, Rule 16: 18-step closure checklist). Recent: D-127 closure class taxonomy (S34), D-128 risk classification (S35), D-129 secret+audit (S36), D-130 transport encryption (S37), D-131 test reporting (S48), D-132 folder migration (S50), D-133 policy engine contract (S48).
+133 frozen decisions (D-001 through D-134, D-126 skipped, D-132 deferred). See `docs/ai/DECISIONS.md`. D-134: Source User Identity Resolution (S55). Governance rules in `docs/ai/GOVERNANCE.md` (D-112, Rule 16: 18-step closure checklist). Recent: D-127 closure class taxonomy (S34), D-128 risk classification (S35), D-129 secret+audit (S36), D-130 transport encryption (S37), D-131 test reporting (S48), D-132 folder migration (S50), D-133 policy engine contract (S48).
 
 ## Port Map
 

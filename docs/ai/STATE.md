@@ -1,9 +1,9 @@
 # Current State
 
 **Last updated:** 2026-04-04
-**Active phase:** Phase 7 — Sprint 52 closed, Sprint 53 pending
+**Active phase:** Phase 7 — Sprint 53 closed, Sprint 54 pending
 **Doc model:** This file is canonical for system state. Session context lives in `docs/ai/handoffs/current.md`.
-**Note:** All sprints through 52 closed. All P1 backlog items complete. Phase 7 active. 132 frozen decisions (D-001 → D-133, D-126 skipped, D-132 now frozen).
+**Note:** All sprints through 53 closed. All P1 backlog items complete. Phase 7 active. 132 frozen decisions (D-001 → D-133, D-126 skipped, D-132 now frozen).
 **Persistence:** State is file-persisted (state.json, mission.json). Mission history via persistence layer (Sprint 16).
 **API:** Vezir API on 127.0.0.1:8003 (FastAPI + Uvicorn). Schemas FROZEN (D-067). SSE on /api/v1/events/stream. Dashboard API + Alert API + Telemetry Query API (Sprint 16).
 **Frontend:** React dashboard on localhost:3000 (Vite + Tailwind). SSE live updates + polling fallback + intervention buttons + monitoring dashboard. Node.js 20 required.
@@ -51,7 +51,7 @@
 | Auto-Resume | Operational (--resume, --auto-resume) | `agent/mission/auto_resume.py` |
 | Cost Dashboard API | Operational (3 endpoints: summary, missions, trends) | `agent/api/cost_api.py` |
 | Agent Health API | Operational (4 endpoints: providers, roles, matrix, performance) | `agent/api/agents_api.py` |
-| Mission Control API | Operational (~82 endpoints) | `agent/api/server.py` on :8003 |
+| Mission Control API | Operational (~83 endpoints) | `agent/api/server.py` on :8003 |
 | SSE Manager | Operational (broadcast, heartbeat 30s) | `agent/api/sse_manager.py` |
 | Session Model | Foundation (operator identity, no auth flow) | `agent/auth/session.py` |
 | CI/CD Pipeline | 7 GitHub Actions workflows | `.github/workflows/` |
@@ -109,6 +109,7 @@
 | Sprint 50 | API Hardening + DevEx + Governance Debt (policy write API, B-109, D-132, RFC 9457) | Closed |
 | Sprint 51 | Contract Testing + Data Safety + Artifact Access (B-110, B-022, B-016) | Closed |
 | Sprint 52 | Recovery + Replay + Seed Demo (B-023, B-111, B-112) | Closed |
+| Sprint 53 | Docs-as-Product + Policy Context + Timeout Contract (B-113, B-013, B-014) | Closed |
 
 ## Test Evidence
 
@@ -133,6 +134,7 @@
 | Sprint 50 | 821 tests, 0 fail | 217 tests, 0 TS errors | +33 new (policy write API, B-109 CLI, D-132 migration, RFC 9457). 13 Playwright. 1051 total |
 | Sprint 51 | 871 tests, 0 fail | 217 tests, 0 TS errors | +50 new (contract tests, backup/restore, artifact API). 13 Playwright. 1101 total |
 | Sprint 52 | 917 tests, 0 fail | 217 tests, 0 TS errors | +46 new (recovery, replay, seed demo). 13 Playwright. 1147 total |
+| Sprint 53 | 992 tests, 0 fail | 217 tests, 0 TS errors | +75 new (docs gen, policyContext, timeout contract). 13 Playwright. 1222 total |
 
 ## Architectural Decisions
 

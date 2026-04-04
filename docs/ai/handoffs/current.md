@@ -1,4 +1,4 @@
-# Session Handoff — 2026-04-04 (Session 26)
+# Session Handoff — 2026-04-04 (Session 27)
 
 **Platform:** Vezir Platform
 **Operator:** Claude Code (Opus) — AKCA delegated
@@ -7,62 +7,75 @@
 
 ## Session Summary
 
-Sprint 52 completed: B-023 corrupted runtime recovery, B-111 mission replay/fixture runner, B-112 local dev sandbox/seeded demo. 46 new tests. Full 18-step closure executed.
+Sprint 53 completed: B-113 docs-as-product pack, B-013 richer policyContext (caller identity, resource tags, environment), B-014 timeoutSeconds in mission contract API. 75 new tests. Full 18-step closure executed.
 
 ## Current State
 
 - **Phase:** 7
-- **Last closed sprint:** 52
-- **Sprint 53:** NOT STARTED
+- **Last closed sprint:** 53
+- **Sprint 54:** NOT STARTED
 - **Decisions:** 132 frozen (D-001 → D-133, D-126 skipped, D-132 now frozen)
-- **Tests:** 917 backend + 217 frontend + 13 Playwright = 1147 total (D-131)
-- **CI:** Pending (commit about to push)
+- **Tests:** 992 backend + 217 frontend + 13 Playwright = 1222 total (D-131)
+- **CI:** Running (push completed)
 - **Security:** 0 code scanning, 0 dependabot, 0 secret scanning
 - **PRs:** 0 open
 - **Blockers:** None
 
 ## Changes This Session
 
-### Sprint 52 Deliverables
+### Sprint 53 Deliverables
 
 | Task | Issue | Scope |
 |------|-------|-------|
-| B-023 Corrupted Runtime Recovery | #296 | Scan/repair/quarantine corrupted mission JSON, truncated repair, orphan detection, 3 API endpoints |
-| B-111 Mission Replay / Fixture Runner | #297 | Replay completed missions, validate stages, generate test fixtures, 3 API endpoints |
-| B-112 Local Dev Sandbox / Seeded Demo | #298 | Seed sample missions/policies, marker-based cleanup, status reporting |
+| B-113 Docs-as-product pack | #299 | CLI tool generates API reference, architecture overview, onboarding guide from OpenAPI spec |
+| B-013 Richer policyContext | #300 | CallerIdentity, resourceTags, environment detection, evaluatedAt. 3 new condition types. Context schema endpoint |
+| B-014 timeoutSeconds in contract | #301 | timeout_seconds + stage_timeout_seconds in CreateMissionRequest. timeoutConfig in MissionSummary response |
 
 ### New/Modified Files
 
 | File | Change |
 |------|--------|
-| `tools/recovery.py` | New — corruption scanner, repair, quarantine CLI |
-| `tools/replay.py` | New — mission replay and fixture generation CLI |
-| `tools/seed_demo.py` | New — dev sandbox seeding CLI |
-| `agent/api/recovery_api.py` | New — 3 recovery API endpoints |
-| `agent/api/replay_api.py` | New — 3 replay API endpoints |
-| `agent/api/server.py` | Modified — 2 new routers (recovery, replay) |
-| `docs/api/openapi.json` | Updated — 82 endpoints (was 76) |
-| `agent/tests/test_recovery.py` | New — 15 tests |
-| `agent/tests/test_replay.py` | New — 18 tests |
-| `agent/tests/test_seed_demo.py` | New — 13 tests |
+| `tools/generate_docs.py` | New — docs-as-product CLI tool |
+| `docs/generated/api-reference.md` | New — auto-generated API reference (83 endpoints) |
+| `docs/generated/architecture.md` | New — auto-generated architecture overview |
+| `docs/generated/onboarding.md` | New — auto-generated developer onboarding guide |
+| `agent/tests/test_generate_docs.py` | New — 27 tests |
+| `agent/tests/test_timeout_contract.py` | New — 17 tests |
+| `agent/mission/policy_context.py` | Modified — +CallerIdentity, resourceTags, environment, evaluatedAt |
+| `agent/mission/policy_engine.py` | Modified — +3 condition types (caller_source, environment, resource_tag) |
+| `agent/api/policy_api.py` | Modified — +GET /policies/context-schema |
+| `agent/api/mission_create_api.py` | Modified — +timeout_seconds, stage_timeout_seconds |
+| `agent/api/schemas.py` | Modified — +timeoutConfig in MissionSummary |
+| `agent/api/normalizer.py` | Modified — passes timeoutConfig to detail |
+| `agent/tests/test_policy_context.py` | Modified — +20 tests |
+| `agent/tests/test_policy_engine.py` | Modified — +11 tests |
+| `docs/api/openapi.json` | Updated — 83 endpoints (was 82) |
+| `frontend/src/api/generated.ts` | Updated — SDK types regenerated |
 
 ### Review History
 
-| Sprint | Claude Code |
-|--------|-------------|
-| S52 | GO (self-review) |
+| Sprint | Claude Code | GPT |
+|--------|-------------|-----|
+| S53 | GO (self-review) | Submitted (pending response) |
 
 ## Commits
 
-- (this session's commit)
+- d2cc23c Sprint 53 Task 53.1: B-113 Docs-as-product pack
+- 7544bb8 Sprint 53 Task 53.2: B-013 Richer policyContext
+- 8b6c4f6 Sprint 53 Task 53.3: B-014 timeoutSeconds in contract
+- 03881ac fix: regenerate frontend SDK types and OpenAPI spec for Sprint 53
+- 5a1f80e chore: regenerate docs with updated OpenAPI (83 endpoints)
 
 ## Next Session
 
-1. Sprint 53 planning — P2 candidates:
-   - B-113 Docs-as-product pack
-   - B-013/B-014 policyContext + timeout enhancements
-2. P3 candidates: B-025, B-027, B-115
+1. Sprint 54 planning — P3 candidates:
+   - B-025 Bootstrap heredoc reduction
+   - B-027 Task directory retention
+   - B-115 Audit export / compliance bundle
+   - B-018 Dynamic sourceUserId
+2. Check GPT review response
+3. All P2 items now complete — entering P3 territory
 
 ## GPT Memo
 
-Session 26: Sprint 52 CLOSED. B-023 corrupted runtime recovery (scan, repair, quarantine — 15 tests, 3 API endpoints). B-111 mission replay/fixture runner (18 tests, 3 API endpoints). B-112 local dev sandbox/seeded demo (13 tests). Tests: 917 backend + 217 frontend + 13 Playwright = 1147 total (+46 new). 0 failures. OpenAPI: 82 endpoints. Issues #296-#298. Next: Sprint 53.
+Session 27: Sprint 53 CLOSED. B-113 docs-as-product pack (tools/generate_docs.py, 3 generated docs, 27 tests). B-013 richer policyContext (CallerIdentity, resourceTags, environment, evaluatedAt, 3 condition types, context schema endpoint, 31 tests). B-014 timeoutSeconds in contract (API-configurable mission/stage timeout, MissionSummary timeoutConfig, 17 tests). Tests: 992 backend + 217 frontend + 13 Playwright = 1222 total (+75 new). 0 failures. OpenAPI: 83 endpoints. Issues #299-#301. All P2 items complete. Next: Sprint 54 (P3 candidates).

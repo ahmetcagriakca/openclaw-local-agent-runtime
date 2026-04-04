@@ -1,9 +1,20 @@
 # Next Steps — Vezir Platform
 
 **Last updated:** 2026-04-04
-**Current:** Phase 7 active. Sprint 52 closed. Sprint 53 pending.
+**Current:** Phase 7 active. Sprint 53 closed. Sprint 54 pending.
 
 ---
+
+## Sprint 53 — Docs-as-Product + Policy Context + Timeout Contract (CLOSED)
+
+**Model:** A (full closure) | **Class:** DevEx + Operations
+**Scope:** B-113 docs-as-product pack, B-013 richer policyContext, B-014 timeoutSeconds in contract
+**Tests:** 992 backend + 217 frontend + 13 Playwright = 1222 total (0 TS errors) (D-131)
+**Issues:** #299, #300, #301
+**New tests:** +75
+**New files:** `tools/generate_docs.py`, `docs/generated/api-reference.md`, `docs/generated/architecture.md`, `docs/generated/onboarding.md`, `agent/tests/test_generate_docs.py`, `agent/tests/test_timeout_contract.py`
+**Modified:** `agent/mission/policy_context.py` (+CallerIdentity, resourceTags, environment), `agent/mission/policy_engine.py` (+3 condition types), `agent/api/policy_api.py` (+context-schema), `agent/api/mission_create_api.py` (+timeout fields), `agent/api/schemas.py` (+timeoutConfig), `agent/api/normalizer.py`
+**Review:** Claude Code GO + GPT submitted
 
 ## Sprint 52 — Recovery + Replay + Seed Demo (CLOSED)
 

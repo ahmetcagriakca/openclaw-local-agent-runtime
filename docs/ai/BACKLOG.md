@@ -1,7 +1,7 @@
 # Backlog -- Vezir Platform
 
 **Auto-generated from GitHub issues.** Do not edit directly.
-**Generated:** 2026-04-04 09:31 UTC
+**Generated:** 2026-04-04 10:10 UTC
 **Source:** `python tools/generate-backlog.py`
 
 ---
@@ -36,6 +36,7 @@
 | # | Item | State |
 |---|------|-------|
 | #293 | Sprint 51 Task 51.1: B-110 Contract test pack | Done |
+| #299 | Sprint 53 Task 53.1: B-113 Docs-as-product pack | Done |
 | #170 | [B-109] Template/plugin scaffolding CLI | Done |
 | #171 | [B-110] Contract test pack | Open |
 | #172 | [B-111] Mission replay / fixture runner | Open |
@@ -48,6 +49,8 @@
 |---|------|-------|
 | #294 | Sprint 51 Task 51.2: B-022 Backup / restore | Done |
 | #295 | Sprint 51 Task 51.3: B-016 Task result artifact access | Done |
+| #300 | Sprint 53 Task 53.2: B-013 Richer policyContext | Done |
+| #301 | Sprint 53 Task 53.3: B-014 timeoutSeconds in contract | Done |
 | #168 | [B-013] Richer policyContext | Open |
 | #169 | [B-014] timeoutSeconds in contract | Open |
 | #164 | [B-016] Task result artifact access | Open |
@@ -101,4 +104,4 @@
 
 ---
 
-**Total:** 42 items (22 open)
+**Total:** 45 items (22 open)

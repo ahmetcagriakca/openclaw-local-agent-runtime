@@ -110,16 +110,11 @@ class TestTier2Header:
         """Header from untrusted origin must be rejected per D-070."""
         req = _mock_request("192.168.1.100",
                             headers={SOURCE_USER_HEADER: "attacker"})
-        # Should fall through to tier 3 or fail-closed
-        with patch.dict(os.environ, {}, clear=True):
-            env_backup = os.environ.pop(DEFAULT_USER_ENV, None)
-            try:
-                result = resolve_source_user(req, None)
-                # Without config fallback, should be None (fail-closed)
-                assert result is None
-            finally:
-                if env_backup:
-                    os.environ[DEFAULT_USER_ENV] = env_backup
+        # Should fall through to tier 3 (default fallback)
+        with patch.dict(os.environ, {DEFAULT_USER_ENV: ""}, clear=False):
+            result = resolve_source_user(req, None)
+            # With empty config fallback, should be None (fail-closed)
+            assert result is None
 
     def test_header_rejected_falls_to_config(self):
         """Rejected header should fall through to config fallback."""
@@ -157,39 +152,27 @@ class TestTier3ConfigFallback:
 
 
 class TestFailClosed:
-    def test_fail_closed_no_source(self):
-        """No auth, no header, no config → None (fail-closed per D-134)."""
+    def test_fail_closed_explicit_empty(self):
+        """Explicitly empty config → None (fail-closed per D-134)."""
         req = _mock_request()
-        with patch.dict(os.environ, {}, clear=True):
-            env_backup = os.environ.pop(DEFAULT_USER_ENV, None)
-            try:
-                result = resolve_source_user(req, None)
-                assert result is None
-            finally:
-                if env_backup:
-                    os.environ[DEFAULT_USER_ENV] = env_backup
+        with patch.dict(os.environ, {DEFAULT_USER_ENV: ""}, clear=False):
+            result = resolve_source_user(req, None)
+            assert result is None
 
-    def test_fail_closed_empty_operator(self):
+    def test_default_fallback_dashboard(self):
+        """No auth, no header, no explicit config → 'dashboard' (backward compat)."""
         req = _mock_request()
-        with patch.dict(os.environ, {}, clear=True):
-            env_backup = os.environ.pop(DEFAULT_USER_ENV, None)
-            try:
-                result = resolve_source_user(req, "")
-                assert result is None
-            finally:
-                if env_backup:
-                    os.environ[DEFAULT_USER_ENV] = env_backup
+        with patch.dict(os.environ, {}, clear=False):
+            if DEFAULT_USER_ENV in os.environ:
+                del os.environ[DEFAULT_USER_ENV]
+            result = resolve_source_user(req, None)
+            assert result == "dashboard"
 
-    def test_fail_closed_empty_dict(self):
+    def test_fail_closed_empty_operator_with_empty_config(self):
         req = _mock_request()
-        with patch.dict(os.environ, {}, clear=True):
-            env_backup = os.environ.pop(DEFAULT_USER_ENV, None)
-            try:
-                result = resolve_source_user(req, {})
-                assert result is None
-            finally:
-                if env_backup:
-                    os.environ[DEFAULT_USER_ENV] = env_backup
+        with patch.dict(os.environ, {DEFAULT_USER_ENV: ""}, clear=False):
+            result = resolve_source_user(req, "")
+            assert result is None
 
 
 # ── Precedence order tests ───────────────────────────────────────

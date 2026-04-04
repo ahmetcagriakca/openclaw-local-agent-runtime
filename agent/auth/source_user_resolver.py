@@ -71,11 +71,11 @@ def resolve_source_user(
             # Fall through to tier 3, don't use untrusted header
 
     # Tier 3: Config fallback
-    default_user = os.environ.get(DEFAULT_USER_ENV)
+    default_user = os.environ.get(DEFAULT_USER_ENV, "dashboard")
     if default_user:
         logger.debug("Source user from config fallback: %s", default_user)
         return default_user
 
-    # Fail-closed: no source resolved
+    # Fail-closed: no source resolved (only if DEFAULT_USER_ENV explicitly empty)
     logger.warning("Source user resolution failed: no source available")
     return None

@@ -1230,6 +1230,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/policies/context-schema": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Policy Context Schema
+         * @description B-013 Sprint 53: Return the policy context schema with all available fields.
+         */
+        get: operations["get_policy_context_schema_api_v1_policies_context_schema_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/missions/{mission_id}/artifacts": {
         parameters: {
             query?: never;
@@ -1565,6 +1585,16 @@ export interface components {
              * @default medium
              */
             complexity: string;
+            /**
+             * Timeout Seconds
+             * @description Mission timeout in seconds (60-86400). Default: 3600.
+             */
+            timeout_seconds?: number | null;
+            /**
+             * Stage Timeout Seconds
+             * @description Per-stage timeout in seconds (30-7200). Default: 600.
+             */
+            stage_timeout_seconds?: number | null;
         };
         /** CreateMissionResponse */
         CreateMissionResponse: {
@@ -1836,6 +1866,10 @@ export interface components {
             stateTransitions?: {
                 [key: string]: unknown;
             }[];
+            /** Timeoutconfig */
+            timeoutConfig?: {
+                [key: string]: unknown;
+            } | null;
         };
         /**
          * MutationResponse
@@ -4394,6 +4428,26 @@ export interface operations {
         };
     };
     reload_policies_api_v1_policies_reload_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    get_policy_context_schema_api_v1_policies_context_schema_get: {
         parameters: {
             query?: never;
             header?: never;

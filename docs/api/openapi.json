@@ -3145,6 +3145,26 @@
         }
       }
     },
+    "/api/v1/policies/context-schema": {
+      "get": {
+        "tags": [
+          "policies"
+        ],
+        "summary": "Get Policy Context Schema",
+        "description": "B-013 Sprint 53: Return the policy context schema with all available fields.",
+        "operationId": "get_policy_context_schema_api_v1_policies_context_schema_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/missions/{mission_id}/artifacts": {
       "get": {
         "tags": [
@@ -3861,6 +3881,34 @@
             "type": "string",
             "title": "Complexity",
             "default": "medium"
+          },
+          "timeout_seconds": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 86400.0,
+                "minimum": 60.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Timeout Seconds",
+            "description": "Mission timeout in seconds (60-86400). Default: 3600."
+          },
+          "stage_timeout_seconds": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 7200.0,
+                "minimum": 30.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stage Timeout Seconds",
+            "description": "Per-stage timeout in seconds (30-7200). Default: 600."
           }
         },
         "type": "object",
@@ -4393,6 +4441,18 @@
             },
             "type": "array",
             "title": "Statetransitions"
+          },
+          "timeoutConfig": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Timeoutconfig"
           }
         },
         "type": "object",

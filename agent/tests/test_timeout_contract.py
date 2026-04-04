@@ -1,12 +1,10 @@
 """B-014 Sprint 53: timeoutSeconds in contract — API and schema tests."""
-from unittest.mock import MagicMock, patch
 
 import pytest
 from pydantic import ValidationError
 
 from api.mission_create_api import CreateMissionRequest
 from api.schemas import MissionSummary
-
 
 # ── CreateMissionRequest timeout fields ──────────────────────────
 

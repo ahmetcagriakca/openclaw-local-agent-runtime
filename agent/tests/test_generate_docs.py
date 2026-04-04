@@ -4,14 +4,11 @@ import sys
 from pathlib import Path
 from unittest.mock import patch
 
-import pytest
-
 # Add tools/ to path
 TOOLS_DIR = Path(__file__).resolve().parent.parent.parent / "tools"
 sys.path.insert(0, str(TOOLS_DIR))
 
 import generate_docs
-
 
 # ── Fixtures ──────────────────────────────────────────────────────
 

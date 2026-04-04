@@ -219,7 +219,8 @@ def build_policy_context(
         mission: The current mission dict (has risk_level, stages, etc.)
         mission_start_time: time.time() when mission started
     """
-    from datetime import datetime, timezone as tz
+    from datetime import datetime
+    from datetime import timezone as tz
 
     # Dependency states: check WMCP
     wmcp_state = check_wmcp_availability()

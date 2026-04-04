@@ -1,7 +1,7 @@
 # open-items.md — Active State Tracker
 
 **Last updated:** 2026-04-04
-**Updated by:** Claude Code (Session 25 — Sprint 51 closure)
+**Updated by:** Claude Code (Session 26 — Sprint 52 closure)
 
 ---
 
@@ -66,9 +66,11 @@
 | Sprint 49 | Policy Engine + Operational Hygiene (B-107, B-026, B-119) | CLOSED |
 | Sprint 50 | API Hardening + DevEx + Governance Debt (policy write API, B-109, D-132, RFC 9457) | CLOSED |
 | Sprint 51 | Contract Testing + Data Safety + Artifact Access (B-110, B-022, B-016) | CLOSED |
+| Sprint 52 | Recovery + Replay + Seed Demo (B-023, B-111, B-112) | CLOSED |
 
 ## Next Sprint
 
-**Sprint 52 — Phase 7**
+**Sprint 53 — Phase 7**
 - Status: NOT STARTED
-- P2 candidates: B-111 mission replay, B-112 local dev sandbox, B-113 docs-as-product, B-023 corrupted runtime recovery
+- P2 candidates: B-113 docs-as-product, B-013 richer policyContext, B-014 timeoutSeconds
+- P3 candidates: B-025 heredoc reduction, B-027 task dir retention, B-115 audit export

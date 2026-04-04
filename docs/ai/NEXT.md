@@ -1,9 +1,19 @@
 # Next Steps — Vezir Platform
 
 **Last updated:** 2026-04-04
-**Current:** Phase 7 active. Sprint 51 closed. Sprint 52 pending.
+**Current:** Phase 7 active. Sprint 52 closed. Sprint 53 pending.
 
 ---
+
+## Sprint 52 — Recovery + Replay + Seed Demo (CLOSED)
+
+**Model:** A (full closure) | **Class:** DevEx + Operations
+**Scope:** B-023 corrupted runtime recovery, B-111 mission replay/fixture runner, B-112 local dev sandbox/seeded demo
+**Tests:** 917 backend + 217 frontend + 13 Playwright = 1147 total (0 TS errors) (D-131)
+**Issues:** #296, #297, #298
+**New tests:** +46
+**New files:** `tools/recovery.py`, `tools/replay.py`, `tools/seed_demo.py`, `agent/api/recovery_api.py`, `agent/api/replay_api.py`
+**Modified:** `agent/api/server.py` (2 new routers), `docs/api/openapi.json` (82 endpoints)
 
 ## Sprint 51 — Contract Testing + Data Safety + Artifact Access (CLOSED)
 

@@ -3368,6 +3368,200 @@
           }
         }
       }
+    },
+    "/api/v1/admin/recovery/scan": {
+      "get": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Scan Corruption",
+        "description": "Scan mission files for corruption issues.",
+        "operationId": "scan_corruption_api_v1_admin_recovery_scan_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/recovery/repair": {
+      "post": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Repair Corrupted",
+        "description": "Attempt to repair corrupted mission files.",
+        "operationId": "repair_corrupted_api_v1_admin_recovery_repair_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/admin/recovery/quarantine": {
+      "post": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Quarantine Corrupted",
+        "description": "Move corrupted mission files to quarantine.",
+        "operationId": "quarantine_corrupted_api_v1_admin_recovery_quarantine_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/missions/replay/list": {
+      "get": {
+        "tags": [
+          "missions"
+        ],
+        "summary": "List Replayable",
+        "description": "List missions available for replay.",
+        "operationId": "list_replayable_api_v1_missions_replay_list_get",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 20,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/missions/replay/{mission_id}": {
+      "get": {
+        "tags": [
+          "missions"
+        ],
+        "summary": "Replay Mission",
+        "description": "Dry-run replay a mission and return validation report.",
+        "operationId": "replay_mission_api_v1_missions_replay__mission_id__get",
+        "parameters": [
+          {
+            "name": "mission_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Mission Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/missions/replay/{mission_id}/fixture": {
+      "get": {
+        "tags": [
+          "missions"
+        ],
+        "summary": "Generate Fixture",
+        "description": "Generate a test fixture from a completed mission.",
+        "operationId": "generate_fixture_api_v1_missions_replay__mission_id__fixture_get",
+        "parameters": [
+          {
+            "name": "mission_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Mission Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {

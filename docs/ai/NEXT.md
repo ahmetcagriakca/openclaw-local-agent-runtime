@@ -1,31 +1,20 @@
 # Next Steps — Vezir Platform
 
 **Last updated:** 2026-04-04
-**Current:** Phase 7 active. Sprint 54 deferred. Sprint 55 planning.
+**Current:** Phase 7 active. Sprint 55 closed. Sprint 56 pending.
 
 ---
 
-## Sprint 55 — Audit Export + Dynamic Source + Heredoc Cleanup (PLANNING)
+## Sprint 55 — Audit Export + Dynamic Source + Heredoc Cleanup (CLOSED)
 
 **Model:** A (full closure) | **Class:** Operations + DevEx + Cleanup
-**Scope:** B-115 audit export/compliance bundle, B-018 dynamic sourceUserId, B-025 bootstrap heredoc reduction
-**Priority:** P3 (all P1/P2 complete)
+**Scope:** B-115 audit export/compliance bundle, B-018 dynamic sourceUserId (D-134), B-025 bootstrap heredoc reduction
+**Tests:** 1057 backend + 217 frontend + 13 Playwright = 1287 total (0 TS errors) (D-131)
 **Issues:** #305, #306, #307
-**Milestone:** Sprint 55 (#30)
-**Carried from:** Sprint 54 (deferred — not implemented)
-
-### Tasks
-
-| # | Task | Issue | Scope |
-|---|------|-------|-------|
-| 55.1 | B-115 Audit export / compliance bundle | #305 | CLI + API for compliance-ready audit archive |
-| 55.2 | B-018 Dynamic sourceUserId | #306 | Resolver chain: auth context > header > config fallback |
-| 55.3 | B-025 Bootstrap heredoc reduction | #307 | Extract heredoc to template files |
-
-### Pre-Sprint Review
-
-- Claude Code: PASS (self-review)
-- GPT: Pending
+**New tests:** +65
+**New files:** `tools/audit_export.py`, `agent/api/audit_export_api.py`, `agent/auth/source_user_resolver.py`, `tools/helpers/policy_check.py`, `docs/decisions/D-134-source-user-identity.md`
+**Modified:** `agent/api/mission_create_api.py` (D-134 resolver), `agent/api/server.py` (+audit router), `tools/sprint-finalize.sh` (heredoc removed)
+**Review:** Claude Code PASS + GPT PASS (5 rounds)
 
 ---
 

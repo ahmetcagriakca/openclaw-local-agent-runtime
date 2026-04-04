@@ -69,12 +69,10 @@
 | Sprint 52 | Recovery + Replay + Seed Demo (B-023, B-111, B-112) | CLOSED |
 | Sprint 53 | Docs-as-Product + Policy Context + Timeout Contract (B-113, B-013, B-014) | CLOSED |
 | Sprint 54 | Audit Export + Dynamic Source + Heredoc Cleanup (B-115, B-018, B-025) | DEFERRED (not implemented, tasks → S55) |
+| Sprint 55 | Audit Export + Dynamic Source + Heredoc Cleanup (B-115, B-018, B-025) | CLOSED |
 
 ## Next Sprint
 
-**Sprint 55 — Audit Export + Dynamic Source + Heredoc Cleanup**
-- Status: PLANNING (pre-sprint review pending)
-- Model: A (full closure)
-- Carried from S54 (deferred)
-- Tasks: B-115 audit export (#305), B-018 dynamic sourceUserId (#306), B-025 heredoc reduction (#307)
-- Milestone: Sprint 55 (#30)
+**Sprint 56 — Phase 7**
+- Status: NOT STARTED
+- P3 candidates: B-027 task dir retention, B-028 stale .bak files, B-019 intent mapping, B-114 knowledge layer, B-117 Grafana pack

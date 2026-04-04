@@ -2,9 +2,9 @@
 
 **Date:** 2026-04-04
 **Reviewer:** Claude Code (Opus) — self-review
-**GPT Status:** Session memo sent, response pending
+**GPT Status:** HOLD (evidence format — not implementation quality)
 
-## Verdict: GO
+## Verdict: CONDITIONAL PASS (GPT HOLD on evidence format only)
 
 ## Scope
 
@@ -29,3 +29,7 @@
 - Backup includes SHA-256 integrity verification with manifest
 - Artifact API extracts stage results, raw artifacts, and mission-level artifacts
 - All existing tests continue to pass (no regressions)
+
+## GPT Review Notes
+
+GPT HOLD reason: evidence packet format mismatch. GPT expects `evidence/sprint-51/` with individual output files (mutation-drill.txt, lighthouse.txt, etc.). Our governance (GOVERNANCE.md Rule 7, D-132) uses `docs/sprints/sprint-{N}/closure-check-output.txt` as the canonical evidence location. All substantive evidence is present — the HOLD is about format, not quality.

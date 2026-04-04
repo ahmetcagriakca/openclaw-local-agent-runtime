@@ -62,4 +62,6 @@
 
 ## GPT Review
 
-Pending — to be submitted next session.
+**Round 1:** HOLD — 3 blocking findings (B1: missing D-XXX, B2: endpoint arithmetic, B3: raw evidence)
+**Round 2:** PASS — All 3 patches accepted. D-135 frozen, endpoint reconciliation verified, closure evidence paths confirmed.
+**Verdict:** PASS (eligible for operator closure)

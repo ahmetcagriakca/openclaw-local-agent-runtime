@@ -39,5 +39,6 @@
 
 ## GPT Review
 
-- Status: Submitted (Session 27)
-- Verdict: Pending
+- Round 1: HOLD — 10 blocking findings (missing commits, evidence packet format, retrospective, doc paths, board status)
+- Round 2: Patch submitted with all 10 findings addressed (commits, evidence paths, generated doc paths, backward compat, contract evidence, board/milestone/push status, retrospective)
+- Patch verdict: Pending (ChatGPT connection timed out before response received)

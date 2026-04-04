@@ -1,30 +1,39 @@
 # Next Steps — Vezir Platform
 
 **Last updated:** 2026-04-04
-**Current:** Phase 7 active. Sprint 53 closed. Sprint 54 planning.
+**Current:** Phase 7 active. Sprint 54 deferred. Sprint 55 planning.
 
 ---
 
-## Sprint 54 — Audit Export + Dynamic Source + Heredoc Cleanup (PLANNING)
+## Sprint 55 — Audit Export + Dynamic Source + Heredoc Cleanup (PLANNING)
 
 **Model:** A (full closure) | **Class:** Operations + DevEx + Cleanup
 **Scope:** B-115 audit export/compliance bundle, B-018 dynamic sourceUserId, B-025 bootstrap heredoc reduction
 **Priority:** P3 (all P1/P2 complete)
-**Issues:** #302, #303, #304
-**Milestone:** Sprint 54 (#29)
+**Issues:** #305, #306, #307
+**Milestone:** Sprint 55 (#30)
+**Carried from:** Sprint 54 (deferred — not implemented)
 
 ### Tasks
 
 | # | Task | Issue | Scope |
 |---|------|-------|-------|
-| 54.1 | B-115 Audit export / compliance bundle | #302 | CLI + API for compliance-ready audit archive (mission logs, policy, approvals, DLQ) |
-| 54.2 | B-018 Dynamic sourceUserId | #303 | Resolver chain: auth context > header > config fallback |
-| 54.3 | B-025 Bootstrap heredoc reduction | #304 | Extract heredoc to template files, reduce inline usage |
+| 55.1 | B-115 Audit export / compliance bundle | #305 | CLI + API for compliance-ready audit archive |
+| 55.2 | B-018 Dynamic sourceUserId | #306 | Resolver chain: auth context > header > config fallback |
+| 55.3 | B-025 Bootstrap heredoc reduction | #307 | Extract heredoc to template files |
 
 ### Pre-Sprint Review
 
 - Claude Code: PASS (self-review)
 - GPT: Pending
+
+---
+
+## Sprint 54 — Audit Export + Dynamic Source + Heredoc Cleanup (DEFERRED)
+
+**Not implemented. All 3 tasks carried forward to Sprint 55 (#305, #306, #307).**
+**Issues:** #302, #303, #304 (closed as deferred)
+**Milestone:** Sprint 54 (#29, closed)
 
 ---
 

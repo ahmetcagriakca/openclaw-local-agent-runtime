@@ -68,12 +68,13 @@
 | Sprint 51 | Contract Testing + Data Safety + Artifact Access (B-110, B-022, B-016) | CLOSED |
 | Sprint 52 | Recovery + Replay + Seed Demo (B-023, B-111, B-112) | CLOSED |
 | Sprint 53 | Docs-as-Product + Policy Context + Timeout Contract (B-113, B-013, B-014) | CLOSED |
+| Sprint 54 | Audit Export + Dynamic Source + Heredoc Cleanup (B-115, B-018, B-025) | DEFERRED (not implemented, tasks → S55) |
 
 ## Next Sprint
 
-**Sprint 54 — Audit Export + Dynamic Source + Heredoc Cleanup**
+**Sprint 55 — Audit Export + Dynamic Source + Heredoc Cleanup**
 - Status: PLANNING (pre-sprint review pending)
 - Model: A (full closure)
-- All P2 items complete — first P3 sprint
-- Tasks: B-115 audit export (#302), B-018 dynamic sourceUserId (#303), B-025 heredoc reduction (#304)
-- Milestone: Sprint 54 (#29)
+- Carried from S54 (deferred)
+- Tasks: B-115 audit export (#305), B-018 dynamic sourceUserId (#306), B-025 heredoc reduction (#307)
+- Milestone: Sprint 55 (#30)

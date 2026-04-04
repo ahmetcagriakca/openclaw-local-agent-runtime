@@ -1,7 +1,7 @@
 # Current State
 
 **Last updated:** 2026-04-04
-**Active phase:** Phase 7 — Sprint 53 closed, Sprint 54 planning
+**Active phase:** Phase 7 — Sprint 54 deferred, Sprint 55 planning
 **Doc model:** This file is canonical for system state. Session context lives in `docs/ai/handoffs/current.md`.
 **Note:** All sprints through 53 closed. All P1 backlog items complete. Phase 7 active. 132 frozen decisions (D-001 → D-133, D-126 skipped, D-132 now frozen).
 **Persistence:** State is file-persisted (state.json, mission.json). Mission history via persistence layer (Sprint 16).
@@ -110,7 +110,8 @@
 | Sprint 51 | Contract Testing + Data Safety + Artifact Access (B-110, B-022, B-016) | Closed |
 | Sprint 52 | Recovery + Replay + Seed Demo (B-023, B-111, B-112) | Closed |
 | Sprint 53 | Docs-as-Product + Policy Context + Timeout Contract (B-113, B-013, B-014) | Closed |
-| Sprint 54 | Audit Export + Dynamic Source + Heredoc Cleanup (B-115, B-018, B-025) | Planning |
+| Sprint 54 | Audit Export + Dynamic Source + Heredoc Cleanup (B-115, B-018, B-025) | Deferred (not implemented, tasks → S55) |
+| Sprint 55 | Audit Export + Dynamic Source + Heredoc Cleanup (B-115, B-018, B-025) | Planning |
 
 ## Test Evidence
 

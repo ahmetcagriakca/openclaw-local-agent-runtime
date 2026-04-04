@@ -1,9 +1,19 @@
 # Next Steps — Vezir Platform
 
 **Last updated:** 2026-04-04
-**Current:** Phase 7 active. Sprint 50 closed. Sprint 51 pending.
+**Current:** Phase 7 active. Sprint 51 closed. Sprint 52 pending.
 
 ---
+
+## Sprint 51 — Contract Testing + Data Safety + Artifact Access (CLOSED)
+
+**Model:** A (full closure) | **Class:** DevEx + Operations
+**Scope:** B-110 contract test pack, B-022 backup/restore, B-016 artifact access API
+**Tests:** 871 backend + 217 frontend + 13 Playwright = 1101 total (0 TS errors) (D-131)
+**Issues:** #293, #294, #295
+**New tests:** +50
+**New files:** `tools/contract_check.py`, `tools/backup.py`, `tools/restore.py`, `agent/api/backup_api.py`, `agent/api/artifacts_api.py`, `docs/api/openapi-baseline.json`
+**Modified:** `agent/api/server.py` (2 new routers), `docs/api/openapi.json` (76 endpoints)
 
 ## Sprint 50 — API Hardening + DevEx + Governance Debt (CLOSED)
 

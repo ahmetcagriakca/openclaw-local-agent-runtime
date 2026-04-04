@@ -1,7 +1,7 @@
 # Backlog -- Vezir Platform
 
 **Auto-generated from GitHub issues.** Do not edit directly.
-**Generated:** 2026-04-04 00:57 UTC
+**Generated:** 2026-04-04 08:36 UTC
 **Source:** `python tools/generate-backlog.py`
 
 ---
@@ -35,7 +35,8 @@
 
 | # | Item | State |
 |---|------|-------|
-| #170 | [B-109] Template/plugin scaffolding CLI | Open |
+| #293 | Sprint 51 Task 51.1: B-110 Contract test pack | Open |
+| #170 | [B-109] Template/plugin scaffolding CLI | Done |
 | #171 | [B-110] Contract test pack | Open |
 | #172 | [B-111] Mission replay / fixture runner | Open |
 | #173 | [B-112] Local dev sandbox / seeded demo | Open |
@@ -45,15 +46,17 @@
 
 | # | Item | State |
 |---|------|-------|
+| #294 | Sprint 51 Task 51.2: B-022 Backup / restore | Open |
+| #295 | Sprint 51 Task 51.3: B-016 Task result artifact access | Open |
 | #168 | [B-013] Richer policyContext | Open |
 | #169 | [B-014] timeoutSeconds in contract | Open |
 | #164 | [B-016] Task result artifact access | Open |
 | #165 | [B-022] Backup / restore | Open |
 | #166 | [B-023] Corrupted runtime recovery | Open |
-| #167 | [B-026] Dead-letter retention policy | Open |
+| #167 | [B-026] Dead-letter retention policy | Done |
 | #160 | [B-105] Cost/outcome dashboard | Done |
 | #161 | [B-106] Retry/DLQ/replay/resume | Done |
-| #162 | [B-107] Policy engine | Open |
+| #162 | [B-107] Policy engine | Done |
 | #163 | [B-108] Agent health / capability view | Done |
 
 ## P3 -- Low Priority
@@ -98,4 +101,4 @@
 
 ---
 
-**Total:** 39 items (25 open)
+**Total:** 42 items (25 open)

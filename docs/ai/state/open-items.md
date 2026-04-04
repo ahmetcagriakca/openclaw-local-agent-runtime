@@ -1,7 +1,7 @@
 # open-items.md — Active State Tracker
 
 **Last updated:** 2026-04-04
-**Updated by:** Claude Code (Session 24 continued — Sprint 50 closure)
+**Updated by:** Claude Code (Session 25 — Sprint 51 closure)
 
 ---
 
@@ -65,9 +65,10 @@
 | Sprint 48 | Debt-First Hybrid (governance + runtime contract + data normalization + OTel) | CLOSED |
 | Sprint 49 | Policy Engine + Operational Hygiene (B-107, B-026, B-119) | CLOSED |
 | Sprint 50 | API Hardening + DevEx + Governance Debt (policy write API, B-109, D-132, RFC 9457) | CLOSED |
+| Sprint 51 | Contract Testing + Data Safety + Artifact Access (B-110, B-022, B-016) | CLOSED |
 
 ## Next Sprint
 
-**Sprint 51 — Phase 7**
+**Sprint 52 — Phase 7**
 - Status: NOT STARTED
-- P2 candidates: B-013/B-014 policyContext + timeout implementation, B-112 Local dev sandbox / seeded demo
+- P2 candidates: B-111 mission replay, B-112 local dev sandbox, B-113 docs-as-product, B-023 corrupted runtime recovery

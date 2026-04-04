@@ -67,3 +67,5 @@ olds/
 docs/review-packets/*.md
 docs/review-packets/*.json
 config/auth.json
+.venv/
+backups/

@@ -3,8 +3,9 @@
 Covers: export logic, filtering, redaction, fail-closed, checksum, CSV.
 """
 import json
-import os
-import tempfile
+
+# Setup path for imports
+import sys
 import zipfile
 from datetime import datetime, timezone
 from pathlib import Path
@@ -12,27 +13,24 @@ from unittest.mock import patch
 
 import pytest
 
-# Setup path for imports
-import sys
 AGENT_DIR = Path(__file__).resolve().parent.parent
 ROOT_DIR = AGENT_DIR.parent
 sys.path.insert(0, str(ROOT_DIR / "tools"))
 sys.path.insert(0, str(AGENT_DIR))
 
 from audit_export import (
-    _redact_dict,
+    MAX_MISSIONS,
     _in_range,
+    _load_approvals,
+    _load_audit_log,
+    _load_dlq,
+    _load_missions,
     _parse_ts,
+    _redact_dict,
     _sha256,
     _to_csv,
-    _load_missions,
-    _load_dlq,
-    _load_audit_log,
-    _load_approvals,
     export_audit,
-    MAX_MISSIONS,
 )
-
 
 # ── Redaction tests ──────────────────────────────────────────────
 
@@ -406,9 +404,10 @@ class TestAuditExportAPI:
     def client(self):
         """Create test client."""
         sys.path.insert(0, str(AGENT_DIR))
-        from fastapi.testclient import TestClient
-        from api.audit_export_api import router
         from fastapi import FastAPI
+        from fastapi.testclient import TestClient
+
+        from api.audit_export_api import router
 
         app = FastAPI()
         app.include_router(router, prefix="/api/v1")

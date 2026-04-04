@@ -3,20 +3,17 @@
 Covers: 3-tier precedence, fail-closed, trusted origin validation.
 """
 import os
-from unittest.mock import MagicMock, patch
-
-import pytest
-
 import sys
 from pathlib import Path
+from unittest.mock import MagicMock, patch
+
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from auth.source_user_resolver import (
-    resolve_source_user,
-    _is_trusted_origin,
-    SOURCE_USER_HEADER,
-    TRUSTED_ORIGINS,
     DEFAULT_USER_ENV,
+    SOURCE_USER_HEADER,
+    _is_trusted_origin,
+    resolve_source_user,
 )
 
 

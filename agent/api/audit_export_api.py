@@ -3,7 +3,6 @@
 Compliance-ready audit export endpoint. Localhost-only, auth-scoped,
 redaction applied, fail-closed. Governed by export contract in sprint plan.
 """
-import json
 import logging
 from datetime import datetime, timezone
 from pathlib import Path

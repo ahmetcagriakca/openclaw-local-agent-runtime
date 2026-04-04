@@ -1,6 +1,6 @@
 # Vezir Platform — Developer Onboarding Guide
 
-**Auto-generated:** 2026-04-04 09:53 UTC
+**Auto-generated:** 2026-04-04 10:02 UTC
 
 ---
 

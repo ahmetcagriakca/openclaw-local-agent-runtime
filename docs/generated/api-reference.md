@@ -1,6 +1,6 @@
 # Vezir Platform — API Reference
 
-**Auto-generated:** 2026-04-04 09:53 UTC
+**Auto-generated:** 2026-04-04 10:02 UTC
 **OpenAPI version:** 3.1.0
 **Base URL:** `http://127.0.0.1:8003`
 
@@ -24,7 +24,7 @@
 - [mission-create](#mission-create) (1 endpoints)
 - [mission-mutations](#mission-mutations) (5 endpoints)
 - [missions](#missions) (8 endpoints)
-- [policies](#policies) (6 endpoints)
+- [policies](#policies) (7 endpoints)
 - [roles](#roles) (1 endpoints)
 - [schedules](#schedules) (7 endpoints)
 - [signals](#signals) (1 endpoints)
@@ -1081,6 +1081,7 @@
 |--------|------|---------|
 | `GET` | `/api/v1/policies` | List Policies |
 | `POST` | `/api/v1/policies` | Create Policy |
+| `GET` | `/api/v1/policies/context-schema` | Get Policy Context Schema |
 | `POST` | `/api/v1/policies/reload` | Reload Policies |
 | `DELETE` | `/api/v1/policies/{name}` | Delete Policy |
 | `GET` | `/api/v1/policies/{name}` | Get Policy |
@@ -1110,6 +1111,18 @@
 
 - `201`: Successful Response
 - `422`: Validation Error
+
+---
+
+### `GET /api/v1/policies/context-schema`
+
+> Get Policy Context Schema
+
+**Operation ID:** `get_policy_context_schema_api_v1_policies_context_schema_get`
+
+**Responses:**
+
+- `200`: Successful Response
 
 ---
 
@@ -1638,4 +1651,4 @@
 
 ---
 
-**Total endpoints:** 82
+**Total endpoints:** 83

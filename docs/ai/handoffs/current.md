@@ -7,7 +7,7 @@
 
 ## Session Summary
 
-Sprint 58 planned, implemented, and closed with full 18-step checklist. 3 P3 tasks completed. 1530 total tests (+90 new). 123 API endpoints (+20 new). CI all green. No new decisions (features built on existing contracts). S56 GPT R3 review still pending — carried forward.
+Sprint 58 planned, implemented, and closed with full 18-step checklist. 3 P3 tasks completed. 1530 total tests (+90 new). 123 API endpoints (+20 new). CI all green. No new decisions. 21 stale backlog issues closed (originals for S51-S58 work). Only 1 open issue remains (#187 B-118). Sprint 59 scope analyzed: B-118 Plugin marketplace / discovery — 3 sub-tasks planned. GPT memo sent.
 
 ## Current State
 
@@ -18,6 +18,7 @@ Sprint 58 planned, implemented, and closed with full 18-step checklist. 3 P3 tas
 - **CI:** All green (CI, Benchmark, Playwright, CodeQL)
 - **Security:** 0 code scanning, 0 dependabot, 0 secret scanning
 - **PRs:** 0 open
+- **Open issues:** 1 (#187 B-118 Plugin marketplace)
 - **Blockers:** None
 
 ## Sprint 58 Deliverables
@@ -52,22 +53,48 @@ Sprint 58 planned, implemented, and closed with full 18-step checklist. 3 P3 tas
 | Closure check | `docs/sprints/sprint-58/closure-check-output.txt` |
 | Review | `docs/ai/reviews/S58-REVIEW.md` |
 
+## Issue Cleanup
+
+21 stale backlog issues (#164-#186) closed — all were original backlog entries whose work was done via sprint-specific issues (#293-#316) in S51-S58. Only #187 (B-118) remains open.
+
 ## Review History
 
 | Sprint | Claude Code | GPT |
 |--------|-------------|-----|
 | S56 | PASS | HOLD R2 — R3 patch pending |
 | S57 | PASS | PASS (R2) |
-| S58 | PASS | Pending |
+| S58 | PASS | Pending (memo sent) |
+
+## Sprint 59 Plan (Ready to Execute)
+
+**Scope:** B-118 Plugin marketplace / discovery — single feature, 3 sub-tasks
+
+| Task | Scope | Est. Tests |
+|------|-------|------------|
+| 59.1 Plugin marketplace store + discovery | PluginMarketplaceStore: metadata, search, filter, install state tracking | ~25 |
+| 59.2 Plugin lifecycle API | 10 endpoints: list, search, details, install, uninstall, enable, disable, config, events, stats | ~25 |
+| 59.3 Plugin installer + hot-reload | Install/uninstall logic, manifest validation, EventBus hot-reload, scaffold integration | ~20 |
+
+**Existing infrastructure (already implemented):**
+- `agent/plugins/registry.py` — PluginRegistry.discover() + load_all()
+- `agent/plugins/manifest.py` — Manifest validation schema
+- `agent/plugins/executor.py` — 30s timeout + error isolation
+- `agent/events/bus.py` — Handler registration (priority 500+)
+- `tools/scaffold_template.py` — Plugin scaffolding CLI (B-109)
+
+**New files to create:**
+1. `agent/services/plugin_marketplace.py` — Marketplace store
+2. `agent/services/plugin_installer.py` — Install/uninstall engine
+3. `agent/api/plugins_api.py` — 10 API endpoints
+4. `agent/tests/test_plugin_marketplace.py` — ~70 tests
 
 ## Next Session
 
-1. **GPT S56 final review** — R3 patch still pending from S56 HOLD R2
-2. **GPT S58 review** — submit evidence packet
-3. Sprint 59 planning — P3 candidates:
-   - B-118 Plugin marketplace / discovery
-   - Remaining carry-forward items (Docker prod image, SSO/RBAC)
+1. **Sprint 59 execution** — B-118 plugin marketplace (3 sub-tasks above)
+2. **GPT S58 review** — review verdict pending
+3. **GPT S56 final review** — R3 patch still pending
+4. After B-118: all backlog items complete — consider Phase 8 planning
 
 ## GPT Memo
 
-Session 32: Sprint 58 CLOSED. B-114 knowledge/connector input layer (KnowledgeStore: file/url/text connectors, CRUD + tag search + mission-context integration, 7 API endpoints, 37 tests). B-116 multi-tenant isolation (TenantStore: namespace isolation, quota management, TenantContext thread-local, default tenant backward compat, 6 API endpoints, 30 tests). B-010 WMCP credential replacement (WmcpCredentialManager: SecretStore integration, rotation lifecycle, env-var migration, hash verification, 5 API endpoints, 23 tests). Tests: 1300 backend + 217 frontend + 13 Playwright = 1530 (+90 new). OpenAPI: 123 endpoints (+20). CI all green. 18-step closure complete. No new decisions.
+Session 32: Sprint 58 CLOSED. B-114 knowledge/connector input layer (KnowledgeStore: file/url/text connectors, CRUD + tag search + mission-context integration, 7 API endpoints, 37 tests). B-116 multi-tenant isolation (TenantStore: namespace isolation, quota management, TenantContext thread-local, default tenant backward compat, 6 API endpoints, 30 tests). B-010 WMCP credential replacement (WmcpCredentialManager: SecretStore integration, rotation lifecycle, env-var migration, hash verification, 5 API endpoints, 23 tests). Tests: 1300 backend + 217 frontend + 13 Playwright = 1530 (+90 new). OpenAPI: 123 endpoints (+20). CI all green. 18-step closure complete. No new decisions. 21 stale issues closed. Sprint 59 planned: B-118 Plugin marketplace (3 sub-tasks, ~70 tests).

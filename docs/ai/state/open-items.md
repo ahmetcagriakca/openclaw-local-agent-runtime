@@ -78,6 +78,9 @@
 ## Next Sprint
 
 **Sprint 59 — Phase 7**
-- Status: NOT STARTED
-- P3 candidates: B-118 plugin marketplace / discovery
+- Status: PLANNED (not started)
+- Scope: B-118 Plugin marketplace / discovery (3 sub-tasks: marketplace store, lifecycle API, installer + hot-reload)
+- Existing infra: PluginRegistry, PluginManifest, PluginExecutor, EventBus, scaffold CLI
+- New: plugin_marketplace.py, plugin_installer.py, plugins_api.py (~10 endpoints, ~70 tests)
+- After B-118: all backlog items complete — Phase 8 planning
 - Carry-forward: Docker prod image, SSO/RBAC, PROJECT_TOKEN rotation

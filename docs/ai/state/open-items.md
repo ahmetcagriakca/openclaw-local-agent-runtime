@@ -1,7 +1,7 @@
 # open-items.md — Active State Tracker
 
 **Last updated:** 2026-04-04
-**Updated by:** Claude Code (Session 30 — Sprint 56 closure)
+**Updated by:** Claude Code (Session 31 — Sprint 57 closure)
 
 ---
 
@@ -71,9 +71,10 @@
 | Sprint 54 | Audit Export + Dynamic Source + Heredoc Cleanup (B-115, B-018, B-025) | DEFERRED (not implemented, tasks → S55) |
 | Sprint 55 | Audit Export + Dynamic Source + Heredoc Cleanup (B-115, B-018, B-025) | CLOSED |
 | Sprint 56 | Task Dir Retention + .bak Cleanup + Intent Mapping (B-027, B-028, B-019) | CLOSED |
+| Sprint 57 | Secret Rotation + Allowlist + Grafana Pack (B-007, B-009, B-117) | CLOSED |
 
 ## Next Sprint
 
-**Sprint 57 — Phase 7**
+**Sprint 58 — Phase 7**
 - Status: NOT STARTED
-- P3 candidates: B-114 knowledge layer, B-117 Grafana pack, B-116 multi-tenant, B-007 secret rotation, B-009 allowlist, B-118 plugin marketplace
+- P3 candidates: B-114 knowledge layer, B-116 multi-tenant, B-118 plugin marketplace, B-010 WMCP credential replacement

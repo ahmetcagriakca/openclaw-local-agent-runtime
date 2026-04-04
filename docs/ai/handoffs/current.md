@@ -1,4 +1,4 @@
-# Session Handoff — 2026-04-04 (Session 30)
+# Session Handoff — 2026-04-04 (Session 31)
 
 **Platform:** Vezir Platform
 **Operator:** Claude Code (Opus) — AKCA delegated
@@ -7,70 +7,70 @@
 
 ## Session Summary
 
-Sprint 56 planned, implemented, and closed with full 18-step checklist. 3 P3 tasks completed. 1358 total tests (+71 new). 90 API endpoints. CI all green. GPT review HOLD Round 2 — evidence precision patches submitted (retrospective + file-manifest artifacts created). GPT Round 3 patch set prepared, pending operator submission.
+Sprint 57 planned, implemented, and closed with full 18-step checklist. 3 P3 tasks completed. 1440 total tests (+82 new). 103 API endpoints (+13 new). CI all green. S56 GPT review HOLD R2 carried forward — R3 patch still pending.
 
 ## Current State
 
 - **Phase:** 7
-- **Last closed sprint:** 56
+- **Last closed sprint:** 57
 - **Decisions:** 133 frozen (D-001 → D-134)
-- **Tests:** 1128 backend + 217 frontend + 13 Playwright = 1358 total (D-131)
+- **Tests:** 1210 backend + 217 frontend + 13 Playwright = 1440 total (D-131)
 - **CI:** All green (CI, Benchmark, Playwright, CodeQL)
 - **Security:** 0 code scanning, 0 dependabot, 0 secret scanning
 - **PRs:** 0 open
 - **Blockers:** None
 
-## Sprint 56 Deliverables
+## Sprint 57 Deliverables
 
 | Task | Issue | Tests | Status |
 |------|-------|-------|--------|
-| B-027 Task directory retention | #308 | 22 | DONE |
-| B-028 Stale .bak file cleanup | #309 | 22 | DONE |
-| B-019 Intent mapping refinement | #310 | 27 | DONE |
+| B-007 Automatic secret rotation | #311 | 28 | DONE |
+| B-009 Multi-source allowlist | #312 | 24 | DONE |
+| B-117 Grafana dashboard pack | #313 | 30 | DONE |
 
 ## New/Modified Files
 
 | File | Change |
 |------|--------|
-| `agent/persistence/mission_retention.py` | New — age+count retention policy |
-| `agent/api/retention_api.py` | New — 5 admin endpoints (retention + bak) |
-| `agent/tests/test_mission_retention.py` | New — 22 tests |
-| `tools/cleanup_bak.py` | New — .bak file scanner + CLI |
-| `agent/tests/test_cleanup_bak.py` | New — 22 tests |
-| `agent/mission/intent_mapper.py` | New — 8-intent mapper with TR+EN |
-| `agent/tests/test_intent_mapper.py` | New — 27 tests |
-| `agent/api/server.py` | Modified — retention router added |
-| `docs/api/openapi.json` | Updated — 90 endpoints |
+| `agent/services/secret_rotation.py` | New — rotation service (age policy, key versioning, audit) |
+| `agent/api/secret_rotation_api.py` | New — 4 endpoints (status, schedule, check, policy) |
+| `agent/tests/test_secret_rotation.py` | New — 28 tests |
+| `agent/services/allowlist_store.py` | New — YAML-backed allowlist store |
+| `agent/api/allowlist_api.py` | New — 7 endpoints (CRUD + check + reload) |
+| `agent/tests/test_allowlist.py` | New — 24 tests |
+| `config/grafana/vezir-missions.json` | New — missions dashboard |
+| `config/grafana/vezir-policy.json` | New — policy/security dashboard |
+| `config/grafana/vezir-api.json` | New — API/infra dashboard |
+| `tools/grafana_setup.py` | New — dashboard validation + provisioning |
+| `agent/api/metrics_api.py` | New — Prometheus metrics endpoint |
+| `agent/tests/test_grafana_dashboards.py` | New — 30 tests |
+| `agent/api/server.py` | Modified — +3 routers |
+| `docs/api/openapi.json` | Updated — 103 endpoints |
 | `frontend/src/api/generated.ts` | Updated — SDK regenerated |
-| `docs/sprints/sprint-56/retrospective.md` | New — sprint retro |
-| `docs/sprints/sprint-56/file-manifest.md` | New — artifact index |
 
 ## Closure Artifacts
 
 | Artifact | Path |
 |----------|------|
-| Closure check | `docs/sprints/sprint-56/closure-check-output.txt` |
-| Review | `docs/ai/reviews/S56-REVIEW.md` |
-| Retrospective | `docs/sprints/sprint-56/retrospective.md` |
-| File manifest | `docs/sprints/sprint-56/file-manifest.md` |
+| Closure check | `docs/sprints/sprint-57/closure-check-output.txt` |
+| Review | `docs/ai/reviews/S57-REVIEW.md` |
 
 ## Review History
 
 | Sprint | Claude Code | GPT |
 |--------|-------------|-----|
-| S56 | PASS | HOLD R2 — patch set R3 prepared |
+| S56 | PASS | HOLD R2 — R3 patch pending |
+| S57 | PASS | Pending |
 
 ## Next Session
 
-1. **GPT S56 final review** — Submit Round 3 patch set (message prepared in chat history), get PASS
-2. Sprint 57 planning — P3 candidates:
+1. **GPT S56+S57 reviews** — Submit to GPT for final verdicts
+2. Sprint 58 planning — P3 candidates:
    - B-114 Knowledge/connector input layer
-   - B-117 Grafana dashboard pack
    - B-116 Multi-tenant isolation
-   - B-007 Automatic secret rotation
-   - B-009 Multi-source allowlist
    - B-118 Plugin marketplace / discovery
+   - B-010 WMCP credential replacement
 
 ## GPT Memo
 
-Session 30: Sprint 56 CLOSED. B-027 task directory retention (MissionRetentionPolicy: age+count based, bounded cleanup, admin API, 22 tests). B-028 stale .bak file cleanup (scanner+cleaner, CLI tool, admin API, 22 tests). B-019 intent mapping refinement (8 intents, TR+EN keyword patterns, complexity override, fallback to complexity router, 27 tests). Tests: 1128 backend + 217 frontend + 13 Playwright = 1358 (+71 new). OpenAPI: 90 endpoints. CI all green. 18-step closure complete. GPT review HOLD R2 — evidence precision. Patch set R3 with exact artifact paths prepared. Retrospective + file-manifest artifacts created.
+Session 31: Sprint 57 CLOSED. B-007 automatic secret rotation (SecretRotationService: age-based policy, key versioning, rotation API 4 endpoints, 28 tests). B-009 multi-source allowlist (AllowlistStore: YAML-backed, wildcard/prefix matching, caller dimension check, 7 API endpoints, 24 tests). B-117 Grafana dashboard pack (3 dashboards: missions/policy/API, Prometheus metrics endpoint, validation tool, 30 tests). Tests: 1210 backend + 217 frontend + 13 Playwright = 1440 (+82 new). OpenAPI: 103 endpoints (+13). CI all green. 18-step closure complete.

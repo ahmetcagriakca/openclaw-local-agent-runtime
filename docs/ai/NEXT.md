@@ -1,7 +1,20 @@
 # Next Steps — Vezir Platform
 
 **Last updated:** 2026-04-04
-**Current:** Phase 7 active. Sprint 56 closed. Sprint 57 pending.
+**Current:** Phase 7 active. Sprint 57 closed. Sprint 58 pending.
+
+---
+
+## Sprint 57 — Secret Rotation + Allowlist + Grafana Pack (CLOSED)
+
+**Model:** A (full closure) | **Class:** Security + Operations
+**Scope:** B-007 automatic secret rotation, B-009 multi-source allowlist, B-117 Grafana dashboard pack
+**Tests:** 1210 backend + 217 frontend + 13 Playwright = 1440 total (0 TS errors) (D-131)
+**Issues:** #311, #312, #313
+**New tests:** +82
+**New files:** `agent/services/secret_rotation.py`, `agent/api/secret_rotation_api.py`, `agent/services/allowlist_store.py`, `agent/api/allowlist_api.py`, `agent/api/metrics_api.py`, `config/grafana/*.json`, `tools/grafana_setup.py`
+**Modified:** `agent/api/server.py` (+3 routers: secret_rotation, allowlist, metrics)
+**Review:** Claude Code PASS
 
 ---
 

@@ -3723,6 +3723,232 @@
           }
         }
       }
+    },
+    "/api/v1/admin/retention/missions/status": {
+      "get": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Retention Status",
+        "description": "Get current mission retention status and policy.",
+        "operationId": "retention_status_api_v1_admin_retention_missions_status_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/retention/missions/candidates": {
+      "get": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Retention Candidates",
+        "description": "List files that would be cleaned up by retention policy.",
+        "operationId": "retention_candidates_api_v1_admin_retention_missions_candidates_get",
+        "parameters": [
+          {
+            "name": "max_age_days",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 365,
+              "minimum": 1,
+              "default": 90,
+              "title": "Max Age Days"
+            }
+          },
+          {
+            "name": "max_files",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 50000,
+              "minimum": 100,
+              "default": 5000,
+              "title": "Max Files"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/retention/missions/cleanup": {
+      "post": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Retention Cleanup",
+        "description": "Execute retention cleanup. Dry-run by default.",
+        "operationId": "retention_cleanup_api_v1_admin_retention_missions_cleanup_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "max_age_days",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 365,
+              "minimum": 1,
+              "default": 90,
+              "title": "Max Age Days"
+            }
+          },
+          {
+            "name": "max_files",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 50000,
+              "minimum": 100,
+              "default": 5000,
+              "title": "Max Files"
+            }
+          },
+          {
+            "name": "dry_run",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": true,
+              "title": "Dry Run"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/retention/bak/status": {
+      "get": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Bak Status",
+        "description": "Get current .bak file status.",
+        "operationId": "bak_status_api_v1_admin_retention_bak_status_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/retention/bak/cleanup": {
+      "post": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Bak Cleanup",
+        "description": "Clean up stale .bak files. Dry-run by default.",
+        "operationId": "bak_cleanup_api_v1_admin_retention_bak_cleanup_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "max_age_days",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 365,
+              "minimum": 1,
+              "default": 30,
+              "title": "Max Age Days"
+            }
+          },
+          {
+            "name": "dry_run",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": true,
+              "title": "Dry Run"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {

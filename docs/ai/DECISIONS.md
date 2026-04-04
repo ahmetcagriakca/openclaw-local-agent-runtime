@@ -1,6 +1,6 @@
 # Architectural Decisions
 
-**Last updated:** 2026-03-31 (D-133)
+**Last updated:** 2026-04-04 (D-135)
 
 All decisions below are frozen unless marked otherwise.
 Reopening requires explicit phase gate approval + operator sign-off.
@@ -1203,9 +1203,21 @@ Mission creation `sourceUserId` resolved via 3-tier precedence: (1) authenticate
 
 ---
 
-## Decision Index (D-001 → D-134)
+### D-135: Secret Rotation + Allowlist + Metrics Contract
 
-132 frozen decisions. D-126 skipped, D-132 deferred.
+**Phase:** Sprint 57 | **Status:** Frozen
+
+**Secret Rotation (B-007):** SecretRotationService extends D-129 SecretStore. Age-based rotation policy (default 90 days, configurable). Key versioning via SHA-256 hash tracking (truncated to 16 hex chars, never raw key storage). Rotation lifecycle: initialize → status check → rotate (re-encrypt all secrets with new key). Fail-safe: rollback to old key on re-encryption failure. Rotation metadata persisted atomically (D-071) in `config/secret-rotation-meta.json`. Status states: ok/warning/expired/unknown. No auto-rotation without operator trigger (auto_rotate flag exists but requires explicit enablement).
+
+**Multi-source Allowlist (B-009):** AllowlistStore provides YAML-backed source filtering in `config/allowlists/`. Source types: caller_source, caller_id, caller_role. Matching: exact, wildcard (`*`), prefix (`admin.*`). Fail-open when no allowlist exists for a source type (no restrictions = allowed). Fail-closed when allowlist exists and value not matched (denied). Disabled entries are transparently skipped. Write authority: AllowlistStore single owner, YAML atomic writes (D-071). Thread-safe CRUD with write lock.
+
+**Prometheus Metrics (B-117):** Read-only metrics exposure at `/api/v1/metrics` (Prometheus text format) and `/api/v1/metrics/json`. No authentication required (localhost-only per D-070). Metrics derived from MissionStore and MetricStore — no new data collection. 3 Grafana dashboard templates in `config/grafana/` validated by `tools/grafana_setup.py`.
+
+---
+
+## Decision Index (D-001 → D-135)
+
+133 frozen decisions. D-126 skipped, D-132 deferred.
 
 | ID | Title | Phase |
 |----|-------|-------|
@@ -1343,3 +1355,4 @@ Mission creation `sourceUserId` resolved via 3-tier precedence: (1) authenticate
 | D-132 | *(Deferred — Sprint folder naming standard, S49)* | — |
 | D-133 | Policy Engine Contract | Sprint 48 |
 | D-134 | Source User Identity Resolution Contract | Sprint 55 |
+| D-135 | Secret Rotation + Allowlist + Metrics Contract | Sprint 57 |

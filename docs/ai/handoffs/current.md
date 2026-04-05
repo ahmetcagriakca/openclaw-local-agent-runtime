@@ -42,7 +42,7 @@ Session 35: Read handoff + STATE, reviewed full platform status, created S59-REV
 | Sprint | R1 | R2 | R3 | Status |
 |--------|----|----|-----|--------|
 | S58 | HOLD | HOLD | HOLD | **PASS (R4)** |
-| S59 | — | — | — | Evidence ready, GPT review next |
+| S59 | HOLD | **PASS (R2)** | — | **PASS** |
 
 ### S58 R3 Patch Set (submitted)
 - P1: Endpoint reconciliation — 7+7+6=20 new, 103+20=123 confirmed
@@ -68,7 +68,7 @@ Session 35: Read handoff + STATE, reviewed full platform status, created S59-REV
 | S57 | PASS | PASS (R2) |
 | S58 | PASS | **PASS (R4)** |
 | S59 plan | — | PASS (R3) |
-| S59 | PASS | Pending |
+| S59 | PASS | **PASS (R2)** |
 
 ## Next Session
 

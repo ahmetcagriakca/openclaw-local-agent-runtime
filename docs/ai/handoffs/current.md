@@ -65,11 +65,10 @@ Session 35: Full platform maintenance + Phase 8 architecture hardening. GPT revi
 
 ## Next Session
 
-1. **S60 GPT R2 verdict** — check if PASS after user relay
-2. **Phase 8 planning** — define next strategic direction
-3. **Mission controller + approval FSM wiring** — S61 retro action item
-4. **Carry-forward:** Docker prod image, SSO/RBAC, PROJECT_TOKEN rotation
+1. **Phase 8 planning** — define next strategic direction
+2. **Mission controller + approval FSM wiring** — S61 retro action item
+3. **Carry-forward:** Docker prod image, SSO/RBAC, PROJECT_TOKEN rotation
 
 ## GPT Memo
 
-Session 35: Full platform maintenance + Phase 8 architecture hardening. GPT reviews: S58 PASS (R4), S59 PASS (R2), S60 R1 HOLD then R2 patch submitted (closure-check + live-checks added), S61 PASS (R1). Fixed 14 CodeQL (path injection + stack trace). Fixed CI: Python 3.12 compat, SDK drift (133 endpoints), 7 lint errors. Synced 37 GitHub issues to milestones. Sprint 60: D-137 WSL2↔PowerShell bridge contract frozen, 3 legacy WSL subprocess fallbacks removed, 19 enforcement tests. Sprint 61: D-138 approval timeout=deny + escalation FSM frozen, 5 canonical states, persist-on-decide, 31 tests. Issues #320+#321 closed, milestones #35+#36 closed. 1426 backend + 217 frontend = 1656 total tests. All CI green. 137 frozen decisions.
+Session 35: Full platform maintenance + Phase 8 architecture hardening. GPT reviews: S58 PASS (R4), S59 PASS (R2), S60 PASS (R2), S61 PASS (R2). Fixed 14 CodeQL (path injection + stack trace). Fixed CI: Python 3.12 compat, SDK drift (133 endpoints), 7 lint errors. Synced 37 GitHub issues to milestones. Sprint 51-61 issues added to Project V2 board with Sprint number field + Status=Done. Sprint 60: D-137 WSL2-PowerShell bridge contract frozen, 3 legacy WSL subprocess fallbacks removed, 19 enforcement tests. Sprint 61: D-138 approval timeout=deny + escalation FSM frozen, 5 canonical states, persist-on-decide, 31 tests. GOVERNANCE.md sprint closure checklist expanded 18->20 steps: added mandatory issue creation+milestone assignment, board Sprint field sync, DECISIONS.md update, evidence bundle with retrospective, GPT review iteration. Issues #320+#321 closed, milestones #35+#36 closed. 1426 backend + 217 frontend = 1656 total tests. All CI green. 137 frozen decisions.

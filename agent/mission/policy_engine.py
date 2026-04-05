@@ -394,7 +394,10 @@ class PolicyEngine:
         with self._write_lock:
             if not self.get_rule(name):
                 raise KeyError(f"Rule '{name}' not found")
-            yaml_path = Path(self._policies_dir) / f"{name}.yaml"
+            base = Path(self._policies_dir).resolve()
+            yaml_path = (base / f"{name}.yaml").resolve()
+            if not str(yaml_path).startswith(str(base) + os.sep):
+                raise ValueError(f"Path traversal blocked: {name}")
             if yaml_path.exists():
                 yaml_path.unlink()
             logger.info("Policy rule deleted: %s", name)
@@ -403,9 +406,11 @@ class PolicyEngine:
 
     def _write_yaml(self, name: str, data: dict) -> None:
         """Atomic write of rule YAML file (D-071 pattern)."""
-        policies_path = Path(self._policies_dir)
+        policies_path = Path(self._policies_dir).resolve()
         policies_path.mkdir(parents=True, exist_ok=True)
-        target = policies_path / f"{name}.yaml"
+        target = (policies_path / f"{name}.yaml").resolve()
+        if not str(target).startswith(str(policies_path) + os.sep):
+            raise ValueError(f"Path traversal blocked: {name}")
         tmp = target.with_suffix(".yaml.tmp")
         try:
             with open(tmp, "w", encoding="utf-8") as f:

@@ -88,3 +88,15 @@ def register_error_handlers(app: FastAPI) -> None:
         )
         logger.warning("Validation error: %s (path=%s)", detail, request.url.path)
         return JSONResponse(status_code=422, content=body)
+
+    @app.exception_handler(Exception)
+    async def unhandled_exception_handler(request: Request, exc: Exception):
+        """Catch-all: prevent stack trace leakage to clients (CodeQL py/stack-trace-exposure)."""
+        logger.exception("Unhandled error on %s", request.url.path)
+        body = _build_error_response(
+            status=500,
+            detail="Internal server error",
+            error_code=ErrorCode.INTERNAL.value,
+            instance=str(request.url.path),
+        )
+        return JSONResponse(status_code=500, content=body)

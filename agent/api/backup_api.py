@@ -5,6 +5,7 @@ Requires operator auth for all mutations.
 """
 import json
 import logging
+import os
 import re
 from datetime import datetime, timezone
 from pathlib import Path
@@ -110,7 +111,9 @@ async def restore_from_backup(
     from restore import restore_backup, validate_backup
 
     backup_name = _safe_backup_name(backup_name)
-    backup_dir = BACKUPS_DIR / backup_name
+    backup_dir = (BACKUPS_DIR / backup_name).resolve()
+    if not str(backup_dir).startswith(str(BACKUPS_DIR.resolve()) + os.sep):
+        raise HTTPException(status_code=400, detail="Invalid backup path")
     if not backup_dir.exists():
         raise HTTPException(status_code=404, detail=f"Backup not found: {backup_name}")
 

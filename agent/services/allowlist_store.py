@@ -186,7 +186,10 @@ class AllowlistStore:
         with self._lock:
             if not self.get(name):
                 raise KeyError(f"Allowlist '{name}' not found")
-            yaml_path = Path(self._dir) / f"{name}.yaml"
+            base = Path(self._dir).resolve()
+            yaml_path = (base / f"{name}.yaml").resolve()
+            if not str(yaml_path).startswith(str(base) + os.sep):
+                raise ValueError(f"Path traversal blocked: {name}")
             if yaml_path.exists():
                 yaml_path.unlink()
             self.load()
@@ -194,9 +197,11 @@ class AllowlistStore:
 
     def _write_yaml(self, name: str, data: dict) -> None:
         """Atomic YAML write (D-071 pattern)."""
-        path = Path(self._dir)
+        path = Path(self._dir).resolve()
         path.mkdir(parents=True, exist_ok=True)
-        target = path / f"{name}.yaml"
+        target = (path / f"{name}.yaml").resolve()
+        if not str(target).startswith(str(path) + os.sep):
+            raise ValueError(f"Path traversal blocked: {name}")
         tmp = target.with_suffix(".yaml.tmp")
         try:
             with open(tmp, "w", encoding="utf-8") as f:

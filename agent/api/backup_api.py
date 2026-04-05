@@ -5,12 +5,20 @@ Requires operator auth for all mutations.
 """
 import json
 import logging
+import re
 from datetime import datetime, timezone
 from pathlib import Path
 
 from fastapi import APIRouter, Depends, HTTPException
 
 from auth.middleware import require_operator
+
+
+def _safe_backup_name(name: str) -> str:
+    """Validate backup name is safe for use in path (no path traversal)."""
+    if not name or not re.match(r'^[a-zA-Z0-9_\-\.]+$', name):
+        raise HTTPException(status_code=400, detail=f"Invalid backup name: must be alphanumeric/underscore/hyphen/dot")
+    return name
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 logger = logging.getLogger("mcc.api.backup")
@@ -101,6 +109,7 @@ async def restore_from_backup(
     sys.path.insert(0, str(OC_ROOT / "tools"))
     from restore import restore_backup, validate_backup
 
+    backup_name = _safe_backup_name(backup_name)
     backup_dir = BACKUPS_DIR / backup_name
     if not backup_dir.exists():
         raise HTTPException(status_code=404, detail=f"Backup not found: {backup_name}")

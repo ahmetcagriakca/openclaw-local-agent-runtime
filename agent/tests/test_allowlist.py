@@ -156,7 +156,7 @@ class TestCRUD:
             store.create({"name": "dup", "source_type": "caller_source", "values": []})
 
     def test_create_no_name_raises(self, store):
-        with pytest.raises(ValueError, match="name is required"):
+        with pytest.raises(ValueError, match="Invalid name"):
             store.create({"source_type": "caller_source"})
 
     def test_get_existing(self, store):

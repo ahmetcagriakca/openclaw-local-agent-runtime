@@ -60,10 +60,15 @@ def retention_cleanup(
 ):
     """Execute retention cleanup. Dry-run by default."""
     from persistence.mission_retention import MissionRetentionPolicy
-    policy = MissionRetentionPolicy(max_age_days=max_age_days, max_files=max_files)
-    result = policy.cleanup(dry_run=dry_run)
-    logger.info("Retention cleanup: dry_run=%s, removed=%d", dry_run, result["removed"])
-    return {"data": result, "_meta": _meta()}
+    try:
+        policy = MissionRetentionPolicy(max_age_days=max_age_days, max_files=max_files)
+        result = policy.cleanup(dry_run=dry_run)
+        logger.info("Retention cleanup: dry_run=%s, removed=%d", dry_run, result["removed"])
+        return {"data": result, "_meta": _meta()}
+    except Exception:
+        logger.exception("Retention cleanup failed")
+        from fastapi import HTTPException
+        raise HTTPException(status_code=500, detail="Retention cleanup failed")
 
 
 @router.get("/bak/status")

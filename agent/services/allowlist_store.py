@@ -5,12 +5,20 @@ IP ranges can invoke missions. Integrates with policy engine.
 """
 import logging
 import os
+import re
 import threading
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Optional
 
 import yaml
+
+
+def _safe_filename(name: str) -> str:
+    """Validate name is safe for use as a filename (no path traversal)."""
+    if not name or not re.match(r'^[a-zA-Z0-9_\-]+$', name):
+        raise ValueError(f"Invalid name: must be alphanumeric/underscore/hyphen, got '{name}'")
+    return name
 
 logger = logging.getLogger("mcc.allowlist")
 
@@ -136,9 +144,7 @@ class AllowlistStore:
 
     def create(self, data: dict) -> AllowlistEntry:
         """Create a new allowlist entry. Writes YAML, reloads."""
-        name = data.get("name", "")
-        if not name:
-            raise ValueError("name is required")
+        name = _safe_filename(data.get("name", ""))
 
         with self._lock:
             if self.get(name):
@@ -157,6 +163,7 @@ class AllowlistStore:
 
     def update(self, name: str, data: dict) -> AllowlistEntry:
         """Update an existing allowlist entry."""
+        name = _safe_filename(name)
         with self._lock:
             if not self.get(name):
                 raise KeyError(f"Allowlist '{name}' not found")
@@ -175,6 +182,7 @@ class AllowlistStore:
 
     def delete(self, name: str) -> bool:
         """Delete an allowlist entry."""
+        name = _safe_filename(name)
         with self._lock:
             if not self.get(name):
                 raise KeyError(f"Allowlist '{name}' not found")

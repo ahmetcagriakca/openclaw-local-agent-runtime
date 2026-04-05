@@ -15,6 +15,7 @@ Evaluation semantics (Sprint 49 v2 contract):
 
 import logging
 import os
+import re
 import threading
 import time
 from dataclasses import dataclass
@@ -23,6 +24,13 @@ from pathlib import Path
 from typing import Optional
 
 import yaml
+
+
+def _safe_rule_name(name: str) -> str:
+    """Validate rule name is safe for use as a filename (no path traversal)."""
+    if not name or not re.match(r'^[a-zA-Z0-9_\-]+$', name):
+        raise ValueError(f"Invalid rule name: must be alphanumeric/underscore/hyphen, got '{name}'")
+    return name
 from pydantic import BaseModel, ValidationError, field_validator
 
 logger = logging.getLogger(__name__)
@@ -326,6 +334,7 @@ class PolicyEngine:
         Raises ValueError on validation failure or name conflict.
         """
         model = PolicyRuleModel(**data)
+        _safe_rule_name(model.name)
         with self._write_lock:
             if self.get_rule(model.name):
                 raise ValueError(f"Rule '{model.name}' already exists")
@@ -339,6 +348,7 @@ class PolicyEngine:
 
         Raises ValueError on validation failure, KeyError if not found.
         """
+        name = _safe_rule_name(name)
         with self._write_lock:
             if not self.get_rule(name):
                 raise KeyError(f"Rule '{name}' not found")
@@ -354,6 +364,7 @@ class PolicyEngine:
 
         Raises KeyError if not found.
         """
+        name = _safe_rule_name(name)
         with self._write_lock:
             if not self.get_rule(name):
                 raise KeyError(f"Rule '{name}' not found")

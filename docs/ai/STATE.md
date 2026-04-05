@@ -149,7 +149,7 @@
 
 ## Architectural Decisions
 
-135 frozen decisions (D-001 through D-136, D-126 skipped, D-132 deferred). See `docs/ai/DECISIONS.md`. Recent: D-135 secret rotation + allowlist + metrics contract (S57). D-136 plugin marketplace + installer contract (S59). S58: no new decisions. Governance rules in `docs/ai/GOVERNANCE.md` (D-112, Rule 16: 18-step closure checklist). Recent: D-127 closure class taxonomy (S34), D-128 risk classification (S35), D-129 secret+audit (S36), D-130 transport encryption (S37), D-131 test reporting (S48), D-132 folder migration (S50), D-133 policy engine contract (S48).
+136 frozen decisions (D-001 through D-137, D-126 skipped, D-132 deferred). See `docs/ai/DECISIONS.md`. Recent: D-136 plugin marketplace + installer contract (S59). D-137 WSL2 <-> PowerShell bridge contract (S60). Governance rules in `docs/ai/GOVERNANCE.md` (D-112, Rule 16: 18-step closure checklist).
 
 ## Port Map
 

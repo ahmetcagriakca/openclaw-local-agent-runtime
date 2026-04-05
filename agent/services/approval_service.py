@@ -23,7 +23,6 @@ Or from Dashboard (Sprint 11+): Approve/Reject buttons
 import json
 import logging
 import os
-import subprocess
 import time
 from datetime import datetime, timezone
 
@@ -50,17 +49,12 @@ class ApprovalService:
         self.chat_id = os.environ.get("OC_TELEGRAM_CHAT_ID") or "8654710624"
 
     def _resolve_token_from_wsl(self):
-        """Try to read bot token from WSL .env file."""
-        try:
-            result = subprocess.run(
-                ["wsl", "-d", "Ubuntu-E", "--", "bash", "-c",
-                 "grep '^TELEGRAM_BOT_TOKEN=' /home/akca/.openclaw/.env 2>/dev/null"],
-                capture_output=True, text=True, timeout=10
-            )
-            if result.returncode == 0 and "=" in result.stdout:
-                self.bot_token = result.stdout.strip().split("=", 1)[1].strip()
-        except Exception:
-            pass
+        """Legacy WSL token fallback removed (D-137 bridge contract).
+
+        Token must be set via OC_TELEGRAM_BOT_TOKEN env var.
+        Direct WSL subprocess calls are not permitted outside the canonical bridge.
+        """
+        logger.debug("WSL token fallback disabled (D-137). Set OC_TELEGRAM_BOT_TOKEN env var.")
 
     def request_approval(self, tool_name: str, tool_params: dict,
                          risk: str, powershell_command: str,

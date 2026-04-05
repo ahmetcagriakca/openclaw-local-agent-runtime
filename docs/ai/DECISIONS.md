@@ -1250,9 +1250,18 @@ Mission creation `sourceUserId` resolved via 3-tier precedence: (1) authenticate
 
 ---
 
-## Decision Index (D-001 → D-136)
+### D-137: WSL2 <-> PowerShell Bridge Contract
 
-134 frozen decisions. D-126 skipped, D-132 deferred.
+**Phase:** Sprint 60 | **Status:** Frozen
+
+Canonical WSL2 <-> PowerShell bridge contract freeze. All cross-environment execution must go through oc-bridge.ps1 (stateless, allowlist-enforced, audit-logged, fail-closed, 30s timeout) or WMCP HTTP transport (mcp_client.py -> localhost:8001/PowerShell). Direct WSL subprocess calls (`wsl -d`) from agent code are denied and removed (3 legacy fallbacks quarantined: approval_service.py, telegram_bot.py, health_api.py). Secrets via env vars only. 19 enforcement tests validate bypass prevention, canonical path inventory, and bridge contract structure.
+Formal record: `docs/decisions/D-137-wsl2-powershell-bridge-contract.md`.
+
+---
+
+## Decision Index (D-001 → D-137)
+
+135 frozen decisions. D-126 skipped, D-132 deferred.
 
 | ID | Title | Phase |
 |----|-------|-------|
@@ -1392,3 +1401,4 @@ Mission creation `sourceUserId` resolved via 3-tier precedence: (1) authenticate
 | D-134 | Source User Identity Resolution Contract | Sprint 55 |
 | D-135 | Secret Rotation + Allowlist + Metrics Contract | Sprint 57 |
 | D-136 | Plugin Marketplace + Installer Contract | Sprint 59 |
+| D-137 | WSL2 <-> PowerShell Bridge Contract | Sprint 60 |

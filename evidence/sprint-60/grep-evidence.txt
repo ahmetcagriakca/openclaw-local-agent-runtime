@@ -1,0 +1,30 @@
+=== Grep Evidence: D-137 Bridge Contract Bypass Check ===
+
+--- Check 1: Direct WSL subprocess calls in agent/ (should be ZERO active) ---
+NONE FOUND
+
+--- Check 2: Direct PowerShell subprocess calls in services/api/mission/ (should be ZERO) ---
+NONE FOUND
+
+--- Check 3: D-137 references in quarantined files ---
+agent/api/health_api.py:251:            # D-137: WSL subprocess fallback removed. Token must be in env var.
+agent/services/approval_service.py:52:        """Legacy WSL token fallback removed (D-137 bridge contract).
+agent/services/approval_service.py:57:        logger.debug("WSL token fallback disabled (D-137). Set OC_TELEGRAM_BOT_TOKEN env var.")
+agent/telegram_bot.py:76:    """Legacy WSL token fallback removed (D-137 bridge contract).
+agent/tests/test_bridge_contract.py:1:"""Bridge contract enforcement tests — D-137.
+agent/tests/test_bridge_contract.py:47:        """No agent code should call 'wsl -d' via subprocess (D-137)."""
+agent/tests/test_bridge_contract.py:62:        assert violations == [], f"Direct WSL subprocess calls found (D-137 violation): {violations}"
+agent/tests/test_bridge_contract.py:84:        assert violations == [], f"Direct PowerShell subprocess calls found (D-137 violation): {violations}"
+agent/tests/test_bridge_contract.py:108:        # Should have the D-137 removal comment
+agent/tests/test_bridge_contract.py:109:        assert "D-137" in content, "approval_service must reference D-137"
+agent/tests/test_bridge_contract.py:118:        assert "D-137" in content, "telegram_bot must reference D-137"
+agent/tests/test_bridge_contract.py:134:        assert "D-137" in content, "health_api must reference D-137"
+agent/tests/test_bridge_contract.py:240:        """D-137 decision record must exist."""
+agent/tests/test_bridge_contract.py:241:        d137 = PROJECT_ROOT / "docs" / "decisions" / "D-137-wsl2-powershell-bridge-contract.md"
+agent/tests/test_bridge_contract.py:242:        assert d137.exists(), "D-137 decision record must exist"
+
+--- Check 4: Canonical paths verified ---
+bridge/oc-bridge.ps1: EXISTS
+wsl/oc-bridge-call: EXISTS
+agent/services/mcp_client.py: EXISTS
+docs/decisions/D-137: EXISTS

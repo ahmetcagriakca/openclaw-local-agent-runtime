@@ -73,17 +73,11 @@ def _read_env_file(path: str, key: str):
 
 
 def _read_wsl_token():
-    """Try to get bot token from WSL (legacy fallback)."""
-    try:
-        r = subprocess.run(
-            ["wsl", "-d", "Ubuntu-E", "--", "bash", "-c",
-             "grep '^TELEGRAM_BOT_TOKEN=' /home/akca/.openclaw/.env 2>/dev/null"],
-            capture_output=True, text=True, timeout=10
-        )
-        if r.returncode == 0 and "=" in r.stdout:
-            return r.stdout.strip().split("=", 1)[1].strip()
-    except Exception:
-        return None
+    """Legacy WSL token fallback removed (D-137 bridge contract).
+
+    Token must be set via OC_TELEGRAM_BOT_TOKEN env var.
+    Direct WSL subprocess calls are not permitted outside the canonical bridge.
+    """
     return None
 
 

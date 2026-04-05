@@ -248,18 +248,8 @@ async def get_health(request: Request):
         tg_token = os.environ.get("OC_TELEGRAM_BOT_TOKEN")
         tg_chat = os.environ.get("OC_TELEGRAM_CHAT_ID") or "8654710624"
         if not tg_token:
-            # Try WSL resolution (same as approval_service)
-            import subprocess as _sp
-            try:
-                _r = _sp.run(
-                    ["wsl", "-d", "Ubuntu-E", "--", "bash", "-c",
-                     "grep '^TELEGRAM_BOT_TOKEN=' /home/akca/.openclaw/.env 2>/dev/null"],
-                    capture_output=True, text=True, timeout=5
-                )
-                if _r.returncode == 0 and "=" in _r.stdout:
-                    tg_token = _r.stdout.strip().split("=", 1)[1].strip()
-            except Exception as e:
-                logger.debug("health check: %s", e)
+            # D-137: WSL subprocess fallback removed. Token must be in env var.
+            logger.debug("OC_TELEGRAM_BOT_TOKEN not set, Telegram health skipped")
 
         if tg_token:
             import urllib.request

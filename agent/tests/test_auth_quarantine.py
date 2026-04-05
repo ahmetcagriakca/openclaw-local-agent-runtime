@@ -7,7 +7,6 @@ Validates:
 4. Mutation audit captures actor field
 """
 import json
-import logging
 import os
 import unittest
 import warnings
@@ -19,15 +18,14 @@ class TestSessionDeprecation(unittest.TestCase):
 
     def test_get_session_emits_deprecation_warning(self):
         """get_session() must emit DeprecationWarning."""
-        from auth.session import get_session, _current_session
-
         # Reset global session to force creation
         import auth.session as mod
+        from auth.session import get_session
         mod._current_session = None
 
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter("always")
-            session = get_session()
+            get_session()
             self.assertTrue(len(w) >= 1, "Expected at least one warning")
             dep_warnings = [x for x in w if issubclass(x.category, DeprecationWarning)]
             self.assertTrue(len(dep_warnings) >= 1, "Expected DeprecationWarning")

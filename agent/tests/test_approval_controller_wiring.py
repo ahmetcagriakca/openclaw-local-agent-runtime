@@ -11,9 +11,7 @@ Scenarios:
 5. Timeout → FAILED (D-138 timeout=deny)
 6. Idempotency — same params don't create duplicate records
 """
-import time
 import unittest
-from dataclasses import dataclass
 from unittest.mock import MagicMock, patch
 
 from mission.controller import MissionController
@@ -166,7 +164,6 @@ class TestEscalateBlockIntegration(unittest.TestCase):
         ctrl._wait_for_approval = MagicMock(return_value="approved")
 
         mission = {"goal": "test", "status": "executing"}
-        stage = {"skill": "run_shell", "policyDecision": "escalate"}
         ms = MissionState(mission_id="m-001", status=MissionStatus.RUNNING)
 
         # Simulate the ESCALATE block logic
@@ -174,7 +171,7 @@ class TestEscalateBlockIntegration(unittest.TestCase):
 
         ctrl._approval_store.request_approval.assert_not_called()
         # Now call the actual method
-        approval_record = ctrl._approval_store.request_approval(
+        ctrl._approval_store.request_approval(
             mission_id="m-001", stage_id="s-001", role="analyst",
             tool_call_id="policy-s-001", tool="run_shell",
             params={"goal": "test", "stage": "s-001"},
@@ -206,7 +203,7 @@ class TestEscalateBlockIntegration(unittest.TestCase):
 
         self.assertEqual(decision, "denied")
         ms.transition_to(MissionStatus.FAILED,
-                         f"Approval denied for stage s-001")
+                         "Approval denied for stage s-001")
         self.assertEqual(ms.status, MissionStatus.FAILED)
 
     @patch("mission.controller.emit_policy_event")
@@ -227,7 +224,7 @@ class TestEscalateBlockIntegration(unittest.TestCase):
 
         self.assertEqual(decision, "expired")
         ms.transition_to(MissionStatus.FAILED,
-                         f"Approval expired for stage s-001")
+                         "Approval expired for stage s-001")
         self.assertEqual(ms.status, MissionStatus.FAILED)
 
     @patch("mission.controller.emit_policy_event")
@@ -248,7 +245,7 @@ class TestEscalateBlockIntegration(unittest.TestCase):
 
         self.assertEqual(decision, "timeout")
         ms.transition_to(MissionStatus.FAILED,
-                         f"Approval timeout for stage s-001")
+                         "Approval timeout for stage s-001")
         self.assertEqual(ms.status, MissionStatus.FAILED)
 
     def test_idempotency_same_params(self):
@@ -286,8 +283,6 @@ class TestEscalateBlockIntegration(unittest.TestCase):
         ctrl._approval_store.request_approval.return_value = record
         ctrl._wait_for_approval = MagicMock(return_value="approved")
 
-        mission = {"goal": "deploy service", "status": "executing"}
-        stage = {"skill": "run_shell", "policyDecision": "escalate"}
         ms = MissionState(mission_id="m-002", status=MissionStatus.RUNNING)
         ms.transition_to(MissionStatus.WAITING_APPROVAL, "test")
 

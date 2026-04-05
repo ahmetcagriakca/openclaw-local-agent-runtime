@@ -1,7 +1,21 @@
 # Next Steps — Vezir Platform
 
-**Last updated:** 2026-04-04
-**Current:** Phase 7 active. Sprint 58 closed. Sprint 59 pending.
+**Last updated:** 2026-04-05
+**Current:** Phase 7 active. Sprint 59 closed. All backlog complete. Phase 8 planning needed.
+
+---
+
+## Sprint 59 — Plugin Marketplace / Discovery (CLOSED)
+
+**Model:** A (full closure) | **Class:** Product
+**Scope:** B-118 plugin marketplace store + discovery, plugin lifecycle API, plugin installer + hot-reload (D-136)
+**Tests:** 1376 backend + 217 frontend + 13 Playwright = 1606 total (0 TS errors) (D-131)
+**Issues:** #317, #318, #319
+**New tests:** +76
+**New files:** `agent/services/plugin_marketplace.py`, `agent/services/plugin_installer.py`, `agent/api/plugins_api.py`, `agent/tests/test_plugin_marketplace.py`
+**Modified:** `agent/api/server.py` (+1 router: plugins)
+**Decision:** D-136 frozen (plugin marketplace + installer contract)
+**Review:** Claude Code PASS, GPT Pending
 
 ---
 

@@ -1,4 +1,4 @@
-# Session Handoff — 2026-04-05 (Session 34)
+# Session Handoff — 2026-04-05 (Session 35)
 
 **Platform:** Vezir Platform
 **Operator:** Claude Code (Opus) — AKCA delegated
@@ -7,7 +7,7 @@
 
 ## Session Summary
 
-Post-S59 audit session. Reviewed all documentation freshness, GitHub issues/milestones, carry-forward items, and backlog status. Updated stale docs (open-items.md, NEXT.md). All backlog complete (48/48), 0 open issues, 0 open milestones. Phase 8 planning needed.
+Session 35: Read handoff + STATE, reviewed full platform status, created S59-REVIEW.md, submitted S58 closure review to GPT (3 rounds). GPT R1/R2 = HOLD, R3 submitted with full evidence patch. S59 GPT review pending after S58 resolution. No code changes.
 
 ## Current State
 
@@ -22,21 +22,33 @@ Post-S59 audit session. Reviewed all documentation freshness, GitHub issues/mile
 - **Open milestones:** 0
 - **Blockers:** None
 
-## Session 34 Actions
+## Session 35 Actions
 
 | Action | Status |
 |--------|--------|
 | Read handoff + STATE.md | DONE |
-| Review git history | DONE |
-| Check GitHub issues/milestones | DONE — 0 open |
-| Audit doc freshness | DONE — 2 stale docs found |
-| Update open-items.md (S59 + carry-forward) | DONE |
-| Update NEXT.md (S59 entry + header) | DONE |
+| Read NEXT.md + open-items.md + BACKLOG.md | DONE |
+| Create S59-REVIEW.md | DONE |
+| S58 GPT review R1 | DONE — HOLD (no evidence) |
+| S58 GPT review R2 | DONE — HOLD (endpoint count, missing SHAs) |
+| S58 GPT review R3 (full patch) | SUBMITTED — awaiting verdict |
+| S59 GPT review | PENDING — after S58 resolution |
+| Phase 8 planning | PENDING — deferred to next session |
 
-## Stale Docs Fixed
+## GPT Review Status
 
-1. **`docs/ai/state/open-items.md`** — Was stuck at S58 closure. Added S59 CLOSED, updated Next Sprint to reflect all-backlog-complete state.
-2. **`docs/ai/NEXT.md`** — Header said "S59 pending". Added S59 closure entry, updated header.
+| Sprint | R1 | R2 | R3 | Status |
+|--------|----|----|-----|--------|
+| S58 | HOLD | HOLD | Submitted | Awaiting R3 verdict |
+| S59 | — | — | — | Pending (after S58) |
+
+### S58 R3 Patch Set (submitted)
+- P1: Endpoint reconciliation — 7+7+6=20 new, 103+20=123 confirmed
+- P2: No evidence/ dir (project pattern since S42, inline CI evidence)
+- P3: Closure commit 7f22d18 (18-step checklist)
+- P4: Commit SHAs — 4e1156e, 572f920, c9c8f88, 142ccb4, 7f22d18
+- P5: Task-to-evidence — 33+33+24=90 tests mapped
+- P6: Retrospective exemption per D-127
 
 ## Carry-Forward (Unassigned / Remaining)
 
@@ -52,16 +64,18 @@ Post-S59 audit session. Reviewed all documentation freshness, GitHub issues/mile
 | Sprint | Claude Code | GPT |
 |--------|-------------|-----|
 | S57 | PASS | PASS (R2) |
-| S58 | PASS | Pending |
+| S58 | PASS | R3 submitted, awaiting |
 | S59 plan | — | PASS (R3) |
 | S59 | PASS | Pending |
 
 ## Next Session
 
-1. **S58 + S59 GPT closure reviews** — send review requests
-2. **Phase 8 planning** — all 48 backlog items done, define next direction
-3. **Carry-forward:** Docker prod image, SSO/RBAC, PROJECT_TOKEN rotation
+1. **Check S58 GPT R3 verdict** — open conversation `69d1f5c3`, read verdict
+2. **If S58 PASS:** submit S59 closure review to GPT
+3. **If S58 HOLD:** address R3 findings and resubmit
+4. **Phase 8 planning** — all 48 backlog items done, define next direction
+5. **Carry-forward:** Docker prod image, SSO/RBAC, PROJECT_TOKEN rotation
 
 ## GPT Memo
 
-Session 34: Post-S59 audit. 0 open issues, 0 open milestones, 48/48 backlog complete. Fixed stale docs: open-items.md (was at S58, now reflects S59 + carry-forward), NEXT.md (added S59 entry). Carry-forward: Docker prod image, SSO/RBAC, PROJECT_TOKEN, D-021-058 extraction. GPT reviews pending for S58 and S59.
+Session 35: Reviewed full platform state (Phase 7, S59 closed, 1606 tests, 0 open issues, 48/48 backlog complete). Created S59-REVIEW.md. Submitted S58 GPT closure review — R1 HOLD (no evidence), R2 HOLD (endpoint count inconsistency, missing SHAs), R3 submitted with full patch set (endpoint reconciliation 7+7+6=20, all commit SHAs, task-to-evidence mapping, D-127 retrospective exemption). GPT conversation: 69d1f5c3. S59 GPT review pending after S58 resolution. Phase 8 planning deferred.

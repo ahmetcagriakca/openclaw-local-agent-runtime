@@ -63,4 +63,7 @@
 
 ## GPT Review
 
-**Pending** — evidence packet to be submitted.
+**Round 1 (2026-04-05):** HOLD — insufficient evidence (no scope/deliverables/commit data).
+**Round 2 (2026-04-05):** HOLD — endpoint count inconsistency, missing commit SHAs, no closure-check raw output.
+**Round 3 (2026-04-05):** Submitted with full patch set (endpoint reconciliation: 7+7+6=20, commit SHAs: 4e1156e/572f920/c9c8f88, task-to-evidence mapping, D-127 retrospective exemption). Awaiting verdict.
+**Status:** review_pending — GPT conversation: `69d1f5c3-9b5c-8386-b4dd-5ea80cf36fd5`

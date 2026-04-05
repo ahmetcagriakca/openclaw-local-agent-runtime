@@ -82,12 +82,34 @@ Session 38: Sprint 63 completed (design-only). Two architecture tasks delivered:
 | SSO/RBAC (full external auth) | D-104/D-108/D-117 | Partial — D-117 + isolation done |
 | D-021→D-058 extraction | S8 | AKCA-assigned decision debt |
 
-## Next Session
+## Next Session — Sprint 64 Kickoff
 
-1. **Sprint 64 kickoff** — B-139 (controller extraction phase 1) + B-140 (P0 hard budget enforcement)
-2. S64 milestone + issues, board sync
-3. GPT review for S62 + S63
+**Sprint:** 64 | **Phase:** 8 | **Model:** A | **Class:** Architecture + Governance
+
+### Kickoff Gate (all met)
+- S63 closed, D-139 frozen, B-138 design documented, no blockers
+
+### Task 64.1 — B-139: Controller Extraction Phase 1 [P1]
+Extract first 2 services per D-139 boundary map:
+1. **MissionPersistenceAdapter** → `agent/mission/persistence_adapter.py` (save/load/atomic write)
+2. **StageRecoveryEngine** → `agent/mission/recovery_engine.py` (failure triage, DLQ, circuit breaker, backoff)
+- Behavioral refactor only — no semantic change
+- All existing tests must stay green, API contract unchanged
+
+### Task 64.2 — B-140: Hard Per-Mission Budget Enforcement [P0]
+- Controller: `_update_mission_budget()` — cumulative token tracking per stage
+- Policy rule: `budget-enforcement.yaml` (deny at 100%, alert at 80%)
+- Default: None = no enforcement (backward compat)
+- Budget data visible in mission detail API
+
+### Sequence
+64.1 (extraction) → G1 → 64.2 (budget) → G2 → RETRO → CLOSURE
+
+### Blocking Risks
+1. Extraction circular imports → service interface pattern
+2. Budget enforcement breaks existing missions → None default
+3. Controller test coupling → test refactor alongside extraction
 
 ## GPT Memo
 
-Session 38 (S63): Sprint 63 completed (design-only). B-137 (P1): D-139 controller decomposition boundary freeze — MissionController (2197 LOC, 28 methods, 8 concerns) analyzed and mapped. 7 extraction targets: MissionPersistenceAdapter (131), SignalAdapter (81), MissionSummaryPublisher (194), ApprovalStateManager (129), StageRecoveryEngine (158), ContextManager (285), CapabilityManifestGenerator (94). Core stays ~500 LOC. Extraction priority: Persistence → Signal → Summary → Approval → Recovery → Context → Manifest. B-138 (P1): Budget enforcement ownership — Controller tracks cumulative tokens, PolicyEngine evaluates (deny at 100%, alert at 80%), AlertEngine fires Telegram warning. budget-enforcement.yaml rule draft committed. Default budgets: trivial=50K, standard=200K, complex=500K, critical=1M. No runtime code change. D-139 frozen. 138 decisions total. S64 ready.
+Session 38 (S63): Sprint 63 completed (design-only). B-137 (P1): D-139 controller decomposition boundary freeze — MissionController (2197 LOC, 28 methods, 8 concerns) analyzed and mapped. 7 extraction targets. B-138 (P1): Budget enforcement ownership — Controller tracks cumulative tokens, PolicyEngine evaluates, AlertEngine warns. D-139 frozen. 138 decisions total. S62 GPT review PASS (R1). S63 GPT review PASS (R2). Both sprints fully closed with evidence. S64 ready: B-139 controller extraction + B-140 hard budget enforcement.

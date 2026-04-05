@@ -1,7 +1,21 @@
 # Next Steps — Vezir Platform
 
 **Last updated:** 2026-04-05
-**Current:** Phase 7 active. Sprint 59 closed. All backlog complete. Phase 8 planning needed.
+**Current:** Phase 8 active. Sprint 60 closed. All backlog complete (48/48). D-137 bridge contract frozen.
+
+---
+
+## Sprint 60 — WSL2 <-> PowerShell Bridge Contract (CLOSED)
+
+**Model:** A (full closure) | **Class:** Security
+**Scope:** D-137 WSL2 <-> PowerShell bridge contract freeze + enforcement
+**Tests:** 1395 backend + 217 frontend + 13 Playwright = 1625 total (0 TS errors) (D-131)
+**Issues:** #320
+**New tests:** +19
+**New files:** `agent/tests/test_bridge_contract.py`, `docs/decisions/D-137-wsl2-powershell-bridge-contract.md`
+**Modified:** `agent/services/approval_service.py`, `agent/telegram_bot.py`, `agent/api/health_api.py` (legacy WSL fallbacks removed)
+**Decision:** D-137 frozen (WSL2 <-> PowerShell bridge contract)
+**Review:** Claude Code PASS, GPT PASS (R1)
 
 ---
 

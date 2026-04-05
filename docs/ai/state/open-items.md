@@ -75,10 +75,11 @@
 
 | Sprint 58 | Knowledge Layer + Multi-tenant + WMCP Cred (B-114, B-116, B-010) | CLOSED |
 | Sprint 59 | Plugin Marketplace / Discovery (B-118, D-136) | CLOSED |
+| Sprint 60 | WSL2 <-> PowerShell Bridge Contract (D-137) | CLOSED |
 
 ## Next Sprint
 
-**All backlog items complete (48/48).** Phase 8 planning needed.
+**Phase 8 active.** All backlog items complete (48/48). S60 started Phase 8 with architecture hardening.
 
 ### Carry-Forward
 | Item | Source | Status |
@@ -86,4 +87,3 @@
 | PROJECT_TOKEN rotation/docs | S23 retro | AKCA-owned, non-blocking |
 | Docker prod image optimization | D-116 (S26) | Partial — docker-compose done, prod image remaining |
 | SSO/RBAC (full external auth) | D-104/D-108/D-117 | Partial — D-117 + backend isolation done. SSO + full RBAC remaining |
-| GPT reviews pending | S58, S59 | Awaiting review submission |

@@ -1,9 +1,9 @@
 # Current State
 
 **Last updated:** 2026-04-05
-**Active phase:** Phase 7 — Sprint 59 closed
+**Active phase:** Phase 8 — Sprint 60 closed
 **Doc model:** This file is canonical for system state. Session context lives in `docs/ai/handoffs/current.md`.
-**Note:** All sprints through 53 closed. S54 deferred. S55-S58 closed. All P1 backlog items complete. Phase 7 active. 135 frozen decisions (D-001 → D-136, D-126 skipped, D-132 deferred).
+**Note:** All sprints through 53 closed. S54 deferred. S55-S60 closed. All P1 backlog items complete (48/48). Phase 8 active (started S60). 136 frozen decisions (D-001 → D-137, D-126 skipped, D-132 deferred).
 **Persistence:** State is file-persisted (state.json, mission.json). Mission history via persistence layer (Sprint 16).
 **API:** Vezir API on 127.0.0.1:8003 (FastAPI + Uvicorn). Schemas FROZEN (D-067). SSE on /api/v1/events/stream. Dashboard API + Alert API + Telemetry Query API (Sprint 16).
 **Frontend:** React dashboard on localhost:3000 (Vite + Tailwind). SSE live updates + polling fallback + intervention buttons + monitoring dashboard. Node.js 20 required.
@@ -116,6 +116,7 @@
 | Sprint 57 | Secret Rotation + Allowlist + Grafana Pack (B-007, B-009, B-117) | Closed |
 | Sprint 58 | Knowledge Layer + Multi-tenant + WMCP Cred (B-114, B-116, B-010) | Closed |
 | Sprint 59 | Plugin Marketplace / Discovery (B-118, D-136) | Closed |
+| Sprint 60 | WSL2 <-> PowerShell Bridge Contract (D-137) | Closed |
 
 ## Test Evidence
 
@@ -146,6 +147,7 @@
 | Sprint 57 | 1210 tests, 0 fail | 217 tests, 0 TS errors | +82 new (secret rotation 28, allowlist 24, grafana 30). 13 Playwright. 1440 total |
 | Sprint 58 | 1300 tests, 0 fail | 217 tests, 0 TS errors | +90 new (knowledge 37, tenant 30, wmcp-cred 23). 13 Playwright. 1530 total |
 | Sprint 59 | 1376 tests, 0 fail | 217 tests, 0 TS errors | +76 new (marketplace 38, API 21, installer 17). 13 Playwright. 1606 total |
+| Sprint 60 | 1395 tests, 0 fail | 217 tests, 0 TS errors | +19 new (bridge contract enforcement 19). 13 Playwright. 1625 total |
 
 ## Architectural Decisions
 

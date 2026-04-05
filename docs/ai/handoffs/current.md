@@ -7,16 +7,16 @@
 
 ## Session Summary
 
-Session 35: Full platform review, S58+S59 GPT reviews (both PASS), 14 CodeQL fixes, CI fixes (Python 3.12 compat + SDK drift + lint), GitHub project sync (37 issues assigned to milestones), D-137 WSL2 <-> PowerShell bridge contract frozen + enforced.
+Session 35: Massive platform maintenance session. Read handoff + STATE. Completed S58+S59+S60 GPT reviews (all PASS). Fixed 14 CodeQL alerts (path injection + stack trace). Fixed CI (Python 3.12 compat, SDK drift, 7 lint errors). Synced 37 GitHub issues to milestones. Implemented D-137 WSL2 <-> PowerShell bridge contract (Sprint 60). Phase 8 started.
 
 ## Current State
 
-- **Phase:** 8 (started with D-137)
+- **Phase:** 8 (started with S60 / D-137)
 - **Last closed sprint:** 60
-- **Decisions:** 136 frozen (D-001 -> D-137)
+- **Decisions:** 136 frozen (D-001 -> D-137, D-126 skipped, D-132 deferred)
 - **Tests:** 1395 backend + 217 frontend + 13 Playwright = 1625 total
-- **CI:** All green (Benchmark, Playwright, Push on main success; CI pending after allowlist test fix)
-- **Security:** CodeQL fixes pushed (14 alerts), secret scanning 0, dependabot 0
+- **CI:** All green (CI, Benchmark, Playwright, Push on main — all success on a594dd4+)
+- **Security:** 14 CodeQL fixes pushed, 0 secret scanning, 0 dependabot
 - **PRs:** 0 open
 - **Open issues:** 0
 - **Open milestones:** 0
@@ -29,16 +29,20 @@ Session 35: Full platform review, S58+S59 GPT reviews (both PASS), 14 CodeQL fix
 | Read handoff + STATE.md | DONE |
 | S58 GPT review (R1-R4) | DONE — **PASS** |
 | S59 GPT review (R1-R2) | DONE — **PASS** |
+| S60 GPT review (R1) | DONE — **PASS** |
 | 14 CodeQL alerts fixed | DONE |
 | CI Python 3.12 compat fix | DONE |
-| SDK sync (OpenAPI + TS types) | DONE |
+| SDK sync (OpenAPI 133 endpoints + TS types) | DONE |
 | 7 ruff lint errors fixed | DONE |
 | 37 issues assigned to milestones | DONE |
-| D-137 bridge contract freeze | DONE |
-| D-137 legacy WSL path removal | DONE |
-| 19 bridge enforcement tests | DONE |
-| S60 GitHub issue + milestone | DONE (#320, milestone #35) |
+| D-137 bridge contract freeze + enforcement | DONE |
+| 3 legacy WSL subprocess paths removed | DONE |
+| 19 bridge enforcement tests added | DONE |
+| S60 GitHub issue #320 + milestone #35 | DONE |
 | Evidence bundles (S58, S59, S60) | DONE |
+| Retrospectives (S58, S59, S60) | DONE |
+| S60-REVIEW.md created | DONE |
+| Handoff + state files updated | DONE |
 
 ## Review History
 
@@ -48,7 +52,7 @@ Session 35: Full platform review, S58+S59 GPT reviews (both PASS), 14 CodeQL fix
 | S58 | PASS | PASS (R4) |
 | S59 plan | — | PASS (R3) |
 | S59 | PASS | PASS (R2) |
-| S60 | PASS | **PASS (R1)** |
+| S60 | PASS | PASS (R1) |
 
 ## Carry-Forward
 
@@ -61,10 +65,10 @@ Session 35: Full platform review, S58+S59 GPT reviews (both PASS), 14 CodeQL fix
 
 ## Next Session
 
-1. **S60 GPT review** — submit closure review
-2. **Phase 8 planning** — define next direction after bridge hardening
-3. **Carry-forward:** Docker prod image, SSO/RBAC, PROJECT_TOKEN rotation
+1. **Phase 8 planning** — define next strategic direction
+2. **Carry-forward:** Docker prod image, SSO/RBAC, PROJECT_TOKEN rotation
+3. **CodeQL re-check** — verify 14 alerts closed after CI run
 
 ## GPT Memo
 
-Session 35: Comprehensive platform maintenance. S58 GPT PASS (R4), S59 GPT PASS (R2). Fixed 14 CodeQL alerts (path injection + stack trace). Fixed CI: Python 3.12 compat (list builtin shadowing), SDK drift, 7 lint errors. Synced 37 GitHub issues to milestones. Sprint 60: D-137 WSL2 <-> PowerShell bridge contract frozen. Removed 3 legacy WSL subprocess fallbacks. Added 19 enforcement tests. 1395 backend tests passing. Issue #320, milestone #35. Phase 8 started.
+Session 35: Full platform maintenance + architecture hardening. S58 GPT PASS (R4), S59 GPT PASS (R2), S60 GPT PASS (R1). Fixed 14 CodeQL alerts (path injection in allowlist_store/policy_engine/backup_api + stack trace in retention_api). Fixed CI: Python 3.12 compat (list builtin shadowing in knowledge_store.py), SDK drift (OpenAPI 133 endpoints), 7 lint errors. Synced 37 unassigned GitHub issues to milestones. Sprint 60 (Phase 8 start): D-137 WSL2 <-> PowerShell bridge contract frozen. Removed 3 legacy WSL subprocess fallbacks (approval_service, telegram_bot, health_api). Added 19 bridge enforcement tests (bypass prevention + contract validation). Issue #320, milestone #35. 1395 backend + 217 frontend = 1625 total tests. All CI green. 136 frozen decisions.

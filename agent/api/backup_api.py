@@ -17,7 +17,7 @@ from auth.middleware import require_operator
 def _safe_backup_name(name: str) -> str:
     """Validate backup name is safe for use in path (no path traversal)."""
     if not name or not re.match(r'^[a-zA-Z0-9_\-\.]+$', name):
-        raise HTTPException(status_code=400, detail=f"Invalid backup name: must be alphanumeric/underscore/hyphen/dot")
+        raise HTTPException(status_code=400, detail="Invalid backup name: must be alphanumeric/underscore/hyphen/dot")
     return name
 
 router = APIRouter(prefix="/admin", tags=["admin"])

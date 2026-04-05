@@ -9,9 +9,7 @@ import json
 import logging
 import threading
 from pathlib import Path
-from typing import Optional
 
-from plugins.executor import execute_handler
 from plugins.manifest import PluginManifest, load_manifest
 
 logger = logging.getLogger("mcc.plugin_installer")

@@ -2,14 +2,11 @@
 from __future__ import annotations
 
 import json
-import tempfile
 from dataclasses import asdict
-from pathlib import Path
 
 import pytest
 
-from services.plugin_marketplace import PluginEntry, PluginMarketplaceStore, _VALID_TRANSITIONS
-
+from services.plugin_marketplace import _VALID_TRANSITIONS, PluginEntry, PluginMarketplaceStore
 
 # -- Fixtures --
 

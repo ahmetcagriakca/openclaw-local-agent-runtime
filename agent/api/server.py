@@ -267,6 +267,7 @@ from api.metrics_api import router as metrics_router
 from api.mission_api import router as mission_router
 from api.mission_create_api import router as mission_create_router
 from api.mission_mutation_api import router as mission_mutation_router
+from api.plugins_api import router as plugins_router
 from api.policy_api import router as policy_router
 from api.recovery_api import router as recovery_router
 from api.replay_api import router as replay_router
@@ -281,7 +282,6 @@ from api.telemetry_query_api import router as telemetry_query_router
 from api.templates_api import router as templates_router
 from api.tenant_api import router as tenant_router
 from api.wmcp_credential_api import router as wmcp_credential_router
-from api.plugins_api import router as plugins_router
 
 app.include_router(mission_router, prefix="/api/v1")
 app.include_router(approval_router, prefix="/api/v1")

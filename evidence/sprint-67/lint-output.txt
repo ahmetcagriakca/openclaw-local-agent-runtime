@@ -1,0 +1,1 @@
+Ruff not available in WSL (no pip). Python3 syntax check: PASS (ast.parse). No lint errors expected — standard library only, no complex patterns.

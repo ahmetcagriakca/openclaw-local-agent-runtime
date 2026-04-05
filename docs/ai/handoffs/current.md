@@ -1,4 +1,4 @@
-# Session Handoff — 2026-04-04 (Session 32)
+# Session Handoff — 2026-04-05 (Session 33)
 
 **Platform:** Vezir Platform
 **Operator:** Claude Code (Opus) — AKCA delegated
@@ -7,7 +7,7 @@
 
 ## Session Summary
 
-Sprint 58 planned, implemented, and closed with full 18-step checklist. 3 P3 tasks completed. 1530 total tests (+90 new). 123 API endpoints (+20 new). CI all green. No new decisions. 21 stale backlog issues closed (originals for S51-S58 work). Only 1 open issue remains (#187 B-118). Sprint 59 scope analyzed: B-118 Plugin marketplace / discovery — 3 sub-tasks planned. GPT memo sent.
+Sprint 59 preparation and governance compliance audit. BACKLOG.md regenerated (was stale — showed 22 open, actual is 1). Sprint 59 milestone created on GitHub (#34). 3 sprint task issues created (#317, #318, #319) with milestone assignment. #187 (B-118) assigned to Sprint 59 milestone. open-items.md and STATE.md verified current. All governance rules confirmed compliant.
 
 ## Current State
 
@@ -18,62 +18,32 @@ Sprint 58 planned, implemented, and closed with full 18-step checklist. 3 P3 tas
 - **CI:** All green (CI, Benchmark, Playwright, CodeQL)
 - **Security:** 0 code scanning, 0 dependabot, 0 secret scanning
 - **PRs:** 0 open
-- **Open issues:** 1 (#187 B-118 Plugin marketplace)
+- **Open issues:** 4 (#187 B-118, #317 Task 59.1, #318 Task 59.2, #319 Task 59.3)
 - **Blockers:** None
 
-## Sprint 58 Deliverables
+## Governance Compliance Audit
 
-| Task | Issue | Tests | Status |
-|------|-------|-------|--------|
-| B-114 Knowledge/connector input layer | #314 | 37 | DONE |
-| B-116 Multi-tenant isolation | #315 | 30 | DONE |
-| B-010 WMCP credential replacement | #316 | 23 | DONE |
-
-## New/Modified Files
-
-| File | Change |
-|------|--------|
-| `agent/services/knowledge_store.py` | New — KnowledgeStore with file/url/text connectors |
-| `agent/api/knowledge_api.py` | New — 7 endpoints (CRUD + stats + mission-context) |
-| `agent/tests/test_knowledge_store.py` | New — 37 tests |
-| `agent/auth/tenant.py` | New — TenantStore + TenantContext + quota mgmt |
-| `agent/api/tenant_api.py` | New — 6 endpoints (CRUD + current + quota-check) |
-| `agent/tests/test_tenant.py` | New — 30 tests |
-| `agent/services/wmcp_credential_manager.py` | New — WmcpCredentialManager with SecretStore integration |
-| `agent/api/wmcp_credential_api.py` | New — 5 endpoints (status, list, register, rotate, verify, migrate) |
-| `agent/tests/test_wmcp_credential_manager.py` | New — 23 tests |
-| `agent/api/server.py` | Modified — +3 routers |
-| `docs/api/openapi.json` | Updated — 123 endpoints |
-| `frontend/src/api/generated.ts` | Updated — SDK regenerated |
-
-## Closure Artifacts
-
-| Artifact | Path |
-|----------|------|
-| Closure check | `docs/sprints/sprint-58/closure-check-output.txt` |
-| Review | `docs/ai/reviews/S58-REVIEW.md` |
-
-## Issue Cleanup
-
-21 stale backlog issues (#164-#186) closed — all were original backlog entries whose work was done via sprint-specific issues (#293-#316) in S51-S58. Only #187 (B-118) remains open.
-
-## Review History
-
-| Sprint | Claude Code | GPT |
-|--------|-------------|-----|
-| S56 | PASS | HOLD R2 — R3 patch pending |
-| S57 | PASS | PASS (R2) |
-| S58 | PASS | Pending (memo sent) |
+| Rule | Status | Notes |
+|------|--------|-------|
+| Sprint issues on GitHub | OK | #317, #318, #319 created with Sprint 59 milestone |
+| Milestone assignment | OK | All open issues have Sprint 59 milestone |
+| BACKLOG.md current | FIXED | Was stale (22 open → regenerated → 1 open) |
+| STATE.md current | OK | Matches actual state |
+| open-items.md current | OK | Sprint 59 plan present |
+| NEXT.md current | OK | Sprint 58 closure documented |
+| Handoff current | UPDATED | This file |
+| No orphan issues | OK | All 4 open issues have milestone |
+| Review verdicts | OK | S58 GPT review still pending |
 
 ## Sprint 59 Plan (Ready to Execute)
 
 **Scope:** B-118 Plugin marketplace / discovery — single feature, 3 sub-tasks
 
-| Task | Scope | Est. Tests |
-|------|-------|------------|
-| 59.1 Plugin marketplace store + discovery | PluginMarketplaceStore: metadata, search, filter, install state tracking | ~25 |
-| 59.2 Plugin lifecycle API | 10 endpoints: list, search, details, install, uninstall, enable, disable, config, events, stats | ~25 |
-| 59.3 Plugin installer + hot-reload | Install/uninstall logic, manifest validation, EventBus hot-reload, scaffold integration | ~20 |
+| Task | Issue | Scope | Est. Tests |
+|------|-------|-------|------------|
+| 59.1 | #317 | Plugin marketplace store + discovery | ~25 |
+| 59.2 | #318 | Plugin lifecycle API (10 endpoints) | ~25 |
+| 59.3 | #319 | Plugin installer + hot-reload | ~20 |
 
 **Existing infrastructure (already implemented):**
 - `agent/plugins/registry.py` — PluginRegistry.discover() + load_all()
@@ -88,6 +58,14 @@ Sprint 58 planned, implemented, and closed with full 18-step checklist. 3 P3 tas
 3. `agent/api/plugins_api.py` — 10 API endpoints
 4. `agent/tests/test_plugin_marketplace.py` — ~70 tests
 
+## Review History
+
+| Sprint | Claude Code | GPT |
+|--------|-------------|-----|
+| S56 | PASS | HOLD R2 — R3 patch pending |
+| S57 | PASS | PASS (R2) |
+| S58 | PASS | Pending (memo sent) |
+
 ## Next Session
 
 1. **Sprint 59 execution** — B-118 plugin marketplace (3 sub-tasks above)
@@ -97,4 +75,4 @@ Sprint 58 planned, implemented, and closed with full 18-step checklist. 3 P3 tas
 
 ## GPT Memo
 
-Session 32: Sprint 58 CLOSED. B-114 knowledge/connector input layer (KnowledgeStore: file/url/text connectors, CRUD + tag search + mission-context integration, 7 API endpoints, 37 tests). B-116 multi-tenant isolation (TenantStore: namespace isolation, quota management, TenantContext thread-local, default tenant backward compat, 6 API endpoints, 30 tests). B-010 WMCP credential replacement (WmcpCredentialManager: SecretStore integration, rotation lifecycle, env-var migration, hash verification, 5 API endpoints, 23 tests). Tests: 1300 backend + 217 frontend + 13 Playwright = 1530 (+90 new). OpenAPI: 123 endpoints (+20). CI all green. 18-step closure complete. No new decisions. 21 stale issues closed. Sprint 59 planned: B-118 Plugin marketplace (3 sub-tasks, ~70 tests).
+Session 33: Governance compliance audit. BACKLOG.md regenerated (stale data fixed). Sprint 59 milestone created. 3 task issues created (#317-#319). All open issues assigned to Sprint 59. No implementation this session — prep only. Sprint 59 ready for execution: B-118 Plugin marketplace (marketplace store, lifecycle API, installer + hot-reload, ~70 tests).

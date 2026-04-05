@@ -1,7 +1,7 @@
 # Backlog -- Vezir Platform
 
 **Auto-generated from GitHub issues.** Do not edit directly.
-**Generated:** 2026-04-04 19:25 UTC
+**Generated:** 2026-04-05 04:10 UTC
 **Source:** `python tools/generate-backlog.py`
 
 ---
@@ -38,10 +38,10 @@
 | #293 | Sprint 51 Task 51.1: B-110 Contract test pack | Done |
 | #299 | Sprint 53 Task 53.1: B-113 Docs-as-product pack | Done |
 | #170 | [B-109] Template/plugin scaffolding CLI | Done |
-| #171 | [B-110] Contract test pack | Open |
-| #172 | [B-111] Mission replay / fixture runner | Open |
-| #173 | [B-112] Local dev sandbox / seeded demo | Open |
-| #174 | [B-113] Docs-as-product pack | Open |
+| #171 | [B-110] Contract test pack | Done |
+| #172 | [B-111] Mission replay / fixture runner | Done |
+| #173 | [B-112] Local dev sandbox / seeded demo | Done |
+| #174 | [B-113] Docs-as-product pack | Done |
 
 ### Operations
 
@@ -51,11 +51,11 @@
 | #295 | Sprint 51 Task 51.3: B-016 Task result artifact access | Done |
 | #300 | Sprint 53 Task 53.2: B-013 Richer policyContext | Done |
 | #301 | Sprint 53 Task 53.3: B-014 timeoutSeconds in contract | Done |
-| #168 | [B-013] Richer policyContext | Open |
-| #169 | [B-014] timeoutSeconds in contract | Open |
-| #164 | [B-016] Task result artifact access | Open |
-| #165 | [B-022] Backup / restore | Open |
-| #166 | [B-023] Corrupted runtime recovery | Open |
+| #168 | [B-013] Richer policyContext | Done |
+| #169 | [B-014] timeoutSeconds in contract | Done |
+| #164 | [B-016] Task result artifact access | Done |
+| #165 | [B-022] Backup / restore | Done |
+| #166 | [B-023] Corrupted runtime recovery | Done |
 | #167 | [B-026] Dead-letter retention policy | Done |
 | #160 | [B-105] Cost/outcome dashboard | Done |
 | #161 | [B-106] Retry/DLQ/replay/resume | Done |
@@ -70,41 +70,41 @@
 |---|------|-------|
 | #308 | Sprint 56 Task 56.1: B-027 Task directory retention | Done |
 | #309 | Sprint 56 Task 56.2: B-028 Stale .bak files | Done |
-| #180 | [B-025] Bootstrap heredoc reduction | Open |
-| #181 | [B-027] Task directory retention | Open |
-| #182 | [B-028] Stale .bak files | Open |
+| #180 | [B-025] Bootstrap heredoc reduction | Done |
+| #181 | [B-027] Task directory retention | Done |
+| #182 | [B-028] Stale .bak files | Done |
 
 ### Devex
 
 | # | Item | State |
 |---|------|-------|
-| #178 | [B-018] Dynamic sourceUserId | Open |
+| #178 | [B-018] Dynamic sourceUserId | Done |
 
 ### Operations
 
 | # | Item | State |
 |---|------|-------|
-| #184 | [B-115] Audit export / compliance bundle | Open |
-| #186 | [B-117] Grafana dashboard pack | Open |
+| #184 | [B-115] Audit export / compliance bundle | Done |
+| #186 | [B-117] Grafana dashboard pack | Done |
 
 ### Product
 
 | # | Item | State |
 |---|------|-------|
 | #310 | Sprint 56 Task 56.3: B-019 Intent mapping refinement | Done |
-| #179 | [B-019] Intent mapping refinement | Open |
-| #183 | [B-114] Knowledge/connector input layer | Open |
-| #185 | [B-116] Multi-tenant isolation | Open |
+| #179 | [B-019] Intent mapping refinement | Done |
+| #183 | [B-114] Knowledge/connector input layer | Done |
+| #185 | [B-116] Multi-tenant isolation | Done |
 | #187 | [B-118] Plugin marketplace / discovery | Open |
 
 ### Security
 
 | # | Item | State |
 |---|------|-------|
-| #175 | [B-007] Automatic secret rotation | Open |
-| #176 | [B-009] Multi-source allowlist | Open |
-| #177 | [B-010] WMCP credential replacement | Open |
+| #175 | [B-007] Automatic secret rotation | Done |
+| #176 | [B-009] Multi-source allowlist | Done |
+| #177 | [B-010] WMCP credential replacement | Done |
 
 ---
 
-**Total:** 48 items (22 open)
+**Total:** 48 items (1 open)

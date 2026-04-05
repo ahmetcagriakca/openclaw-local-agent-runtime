@@ -3,7 +3,7 @@
 **Last updated:** 2026-04-05
 **Active phase:** Phase 8 — Sprint 61 closed
 **Doc model:** This file is canonical for system state. Session context lives in `docs/ai/handoffs/current.md`.
-**Note:** All sprints through 53 closed. S54 deferred. S55-S60 closed. All P1 backlog items complete (48/48). Phase 8 active (started S60). 137 frozen decisions (D-001 → D-138, D-126 skipped, D-132 deferred).
+**Note:** All sprints through 53 closed. S54 deferred. S55-S61 closed. All P1 backlog items complete (48/48). Phase 8 active (S60+S61). 137 frozen decisions (D-001 → D-138, D-126 skipped, D-132 deferred). Governance: 20-step closure checklist.
 **Persistence:** State is file-persisted (state.json, mission.json). Mission history via persistence layer (Sprint 16).
 **API:** Vezir API on 127.0.0.1:8003 (FastAPI + Uvicorn). Schemas FROZEN (D-067). SSE on /api/v1/events/stream. Dashboard API + Alert API + Telemetry Query API (Sprint 16).
 **Frontend:** React dashboard on localhost:3000 (Vite + Tailwind). SSE live updates + polling fallback + intervention buttons + monitoring dashboard. Node.js 20 required.
@@ -153,7 +153,7 @@
 
 ## Architectural Decisions
 
-137 frozen decisions (D-001 through D-138, D-126 skipped, D-132 deferred). See `docs/ai/DECISIONS.md`. Recent: D-137 WSL2 <-> PowerShell bridge contract (S60). D-138 approval timeout=deny + escalation FSM (S61).
+137 frozen decisions (D-001 through D-138, D-126 skipped, D-132 deferred). See `docs/ai/DECISIONS.md`. Recent: D-137 WSL2 <-> PowerShell bridge contract (S60). D-138 approval timeout=deny + escalation FSM (S61). Governance: 20-step closure checklist (expanded from 18, Session 35).
 
 ## Port Map
 

@@ -276,12 +276,28 @@ class PolicyEngine:
             mission_timeout = timeout_cfg.get("missionSeconds", 3600)
             return mission_age >= mission_timeout
 
-        # budget_exceeded check
+        # budget_exceeded check (legacy stage-count based)
         if condition.get("budget_exceeded") is True:
             tenant_limits = policy_context.get("tenantLimits", {})
             stages = mission_config.get("stages", [])
             max_stages = tenant_limits.get("max_stages", 15)
             return len(stages) >= max_stages
+
+        # B-140: token_budget_exceeded — hard per-mission token budget
+        if condition.get("token_budget_exceeded") is True:
+            total_tokens = policy_context.get("totalTokens", 0)
+            max_budget = policy_context.get("maxTokenBudget", 0)
+            if max_budget <= 0:
+                return False  # No budget set = no enforcement
+            return total_tokens >= max_budget
+
+        # B-140: token_budget_warning — 80% threshold alert
+        if condition.get("token_budget_warning") is True:
+            total_tokens = policy_context.get("totalTokens", 0)
+            max_budget = policy_context.get("maxTokenBudget", 0)
+            if max_budget <= 0:
+                return False
+            return total_tokens >= max_budget * 0.8
 
         # B-013 Sprint 53: caller_source check
         caller_source = condition.get("caller_source")

@@ -1,0 +1,6 @@
+name: token-budget-warning
+priority: 900
+description: "B-140: Allow but log warning when mission reaches 80% of token budget"
+condition:
+  token_budget_warning: true
+decision: allow

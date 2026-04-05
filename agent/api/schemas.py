@@ -154,6 +154,9 @@ class MissionSummary(BaseModel):
     stateTransitions: list[dict] = Field(default_factory=list)
     # B-014 Sprint 53: Timeout status in mission detail
     timeoutConfig: Optional[dict] = None
+    # B-140: Per-mission token budget
+    cumulativeTokens: int = 0
+    maxTokenBudget: Optional[int] = None
 
 
 class MissionListItem(BaseModel):

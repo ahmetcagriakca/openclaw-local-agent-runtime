@@ -1,9 +1,9 @@
 # Current State
 
 **Last updated:** 2026-04-05
-**Active phase:** Phase 8 — Sprint 63 closed
+**Active phase:** Phase 8 — Sprint 64 closed
 **Doc model:** This file is canonical for system state. Session context lives in `docs/ai/handoffs/current.md`.
-**Note:** All sprints through 53 closed. S54 deferred. S55-S63 closed. All P1 backlog items complete (48/48). Phase 8 active (S60-S63). 136 frozen decisions + 2 superseded (D-001 → D-139, D-126 skipped, D-132 deferred, D-082/D-098 superseded). Governance: 20-step closure checklist.
+**Note:** All sprints through 53 closed. S54 deferred. S55-S64 closed. All P1 backlog items complete (48/48). Phase 8 active (S60-S64). 136 frozen decisions + 2 superseded (D-001 → D-139, D-126 skipped, D-132 deferred, D-082/D-098 superseded). Governance: 20-step closure checklist.
 **Persistence:** State is file-persisted (state.json, mission.json). Mission history via persistence layer (Sprint 16).
 **API:** Vezir API on 127.0.0.1:8003 (FastAPI + Uvicorn). Schemas FROZEN (D-067). SSE on /api/v1/events/stream. Dashboard API + Alert API + Telemetry Query API (Sprint 16).
 **Frontend:** React dashboard on localhost:3000 (Vite + Tailwind). SSE live updates + polling fallback + intervention buttons + monitoring dashboard. Node.js 20 required.
@@ -120,6 +120,7 @@
 | Sprint 61 | Approval Timeout=Deny + Escalation FSM (D-138) | Closed |
 | Sprint 62 | Approval FSM Wiring + Decision Drift + Auth Quarantine (B-134, B-135, B-136) | Closed |
 | Sprint 63 | Controller Decomposition Boundary + Budget Ownership Design (B-137, B-138, D-139) | Closed |
+| Sprint 64 | Controller Extraction Phase 1 + Hard Budget Enforcement (B-139, B-140) | Closed |
 
 ## Test Evidence
 
@@ -154,6 +155,7 @@
 | Sprint 61 | 1426 tests, 0 fail | 217 tests, 0 TS errors | +31 new (approval FSM 31). 13 Playwright. 1656 total |
 | Sprint 62 | 1454 tests, 0 fail | 217 tests, 0 TS errors | +28 new (approval wiring 14, auth quarantine 14). 13 Playwright. 1684 total |
 | Sprint 63 | 1454 tests, 0 fail | 217 tests, 0 TS errors | Design-only sprint (no new tests). 13 Playwright. 1684 total |
+| Sprint 64 | 1494 tests, 0 fail | 217 tests, 0 TS errors | +40 new (persistence 11, recovery 8, budget 21). 13 Playwright. 1724 total |
 
 ## Architectural Decisions
 

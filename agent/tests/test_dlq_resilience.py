@@ -197,9 +197,13 @@ class TestDLQStore(unittest.TestCase):
     def test_dlq_suppress_flag(self):
         """Controller with _dlq_suppress=True should not enqueue."""
         from mission.controller import MissionController
+        from mission.recovery_engine import StageRecoveryEngine
+        from mission.resilience import CircuitBreaker
         with patch.object(MissionController, "__init__", lambda self, **kw: None):
             ctrl = MissionController.__new__(MissionController)
             ctrl._dlq_store = self.store
+            ctrl._circuit_breaker = CircuitBreaker(failure_threshold=3, reset_timeout_s=300.0)
+            ctrl._recovery_engine = StageRecoveryEngine(ctrl._circuit_breaker, self.store)
             ctrl._dlq_suppress = True
             result = ctrl._enqueue_to_dlq(self._make_mission("m-1"))
             self.assertIsNone(result)
@@ -638,9 +642,13 @@ class TestControllerDLQIntegration(unittest.TestCase):
             store = DLQStore(store_path=Path(tmpdir) / "dlq.json")
             # Create a minimal controller mock
             from mission.controller import MissionController
+            from mission.recovery_engine import StageRecoveryEngine
+            from mission.resilience import CircuitBreaker
             with patch.object(MissionController, "__init__", lambda self, **kw: None):
                 ctrl = MissionController.__new__(MissionController)
                 ctrl._dlq_store = store
+                ctrl._circuit_breaker = CircuitBreaker(failure_threshold=3, reset_timeout_s=300.0)
+                ctrl._recovery_engine = StageRecoveryEngine(ctrl._circuit_breaker, store)
 
                 mission = {
                     "missionId": "mission-test-1",

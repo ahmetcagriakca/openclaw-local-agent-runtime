@@ -1,7 +1,20 @@
 # Next Steps — Vezir Platform
 
 **Last updated:** 2026-04-05
-**Current:** Phase 8 active. Sprint 63 closed. D-139 controller decomposition + budget ownership frozen.
+**Current:** Phase 8 active. Sprint 64 closed. B-139 controller extraction + B-140 budget enforcement implemented.
+
+---
+
+## Sprint 64 — Controller Extraction Phase 1 + Hard Budget Enforcement (CLOSED)
+
+**Model:** A (full closure) | **Class:** Architecture + Governance
+**Scope:** B-139 controller extraction phase 1, B-140 hard per-mission budget enforcement
+**Tests:** 1494 backend + 217 frontend + 13 Playwright = 1724 total
+**Issues:** #327, #328
+**New tests:** +40 (persistence 11, recovery 8, budget 21)
+**New files:** `agent/mission/persistence_adapter.py`, `agent/mission/recovery_engine.py`, `config/policies/token-budget-exceeded.yaml`, `config/policies/token-budget-warning.yaml`, `agent/tests/test_persistence_adapter.py`, `agent/tests/test_recovery_engine.py`, `agent/tests/test_budget_enforcement.py`
+**Modified:** `agent/mission/controller.py` (delegation), `agent/mission/policy_context.py` (budget fields), `agent/mission/policy_engine.py` (budget conditions), `agent/api/schemas.py` (budget in API), `agent/api/normalizer.py`
+**Review:** Claude Code PASS, GPT Pending
 
 ---
 

@@ -29,6 +29,7 @@ EXCLUDED_FILES = {"atomic_write.py"}
 # TODO: Remove entries as each file is migrated to atomic_write_json.
 KNOWN_EXCEPTIONS = {
     os.path.normpath("mission/controller.py"),
+    os.path.normpath("mission/persistence_adapter.py"),  # B-139: IS the atomic write impl
     os.path.normpath("services/secret_store.py"),
 }
 

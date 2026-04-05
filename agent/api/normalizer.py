@@ -519,6 +519,8 @@ class MissionNormalizer:
             or (state_data or {}).get("status"),
             stateTransitions=transitions,
             timeoutConfig=timeout_config,
+            cumulativeTokens=mission_data.get("cumulativeTokens", 0),
+            maxTokenBudget=mission_data.get("maxTokenBudget"),
         )
         meta = ResponseMeta(
             freshnessMs=max_age,

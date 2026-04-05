@@ -1,0 +1,6 @@
+name: token-budget-exceeded
+priority: 350
+description: "B-140: Deny mission when cumulative tokens exceed per-mission budget"
+condition:
+  token_budget_exceeded: true
+decision: deny

@@ -6,15 +6,15 @@ from datetime import datetime, timezone
 
 from context.policy_telemetry import emit_policy_event
 from mission.mission_state import MissionState, MissionStatus
+from mission.persistence_adapter import MissionPersistenceAdapter
 from mission.policy_context import (
     TimeoutConfig,
     build_policy_context,
 )
 from mission.policy_engine import PolicyDecision, PolicyEngine
+from mission.recovery_engine import StageRecoveryEngine
 from mission.resilience import (
     CircuitBreaker,
-    is_poison_pill,
-    sleep_with_backoff,
 )
 from persistence.dlq_store import DLQStore
 from services.approval_store import ApprovalStore
@@ -43,6 +43,11 @@ class MissionController:
         self._policy_engine = PolicyEngine()
         self._circuit_breaker = CircuitBreaker(
             failure_threshold=3, reset_timeout_s=300.0)
+
+        # B-139: Extracted services (D-139)
+        self._persistence = MissionPersistenceAdapter(MISSIONS_DIR)
+        self._recovery_engine = StageRecoveryEngine(
+            self._circuit_breaker, self._dlq_store)
 
         # 7.9: Auto-generate capability manifest on startup
         self._update_capability_manifest()
@@ -95,6 +100,8 @@ class MissionController:
             "risk_level": None,  # D-128: set after planning, before execution
             "timeoutConfig": TimeoutConfig().to_dict(),  # B-014: timeout hierarchy
             "policyContext": None,  # B-013: set before stage execution
+            "cumulativeTokens": 0,  # B-140: running token total
+            "maxTokenBudget": None,  # B-140: None = no enforcement (backward compat)
         }
         self._save_mission(mission)
 
@@ -138,6 +145,10 @@ class MissionController:
                                             f"planned {len(plan['stages'])} stages")
             # D-128: Classify mission risk from planned tool usage (once, at creation)
             mission["risk_level"] = self._classify_mission_risk(mission)
+            # B-140: Set default token budget if not specified
+            if mission.get("maxTokenBudget") is None:
+                mission["maxTokenBudget"] = self._default_token_budget(
+                    mission.get("complexity", "standard"))
             self._save_mission(mission)
         except Exception as e:
             mission["status"] = "failed"
@@ -447,6 +458,8 @@ class MissionController:
                 stage["artifacts"] = result.get("artifacts", [])
                 # B-106: Reset circuit breaker on success
                 self._circuit_breaker.record_success(specialist)
+                # B-140: Accumulate token budget after stage completion
+                self._update_mission_budget(mission)
                 # Save immediately so UI sees progress
                 self._save_mission(mission)
                 self._persist_mission_state(mission_state)
@@ -1015,31 +1028,8 @@ Respond ONLY with a JSON object, no markdown:
         return engine.classify_mission(tool_names)
 
     def _persist_mission_state(self, mission_state: MissionState):
-        """5C-1: Persist mission state machine to disk.
-
-        BF-8.0: Uses atomic write (D-071).
-        """
-        import tempfile
-        state_path = os.path.join(MISSIONS_DIR,
-                                  f"{mission_state.mission_id}-state.json")
-        try:
-            fd, tmp_path = tempfile.mkstemp(
-                dir=MISSIONS_DIR, suffix=".tmp", prefix="state-")
-            try:
-                with os.fdopen(fd, "w", encoding="utf-8") as f:
-                    json.dump(mission_state.to_dict(), f, indent=2,
-                              ensure_ascii=False)
-                    f.flush()
-                    os.fsync(f.fileno())
-                os.replace(tmp_path, state_path)
-            except Exception:
-                try:
-                    os.unlink(tmp_path)
-                except OSError:
-                    pass
-                raise
-        except Exception:
-            pass
+        """5C-1: Persist mission state machine — delegates to MissionPersistenceAdapter (B-139)."""
+        self._persistence.persist_mission_state(mission_state)
 
     def _emit_mission_summary(self, mission_id: str, mission: dict,
                                assembler, expansion_broker, status: str,
@@ -1700,168 +1690,28 @@ Respond ONLY with a JSON object, no markdown:
                               mission_state, assembler,
                               mission_id, user_id, all_artifacts,
                               expansion_broker):
-        """D-056: First reflex is recovery_triage, NOT restart.
-
-        B-106: Enhanced with exponential backoff, circuit breaker,
-        and poison pill detection.
-
-        Returns: {"action": "retry_stage"|"abort"|"escalate"|"retry_from",
-                  "reason": ..., ...}
-        """
-        from context.policy_telemetry import emit_policy_event
-
-        stage_id = failed_stage.get("id",
-                                    failed_stage.get("stage_id", "unknown"))
-        specialist = failed_stage.get("specialist", "unknown")
-
-        # B-106: Circuit breaker check — fail-fast if circuit is open
-        if self._circuit_breaker.is_open(specialist):
-            emit_policy_event("recovery_triage_decision", {
-                "mission_id": mission_state.mission_id,
-                "stage_id": stage_id,
-                "action": "abort",
-                "reason": f"Circuit open for {specialist}"
-            })
-            return {"action": "abort",
-                    "reason": f"circuit_open:{specialist}"}
-
-        # B-106: Poison pill detection — same error repeating
-        if is_poison_pill(specialist, error_context, self._circuit_breaker):
-            self._circuit_breaker.record_failure(specialist, error_context)
-            emit_policy_event("recovery_triage_decision", {
-                "mission_id": mission_state.mission_id,
-                "stage_id": stage_id,
-                "action": "abort",
-                "reason": "Poison pill — identical error repeating"
-            })
-            return {"action": "abort",
-                    "reason": "poison_pill_detected"}
-
-        # Record failure in circuit breaker
-        self._circuit_breaker.record_failure(specialist, error_context)
-
-        # Check retry budget
-        attempt = mission_state.increment_stage_attempt(stage_id)
-        if not mission_state.can_retry_stage(stage_id):
-            emit_policy_event("recovery_triage_decision", {
-                "mission_id": mission_state.mission_id,
-                "stage_id": stage_id,
-                "action": "abort",
-                "reason": f"Max attempts ({attempt}) exceeded"
-            })
-            return {"action": "abort",
-                    "reason": "max_attempts_exceeded"}
-
-        # B-106: Exponential backoff before retry
-        sleep_with_backoff(attempt)
-
-        # Transition to FAILED for recovery
-        if mission_state.status != MissionStatus.FAILED:
-            mission_state.transition_to(
-                MissionStatus.FAILED,
-                f"Stage {stage_id} failed, attempt {attempt}")
-
-        # Try to invoke Manager recovery_triage
-        try:
-            recovery_stage = self._create_recovery_stage(
-                failed_stage, error_context)
-
-            recovery_result = self._execute_stage(
-                recovery_stage, all_artifacts, mission_id, user_id,
-                expansion_broker=expansion_broker)
-
-            # Parse recovery decision from result
-            recovery_data = {}
-            if recovery_result and isinstance(recovery_result, dict):
-                # Try to extract structured decision from response
-                response_text = recovery_result.get("response", "")
-                # Best-effort JSON parse from response
-                try:
-                    import re
-                    json_match = re.search(r'\{[^}]*"recovery_action"[^}]*\}',
-                                           response_text)
-                    if json_match:
-                        recovery_data = json.loads(json_match.group())
-                except (json.JSONDecodeError, AttributeError):
-                    pass
-
-            action = recovery_data.get("recovery_action", "abort")
-
-            emit_policy_event("recovery_triage_decision", {
-                "mission_id": mission_state.mission_id,
-                "stage_id": stage_id,
-                "action": action,
-                "diagnosis": str(
-                    recovery_data.get("diagnosis", ""))[:200]
-            })
-
-            if action == "retry_stage":
-                mission_state.transition_to(
-                    MissionStatus.READY,
-                    f"Recovery: retry {stage_id}")
-                mission_state.transition_to(
-                    MissionStatus.RUNNING,
-                    "resuming after recovery")
-                return {"action": "retry_stage", "stage_id": stage_id}
-
-            elif action == "escalate_to_operator":
-                return {"action": "escalate",
-                        "reason": recovery_data.get("diagnosis", "")}
-
-            elif action == "retry_from":
-                return {"action": "retry_from",
-                        "target_stage": recovery_data.get(
-                            "target_stage", "stage-1"),
-                        "reason": recovery_data.get("diagnosis", "")}
-
-            else:
-                return {"action": "abort",
-                        "reason": recovery_data.get(
-                            "diagnosis", "Recovery chose abort")}
-
-        except Exception as recovery_error:
-            # Recovery itself failed — safe abort
-            emit_policy_event("recovery_triage_decision", {
-                "mission_id": mission_state.mission_id,
-                "stage_id": stage_id,
-                "action": "abort",
-                "reason": f"Recovery failed: {str(recovery_error)[:200]}"
-            })
-            return {"action": "abort",
-                    "reason": f"Recovery triage itself failed: "
-                              f"{recovery_error}"}
+        """D-056 / B-106: Recovery triage — delegates to StageRecoveryEngine (B-139)."""
+        return self._recovery_engine.handle_stage_failure(
+            failed_stage=failed_stage,
+            error_context=error_context,
+            mission_state=mission_state,
+            assembler=assembler,
+            mission_id=mission_id,
+            user_id=user_id,
+            all_artifacts=all_artifacts,
+            expansion_broker=expansion_broker,
+            execute_stage_fn=self._execute_stage,
+            create_recovery_stage_fn=self._create_recovery_stage,
+        )
 
     def _enqueue_to_dlq(self, mission: dict) -> str | None:
-        """B-106: Enqueue failed mission to DLQ for later retry.
-
-        Suppressed when _dlq_suppress is True (during DLQ retry to
-        prevent orphan entries — P4 lineage fix).
-        """
-        if getattr(self, "_dlq_suppress", False):
-            return None
-        try:
-            failed_stage_id = ""
-            for s in mission.get("stages", []):
-                if s.get("status") == "failed":
-                    failed_stage_id = s.get("id", "")
-                    break
-            return self._dlq_store.enqueue(
-                mission,
-                failed_stage_id=failed_stage_id,
-                error=mission.get("error", ""),
-            )
-        except Exception as e:
-            import logging
-            logging.getLogger("mcc.mission.controller").error(
-                "DLQ enqueue failed: %s", e)
-            return None
+        """B-106: Enqueue failed mission to DLQ — delegates to StageRecoveryEngine (B-139)."""
+        return self._recovery_engine.enqueue_to_dlq(
+            mission, suppress=getattr(self, "_dlq_suppress", False))
 
     def _find_stage_index(self, stages, target_stage_id):
-        """Find index of stage by ID."""
-        for i, s in enumerate(stages):
-            if s.get("id") == target_stage_id:
-                return i
-        return None
+        """Find index of stage by ID — delegates to MissionPersistenceAdapter (B-139)."""
+        return MissionPersistenceAdapter.find_stage_index(stages, target_stage_id)
 
     # ── 7.9: Capability Manifest ─────────────────────────────────
 
@@ -1960,106 +1810,47 @@ Respond ONLY with a JSON object, no markdown:
         except Exception:
             pass  # Best effort — don't block mission execution
 
-    def _save_mission(self, mission: dict):
-        """Save mission state to disk.
+    # ── B-140: Per-Mission Token Budget ────────────────────────────
 
-        BF-8.0: Uses atomic write (D-071) to prevent corrupt JSON
-        on crash/timeout. Pattern: temp → fsync → os.replace().
+    # Default budgets per complexity tier (D-139 / B-138 design)
+    _BUDGET_DEFAULTS = {
+        "trivial": 50_000,
+        "standard": 200_000,
+        "complex": 500_000,
+        "critical": 1_000_000,
+    }
+
+    @classmethod
+    def _default_token_budget(cls, complexity: str) -> int | None:
+        """Return default token budget for complexity tier, or None for no enforcement."""
+        return cls._BUDGET_DEFAULTS.get(complexity)
+
+    @staticmethod
+    def _update_mission_budget(mission: dict) -> int:
+        """B-140: Accumulate cumulative token count from completed stages.
+
+        Called after each stage completion. Updates mission["cumulativeTokens"].
+        Returns the new cumulative total.
         """
-        import tempfile
-        path = os.path.join(MISSIONS_DIR, f"{mission['missionId']}.json")
-        try:
-            fd, tmp_path = tempfile.mkstemp(
-                dir=MISSIONS_DIR, suffix=".tmp", prefix="mission-")
-            try:
-                with os.fdopen(fd, "w", encoding="utf-8") as f:
-                    json.dump(mission, f, ensure_ascii=False, indent=2)
-                    f.flush()
-                    os.fsync(f.fileno())
-                os.replace(tmp_path, path)
-            except Exception:
-                try:
-                    os.unlink(tmp_path)
-                except OSError:
-                    pass
-                raise
-        except Exception:
-            pass
+        total = 0
+        for stage in mission.get("stages", []):
+            if stage.get("status") != "completed":
+                continue
+            tr = stage.get("token_report")
+            if tr and isinstance(tr, dict):
+                total += tr.get("total_tokens", 0)
+        mission["cumulativeTokens"] = total
+        return total
+
+    # ── Persistence ──────────────────────────────────────────────
+
+    def _save_mission(self, mission: dict):
+        """Save mission state to disk — delegates to MissionPersistenceAdapter (B-139)."""
+        self._persistence.save_mission(mission)
 
     def _save_token_report(self, mission: dict):
-        """Save aggregated token report to {mission_id}-token-report.json.
-
-        Collects per-stage token_report data into a single mission-level report.
-        Uses atomic write pattern (D-071).
-        """
-        import tempfile
-        mission_id = mission.get("missionId", "")
-        if not mission_id:
-            return
-
-        stages = mission.get("stages", [])
-        stage_reports = []
-        total_tokens = 0
-        total_tool_calls = 0
-        total_truncations = 0
-        total_blocks = 0
-
-        for stage in stages:
-            sr = stage.get("token_report")
-            if sr and isinstance(sr, dict):
-                for s in sr.get("stages", []):
-                    stage_reports.append(s)
-                total_tokens += sr.get("total_tokens", 0)
-                total_tool_calls += sr.get("total_tool_calls", 0)
-                total_truncations += sr.get("truncations", 0)
-                total_blocks += sr.get("blocks", 0)
-            elif stage.get("status") == "completed":
-                from context.token_budget import estimate_tokens
-                result_tokens = estimate_tokens(stage.get("result", ""))
-                stage_reports.append({
-                    "stage": stage.get("stageId", ""),
-                    "tokens_consumed": result_tokens,
-                    "tool_calls": stage.get("tool_call_count", 0),
-                    "pct_of_total": 0,
-                })
-                total_tokens += result_tokens
-                total_tool_calls += stage.get("tool_call_count", 0)
-
-        for s in stage_reports:
-            if total_tokens > 0:
-                s["pct_of_total"] = round(
-                    s["tokens_consumed"] / total_tokens * 100, 1)
-
-        report = {
-            "mission_id": mission_id,
-            "status": mission.get("status", "unknown"),
-            "generated_at": datetime.now(timezone.utc).isoformat(),
-            "total_tokens": total_tokens,
-            "total_tool_calls": total_tool_calls,
-            "truncations": total_truncations,
-            "blocks": total_blocks,
-            "stages": stage_reports,
-        }
-
-        report_path = os.path.join(
-            MISSIONS_DIR, f"{mission_id}-token-report.json")
-        try:
-            fd, tmp_path = tempfile.mkstemp(
-                dir=MISSIONS_DIR, suffix=".tmp", prefix="token-report-")
-            try:
-                with os.fdopen(fd, "w", encoding="utf-8") as f:
-                    json.dump(report, f, ensure_ascii=False, indent=2)
-                    f.flush()
-                    os.fsync(f.fileno())
-                os.replace(tmp_path, report_path)
-            except Exception:
-                try:
-                    os.unlink(tmp_path)
-                except OSError:
-                    pass
-                raise
-        except Exception:
-            pass  # Best effort
+        """Save aggregated token report — delegates to MissionPersistenceAdapter (B-139)."""
+        self._persistence.save_token_report(mission)
 
     def _check_and_handle_pause(self, mission_id: str, mission: dict,
                                  mission_state: MissionState,

@@ -281,9 +281,9 @@ class TestConditionMatching:
 # ─── Default Rules Integration ───
 
 class TestDefaultRules:
-    def test_default_config_loads_five_rules(self):
+    def test_default_config_loads_seven_rules(self):
         engine = PolicyEngine()
-        assert len(engine.rules) == 5
+        assert len(engine.rules) == 7  # 5 original + 2 B-140 budget rules
 
     def test_default_allow_is_last(self):
         engine = PolicyEngine()
@@ -323,7 +323,7 @@ class TestSerialization:
         engine = PolicyEngine()
         rules_dict = engine.to_dict()
         assert isinstance(rules_dict, list)
-        assert len(rules_dict) == 5
+        assert len(rules_dict) == 7  # 5 original + 2 B-140 budget rules
         assert all("name" in r for r in rules_dict)
         assert all("decision" in r for r in rules_dict)
 

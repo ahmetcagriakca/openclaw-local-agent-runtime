@@ -137,6 +137,10 @@ class PolicyContext:
     # B-013 Sprint 53: Evaluation timestamp (ISO 8601)
     evaluated_at: str = ""
 
+    # B-140: Per-mission token budget enforcement
+    total_tokens: int = 0
+    max_token_budget: int = 0  # 0 = no enforcement (backward compat)
+
     def to_dict(self) -> dict:
         return {
             "dependencyStates": [d.to_dict() for d in self.dependency_states],
@@ -150,6 +154,8 @@ class PolicyContext:
             "resourceTags": self.resource_tags,
             "environment": self.environment,
             "evaluatedAt": self.evaluated_at,
+            "totalTokens": self.total_tokens,
+            "maxTokenBudget": self.max_token_budget,
         }
 
     @classmethod
@@ -181,6 +187,8 @@ class PolicyContext:
             resource_tags=data.get("resourceTags", {}),
             environment=data.get("environment", "production"),
             evaluated_at=data.get("evaluatedAt", ""),
+            total_tokens=data.get("totalTokens", 0),
+            max_token_budget=data.get("maxTokenBudget", 0),
         )
 
 
@@ -282,6 +290,10 @@ def build_policy_context(
     # B-013 Sprint 53: Evaluation timestamp
     evaluated_at = datetime.now(tz.utc).isoformat()
 
+    # B-140: Token budget from mission (cumulative tracking by controller)
+    total_tokens = mission.get("cumulativeTokens", 0)
+    max_token_budget = mission.get("maxTokenBudget", 0)  # 0 = no enforcement
+
     return PolicyContext(
         dependency_states=dependency_states,
         risk_level=risk_level,
@@ -294,4 +306,6 @@ def build_policy_context(
         resource_tags=resource_tags,
         environment=environment,
         evaluated_at=evaluated_at,
+        total_tokens=total_tokens,
+        max_token_budget=max_token_budget,
     )

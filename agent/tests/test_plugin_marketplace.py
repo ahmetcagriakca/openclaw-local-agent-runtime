@@ -481,3 +481,171 @@ class TestPluginConfigAPI:
     def test_update_config_404(self, api_client):
         r = api_client.put("/api/v1/plugins/nonexistent/config", json={"config": {}})
         assert r.status_code == 404
+
+
+# ── Task 59.3: Installer Tests ────────────────────────────────────
+
+from services.plugin_installer import PluginInstaller, PluginInstallError
+
+
+@pytest.fixture
+def installer_env(tmp_path):
+    """Create temp environment for installer tests."""
+    plugins_dir = tmp_path / "plugins"
+    plugins_dir.mkdir()
+    config_dir = tmp_path / "config" / "plugins"
+    config_dir.mkdir(parents=True)
+
+    # Create a valid plugin
+    p = plugins_dir / "test_plugin"
+    p.mkdir()
+    (p / "manifest.json").write_text(json.dumps({
+        "name": "TestPlugin",
+        "version": "1.0.0",
+        "description": "A test plugin",
+        "author": "tester",
+        "handlers": [{"event_type": "mission.started", "handler": "on_start", "priority": 600}],
+    }))
+
+    # Create invalid plugin
+    bad = plugins_dir / "bad_plugin"
+    bad.mkdir()
+    (bad / "manifest.json").write_text("{invalid json")
+
+    installer = PluginInstaller(plugins_dir=plugins_dir, config_dir=config_dir)
+    return installer, plugins_dir, config_dir
+
+
+class MockBus:
+    """Minimal EventBus mock for testing handler registration."""
+
+    def __init__(self):
+        self.handlers = {}
+
+    def on(self, event_type, handler, priority=0, name=""):
+        self.handlers[name] = {"event_type": event_type, "priority": priority, "handler": handler}
+
+    def off(self, name):
+        self.handlers.pop(name, None)
+
+
+class TestPluginInstaller:
+    def test_install_success(self, installer_env):
+        installer, _, config_dir = installer_env
+        manifest = installer.install("test_plugin")
+        assert manifest.name == "TestPlugin"
+        assert manifest.version == "1.0.0"
+        assert (config_dir / "test_plugin.json").exists()
+
+    def test_install_invalid_manifest(self, installer_env):
+        installer, _, _ = installer_env
+        with pytest.raises(PluginInstallError, match="manifest validation failed"):
+            installer.install("bad_plugin")
+
+    def test_install_nonexistent(self, installer_env):
+        installer, _, _ = installer_env
+        with pytest.raises(PluginInstallError, match="manifest not found"):
+            installer.install("nonexistent")
+
+    def test_install_already_installed(self, installer_env):
+        installer, _, _ = installer_env
+        installer.install("test_plugin")
+        with pytest.raises(PluginInstallError, match="already installed"):
+            installer.install("test_plugin")
+
+    def test_install_creates_config(self, installer_env):
+        installer, _, config_dir = installer_env
+        installer.install("test_plugin")
+        config = json.loads((config_dir / "test_plugin.json").read_text())
+        assert config["enabled"] is True
+        assert config["installed"] is True
+        assert config["version"] == "1.0.0"
+
+
+class TestPluginUninstaller:
+    def test_uninstall_success(self, installer_env):
+        installer, _, config_dir = installer_env
+        installer.install("test_plugin")
+        assert installer.uninstall("test_plugin")
+        assert not (config_dir / "test_plugin.json").exists()
+
+    def test_uninstall_not_installed(self, installer_env):
+        installer, _, _ = installer_env
+        with pytest.raises(PluginInstallError, match="not installed"):
+            installer.uninstall("test_plugin")
+
+
+class TestPluginEnableDisable:
+    def test_enable(self, installer_env):
+        installer, _, config_dir = installer_env
+        installer.install("test_plugin")
+        installer.disable("test_plugin")
+        assert installer.enable("test_plugin")
+        config = json.loads((config_dir / "test_plugin.json").read_text())
+        assert config["enabled"] is True
+
+    def test_disable(self, installer_env):
+        installer, _, config_dir = installer_env
+        installer.install("test_plugin")
+        assert installer.disable("test_plugin")
+        config = json.loads((config_dir / "test_plugin.json").read_text())
+        assert config["enabled"] is False
+
+    def test_enable_not_installed(self, installer_env):
+        installer, _, _ = installer_env
+        with pytest.raises(PluginInstallError, match="not installed"):
+            installer.enable("test_plugin")
+
+    def test_disable_not_installed(self, installer_env):
+        installer, _, _ = installer_env
+        with pytest.raises(PluginInstallError, match="not installed"):
+            installer.disable("test_plugin")
+
+
+class TestEventBusHotReload:
+    def test_install_registers_handlers(self, installer_env):
+        installer, _, _ = installer_env
+        bus = MockBus()
+        installer.install("test_plugin", bus=bus)
+        assert len(bus.handlers) == 1
+        assert "plugin:test_plugin:mission.started" in bus.handlers
+
+    def test_handler_priority_500_plus(self, installer_env):
+        installer, _, _ = installer_env
+        bus = MockBus()
+        installer.install("test_plugin", bus=bus)
+        handler = bus.handlers["plugin:test_plugin:mission.started"]
+        assert handler["priority"] >= 500
+
+    def test_uninstall_deregisters_handlers(self, installer_env):
+        installer, _, _ = installer_env
+        bus = MockBus()
+        installer.install("test_plugin", bus=bus)
+        assert len(bus.handlers) == 1
+        installer.uninstall("test_plugin", bus=bus)
+        assert len(bus.handlers) == 0
+
+    def test_disable_deregisters_handlers(self, installer_env):
+        installer, _, _ = installer_env
+        bus = MockBus()
+        installer.install("test_plugin", bus=bus)
+        installer.disable("test_plugin", bus=bus)
+        assert len(bus.handlers) == 0
+
+    def test_enable_registers_handlers(self, installer_env):
+        installer, _, _ = installer_env
+        bus = MockBus()
+        installer.install("test_plugin", bus=bus)
+        installer.disable("test_plugin", bus=bus)
+        installer.enable("test_plugin", bus=bus)
+        assert len(bus.handlers) == 1
+
+
+class TestInstallerConcurrency:
+    def test_concurrent_lock_prevents_race(self, installer_env):
+        installer, _, _ = installer_env
+        lock = installer._get_lock("test_plugin")
+        lock.acquire()
+        with pytest.raises(PluginInstallError, match="already in progress"):
+            installer.install("test_plugin")
+        lock.release()

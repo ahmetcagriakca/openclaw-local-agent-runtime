@@ -1,12 +1,32 @@
-"""Approval store — strict ID-based approval lifecycle with idempotency."""
+"""Approval store — canonical approval FSM with timeout=deny semantics (D-138).
+
+States: PENDING → APPROVED | DENIED | EXPIRED | ESCALATED
+Terminal: APPROVED, DENIED, EXPIRED (no transitions out)
+Escalated: re-enters decision cycle (ESCALATED → APPROVED | DENIED | EXPIRED)
+
+Doctrines:
+- Timeout = deny (expired approval = denial, no mission proceeds)
+- No reuse of expired/denied records
+- Every state transition emits auditable event
+- Invalid transitions fail closed
+- Decisions persisted to disk
+"""
 import hashlib
 import json
+import logging
 import os
 from dataclasses import asdict, dataclass
 from datetime import datetime, timedelta, timezone
 
 from context.policy_telemetry import emit_policy_event
 from utils.atomic_write import atomic_write_json
+
+logger = logging.getLogger("mcc.approval.store")
+
+# D-138 canonical states
+VALID_STATES = {"pending", "approved", "denied", "expired", "escalated"}
+TERMINAL_STATES = {"approved", "denied", "expired"}
+DECIDABLE_STATES = {"pending", "escalated"}
 
 
 @dataclass
@@ -26,10 +46,12 @@ class ApprovalRecord:
     decision: str = None
     decidedAt: str = None
     decidedBy: str = None
+    escalatedAt: str = None
+    escalationReason: str = None
 
 
 class ApprovalStore:
-    """Strict ID-based approval lifecycle. No ambiguous yes/no."""
+    """Canonical approval FSM — D-138 timeout=deny, fail-closed."""
 
     def __init__(self, store_path=None):
         if store_path is None:
@@ -53,7 +75,7 @@ class ApprovalStore:
         # Idempotency — same params already pending?
         for existing in self.pending.values():
             if existing.paramsHash == f"sha256:{params_hash}" and \
-               existing.status == "pending":
+               existing.status in DECIDABLE_STATES:
                 return existing
 
         record = ApprovalRecord(
@@ -81,8 +103,17 @@ class ApprovalStore:
         return record
 
     def approve(self, approval_id: str, decided_by: str = "operator") -> bool:
+        """Approve a pending/escalated approval. Returns False if not decidable.
+
+        D-138: expired records are auto-expired first, then rejected.
+        Terminal states cannot be re-approved.
+        """
         record = self.pending.get(approval_id)
-        if not record or record.status != "pending":
+        if not record:
+            return False
+        if record.status in TERMINAL_STATES:
+            return False
+        if record.status not in DECIDABLE_STATES:
             return False
         if self._is_expired(record):
             self._expire(record)
@@ -93,15 +124,25 @@ class ApprovalStore:
         record.decidedAt = datetime.now(timezone.utc).isoformat()
         record.decidedBy = decided_by
         self._move_to_history(record)
+        self._persist_decision(record)
 
         emit_policy_event("approval_decided", {
             "approval_id": approval_id,
             "decision": "approved", "decided_by": decided_by})
+        logger.info("Approval %s: APPROVED by %s", approval_id, decided_by)
         return True
 
     def deny(self, approval_id: str, decided_by: str = "operator") -> bool:
+        """Deny a pending/escalated approval. Returns False if not decidable.
+
+        D-138: terminal states cannot be re-denied.
+        """
         record = self.pending.get(approval_id)
-        if not record or record.status != "pending":
+        if not record:
+            return False
+        if record.status in TERMINAL_STATES:
+            return False
+        if record.status not in DECIDABLE_STATES:
             return False
 
         record.status = "denied"
@@ -109,24 +150,64 @@ class ApprovalStore:
         record.decidedAt = datetime.now(timezone.utc).isoformat()
         record.decidedBy = decided_by
         self._move_to_history(record)
+        self._persist_decision(record)
 
         emit_policy_event("approval_decided", {
             "approval_id": approval_id,
             "decision": "denied", "decided_by": decided_by})
+        logger.info("Approval %s: DENIED by %s", approval_id, decided_by)
+        return True
+
+    def escalate(self, approval_id: str, reason: str = "risk_threshold") -> bool:
+        """Escalate a pending approval to elevated authority.
+
+        D-138: only pending approvals can be escalated.
+        Escalated approvals re-enter the decision cycle.
+        """
+        record = self.pending.get(approval_id)
+        if not record:
+            return False
+        if record.status != "pending":
+            return False
+        if self._is_expired(record):
+            self._expire(record)
+            return False
+
+        record.status = "escalated"
+        record.escalatedAt = datetime.now(timezone.utc).isoformat()
+        record.escalationReason = reason
+        self._persist_decision(record)
+
+        emit_policy_event("approval_decided", {
+            "approval_id": approval_id,
+            "decision": "escalated", "reason": reason})
+        logger.info("Approval %s: ESCALATED reason=%s", approval_id, reason)
         return True
 
     def check_expired(self):
+        """Check all pending/escalated approvals for expiration. Returns expired IDs."""
         expired = []
         for aid, record in list(self.pending.items()):
-            if self._is_expired(record):
+            if record.status in DECIDABLE_STATES and self._is_expired(record):
                 self._expire(record)
                 expired.append(aid)
         return expired
 
     def get_pending(self) -> list:
+        """Get all decidable (pending + escalated) approvals, expiring stale ones first."""
         self.check_expired()
         return [asdict(r) for r in self.pending.values()
-                if r.status == "pending"]
+                if r.status in DECIDABLE_STATES]
+
+    def get_record(self, approval_id: str) -> dict | None:
+        """Get approval record by ID (pending or history)."""
+        record = self.pending.get(approval_id)
+        if record:
+            return asdict(record)
+        for r in self.history:
+            if r.approvalId == approval_id:
+                return asdict(r)
+        return None
 
     def check_idempotency(self, params_hash: str) -> str | None:
         for record in self.history:
@@ -140,11 +221,18 @@ class ApprovalStore:
         return datetime.now(timezone.utc) > expires
 
     def _expire(self, record):
+        """D-138: timeout = deny. Expired approval is equivalent to denial."""
         record.status = "expired"
+        record.decision = "expired"
         record.decidedAt = datetime.now(timezone.utc).isoformat()
+        record.decidedBy = "system:timeout"
         self._move_to_history(record)
+        self._persist_decision(record)
+
         emit_policy_event("approval_decided", {
-            "approval_id": record.approvalId, "decision": "expired"})
+            "approval_id": record.approvalId, "decision": "expired",
+            "decided_by": "system:timeout"})
+        logger.info("Approval %s: EXPIRED (timeout=deny, D-138)", record.approvalId)
 
     def _move_to_history(self, record):
         if record.approvalId in self.pending:
@@ -156,4 +244,12 @@ class ApprovalStore:
         try:
             atomic_write_json(path, asdict(record))
         except Exception:
-            pass
+            logger.warning("Failed to persist approval %s", record.approvalId)
+
+    def _persist_decision(self, record):
+        """D-138: persist every decision to disk (not just creation)."""
+        path = os.path.join(self.store_path, f"{record.approvalId}.json")
+        try:
+            atomic_write_json(path, asdict(record))
+        except Exception:
+            logger.warning("Failed to persist decision for %s", record.approvalId)

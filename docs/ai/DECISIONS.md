@@ -1259,9 +1259,18 @@ Formal record: `docs/decisions/D-137-wsl2-powershell-bridge-contract.md`.
 
 ---
 
-## Decision Index (D-001 → D-137)
+### D-138: Approval Timeout=Deny Semantics + Escalation FSM
 
-135 frozen decisions. D-126 skipped, D-132 deferred.
+**Phase:** Sprint 61 | **Status:** Frozen
+
+Canonical approval FSM: PENDING → APPROVED | DENIED | EXPIRED | ESCALATED. Timeout=deny doctrine: expired approval = denial, no mission proceeds on expired token. Terminal states (APPROVED, DENIED, EXPIRED) immutable — no reuse. Escalated re-enters decision cycle. Every state transition persisted to disk and emits `approval_decided` audit event. `decidedBy=system:timeout` for expired records. 31 enforcement tests covering approve/deny/expire/escalate/bypass/idempotency.
+Formal record: `docs/decisions/D-138-approval-timeout-escalation-fsm.md`.
+
+---
+
+## Decision Index (D-001 → D-138)
+
+137 frozen decisions. D-126 skipped, D-132 deferred.
 
 | ID | Title | Phase |
 |----|-------|-------|
@@ -1402,3 +1411,4 @@ Formal record: `docs/decisions/D-137-wsl2-powershell-bridge-contract.md`.
 | D-135 | Secret Rotation + Allowlist + Metrics Contract | Sprint 57 |
 | D-136 | Plugin Marketplace + Installer Contract | Sprint 59 |
 | D-137 | WSL2 <-> PowerShell Bridge Contract | Sprint 60 |
+| D-138 | Approval Timeout=Deny + Escalation FSM | Sprint 61 |

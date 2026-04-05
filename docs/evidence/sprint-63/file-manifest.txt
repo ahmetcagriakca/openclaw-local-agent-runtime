@@ -1,0 +1,11 @@
+Sprint 63 File Manifest (Design-Only)
+=======================================
+
+NEW FILES:
+  docs/sprints/sprint-63/responsibility-map.md           — Controller responsibility allocation map
+  docs/sprints/sprint-63/D-139-controller-decomposition.md — D-139 frozen decision document
+  docs/sprints/sprint-63/budget-data-flow.md              — Budget enforcement data flow diagram
+  docs/sprints/sprint-63/budget-enforcement-draft.yaml    — Budget enforcement policy draft
+
+MODIFIED FILES:
+  docs/ai/DECISIONS.md                                    — D-139 entry added (controller decomposition boundary)

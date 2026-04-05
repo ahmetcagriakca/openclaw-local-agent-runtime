@@ -1,9 +1,9 @@
 # Current State
 
 **Last updated:** 2026-04-06
-**Active phase:** Phase 8 — Sprint 66 closed
+**Active phase:** Phase 8 — Sprint 67 closed
 **Doc model:** This file is canonical for system state. Session context lives in `docs/ai/handoffs/current.md`.
-**Note:** All sprints through 53 closed. S54 deferred. S55-S66 closed. All P1 backlog items complete (50/50). Phase 8 active (S60-S66). 137 frozen decisions + 2 superseded (D-001 → D-140, D-126 skipped, D-132 deferred, D-082/D-098 superseded). Governance: 20-step closure checklist.
+**Note:** All sprints through 53 closed. S54 deferred. S55-S67 closed. All P1 backlog items complete (50/50). Phase 8 active (S60-S67). 137 frozen decisions + 2 superseded (D-001 → D-140, D-126 skipped, D-132 deferred, D-082/D-098 superseded). Governance: 20-step closure checklist.
 **Persistence:** State is file-persisted (state.json, mission.json). Mission history via persistence layer (Sprint 16).
 **API:** Vezir API on 127.0.0.1:8003 (FastAPI + Uvicorn). Schemas FROZEN (D-067). SSE on /api/v1/events/stream. Dashboard API + Alert API + Telemetry Query API (Sprint 16).
 **Frontend:** React dashboard on localhost:3000 (Vite + Tailwind). SSE live updates + polling fallback + intervention buttons + monitoring dashboard. Node.js 20 required.
@@ -123,6 +123,7 @@
 | Sprint 64 | Controller Extraction Phase 1 + Hard Budget Enforcement (B-139, B-140) | Closed |
 | Sprint 65 | Mission Startup Recovery + Plugin Mutation Auth Boundary (B-141, B-142) | Closed |
 | Sprint 66 | Persistence Boundary ADR + Tool Reversibility Metadata (B-143, B-144, D-140) | Closed |
+| Sprint 67 | Enforcement Chain Doc + Mission Replay CLI (B-145, B-146) | Closed |
 
 ## Test Evidence
 
@@ -160,6 +161,7 @@
 | Sprint 64 | 1494 tests, 0 fail | 217 tests, 0 TS errors | +40 new (persistence 11, recovery 8, budget 21). 13 Playwright. 1724 total |
 | Sprint 65 | 1536 tests, 0 fail | 217 tests, 0 TS errors | +42 new (startup recovery 25, plugin auth 17). 13 Playwright. 1766 total |
 | Sprint 66 | 1555 tests, 0 fail | 217 tests, 0 TS errors | +19 new (manifest invariant 7, policy enforcement 10, assertion updates 2). 13 Playwright. 1785 total |
+| Sprint 67 | 1555 tests, 0 fail | 217 tests, 0 TS errors | Model B: docs + CLI tool only, no runtime change. 13 Playwright. 1785 total |
 
 ## Architectural Decisions
 

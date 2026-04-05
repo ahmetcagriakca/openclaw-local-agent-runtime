@@ -1,11 +1,25 @@
 # Next Steps — Vezir Platform
 
-**Last updated:** 2026-04-05
-**Current:** Phase 8 active. Sprint 65 kickoff ready. B-141 mission startup recovery + B-142 plugin mutation auth boundary.
+**Last updated:** 2026-04-06
+**Current:** Phase 8 active. Sprint 67 closed. B-147 patch/review/apply/revert contract next (S68).
 
 ---
 
-## Sprint 65 — Mission Startup Recovery + Plugin Mutation Auth Boundary (KICKOFF)
+## Sprint 67 — Enforcement Chain Doc + Mission Replay CLI (CLOSED)
+
+**Model:** B (lightweight closure) | **Class:** Documentation + DevEx
+**Scope:** B-145 enforcement chain documentation, B-146 mission replay CLI tool
+**Issues:** #333, #334
+**Milestone:** S67
+**Tests:** 1555 backend + 217 frontend + 13 Playwright = 1785 total (no change — Model B)
+**New files:** `docs/shared/ENFORCEMENT-CHAIN.md`, `tools/replay-mission.py`
+**Modified:** `docs/ai/GOVERNANCE.md` (section 15 enforcement chain cross-ref)
+**Review:** Claude Code PASS, GPT PENDING
+**Evidence:** `evidence/sprint-67/`
+
+---
+
+## Sprint 65 — Mission Startup Recovery + Plugin Mutation Auth Boundary (CLOSED)
 
 **Model:** A (full closure) | **Class:** Architecture + Security
 **Scope:** B-141 mission startup recovery, B-142 plugin mutation auth boundary

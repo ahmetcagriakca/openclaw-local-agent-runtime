@@ -1,4 +1,4 @@
-# Session Handoff — 2026-04-06 (Session 42 — Sprint 66 Closure + Housekeeping)
+# Session Handoff — 2026-04-06 (Session 43 — Sprint 67)
 
 **Platform:** Vezir Platform
 **Operator:** Claude Code (Opus) — AKCA delegated
@@ -7,26 +7,22 @@
 
 ## Session Summary
 
-Session 42: Sprint 66 fully implemented and closed. B-143 persistence boundary ADR (D-140 frozen — 5-category store stratification, observation-based scaling). B-144 tool reversibility metadata (24 tools with reversibility/idempotent/side_effect_scope, irreversible-escalation policy rule, 19 new tests including 7 manifest invariant + 10 policy enforcement). GPT R1 HOLD → R2 PASS.
+Session 43: Sprint 67 fully implemented and closed. Model B (docs + CLI tool, no runtime change).
 
-Post-sprint housekeeping:
-- CI fixes: 3 unused imports (lint gate), OpenAPI/TS SDK drift sync
-- Dependabot: 7 PRs merged (4 GitHub Actions + 3 frontend), 1 reverted (@vitejs/plugin-react 6 incompatible with vite 6), 2 closed (eslint 10 + react-router-dom 7 need migration)
-- CodeQL: 14 original alerts fixed (path-injection: basename+resolve+prefix guard, stack-trace-exposure: catch-all handler). 19 residual alerts dismissed as false positive (4-layer protection verified)
-- Project board: S62-S66 Sprint fields + Status synced, milestones assigned, 6 issues closed
-- All milestones S62-S66 closed
+- B-145: Enforcement chain documentation (`docs/shared/ENFORCEMENT-CHAIN.md`) — all 7 layers documented with fail behavior, decision records, key files, interaction rules, known gaps. GOVERNANCE.md cross-reference added (section 15).
+- B-146: Mission replay CLI tool (`tools/replay-mission.py`) — merges 3 sources (audit trail, mission state transitions, policy telemetry) into chronological timeline. Supports `--json` and `--filter` flags. Graceful degradation on missing sources. Sample output generated.
 
 ## Current State
 
-- **Phase:** 8 active — S66 closed
-- **Last closed sprint:** 66
+- **Phase:** 8 active — S67 closed
+- **Last closed sprint:** 67
 - **Decisions:** 137 frozen + 2 superseded (D-001 → D-140, D-126 skipped, D-132 deferred, D-082/D-098 superseded)
-- **Tests:** 1555 backend + 217 frontend + 13 Playwright = 1785 total
-- **CI:** All green (CI, Playwright, Benchmark, CodeQL — all success)
+- **Tests:** 1555 backend + 217 frontend + 13 Playwright = 1785 total (no change — Model B)
+- **CI:** All green
 - **Security:** 0 CodeQL open, 0 secret scanning, 0 dependabot critical
 - **PRs:** 0 open
-- **Open issues:** 3 (Phase 8 backlog B-145→B-147)
-- **Project board:** Fully synced through S66, S67/S68 backlog assigned
+- **Open issues:** 1 (Phase 8 backlog B-147)
+- **Project board:** Synced through S67
 - **Blockers:** None
 
 ## Review History
@@ -43,29 +39,17 @@ Post-sprint housekeeping:
 | S64 | PASS | PASS (R2) |
 | S65 | PASS | PASS (R2) |
 | S66 | PASS | PASS (R2) |
+| S67 | PASS | PENDING |
 
 ## Phase 8 Backlog (Remaining)
 
 | Issue | ID | Priority | Sprint | Scope |
 |-------|-----|----------|--------|-------|
-| #333 | B-145 | P2 | S67 | Enforcement chain documentation |
-| #334 | B-146 | P2 | S67 | Mission replay CLI tool |
 | #335 | B-147 | P3 | S68 | Patch/review/apply/revert contract |
 
 ## Dependency Status
 
-| Package | PR | Action | Reason |
-|---------|-----|--------|--------|
-| actions/checkout 4→6 | #337 | Merged | Compatible |
-| actions/setup-node 4→6 | #338 | Merged (git) | Compatible |
-| actions/setup-python 5→6 | #339 | Merged (git) | Compatible |
-| actions/upload-artifact 4→7 | #336 | Merged (git) | Compatible |
-| typescript-eslint 8.57→8.58 | #340 | Merged (git) | Minor bump |
-| @testing-library/dom 10.0→10.4 | #341 | Merged (git) | Minor bump |
-| eslint-plugin-react-hooks 5→7 | #345 | Merged (git) | Major, tests pass |
-| @vitejs/plugin-react 4→6 | #343 | Reverted | Requires vite 8 (incompatible) |
-| eslint 9→10 | #342 | Closed | Major, merge conflict, needs migration |
-| react-router-dom 6→7 | #344 | Closed | Major, merge conflict, breaking changes |
+No changes from S66.
 
 ## Carry-Forward
 
@@ -80,14 +64,13 @@ Post-sprint housekeeping:
 | react-router-dom 6→7 migration | Dependabot | Deferred — breaking API changes |
 | vite 6→8 + plugin-react 6 | Dependabot | Deferred — blocked on vite major bump |
 
-## Next Session — Sprint 67
+## Next Session — Sprint 68
 
-**Sprint:** 67 | **Phase:** 8 | **Model:** A (full closure) | **Class:** Documentation + Tooling
+**Sprint:** 68 | **Phase:** 8 | **Class:** Contract Design
 
 ### Planned Tasks
-- B-145: Enforcement chain documentation
-- B-146: Mission replay CLI tool
+- B-147: Patch/review/apply/revert contract
 
 ## GPT Memo
 
-Session 42 (S66 closure + housekeeping): B-143 persistence boundary ADR (D-140 frozen — 5 store categories: hot state/audit log/artifact/plugin/config, observation-based scaling signals, no numeric thresholds). B-144 tool reversibility metadata (24 tools with reversibility/idempotent/side_effect_scope governance fields, irreversible-escalation policy rule at priority 75, compound condition matcher in policy engine). GPT R1 HOLD (test accounting, manifest invariant, enforcement proofs) → R2 PASS: +19 new tests (7 manifest invariant covering all 24 tools, 10 policy enforcement covering positive/negative/edge cases). Backend 1555, Frontend 217, Playwright 13, total 1785. Post-sprint: CI lint+SDK drift fixed, 7 Dependabot PRs merged (Actions+frontend minor), 14 CodeQL path-injection+stack-trace alerts resolved, project board S62-S66 fully synced.
+Session 43 (S67 closure): Model B sprint. B-145 enforcement chain documentation — 7-layer sequence (Auth D-117 → Tool Gateway D-024 → Working Set D-053 → Risk Engine D-128 → Policy Engine D-133 → Execute → Audit Trail D-129) with per-layer fail behavior, decision refs, key files, interaction rules, known gaps. GOVERNANCE.md cross-ref added (section 15). B-146 mission replay CLI tool — tools/replay-mission.py merges 3 sources (audit trail JSONL, mission summary stateTransitions, policy telemetry JSONL) into chronological unified timeline, supports --json and --filter, graceful degradation. Frontend 217 tests pass, tsc clean. No runtime change, no new backend tests (Model B waiver). Total: 1785 tests unchanged.

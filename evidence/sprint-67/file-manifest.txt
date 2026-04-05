@@ -1,0 +1,15 @@
+Sprint 67 — File Manifest
+
+New files:
+  docs/shared/ENFORCEMENT-CHAIN.md        — B-145: 7-layer enforcement chain documentation
+  tools/replay-mission.py                  — B-146: Mission replay CLI tool (3-source merge)
+  evidence/sprint-67/replay-output-sample.txt  — Sample replay output
+  evidence/sprint-67/lint-output.txt       — Lint evidence
+  evidence/sprint-67/pytest-note.txt       — Model B pytest waiver
+  evidence/sprint-67/file-manifest.txt     — This file
+  evidence/sprint-67/review-summary.md     — GPT review summary
+
+Modified files:
+  docs/ai/GOVERNANCE.md                    — Added section 15 (enforcement chain cross-ref), renumbered 16→17
+  docs/ai/STATE.md                         — Sprint 67 row added
+  docs/ai/handoffs/current.md              — Session 43 handoff

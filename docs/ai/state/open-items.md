@@ -76,10 +76,11 @@
 | Sprint 58 | Knowledge Layer + Multi-tenant + WMCP Cred (B-114, B-116, B-010) | CLOSED |
 | Sprint 59 | Plugin Marketplace / Discovery (B-118, D-136) | CLOSED |
 | Sprint 60 | WSL2 <-> PowerShell Bridge Contract (D-137) | CLOSED |
+| Sprint 61 | Approval Timeout=Deny + Escalation FSM (D-138) | CLOSED |
 
 ## Next Sprint
 
-**Phase 8 active.** All backlog items complete (48/48). S60 started Phase 8 with architecture hardening.
+**Phase 8 active.** Architecture hardening: D-137 bridge contract, D-138 approval FSM.
 
 ### Carry-Forward
 | Item | Source | Status |

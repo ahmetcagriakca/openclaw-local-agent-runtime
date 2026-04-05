@@ -1,7 +1,21 @@
 # Next Steps — Vezir Platform
 
 **Last updated:** 2026-04-05
-**Current:** Phase 8 active. Sprint 60 closed. All backlog complete (48/48). D-137 bridge contract frozen.
+**Current:** Phase 8 active. Sprint 61 closed. D-137 bridge contract + D-138 approval FSM frozen.
+
+---
+
+## Sprint 61 — Approval Timeout=Deny + Escalation FSM (CLOSED)
+
+**Model:** A (full closure) | **Class:** Governance
+**Scope:** D-138 Approval timeout=deny semantics + escalation FSM
+**Tests:** 1426 backend + 217 frontend + 13 Playwright = 1656 total (0 TS errors)
+**Issues:** #321
+**New tests:** +31
+**New files:** `agent/tests/test_approval_fsm.py`, `docs/decisions/D-138-approval-timeout-escalation-fsm.md`
+**Modified:** `agent/services/approval_store.py` (canonical FSM, escalation, persist-on-decide)
+**Decision:** D-138 frozen
+**Review:** Claude Code PASS, GPT Pending
 
 ---
 

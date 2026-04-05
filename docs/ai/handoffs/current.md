@@ -7,14 +7,14 @@
 
 ## Session Summary
 
-Session 35: Massive platform maintenance session. Read handoff + STATE. Completed S58+S59+S60 GPT reviews (all PASS). Fixed 14 CodeQL alerts (path injection + stack trace). Fixed CI (Python 3.12 compat, SDK drift, 7 lint errors). Synced 37 GitHub issues to milestones. Implemented D-137 WSL2 <-> PowerShell bridge contract (Sprint 60). Phase 8 started.
+Session 35: Massive platform maintenance + architecture hardening. S58+S59+S60+S61 GPT reviews (all PASS). 14 CodeQL fixes. CI fixes. 37 issues synced to milestones. D-137 bridge contract (S60) + D-138 approval FSM (S61) frozen. Phase 8 active.
 
 ## Current State
 
-- **Phase:** 8 (started with S60 / D-137)
-- **Last closed sprint:** 60
-- **Decisions:** 136 frozen (D-001 -> D-137, D-126 skipped, D-132 deferred)
-- **Tests:** 1395 backend + 217 frontend + 13 Playwright = 1625 total
+- **Phase:** 8 (S60 bridge contract + S61 approval FSM)
+- **Last closed sprint:** 61
+- **Decisions:** 137 frozen (D-001 -> D-138, D-126 skipped, D-132 deferred)
+- **Tests:** 1426 backend + 217 frontend + 13 Playwright = 1656 total
 - **CI:** All green (CI, Benchmark, Playwright, Push on main — all success on a594dd4+)
 - **Security:** 14 CodeQL fixes pushed, 0 secret scanning, 0 dependabot
 - **PRs:** 0 open
@@ -53,6 +53,7 @@ Session 35: Massive platform maintenance session. Read handoff + STATE. Complete
 | S59 plan | — | PASS (R3) |
 | S59 | PASS | PASS (R2) |
 | S60 | PASS | PASS (R1) |
+| S61 | PASS | PASS (R1) |
 
 ## Carry-Forward
 
@@ -71,4 +72,4 @@ Session 35: Massive platform maintenance session. Read handoff + STATE. Complete
 
 ## GPT Memo
 
-Session 35: Full platform maintenance + architecture hardening. S58 GPT PASS (R4), S59 GPT PASS (R2), S60 GPT PASS (R1). Fixed 14 CodeQL alerts (path injection in allowlist_store/policy_engine/backup_api + stack trace in retention_api). Fixed CI: Python 3.12 compat (list builtin shadowing in knowledge_store.py), SDK drift (OpenAPI 133 endpoints), 7 lint errors. Synced 37 unassigned GitHub issues to milestones. Sprint 60 (Phase 8 start): D-137 WSL2 <-> PowerShell bridge contract frozen. Removed 3 legacy WSL subprocess fallbacks (approval_service, telegram_bot, health_api). Added 19 bridge enforcement tests (bypass prevention + contract validation). Issue #320, milestone #35. 1395 backend + 217 frontend = 1625 total tests. All CI green. 136 frozen decisions.
+Session 35: Full platform maintenance + architecture hardening. GPT reviews: S58 PASS (R4), S59 PASS (R2), S60 PASS (R1), S61 PASS (R1). Fixed 14 CodeQL alerts. Fixed CI (Python 3.12, SDK drift, lint). Synced 37 issues to milestones. Sprint 60: D-137 bridge contract frozen, 19 tests, issue #320. Sprint 61: D-138 approval timeout=deny + escalation FSM frozen, 31 tests, issue #321. 1426 backend + 217 frontend = 1656 total tests. All CI green. 137 frozen decisions.

@@ -1,9 +1,9 @@
 # Current State
 
 **Last updated:** 2026-04-05
-**Active phase:** Phase 8 — Sprint 60 closed
+**Active phase:** Phase 8 — Sprint 61 closed
 **Doc model:** This file is canonical for system state. Session context lives in `docs/ai/handoffs/current.md`.
-**Note:** All sprints through 53 closed. S54 deferred. S55-S60 closed. All P1 backlog items complete (48/48). Phase 8 active (started S60). 136 frozen decisions (D-001 → D-137, D-126 skipped, D-132 deferred).
+**Note:** All sprints through 53 closed. S54 deferred. S55-S60 closed. All P1 backlog items complete (48/48). Phase 8 active (started S60). 137 frozen decisions (D-001 → D-138, D-126 skipped, D-132 deferred).
 **Persistence:** State is file-persisted (state.json, mission.json). Mission history via persistence layer (Sprint 16).
 **API:** Vezir API on 127.0.0.1:8003 (FastAPI + Uvicorn). Schemas FROZEN (D-067). SSE on /api/v1/events/stream. Dashboard API + Alert API + Telemetry Query API (Sprint 16).
 **Frontend:** React dashboard on localhost:3000 (Vite + Tailwind). SSE live updates + polling fallback + intervention buttons + monitoring dashboard. Node.js 20 required.
@@ -117,6 +117,7 @@
 | Sprint 58 | Knowledge Layer + Multi-tenant + WMCP Cred (B-114, B-116, B-010) | Closed |
 | Sprint 59 | Plugin Marketplace / Discovery (B-118, D-136) | Closed |
 | Sprint 60 | WSL2 <-> PowerShell Bridge Contract (D-137) | Closed |
+| Sprint 61 | Approval Timeout=Deny + Escalation FSM (D-138) | Closed |
 
 ## Test Evidence
 
@@ -148,10 +149,11 @@
 | Sprint 58 | 1300 tests, 0 fail | 217 tests, 0 TS errors | +90 new (knowledge 37, tenant 30, wmcp-cred 23). 13 Playwright. 1530 total |
 | Sprint 59 | 1376 tests, 0 fail | 217 tests, 0 TS errors | +76 new (marketplace 38, API 21, installer 17). 13 Playwright. 1606 total |
 | Sprint 60 | 1395 tests, 0 fail | 217 tests, 0 TS errors | +19 new (bridge contract enforcement 19). 13 Playwright. 1625 total |
+| Sprint 61 | 1426 tests, 0 fail | 217 tests, 0 TS errors | +31 new (approval FSM 31). 13 Playwright. 1656 total |
 
 ## Architectural Decisions
 
-136 frozen decisions (D-001 through D-137, D-126 skipped, D-132 deferred). See `docs/ai/DECISIONS.md`. Recent: D-136 plugin marketplace + installer contract (S59). D-137 WSL2 <-> PowerShell bridge contract (S60). Governance rules in `docs/ai/GOVERNANCE.md` (D-112, Rule 16: 18-step closure checklist).
+137 frozen decisions (D-001 through D-138, D-126 skipped, D-132 deferred). See `docs/ai/DECISIONS.md`. Recent: D-137 WSL2 <-> PowerShell bridge contract (S60). D-138 approval timeout=deny + escalation FSM (S61).
 
 ## Port Map
 

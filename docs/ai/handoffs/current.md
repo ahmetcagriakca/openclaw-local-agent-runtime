@@ -48,14 +48,14 @@ Session 35: Full platform maintenance + Phase 8 architecture hardening. GPT revi
 | S58 | PASS | PASS (R4) |
 | S59 plan | — | PASS (R3) |
 | S59 | PASS | PASS (R2) |
-| S60 | PASS | R1 HOLD → R2 submitted |
+| S60 | PASS | PASS (R2) |
 | S61 | PASS | PASS (R1) |
 
 ## Carry-Forward
 
 | Item | Source | Status |
 |------|--------|--------|
-| S60 GPT R2 verdict | This session | User relaying patch, awaiting GPT response |
+| ~~S60 GPT R2 verdict~~ | This session | **RESOLVED — PASS** |
 | PROJECT_TOKEN rotation | S23 retro | AKCA-owned, non-blocking |
 | Docker prod image optimization | D-116 | Partial — docker-compose done |
 | SSO/RBAC (full external auth) | D-104/D-108/D-117 | Partial — D-117 + isolation done |

@@ -47,5 +47,6 @@
 
 ## GPT Review
 
-**Round 1 (2026-04-05):** **PASS** — all evidence accepted, bridge contract verified.
-**Status:** PASS (R1) — GPT conversation: `69d21fba-4774-8386-bf4c-95f12387ef1c`
+**Round 1 (2026-04-05):** HOLD — closure-check missing, runtime enforcement proof missing, verification surface too narrow.
+**Round 2 (2026-04-05):** **PASS** — closure-check added (ELIGIBLE FOR CLOSURE REVIEW), live-checks.txt with 5 runtime enforcement proofs, project closure convention clarified.
+**Status:** PASS (R2) — GPT conversation: `69d21fba-4774-8386-bf4c-95f12387ef1c`

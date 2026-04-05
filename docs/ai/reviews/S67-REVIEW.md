@@ -15,12 +15,19 @@
 - [x] B-145: GOVERNANCE.md cross-reference (section 15)
 - [x] B-146: replay-mission.py CLI with 3 sources, --json, --filter
 - [x] B-146: Graceful degradation on missing sources
-- [x] B-146: Clear error on unknown mission_id
-- [x] B-146: Sample output generated
-- [x] Evidence bundle complete
+- [x] B-146: Clear error on unknown mission_id (exit code 1)
+- [x] B-146: 5 raw CLI verification evidence outputs
+- [x] Evidence bundle complete (11 files)
 - [x] Frontend tests: 217 pass, 0 TS errors
-- [x] No runtime changes (Model B)
+- [x] Core runtime unchanged, CLI-specific verification provided
 
-## Verdict: PASS
+## GPT Review
 
-All acceptance criteria met. Model B closure appropriate — no runtime code changed.
+| Round | Verdict | Notes |
+|-------|---------|-------|
+| R1 | HOLD | CLI under-verified, waiver too broad |
+| R2 | PASS | 5 raw evidence outputs added, waiver corrected |
+
+## Verdict: PASS (R2)
+
+All acceptance criteria met. GPT R1 HOLD resolved with evidence patch (bf1f3cd).

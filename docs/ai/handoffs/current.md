@@ -39,7 +39,7 @@ Session 43: Sprint 67 fully implemented and closed. Model B (docs + CLI tool, no
 | S64 | PASS | PASS (R2) |
 | S65 | PASS | PASS (R2) |
 | S66 | PASS | PASS (R2) |
-| S67 | PASS | PENDING |
+| S67 | PASS | PASS (R2) |
 
 ## Phase 8 Backlog (Remaining)
 
@@ -73,4 +73,4 @@ No changes from S66.
 
 ## GPT Memo
 
-Session 43 (S67 closure): Model B sprint. B-145 enforcement chain documentation — 7-layer sequence (Auth D-117 → Tool Gateway D-024 → Working Set D-053 → Risk Engine D-128 → Policy Engine D-133 → Execute → Audit Trail D-129) with per-layer fail behavior, decision refs, key files, interaction rules, known gaps. GOVERNANCE.md cross-ref added (section 15). B-146 mission replay CLI tool — tools/replay-mission.py merges 3 sources (audit trail JSONL, mission summary stateTransitions, policy telemetry JSONL) into chronological unified timeline, supports --json and --filter, graceful degradation. Frontend 217 tests pass, tsc clean. No runtime change, no new backend tests (Model B waiver). Total: 1785 tests unchanged.
+Session 43 (S67 closure): Model B sprint. B-145 enforcement chain documentation — 7-layer sequence (Auth D-117 > Tool Gateway D-024 > Working Set D-053 > Risk Engine D-128 > Policy Engine D-133 > Execute > Audit Trail D-129) with per-layer fail behavior, decision refs, key files, interaction rules, known gaps. GOVERNANCE.md cross-ref added (section 15). B-146 mission replay CLI tool — tools/replay-mission.py merges 3 sources (audit trail JSONL, mission summary stateTransitions, policy telemetry JSONL) into chronological unified timeline, supports --json and --filter, graceful degradation. GPT R1 HOLD (CLI under-verified, waiver too broad) > R2 PASS: +5 raw CLI evidence outputs (smoke, json, filter, missing-source degradation, unknown-mission exit code 1), waiver language corrected. Frontend 217 tests pass, tsc clean. Core runtime unchanged, CLI-specific evidence provided. Total: 1785 tests unchanged.

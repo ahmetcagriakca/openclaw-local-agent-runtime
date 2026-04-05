@@ -1,0 +1,10 @@
+    at innerInvokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:350:25)
+    at invokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:286:3)
+    at HTMLUnknownElementImpl._dispatch (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:233:9)
+    at HTMLUnknownElementImpl.dispatchEvent (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:104:17)
+
+ Test Files  30 passed (30)
+      Tests  217 passed (217)
+   Start at  23:16:00
+   Duration  18.85s (transform 8.19s, setup 14.61s, import 32.91s, tests 12.96s, environment 85.97s)
+

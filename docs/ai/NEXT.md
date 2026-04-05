@@ -7,14 +7,15 @@
 
 ## Sprint 64 — Controller Extraction Phase 1 + Hard Budget Enforcement (CLOSED)
 
-**Model:** A (full closure) | **Class:** Architecture + Governance
+**Model:** A (full closure) | **Class:** Product + Security
 **Scope:** B-139 controller extraction phase 1, B-140 hard per-mission budget enforcement
 **Tests:** 1494 backend + 217 frontend + 13 Playwright = 1724 total
 **Issues:** #327, #328
 **New tests:** +40 (persistence 11, recovery 8, budget 21)
 **New files:** `agent/mission/persistence_adapter.py`, `agent/mission/recovery_engine.py`, `config/policies/token-budget-exceeded.yaml`, `config/policies/token-budget-warning.yaml`, `agent/tests/test_persistence_adapter.py`, `agent/tests/test_recovery_engine.py`, `agent/tests/test_budget_enforcement.py`
 **Modified:** `agent/mission/controller.py` (delegation), `agent/mission/policy_context.py` (budget fields), `agent/mission/policy_engine.py` (budget conditions), `agent/api/schemas.py` (budget in API), `agent/api/normalizer.py`
-**Review:** Claude Code PASS, GPT Pending
+**Review:** Claude Code PASS, GPT PASS (R2)
+**Evidence:** `docs/evidence/sprint-64/`
 
 ---
 
@@ -39,7 +40,7 @@
 **Tests:** 1454 backend + 217 frontend + 13 Playwright = 1684 total
 **Issues:** #322, #323, #324
 **New tests:** +28
-**Review:** Claude Code PASS, GPT Pending
+**Review:** Claude Code PASS, GPT PASS (R1)
 
 ---
 
@@ -53,7 +54,7 @@
 **New files:** `agent/tests/test_approval_fsm.py`, `docs/decisions/D-138-approval-timeout-escalation-fsm.md`
 **Modified:** `agent/services/approval_store.py` (canonical FSM, escalation, persist-on-decide)
 **Decision:** D-138 frozen
-**Review:** Claude Code PASS, GPT Pending
+**Review:** Claude Code PASS, GPT PASS (R2)
 
 ---
 

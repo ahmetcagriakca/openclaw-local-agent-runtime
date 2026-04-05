@@ -79,10 +79,11 @@
 | Sprint 61 | Approval Timeout=Deny + Escalation FSM (D-138) | CLOSED |
 | Sprint 62 | Approval FSM Wiring + Decision Drift + Auth Quarantine (B-134, B-135, B-136) | CLOSED |
 | Sprint 63 | Controller Decomposition Boundary + Budget Ownership Design (B-137, B-138, D-139) | CLOSED |
+| Sprint 64 | Controller Extraction Phase 1 + Hard Budget Enforcement (B-139, B-140) | CLOSED |
 
 ## Next Sprint
 
-**Phase 8 active.** S64 ready: B-139 controller extraction phase 1, B-140 hard per-mission budget enforcement.
+**Phase 8 active.** S65 ready: B-141 mission startup recovery, B-142 plugin mutation auth boundary.
 
 ### Carry-Forward
 | Item | Source | Status |

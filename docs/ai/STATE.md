@@ -159,6 +159,7 @@
 | Sprint 63 | 1454 tests, 0 fail | 217 tests, 0 TS errors | Design-only sprint (no new tests). 13 Playwright. 1684 total |
 | Sprint 64 | 1494 tests, 0 fail | 217 tests, 0 TS errors | +40 new (persistence 11, recovery 8, budget 21). 13 Playwright. 1724 total |
 | Sprint 65 | 1536 tests, 0 fail | 217 tests, 0 TS errors | +42 new (startup recovery 25, plugin auth 17). 13 Playwright. 1766 total |
+| Sprint 66 | 1555 tests, 0 fail | 217 tests, 0 TS errors | +19 new (manifest invariant 7, policy enforcement 10, assertion updates 2). 13 Playwright. 1785 total |
 
 ## Architectural Decisions
 

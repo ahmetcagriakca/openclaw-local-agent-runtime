@@ -2,6 +2,11 @@
 
 **Sprint:** 66 | **Phase:** 8 | **Model:** A | **Date:** 2026-04-06
 
+## Review History
+
+- R1: HOLD — test-count inconsistency, missing manifest invariant, thin enforcement proofs
+- R2: Patch applied — all 4 blockers addressed
+
 ## Tasks Completed
 
 ### 66.1 — B-143: Persistence Boundary ADR (D-140)
@@ -16,19 +21,23 @@
 - Updated `validate_catalog_governance()` required_fields (0 errors)
 - Created `config/policies/irreversible-escalation.yaml` policy rule
 - Added `side_effect_scope` compound condition support in policy engine
-- 4 new tests for irreversible-escalation rule
-- Updated 2 existing test assertions (rule count 7 -> 8)
+- 7 manifest invariant tests (24-tool coverage proof)
+- 10 policy enforcement tests (positive/negative/edge/mixed-tool)
 
-## Test Results
-- Backend: 1532 passed, 2 skipped (test_transport_encryption excluded: pre-existing recursion bug)
-- Catalog validation: 0 errors
-- Policy engine: 45 tests passed
+## Test Results (exact reconciliation)
+- Backend (pytest): 1555 collected = 1553 passed + 2 skipped
+- Frontend (vitest): 217
+- Playwright (E2E): 13
+- **Total: 1785**
+- **Delta vs S65: +19 backend tests**
 - Lint: 0 new errors (3 pre-existing in other files)
+- validate_catalog_governance(): 0 errors
 
 ## Files Changed
 - `agent/services/tool_catalog.py` — 24 tools with new governance fields
 - `agent/mission/policy_engine.py` — side_effect_scope condition matcher
-- `agent/tests/test_policy_engine.py` — 4 new tests + 2 assertion updates
+- `agent/tests/test_policy_engine.py` — 10 new policy enforcement tests + 2 assertion updates
+- `agent/tests/test_quality.py` — 7 new manifest invariant tests
 - `config/policies/irreversible-escalation.yaml` — new policy rule
 - `docs/decisions/D-140-persistence-boundary.md` — new ADR
 - `docs/ai/DECISIONS.md` — D-140 entry added

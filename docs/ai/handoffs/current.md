@@ -7,14 +7,14 @@
 
 ## Session Summary
 
-Session 42: Sprint 66 fully implemented and closed. B-143 persistence boundary ADR (D-140 frozen — 5-category store stratification, observation-based scaling). B-144 tool reversibility metadata (24 tools with reversibility/idempotent/side_effect_scope, irreversible-escalation policy rule, 4 new tests). GPT review pending.
+Session 42: Sprint 66 fully implemented and closed. B-143 persistence boundary ADR (D-140 frozen — 5-category store stratification, observation-based scaling). B-144 tool reversibility metadata (24 tools with reversibility/idempotent/side_effect_scope, irreversible-escalation policy rule, 19 new tests including 7 manifest invariant + 10 policy enforcement). GPT R1 HOLD → R2 patch (test accounting, manifest invariant, expanded enforcement proofs).
 
 ## Current State
 
 - **Phase:** 8 active — S66 closed
 - **Last closed sprint:** 66
 - **Decisions:** 137 frozen + 2 superseded (D-001 → D-140, D-126 skipped, D-132 deferred, D-082/D-098 superseded)
-- **Tests:** 1536 backend + 217 frontend + 13 Playwright = 1766 total
+- **Tests:** 1555 backend + 217 frontend + 13 Playwright = 1785 total
 - **CI:** All green (2 pre-existing: test_audit_integrity WinError sandbox)
 - **Security:** 0 CodeQL, 0 secret scanning, 0 dependabot
 - **PRs:** 0 open
@@ -64,4 +64,4 @@ Session 42: Sprint 66 fully implemented and closed. B-143 persistence boundary A
 
 ## GPT Memo
 
-Session 42 (S66 closure): B-143 persistence boundary ADR (D-140 frozen — 5 store categories: hot state/audit log/artifact/plugin/config, observation-based scaling signals, no numeric thresholds). B-144 tool reversibility metadata (24 tools with reversibility/idempotent/side_effect_scope governance fields, irreversible-escalation policy rule at priority 75, compound condition matcher in policy engine, 4 new tests). Backend 1536, Frontend 217, total 1766.
+Session 42 (S66 closure): B-143 persistence boundary ADR (D-140 frozen — 5 store categories: hot state/audit log/artifact/plugin/config, observation-based scaling signals, no numeric thresholds). B-144 tool reversibility metadata (24 tools with reversibility/idempotent/side_effect_scope governance fields, irreversible-escalation policy rule at priority 75, compound condition matcher in policy engine). GPT R1 HOLD (test accounting, manifest invariant, enforcement proofs) → R2 patch: +19 new tests (7 manifest invariant covering all 24 tools, 10 policy enforcement covering positive/negative/edge cases). Backend 1555, Frontend 217, Playwright 13, total 1785.

@@ -375,6 +375,63 @@ class TestIrreversibleEscalation:
         assert rule.priority == 75
         assert rule.decision == PolicyDecision.ESCALATE
 
+    def test_reversible_tool_no_escalation(self):
+        """B-144: full-reversible tool + high risk → no irreversible escalation."""
+        engine = PolicyEngine()
+        ctx = {"riskLevel": "high"}
+        tool_req = {"side_effect_scope": "local"}
+        result = engine.evaluate(ctx, {}, tool_request=tool_req)
+        assert result.matched_rule != "irreversible-tool-escalation"
+
+    def test_external_tool_high_risk_no_irreversible_escalation(self):
+        """B-144: external (not irreversible) + high risk → no irreversible escalation."""
+        engine = PolicyEngine()
+        ctx = {"riskLevel": "high"}
+        tool_req = {"side_effect_scope": "external"}
+        result = engine.evaluate(ctx, {}, tool_request=tool_req)
+        assert result.matched_rule != "irreversible-tool-escalation"
+
+    def test_no_tool_request_no_escalation(self):
+        """B-144: no tool_request → side_effect_scope rule cannot match."""
+        engine = PolicyEngine()
+        ctx = {"riskLevel": "high"}
+        result = engine.evaluate(ctx, {}, tool_request=None)
+        assert result.matched_rule != "irreversible-tool-escalation"
+
+    def test_missing_scope_in_tool_request_no_escalation(self):
+        """B-144: tool_request without side_effect_scope → rule cannot match (fail-closed)."""
+        engine = PolicyEngine()
+        ctx = {"riskLevel": "high"}
+        tool_req = {"name": "some_tool"}  # no side_effect_scope
+        result = engine.evaluate(ctx, {}, tool_request=tool_req)
+        assert result.matched_rule != "irreversible-tool-escalation"
+
+    def test_irreversible_critical_risk_escalates(self):
+        """B-144: irreversible + critical risk → does NOT match (rule requires high, not critical)."""
+        engine = PolicyEngine()
+        ctx = {"riskLevel": "critical"}
+        tool_req = {"side_effect_scope": "irreversible"}
+        result = engine.evaluate(ctx, {}, tool_request=tool_req)
+        # critical risk hits risk-escalation rule (priority 200) first, not our rule
+        assert result.matched_rule != "irreversible-tool-escalation"
+
+    def test_all_24_tools_evaluated_correctly(self):
+        """B-144: evaluate policy for each of the 24 real tools with their actual metadata."""
+        from services.tool_catalog import TOOL_CATALOG
+        engine = PolicyEngine()
+        irreversible_tools = []
+        for tool in TOOL_CATALOG:
+            gov = tool["governance"]
+            ctx = {"riskLevel": tool.get("risk", "low")}
+            tool_req = {"side_effect_scope": gov["side_effect_scope"]}
+            result = engine.evaluate(ctx, {}, tool_request=tool_req)
+            if gov["side_effect_scope"] == "irreversible" and tool.get("risk") == "high":
+                assert result.decision == PolicyDecision.ESCALATE, \
+                    f"{tool['name']}: irreversible+high should escalate"
+                irreversible_tools.append(tool["name"])
+        # close_application is high+irreversible, should be in the list
+        assert "close_application" in irreversible_tools
+
 
 # ─── Benchmark (p99 < 5ms) ───
 

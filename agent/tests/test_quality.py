@@ -115,3 +115,68 @@ class TestWMCPToolInventory(unittest.TestCase):
         missing = expected - tool_names
         self.assertEqual(missing, set(),
                          f"Missing critical tools: {missing}")
+
+
+class TestToolGovernanceManifest(unittest.TestCase):
+    """B-144 S66: All 24 tools must carry complete governance metadata."""
+
+    REQUIRED_GOVERNANCE_FIELDS = [
+        "filesystemTouching", "mutationSurface",
+        "workingSetScopeRequired", "requiresPathResolution",
+        "reversibility", "idempotent", "side_effect_scope",
+    ]
+    VALID_REVERSIBILITY = {"none", "compensating", "full"}
+    VALID_SIDE_EFFECT_SCOPE = {"local", "external", "irreversible"}
+
+    def test_all_24_tools_have_governance(self):
+        """Every tool in catalog must have a governance block."""
+        from services.tool_catalog import TOOL_CATALOG
+        self.assertEqual(len(TOOL_CATALOG), 24, f"Expected 24 tools, got {len(TOOL_CATALOG)}")
+        for tool in TOOL_CATALOG:
+            self.assertIn("governance", tool, f"{tool['name']}: missing governance block")
+
+    def test_all_tools_have_7_required_fields(self):
+        """Every tool governance block must have all 7 required fields."""
+        from services.tool_catalog import TOOL_CATALOG
+        for tool in TOOL_CATALOG:
+            gov = tool.get("governance", {})
+            for field in self.REQUIRED_GOVERNANCE_FIELDS:
+                self.assertIn(field, gov, f"{tool['name']}: missing governance.{field}")
+
+    def test_reversibility_values_valid(self):
+        """reversibility must be none/compensating/full."""
+        from services.tool_catalog import TOOL_CATALOG
+        for tool in TOOL_CATALOG:
+            val = tool["governance"]["reversibility"]
+            self.assertIn(val, self.VALID_REVERSIBILITY,
+                          f"{tool['name']}: invalid reversibility '{val}'")
+
+    def test_idempotent_is_bool(self):
+        """idempotent must be a boolean."""
+        from services.tool_catalog import TOOL_CATALOG
+        for tool in TOOL_CATALOG:
+            val = tool["governance"]["idempotent"]
+            self.assertIsInstance(val, bool, f"{tool['name']}: idempotent must be bool, got {type(val)}")
+
+    def test_side_effect_scope_values_valid(self):
+        """side_effect_scope must be local/external/irreversible."""
+        from services.tool_catalog import TOOL_CATALOG
+        for tool in TOOL_CATALOG:
+            val = tool["governance"]["side_effect_scope"]
+            self.assertIn(val, self.VALID_SIDE_EFFECT_SCOPE,
+                          f"{tool['name']}: invalid side_effect_scope '{val}'")
+
+    def test_validate_catalog_governance_zero_errors(self):
+        """D-057 startup gate: validate_catalog_governance must return 0 errors."""
+        from services.tool_catalog import validate_catalog_governance
+        errors = validate_catalog_governance()
+        self.assertEqual(len(errors), 0, f"Governance errors: {errors}")
+
+    def test_irreversible_tools_have_none_reversibility(self):
+        """Tools with side_effect_scope=irreversible must have reversibility=none."""
+        from services.tool_catalog import TOOL_CATALOG
+        for tool in TOOL_CATALOG:
+            gov = tool["governance"]
+            if gov["side_effect_scope"] == "irreversible":
+                self.assertEqual(gov["reversibility"], "none",
+                                 f"{tool['name']}: irreversible scope but reversibility={gov['reversibility']}")

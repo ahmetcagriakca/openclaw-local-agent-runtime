@@ -1,0 +1,20 @@
+Sprint 62 File Manifest — 2026-04-05
+=====================================
+
+Modified Files (S62 implementation):
+  agent/mission/controller.py — ApprovalStore integration, _wait_for_approval polling
+  agent/auth/session.py — DEPRECATED banner + DeprecationWarning
+  agent/api/mutation_audit.py — actor field (B-136)
+  10 API files — require_operator added to 35 mutation endpoints
+
+New Files:
+  agent/tests/test_approval_controller_wiring.py — 14 tests
+  agent/tests/test_auth_quarantine.py — 14 tests
+  tools/verify_decision_drift.py — drift detection tool
+  docs/ai/reviews/s62-drift-report.md — drift evidence
+
+Evidence:
+  evidence/sprint-62/sprint-class.txt
+  evidence/sprint-62/review-summary.md
+  evidence/sprint-62/file-manifest.txt
+  docs/ai/reviews/s62-gpt-review.md

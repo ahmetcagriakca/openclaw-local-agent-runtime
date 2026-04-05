@@ -48,7 +48,7 @@ Session 35: Full platform review, S58+S59 GPT reviews (both PASS), 14 CodeQL fix
 | S58 | PASS | PASS (R4) |
 | S59 plan | — | PASS (R3) |
 | S59 | PASS | PASS (R2) |
-| S60 | PASS | Pending |
+| S60 | PASS | **PASS (R1)** |
 
 ## Carry-Forward
 

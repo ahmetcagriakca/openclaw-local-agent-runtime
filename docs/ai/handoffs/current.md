@@ -7,7 +7,7 @@
 
 ## Session Summary
 
-Session 42: Sprint 66 fully implemented and closed. B-143 persistence boundary ADR (D-140 frozen — 5-category store stratification, observation-based scaling). B-144 tool reversibility metadata (24 tools with reversibility/idempotent/side_effect_scope, irreversible-escalation policy rule, 19 new tests including 7 manifest invariant + 10 policy enforcement). GPT R1 HOLD → R2 patch (test accounting, manifest invariant, expanded enforcement proofs).
+Session 42: Sprint 66 fully implemented and closed. B-143 persistence boundary ADR (D-140 frozen — 5-category store stratification, observation-based scaling). B-144 tool reversibility metadata (24 tools with reversibility/idempotent/side_effect_scope, irreversible-escalation policy rule, 19 new tests including 7 manifest invariant + 10 policy enforcement). GPT R1 HOLD → R2 PASS (test accounting fixed, 7 manifest invariant tests, 10 policy enforcement tests).
 
 ## Current State
 
@@ -34,7 +34,7 @@ Session 42: Sprint 66 fully implemented and closed. B-143 persistence boundary A
 | S63 | PASS | PASS (R2) |
 | S64 | PASS | PASS (R2) |
 | S65 | PASS | PASS (R2) |
-| S66 | PASS | PENDING |
+| S66 | PASS | PASS (R2) |
 
 ## Phase 8 Backlog (Remaining)
 

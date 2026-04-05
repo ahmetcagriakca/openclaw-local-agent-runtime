@@ -1,4 +1,4 @@
-# Session Handoff — 2026-04-05 (Session 40 — Sprint 64 Closure)
+# Session Handoff — 2026-04-05 (Session 40 — Sprint 65 Kickoff)
 
 **Platform:** Vezir Platform
 **Operator:** Claude Code (Opus) — AKCA delegated
@@ -7,11 +7,11 @@
 
 ## Session Summary
 
-Session 40: Sprint 64 full closure completed. GPT review obtained (PASS R2). Evidence bundle created (docs/evidence/sprint-64/). 20-step closure checklist executed: pytest 1493 pass + 1 known flaky, ruff 0, tsc 0, vitest 217/217. README badges updated. NEXT.md, open-items.md, handoff updated. GPT memo sent. Previous session (39) delivered B-139 + B-140 implementation.
+Session 40: Sprint 64 full closure completed + Sprint 65 kickoff prepared. S64 GPT review obtained (PASS R2). S64 + S63 evidence bundles created. 20-step closure checklist executed. S65 milestone created (#39), issues #329/#330 assigned. Kickoff gate all met.
 
 ## Current State
 
-- **Phase:** 8 active — S64 closed, S65 ready
+- **Phase:** 8 active — S64 closed, S65 kickoff ready
 - **Last closed sprint:** 64
 - **Decisions:** 136 frozen + 2 superseded (D-001 → D-139, D-126 skipped, D-132 deferred, D-082/D-098 superseded)
 - **Tests:** 1494 backend + 217 frontend + 13 Playwright = 1724 total
@@ -20,35 +20,6 @@ Session 40: Sprint 64 full closure completed. GPT review obtained (PASS R2). Evi
 - **PRs:** 0 open
 - **Open issues:** 7 (Phase 8 backlog B-141→B-147)
 - **Blockers:** None
-
-## Sprint 64 Deliverables
-
-| # | Task | Issue | Status |
-|---|------|-------|--------|
-| 1 | B-139: Controller Extraction Phase 1 | #327 | **DONE** — MissionPersistenceAdapter + StageRecoveryEngine extracted, 19 new tests |
-| 2 | B-140: Hard Per-Mission Budget Enforcement | #328 | **DONE** — cumulative tracking, policy rules, API fields, 21 new tests |
-
-## Key Changes
-
-### B-139: Controller Extraction Phase 1
-- `agent/mission/persistence_adapter.py`: NEW — MissionPersistenceAdapter (131 LOC, 4 methods, consolidated `_atomic_write_json` helper)
-- `agent/mission/recovery_engine.py`: NEW — StageRecoveryEngine (158 LOC, 2 methods, callback pattern for bidirectional dep)
-- `agent/mission/controller.py`: Thin delegation wrappers for `_save_mission`, `_persist_mission_state`, `_save_token_report`, `_find_stage_index`, `_handle_stage_failure`, `_enqueue_to_dlq`
-- `agent/tests/test_persistence_adapter.py`: 11 new tests
-- `agent/tests/test_recovery_engine.py`: 8 new tests
-- `agent/tests/test_dlq_resilience.py`: Updated to wire `_recovery_engine` in mocked controllers
-- `agent/tests/test_atomic_write_compliance.py`: persistence_adapter.py added to known exceptions (IS the atomic write impl)
-
-### B-140: Hard Per-Mission Budget Enforcement
-- `agent/mission/policy_context.py`: Added `total_tokens`, `max_token_budget` fields to PolicyContext
-- `agent/mission/policy_engine.py`: Added `token_budget_exceeded` and `token_budget_warning` conditions
-- `agent/mission/controller.py`: Added `_update_mission_budget()`, `_default_token_budget()`, `_BUDGET_DEFAULTS` dict
-- `config/policies/token-budget-exceeded.yaml`: Deny at 100% budget (priority 350)
-- `config/policies/token-budget-warning.yaml`: Allow with warning at 80% (priority 900)
-- `agent/api/schemas.py`: Added `cumulativeTokens`, `maxTokenBudget` to MissionSummary
-- `agent/api/normalizer.py`: Wire budget fields into mission detail response
-- `agent/tests/test_budget_enforcement.py`: 21 new tests
-- `agent/tests/test_policy_engine.py`: Updated rule count assertions (5 → 7)
 
 ## Review History
 
@@ -85,26 +56,49 @@ Session 40: Sprint 64 full closure completed. GPT review obtained (PASS R2). Evi
 | D-021→D-058 extraction | S8 | AKCA-assigned decision debt |
 | Flaky test: test_cannot_approve_expired | S64 | Pre-existing timing race (timeout_seconds=0) |
 
-## Next Session — Sprint 65 Kickoff
+## Next Session — Sprint 65 Implementation
 
-**Sprint:** 65 | **Phase:** 8 | **Model:** A | **Class:** Product + Security
+**Sprint:** 65 | **Phase:** 8 | **Model:** A (full closure) | **Class:** Architecture + Security
 
 ### Kickoff Gate (all met)
-- S64 closed, B-139/B-140 implemented, no blockers
+- S64 `closure_status=closed` with evidence bundle
+- B-139/B-140 implemented, no blockers
+- Issues #329/#330 created, milestone S65 assigned
 
 ### Task 65.1 — B-141: Mission Startup Recovery [P1]
-- Detect incomplete missions on startup
-- Auto-resume or mark as failed with reason
-- DLQ enqueue for manual retry
+
+Fail-closed model: restart sonrası tüm non-terminal, non-paused missions → FAILED.
+
+Recovery matrix:
+
+| State at Crash | Approval State | Mission Recovery | Reason |
+|----------------|----------------|-------------------|--------|
+| RUNNING | N/A | → FAILED | orphaned_by_restart |
+| WAITING_APPROVAL | PENDING | approval → EXPIRED, mission → FAILED | restart_expired_approval |
+| WAITING_APPROVAL | ESCALATED | approval → EXPIRED, mission → FAILED | restart_expired_escalated_approval |
+| PAUSED | N/A | preserve (stay PAUSED) | Operator explicitly paused |
+| PLANNING | N/A | → FAILED | orphaned_by_restart |
+| COMPLETED/FAILED/TIMED_OUT | N/A | no mutation | Terminal |
+
+Yapılacaklar:
+1. Startup hook: `_recover_orphaned_missions()` — scan + apply matrix
+2. Alert: "N orphaned missions recovered at startup" → Telegram
+3. Audit trail per recovery action
+4. Log: recovery summary (mission_id, old_state, new_state, reason)
 
 ### Task 65.2 — B-142: Plugin Mutation Auth Boundary [P1]
-- Plugin mutations require operator approval
-- Auth boundary for plugin state changes
-- Audit trail for plugin lifecycle
+
+Yapılacaklar:
+1. Plugin API mutation endpoints'e `require_operator` dependency ekle/verify
+2. trust_status enforcement: untrusted → deny (403), unknown → warning + proceed
+3. Test suite: no auth → 401, viewer → 403, operator → 200, untrusted install → 403
 
 ### Sequence
-65.1 (recovery) → G1 → 65.2 (auth boundary) → G2 → RETRO → CLOSURE
+65.1 (startup recovery) → G1 → 65.2 (plugin auth) → G2 → RETRO → CLOSURE
+
+### Evidence
+`evidence/sprint-65/` — pytest, lint, closure-check, grep-evidence, review-summary, file-manifest
 
 ## GPT Memo
 
-Session 39 (S64): Sprint 64 completed. B-139 (P1): Controller extraction phase 1 — MissionPersistenceAdapter (131 LOC, atomic write consolidation) and StageRecoveryEngine (158 LOC, callback pattern) extracted from MissionController. Thin delegation wrappers maintain API compatibility. B-140 (P0): Hard per-mission token budget enforcement — cumulative tracking in controller, PolicyContext/PolicyEngine integration, 2 YAML rules (deny at 100%, allow+warn at 80%), complexity-tier defaults (trivial=50K, standard=200K, complex=500K, critical=1M), budget visible in mission detail API. 40 new tests (19 extraction + 21 budget). 1494 backend + 217 frontend + 13 Playwright = 1724 total. S65 ready: B-141 mission startup recovery + B-142 plugin mutation auth boundary.
+Session 40 (S64 closure + S65 kickoff): S64 full closure completed — GPT PASS (R2), evidence bundle at docs/evidence/sprint-64/, 20-step closure checklist all green. S63 evidence bundle also created retroactively. S65 kickoff ready: B-141 mission startup recovery (fail-closed model, recovery matrix for 8 states) + B-142 plugin mutation auth boundary (require_operator + trust_status enforcement). Milestone S65 created, issues #329/#330 assigned.

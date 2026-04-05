@@ -1,7 +1,18 @@
 # Next Steps — Vezir Platform
 
 **Last updated:** 2026-04-05
-**Current:** Phase 8 active. Sprint 64 closed. B-139 controller extraction + B-140 budget enforcement implemented.
+**Current:** Phase 8 active. Sprint 65 kickoff ready. B-141 mission startup recovery + B-142 plugin mutation auth boundary.
+
+---
+
+## Sprint 65 — Mission Startup Recovery + Plugin Mutation Auth Boundary (KICKOFF)
+
+**Model:** A (full closure) | **Class:** Architecture + Security
+**Scope:** B-141 mission startup recovery, B-142 plugin mutation auth boundary
+**Issues:** #329, #330
+**Milestone:** S65
+**Sequence:** 65.1 (startup recovery) → G1 → 65.2 (plugin auth) → G2 → RETRO → CLOSURE
+**Evidence:** `evidence/sprint-65/`
 
 ---
 

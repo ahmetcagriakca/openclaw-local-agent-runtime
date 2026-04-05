@@ -1,0 +1,8 @@
+name: irreversible-tool-escalation
+priority: 75
+description: Escalate irreversible tools with high risk to approval
+condition:
+  side_effect_scope: irreversible
+  risk_level: high
+decision: escalate
+reason: "Irreversible tool with high risk requires approval"

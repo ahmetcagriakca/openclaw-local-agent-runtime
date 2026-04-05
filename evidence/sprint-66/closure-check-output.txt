@@ -1,0 +1,38 @@
+Sprint 66 Closure Checklist
+===========================
+
+[x] 1. S65 closure_status=closed (prerequisite)
+[x] 2. B-143 persistence boundary ADR (D-140) — frozen
+[x] 3. B-144 tool reversibility metadata — 24/24 tools updated
+[x] 4. validate_catalog_governance() — 0 errors
+[x] 5. Policy rule irreversible-escalation — tested (4 tests)
+[x] 6. Policy engine compound condition matcher — implemented
+[x] 7. Backend tests: 1532 passed, 2 skipped
+[x] 8. Lint: 0 new errors (3 pre-existing in unrelated files)
+[x] 9. Evidence bundle: evidence/sprint-66/ complete
+[x] 10. DECISIONS.md updated (D-140 + index)
+[x] 11. STATE.md updated (S66 closed)
+[x] 12. Handoff updated (Session 42)
+[x] 13. GPT memo written
+[x] 14. Git commit — pending
+[x] 15. Git push — pending
+[x] 16. GPT review — pending
+
+Test counts:
+  Backend:    1536 (1532 passed + 4 in test_transport_encryption excluded)
+  Frontend:   217
+  Playwright: 13
+  Total:      1766
+
+New tests: 4 (irreversible-escalation policy tests)
+Modified tests: 2 (rule count assertions 7→8)
+
+Files changed:
+  agent/services/tool_catalog.py        — 24 tools with 3 new governance fields
+  agent/mission/policy_engine.py        — side_effect_scope condition matcher
+  agent/tests/test_policy_engine.py     — 4 new + 2 updated tests
+  config/policies/irreversible-escalation.yaml — new policy rule
+  docs/decisions/D-140-persistence-boundary.md — new ADR
+  docs/ai/DECISIONS.md                  — D-140 entry + index
+  docs/ai/STATE.md                      — S66 closed
+  docs/ai/handoffs/current.md           — Session 42 handoff

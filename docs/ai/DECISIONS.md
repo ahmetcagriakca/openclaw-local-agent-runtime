@@ -1,6 +1,6 @@
 # Architectural Decisions
 
-**Last updated:** 2026-04-04 (D-135)
+**Last updated:** 2026-04-06 (D-140)
 
 All decisions below are frozen unless marked otherwise.
 Reopening requires explicit phase gate approval + operator sign-off.
@@ -1289,9 +1289,18 @@ Formal record: `docs/sprints/sprint-63/D-139-controller-decomposition.md`.
 
 ---
 
-## Decision Index (D-001 → D-139)
+### D-140: Persistence Boundary Contract
 
-136 frozen + 2 superseded decisions. D-126 skipped, D-132 deferred, D-082/D-098 superseded.
+**Phase:** Sprint 66 | **Status:** Frozen
+
+Store stratification into 5 categories: hot state (MissionStore, ApprovalStore, DLQStore — atomic write, contention-sensitive), audit log (audit.jsonl, policy-telemetry.jsonl — append-only, hash-chained D-129), artifact store (traces, metrics, evidence — write-once per sprint), plugin state (marketplace, registry — per-plugin lock D-136), config (policies, capabilities, secrets — startup-loaded, rarely written). Scaling observation-based: measure lock contention, startup scan latency, replay query latency, approval poll I/O. No hardcoded numeric thresholds. Each category migrates independently when measured evidence justifies it.
+Formal record: `docs/decisions/D-140-persistence-boundary.md`.
+
+---
+
+## Decision Index (D-001 → D-140)
+
+137 frozen + 2 superseded decisions. D-126 skipped, D-132 deferred, D-082/D-098 superseded.
 
 | ID | Title | Phase |
 |----|-------|-------|
@@ -1434,3 +1443,4 @@ Formal record: `docs/sprints/sprint-63/D-139-controller-decomposition.md`.
 | D-137 | WSL2 <-> PowerShell Bridge Contract | Sprint 60 |
 | D-138 | Approval Timeout=Deny + Escalation FSM | Sprint 61 |
 | D-139 | Controller Decomposition Boundary + Budget Ownership | Sprint 63 |
+| D-140 | Persistence Boundary Contract | Sprint 66 |

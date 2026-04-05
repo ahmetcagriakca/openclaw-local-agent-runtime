@@ -1,9 +1,9 @@
 # Current State
 
 **Last updated:** 2026-04-06
-**Active phase:** Phase 8 — Sprint 65 closed
+**Active phase:** Phase 8 — Sprint 66 closed
 **Doc model:** This file is canonical for system state. Session context lives in `docs/ai/handoffs/current.md`.
-**Note:** All sprints through 53 closed. S54 deferred. S55-S65 closed. All P1 backlog items complete (50/50). Phase 8 active (S60-S65). 136 frozen decisions + 2 superseded (D-001 → D-139, D-126 skipped, D-132 deferred, D-082/D-098 superseded). Governance: 20-step closure checklist.
+**Note:** All sprints through 53 closed. S54 deferred. S55-S66 closed. All P1 backlog items complete (50/50). Phase 8 active (S60-S66). 137 frozen decisions + 2 superseded (D-001 → D-140, D-126 skipped, D-132 deferred, D-082/D-098 superseded). Governance: 20-step closure checklist.
 **Persistence:** State is file-persisted (state.json, mission.json). Mission history via persistence layer (Sprint 16).
 **API:** Vezir API on 127.0.0.1:8003 (FastAPI + Uvicorn). Schemas FROZEN (D-067). SSE on /api/v1/events/stream. Dashboard API + Alert API + Telemetry Query API (Sprint 16).
 **Frontend:** React dashboard on localhost:3000 (Vite + Tailwind). SSE live updates + polling fallback + intervention buttons + monitoring dashboard. Node.js 20 required.
@@ -122,6 +122,7 @@
 | Sprint 63 | Controller Decomposition Boundary + Budget Ownership Design (B-137, B-138, D-139) | Closed |
 | Sprint 64 | Controller Extraction Phase 1 + Hard Budget Enforcement (B-139, B-140) | Closed |
 | Sprint 65 | Mission Startup Recovery + Plugin Mutation Auth Boundary (B-141, B-142) | Closed |
+| Sprint 66 | Persistence Boundary ADR + Tool Reversibility Metadata (B-143, B-144, D-140) | Closed |
 
 ## Test Evidence
 
@@ -161,7 +162,7 @@
 
 ## Architectural Decisions
 
-136 frozen + 2 superseded decisions (D-001 through D-139, D-126 skipped, D-132 deferred, D-082/D-098 superseded S62). See `docs/ai/DECISIONS.md`. Recent: D-138 approval timeout=deny + escalation FSM (S61). D-139 controller decomposition boundary freeze + budget enforcement ownership (S63). Governance: 20-step closure checklist.
+137 frozen + 2 superseded decisions (D-001 through D-140, D-126 skipped, D-132 deferred, D-082/D-098 superseded S62). See `docs/ai/DECISIONS.md`. Recent: D-139 controller decomposition boundary freeze + budget enforcement ownership (S63). D-140 persistence boundary contract — 5-category store stratification (S66). Governance: 20-step closure checklist.
 
 ## Port Map
 

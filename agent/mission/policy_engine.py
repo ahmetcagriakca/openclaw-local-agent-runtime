@@ -254,6 +254,16 @@ class PolicyEngine:
                         return True
             return False
 
+        # B-144 Sprint 66: side_effect_scope + risk_level compound check
+        scope_cond = condition.get("side_effect_scope")
+        if scope_cond:
+            tool_scope = (tool_request or {}).get("side_effect_scope", "")
+            ctx_risk = policy_context.get("riskLevel", "medium")
+            cond_risk = condition.get("risk_level")
+            scope_match = tool_scope == scope_cond
+            risk_match = ctx_risk == cond_risk if cond_risk else True
+            return scope_match and risk_match
+
         # risk_level check
         risk_level = condition.get("risk_level")
         if risk_level:

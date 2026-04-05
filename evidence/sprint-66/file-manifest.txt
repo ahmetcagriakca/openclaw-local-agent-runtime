@@ -1,0 +1,6 @@
+ agent/mission/policy_engine.py    |  10 ++++
+ agent/services/tool_catalog.py    | 123 ++++++++++++++++++++++++++++++--------
+ agent/tests/test_policy_engine.py |  42 ++++++++++++-
+ config/capabilities.json          |  12 ++--
+ docs/ai/DECISIONS.md              |  16 ++++-
+ 5 files changed, 167 insertions(+), 36 deletions(-)

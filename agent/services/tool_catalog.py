@@ -29,7 +29,10 @@ Write-Output "Uptime: $($uptime.Days)d $($uptime.Hours)h $($uptime.Minutes)m"
             "filesystemTouching": False,
             "mutationSurface": "none",
             "workingSetScopeRequired": False,
-            "requiresPathResolution": False
+            "requiresPathResolution": False,
+            "reversibility": "full",
+            "idempotent": True,
+            "side_effect_scope": "local"
         }
     },
     {
@@ -52,7 +55,10 @@ Write-Output "Uptime: $($uptime.Days)d $($uptime.Hours)h $($uptime.Minutes)m"
             "filesystemTouching": False,
             "mutationSurface": "none",
             "workingSetScopeRequired": False,
-            "requiresPathResolution": False
+            "requiresPathResolution": False,
+            "reversibility": "full",
+            "idempotent": True,
+            "side_effect_scope": "local"
         }
     },
     {
@@ -74,7 +80,10 @@ Write-Output "Uptime: $($uptime.Days)d $($uptime.Hours)h $($uptime.Minutes)m"
             "filesystemTouching": True,
             "mutationSurface": "none",
             "workingSetScopeRequired": True,
-            "requiresPathResolution": True
+            "requiresPathResolution": True,
+            "reversibility": "full",
+            "idempotent": True,
+            "side_effect_scope": "local"
         }
     },
     {
@@ -100,7 +109,10 @@ Write-Output "Uptime: $($uptime.Days)d $($uptime.Hours)h $($uptime.Minutes)m"
             "filesystemTouching": True,
             "mutationSurface": "code",
             "workingSetScopeRequired": True,
-            "requiresPathResolution": True
+            "requiresPathResolution": True,
+            "reversibility": "compensating",
+            "idempotent": False,
+            "side_effect_scope": "local"
         }
     },
     {
@@ -122,7 +134,10 @@ Write-Output "Uptime: $($uptime.Days)d $($uptime.Hours)h $($uptime.Minutes)m"
             "filesystemTouching": True,
             "mutationSurface": "none",
             "workingSetScopeRequired": True,
-            "requiresPathResolution": True
+            "requiresPathResolution": True,
+            "reversibility": "full",
+            "idempotent": True,
+            "side_effect_scope": "local"
         }
     },
     {
@@ -148,7 +163,10 @@ Write-Output "Uptime: $($uptime.Days)d $($uptime.Hours)h $($uptime.Minutes)m"
             "filesystemTouching": True,
             "mutationSurface": "none",
             "workingSetScopeRequired": True,
-            "requiresPathResolution": True
+            "requiresPathResolution": True,
+            "reversibility": "full",
+            "idempotent": True,
+            "side_effect_scope": "local"
         }
     },
     {
@@ -165,7 +183,10 @@ Write-Output "Uptime: $($uptime.Days)d $($uptime.Hours)h $($uptime.Minutes)m"
             "filesystemTouching": False,
             "mutationSurface": "none",
             "workingSetScopeRequired": False,
-            "requiresPathResolution": False
+            "requiresPathResolution": False,
+            "reversibility": "full",
+            "idempotent": True,
+            "side_effect_scope": "local"
         }
     },
     {
@@ -187,7 +208,10 @@ Write-Output "Uptime: $($uptime.Days)d $($uptime.Hours)h $($uptime.Minutes)m"
             "filesystemTouching": False,
             "mutationSurface": "system",
             "workingSetScopeRequired": False,
-            "requiresPathResolution": False
+            "requiresPathResolution": False,
+            "reversibility": "compensating",
+            "idempotent": False,
+            "side_effect_scope": "local"
         }
     },
     {
@@ -210,7 +234,10 @@ Write-Output "Uptime: $($uptime.Days)d $($uptime.Hours)h $($uptime.Minutes)m"
             "filesystemTouching": False,
             "mutationSurface": "system",
             "workingSetScopeRequired": False,
-            "requiresPathResolution": False
+            "requiresPathResolution": False,
+            "reversibility": "compensating",
+            "idempotent": False,
+            "side_effect_scope": "external"
         }
     },
     {
@@ -232,7 +259,10 @@ Write-Output "Uptime: $($uptime.Days)d $($uptime.Hours)h $($uptime.Minutes)m"
             "filesystemTouching": False,
             "mutationSurface": "system",
             "workingSetScopeRequired": False,
-            "requiresPathResolution": False
+            "requiresPathResolution": False,
+            "reversibility": "compensating",
+            "idempotent": False,
+            "side_effect_scope": "external"
         }
     },
     {
@@ -261,7 +291,10 @@ Write-Output "Screenshot saved: $path"
             "filesystemTouching": False,
             "mutationSurface": "none",
             "workingSetScopeRequired": False,
-            "requiresPathResolution": False
+            "requiresPathResolution": False,
+            "reversibility": "full",
+            "idempotent": True,
+            "side_effect_scope": "local"
         }
     },
     {
@@ -278,7 +311,10 @@ Write-Output "Screenshot saved: $path"
             "filesystemTouching": False,
             "mutationSurface": "none",
             "workingSetScopeRequired": False,
-            "requiresPathResolution": False
+            "requiresPathResolution": False,
+            "reversibility": "full",
+            "idempotent": True,
+            "side_effect_scope": "local"
         }
     },
     {
@@ -300,7 +336,10 @@ Write-Output "Screenshot saved: $path"
             "filesystemTouching": False,
             "mutationSurface": "system",
             "workingSetScopeRequired": False,
-            "requiresPathResolution": False
+            "requiresPathResolution": False,
+            "reversibility": "none",
+            "idempotent": False,
+            "side_effect_scope": "irreversible"
         }
     },
     {
@@ -313,7 +352,10 @@ Write-Output "Screenshot saved: $path"
             "filesystemTouching": False,
             "mutationSurface": "system",
             "workingSetScopeRequired": False,
-            "requiresPathResolution": False
+            "requiresPathResolution": False,
+            "reversibility": "compensating",
+            "idempotent": True,
+            "side_effect_scope": "external"
         }
     },
     {
@@ -336,7 +378,10 @@ Write-Output "Screenshot saved: $path"
             "filesystemTouching": False,
             "mutationSurface": "system",
             "workingSetScopeRequired": False,
-            "requiresPathResolution": False
+            "requiresPathResolution": False,
+            "reversibility": "none",
+            "idempotent": False,
+            "side_effect_scope": "irreversible"
         }
     },
     {
@@ -359,7 +404,10 @@ Write-Output "Screenshot saved: $path"
             "filesystemTouching": False,
             "mutationSurface": "system",
             "workingSetScopeRequired": False,
-            "requiresPathResolution": False
+            "requiresPathResolution": False,
+            "reversibility": "none",
+            "idempotent": False,
+            "side_effect_scope": "irreversible"
         }
     },
     {
@@ -386,7 +434,10 @@ Write-Output "Screenshot saved: $path"
             "filesystemTouching": False,
             "mutationSurface": "system",
             "workingSetScopeRequired": False,
-            "requiresPathResolution": False
+            "requiresPathResolution": False,
+            "reversibility": "compensating",
+            "idempotent": False,
+            "side_effect_scope": "external"
         }
     },
     {
@@ -408,7 +459,10 @@ Write-Output "Screenshot saved: $path"
             "filesystemTouching": False,
             "mutationSurface": "none",
             "workingSetScopeRequired": False,
-            "requiresPathResolution": False
+            "requiresPathResolution": False,
+            "reversibility": "full",
+            "idempotent": True,
+            "side_effect_scope": "external"
         }
     },
     {
@@ -421,7 +475,10 @@ Write-Output "Screenshot saved: $path"
             "filesystemTouching": False,
             "mutationSurface": "none",
             "workingSetScopeRequired": False,
-            "requiresPathResolution": False
+            "requiresPathResolution": False,
+            "reversibility": "full",
+            "idempotent": True,
+            "side_effect_scope": "external"
         }
     },
     {
@@ -434,7 +491,10 @@ Write-Output "Screenshot saved: $path"
             "filesystemTouching": False,
             "mutationSurface": "system",
             "workingSetScopeRequired": False,
-            "requiresPathResolution": False
+            "requiresPathResolution": False,
+            "reversibility": "compensating",
+            "idempotent": False,
+            "side_effect_scope": "external"
         }
     },
     {
@@ -465,7 +525,10 @@ Write-Output "Screenshot saved: $path"
             "filesystemTouching": True,
             "mutationSurface": "none",
             "workingSetScopeRequired": True,
-            "requiresPathResolution": True
+            "requiresPathResolution": True,
+            "reversibility": "full",
+            "idempotent": True,
+            "side_effect_scope": "local"
         }
     },
     {
@@ -487,7 +550,10 @@ Write-Output "Screenshot saved: $path"
             "filesystemTouching": False,
             "mutationSurface": "none",
             "workingSetScopeRequired": False,
-            "requiresPathResolution": False
+            "requiresPathResolution": False,
+            "reversibility": "full",
+            "idempotent": True,
+            "side_effect_scope": "local"
         }
     },
     {
@@ -500,7 +566,10 @@ Write-Output "Screenshot saved: $path"
             "filesystemTouching": False,
             "mutationSurface": "none",
             "workingSetScopeRequired": False,
-            "requiresPathResolution": False
+            "requiresPathResolution": False,
+            "reversibility": "full",
+            "idempotent": True,
+            "side_effect_scope": "external"
         }
     },
     {
@@ -523,7 +592,10 @@ Write-Output "Screenshot saved: $path"
             "filesystemTouching": False,
             "mutationSurface": "none",
             "workingSetScopeRequired": False,
-            "requiresPathResolution": False
+            "requiresPathResolution": False,
+            "reversibility": "full",
+            "idempotent": True,
+            "side_effect_scope": "local"
         }
     }
 ]
@@ -601,7 +673,8 @@ def get_mutation_surface(name: str) -> str:
 def validate_catalog_governance() -> list[str]:
     """Startup check: every tool must have complete governance metadata."""
     required_fields = ["filesystemTouching", "mutationSurface",
-                       "workingSetScopeRequired", "requiresPathResolution"]
+                       "workingSetScopeRequired", "requiresPathResolution",
+                       "reversibility", "idempotent", "side_effect_scope"]
     errors = []
     for tool in TOOL_CATALOG:
         gov = tool.get("governance")

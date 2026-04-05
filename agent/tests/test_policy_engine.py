@@ -283,7 +283,7 @@ class TestConditionMatching:
 class TestDefaultRules:
     def test_default_config_loads_seven_rules(self):
         engine = PolicyEngine()
-        assert len(engine.rules) == 7  # 5 original + 2 B-140 budget rules
+        assert len(engine.rules) == 8  # 5 original + 2 B-140 budget + 1 irreversible-escalation
 
     def test_default_allow_is_last(self):
         engine = PolicyEngine()
@@ -323,7 +323,7 @@ class TestSerialization:
         engine = PolicyEngine()
         rules_dict = engine.to_dict()
         assert isinstance(rules_dict, list)
-        assert len(rules_dict) == 7  # 5 original + 2 B-140 budget rules
+        assert len(rules_dict) == 8  # 5 original + 2 B-140 budget + 1 irreversible-escalation
         assert all("name" in r for r in rules_dict)
         assert all("decision" in r for r in rules_dict)
 
@@ -336,6 +336,44 @@ class TestSerialization:
     def test_get_rule_not_found(self):
         engine = PolicyEngine()
         assert engine.get_rule("nonexistent") is None
+
+
+# ─── B-144 Irreversible Tool Escalation (Sprint 66) ───
+
+class TestIrreversibleEscalation:
+    def test_irreversible_high_risk_escalates(self):
+        """B-144: irreversible + high risk → escalate."""
+        engine = PolicyEngine()
+        ctx = {"riskLevel": "high"}
+        tool_req = {"side_effect_scope": "irreversible"}
+        result = engine.evaluate(ctx, {}, tool_request=tool_req)
+        assert result.decision == PolicyDecision.ESCALATE
+        assert result.matched_rule == "irreversible-tool-escalation"
+
+    def test_irreversible_medium_risk_no_escalation(self):
+        """B-144: irreversible + medium risk → not matched by this rule."""
+        engine = PolicyEngine()
+        ctx = {"riskLevel": "medium"}
+        tool_req = {"side_effect_scope": "irreversible"}
+        result = engine.evaluate(ctx, {}, tool_request=tool_req)
+        # Should fall through to default-allow (medium risk, no other rule matches)
+        assert result.matched_rule != "irreversible-tool-escalation"
+
+    def test_local_high_risk_no_escalation(self):
+        """B-144: local scope + high risk → not matched by irreversible rule."""
+        engine = PolicyEngine()
+        ctx = {"riskLevel": "high"}
+        tool_req = {"side_effect_scope": "local"}
+        result = engine.evaluate(ctx, {}, tool_request=tool_req)
+        assert result.matched_rule != "irreversible-tool-escalation"
+
+    def test_rule_exists_in_engine(self):
+        """B-144: irreversible-tool-escalation rule loaded from config."""
+        engine = PolicyEngine()
+        rule = engine.get_rule("irreversible-tool-escalation")
+        assert rule is not None
+        assert rule.priority == 75
+        assert rule.decision == PolicyDecision.ESCALATE
 
 
 # ─── Benchmark (p99 < 5ms) ───

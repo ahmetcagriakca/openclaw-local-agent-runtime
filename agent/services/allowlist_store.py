@@ -182,7 +182,7 @@ class AllowlistStore:
 
     def delete(self, name: str) -> bool:
         """Delete an allowlist entry."""
-        name = _safe_filename(name)
+        name = os.path.basename(_safe_filename(name))
         with self._lock:
             if not self.get(name):
                 raise KeyError(f"Allowlist '{name}' not found")
@@ -197,6 +197,7 @@ class AllowlistStore:
 
     def _write_yaml(self, name: str, data: dict) -> None:
         """Atomic YAML write (D-071 pattern)."""
+        name = os.path.basename(name)
         path = Path(self._dir).resolve()
         path.mkdir(parents=True, exist_ok=True)
         target = (path / f"{name}.yaml").resolve()

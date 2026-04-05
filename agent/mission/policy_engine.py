@@ -390,7 +390,7 @@ class PolicyEngine:
 
         Raises KeyError if not found.
         """
-        name = _safe_rule_name(name)
+        name = os.path.basename(_safe_rule_name(name))
         with self._write_lock:
             if not self.get_rule(name):
                 raise KeyError(f"Rule '{name}' not found")
@@ -406,6 +406,7 @@ class PolicyEngine:
 
     def _write_yaml(self, name: str, data: dict) -> None:
         """Atomic write of rule YAML file (D-071 pattern)."""
+        name = os.path.basename(name)
         policies_path = Path(self._policies_dir).resolve()
         policies_path.mkdir(parents=True, exist_ok=True)
         target = (policies_path / f"{name}.yaml").resolve()

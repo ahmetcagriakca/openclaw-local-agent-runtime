@@ -110,7 +110,7 @@ async def restore_from_backup(
     sys.path.insert(0, str(OC_ROOT / "tools"))
     from restore import restore_backup, validate_backup
 
-    backup_name = _safe_backup_name(backup_name)
+    backup_name = os.path.basename(_safe_backup_name(backup_name))
     backup_dir = (BACKUPS_DIR / backup_name).resolve()
     if not str(backup_dir).startswith(str(BACKUPS_DIR.resolve()) + os.sep):
         raise HTTPException(status_code=400, detail="Invalid backup path")

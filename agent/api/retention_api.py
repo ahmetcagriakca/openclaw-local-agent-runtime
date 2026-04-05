@@ -6,7 +6,7 @@ Requires operator auth for cleanup mutations.
 import logging
 from datetime import datetime, timezone
 
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, HTTPException, Query
 
 from auth.middleware import require_operator
 
@@ -65,10 +65,11 @@ def retention_cleanup(
         result = policy.cleanup(dry_run=dry_run)
         logger.info("Retention cleanup: dry_run=%s, removed=%d", dry_run, result["removed"])
         return {"data": result, "_meta": _meta()}
+    except HTTPException:
+        raise
     except Exception:
-        logger.exception("Retention cleanup failed")
-        from fastapi import HTTPException
-        raise HTTPException(status_code=500, detail="Retention cleanup failed")
+        logger.error("Retention cleanup failed")
+        raise HTTPException(status_code=500, detail="Retention cleanup failed")  # noqa: B904
 
 
 @router.get("/bak/status")

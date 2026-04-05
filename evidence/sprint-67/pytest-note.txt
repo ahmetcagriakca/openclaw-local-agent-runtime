@@ -1,1 +1,10 @@
-NO EVIDENCE — no runtime code changed, CLI tool only (Model B waiver)
+Model B waiver -- scope clarification:
+- Core backend/frontend runtime: UNCHANGED (no API, controller, or frontend code modified)
+- New CLI tool added: tools/replay-mission.py (standalone, no import into runtime)
+- CLI-specific verification: mandatory, provided via 5 raw evidence outputs:
+  1. replay-smoke-output.txt -- success path, mission source, 10 events chronological
+  2. replay-json-output.txt -- JSONL output format verified
+  3. replay-filter-output.txt -- --filter state_transition applied
+  4. replay-missing-source-output.txt -- graceful degradation (policy-only, no audit/mission files)
+  5. replay-unknown-mission-output.txt -- clear error message, exit code 1
+- Full regression (pytest 1555) expansion waived: no runtime paths touched

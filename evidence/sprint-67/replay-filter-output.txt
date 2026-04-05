@@ -1,0 +1,17 @@
+=== Mission Replay: mission-20260323141338-3512 ===
+Sources: mission (10 events)
+Total events: 10
+Filter: state_transition
+
+TIMESTAMP                  | SOURCE  | EVENT_TYPE       | DETAIL
+----------------------------------------------------------------
+2026-03-23T14:13:38.417897 | mission | state_transition | pending → planning (mission started)
+2026-03-23T14:13:44.563679 | mission | state_transition | planning → ready (planned 3 stages)
+2026-03-23T14:13:44.566342 | mission | state_transition | ready → running (executing stages)
+2026-03-23T14:14:28.109877 | mission | state_transition | running → waiting_rework (Gate 2 fail, dev-test rework cycle 1)
+2026-03-23T14:14:28.110378 | mission | state_transition | waiting_rework → running (rework stages inserted)
+2026-03-23T14:14:42.793831 | mission | state_transition | running → waiting_rework (Gate 2 fail, dev-test rework cycle 2)
+2026-03-23T14:14:42.794604 | mission | state_transition | waiting_rework → running (rework stages inserted)
+2026-03-23T14:14:54.532161 | mission | state_transition | running → waiting_rework (Gate 2 fail, dev-test rework cycle 3)
+2026-03-23T14:14:54.532653 | mission | state_transition | waiting_rework → running (rework stages inserted)
+2026-03-23T14:15:21.147892 | mission | state_transition | running → failed (Gate 2 escalated: Dev-Test cycle 4/3 exceeded)

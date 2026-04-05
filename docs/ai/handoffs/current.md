@@ -49,7 +49,7 @@ Session 35: Full platform maintenance + Phase 8 architecture hardening. GPT revi
 | S59 plan | — | PASS (R3) |
 | S59 | PASS | PASS (R2) |
 | S60 | PASS | PASS (R2) |
-| S61 | PASS | PASS (R1) |
+| S61 | PASS | PASS (R2) |
 
 ## Carry-Forward
 

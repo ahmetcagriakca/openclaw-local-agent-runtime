@@ -1,4 +1,4 @@
-# Session Handoff — 2026-04-05 (Session 37 — Sprint 62)
+# Session Handoff — 2026-04-05 (Session 38 — Sprint 63)
 
 **Platform:** Vezir Platform
 **Operator:** Claude Code (Opus) — AKCA delegated
@@ -7,50 +7,45 @@
 
 ## Session Summary
 
-Session 37: Sprint 62 completed. Three tasks delivered: B-134 (P0 approval FSM controller wiring), B-135 (decision drift D-098/D-082 cleanup), B-136 (auth session quarantine + actor chain). 28 new tests (14 approval wiring + 14 auth quarantine). All 1454 backend tests pass. S62 milestone created, 3 issues closed. Decision count adjusted: 135 frozen + 2 superseded.
+Session 38: Sprint 63 completed (design-only). Two architecture tasks delivered: B-137 (D-139 controller decomposition boundary freeze — 28 methods mapped to 8 concerns, 7 extraction targets identified) and B-138 (budget enforcement ownership design — Controller tracks tokens, PolicyEngine evaluates, AlertEngine warns). No runtime code change. D-139 frozen. 138 decisions total (136 frozen + 2 superseded).
 
 ## Current State
 
-- **Phase:** 8 active — S62 closed, S63 ready
-- **Last closed sprint:** 62
-- **Decisions:** 135 frozen + 2 superseded (D-001 → D-138, D-126 skipped, D-132 deferred, D-082/D-098 superseded)
-- **Tests:** 1454 backend + 217 frontend + 13 Playwright = 1684 total
-- **CI:** All green (2 pre-existing Windows handle failures in test_audit_integrity, not new)
+- **Phase:** 8 active — S63 closed, S64 ready
+- **Last closed sprint:** 63
+- **Decisions:** 136 frozen + 2 superseded (D-001 → D-139, D-126 skipped, D-132 deferred, D-082/D-098 superseded)
+- **Tests:** 1454 backend + 217 frontend + 13 Playwright = 1684 total (unchanged — design sprint)
+- **CI:** All green
 - **Security:** 0 CodeQL, 0 secret scanning, 0 dependabot
 - **PRs:** 0 open
-- **Open issues:** 11 (Phase 8 backlog B-137→B-147)
+- **Open issues:** 9 (Phase 8 backlog B-139→B-147)
 - **Open milestones:** 0
-- **Board:** 188 items (174 Done + 14 backlog, 3 newly closed)
+- **Board:** 190 items (176 Done + 14 backlog, 2 newly closed)
 - **Blockers:** None
 
-## Sprint 62 Deliverables
+## Sprint 63 Deliverables
 
 | # | Task | Issue | Status |
 |---|------|-------|--------|
-| 1 | B-134: Approval FSM controller wiring | #322 | **DONE** — ApprovalStore integrated into ESCALATE block, _wait_for_approval polling, D-138 timeout=deny, 14 tests |
-| 2 | B-135: Decision drift scan + cleanup | #323 | **DONE** — D-098 + D-082 marked Superseded, drift tool created, evidence report |
-| 3 | B-136: Auth session quarantine + actor chain | #324 | **DONE** ��� session.py deprecated, 35 mutation endpoints secured with require_operator, mutation_audit actor field, 14 tests |
+| 1 | B-137: Controller Decomposition Boundary Freeze | #325 | **DONE** — D-139 frozen, responsibility-map.md, 28 methods → 8 concerns, 7 extraction targets, dependency graph |
+| 2 | B-138: Budget Enforcement Ownership Design | #326 | **DONE** — Budget ownership in D-139, data flow diagram, budget-enforcement.yaml draft |
 
 ## Key Changes
 
-### B-134: Approval FSM Controller Wiring
-- `agent/mission/controller.py`: ApprovalStore integrated into ESCALATE block
-  - Creates approval request via FSM store
-  - `_wait_for_approval()` polls every 2s for decision
-  - APPROVED → RUNNING (continue), DENIED/EXPIRED/TIMEOUT → FAILED
-  - D-138 timeout=deny enforced
-- `agent/tests/test_approval_controller_wiring.py`: 14 tests (6 direct + 8 integration)
+### B-137: Controller Decomposition Boundary Freeze
+- `docs/sprints/sprint-63/responsibility-map.md`: Full method → service mapping (28 methods)
+- `docs/sprints/sprint-63/D-139-controller-decomposition.md`: Decision record with boundary definitions
+- 8 concerns identified: Orchestration Core (910 LOC), Context Manager (285), Summary Publisher (194), Recovery Engine (158), Persistence Adapter (131), Approval State (129), Capability Manifest (94), Signal Adapter (81)
+- Extraction priority: Persistence → Signal → Summary → Approval → Recovery → Context → Manifest
+- Key finding: 7 duplicate error-handling blocks (~140 LOC) to consolidate
 
-### B-135: Decision Drift Scan + Cleanup
-- `docs/ai/DECISIONS.md`: D-098 (Superseded S39, Playwright active), D-082 (Superseded S25, openapi-typescript active)
-- `tools/verify_decision_drift.py`: Drift detection tool (scans decisions, flags indicators)
-- `docs/ai/reviews/s62-drift-report.md`: Evidence report
-
-### B-136: Auth Session Quarantine + Actor Chain
-- `agent/auth/session.py`: DEPRECATED banner + DeprecationWarning in get_session()
-- 10 API files: require_operator added to 35 mutation endpoints
-- `agent/api/mutation_audit.py`: actor field added (B-136)
-- `agent/tests/test_auth_quarantine.py`: 14 tests (4 session + 7 resolver + 3 audit)
+### B-138: Budget Enforcement Ownership Design
+- `docs/sprints/sprint-63/budget-data-flow.md`: Budget enforcement data flow diagram
+- `config/policies/budget-enforcement.yaml`: Policy rule draft (deny at 100%, alert at 80%)
+- Controller: tracks cumulative tokens per mission
+- PolicyEngine: evaluates budget_exceeded rule
+- AlertEngine: fires budget_warning at 80% threshold
+- Default budgets: trivial=50K, standard=200K, complex=500K, critical=1M tokens
 
 ## Review History
 
@@ -62,13 +57,12 @@ Session 37: Sprint 62 completed. Three tasks delivered: B-134 (P0 approval FSM c
 | S60 | PASS | PASS (R2) |
 | S61 | PASS | PASS (R2) |
 | S62 | PASS | Pending |
+| S63 | PASS | Pending |
 
 ## Phase 8 Backlog (Remaining)
 
 | Issue | ID | Priority | Sprint | Scope |
 |-------|-----|----------|--------|-------|
-| #325 | B-137 | P1 | S63 | Controller decomposition boundary freeze |
-| #326 | B-138 | P1 | S63 | Budget enforcement ownership design |
 | #327 | B-139 | P1 | S64 | Controller extraction phase 1 |
 | #328 | B-140 | **P0** | S64 | Hard per-mission budget enforcement |
 | #329 | B-141 | P1 | S65 | Mission startup recovery |
@@ -90,10 +84,10 @@ Session 37: Sprint 62 completed. Three tasks delivered: B-134 (P0 approval FSM c
 
 ## Next Session
 
-1. **Sprint 63 kickoff** — B-137 (controller decomposition) + B-138 (budget enforcement design)
-2. S63 milestone + issues, board sync
-3. GPT review for S62
+1. **Sprint 64 kickoff** — B-139 (controller extraction phase 1) + B-140 (P0 hard budget enforcement)
+2. S64 milestone + issues, board sync
+3. GPT review for S62 + S63
 
 ## GPT Memo
 
-Session 37 (S62): Sprint 62 completed. B-134 (P0): Approval FSM controller wiring — ApprovalStore integrated into MissionController ESCALATE block with _wait_for_approval polling loop (2s interval, 300s timeout), D-138 timeout=deny semantics enforced. APPROVED→RUNNING, DENIED/EXPIRED/TIMEOUT→FAILED. 14 tests. B-135: Decision drift D-098 (browser E2E deferred→Superseded S39, Playwright active since S39) and D-082 (manual types→Superseded S25, openapi-typescript active). Drift detection tool created. B-136: session.py deprecated with DeprecationWarning, 35 mutation endpoints secured with require_operator across 10 API files, mutation_audit.py actor field added. 14 tests. Total: 1454 backend + 217 frontend + 13 Playwright = 1684 tests. 135 frozen + 2 superseded decisions. All CI green. S63 ready.
+Session 38 (S63): Sprint 63 completed (design-only). B-137 (P1): D-139 controller decomposition boundary freeze — MissionController (2197 LOC, 28 methods, 8 concerns) analyzed and mapped. 7 extraction targets: MissionPersistenceAdapter (131), SignalAdapter (81), MissionSummaryPublisher (194), ApprovalStateManager (129), StageRecoveryEngine (158), ContextManager (285), CapabilityManifestGenerator (94). Core stays ~500 LOC. Extraction priority: Persistence → Signal → Summary → Approval → Recovery → Context → Manifest. B-138 (P1): Budget enforcement ownership — Controller tracks cumulative tokens, PolicyEngine evaluates (deny at 100%, alert at 80%), AlertEngine fires Telegram warning. budget-enforcement.yaml rule draft committed. Default budgets: trivial=50K, standard=200K, complex=500K, critical=1M. No runtime code change. D-139 frozen. 138 decisions total. S64 ready.

@@ -1272,9 +1272,18 @@ Formal record: `docs/decisions/D-138-approval-timeout-escalation-fsm.md`.
 
 ---
 
-## Decision Index (D-001 → D-138)
+### D-139: Controller Decomposition Boundary Freeze + Budget Enforcement Ownership
 
-137 frozen decisions. D-126 skipped, D-132 deferred.
+**Phase:** Sprint 63 | **Status:** Frozen
+
+Controller decomposition boundary freeze: MissionController (2197 LOC, 28 methods, 8 concerns) split into 7 extraction targets: MissionPersistenceAdapter (131 LOC), SignalAdapter (81), MissionSummaryPublisher (194), ApprovalStateManager (129), StageRecoveryEngine (158), ContextManager (285), CapabilityManifestGenerator (94). Core stays at ~500 LOC. Extraction rules: no behavior change, dependency injection, callback for circular deps (Recovery ↔ Orchestration). Budget enforcement ownership: Controller tracks cumulative tokens, PolicyEngine evaluates budget rules (deny at 100%, alert at 80%), AlertEngine fires Telegram warning. Design-only — no code change.
+Formal record: `docs/sprints/sprint-63/D-139-controller-decomposition.md`.
+
+---
+
+## Decision Index (D-001 → D-139)
+
+138 frozen decisions. D-126 skipped, D-132 deferred.
 
 | ID | Title | Phase |
 |----|-------|-------|
@@ -1416,3 +1425,4 @@ Formal record: `docs/decisions/D-138-approval-timeout-escalation-fsm.md`.
 | D-136 | Plugin Marketplace + Installer Contract | Sprint 59 |
 | D-137 | WSL2 <-> PowerShell Bridge Contract | Sprint 60 |
 | D-138 | Approval Timeout=Deny + Escalation FSM | Sprint 61 |
+| D-139 | Controller Decomposition Boundary + Budget Ownership | Sprint 63 |

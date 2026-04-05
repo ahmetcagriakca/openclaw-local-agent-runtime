@@ -1,0 +1,14 @@
+Sprint 63 File Manifest — 2026-04-05
+=====================================
+
+New Files:
+  docs/sprints/sprint-63/responsibility-map.md
+  docs/sprints/sprint-63/D-139-controller-decomposition.md
+  docs/sprints/sprint-63/budget-data-flow.md
+  config/policies/budget-enforcement.yaml
+  evidence/sprint-63/closure-check-output.txt
+  evidence/sprint-63/file-manifest.txt
+  evidence/sprint-63/review-summary.md
+
+Modified Files:
+  docs/ai/DECISIONS.md — D-139 added (controller decomposition boundary + budget ownership)

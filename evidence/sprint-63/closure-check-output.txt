@@ -1,0 +1,41 @@
+Sprint 63 Closure Check — 2026-04-05
+=====================================
+
+Sprint Type: Architecture (design-only)
+Tasks: B-137, B-138
+
+1. No Runtime Code Change Verification:
+   git diff --name-only -- agent/ frontend/ | grep -v "docs|evidence|tools|config"
+   Result: PASS — no runtime code change
+
+2. Deliverables:
+   [x] D-139 frozen in DECISIONS.md
+   [x] docs/sprints/sprint-63/D-139-controller-decomposition.md — formal decision record
+   [x] docs/sprints/sprint-63/responsibility-map.md — 28 methods mapped to 8 concerns
+   [x] docs/sprints/sprint-63/budget-data-flow.md — budget enforcement design
+   [x] config/policies/budget-enforcement.yaml — policy rule draft
+
+3. B-137 Acceptance:
+   [x] D-139 frozen with boundary diagram
+   [x] responsibility-map.md committed
+   [x] Method → service mapping table (28 methods mapped)
+   [x] LOC per concern breakdown (8 concerns totaling 2197 LOC)
+   [x] Inter-concern dependency graph
+   [x] No code change
+
+4. B-138 Acceptance:
+   [x] Budget ownership documented in D-139
+   [x] Data flow diagram committed
+   [x] Policy rule draft YAML committed
+   [x] No implementation code
+
+5. Test Regression:
+   Design-only sprint — no new tests expected.
+   Backend: 1454 tests (unchanged, CI verified)
+   Frontend: 217 tests (unchanged)
+   Playwright: 13 tests (unchanged)
+   Total: 1684 tests
+
+6. Issues:
+   #325 (B-137) — milestone Sprint 63 assigned
+   #326 (B-138) — milestone Sprint 63 assigned

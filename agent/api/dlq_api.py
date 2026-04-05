@@ -4,9 +4,10 @@ B-106: List, inspect, retry, and purge failed missions from DLQ.
 """
 import logging
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
+from auth.middleware import require_operator
 from persistence.dlq_store import DLQStore
 
 logger = logging.getLogger("mcc.api.dlq")
@@ -53,7 +54,7 @@ def get_dlq_entry(dlq_id: str):
 
 
 @router.post("/dlq/{dlq_id}/retry")
-def retry_dlq_entry(dlq_id: str) -> DLQRetryResponse:
+def retry_dlq_entry(dlq_id: str, _operator=Depends(require_operator)) -> DLQRetryResponse:
     """Retry a failed mission from DLQ.
 
     Marks entry as retrying and re-submits the mission using the
@@ -119,7 +120,7 @@ def retry_dlq_entry(dlq_id: str) -> DLQRetryResponse:
 
 
 @router.delete("/dlq/{dlq_id}")
-def purge_dlq_entry(dlq_id: str):
+def purge_dlq_entry(dlq_id: str, _operator=Depends(require_operator)):
     """Purge a single DLQ entry."""
     if not get_dlq_store().purge(dlq_id):
         raise HTTPException(status_code=404, detail="DLQ entry not found")
@@ -127,7 +128,7 @@ def purge_dlq_entry(dlq_id: str):
 
 
 @router.post("/dlq/purge-resolved")
-def purge_resolved():
+def purge_resolved(_operator=Depends(require_operator)):
     """Purge all resolved DLQ entries."""
     count = get_dlq_store().purge_resolved()
     return {"purged": count}

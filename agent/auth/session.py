@@ -1,5 +1,9 @@
 """Session model — Sprint 16: operator identity + session tracking.
 
+DEPRECATED (S62, B-136): This module is superseded by require_operator
+middleware (agent/auth/middleware.py) and D-134 source user resolver
+(agent/auth/source_user_resolver.py). Do not add new callers.
+
 Task 16.19: Foundation for future multi-user support.
 No authentication flow — just identity tracking.
 """
@@ -7,6 +11,7 @@ from __future__ import annotations
 
 import os
 import uuid
+import warnings
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 
@@ -40,6 +45,11 @@ def get_operator() -> str:
 
 def get_session() -> Session:
     """Get or create current session."""
+    warnings.warn(
+        "get_session() is deprecated (B-136). Use require_operator middleware instead.",
+        DeprecationWarning,
+        stacklevel=2,
+    )
     global _current_session
     if _current_session is None:
         _current_session = Session()

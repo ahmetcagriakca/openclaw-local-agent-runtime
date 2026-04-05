@@ -5,9 +5,10 @@ enable, disable, config, events, stats.
 """
 from dataclasses import asdict
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 
+from auth.middleware import require_operator
 from services.plugin_marketplace import PluginMarketplaceStore
 
 router = APIRouter(tags=["plugins"])
@@ -122,7 +123,7 @@ def get_plugin(plugin_id: str):
 # -- Write endpoints (Task 59.3 — installer) --
 
 @router.post("/plugins/{plugin_id}/install", response_model=MessageResponse)
-def install_plugin(plugin_id: str):
+def install_plugin(plugin_id: str, _operator=Depends(require_operator)):
     """Install a plugin from the marketplace."""
     store = _get_store()
     entry = store.get(plugin_id)
@@ -136,7 +137,7 @@ def install_plugin(plugin_id: str):
 
 
 @router.post("/plugins/{plugin_id}/uninstall", response_model=MessageResponse)
-def uninstall_plugin(plugin_id: str):
+def uninstall_plugin(plugin_id: str, _operator=Depends(require_operator)):
     """Uninstall a plugin."""
     store = _get_store()
     entry = store.get(plugin_id)
@@ -150,7 +151,7 @@ def uninstall_plugin(plugin_id: str):
 
 
 @router.post("/plugins/{plugin_id}/enable", response_model=MessageResponse)
-def enable_plugin(plugin_id: str):
+def enable_plugin(plugin_id: str, _operator=Depends(require_operator)):
     """Enable an installed plugin."""
     store = _get_store()
     entry = store.get(plugin_id)
@@ -162,7 +163,7 @@ def enable_plugin(plugin_id: str):
 
 
 @router.post("/plugins/{plugin_id}/disable", response_model=MessageResponse)
-def disable_plugin(plugin_id: str):
+def disable_plugin(plugin_id: str, _operator=Depends(require_operator)):
     """Disable a plugin."""
     store = _get_store()
     entry = store.get(plugin_id)
@@ -174,7 +175,7 @@ def disable_plugin(plugin_id: str):
 
 
 @router.put("/plugins/{plugin_id}/config", response_model=MessageResponse)
-def update_plugin_config(plugin_id: str, body: PluginConfigRequest):
+def update_plugin_config(plugin_id: str, body: PluginConfigRequest, _operator=Depends(require_operator)):
     """Update plugin configuration."""
     store = _get_store()
     if not store.update_config(plugin_id, body.config):

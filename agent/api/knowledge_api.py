@@ -2,9 +2,10 @@
 
 CRUD + search + mission-context endpoints for knowledge entries.
 """
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 
+from auth.middleware import require_operator
 from services.knowledge_store import KnowledgeStore
 
 router = APIRouter(tags=["knowledge"])
@@ -41,7 +42,7 @@ class MissionKnowledgeRequest(BaseModel):
 
 
 @router.post("/knowledge")
-async def create_knowledge(req: KnowledgeCreateRequest):
+async def create_knowledge(req: KnowledgeCreateRequest, _operator=Depends(require_operator)):
     """Create a new knowledge entry."""
     store = _get_store()
     entry = store.add(
@@ -96,7 +97,7 @@ async def get_knowledge(entry_id: str):
 
 
 @router.patch("/knowledge/{entry_id}")
-async def update_knowledge(entry_id: str, req: KnowledgeUpdateRequest):
+async def update_knowledge(entry_id: str, req: KnowledgeUpdateRequest, _operator=Depends(require_operator)):
     """Update a knowledge entry."""
     store = _get_store()
     entry = store.update(
@@ -114,7 +115,7 @@ async def update_knowledge(entry_id: str, req: KnowledgeUpdateRequest):
 
 
 @router.delete("/knowledge/{entry_id}")
-async def delete_knowledge(entry_id: str):
+async def delete_knowledge(entry_id: str, _operator=Depends(require_operator)):
     """Delete a knowledge entry."""
     store = _get_store()
     deleted = store.delete(entry_id)

@@ -2,9 +2,10 @@
 
 Credential management endpoints for WMCP proxy.
 """
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 
+from auth.middleware import require_operator
 from services.wmcp_credential_manager import (
     WmcpCredentialError,
     WmcpCredentialManager,
@@ -62,7 +63,7 @@ async def list_wmcp_credentials(
 
 
 @router.post("/wmcp/credentials/register")
-async def register_wmcp_credential(req: CredentialRegisterRequest):
+async def register_wmcp_credential(req: CredentialRegisterRequest, _operator=Depends(require_operator)):
     """Register a new WMCP credential."""
     mgr = _get_manager()
     try:
@@ -79,7 +80,7 @@ async def register_wmcp_credential(req: CredentialRegisterRequest):
 
 
 @router.post("/wmcp/credentials/rotate")
-async def rotate_wmcp_credential(req: CredentialRotateRequest):
+async def rotate_wmcp_credential(req: CredentialRotateRequest, _operator=Depends(require_operator)):
     """Rotate a WMCP credential (deactivate old, register new)."""
     mgr = _get_manager()
     try:
@@ -95,7 +96,7 @@ async def rotate_wmcp_credential(req: CredentialRotateRequest):
 
 
 @router.post("/wmcp/credentials/verify")
-async def verify_wmcp_credential(req: CredentialVerifyRequest):
+async def verify_wmcp_credential(req: CredentialVerifyRequest, _operator=Depends(require_operator)):
     """Verify if a value matches the active credential."""
     mgr = _get_manager()
     return mgr.verify(
@@ -105,7 +106,7 @@ async def verify_wmcp_credential(req: CredentialVerifyRequest):
 
 
 @router.post("/wmcp/credentials/migrate")
-async def migrate_wmcp_credentials():
+async def migrate_wmcp_credentials(_operator=Depends(require_operator)):
     """Migrate WMCP credentials from environment variables to SecretStore."""
     mgr = _get_manager()
     migrated = mgr.migrate_from_env()

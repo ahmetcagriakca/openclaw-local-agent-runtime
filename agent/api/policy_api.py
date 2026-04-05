@@ -7,9 +7,10 @@ Sprint 50: POST create, PUT update, DELETE remove + mutation audit.
 import logging
 from datetime import datetime, timezone
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import ValidationError
 
+from auth.middleware import require_operator
 from mission.policy_engine import PolicyEngine
 
 router = APIRouter(tags=["policies"])
@@ -46,7 +47,7 @@ def get_policy(name: str):
 
 
 @router.post("/policies/reload")
-def reload_policies():
+def reload_policies(_operator=Depends(require_operator)):
     """Reload all policy rules from YAML files."""
     count = _engine.load_rules()
     return {
@@ -56,7 +57,7 @@ def reload_policies():
 
 
 @router.post("/policies", status_code=201)
-def create_policy(body: dict):
+def create_policy(body: dict, _operator=Depends(require_operator)):
     """Create a new policy rule."""
     try:
         rule = _engine.create_rule(body)
@@ -75,7 +76,7 @@ def create_policy(body: dict):
 
 
 @router.put("/policies/{name}")
-def update_policy(name: str, body: dict):
+def update_policy(name: str, body: dict, _operator=Depends(require_operator)):
     """Update an existing policy rule."""
     try:
         rule = _engine.update_rule(name, body)
@@ -94,7 +95,7 @@ def update_policy(name: str, body: dict):
 
 
 @router.delete("/policies/{name}")
-def delete_policy(name: str):
+def delete_policy(name: str, _operator=Depends(require_operator)):
     """Delete a policy rule."""
     try:
         _engine.delete_rule(name)

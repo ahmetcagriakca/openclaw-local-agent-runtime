@@ -5,9 +5,10 @@ CRUD endpoints for mission schedules.
 import logging
 from typing import Optional
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 
+from auth.middleware import require_operator
 from schedules.store import ScheduleStore
 
 logger = logging.getLogger("mcc.schedules_api")
@@ -66,7 +67,7 @@ async def get_schedule(schedule_id: str):
 
 
 @router.post("/schedules", status_code=201)
-async def create_schedule(body: CreateScheduleRequest):
+async def create_schedule(body: CreateScheduleRequest, _operator=Depends(require_operator)):
     """Create a new mission schedule."""
     from schedules.schema import parse_cron
     from templates.store import TemplateStore
@@ -95,7 +96,7 @@ async def create_schedule(body: CreateScheduleRequest):
 
 
 @router.put("/schedules/{schedule_id}")
-async def update_schedule(schedule_id: str, body: UpdateScheduleRequest):
+async def update_schedule(schedule_id: str, body: UpdateScheduleRequest, _operator=Depends(require_operator)):
     """Update an existing schedule."""
     from schedules.schema import parse_cron
 
@@ -115,7 +116,7 @@ async def update_schedule(schedule_id: str, body: UpdateScheduleRequest):
 
 
 @router.delete("/schedules/{schedule_id}")
-async def delete_schedule(schedule_id: str):
+async def delete_schedule(schedule_id: str, _operator=Depends(require_operator)):
     """Delete a schedule."""
     store = _get_store()
     if not store.delete(schedule_id):
@@ -124,7 +125,7 @@ async def delete_schedule(schedule_id: str):
 
 
 @router.post("/schedules/{schedule_id}/run")
-async def run_schedule_now(schedule_id: str):
+async def run_schedule_now(schedule_id: str, _operator=Depends(require_operator)):
     """Manually trigger a scheduled mission immediately."""
     store = _get_store()
     sched = store.get(schedule_id)
@@ -146,7 +147,7 @@ async def run_schedule_now(schedule_id: str):
 
 
 @router.post("/schedules/{schedule_id}/toggle")
-async def toggle_schedule(schedule_id: str):
+async def toggle_schedule(schedule_id: str, _operator=Depends(require_operator)):
     """Toggle a schedule's enabled/disabled state."""
     store = _get_store()
     sched = store.get(schedule_id)

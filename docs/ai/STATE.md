@@ -1,9 +1,9 @@
 # Current State
 
 **Last updated:** 2026-04-05
-**Active phase:** Phase 8 — Sprint 61 closed
+**Active phase:** Phase 8 — Sprint 62 closed
 **Doc model:** This file is canonical for system state. Session context lives in `docs/ai/handoffs/current.md`.
-**Note:** All sprints through 53 closed. S54 deferred. S55-S61 closed. All P1 backlog items complete (48/48). Phase 8 active (S60+S61). 137 frozen decisions (D-001 → D-138, D-126 skipped, D-132 deferred). Governance: 20-step closure checklist.
+**Note:** All sprints through 53 closed. S54 deferred. S55-S62 closed. All P1 backlog items complete (48/48). Phase 8 active (S60-S62). 135 frozen decisions + 2 superseded (D-001 → D-138, D-126 skipped, D-132 deferred, D-082/D-098 superseded). Governance: 20-step closure checklist.
 **Persistence:** State is file-persisted (state.json, mission.json). Mission history via persistence layer (Sprint 16).
 **API:** Vezir API on 127.0.0.1:8003 (FastAPI + Uvicorn). Schemas FROZEN (D-067). SSE on /api/v1/events/stream. Dashboard API + Alert API + Telemetry Query API (Sprint 16).
 **Frontend:** React dashboard on localhost:3000 (Vite + Tailwind). SSE live updates + polling fallback + intervention buttons + monitoring dashboard. Node.js 20 required.
@@ -118,6 +118,7 @@
 | Sprint 59 | Plugin Marketplace / Discovery (B-118, D-136) | Closed |
 | Sprint 60 | WSL2 <-> PowerShell Bridge Contract (D-137) | Closed |
 | Sprint 61 | Approval Timeout=Deny + Escalation FSM (D-138) | Closed |
+| Sprint 62 | Approval FSM Wiring + Decision Drift + Auth Quarantine (B-134, B-135, B-136) | Closed |
 
 ## Test Evidence
 
@@ -150,10 +151,11 @@
 | Sprint 59 | 1376 tests, 0 fail | 217 tests, 0 TS errors | +76 new (marketplace 38, API 21, installer 17). 13 Playwright. 1606 total |
 | Sprint 60 | 1395 tests, 0 fail | 217 tests, 0 TS errors | +19 new (bridge contract enforcement 19). 13 Playwright. 1625 total |
 | Sprint 61 | 1426 tests, 0 fail | 217 tests, 0 TS errors | +31 new (approval FSM 31). 13 Playwright. 1656 total |
+| Sprint 62 | 1454 tests, 0 fail | 217 tests, 0 TS errors | +28 new (approval wiring 14, auth quarantine 14). 13 Playwright. 1684 total |
 
 ## Architectural Decisions
 
-137 frozen decisions (D-001 through D-138, D-126 skipped, D-132 deferred). See `docs/ai/DECISIONS.md`. Recent: D-137 WSL2 <-> PowerShell bridge contract (S60). D-138 approval timeout=deny + escalation FSM (S61). Governance: 20-step closure checklist (expanded from 18, Session 35).
+135 frozen + 2 superseded decisions (D-001 through D-138, D-126 skipped, D-132 deferred, D-082/D-098 superseded S62). See `docs/ai/DECISIONS.md`. Recent: D-137 WSL2 <-> PowerShell bridge contract (S60). D-138 approval timeout=deny + escalation FSM (S61). S62: D-082/D-098 superseded (decision drift cleanup). Governance: 20-step closure checklist.
 
 ## Port Map
 

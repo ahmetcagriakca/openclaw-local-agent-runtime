@@ -5,9 +5,10 @@ CRUD endpoints for multi-source allowlist management.
 import logging
 from typing import Optional
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
+from auth.middleware import require_operator
 from services.allowlist_store import AllowlistStore
 
 logger = logging.getLogger("mcc.api.allowlist")
@@ -53,7 +54,7 @@ def get_allowlist(name: str):
 
 
 @router.post("/allowlists", status_code=201)
-def create_allowlist(req: AllowlistCreateRequest):
+def create_allowlist(req: AllowlistCreateRequest, _operator=Depends(require_operator)):
     """Create a new allowlist entry."""
     try:
         entry = _store.create(req.model_dump())
@@ -64,7 +65,7 @@ def create_allowlist(req: AllowlistCreateRequest):
 
 
 @router.put("/allowlists/{name}")
-def update_allowlist(name: str, req: AllowlistUpdateRequest):
+def update_allowlist(name: str, req: AllowlistUpdateRequest, _operator=Depends(require_operator)):
     """Update an existing allowlist entry."""
     try:
         data = {k: v for k, v in req.model_dump().items() if v is not None}
@@ -78,7 +79,7 @@ def update_allowlist(name: str, req: AllowlistUpdateRequest):
 
 
 @router.delete("/allowlists/{name}")
-def delete_allowlist(name: str):
+def delete_allowlist(name: str, _operator=Depends(require_operator)):
     """Delete an allowlist entry."""
     try:
         _store.delete(name)
@@ -95,7 +96,7 @@ def check_allowlist(req: AllowlistCheckRequest):
 
 
 @router.post("/allowlists/reload")
-def reload_allowlists():
+def reload_allowlists(_operator=Depends(require_operator)):
     """Reload allowlists from YAML files."""
     count = _store.load()
     return {"reloaded": count}

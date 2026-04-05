@@ -17,6 +17,7 @@ from mission.resilience import (
     sleep_with_backoff,
 )
 from persistence.dlq_store import DLQStore
+from services.approval_store import ApprovalStore
 
 MISSIONS_DIR = os.path.join(
     os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
@@ -36,6 +37,8 @@ class MissionController:
 
         # B-106: Resilience — DLQ + circuit breaker
         self._dlq_store = DLQStore()
+        # B-134: Approval FSM store (D-138)
+        self._approval_store = ApprovalStore()
         # B-107: Policy engine — pre-stage evaluation
         self._policy_engine = PolicyEngine()
         self._circuit_breaker = CircuitBreaker(
@@ -308,10 +311,26 @@ class MissionController:
                     mission_state.transition_to(
                         MissionStatus.WAITING_APPROVAL,
                         f"Policy escalated: {policy_result.reason}")
+
+                    # B-134: Create approval request in FSM store
+                    approval_record = self._approval_store.request_approval(
+                        mission_id=mission_id,
+                        stage_id=stage_id,
+                        role=specialist,
+                        tool_call_id=f"policy-{stage_id}",
+                        tool=stage.get("skill", "unknown"),
+                        params={"goal": mission.get("goal", ""), "stage": stage_id},
+                        risk=stage.get("policyDecision", "escalate"),
+                        reason=policy_result.reason,
+                        timeout_seconds=300,
+                    )
+                    mission["pendingApprovalId"] = approval_record.approvalId
+
                     emit_policy_event("policy_escalated", {
                         "mission_id": mission_id,
                         "stage_id": stage_id,
                         "rule": policy_result.matched_rule,
+                        "approval_id": approval_record.approvalId,
                     })
                     self._save_mission(mission)
                     self._persist_mission_state(mission_state)
@@ -319,7 +338,53 @@ class MissionController:
                         mission_id, mission, assembler,
                         expansion_broker, "waiting_approval",
                         mission_state=mission_state)
-                    return mission
+
+                    # B-134: Wait for approval decision
+                    decision = self._wait_for_approval(
+                        mission_id, mission, mission_state,
+                        approval_record.approvalId, timeout_s=300)
+
+                    if decision == "approved":
+                        # Resume execution — transition back to RUNNING
+                        mission_state.transition_to(
+                            MissionStatus.RUNNING,
+                            f"approval {approval_record.approvalId} approved")
+                        mission["status"] = "executing"
+                        mission.pop("pendingApprovalId", None)
+                        emit_policy_event("approval_resumed", {
+                            "mission_id": mission_id,
+                            "approval_id": approval_record.approvalId,
+                            "stage_id": stage_id,
+                        })
+                        self._save_mission(mission)
+                        self._persist_mission_state(mission_state)
+                        # Continue to stage execution (don't return)
+                    else:
+                        # denied / expired / timeout → FAILED
+                        failure_reason = (
+                            f"Approval {decision} for stage {stage_id} "
+                            f"(approval_id={approval_record.approvalId})")
+                        mission_state.transition_to(
+                            MissionStatus.FAILED, failure_reason)
+                        mission["status"] = "failed"
+                        mission["error"] = failure_reason
+                        mission["finishedAt"] = datetime.now(
+                            timezone.utc).isoformat()
+                        mission.pop("pendingApprovalId", None)
+                        emit_policy_event("approval_failed", {
+                            "mission_id": mission_id,
+                            "approval_id": approval_record.approvalId,
+                            "decision": decision,
+                            "stage_id": stage_id,
+                        })
+                        self._save_mission(mission)
+                        self._persist_mission_state(mission_state)
+                        self._enqueue_to_dlq(mission)
+                        self._emit_mission_summary(
+                            mission_id, mission, assembler,
+                            expansion_broker, "failed",
+                            mission_state=mission_state)
+                        return mission
 
                 if policy_result.decision == PolicyDecision.DEGRADE:
                     emit_policy_event("policy_degraded", {
@@ -2067,6 +2132,56 @@ Respond ONLY with a JSON object, no markdown:
         logger.warning("[PAUSE TIMEOUT] Mission %s — no resume after %ds",
                        mission_id, timeout_s)
         return False
+
+    def _wait_for_approval(self, mission_id: str, mission: dict,
+                            mission_state: MissionState,
+                            approval_id: str,
+                            timeout_s: int = 300) -> str:
+        """Block until approval decision arrives or timeout.
+
+        Returns: 'approved', 'denied', 'expired', or 'timeout'
+        D-138: timeout = deny semantics.
+        """
+        import logging
+        logger = logging.getLogger("mcc.controller")
+        deadline = time.time() + timeout_s
+
+        logger.info("[APPROVAL] Mission %s waiting for approval %s (timeout=%ds)",
+                    mission_id, approval_id, timeout_s)
+
+        while time.time() < deadline:
+            # Check approval store for decision
+            record = self._approval_store.get_record(approval_id)
+            if not record:
+                logger.warning("[APPROVAL] Record %s disappeared", approval_id)
+                return "denied"
+
+            status = record.get("status", "pending")
+
+            if status == "approved":
+                logger.info("[APPROVAL] Mission %s approved by %s",
+                           mission_id, record.get("decidedBy", "unknown"))
+                return "approved"
+            elif status == "denied":
+                logger.info("[APPROVAL] Mission %s denied by %s",
+                           mission_id, record.get("decidedBy", "unknown"))
+                return "denied"
+            elif status == "expired":
+                logger.info("[APPROVAL] Mission %s approval expired (D-138 timeout=deny)",
+                           mission_id)
+                return "expired"
+            # escalated → keep waiting for re-decision
+
+            # Also check expiration proactively
+            self._approval_store.check_expired()
+
+            time.sleep(2)  # Poll every 2 seconds
+
+        # Timeout — D-138: timeout = deny
+        self._approval_store.check_expired()
+        logger.warning("[APPROVAL TIMEOUT] Mission %s — no decision after %ds",
+                       mission_id, timeout_s)
+        return "timeout"
 
     @staticmethod
     def _delete_signal(missions_dir, mission_id: str,

@@ -684,9 +684,11 @@ Tailwind CSS utility-first approach. No component library; all UI built with Tai
 
 ### D-082: Type Generation — Manual TS Types from Frozen Pydantic Schemas
 
-**Phase:** 5A-2 (Sprint 9) | **Status:** Frozen
+**Phase:** 5A-2 (Sprint 9) | **Status:** Superseded
 
 Frontend TypeScript types written manually from frozen Pydantic schemas (D-067). No auto code-gen tools (openapi-typescript, etc.). **Trade-off:** Both sides must update on schema change, but dependency chain stays simple.
+
+**Status update (S62):** Superseded. openapi-typescript auto-generation implemented in Sprint 25 (frontend/src/api/generated.ts via `npm run generate:api`). Manual types retained in frontend/src/types/api.ts for domain enums. Original prohibition on code-gen tools overridden by API velocity requirement.
 
 ---
 
@@ -828,9 +830,11 @@ Mission Control (:8003 + :3000) fully replaces legacy health dashboard (:8002). 
 
 ### D-098: API-level E2E with httpx + pytest — browser E2E deferred
 
-**Phase:** 5D (Sprint 12) | **Status:** Frozen
+**Phase:** 5D (Sprint 12) | **Status:** Superseded
 
 E2E tests use `httpx` + `pytest` for API-level testing. Browser-level E2E (Playwright/Cypress) deferred to Phase 6. API-level E2E covers critical paths (roles, signals, approvals, SSE) without browser driver overhead. **Trade-off:** UI interaction coverage deferred but not eliminated. **Validation:** `pytest tests/e2e/ -v` → 12+ PASS, 0 FAIL. Tests isolated from unit test suite.
+
+**Status update (S62):** Superseded. Browser-level Playwright E2E implemented in Sprint 39 (tests/e2e/*.spec.ts, .github/workflows/playwright.yml). D-131 (Sprint 48) defines Playwright as canonical test component. Original deferral no longer valid.
 
 ---
 

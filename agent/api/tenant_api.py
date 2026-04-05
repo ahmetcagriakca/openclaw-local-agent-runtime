@@ -2,9 +2,10 @@
 
 CRUD + quota check endpoints for tenant management.
 """
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel, Field
 
+from auth.middleware import require_operator
 from auth.tenant import (
     TenantError,
     TenantStore,
@@ -43,7 +44,7 @@ class QuotaCheckRequest(BaseModel):
 
 
 @router.post("/tenants")
-async def create_tenant(req: TenantCreateRequest):
+async def create_tenant(req: TenantCreateRequest, _operator=Depends(require_operator)):
     """Create a new tenant."""
     store = _get_store()
     try:
@@ -89,7 +90,7 @@ async def get_tenant(tenant_id: str):
 
 
 @router.patch("/tenants/{tenant_id}")
-async def update_tenant(tenant_id: str, req: TenantUpdateRequest):
+async def update_tenant(tenant_id: str, req: TenantUpdateRequest, _operator=Depends(require_operator)):
     """Update a tenant."""
     store = _get_store()
     tenant = store.update(
@@ -105,7 +106,7 @@ async def update_tenant(tenant_id: str, req: TenantUpdateRequest):
 
 
 @router.delete("/tenants/{tenant_id}")
-async def delete_tenant(tenant_id: str):
+async def delete_tenant(tenant_id: str, _operator=Depends(require_operator)):
     """Delete a tenant."""
     store = _get_store()
     try:

@@ -6,9 +6,10 @@ Rotation trigger requires operator confirmation (escalation pattern).
 import logging
 from typing import Optional
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
+from auth.middleware import require_operator
 from services.secret_rotation import (
     SecretRotationError,
     SecretRotationService,
@@ -56,7 +57,7 @@ def check_rotation_due():
 
 
 @router.put("/secrets/rotation/policy")
-def update_rotation_policy(req: PolicyUpdateRequest):
+def update_rotation_policy(req: PolicyUpdateRequest, _operator=Depends(require_operator)):
     """Update rotation policy parameters."""
     try:
         policy = _rotation_service.update_policy(

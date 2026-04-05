@@ -20,6 +20,7 @@ def log_mutation(
     tab_id: str = "",
     session_id: str = "",
     detail: str = "",
+    actor: str = "",
 ) -> None:
     """Log a structured mutation audit entry.
 
@@ -31,6 +32,7 @@ def log_mutation(
         tab_id: Browser tab ID (X-Tab-Id header).
         session_id: Browser session ID (X-Session-Id header).
         detail: Optional detail message.
+        actor: Identity of the user who performed the mutation (B-136).
     """
     entry = {
         "timestamp": datetime.now(timezone.utc).isoformat(),
@@ -41,6 +43,7 @@ def log_mutation(
         "requestId": request_id,
         "tabId": tab_id,
         "sessionId": session_id,
+        "actor": actor or "unknown",
     }
     if detail:
         entry["detail"] = detail

@@ -154,7 +154,15 @@ Requires: identify which decision, provide evidence, get operator approval, upda
 
 ---
 
-## 15. Technical Standards
+## 15. Enforcement Chain
+
+The platform enforces a 7-layer security chain on every tool call. See [`docs/shared/ENFORCEMENT-CHAIN.md`](../shared/ENFORCEMENT-CHAIN.md) for the full sequence diagram, per-layer fail behavior, and decision record references.
+
+Layers: Auth (D-117) → Tool Gateway (D-024) → Working Set (D-053) → Risk Engine (D-128) → Policy Engine (D-133) → Execute → Audit Trail (D-129).
+
+---
+
+## 16. Technical Standards
 
 - Scripts, logs, commands: English/ASCII only
 - All persistent state in repo files, not chat history
@@ -162,7 +170,7 @@ Requires: identify which decision, provide evidence, get operator approval, upda
 
 ---
 
-## 16. Sprint Closure Checklist (Mandatory, Autonomous)
+## 17. Sprint Closure Checklist (Mandatory, Autonomous)
 
 Every sprint closure MUST execute ALL steps below without waiting for operator reminders.
 Skipping any step = governance violation. No step is optional.

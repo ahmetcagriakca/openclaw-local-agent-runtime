@@ -7,7 +7,6 @@ Tests for trust_status enforcement on plugin mutation endpoints:
 - Operator + unknown → 200 (warning logged)
 - Operator + trusted → 200
 """
-import json
 import os
 import sys
 import unittest
@@ -16,7 +15,6 @@ from unittest.mock import MagicMock, patch
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-import pytest
 from fastapi import HTTPException
 
 from api.plugins_api import _enforce_trust_status

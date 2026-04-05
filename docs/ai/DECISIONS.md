@@ -1215,9 +1215,44 @@ Mission creation `sourceUserId` resolved via 3-tier precedence: (1) authenticate
 
 ---
 
-## Decision Index (D-001 → D-135)
+### D-136: Plugin Marketplace + Installer Contract
 
-133 frozen decisions. D-126 skipped, D-132 deferred.
+**Phase:** Sprint 59 | **Status:** Frozen
+
+**Marketplace Store:** PluginMarketplaceStore manages plugin metadata (name, version, description, author, capabilities, risk_tier, source, trust_status). Plugins indexed from PluginManifest schema (D-118). Search by name/tag/category, filter by status. Install states: available → installed → enabled/disabled. Store persisted via JSON file (atomic_write_json per D-106).
+
+**API Surface (10 endpoints):**
+- `GET /api/v1/plugins` — list all (read)
+- `GET /api/v1/plugins/search` — search/filter (read)
+- `GET /api/v1/plugins/{id}` — detail (read)
+- `POST /api/v1/plugins/{id}/install` — install (write, Task 59.3)
+- `POST /api/v1/plugins/{id}/uninstall` — uninstall (write, Task 59.3)
+- `POST /api/v1/plugins/{id}/enable` — enable (write, Task 59.3)
+- `POST /api/v1/plugins/{id}/disable` — disable (write, Task 59.3)
+- `PUT /api/v1/plugins/{id}/config` — update config (write, Task 59.3)
+- `GET /api/v1/plugins/events` — event log (read)
+- `GET /api/v1/plugins/stats` — dashboard stats (read)
+
+**Installer Contract (Task 59.3):**
+- **Source of truth:** Local plugin directory (`agent/plugins/`) with manifest.json.
+- **Integrity:** Manifest validated via `load_manifest()` (D-118). Invalid manifest → fail-closed (reject install, log error, return 422).
+- **Version policy:** One version per plugin name. Re-install overwrites. No multi-version support.
+- **Rollback:** Uninstall deregisters from PluginRegistry + removes config. No rollback to previous version (single-version model).
+- **Idempotency:** Install of already-installed plugin returns 409. Uninstall of not-installed returns 404.
+- **Concurrency:** No concurrent installs of same plugin. Store-level lock per plugin ID.
+- **Failure states:** Manifest validation failure → 422. Handler import failure → 422 + partial cleanup. Registry full → 507.
+- **Audit trail:** All install/uninstall/enable/disable events logged to plugin event store.
+- **Authorization:** No auth required (single-operator per D-108). Future: RBAC per D-117.
+
+**Trust model:** All plugins local-only (no remote registry). PluginExecutor (D-118) provides 30s timeout + error isolation. Unknown/missing manifest fields → plugin rejected (fail-closed). Missing risk_tier defaults to "high".
+
+**EventBus hot-reload:** Install registers handlers at priority 500+. Uninstall deregisters handlers. No restart required.
+
+---
+
+## Decision Index (D-001 → D-136)
+
+134 frozen decisions. D-126 skipped, D-132 deferred.
 
 | ID | Title | Phase |
 |----|-------|-------|
@@ -1356,3 +1391,4 @@ Mission creation `sourceUserId` resolved via 3-tier precedence: (1) authenticate
 | D-133 | Policy Engine Contract | Sprint 48 |
 | D-134 | Source User Identity Resolution Contract | Sprint 55 |
 | D-135 | Secret Rotation + Allowlist + Metrics Contract | Sprint 57 |
+| D-136 | Plugin Marketplace + Installer Contract | Sprint 59 |

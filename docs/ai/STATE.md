@@ -1,7 +1,7 @@
 # Current State
 
 **Last updated:** 2026-04-05
-**Active phase:** Phase 7 — Sprint 58 closed, Sprint 59 plan PASS
+**Active phase:** Phase 7 — Sprint 59 closed
 **Doc model:** This file is canonical for system state. Session context lives in `docs/ai/handoffs/current.md`.
 **Note:** All sprints through 53 closed. S54 deferred. S55-S58 closed. All P1 backlog items complete. Phase 7 active. 135 frozen decisions (D-001 → D-136, D-126 skipped, D-132 deferred).
 **Persistence:** State is file-persisted (state.json, mission.json). Mission history via persistence layer (Sprint 16).
@@ -115,6 +115,7 @@
 | Sprint 56 | Task Dir Retention + .bak Cleanup + Intent Mapping (B-027, B-028, B-019) | Closed |
 | Sprint 57 | Secret Rotation + Allowlist + Grafana Pack (B-007, B-009, B-117) | Closed |
 | Sprint 58 | Knowledge Layer + Multi-tenant + WMCP Cred (B-114, B-116, B-010) | Closed |
+| Sprint 59 | Plugin Marketplace / Discovery (B-118, D-136) | Closed |
 
 ## Test Evidence
 
@@ -144,6 +145,7 @@
 | Sprint 56 | 1128 tests, 0 fail | 217 tests, 0 TS errors | +71 new (retention 22, cleanup_bak 22, intent mapper 27). 13 Playwright. 1358 total |
 | Sprint 57 | 1210 tests, 0 fail | 217 tests, 0 TS errors | +82 new (secret rotation 28, allowlist 24, grafana 30). 13 Playwright. 1440 total |
 | Sprint 58 | 1300 tests, 0 fail | 217 tests, 0 TS errors | +90 new (knowledge 37, tenant 30, wmcp-cred 23). 13 Playwright. 1530 total |
+| Sprint 59 | 1376 tests, 0 fail | 217 tests, 0 TS errors | +76 new (marketplace 38, API 21, installer 17). 13 Playwright. 1606 total |
 
 ## Architectural Decisions
 

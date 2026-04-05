@@ -1,7 +1,7 @@
 # Backlog -- Vezir Platform
 
 **Auto-generated from GitHub issues.** Do not edit directly.
-**Generated:** 2026-04-05 04:10 UTC
+**Generated:** 2026-04-05 05:24 UTC
 **Source:** `python tools/generate-backlog.py`
 
 ---
@@ -95,7 +95,7 @@
 | #179 | [B-019] Intent mapping refinement | Done |
 | #183 | [B-114] Knowledge/connector input layer | Done |
 | #185 | [B-116] Multi-tenant isolation | Done |
-| #187 | [B-118] Plugin marketplace / discovery | Open |
+| #187 | [B-118] Plugin marketplace / discovery | Done |
 
 ### Security
 
@@ -107,4 +107,4 @@
 
 ---
 
-**Total:** 48 items (1 open)
+**Total:** 48 items (0 open)

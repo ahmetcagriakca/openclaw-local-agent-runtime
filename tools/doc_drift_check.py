@@ -106,18 +106,27 @@ def check_decision_count_vs_state():
     actual_headings = re.findall(r"^### D-\d{3}", decisions_text, re.MULTILINE)
     actual_count = len(actual_headings)
 
-    # Parse STATE.md claim — look for "N frozen decisions" pattern
-    state_match = re.search(r"(\d+)\s+frozen\s+decisions", state_text)
+    # Parse STATE.md claim — look for "N frozen decisions" or "N frozen + M superseded"
+    state_match = re.search(r"(\d+)\s+frozen\s+(?:decisions\s*\+\s*(\d+)\s+superseded|\+\s*(\d+)\s+superseded|decisions)", state_text)
     if not state_match:
         warn_check("Could not find 'N frozen decisions' claim in STATE.md")
         return
 
-    claimed_count = int(state_match.group(1))
+    frozen_count = int(state_match.group(1))
+    superseded_count = int(state_match.group(2) or state_match.group(3) or 0)
 
-    if actual_count == claimed_count:
-        pass_check(f"STATE.md claims {claimed_count} frozen decisions, DECISIONS.md has {actual_count} headings")
+    # Count deferred decisions (headings with Status: Deferred)
+    deferred_count = len(re.findall(r"Status:\s*Deferred", decisions_text, re.IGNORECASE))
+
+    # Total claimed = frozen + superseded + deferred
+    claimed_total = frozen_count + superseded_count + deferred_count
+
+    if actual_count == claimed_total:
+        pass_check(f"STATE.md total ({frozen_count} frozen + {superseded_count} superseded + {deferred_count} deferred = {claimed_total}) matches DECISIONS.md headings ({actual_count})")
+    elif actual_count == frozen_count:
+        pass_check(f"STATE.md claims {frozen_count} frozen decisions, DECISIONS.md has {actual_count} headings")
     else:
-        fail_check(f"STATE.md claims {claimed_count} frozen decisions, but DECISIONS.md has {actual_count} headings")
+        fail_check(f"STATE.md claims {frozen_count} frozen + {superseded_count} superseded + {deferred_count} deferred = {claimed_total}, but DECISIONS.md has {actual_count} headings")
 
     # Also check the D-XXX range claim in STATE.md
     range_match = re.search(r"D-001.*?D-(\d{3})", state_text)

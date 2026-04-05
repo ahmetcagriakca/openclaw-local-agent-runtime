@@ -9,6 +9,18 @@
 
 set -euo pipefail
 
+# Python command resolution for cross-platform compatibility
+# Windows: Microsoft Store aliases shadow real python; use known local path
+PYTHON_CMD="python"
+PYTHON_LOCAL="$HOME/AppData/Local/Python/bin/python.exe"
+if [ -x "$PYTHON_LOCAL" ]; then
+    PYTHON_CMD="$PYTHON_LOCAL"
+elif command -v python3.14 &>/dev/null; then
+    PYTHON_CMD="python3.14"
+elif command -v python3 &>/dev/null; then
+    PYTHON_CMD="python3"
+fi
+
 SPRINT=${1:?"Usage: $0 <sprint_number> [--governance]"}
 GOVERNANCE_OVERRIDE=false
 if [[ "${2:-}" == "--governance" ]]; then
@@ -59,8 +71,8 @@ log ""
 # ─── BACKEND TESTS ───────────────────────────────────────────
 log "--- Backend Tests ---"
 cd agent
-if python -m pytest tests/ -v 2>&1 | tee -a "$MAIN_OUTPUT"; then
-    BACKEND_COUNT=$(python -m pytest tests/ --co -q 2>/dev/null | tail -1 | grep -oE '[0-9]+' | head -1)
+if $PYTHON_CMD -m pytest tests/ -v 2>&1 | tee -a "$MAIN_OUTPUT"; then
+    BACKEND_COUNT=$($PYTHON_CMD -m pytest tests/ --co -q 2>/dev/null | tail -1 | grep -oE '[0-9]+' | head -1)
     log "Backend test count (collected): $BACKEND_COUNT"
     pass "Backend tests: $BACKEND_COUNT collected"
 else
@@ -119,7 +131,7 @@ log ""
 # ─── SPRINT DOC VALIDATOR ────────────────────────────────────
 log "--- Sprint Doc Validator ---"
 if [ -f "tools/validate_sprint_docs.py" ]; then
-    if python tools/validate_sprint_docs.py --sprint "$SPRINT" 2>&1 | tee -a "$MAIN_OUTPUT"; then
+    if $PYTHON_CMD tools/validate_sprint_docs.py --sprint "$SPRINT" 2>&1 | tee -a "$MAIN_OUTPUT"; then
         pass "Sprint doc validator: all checks passed"
     else
         fail "Sprint doc validator failed"
@@ -133,7 +145,7 @@ log ""
 # ─── DOC DRIFT CHECK (decision index + test counts) ─────────
 log "--- Doc Drift Check ---"
 if [ -f "tools/doc_drift_check.py" ]; then
-    if python tools/doc_drift_check.py --skip-tests 2>&1 | tee -a "$MAIN_OUTPUT"; then
+    if $PYTHON_CMD tools/doc_drift_check.py --skip-tests 2>&1 | tee -a "$MAIN_OUTPUT"; then
         pass "Doc drift check: all checks passed"
     else
         fail "Doc drift check: mismatches found"
@@ -146,14 +158,14 @@ log ""
 
 # ─── PROJECT V2 BOARD VALIDATOR (D-123/D-124/D-125) ─────────
 log "--- Project V2 Board Validator ---"
-VALIDATOR_OUTPUT=$(python tools/project-validator.py 2>&1)
+VALIDATOR_OUTPUT=$($PYTHON_CMD tools/project-validator.py 2>&1)
 VALIDATOR_EXIT=$?
 echo "$VALIDATOR_OUTPUT" | tee -a "$MAIN_OUTPUT"
 
 if [ $VALIDATOR_EXIT -eq 0 ]; then
     pass "Project V2 board validator: VALID"
     # Save JSON output for evidence
-    python tools/project-validator.py --json > "$EVIDENCE_DIR/validator-board.json" 2>/dev/null
+    $PYTHON_CMD tools/project-validator.py --json > "$EVIDENCE_DIR/validator-board.json" 2>/dev/null
 else
     fail "Project V2 board validator: NOT VALID"
 fi
@@ -260,8 +272,8 @@ log "--- Contract Evidence ---"
 
         # Sprint 12+ E2E test count (P-05)
         echo "--- E2E Test Count (auto-parsed, P-05) ---"
-        if command -v python &>/dev/null && [ -f "agent/tests/test_e2e.py" ]; then
-            E2E_COUNT=$(cd agent && python -m pytest tests/test_e2e.py --co -q 2>/dev/null | tail -1 | grep -oE '[0-9]+' | head -1 || echo "0")
+        if command -v $PYTHON_CMD &>/dev/null && [ -f "agent/tests/test_e2e.py" ]; then
+            E2E_COUNT=$(cd agent && $PYTHON_CMD -m pytest tests/test_e2e.py --co -q 2>/dev/null | tail -1 | grep -oE '[0-9]+' | head -1 || echo "0")
             echo "E2E test count (collected): $E2E_COUNT"
         else
             E2E_COUNT=0
@@ -309,7 +321,7 @@ log "--- Live Endpoint Checks ---"
 
     if curl -sf http://127.0.0.1:8003/api/v1/health > /dev/null 2>&1; then
         echo "GET /api/v1/health → 200 ✅"
-        curl -s http://127.0.0.1:8003/api/v1/health | python -m json.tool 2>/dev/null
+        curl -s http://127.0.0.1:8003/api/v1/health | $PYTHON_CMD -m json.tool 2>/dev/null
     else
         echo "GET /api/v1/health → UNREACHABLE ❌ — MANDATORY FAIL"
         echo "Backend :8003 must be running for closure check."

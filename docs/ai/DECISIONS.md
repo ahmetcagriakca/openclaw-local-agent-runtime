@@ -1190,6 +1190,14 @@ Formal record: `docs/decisions/D-131-test-reporting.md`.
 
 ---
 
+### D-132: Sprint Folder Naming Standard
+
+**Phase:** Sprint 49 | **Status:** Deferred
+
+Sprint folder naming standard. Deferred — not implemented. Original scope: standardize sprint evidence/docs folder naming convention across tools.
+
+---
+
 ### D-133: Policy Engine Contract
 
 **Phase:** Sprint 48 | **Status:** Frozen
@@ -1283,7 +1291,7 @@ Formal record: `docs/sprints/sprint-63/D-139-controller-decomposition.md`.
 
 ## Decision Index (D-001 → D-139)
 
-138 frozen decisions. D-126 skipped, D-132 deferred.
+136 frozen + 2 superseded decisions. D-126 skipped, D-132 deferred, D-082/D-098 superseded.
 
 | ID | Title | Phase |
 |----|-------|-------|

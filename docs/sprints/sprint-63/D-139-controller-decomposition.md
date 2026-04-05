@@ -81,7 +81,7 @@ Stage N+1 proceeds or mission FAILED
 
 - `docs/sprints/sprint-63/responsibility-map.md` — full method mapping
 - `docs/sprints/sprint-63/budget-data-flow.md` — budget enforcement design
-- `config/policies/budget-enforcement.yaml` — rule draft
+- `docs/sprints/sprint-63/budget-enforcement-draft.yaml` — rule draft
 
 ## Status
 

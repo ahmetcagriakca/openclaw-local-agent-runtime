@@ -14,5 +14,8 @@ Evidence Files:
   evidence/sprint-60/pytest-output.txt
   evidence/sprint-60/lint-output.txt
   evidence/sprint-60/grep-evidence.txt
+  evidence/sprint-60/closure-check-output.txt
+  evidence/sprint-60/live-checks.txt
   evidence/sprint-60/review-summary.md
   evidence/sprint-60/file-manifest.txt
+  evidence/sprint-60/retrospective.md

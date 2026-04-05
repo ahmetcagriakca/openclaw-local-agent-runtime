@@ -1,4 +1,4 @@
-# Session Handoff — 2026-04-05 (Session 39 — Sprint 64)
+# Session Handoff — 2026-04-05 (Session 40 — Sprint 64 Closure)
 
 **Platform:** Vezir Platform
 **Operator:** Claude Code (Opus) — AKCA delegated
@@ -7,7 +7,7 @@
 
 ## Session Summary
 
-Session 39: Sprint 64 completed. Two implementation tasks delivered: B-139 (D-139 controller extraction phase 1 — MissionPersistenceAdapter + StageRecoveryEngine extracted, 289 LOC moved out, controller delegates via thin wrappers) and B-140 (hard per-mission token budget enforcement — cumulative tracking, policy rules, API visibility, complexity-tier defaults). 40 new tests. 1494 backend tests total.
+Session 40: Sprint 64 full closure completed. GPT review obtained (PASS R2). Evidence bundle created (docs/evidence/sprint-64/). 20-step closure checklist executed: pytest 1493 pass + 1 known flaky, ruff 0, tsc 0, vitest 217/217. README badges updated. NEXT.md, open-items.md, handoff updated. GPT memo sent. Previous session (39) delivered B-139 + B-140 implementation.
 
 ## Current State
 

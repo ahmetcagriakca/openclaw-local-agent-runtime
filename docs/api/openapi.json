@@ -2233,6 +2233,11 @@
         "summary": "Create Schedule",
         "description": "Create a new mission schedule.",
         "operationId": "create_schedule_api_v1_schedules_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -2312,6 +2317,11 @@
         "summary": "Update Schedule",
         "description": "Update an existing schedule.",
         "operationId": "update_schedule_api_v1_schedules__schedule_id__put",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "schedule_id",
@@ -2361,6 +2371,11 @@
         "summary": "Delete Schedule",
         "description": "Delete a schedule.",
         "operationId": "delete_schedule_api_v1_schedules__schedule_id__delete",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "schedule_id",
@@ -2402,6 +2417,11 @@
         "summary": "Run Schedule Now",
         "description": "Manually trigger a scheduled mission immediately.",
         "operationId": "run_schedule_now_api_v1_schedules__schedule_id__run_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "schedule_id",
@@ -2443,6 +2463,11 @@
         "summary": "Toggle Schedule",
         "description": "Toggle a schedule's enabled/disabled state.",
         "operationId": "toggle_schedule_api_v1_schedules__schedule_id__toggle_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "schedule_id",
@@ -2611,6 +2636,11 @@
         "summary": "Purge Dlq Entry",
         "description": "Purge a single DLQ entry.",
         "operationId": "purge_dlq_entry_api_v1_dlq__dlq_id__delete",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "dlq_id",
@@ -2652,6 +2682,11 @@
         "summary": "Retry Dlq Entry",
         "description": "Retry a failed mission from DLQ.\n\nMarks entry as retrying and re-submits the mission using the\nstored snapshot (retry_from_mission).",
         "operationId": "retry_dlq_entry_api_v1_dlq__dlq_id__retry_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "dlq_id",
@@ -2704,7 +2739,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
       }
     },
     "/api/v1/features": {
@@ -2991,7 +3031,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
       }
     },
     "/api/v1/policies/{name}": {
@@ -3041,6 +3086,11 @@
         "summary": "Update Policy",
         "description": "Update an existing policy rule.",
         "operationId": "update_policy_api_v1_policies__name__put",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "name",
@@ -3092,6 +3142,11 @@
         "summary": "Delete Policy",
         "description": "Delete a policy rule.",
         "operationId": "delete_policy_api_v1_policies__name__delete",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "name",
@@ -3142,7 +3197,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
       }
     },
     "/api/v1/policies/context-schema": {
@@ -4047,7 +4107,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
       }
     },
     "/api/v1/allowlists": {
@@ -4105,7 +4170,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
       }
     },
     "/api/v1/allowlists/{name}": {
@@ -4155,6 +4225,11 @@
         "summary": "Update Allowlist",
         "description": "Update an existing allowlist entry.",
         "operationId": "update_allowlist_api_v1_allowlists__name__put",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "name",
@@ -4204,6 +4279,11 @@
         "summary": "Delete Allowlist",
         "description": "Delete an allowlist entry.",
         "operationId": "delete_allowlist_api_v1_allowlists__name__delete",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "name",
@@ -4294,7 +4374,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
       }
     },
     "/api/v1/metrics": {
@@ -4347,6 +4432,11 @@
         "summary": "Create Knowledge",
         "description": "Create a new knowledge entry.",
         "operationId": "create_knowledge_api_v1_knowledge_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -4554,6 +4644,11 @@
         "summary": "Update Knowledge",
         "description": "Update a knowledge entry.",
         "operationId": "update_knowledge_api_v1_knowledge__entry_id__patch",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "entry_id",
@@ -4603,6 +4698,11 @@
         "summary": "Delete Knowledge",
         "description": "Delete a knowledge entry.",
         "operationId": "delete_knowledge_api_v1_knowledge__entry_id__delete",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "entry_id",
@@ -4684,6 +4784,11 @@
         "summary": "Create Tenant",
         "description": "Create a new tenant.",
         "operationId": "create_tenant_api_v1_tenants_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -4823,6 +4928,11 @@
         "summary": "Update Tenant",
         "description": "Update a tenant.",
         "operationId": "update_tenant_api_v1_tenants__tenant_id__patch",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "tenant_id",
@@ -4872,6 +4982,11 @@
         "summary": "Delete Tenant",
         "description": "Delete a tenant.",
         "operationId": "delete_tenant_api_v1_tenants__tenant_id__delete",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "tenant_id",
@@ -5071,7 +5186,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
       }
     },
     "/api/v1/wmcp/credentials/rotate": {
@@ -5111,7 +5231,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
       }
     },
     "/api/v1/wmcp/credentials/verify": {
@@ -5151,7 +5276,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
       }
     },
     "/api/v1/wmcp/credentials/migrate": {
@@ -5171,7 +5301,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
       }
     },
     "/api/v1/plugins": {
@@ -5375,6 +5510,11 @@
         "summary": "Install Plugin",
         "description": "Install a plugin from the marketplace.",
         "operationId": "install_plugin_api_v1_plugins__plugin_id__install_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "plugin_id",
@@ -5418,6 +5558,11 @@
         "summary": "Uninstall Plugin",
         "description": "Uninstall a plugin.",
         "operationId": "uninstall_plugin_api_v1_plugins__plugin_id__uninstall_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "plugin_id",
@@ -5461,6 +5606,11 @@
         "summary": "Enable Plugin",
         "description": "Enable an installed plugin.",
         "operationId": "enable_plugin_api_v1_plugins__plugin_id__enable_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "plugin_id",
@@ -5504,6 +5654,11 @@
         "summary": "Disable Plugin",
         "description": "Disable a plugin.",
         "operationId": "disable_plugin_api_v1_plugins__plugin_id__disable_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "plugin_id",
@@ -5547,6 +5702,11 @@
         "summary": "Update Plugin Config",
         "description": "Update plugin configuration.",
         "operationId": "update_plugin_config_api_v1_plugins__plugin_id__config_put",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "plugin_id",

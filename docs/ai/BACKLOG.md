@@ -1,7 +1,7 @@
 # Backlog -- Vezir Platform
 
 **Auto-generated from GitHub issues.** Do not edit directly.
-**Generated:** 2026-04-05 12:50 UTC
+**Generated:** 2026-04-05 18:23 UTC
 **Source:** `python tools/generate-backlog.py`
 
 ---
@@ -12,9 +12,9 @@
 
 | # | Item | State |
 |---|------|-------|
-| #323 | [B-135] Decision Drift Full Scan + Cleanup | Open |
-| #325 | [B-137] Controller Decomposition Boundary Freeze | Open |
-| #326 | [B-138] Budget Enforcement Ownership Design | Open |
+| #323 | [B-135] Decision Drift Full Scan + Cleanup | Done |
+| #325 | [B-137] Controller Decomposition Boundary Freeze | Done |
+| #326 | [B-138] Budget Enforcement Ownership Design | Done |
 | #327 | [B-139] Controller Extraction â€” Phase 1 | Open |
 | #329 | [B-141] Mission Startup Recovery | Open |
 
@@ -38,7 +38,7 @@
 | #155 | [B-008] Audit log tamper resistance | Done |
 | #152 | [B-011] Transport encryption | Done |
 | #153 | [B-012] Full request idempotency | Done |
-| #324 | [B-136] Auth Session Quarantine + Actor Chain Verification | Open |
+| #324 | [B-136] Auth Session Quarantine + Actor Chain Verification | Done |
 | #330 | [B-142] Plugin Mutation Auth Boundary | Open |
 
 ## P2 -- Medium Priority
@@ -134,4 +134,4 @@
 
 ---
 
-**Total:** 62 items (14 open)
+**Total:** 62 items (9 open)

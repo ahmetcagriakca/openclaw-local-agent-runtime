@@ -77,10 +77,12 @@
 | Sprint 59 | Plugin Marketplace / Discovery (B-118, D-136) | CLOSED |
 | Sprint 60 | WSL2 <-> PowerShell Bridge Contract (D-137) | CLOSED |
 | Sprint 61 | Approval Timeout=Deny + Escalation FSM (D-138) | CLOSED |
+| Sprint 62 | Approval FSM Wiring + Decision Drift + Auth Quarantine (B-134, B-135, B-136) | CLOSED |
+| Sprint 63 | Controller Decomposition Boundary + Budget Ownership Design (B-137, B-138, D-139) | CLOSED |
 
 ## Next Sprint
 
-**Phase 8 active.** Architecture hardening: D-137 bridge contract, D-138 approval FSM.
+**Phase 8 active.** S64 ready: B-139 controller extraction phase 1, B-140 hard per-mission budget enforcement.
 
 ### Carry-Forward
 | Item | Source | Status |

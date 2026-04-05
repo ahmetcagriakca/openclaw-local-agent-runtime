@@ -1,7 +1,32 @@
 # Next Steps — Vezir Platform
 
 **Last updated:** 2026-04-05
-**Current:** Phase 8 active. Sprint 61 closed. D-137 bridge contract + D-138 approval FSM frozen.
+**Current:** Phase 8 active. Sprint 63 closed. D-139 controller decomposition + budget ownership frozen.
+
+---
+
+## Sprint 63 — Controller Decomposition Boundary + Budget Ownership (CLOSED)
+
+**Model:** A (full closure) | **Class:** Architecture (design-only)
+**Scope:** B-137 controller decomposition boundary freeze, B-138 budget enforcement ownership design
+**Tests:** 1454 backend + 217 frontend + 13 Playwright = 1684 total (unchanged, design sprint)
+**Issues:** #325, #326
+**New tests:** 0 (design-only)
+**New files:** `docs/sprints/sprint-63/responsibility-map.md`, `docs/sprints/sprint-63/D-139-controller-decomposition.md`, `docs/sprints/sprint-63/budget-data-flow.md`, `docs/sprints/sprint-63/budget-enforcement-draft.yaml`
+**Modified:** `docs/ai/DECISIONS.md` (D-139 added)
+**Decision:** D-139 frozen
+**Review:** Claude Code PASS, GPT PASS (R2)
+
+---
+
+## Sprint 62 — Approval FSM Wiring + Decision Drift + Auth Quarantine (CLOSED)
+
+**Model:** A (full closure) | **Class:** Product
+**Scope:** B-134 approval FSM controller wiring, B-135 decision drift cleanup, B-136 auth session quarantine
+**Tests:** 1454 backend + 217 frontend + 13 Playwright = 1684 total
+**Issues:** #322, #323, #324
+**New tests:** +28
+**Review:** Claude Code PASS, GPT Pending
 
 ---
 

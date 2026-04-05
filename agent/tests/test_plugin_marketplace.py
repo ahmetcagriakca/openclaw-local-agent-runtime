@@ -330,3 +330,154 @@ class TestTransitionsContract:
     def test_all_states_have_transitions(self):
         for state in ["available", "installed", "enabled", "disabled"]:
             assert state in _VALID_TRANSITIONS
+
+
+# ── Task 59.2: API Tests ──────────────────────────────────────────
+
+from fastapi.testclient import TestClient
+
+import api.plugins_api as plugins_api_module
+from api.plugins_api import router
+
+
+def _make_test_app(store):
+    """Create a FastAPI test app with a pre-configured store."""
+    from fastapi import FastAPI
+
+    app = FastAPI()
+    app.include_router(router, prefix="/api/v1")
+    plugins_api_module._store = store
+    return app
+
+
+@pytest.fixture
+def api_client(store_with_plugins):
+    app = _make_test_app(store_with_plugins)
+    return TestClient(app)
+
+
+class TestPluginListAPI:
+    def test_list_plugins(self, api_client):
+        r = api_client.get("/api/v1/plugins")
+        assert r.status_code == 200
+        data = r.json()
+        assert data["total"] == 4
+        assert len(data["plugins"]) == 4
+
+    def test_list_has_required_fields(self, api_client):
+        r = api_client.get("/api/v1/plugins")
+        plugin = r.json()["plugins"][0]
+        for field in ["plugin_id", "name", "version", "description", "author",
+                       "status", "capabilities", "risk_tier", "source", "trust_status"]:
+            assert field in plugin
+
+
+class TestPluginSearchAPI:
+    def test_search_by_query(self, api_client):
+        r = api_client.get("/api/v1/plugins/search", params={"q": "Alpha"})
+        assert r.status_code == 200
+        assert r.json()["total"] == 1
+
+    def test_search_by_status(self, api_client):
+        r = api_client.get("/api/v1/plugins/search", params={"status": "available"})
+        assert r.status_code == 200
+        assert r.json()["total"] == 4
+
+    def test_search_by_category(self, api_client):
+        r = api_client.get("/api/v1/plugins/search", params={"category": "security"})
+        assert r.status_code == 200
+        assert r.json()["total"] == 1
+
+    def test_search_no_match(self, api_client):
+        r = api_client.get("/api/v1/plugins/search", params={"q": "zzzzz"})
+        assert r.json()["total"] == 0
+
+
+class TestPluginDetailAPI:
+    def test_get_detail(self, api_client):
+        r = api_client.get("/api/v1/plugins/alpha")
+        assert r.status_code == 200
+        assert r.json()["name"] == "Alpha"
+        assert r.json()["risk_tier"] == "low"
+
+    def test_get_detail_404(self, api_client):
+        r = api_client.get("/api/v1/plugins/nonexistent")
+        assert r.status_code == 404
+
+
+class TestPluginEventsAPI:
+    def test_events(self, api_client):
+        r = api_client.get("/api/v1/plugins/events")
+        assert r.status_code == 200
+        assert "events" in r.json()
+
+    def test_events_with_limit(self, api_client):
+        r = api_client.get("/api/v1/plugins/events", params={"limit": 2})
+        assert r.status_code == 200
+
+
+class TestPluginStatsAPI:
+    def test_stats(self, api_client):
+        r = api_client.get("/api/v1/plugins/stats")
+        assert r.status_code == 200
+        data = r.json()
+        assert data["total"] == 4
+        assert "by_category" in data
+        assert "by_risk_tier" in data
+
+
+class TestPluginInstallAPI:
+    def test_install(self, api_client):
+        r = api_client.post("/api/v1/plugins/alpha/install")
+        assert r.status_code == 200
+        assert r.json()["status"] == "installed"
+
+    def test_install_already_installed(self, api_client):
+        api_client.post("/api/v1/plugins/alpha/install")
+        r = api_client.post("/api/v1/plugins/alpha/install")
+        assert r.status_code == 409
+
+    def test_install_404(self, api_client):
+        r = api_client.post("/api/v1/plugins/nonexistent/install")
+        assert r.status_code == 404
+
+
+class TestPluginUninstallAPI:
+    def test_uninstall(self, api_client):
+        api_client.post("/api/v1/plugins/alpha/install")
+        r = api_client.post("/api/v1/plugins/alpha/uninstall")
+        assert r.status_code == 200
+        assert r.json()["status"] == "available"
+
+    def test_uninstall_not_installed(self, api_client):
+        r = api_client.post("/api/v1/plugins/alpha/uninstall")
+        assert r.status_code == 404
+
+
+class TestPluginEnableDisableAPI:
+    def test_enable(self, api_client):
+        api_client.post("/api/v1/plugins/alpha/install")
+        r = api_client.post("/api/v1/plugins/alpha/enable")
+        assert r.status_code == 200
+        assert r.json()["status"] == "enabled"
+
+    def test_enable_not_installed(self, api_client):
+        r = api_client.post("/api/v1/plugins/alpha/enable")
+        assert r.status_code == 422
+
+    def test_disable(self, api_client):
+        api_client.post("/api/v1/plugins/alpha/install")
+        api_client.post("/api/v1/plugins/alpha/enable")
+        r = api_client.post("/api/v1/plugins/alpha/disable")
+        assert r.status_code == 200
+        assert r.json()["status"] == "disabled"
+
+
+class TestPluginConfigAPI:
+    def test_update_config(self, api_client):
+        r = api_client.put("/api/v1/plugins/alpha/config", json={"config": {"key": "val"}})
+        assert r.status_code == 200
+
+    def test_update_config_404(self, api_client):
+        r = api_client.put("/api/v1/plugins/nonexistent/config", json={"config": {}})
+        assert r.status_code == 404

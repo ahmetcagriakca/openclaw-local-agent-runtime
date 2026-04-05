@@ -173,22 +173,26 @@ Skipping any step = governance violation. No step is optional.
  3. SDK sync            — python tools/export_openapi.py && cd frontend && npm run generate:api
  4. Git commit + push   — all files staged, pushed to main
  5. CI green            — gh run list, wait for success
- 6. Issues close        — gh issue close for all sprint issues
- 7. Milestone close     — gh api milestones PATCH state=closed
- 8. Board sync          — Project V2: Sprint field + Status=Done for all items
- 9. STATE.md            — sprint count, phase, test evidence row
-10. NEXT.md             — new sprint entry at top
-11. Handoff current.md  — full session handoff with deliverables + GPT memo
-12. open-items.md       — carry-forward resolved items, next sprint candidates
-13. BACKLOG.md          — python tools/generate-backlog.py (regenerate from GitHub)
-14. Review file         — docs/ai/reviews/S{N}-REVIEW.md (verdict + evidence)
-15. Closure evidence    — docs/sprints/sprint-{N}/closure-check-output.txt (D-132)
-16. README badges       — test counts + phase current? fix if stale
-17. Claude memory       — update project status memory
-18. GPT memo            — send session memo to GPT Vezir (browser or text)
+ 6. Issues create+close — create sprint task issues if missing, close all with evidence
+ 7. Issues milestone    — every issue assigned to sprint milestone (gh api PATCH)
+ 8. Milestone close     — gh api milestones PATCH state=closed
+ 9. Board sync          — Project V2: add items, set Sprint number field, set Status=Done
+10. STATE.md            — sprint count, phase, test evidence row, decision count
+11. NEXT.md             — new sprint entry at top
+12. Handoff current.md  — full session handoff with deliverables + GPT memo
+13. open-items.md       — carry-forward resolved items, next sprint candidates
+14. DECISIONS.md        — new D-XXX entry + index row if decision frozen this sprint
+15. Review file         — docs/ai/reviews/S{N}-REVIEW.md (verdict + evidence)
+16. Evidence bundle     — evidence/sprint-{N}/ with: pytest-output.txt, lint-output.txt,
+                          closure-check-output.txt, review-summary.md, file-manifest.txt,
+                          retrospective.md (per D-105, never waivable)
+17. GPT review          — submit closure packet to GPT Vezir, iterate until PASS
+18. README badges       — test counts + phase current? fix if stale
+19. Claude memory       — update project status memory
+20. GPT memo            — send session memo to GPT Vezir (browser or text)
 ```
 
-All 18 steps executed in one pass. Never ask operator "shall I do X?" — just do it.
+All 20 steps executed in one pass. Never ask operator "shall I do X?" — just do it.
 
 ---
 

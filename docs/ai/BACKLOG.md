@@ -1,12 +1,22 @@
 # Backlog -- Vezir Platform
 
 **Auto-generated from GitHub issues.** Do not edit directly.
-**Generated:** 2026-04-05 05:24 UTC
+**Generated:** 2026-04-05 12:50 UTC
 **Source:** `python tools/generate-backlog.py`
 
 ---
 
 ## P1 -- High Priority
+
+### General
+
+| # | Item | State |
+|---|------|-------|
+| #323 | [B-135] Decision Drift Full Scan + Cleanup | Open |
+| #325 | [B-137] Controller Decomposition Boundary Freeze | Open |
+| #326 | [B-138] Budget Enforcement Ownership Design | Open |
+| #327 | [B-139] Controller Extraction â€” Phase 1 | Open |
+| #329 | [B-141] Mission Startup Recovery | Open |
 
 ### Product
 
@@ -28,6 +38,8 @@
 | #155 | [B-008] Audit log tamper resistance | Done |
 | #152 | [B-011] Transport encryption | Done |
 | #153 | [B-012] Full request idempotency | Done |
+| #324 | [B-136] Auth Session Quarantine + Actor Chain Verification | Open |
+| #330 | [B-142] Plugin Mutation Auth Boundary | Open |
 
 ## P2 -- Medium Priority
 
@@ -42,6 +54,15 @@
 | #172 | [B-111] Mission replay / fixture runner | Done |
 | #173 | [B-112] Local dev sandbox / seeded demo | Done |
 | #174 | [B-113] Docs-as-product pack | Done |
+| #333 | [B-145] Enforcement Chain Documentation | Open |
+| #334 | [B-146] Mission Replay CLI Tool | Open |
+
+### General
+
+| # | Item | State |
+|---|------|-------|
+| #331 | [B-143] Persistence Boundary ADR | Open |
+| #332 | [B-144] Tool Reversibility Metadata Extension | Open |
 
 ### Operations
 
@@ -80,6 +101,12 @@
 |---|------|-------|
 | #178 | [B-018] Dynamic sourceUserId | Done |
 
+### General
+
+| # | Item | State |
+|---|------|-------|
+| #335 | [B-147] Patch/Review/Apply/Revert Contract Design | Open |
+
 ### Operations
 
 | # | Item | State |
@@ -107,4 +134,4 @@
 
 ---
 
-**Total:** 48 items (0 open)
+**Total:** 62 items (14 open)

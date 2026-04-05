@@ -61,4 +61,4 @@
 
 ## GPT Review
 
-**Status:** Pending — S58 review in progress, S59 packet to follow after S58 PASS.
+**Status:** Pending — evidence packet generated at `evidence/sprint-59/`. GPT submission after S58 PASS.

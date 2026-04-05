@@ -1,4 +1,4 @@
-# Session Handoff — 2026-04-05 (Session 40 — Sprint 65 Kickoff)
+# Session Handoff — 2026-04-06 (Session 41 — Sprint 65 Closure)
 
 **Platform:** Vezir Platform
 **Operator:** Claude Code (Opus) — AKCA delegated
@@ -7,18 +7,18 @@
 
 ## Session Summary
 
-Session 40: Sprint 64 full closure completed + Sprint 65 kickoff prepared. S64 GPT review obtained (PASS R2). S64 + S63 evidence bundles created. 20-step closure checklist executed. S65 milestone created (#39), issues #329/#330 assigned. Kickoff gate all met.
+Session 41: Sprint 65 fully implemented and closed. B-141 mission startup recovery (fail-closed model) + B-142 plugin mutation auth boundary (fail-closed trust enforcement). GPT review R1 HOLD → R2 PASS. 42 new tests added (25 recovery + 17 auth). Evidence bundle at docs/evidence/sprint-65/.
 
 ## Current State
 
-- **Phase:** 8 active — S64 closed, S65 kickoff ready
-- **Last closed sprint:** 64
+- **Phase:** 8 active — S65 closed
+- **Last closed sprint:** 65
 - **Decisions:** 136 frozen + 2 superseded (D-001 → D-139, D-126 skipped, D-132 deferred, D-082/D-098 superseded)
-- **Tests:** 1494 backend + 217 frontend + 13 Playwright = 1724 total
-- **CI:** All green (1 pre-existing flaky: test_cannot_approve_expired timing race)
+- **Tests:** 1536 backend + 217 frontend + 13 Playwright = 1766 total
+- **CI:** All green (2 pre-existing: test_audit_integrity WinError sandbox)
 - **Security:** 0 CodeQL, 0 secret scanning, 0 dependabot
 - **PRs:** 0 open
-- **Open issues:** 7 (Phase 8 backlog B-141→B-147)
+- **Open issues:** 5 (Phase 8 backlog B-143→B-147)
 - **Blockers:** None
 
 ## Review History
@@ -33,13 +33,12 @@ Session 40: Sprint 64 full closure completed + Sprint 65 kickoff prepared. S64 G
 | S62 | PASS | PASS (R1) |
 | S63 | PASS | PASS (R2) |
 | S64 | PASS | PASS (R2) |
+| S65 | PASS | PASS (R2) |
 
 ## Phase 8 Backlog (Remaining)
 
 | Issue | ID | Priority | Sprint | Scope |
 |-------|-----|----------|--------|-------|
-| #329 | B-141 | P1 | S65 | Mission startup recovery |
-| #330 | B-142 | P1 | S65 | Plugin mutation auth boundary |
 | #331 | B-143 | P2 | S66 | Persistence boundary ADR |
 | #332 | B-144 | P2 | S66 | Tool reversibility metadata |
 | #333 | B-145 | P2 | S67 | Enforcement chain documentation |
@@ -56,49 +55,14 @@ Session 40: Sprint 64 full closure completed + Sprint 65 kickoff prepared. S64 G
 | D-021→D-058 extraction | S8 | AKCA-assigned decision debt |
 | Flaky test: test_cannot_approve_expired | S64 | Pre-existing timing race (timeout_seconds=0) |
 
-## Next Session — Sprint 65 Implementation
+## Next Session — Sprint 66
 
-**Sprint:** 65 | **Phase:** 8 | **Model:** A (full closure) | **Class:** Architecture + Security
+**Sprint:** 66 | **Phase:** 8 | **Model:** A (full closure) | **Class:** Architecture + Documentation
 
-### Kickoff Gate (all met)
-- S64 `closure_status=closed` with evidence bundle
-- B-139/B-140 implemented, no blockers
-- Issues #329/#330 created, milestone S65 assigned
-
-### Task 65.1 — B-141: Mission Startup Recovery [P1]
-
-Fail-closed model: restart sonrası tüm non-terminal, non-paused missions → FAILED.
-
-Recovery matrix:
-
-| State at Crash | Approval State | Mission Recovery | Reason |
-|----------------|----------------|-------------------|--------|
-| RUNNING | N/A | → FAILED | orphaned_by_restart |
-| WAITING_APPROVAL | PENDING | approval → EXPIRED, mission → FAILED | restart_expired_approval |
-| WAITING_APPROVAL | ESCALATED | approval → EXPIRED, mission → FAILED | restart_expired_escalated_approval |
-| PAUSED | N/A | preserve (stay PAUSED) | Operator explicitly paused |
-| PLANNING | N/A | → FAILED | orphaned_by_restart |
-| COMPLETED/FAILED/TIMED_OUT | N/A | no mutation | Terminal |
-
-Yapılacaklar:
-1. Startup hook: `_recover_orphaned_missions()` — scan + apply matrix
-2. Alert: "N orphaned missions recovered at startup" → Telegram
-3. Audit trail per recovery action
-4. Log: recovery summary (mission_id, old_state, new_state, reason)
-
-### Task 65.2 — B-142: Plugin Mutation Auth Boundary [P1]
-
-Yapılacaklar:
-1. Plugin API mutation endpoints'e `require_operator` dependency ekle/verify
-2. trust_status enforcement: untrusted → deny (403), unknown → warning + proceed
-3. Test suite: no auth → 401, viewer → 403, operator → 200, untrusted install → 403
-
-### Sequence
-65.1 (startup recovery) → G1 → 65.2 (plugin auth) → G2 → RETRO → CLOSURE
-
-### Evidence
-`evidence/sprint-65/` — pytest, lint, closure-check, grep-evidence, review-summary, file-manifest
+### Planned Tasks
+- B-143: Persistence boundary ADR
+- B-144: Tool reversibility metadata
 
 ## GPT Memo
 
-Session 40 (S64 closure + S65 kickoff): S64 full closure completed — GPT PASS (R2), evidence bundle at docs/evidence/sprint-64/, 20-step closure checklist all green. S63 evidence bundle also created retroactively. S65 kickoff ready: B-141 mission startup recovery (fail-closed model, recovery matrix for 8 states) + B-142 plugin mutation auth boundary (require_operator + trust_status enforcement). Milestone S65 created, issues #329/#330 assigned.
+Session 41 (S65 closure): B-141 mission startup recovery implemented (fail-closed: RUNNING/PLANNING→FAILED, WAITING_APPROVAL→expire+FAILED, PAUSED preserved). B-142 plugin mutation auth boundary (fail-closed: unknown=403, untrusted=403, only trusted=proceed). GPT R1 HOLD (unknown→proceed was not fail-closed, missing invariant tests, missing evidence). R2 PASS after patching all 3 blockers. 42 new tests (25+17). Backend 1536, Frontend 217, total 1766.

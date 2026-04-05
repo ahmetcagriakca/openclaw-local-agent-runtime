@@ -1,5 +1,7 @@
 """Mission Controller — orchestrates multi-agent missions."""
+import glob as glob_mod
 import json
+import logging
 import os
 import time
 from datetime import datetime, timezone
@@ -51,6 +53,143 @@ class MissionController:
 
         # 7.9: Auto-generate capability manifest on startup
         self._update_capability_manifest()
+
+        # B-141: Recover orphaned missions on startup (fail-closed)
+        self._recover_orphaned_missions()
+
+    # ── B-141: Mission Startup Recovery ─────────────────────────────
+
+    def _recover_orphaned_missions(self) -> int:
+        """B-141: Fail-closed startup recovery for orphaned missions.
+
+        Scans persisted missions and applies recovery matrix:
+        - RUNNING/PLANNING → FAILED (orphaned_by_restart)
+        - WAITING_APPROVAL (PENDING/ESCALATED) → expire approval → FAILED
+        - PAUSED → preserve (operator explicitly paused)
+        - Terminal states (COMPLETED/FAILED/TIMED_OUT) → no mutation
+        """
+        logger = logging.getLogger("mcc.controller.startup_recovery")
+        # Suffixes for non-canonical files
+        excluded_suffixes = ("-state.json", "-summary.json", "-token-report.json")
+
+        pattern = os.path.join(MISSIONS_DIR, "mission-*.json")
+        recovered = []
+
+        for mission_path in sorted(glob_mod.glob(pattern)):
+            filename = os.path.basename(mission_path)
+            if any(filename.endswith(s) for s in excluded_suffixes):
+                continue
+
+            try:
+                with open(mission_path, "r", encoding="utf-8") as f:
+                    mission = json.load(f)
+            except (json.JSONDecodeError, OSError) as exc:
+                logger.warning("Cannot read mission file %s: %s", mission_path, exc)
+                continue
+
+            mission_id = mission.get("missionId", "")
+            status = mission.get("status", "")
+
+            if not mission_id or not status:
+                continue
+
+            # Load state machine (if persisted)
+            state_path = os.path.join(MISSIONS_DIR, f"{mission_id}-state.json")
+            mission_state = None
+            if os.path.exists(state_path):
+                try:
+                    with open(state_path, "r", encoding="utf-8") as f:
+                        mission_state = MissionState.from_dict(json.load(f))
+                except (json.JSONDecodeError, OSError, KeyError):
+                    pass
+
+            old_status = status
+            reason = ""
+
+            # Case 1: RUNNING or PLANNING → FAILED
+            if status in ("running", "planning", "executing"):
+                reason = "orphaned_by_restart"
+                mission["status"] = "failed"
+                mission["error"] = f"Startup recovery: {reason}"
+                mission["finishedAt"] = datetime.now(timezone.utc).isoformat()
+                if mission_state:
+                    mission_state.transition_to(MissionStatus.FAILED, reason)
+
+            # Case 2: WAITING_APPROVAL → expire approval → FAILED
+            elif status == "waiting_approval":
+                # Expire any pending/escalated approvals for this mission
+                approval_id = mission.get("pendingApprovalId")
+                approval_reason = "restart_expired_approval"
+                if approval_id:
+                    record = self._approval_store.pending.get(approval_id)
+                    if record and record.status == "escalated":
+                        approval_reason = "restart_expired_escalated_approval"
+                    # Force-expire the approval
+                    if record and record.status in ("pending", "escalated"):
+                        record.status = "expired"
+                        record.decision = "expired"
+                        record.decidedAt = datetime.now(timezone.utc).isoformat()
+                        record.decidedBy = "system:startup_recovery"
+                        self._approval_store._move_to_history(record)
+                        self._approval_store._persist_decision(record)
+
+                reason = approval_reason
+                mission["status"] = "failed"
+                mission["error"] = f"Startup recovery: {reason}"
+                mission["finishedAt"] = datetime.now(timezone.utc).isoformat()
+                if mission_state:
+                    mission_state.transition_to(MissionStatus.FAILED, reason)
+
+            # Case 3: PAUSED → preserve (no mutation)
+            elif status == "paused":
+                continue
+
+            # Case 4: Terminal states → no mutation
+            elif status in ("completed", "failed", "timed_out"):
+                continue
+
+            else:
+                # Unknown non-terminal state → fail-closed
+                reason = f"orphaned_unknown_state_{status}"
+                mission["status"] = "failed"
+                mission["error"] = f"Startup recovery: {reason}"
+                mission["finishedAt"] = datetime.now(timezone.utc).isoformat()
+                if mission_state:
+                    try:
+                        mission_state.transition_to(MissionStatus.FAILED, reason)
+                    except Exception:
+                        pass
+
+            # Persist recovered mission
+            self._save_mission(mission)
+            if mission_state:
+                self._persist_mission_state(mission_state)
+
+            recovered.append({
+                "mission_id": mission_id,
+                "old_status": old_status,
+                "new_status": "failed",
+                "reason": reason,
+            })
+
+            emit_policy_event("mission_startup_recovery", {
+                "mission_id": mission_id,
+                "old_status": old_status,
+                "new_status": "failed",
+                "reason": reason,
+            })
+
+            logger.info(
+                "Recovered mission %s: %s → failed (reason=%s)",
+                mission_id, old_status, reason)
+
+        if recovered:
+            logger.warning(
+                "Startup recovery: %d orphaned missions recovered", len(recovered))
+        else:
+            logger.info("Startup recovery: no orphaned missions found")
+
+        return len(recovered)
 
     def execute_mission(self, goal: str, user_id: str, session_id: str,
                          retry_from_mission: dict = None) -> dict:

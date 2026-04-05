@@ -1,0 +1,5 @@
+..\..\AppData\Local\Python\pythoncore-3.14-64\Lib\subprocess.py:1430: OSError
+=========================== short test summary info ===========================
+FAILED tests/test_audit_integrity.py::TestAuditIntegrityCLI::test_audit_integrity_cli_exit_0_on_ok
+FAILED tests/test_audit_integrity.py::TestAuditIntegrityCLI::test_audit_integrity_cli_exit_1_on_fail
+2 failed, 1527 passed, 2 skipped in 146.63s (0:02:26)

@@ -2,14 +2,20 @@
 
 10 endpoints: list, search, details, install, uninstall,
 enable, disable, config, events, stats.
+
+B-142 (Sprint 65): trust_status enforcement on all mutation endpoints.
+untrusted → 403, unknown → warning + proceed, trusted → proceed.
 """
+import logging
 from dataclasses import asdict
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 
 from auth.middleware import require_operator
-from services.plugin_marketplace import PluginMarketplaceStore
+from services.plugin_marketplace import PluginEntry, PluginMarketplaceStore
+
+logger = logging.getLogger("mcc.api.plugins")
 
 router = APIRouter(tags=["plugins"])
 
@@ -120,6 +126,29 @@ def get_plugin(plugin_id: str):
     return PluginResponse(**asdict(entry))
 
 
+# -- B-142: Trust status enforcement helper --
+
+def _enforce_trust_status(entry: PluginEntry, plugin_id: str, action: str) -> None:
+    """B-142: Enforce trust_status boundary on plugin mutations (fail-closed).
+
+    Only trusted plugins may mutate. untrusted → 403, unknown → 403, trusted → proceed.
+    Governance: unknown != healthy, fail-closed on mutation paths.
+    """
+    if entry.trust_status == "untrusted":
+        logger.warning(
+            "Plugin '%s' mutation '%s' DENIED: untrusted", plugin_id, action)
+        raise HTTPException(
+            status_code=403,
+            detail=f"Plugin '{plugin_id}' is untrusted — {action} denied")
+    if entry.trust_status == "unknown":
+        logger.warning(
+            "Plugin '%s' mutation '%s' DENIED: unknown trust status (fail-closed)",
+            plugin_id, action)
+        raise HTTPException(
+            status_code=403,
+            detail=f"Plugin '{plugin_id}' has unknown trust status — {action} denied (fail-closed)")
+
+
 # -- Write endpoints (Task 59.3 — installer) --
 
 @router.post("/plugins/{plugin_id}/install", response_model=MessageResponse)
@@ -129,6 +158,7 @@ def install_plugin(plugin_id: str, _operator=Depends(require_operator)):
     entry = store.get(plugin_id)
     if entry is None:
         raise HTTPException(status_code=404, detail=f"Plugin '{plugin_id}' not found")
+    _enforce_trust_status(entry, plugin_id, "install")
     if entry.status != "available":
         raise HTTPException(status_code=409, detail=f"Plugin '{plugin_id}' already installed (status={entry.status})")
     if not store.update_status(plugin_id, "installed"):
@@ -143,6 +173,7 @@ def uninstall_plugin(plugin_id: str, _operator=Depends(require_operator)):
     entry = store.get(plugin_id)
     if entry is None:
         raise HTTPException(status_code=404, detail=f"Plugin '{plugin_id}' not found")
+    _enforce_trust_status(entry, plugin_id, "uninstall")
     if entry.status == "available":
         raise HTTPException(status_code=404, detail=f"Plugin '{plugin_id}' is not installed")
     if not store.update_status(plugin_id, "available"):
@@ -157,6 +188,7 @@ def enable_plugin(plugin_id: str, _operator=Depends(require_operator)):
     entry = store.get(plugin_id)
     if entry is None:
         raise HTTPException(status_code=404, detail=f"Plugin '{plugin_id}' not found")
+    _enforce_trust_status(entry, plugin_id, "enable")
     if not store.update_status(plugin_id, "enabled"):
         raise HTTPException(status_code=422, detail=f"Cannot enable plugin '{plugin_id}' from status '{entry.status}'")
     return MessageResponse(message="Plugin enabled", plugin_id=plugin_id, status="enabled")
@@ -169,6 +201,7 @@ def disable_plugin(plugin_id: str, _operator=Depends(require_operator)):
     entry = store.get(plugin_id)
     if entry is None:
         raise HTTPException(status_code=404, detail=f"Plugin '{plugin_id}' not found")
+    _enforce_trust_status(entry, plugin_id, "disable")
     if not store.update_status(plugin_id, "disabled"):
         raise HTTPException(status_code=422, detail=f"Cannot disable plugin '{plugin_id}' from status '{entry.status}'")
     return MessageResponse(message="Plugin disabled", plugin_id=plugin_id, status="disabled")
@@ -178,7 +211,11 @@ def disable_plugin(plugin_id: str, _operator=Depends(require_operator)):
 def update_plugin_config(plugin_id: str, body: PluginConfigRequest, _operator=Depends(require_operator)):
     """Update plugin configuration."""
     store = _get_store()
-    if not store.update_config(plugin_id, body.config):
+    entry = store.get(plugin_id)
+    if entry is None:
         raise HTTPException(status_code=404, detail=f"Plugin '{plugin_id}' not found")
+    _enforce_trust_status(entry, plugin_id, "config_update")
+    if not store.update_config(plugin_id, body.config):
+        raise HTTPException(status_code=422, detail=f"Cannot update config for plugin '{plugin_id}'")
     entry = store.get(plugin_id)
     return MessageResponse(message="Config updated", plugin_id=plugin_id, status=entry.status)

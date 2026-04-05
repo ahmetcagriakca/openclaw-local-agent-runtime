@@ -6951,6 +6951,22 @@
               }
             ],
             "title": "Timeoutconfig"
+          },
+          "cumulativeTokens": {
+            "type": "integer",
+            "title": "Cumulativetokens",
+            "default": 0
+          },
+          "maxTokenBudget": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Maxtokenbudget"
           }
         },
         "type": "object",

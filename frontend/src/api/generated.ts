@@ -2854,6 +2854,13 @@ export interface components {
             timeoutConfig?: {
                 [key: string]: unknown;
             } | null;
+            /**
+             * Cumulativetokens
+             * @default 0
+             */
+            cumulativeTokens: number;
+            /** Maxtokenbudget */
+            maxTokenBudget?: number | null;
         };
         /**
          * MutationResponse

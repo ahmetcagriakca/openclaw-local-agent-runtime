@@ -1,4 +1,4 @@
-# Session Handoff — 2026-04-06 (Session 50 — Sprint 74)
+# Session Handoff — 2026-04-06 (Session 51 — Sprint 75)
 
 **Platform:** Vezir Platform
 **Operator:** Claude Code (Opus) — AKCA delegated
@@ -7,38 +7,38 @@
 
 ## Session Summary
 
-Session 50: Sprint 74 implementation complete. Phase 10 — Project Aggregate (Faz 2A, D-145).
+Session 51: Sprint 75 implementation complete. Phase 10 — Project Aggregate (Faz 2B, D-145).
 
 ### Implementation (single session)
-- Pre-sprint: CI fix — regenerated OpenAPI spec + TS types for S73 project API (SDK drift).
-- T74.1: `persistence/project_store.py` — enable_workspace() with directory creation, workspace fields, projects_root parameter.
-- T74.2: `api/project_api.py` — POST /projects/{id}/workspace/enable (201/403/409) + GET /projects/{id}/workspace.
-- T74.3: `mission/controller.py` — _build_default_working_set() now accepts mission dict, _get_project_paths() injects read-only project paths for active projects with workspace.
-- T74.4: Workspace metadata GET endpoint returns enabled/paths status.
-- T74.5: Artifact publish endpoint — POST /projects/{id}/artifacts (201, server-side path resolution, D-145 §3).
-- T74.6: Artifact list (GET) + unpublish (DELETE /projects/{id}/artifacts/{aid}) endpoints.
-- T74.7: 3 new event types: project.workspace_enabled, project.artifact_published, project.artifact_unpublished. ProjectHandler updated (5→8 types).
-- T74.8-11: 4 new test files, 51 new tests. Updated event count assertions (+2 files).
-- mission_store.py: Added `artifacts` field to record() for artifact resolution.
-- GitHub issues #368-#370 (B-153→B-155) assigned to Sprint 74 milestone. Parent issue #373 created.
+- Pre-sprint: State doc hygiene (NEXT.md phase 9→10, open-items next sprint 74→75).
+- T75.1-T75.2: `persistence/project_store.py` — compute_rollup(), get_rollup() with staleness cache (300s default), invalidate_rollup().
+- T75.3: `api/project_api.py` — GET /projects/{id}/rollup endpoint (200/404).
+- T75.4: `events/catalog.py` — PROJECT_ROLLUP_UPDATED event type (37 total).
+- T75.5: `events/handlers/project_handler.py` — SSE broadcast for 4 event types (status_changed, rollup_updated, artifact_published, artifact_unpublished), rollup cache invalidation on link/unlink/status events. Handler now accepts optional sse_manager + project_store.
+- T75.6: `frontend/src/pages/ProjectsPage.tsx` — List view with search, status filter, sort, status badges.
+- T75.7: `frontend/src/pages/ProjectDetailPage.tsx` — Detail view with rollup KPIs, status breakdown, artifacts list.
+- T75.8: `frontend/src/api/client.ts` + types — getProjects, getProject, getProjectRollup, getProjectArtifacts. Router + sidebar wired.
+- T75.9-T75.13: 58 new tests (36 backend + 22 frontend). Updated event count assertions (+1).
+- OpenAPI spec + TS types regenerated (145→146 endpoints).
+- GitHub issues #371-#389 assigned to Sprint 75 milestone (#51). Parent issue #374.
 
 ### Governance
 - Separate impl/test commits per S73 retro carry-forward.
-- OpenAPI spec + TS types regenerated (140→145 endpoints, 60→61 schemas).
-- CI green after push.
+- Intake gate PASS before implementation.
+- OpenAPI spec + TS types regenerated (146 endpoints, 61 schemas).
 
 ## Current State
 
-- **Phase:** 10 active — S74 implementation done, closure pending
+- **Phase:** 10 active — S75 implementation done, closure pending
 - **Last closed sprint:** 74
-- **Sprint 74 status:** implementation_status=done, closure_status=closed (operator override)
+- **Sprint 75 status:** implementation_status=done, closure_status=not_started
 - **Decisions:** 143 frozen + 2 superseded (D-001 → D-146, D-126 skipped, D-143 placeholder, D-082/D-098 superseded)
-- **Tests:** 1712 backend + 217 frontend + 13 Playwright + 139 root = 2081 total (was 2030, +51 backend)
-- **CI:** All green
+- **Tests:** 1748 backend + 239 frontend + 13 Playwright + 139 root = 2139 total (was 2081, +36 backend +22 frontend)
+- **CI:** Pending push
 - **Security:** 0 CodeQL open, 0 secret scanning, 0 dependabot critical
 - **PRs:** 0 open
-- **Open issues:** 6 (B-148 PAT, B-153-B-157 Phase 10 Faz 2 backlog — B-153/B-154/B-155 in S74)
-- **Project board:** Synced through S74
+- **Open issues:** 6 backlog (B-148 PAT, B-153-B-157 Phase 10 — B-156/B-157 in S75)
+- **Project board:** Synced through S75
 - **Blockers:** None
 
 ## Review History
@@ -63,6 +63,7 @@ Session 50: Sprint 74 implementation complete. Phase 10 — Project Aggregate (F
 | S72 | — | PASS (R5) |
 | S73 | — | HOLD R10 → Operator Override (D-146) |
 | S74 | — | HOLD R5 → Operator Override |
+| S75 | — | Pending |
 
 ## Phase 10 Status
 
@@ -70,17 +71,18 @@ Session 50: Sprint 74 implementation complete. Phase 10 — Project Aggregate (F
 |--------|-------|--------|
 | S73 | Project Entity + CRUD (D-144, Faz 1) | Closed |
 | S74 | Workspace + Artifacts (D-145, Faz 2A) | Closed (operator override) |
-| S75 | Rollup + SSE + Dashboard (D-145, Faz 2B) | Not started |
+| S75 | Rollup + SSE + Dashboard (D-145, Faz 2B) | Implementation done |
+| S76 | TBD (D-145, Faz 3 — policy, budget, deps) | Not started |
 
 ## Dependency Status
 
-No new runtime dependencies. Phase 10 adds workspace + artifacts (additive).
+No new runtime dependencies. Phase 10 adds rollup cache + SSE broadcast + dashboard UI (additive).
 
 ## Carry-Forward
 
 | Item | Source | Status |
 |------|--------|--------|
-| S75 impl/test separate commits | S73 retro | Required — prevents GPT review gate-timing loop |
+| S76+ impl/test separate commits | S73 retro | Required — prevents GPT review gate-timing loop |
 | PROJECT_TOKEN rotation | S23 retro | AKCA-owned, non-blocking |
 | Docker prod image optimization | D-116 | Partial — docker-compose done |
 | SSO/RBAC (full external auth) | D-104/D-108/D-117 | Partial — D-117 + isolation done |
@@ -94,4 +96,4 @@ No new runtime dependencies. Phase 10 adds workspace + artifacts (additive).
 
 ## GPT Memo
 
-Session 50 (S74): Phase 10 Faz 2A — Workspace + Artifacts (D-145). 11 tasks (7 impl + 4 test). MODIFIED: project_store.py (enable_workspace, publish/unpublish/list artifacts, workspace fields), project_api.py (6 new endpoints: workspace enable/get, artifact publish/list/unpublish), controller.py (WorkingSet project path injection), mission_store.py (artifacts field), catalog.py (3 new event types → 36 total), project_handler.py (3 new handlers → 8 total). NEW: 4 test files (workspace 13, artifacts 18, WorkingSet 8, integration+events 7+3 = 10). UPDATED: test_eventbus.py (33→36), test_project_events.py (5→8). 51 new tests, 1712 backend total. Separate impl/test commits. OpenAPI regenerated (145 endpoints). CI green.
+Session 51 (S75): Phase 10 Faz 2B — Rollup + SSE + Dashboard (D-145). 13 tasks (8 impl + 5 test). MODIFIED: project_store.py (compute_rollup, get_rollup, invalidate_rollup), project_api.py (+1 rollup endpoint → 14 total), catalog.py (+1 rollup event → 37 total), project_handler.py (SSE broadcast + rollup invalidation, accepts sse_manager/project_store), client.ts (+4 project API methods), api.ts (+7 project types). NEW: ProjectsPage.tsx (list view), ProjectDetailPage.tsx (detail view), 4 test files backend, 2 test files frontend. UPDATED: test_eventbus.py (36→37), test_project_events.py (8→9), App.tsx (+2 routes), Sidebar.tsx (+Projects nav). 58 new tests (36 backend + 22 frontend), 1748+239=1987 backend+frontend. Separate impl/test commits. OpenAPI regenerated (146 endpoints). TS types regenerated.

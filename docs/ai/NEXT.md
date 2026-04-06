@@ -1,7 +1,20 @@
 # Next Steps — Vezir Platform
 
 **Last updated:** 2026-04-06
-**Current:** Phase 10 active. Sprint 74 closed. S75 next.
+**Current:** Phase 10 active. Sprint 75 impl done. Closure pending.
+
+---
+
+## Sprint 75 — Rollup + SSE + Dashboard (IMPL DONE)
+
+**Model:** A (full closure) | **Class:** Product
+**Scope:** D-145 Faz 2B — EventBus-driven rollup cache, SSE project events, minimal dashboard UI
+**Issues:** #374 (parent), #376-#389 (tasks), #371 (B-156), #372 (B-157)
+**Milestone:** Sprint 75
+**Tests:** 1748 backend + 239 frontend + 13 Playwright + 139 root = 2139 total (+36 backend, +22 frontend)
+**New files:** `pages/ProjectsPage.tsx`, `pages/ProjectDetailPage.tsx`, 4 backend test files, 2 frontend test files
+**Modified:** `project_store.py` (rollup), `project_api.py` (+rollup endpoint), `catalog.py` (+rollup event), `project_handler.py` (SSE+invalidation), `client.ts` (+4 methods), `api.ts` (+7 types), `App.tsx` (+2 routes), `Sidebar.tsx` (+Projects)
+**Review:** Pending
 
 ---
 

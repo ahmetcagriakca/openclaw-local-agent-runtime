@@ -42,17 +42,17 @@ Windows 11 + WSL2 + Python 3.14 + PowerShell.
 ## Build & Test
 
 ```bash
-# Backend (1712 tests)
+# Backend (1748 tests)
 cd agent && python -m pytest tests/ -v
 
-# Frontend (217 tests, requires Node.js 20)
+# Frontend (239 tests, requires Node.js 20)
 cd frontend && npx tsc --noEmit
 cd frontend && npx vitest run
 
 # Playwright E2E (13 tests)
 cd frontend && npx playwright test
 
-# Total: 1712 backend + 217 frontend + 13 Playwright = 1942 (D-131)
+# Total: 1748 backend + 239 frontend + 13 Playwright = 2000 (D-131)
 
 # Preflight (all-in-one local CI)
 bash tools/preflight.sh

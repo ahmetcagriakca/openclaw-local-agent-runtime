@@ -1,7 +1,7 @@
 # Current State
 
 **Last updated:** 2026-04-06
-**Active phase:** Phase 10 — Sprint 74 closed
+**Active phase:** Phase 10 — Sprint 75 impl done, closure pending
 **Doc model:** This file is canonical for system state. Session context lives in `docs/ai/handoffs/current.md`.
 **Note:** All sprints through 53 closed. S54 deferred. S55-S74 closed. All P1 backlog items complete (50/50). Phase 10 active (S73+). Phase 9 complete (S69-S72). Phase 8 complete (S60-S68). 143 frozen + 2 superseded decisions (D-001 → D-146, D-126 skipped, D-143 placeholder, D-082/D-098 superseded). Governance: 20-step closure checklist. Review pipeline: max 5 rounds + ESCALATE (D-146).
 **Persistence:** State is file-persisted (state.json, mission.json). Mission history via persistence layer (Sprint 16).
@@ -134,6 +134,7 @@
 | Sprint 72 | Session Protocol Enforcement �� Phase 9 | Closed |
 | Sprint 73 | Project Entity + CRUD (D-144) — Phase 10 | Closed |
 | Sprint 74 | Workspace + Artifacts (D-145) — Phase 10 | Closed |
+| Sprint 75 | Rollup + SSE + Dashboard (D-145 Faz 2B) — Phase 10 | Impl done |
 
 ## Test Evidence
 
@@ -179,6 +180,7 @@
 | Sprint 72 | 1555 tests, 0 fail | 217 tests, 0 TS errors | +37 root tests (pre-impl-check). 13 Playwright. 139 root. 1924 total |
 | Sprint 73 | 1661 tests, 0 fail | 217 tests, 0 TS errors | +106 backend (project store 23, API 22, FSM 22, historical 9, events 15, compat 12, integration 8, event count fix -2+2). 13 Playwright. 139 root. 2030 total |
 | Sprint 74 | 1712 tests, 0 fail | 217 tests, 0 TS errors | +51 backend (workspace 13, artifacts 18, WorkingSet 8, integration 7, events 3, count fix +2). 13 Playwright. 139 root. 2081 total |
+| Sprint 75 | 1748 tests, 0 fail | 239 tests, 0 TS errors | +36 backend (rollup 12, API 5, SSE 13, integration 6), +22 frontend (projects list 11, detail 11, count fix +1). 13 Playwright. 139 root. 2139 total |
 
 ## Architectural Decisions
 

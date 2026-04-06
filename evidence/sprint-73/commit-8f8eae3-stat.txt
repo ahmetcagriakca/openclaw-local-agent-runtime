@@ -1,0 +1,42 @@
+commit 8f8eae36e41b2f66696d791312ebb5ac9fde1139
+Author: AKCA <ahmetcagriakca@gmail.com>
+Date:   Mon Apr 6 13:04:22 2026 +0300
+
+    Sprint 73: Project Entity + CRUD (Phase 10 Faz 1, D-144)
+    
+    NEW: project_store.py (entity, CRUD, 6-state FSM, lifecycle constraints),
+    project_api.py (7 REST endpoints), project_handler.py (5 event types).
+    MODIFIED: mission_store.py (project_id field), catalog.py (5 project events),
+    server.py (project router). 111 new tests across 7 test files.
+    D-144 + D-145 frozen decisions placed. 10 GitHub issues created (B-148→B-157).
+    
+    Backend: 1661 passed, 0 failed. Lint clean. 0 regressions.
+    
+    Co-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>
+
+ agent/api/project_api.py                           |  227 +++
+ agent/api/server.py                                |    2 +
+ agent/events/catalog.py                            |    7 +
+ agent/events/handlers/project_handler.py           |   67 +
+ agent/persistence/mission_store.py                 |    1 +
+ agent/persistence/project_store.py                 |  415 +++++
+ agent/tests/test_backward_compat.py                |  176 ++
+ agent/tests/test_eventbus.py                       |    4 +-
+ agent/tests/test_observability.py                  |   11 +-
+ agent/tests/test_project_api.py                    |  316 ++++
+ agent/tests/test_project_events.py                 |  120 ++
+ agent/tests/test_project_fsm.py                    |  232 +++
+ agent/tests/test_project_historical_link.py        |  165 ++
+ agent/tests/test_project_integration.py            |  203 +++
+ agent/tests/test_project_store.py                  |  179 +++
+ docs/ai/DECISIONS.md                               |   22 +-
+ docs/ai/STATE.md                                   |   13 +-
+ docs/ai/handoffs/current.md                        |   57 +-
+ docs/decisions/D-144-project-aggregate-contract.md |  396 +++++
+ .../D-145-project-workspace-artifact-boundary.md   |  279 ++++
+ docs/sprints/sprint-73/plan.yaml                   |  131 ++
+ evidence/sprint-73/file-manifest.txt               |   27 +
+ evidence/sprint-73/grep-evidence.txt               |   64 +
+ evidence/sprint-73/lint-output.txt                 |    1 +
+ evidence/sprint-73/pytest-output.txt               | 1678 ++++++++++++++++++++
+ 25 files changed, 4757 insertions(+), 36 deletions(-)

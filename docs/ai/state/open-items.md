@@ -86,10 +86,11 @@
 | Sprint 68 | Patch/Apply Contract Design (B-147, D-141) — Phase 8C | CLOSED |
 | Sprint 69 | Operating Model Freeze + State Drift Guard (D-142) — Phase 9 | CLOSED |
 | Sprint 70 | Validator/Closer Drift Hardening — Phase 9 | CLOSED |
+| Sprint 71 | Intake Gate + Workflow Writer Enforcement — Phase 9 | CLOSED |
 
 ## Next Sprint
 
-**Phase 9 active.** S71 ready: Intake Gate + Workflow Writer Enforcement.
+**Phase 9 active.** S72 next: Session Protocol Enforcement.
 
 ### Carry-Forward
 | Item | Source | Status |

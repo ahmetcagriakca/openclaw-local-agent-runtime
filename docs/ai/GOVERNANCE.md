@@ -55,7 +55,7 @@ All checked before code is written:
   - GitHub milestone exists and is open
   - Parent + task issues exist with correct milestone
   - Governed state docs consistent (state-sync --check)
-  - Project V2 board items have canonical fields initialized
+  - Project V2 board items detected (canonical field auto-init requires PAT — see B-148)
 
 ---
 

@@ -12,7 +12,7 @@ Session 47: Sprint 71 implementation complete. Phase 9 — Intake Gate + Workflo
 - T71.1: `tools/task-intake.py` — new intake gate tool enforcing D-142 prerequisites. Validates plan.yaml structure, GitHub milestone existence, parent+task issue binding with correct milestone, governed state doc consistency (delegates to state-sync --check), Project V2 board item detection. Supports `--json` and `--skip-project` flags.
 - T71.2: `tests/test_task_intake.py` — 40 unit tests (IntakeResult 5, plan structure 12, milestone 4, issues 6, state consistency 4, project board 4, load plan 2, integration 3).
 - T71.3: `.github/workflows/issue-from-plan.yml` — full writer contract: plan.yaml validation before issue creation, auto-creates milestone if missing, assigns milestone to all parent+child issues.
-- T71.4: `.github/workflows/project-auto-add.yml` — canonical field initialization: sets Status=Todo and Sprint=N on Project V2 board when issues are added.
+- T71.4: `.github/workflows/project-auto-add.yml` — canonical field initialization code: sets Status=Todo and Sprint=N with D-142 hard-fail (exit 1). **Code-ready but operationally blocked:** `GITHUB_TOKEN` lacks Project V2 access. Manual board sync remains production path. Follow-up: B-148 (#358) PAT-backed credentials.
 - T71.5: `docs/ai/GOVERNANCE.md` — intake gate added to Sprint Kickoff Gate (section 4) with 5 sub-checks.
 - Also fixed stale `open-items.md` next-sprint reference (S70 → S71).
 - PR #356 merged to main. CI all green.
@@ -76,6 +76,7 @@ No new dependencies introduced. Phase 9 is governance/tooling-only.
 | react-router-dom 6→7 migration | Dependabot | Deferred — breaking API changes |
 | vite 6→8 + plugin-react 6 | Dependabot | Deferred — blocked on vite major bump |
 | test_audit_integrity WinError | Pre-existing | subprocess.py WinError 50 on Win32 — CI (Ubuntu) not affected |
+| B-148 PAT-backed Project V2 credentials | S71 T71.4 | Code-ready, blocked by GITHUB_TOKEN limitation (#358) |
 
 ## GPT Memo
 

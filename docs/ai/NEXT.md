@@ -8,7 +8,7 @@
 ## Sprint 71 — Intake Gate + Workflow Writer Enforcement (CLOSED)
 
 **Model:** A (full closure) | **Class:** Governance
-**Scope:** D-142 intake gate tool, issue-from-plan writer contract, project-auto-add field init, governance patch
+**Scope:** D-142 intake gate tool, issue-from-plan writer contract, project-auto-add field init (code-ready, blocked by PAT credential), governance patch
 **Issues:** #350 (parent), #351-#355 (tasks)
 **Milestone:** Sprint 71
 **Tests:** 1555 backend + 217 frontend + 13 Playwright + 102 root = 1887 total (+40 root new)

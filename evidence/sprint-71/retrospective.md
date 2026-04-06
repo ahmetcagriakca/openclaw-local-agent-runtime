@@ -10,7 +10,8 @@
 ## What could improve
 
 1. **Hyphenated module naming** — `task-intake.py` naming convention (matching other tools) caused `@patch("task-intake.gh")` failures. Used `patch.object(intake, "gh")` as workaround. Consider underscore naming for new tools in future.
-2. **Project V2 field init** — The workflow uses Python3 inline scripts to parse GraphQL responses, which adds complexity. Could be simplified if GitHub CLI adds native field-setting support.
+2. **Project V2 credential gap** — T71.4 workflow code was implemented without verifying that `GITHUB_TOKEN` has Project V2 access. This is a pre-existing infrastructure limitation (Project V2 GraphQL requires PAT). Should have been caught during task planning and scoped as "code-prep + credential dependency" from the start. Created B-148 (#358) for follow-up.
+3. **GPT review cycle count** — 6 rounds due to evidence completeness escalation + T71.4 overclaim. Earlier honest scoping would have avoided rounds 3-6.
 
 ## Patterns to keep
 

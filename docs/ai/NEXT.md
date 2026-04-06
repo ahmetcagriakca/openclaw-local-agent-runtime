@@ -113,7 +113,7 @@
 **New files:** `agent/mission/persistence_adapter.py`, `agent/mission/recovery_engine.py`, `config/policies/token-budget-exceeded.yaml`, `config/policies/token-budget-warning.yaml`, `agent/tests/test_persistence_adapter.py`, `agent/tests/test_recovery_engine.py`, `agent/tests/test_budget_enforcement.py`
 **Modified:** `agent/mission/controller.py` (delegation), `agent/mission/policy_context.py` (budget fields), `agent/mission/policy_engine.py` (budget conditions), `agent/api/schemas.py` (budget in API), `agent/api/normalizer.py`
 **Review:** Claude Code PASS, GPT PASS (R2)
-**Evidence:** `docs/evidence/sprint-64/`
+**Evidence:** `docs/archive/evidence/sprint-64/`
 
 ---
 

@@ -44,6 +44,13 @@ class EventType:
     APPROVAL_DENIED = "approval.denied"
     APPROVAL_TIMEOUT = "approval.timeout"
 
+    # ── Project lifecycle (D-144) ──────────────────────────────
+    PROJECT_CREATED = "project.created"
+    PROJECT_STATUS_CHANGED = "project.status_changed"
+    PROJECT_MISSION_LINKED = "project.mission_linked"
+    PROJECT_MISSION_UNLINKED = "project.mission_unlinked"
+    PROJECT_DELETED = "project.deleted"
+
     # ── Quality gates ────────────────────────────────────────────
     GATE_CHECKED = "gate.checked"
     GATE_PASSED = "gate.passed"

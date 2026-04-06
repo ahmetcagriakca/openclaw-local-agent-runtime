@@ -1,0 +1,131 @@
+sprint: 73
+phase: 10
+title: "Project Entity + CRUD (Phase 10 Faz 1)"
+model: "A"
+
+authority:
+  source_of_truth: "D-144 frozen v5"
+  automation_index: "plan.yaml"
+
+status:
+  implementation_status: done
+  closure_status: not_started
+
+mutation_budget:
+  max: 12
+  planned: 8
+  stop_rule: "no additional repo code/config mutation without explicit rescope"
+
+tasks:
+  - id: "73.1"
+    title: "Project store implementation"
+    type: "implementation"
+    backlog: "B-148"
+    files:
+      - "agent/persistence/project_store.py"
+
+  - id: "73.2"
+    title: "Project CRUD API endpoints"
+    type: "implementation"
+    backlog: "B-149"
+    files:
+      - "agent/api/project_api.py"
+
+  - id: "73.3"
+    title: "Mission link/unlink API"
+    type: "implementation"
+    backlog: "B-149"
+    files:
+      - "agent/api/project_api.py"
+
+  - id: "73.4"
+    title: "Project status FSM enforcement"
+    type: "implementation"
+    backlog: "B-150"
+    files:
+      - "agent/persistence/project_store.py"
+
+  - id: "73.5"
+    title: "Delete/archive lifecycle constraints"
+    type: "implementation"
+    backlog: "B-150"
+    files:
+      - "agent/persistence/project_store.py"
+
+  - id: "73.6"
+    title: "Project EventBus events + audit handler"
+    type: "implementation"
+    backlog: "B-151"
+    files:
+      - "agent/events/catalog.py"
+      - "agent/events/handlers/project_handler.py"
+
+  - id: "73.7"
+    title: "Mission project_id field + store query"
+    type: "implementation"
+    backlog: "B-152"
+    files:
+      - "agent/persistence/mission_store.py"
+
+  - id: "73.8"
+    title: "Backward compatibility test suite"
+    type: "test"
+    backlog: "B-152"
+    files:
+      - "agent/tests/test_backward_compat.py"
+
+  - id: "73.MID"
+    title: "Mid Review Gate"
+    type: "gate"
+    branch_exempt: true
+
+  - id: "73.9"
+    title: "Project store tests"
+    type: "test"
+    backlog: "B-148"
+    files:
+      - "agent/tests/test_project_store.py"
+
+  - id: "73.10"
+    title: "Project API tests"
+    type: "test"
+    backlog: "B-149"
+    files:
+      - "agent/tests/test_project_api.py"
+
+  - id: "73.11"
+    title: "Project FSM tests"
+    type: "test"
+    backlog: "B-150"
+    files:
+      - "agent/tests/test_project_fsm.py"
+
+  - id: "73.12"
+    title: "Historical link tests"
+    type: "test"
+    backlog: "B-150"
+    files:
+      - "agent/tests/test_project_historical_link.py"
+
+  - id: "73.13"
+    title: "EventBus event tests"
+    type: "test"
+    backlog: "B-151"
+    files:
+      - "agent/tests/test_project_events.py"
+
+  - id: "73.14"
+    title: "Integration test: full CRUD + link lifecycle"
+    type: "test"
+    files:
+      - "agent/tests/test_project_integration.py"
+
+  - id: "73.RETRO"
+    title: "Retrospective"
+    type: "process"
+    branch_exempt: true
+
+  - id: "73.CLOSE"
+    title: "Closure"
+    type: "process"
+    branch_exempt: true

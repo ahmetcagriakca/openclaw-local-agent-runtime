@@ -1,6 +1,6 @@
 # Architectural Decisions
 
-**Last updated:** 2026-04-06 (D-141)
+**Last updated:** 2026-04-06 (D-145)
 
 All decisions below are frozen unless marked otherwise.
 Reopening requires explicit phase gate approval + operator sign-off.
@@ -1314,11 +1314,25 @@ Formal record: `docs/decisions/D-141-patch-apply-contract.md`.
 Canonical operating model frozen: backlog item != sprint task (D-122), sprint membership explicit and machine-written, intake binding before implementation (hard gate, not closure cleanup). Project V2 canonical fields: Status, Sprint, Priority, Task ID (sprint tasks only). Session protocol fail-closed: governed state docs (current.md, open-items.md, STATE.md, NEXT.md) must be consistent before work starts. Validators and workflows must enforce the same model — no workflow may create state that validator rejects. Governed state document set frozen as 4-file coherent source of truth.
 Formal record: `docs/decisions/D-142-intake-to-sprint-operating-model.md`.
 
+### D-144: Project Aggregate Contract
+
+**Phase:** Sprint 73 (Phase 10) | **Status:** Frozen (v5)
+
+Project is an optional first-class aggregate above Mission. 6-state FSM (draft, active, paused, completed, archived, cancelled). Persistence via project_store.py with atomic write. 7 API endpoints. 5 EventBus event types. Mission gains optional project_id field (default null). Historical link model: project_id retained when project goes inactive. Delete restricted to {draft, active, paused}. Complete/cancel requires all linked missions quiescent.
+Formal record: `docs/decisions/D-144-project-aggregate-contract.md`.
+
+### D-145: Project Workspace and Artifact Boundary
+
+**Phase:** Sprint 74-75 (Phase 10) | **Status:** Frozen (v4)
+
+Workspace creation explicit (operator enables per project). WorkingSet injection: read-only paths for active project missions. Artifact publish: server-side path resolution only, no caller-supplied paths. Rollup cache with configurable staleness. SSE broadcast on existing channel. Minimal dashboard UI (list + detail views).
+Formal record: `docs/decisions/D-145-project-workspace-artifact-boundary.md`.
+
 ---
 
-## Decision Index (D-001 → D-142)
+## Decision Index (D-001 → D-145)
 
-139 frozen + 2 superseded decisions. D-126 skipped, D-132 deferred, D-082/D-098 superseded.
+141 frozen + 2 superseded decisions. D-126 skipped, D-132 deferred, D-143 skipped, D-082/D-098 superseded.
 
 | ID | Title | Phase |
 |----|-------|-------|
@@ -1464,3 +1478,5 @@ Formal record: `docs/decisions/D-142-intake-to-sprint-operating-model.md`.
 | D-140 | Persistence Boundary Contract | Sprint 66 |
 | D-141 | Patch/Review/Apply/Revert Contract | Sprint 68 |
 | D-142 | Intake-to-Sprint Operating Model Freeze | Sprint 69 |
+| D-144 | Project Aggregate Contract | Sprint 73 |
+| D-145 | Project Workspace and Artifact Boundary | Sprint 74-75 |

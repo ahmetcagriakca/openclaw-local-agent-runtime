@@ -1,0 +1,27 @@
+# Sprint 73 File Manifest — Phase 10 Faz 1 (D-144)
+
+## NEW files
+agent/persistence/project_store.py    — Project entity + CRUD + FSM + lifecycle (73.1, 73.4, 73.5)
+agent/api/project_api.py              — 7 REST endpoints (73.2, 73.3)
+agent/events/handlers/project_handler.py — Audit handler for 5 project events (73.6)
+agent/tests/test_project_store.py     — 23 tests: CRUD + atomic write (73.9)
+agent/tests/test_project_api.py       — 22 tests: 7 endpoints + error codes (73.10)
+agent/tests/test_project_fsm.py       — 22 tests: FSM transitions + quiescent (73.11)
+agent/tests/test_project_historical_link.py — 9 tests: historical link model (73.12)
+agent/tests/test_project_events.py    — 15 tests: 5 event types + handler (73.13)
+agent/tests/test_backward_compat.py   — 12 tests: project_id=null compat (73.8)
+agent/tests/test_project_integration.py — 8 tests: full lifecycle (73.14)
+docs/decisions/D-144-project-aggregate-contract.md — Frozen decision v5
+docs/decisions/D-145-project-workspace-artifact-boundary.md — Frozen decision v4
+docs/sprints/sprint-73/plan.yaml      — Sprint plan
+
+## MODIFIED files
+agent/persistence/mission_store.py    — project_id field in record() (73.7)
+agent/events/catalog.py               — 5 project event types added (73.6)
+agent/api/server.py                   — project_router registered (73.2)
+agent/tests/test_eventbus.py          — Event count updated 28→33
+agent/tests/test_observability.py     — TracingHandler coverage excludes project events
+
+## Test counts
+New project tests: 111 (23+22+22+9+15+12+8)
+Total backend: 1661 passed, 4 skipped

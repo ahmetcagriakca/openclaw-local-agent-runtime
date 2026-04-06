@@ -269,6 +269,7 @@ from api.mission_create_api import router as mission_create_router
 from api.mission_mutation_api import router as mission_mutation_router
 from api.plugins_api import router as plugins_router
 from api.policy_api import router as policy_router
+from api.project_api import router as project_router
 from api.recovery_api import router as recovery_router
 from api.replay_api import router as replay_router
 from api.retention_api import router as retention_router
@@ -317,6 +318,7 @@ app.include_router(knowledge_router, prefix="/api/v1")
 app.include_router(tenant_router, prefix="/api/v1")
 app.include_router(wmcp_credential_router, prefix="/api/v1")
 app.include_router(plugins_router, prefix="/api/v1")
+app.include_router(project_router, prefix="/api/v1")
 
 # ── RFC 9457 Error Envelope (Sprint 50) ─────────────────────────
 from api.error_envelope import register_error_handlers

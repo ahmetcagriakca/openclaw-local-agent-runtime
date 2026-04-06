@@ -1,0 +1,64 @@
+agent/persistence/mission_store.py:77:                "project_id": mission.get("project_id"),
+agent/persistence/project_store.py:98:def generate_project_id() -> str:
+agent/persistence/project_store.py:148:        project_id = generate_project_id()
+agent/persistence/project_store.py:150:            "project_id": project_id,
+agent/persistence/project_store.py:159:            self._projects[project_id] = project
+agent/persistence/project_store.py:161:        logger.info("Project created: %s (%s)", project_id, name)
+agent/persistence/project_store.py:164:    def get(self, project_id: str) -> dict | None:
+agent/persistence/project_store.py:167:            proj = self._projects.get(project_id)
+agent/persistence/project_store.py:203:    def update(self, project_id: str, **fields) -> dict:
+agent/persistence/project_store.py:206:            proj = self._projects.get(project_id)
+agent/persistence/project_store.py:208:                raise ProjectStoreError(f"Project not found: {project_id}")
+agent/persistence/project_store.py:219:    def delete(self, project_id: str) -> dict:
+agent/persistence/project_store.py:227:            proj = self._projects.get(project_id)
+agent/persistence/project_store.py:229:                raise ProjectStoreError(f"Project not found: {project_id}")
+agent/persistence/project_store.py:244:            active = self._get_active_mission_ids_unlocked(project_id)
+agent/persistence/project_store.py:252:            logger.info("Project soft-deleted: %s", project_id)
+agent/persistence/project_store.py:257:    def transition_status(self, project_id: str,
+agent/persistence/project_store.py:265:            proj = self._projects.get(project_id)
+agent/persistence/project_store.py:267:                raise ProjectStoreError(f"Project not found: {project_id}")
+agent/persistence/project_store.py:283:                active = self._get_active_mission_ids_unlocked(project_id)
+agent/persistence/project_store.py:293:                        project_id, old_status, target.value)
+agent/persistence/project_store.py:298:    def link_mission(self, project_id: str, mission_id: str) -> None:
+agent/persistence/project_store.py:305:            proj = self._projects.get(project_id)
+agent/persistence/project_store.py:307:                raise ProjectStoreError(f"Project not found: {project_id}")
+agent/persistence/project_store.py:316:        # Update mission's project_id via mission_store
+agent/persistence/project_store.py:322:            mission["project_id"] = project_id
+agent/persistence/project_store.py:325:    def unlink_mission(self, project_id: str, mission_id: str) -> None:
+agent/persistence/project_store.py:332:            proj = self._projects.get(project_id)
+agent/persistence/project_store.py:334:                raise ProjectStoreError(f"Project not found: {project_id}")
+agent/persistence/project_store.py:343:        # Clear mission's project_id via mission_store
+agent/persistence/project_store.py:349:            mission["project_id"] = None
+agent/persistence/project_store.py:354:    def get_missions(self, project_id: str) -> list[dict]:
+agent/persistence/project_store.py:360:                if m.get("project_id") == project_id]
+agent/persistence/project_store.py:362:    def get_mission_summary(self, project_id: str) -> dict:
+agent/persistence/project_store.py:367:        missions = self.get_missions(project_id)
+agent/persistence/project_store.py:394:    def _get_active_mission_ids_unlocked(self, project_id: str) -> list[str]:
+agent/persistence/project_store.py:402:            if m.get("project_id") == project_id
+agent/api/project_api.py:103:@router.get("/{project_id}")
+agent/api/project_api.py:104:async def get_project(project_id: str):
+agent/api/project_api.py:107:    project = store.get(project_id)
+agent/api/project_api.py:111:    mission_summary = store.get_mission_summary(project_id)
+agent/api/project_api.py:121:@router.patch("/{project_id}")
+agent/api/project_api.py:122:async def update_project(project_id: str, req: UpdateProjectRequest):
+agent/api/project_api.py:125:    project = store.get(project_id)
+agent/api/project_api.py:132:            project = store.transition_status(project_id, req.status)
+agent/api/project_api.py:153:            project = store.update(project_id, **updates)
+agent/api/project_api.py:160:@router.delete("/{project_id}")
+agent/api/project_api.py:161:async def delete_project(project_id: str):
+agent/api/project_api.py:168:    project = store.get(project_id)
+agent/api/project_api.py:173:        project = store.delete(project_id)
+agent/api/project_api.py:188:@router.post("/{project_id}/missions/{mission_id}", status_code=200)
+agent/api/project_api.py:189:async def link_mission(project_id: str, mission_id: str):
+agent/api/project_api.py:195:    project = store.get(project_id)
+agent/api/project_api.py:200:        store.link_mission(project_id, mission_id)
+agent/api/project_api.py:209:@router.delete("/{project_id}/missions/{mission_id}")
+agent/api/project_api.py:210:async def unlink_mission(project_id: str, mission_id: str):
+agent/api/project_api.py:216:    project = store.get(project_id)
+agent/api/project_api.py:221:        store.unlink_mission(project_id, mission_id)
+agent/events/handlers/project_handler.py:35:        project_id = data.get("project_id", "?")
+agent/events/handlers/project_handler.py:40:                project_id, data.get("name"), data.get("owner"))
+agent/events/handlers/project_handler.py:45:                project_id,
+agent/events/handlers/project_handler.py:53:                project_id, data.get("mission_id"))
+agent/events/handlers/project_handler.py:58:                project_id, data.get("mission_id"))
+agent/events/handlers/project_handler.py:63:                project_id,

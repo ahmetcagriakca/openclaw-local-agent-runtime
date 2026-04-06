@@ -1,4 +1,4 @@
-# Session Handoff — 2026-04-06 (Session 48 — Sprint 72)
+# Session Handoff — 2026-04-06 (Session 49 — Sprint 73)
 
 **Platform:** Vezir Platform
 **Operator:** Claude Code (Opus) — AKCA delegated
@@ -7,27 +7,35 @@
 
 ## Session Summary
 
-Session 48: Sprint 72 implementation complete. Phase 9 — Session Protocol Enforcement.
+Session 49: Sprint 73 implementation complete. Phase 10 — Project Aggregate (Faz 1, D-144).
 
-- Pre-sprint: Review pipeline setup (ask-gpt-review.sh, prompts, verdict contract, runbook, AGENTS.md).
-- T72.1: `CLAUDE.md` session protocol expanded from 3 steps to 11 (entry/during/exit phases). Entry mandates reading handoff+open-items+STATE.md and running pre-implementation gate.
-- T72.2: `tools/pre-implementation-check.py` — new deterministic session entry gate (7 checks: file existence, blocker detection, state-sync consistency, closure verification, plan.yaml detection). Supports --json and --allow-blockers.
-- T72.3: `tests/test_pre_implementation_check.py` — 37 unit tests (CheckResult 2, GateResult 4, file existence 3, sprint extraction 5, active sprint detection 3, blocker detection 5, closure verification 4, plan.yaml 3, state-sync 4, astuple 1, integration 3).
-- Also fixed open-items.md next-sprint format for state-sync regex compatibility.
-- GPT review PASS (R5) via new API pipeline (`tools/ask-gpt-review.sh`).
-- CI all green (3/3 workflows).
+- Pre-sprint: Phase 10 plan ingested from project_implementation.zip (D-144 frozen v5, D-145 frozen v4, aggregate plan, 3 kickoff prompts, issue creation script). Decisions placed in docs/decisions/. plan.yaml created. Pre-implementation gate PASS.
+- T73.1: `persistence/project_store.py` — Project entity with atomic write, CRUD, 6-state FSM enforcement, lifecycle constraints, mission link/unlink, mission summary computation.
+- T73.2-73.3: `api/project_api.py` — 7 REST endpoints (create, list, detail, update, delete, link, unlink). Registered in server.py.
+- T73.4-73.5: FSM transition matrix, delete restricted to {draft, active, paused}, complete/cancel requires quiescent missions, archive from {completed, cancelled} only.
+- T73.6: 5 project event types in catalog.py + ProjectHandler audit handler.
+- T73.7: Mission `project_id` field added to mission_store.py record().
+- T73.8: Backward compatibility test suite — 12 tests, project_id=null unchanged.
+- T73.9: Project store tests — 23 tests.
+- T73.10: Project API tests — 22 tests (with CSRF Origin header).
+- T73.11: Project FSM tests — 22 tests (valid/invalid transitions, quiescent checks).
+- T73.12: Historical link tests — 9 tests.
+- T73.13: EventBus event tests — 15 tests.
+- T73.14: Integration test — 8 tests (full lifecycle).
+- Also updated test_eventbus.py (28→33 events) and test_observability.py (exclude project events from TracingHandler check).
+- GitHub issues B-148→B-157 created, Sprint 73 milestone created.
 
 ## Current State
 
-- **Phase:** 9 active — S72 closed
-- **Last closed sprint:** 72
-- **Decisions:** 139 frozen + 2 superseded (D-001 → D-142, D-126 skipped, D-132 deferred, D-082/D-098 superseded)
-- **Tests:** 1555 backend + 217 frontend + 13 Playwright + 139 root-level = 1924 total (was 1887, +37 new root)
-- **CI:** All green
+- **Phase:** 10 active — S73 closed
+- **Last closed sprint:** 73
+- **Decisions:** 141 frozen + 2 superseded (D-001 → D-145, D-126 skipped, D-132 deferred, D-143 skipped, D-082/D-098 superseded)
+- **Tests:** 1661 backend + 217 frontend + 13 Playwright + 139 root-level = 2030 total (was 1924, +106 backend)
+- **CI:** Pending push
 - **Security:** 0 CodeQL open, 0 secret scanning, 0 dependabot critical
 - **PRs:** 0 open
-- **Open issues:** 0
-- **Project board:** Synced through S72
+- **Open issues:** 10 (B-148→B-157 Phase 10 backlog)
+- **Project board:** Synced through S73
 - **Blockers:** None
 
 ## Review History
@@ -50,20 +58,19 @@ Session 48: Sprint 72 implementation complete. Phase 9 — Session Protocol Enfo
 | S70 | — | PASS (R4) |
 | S71 | — | PASS (R8) |
 | S72 | — | PASS (R5) |
+| S73 | — | Pending |
 
-## Phase 9 Status
+## Phase 10 Status
 
 | Sprint | Scope | Status |
 |--------|-------|--------|
-| S69 | Operating Model Freeze + State Drift Guard (D-142) | Closed |
-| S70 | Validator/Closer Drift Hardening | Closed |
-| S71 | Intake Gate + Workflow Writer Enforcement | Closed |
-| S72 | Session Protocol Enforcement | Closed |
-| S73 | TBD | Not started |
+| S73 | Project Entity + CRUD (D-144, Faz 1) | Closed |
+| S74 | Workspace + Artifacts (D-145, Faz 2A) | Not started |
+| S75 | Rollup + SSE + Dashboard (D-145, Faz 2B) | Not started |
 
 ## Dependency Status
 
-No new dependencies introduced. Phase 9 is governance/tooling-only.
+No new runtime dependencies. Phase 10 adds project aggregate (additive).
 
 ## Carry-Forward
 
@@ -82,4 +89,4 @@ No new dependencies introduced. Phase 9 is governance/tooling-only.
 
 ## GPT Memo
 
-Session 48 (S72): Session Protocol Enforcement. 3 tasks: T72.1 CLAUDE.md session protocol expanded (3→11 steps, entry/during/exit), T72.2 pre-implementation-check.py session entry gate (7 checks, --json/--allow-blockers), T72.3 37 unit tests. Also set up GPT review API pipeline (ask-gpt-review.sh + 4 prompt docs). 37 new root tests. CI all green. GPT review R5 PASS via new API pipeline. No new decisions, no runtime code changes.
+Session 49 (S73): Phase 10 Faz 1 — Project Aggregate (D-144). 7 impl tasks + 6 test tasks. NEW: project_store.py (entity+CRUD+FSM+lifecycle), project_api.py (7 endpoints), project_handler.py (5 event types). MODIFIED: mission_store.py (project_id field), catalog.py (5 events), server.py (router). 111 new project tests + 2 updated existing tests = +106 net backend. 1661 backend total. D-144+D-145 frozen decisions placed. 10 GitHub issues (B-148→B-157) created. No runtime code changes to mission execution.

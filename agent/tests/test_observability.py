@@ -253,12 +253,19 @@ def run_simulated_mission(
 # ══════════════════════════════════════════════════════════════
 
 class TestT1_EventCoverage:
-    """Verify TracingHandler handles all 28 event types."""
+    """Verify TracingHandler handles all non-project event types.
+
+    Project events (D-144) are handled by ProjectHandler, not TracingHandler.
+    TracingHandler covers the original 28 event types.
+    """
 
     def test_all_event_types_handled(self):
         all_types = set(EventType.all_types())
+        # Project events handled by ProjectHandler, not TracingHandler
+        project_types = set(EventType.namespace("project"))
+        expected = all_types - project_types
         handled = TracingHandler.handled_event_types()
-        missing = all_types - handled
+        missing = expected - handled
         assert missing == set(), f"TracingHandler missing: {missing}"
 
     def test_handler_count_is_28(self):

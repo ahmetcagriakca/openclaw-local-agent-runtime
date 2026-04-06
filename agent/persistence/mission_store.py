@@ -74,6 +74,7 @@ class MissionStore:
                 "anomaly_count": mission.get("anomaly_count", 0),
                 "budget_events": mission.get("budget_events", 0),
                 "stages_detail": mission.get("stages_detail", []),
+                "project_id": mission.get("project_id"),
             }
             self._save()
 

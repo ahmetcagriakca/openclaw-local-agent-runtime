@@ -170,9 +170,9 @@ class TestEventBus:
 
 class TestEventCatalog:
 
-    def test_has_28_types(self):
+    def test_has_33_types(self):
         all_types = EventType.all_types()
-        assert len(all_types) == 28
+        assert len(all_types) == 33  # 28 original + 5 project (D-144)
 
     def test_namespace_mission(self):
         ns = EventType.namespace("mission")

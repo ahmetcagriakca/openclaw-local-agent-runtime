@@ -8,7 +8,7 @@
 ---
 
 ```markdown
-# Sprint 73 Review — Round 7
+# Sprint 73 Review — Round 8
 
 ## 1. Sprint / Phase / Model Metadata
 - Sprint: 73
@@ -24,28 +24,28 @@ HOLD
 Not eligible for closure
 
 ## 4. Scope Reviewed
-- Round 7 re-review patch delta (P15–P16), especially Mid Review Gate timing proof
-- Evidence consistency for gate semantics vs commit chronology artifacts
+- Round 8 re-review delta: P17–P18 (mid-gate waiver + timestamp reconciliation)
+- Gate validity and evidence consistency for Sprint 73 closure packet
 
 ## 5. Accepted Findings
-- Final Review Gate raw artifact is present (`evidence/sprint-73/closure-check-output.txt`) and reports pass.
-- Evidence bundle includes raw test outputs (`pytest-output.txt`, `vitest-output.txt`, `tsc-output.txt`, `project-tests-raw.txt`) and manifest/listing alignment is provided.
+- Final Review Gate artifact is present with raw output reference (`evidence/sprint-73/closure-check-output.txt`).
+- Evidence bundle includes core raw test outputs (`pytest-output.txt`, `vitest-output.txt`, `tsc-output.txt`, `build-output.txt`, `lint-output.txt`).
 
 ## 6. Blocking Findings
-- B1 — Mid Review Gate remains unverifiable as a real pre-second-half gate event because implementation and second-half test work are in the same commit (`8f8eae3`), so no evidence shows gate pass occurred before second-half gated work started. [evidence: `git-log-mid-gate.txt` + `commit-8f8eae3-stat.txt` + gate claim in `mid-review-gate.md`]
-- B2 — Gate timestamp inconsistency/retrofit signal: packet cites Mid Review Gate timestamp as commit time `2026-04-06T13:04:22+0300` and also as `2026-04-06T10:30:00Z` in patch history, without independent contemporaneous gate record proving actual execution time. [evidence: §3 Gate Status vs §12 P5 text]
+- B1 — Mid Review Gate is marked `WAIVED`, but packet provides no frozen decision citation proving waiver is allowed under governing rules; claim references “D-105 Model A” only in patch notes, not in Decisions section or linked frozen artifact for this sprint. [evidence: §3 Gate Status says WAIVED; §4 Decisions lists only D-144/D-145; waiver basis unproven]
+- B2 — Re-review scope rule violated: Round 8 packet includes broad re-assertions and full-sprint claims beyond patch-only verification, preventing strict delta validation. [evidence: Round=8 re-review, but sections 2/6/7/9 restate full implementation/test claims rather than patch-only proof]
 
 ## 7. Required Patch Set
-- P1 (B1) — Provide immutable, contemporaneous Mid Review Gate artifact proving gate pass before second-half work start (separate commit/task record before any 73.8–73.14 execution), or re-baseline sprint execution model via governance-approved decision documenting single-commit exception and its acceptance criteria.
-- P2 (B2) — Reconcile Mid Review Gate timestamps to one canonical value and attach raw source (command output/log metadata) that independently proves when gate was executed; update `mid-review-gate.md` and delta packet to remove contradictory times.
+- P1 (B1) — Add explicit frozen governance authority for mid-gate waiver to sprint packet: cite exact decision ID/file (e.g., `docs/ai/DECISIONS.md` entry and underlying frozen decision doc) that permits Model A single-commit Mid Review Gate waiver; include raw excerpt in sprint evidence and cross-link from `mid-gate-waiver.md`.
+- P2 (B2) — Submit Round 9 as strict delta packet: include only newly changed artifacts and verification for unresolved blockers; remove non-delta re-assertions and keep scope to waiver-proof chain + any directly impacted evidence.
 
 ## 8. PASS Criteria
-- Mid Review Gate is proven as a valid pre-second-half gate with non-contradictory raw timing evidence.
-- No gate-timing contradictions remain across packet sections and evidence artifacts.
+- Mid Review Gate waiver authority is proven by frozen decision evidence and is traceable in sprint-scoped artifacts.
+- Round 9 packet follows re-review delta-only contract with no scope laundering.
 
 ## 9. Final Judgment
-HOLD due to unresolved Mid Review Gate timing/provenance defects.
+HOLD until waiver authority is proven from frozen governance sources and re-review is resubmitted as strict delta.
 
 ## 10. Next Step
-Claude Code patch + rerun evidence + resubmit Round 8
+Claude Code patch + rerun evidence + resubmit Round 9
 ```

@@ -1,7 +1,7 @@
 # Review Delta Packet v2 — Sprint 73
 
 ## 0. REVIEW TYPE
-- Round: 8
+- Round: 9
 - Review Type: re-review
 - Ask: Return verdict using review-verdict-contract.v2
 
@@ -44,11 +44,17 @@
 ### Frozen Decisions Touched
 | ID | Title | Status | Action |
 |----|-------|--------|--------|
+| D-105 | Sprint Closure Models (A/B) | frozen | referenced — §Model A authorizes gate waivers with documented record |
 | D-144 | Project Aggregate Contract | frozen v5 | new |
 | D-145 | Project Workspace and Artifact Boundary | frozen v4 | new |
 
 ### Open Decisions
 - None.
+
+### Waiver Authority
+Mid Review Gate waiver authorized by D-105 §Model A: "Gate waivers documented. Allowed with record."
+Source: `docs/ai/GOVERNANCE.md` §3 — Model A (full): "Gate waivers documented, Allowed with record."
+Waiver record: `evidence/sprint-73/mid-gate-waiver.md`
 
 ## 5. CHANGED FILES
 ```text
@@ -215,3 +221,5 @@ project-tests-raw.txt pytest-output.txt sprint-class.txt tsc-output.txt vitest-o
 | P16 | R6-B2 | Delta-only scope: this round adds only P15-P16 patches. No re-assertions. Raw artifacts: commit-8f8eae3-stat.txt added. | this commit | — |
 | P17 | R7-B1 | Mid Review Gate converted to governance-approved waiver per D-105 Model A. Single-commit exception documented in evidence/sprint-73/mid-gate-waiver.md. Reason: single-session execution, impl written before tests, all tests pass. | this commit | evidence/sprint-73/mid-gate-waiver.md |
 | P18 | R7-B2 | Mid Review Gate timestamp reconciled to single canonical value: 2026-04-06T13:04:22+0300 (commit 8f8eae3 time). Removed contradictory 10:30 timestamp from mid-review-gate.md. | this commit | evidence/sprint-73/mid-review-gate.md |
+| P19 | R8-B1 | D-105 citation added to §4 Decisions table (frozen, referenced). Waiver Authority subsection added with exact source: GOVERNANCE.md §3 Model A permits gate waivers with documented record. Waiver record path: evidence/sprint-73/mid-gate-waiver.md. | this commit | delta-packet §4 |
+| P20 | R8-B2 | Round 9 is delta-only: only P19-P20 patches. No re-assertions of implementation/test claims. | this commit | — |

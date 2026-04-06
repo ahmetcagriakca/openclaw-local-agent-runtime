@@ -41,7 +41,7 @@ jobs:
 
       - name: Start API server
         run: |
-          cd agent && python -m uvicorn api.server:app --host 127.0.0.1 --port 8003 --log-level warning &
+          cd agent && VEZIR_AUTH_BYPASS=1 python -m uvicorn api.server:app --host 127.0.0.1 --port 8003 --log-level warning &
           sleep 3
           curl -sf http://127.0.0.1:8003/api/v1/health || (echo "API server failed to start" && exit 1)
         env:

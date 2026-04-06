@@ -25,6 +25,8 @@ jobs:
 
       - name: Run benchmark
         run: python tools/benchmark_api.py
+        env:
+          VEZIR_AUTH_BYPASS: "1"
 
       - name: Regression check against baseline
         run: |

@@ -2,13 +2,13 @@
 
 Tests GET /projects/{id}/rollup endpoint.
 """
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 import pytest
 from fastapi.testclient import TestClient
 
 from api.project_api import router, set_store
-from persistence.project_store import ProjectStore, ProjectStoreError
+from persistence.project_store import ProjectStore
 
 
 @pytest.fixture

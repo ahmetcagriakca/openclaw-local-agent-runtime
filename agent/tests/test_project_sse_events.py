@@ -2,18 +2,15 @@
 
 Tests SSE broadcast wiring for project events and rollup invalidation.
 """
-import asyncio
-from unittest.mock import AsyncMock, MagicMock, patch
-
-import pytest
+from unittest.mock import MagicMock
 
 from events.bus import Event
 from events.catalog import EventType
 from events.handlers.project_handler import (
     PROJECT_EVENT_TYPES,
-    ProjectHandler,
     ROLLUP_INVALIDATION_EVENTS,
     SSE_BROADCAST_EVENTS,
+    ProjectHandler,
 )
 
 

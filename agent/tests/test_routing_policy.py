@@ -210,6 +210,73 @@ class TestProviderPreference:
         assert decision.selected_provider == "azure-general"
 
 
+# --- Capability routing tests ---
+
+
+class TestCapabilityRouting:
+    def test_azure_missing_capability_fallback_to_gpt(self):
+        """Azure lacks code_interpreter → GPT selected."""
+        policy = make_policy()
+        decision = policy.select(
+            AGENT_CONFIG,
+            required_capabilities=["code_interpreter"],
+        )
+        assert decision.selected_provider == "gpt-general"
+        assert decision.fallback_used
+        assert "missing capabilities" in decision.fallback_reason
+
+    def test_azure_missing_capability_gpt_unavailable_fallback_to_claude(self):
+        """Azure lacks long_context, GPT also lacks it → Claude selected."""
+        policy = make_policy()
+        decision = policy.select(
+            AGENT_CONFIG,
+            required_capabilities=["long_context"],
+        )
+        assert decision.selected_provider == "claude-general"
+        assert decision.fallback_used
+
+    def test_capability_match_stays_primary(self):
+        """Azure has text_generation → stays primary."""
+        policy = make_policy()
+        decision = policy.select(
+            AGENT_CONFIG,
+            required_capabilities=["text_generation"],
+        )
+        assert decision.selected_provider == "azure-general"
+        assert not decision.fallback_used
+
+    def test_all_providers_lack_capability(self):
+        """No provider has 'browser_mutation' → RuntimeError."""
+        policy = make_policy()
+        with pytest.raises(RuntimeError, match="No available provider"):
+            policy.select(
+                AGENT_CONFIG,
+                required_capabilities=["browser_mutation"],
+            )
+
+    def test_multiple_capabilities_required(self):
+        """Needs function_calling + reasoning → Azure has both."""
+        policy = make_policy()
+        decision = policy.select(
+            AGENT_CONFIG,
+            required_capabilities=["function_calling", "reasoning"],
+        )
+        assert decision.selected_provider == "azure-general"
+        assert not decision.fallback_used
+
+    def test_no_capabilities_required(self):
+        """No capability requirement → primary selected."""
+        policy = make_policy()
+        decision = policy.select(AGENT_CONFIG, required_capabilities=None)
+        assert decision.selected_provider == "azure-general"
+
+    def test_empty_capabilities_list(self):
+        """Empty list → primary selected."""
+        policy = make_policy()
+        decision = policy.select(AGENT_CONFIG, required_capabilities=[])
+        assert decision.selected_provider == "azure-general"
+
+
 # --- Edge cases ---
 
 

@@ -185,6 +185,77 @@ class TestMessageConversion:
 # --- Tool conversion tests ---
 
 
+class TestCanonicalExecute:
+    """Tests for the canonical execute() path — D-148 compliant."""
+
+    @patch("providers.azure_openai_provider.requests.post")
+    def test_execute_direct_path(self, mock_post):
+        """execute() sends prompt directly as input, no messages conversion."""
+        mock_resp = MagicMock()
+        mock_resp.status_code = 200
+        mock_resp.json.return_value = mock_response_json("hello")
+        mock_post.return_value = mock_resp
+
+        p = make_provider()
+        req = TaskRequest(task_type="review", prompt="Review this code")
+        result = p.execute(req)
+
+        assert isinstance(result, ProviderResponse)
+        assert result.text == "hello"
+        # Verify the payload sent directly uses prompt, not messages
+        call_body = mock_post.call_args[1]["json"]
+        assert call_body["input"] == "Review this code"  # Direct, no [User] prefix
+        assert call_body["model"] == MOCK_DEPLOYMENT
+
+    @patch("providers.azure_openai_provider.requests.post")
+    def test_execute_with_tools(self, mock_post):
+        mock_resp = MagicMock()
+        mock_resp.status_code = 200
+        mock_resp.json.return_value = mock_response_json("ok")
+        mock_post.return_value = mock_resp
+
+        p = make_provider()
+        req = TaskRequest(task_type="tool_call", prompt="Add 1+2")
+        tools = [{"type": "function", "function": {
+            "name": "add", "description": "add",
+            "parameters": {"type": "object", "properties": {}},
+        }}]
+        result = p.execute(req, tools=tools)
+        assert isinstance(result, ProviderResponse)
+
+    @patch("providers.azure_openai_provider.requests.post")
+    def test_execute_vs_chat_different_payloads(self, mock_post):
+        """execute() and chat() send different payload formats."""
+        mock_resp = MagicMock()
+        mock_resp.status_code = 200
+        mock_resp.json.return_value = mock_response_json("ok")
+        mock_post.return_value = mock_resp
+
+        p = make_provider()
+
+        # execute() path — direct prompt
+        req = TaskRequest(task_type="analysis", prompt="test prompt")
+        p.execute(req)
+        execute_body = mock_post.call_args[1]["json"]
+
+        # chat() path — messages conversion
+        p.chat([{"role": "user", "content": "test prompt"}], [])
+        chat_body = mock_post.call_args[1]["json"]
+
+        # execute sends raw prompt, chat converts to [User]\ntest prompt
+        assert execute_body["input"] == "test prompt"
+        assert "[User]" in chat_body["input"]
+
+    @patch("providers.azure_openai_provider.requests.post")
+    def test_base_provider_execute_default(self, mock_post):
+        """Base AgentProvider.execute() delegates to chat() for compat."""
+        from providers.base import AgentProvider
+        provider = AgentProvider()
+        req = TaskRequest(task_type="test", prompt="hello")
+        with pytest.raises(NotImplementedError):
+            provider.execute(req)
+
+
 class TestToolConversion:
     def test_function_tool(self):
         p = make_provider()
@@ -220,14 +291,15 @@ class TestChat:
         assert result.tool_calls == []
 
     @patch("providers.azure_openai_provider.requests.post")
-    def test_canonical_response(self, mock_post):
+    def test_canonical_response_via_execute(self, mock_post):
         mock_resp = MagicMock()
         mock_resp.status_code = 200
         mock_resp.json.return_value = mock_response_json("hello")
         mock_post.return_value = mock_resp
 
         p = make_provider()
-        result = p.chat_canonical([{"role": "user", "content": "hi"}], [])
+        req = TaskRequest(task_type="review", prompt="hi")
+        result = p.execute(req)
 
         assert isinstance(result, ProviderResponse)
         assert result.text == "hello"

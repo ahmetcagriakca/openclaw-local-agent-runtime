@@ -353,6 +353,7 @@ class TestAlertAPI(unittest.TestCase):
     """Task 16.8: alert API endpoint tests."""
 
     def setUp(self):
+        os.environ.setdefault("VEZIR_AUTH_BYPASS", "1")
         self.tmp = tempfile.mkdtemp()
         from observability.alert_engine import AlertEngine
         self.engine = AlertEngine(config_path=Path(self.tmp) / "rules.json")

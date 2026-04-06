@@ -250,6 +250,7 @@ class TestScheduleAPI(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         os.environ.setdefault("TESTING", "1")
+        os.environ.setdefault("VEZIR_AUTH_BYPASS", "1")
 
     def _get_client(self):
         from fastapi import FastAPI

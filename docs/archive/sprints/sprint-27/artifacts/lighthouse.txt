@@ -1,1 +1,0 @@
-NO EVIDENCE — no UI visual changes (auth context only)

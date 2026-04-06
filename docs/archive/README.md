@@ -1,19 +1,21 @@
 # Archive
 
-Historical documents moved here during Phase 4 cleanup (2026-03-24).
+Historical artifacts have been moved to the dedicated archive repository:
+https://github.com/ahmetcagriakca/vezir-archive
 
-These files are preserved for reference but are NOT current documentation.
-For current state, see:
-- `docs/ai/STATE.md` — Current system state
-- `docs/ai/DECISIONS.md` — All frozen decisions (D-001→D-058)
-- `docs/architecture/ARCHITECTURE.md` — Canonical architecture
+## What was moved
+- Sprint folders (sprint-12 through sprint-74, legacy sprint-33 through sprint-41)
+- Historical evidence (sprint-8 through sprint-74)
+- Stale quarantined documents
+- Phase reports
+- Process history, debt plans, review packets, handoffs
+- Session reports and misc artifacts
 
-## Contents
+## What remains here
+- `docs/sprints/` — last closed + current sprint only
+- `evidence/` — active sprint evidence packets
+- All active governance docs
 
-### phase1-tasks/
-15 task implementation reports from Phase 1 and Phase 1.5 runtime stabilization.
-
-### Session Reports
-- SESSION-REPORT-20260323.md — Phase 1.6 session
-- SESSION-REPORT-20260323-FULL.md — Phase 1.6 through 3-A session
-- REPO-REORGANIZATION-REPORT.md — Initial repo creation
+## Policy
+Per D-113, this repo maintains only active governance state.
+All historical artifacts live in vezir-archive.

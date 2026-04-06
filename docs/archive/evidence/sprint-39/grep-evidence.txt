@@ -1,7 +1,0 @@
-agent/api/approval_api.py
-agent/api/normalizer.py
-agent/api/schemas.py
-agent/tools/compare_benchmark.py
-frontend/src/api/generated.ts
-frontend/src/pages/ApprovalsPage.tsx
-frontend/src/types/api.ts

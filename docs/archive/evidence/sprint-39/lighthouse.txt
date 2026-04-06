@@ -1,1 +1,0 @@
-NO EVIDENCE — Product sprint. Lighthouse not applicable, no visual UI regression.

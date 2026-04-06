@@ -1,9 +1,0 @@
-{
-  "ok": true,
-  "target": "gpt",
-  "chatUrl": "https://chatgpt.com/g/g-p-69c05848f5cc819196f2e353529d45f6-vezir/c/69c8ee82-4da4-838b-9f24-690ecb078acb",
-  "response": "Bunu lafla degil, boyle kos:\n\nBash\nmkdir -p evidence/sprint-37\n\n# 1) Selector sagligi\nnode C:/Users/AKCA/chatbridge/bridge.js --health gpt \\\n  2>&1 | tee evidence/sprint-37/chatbridge-health-output.txt\n\n# 2) Roundtrip\nnode C:/Users/AKCA/chatbridge/bridge.js --target gpt --new-chat --message \"ping\" \\\n  2>&1 | tee evidence/sprint-37/chatbridge-ping-output.txt\n\nBeklenen durum:\n\nPASS\n- health output = healthy\n- selector validation = all valid\n- ping output = message sent + non-empty response received\n\nHOLD\n- health fail\n- selector invalid / missing\n- message sent var ama response yok\n- sadece browser aciliyor ama roundtrip tamamlanmiyor\n\nKritik nokta:\n\nOnce --health gpt gecmeden roundtrip sonucu anlamli degil.\n\nFix hedefi tam olarak burasi: C:/Users/AKCA/chatbridge/lib/selectors.js\n\nEvidence dosyalari bunlar olmali:\n\nevidence/sprint-37/chatbridge-health-output.txt\n\nevidence/sprint-37/chatbridge-ping-output.txt\n\nTek satirlik operator karari:\n\nhealth fail ise selector patch\n\nhealth pass, roundtrip fail ise bridge akisi/loglama inceleme\n\nikisi de pass ise 37.2 acceptance tamamdir.",
-  "truncated": false,
-  "durationMs": 110362,
-  "timestamp": "2026-03-29T09:20:42.014Z"
-}

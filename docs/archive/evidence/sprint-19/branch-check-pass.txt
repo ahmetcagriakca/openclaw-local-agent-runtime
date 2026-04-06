@@ -1,1 +1,0 @@
-PASS: Branch 'sprint-19/t19.5-branch-contract' matches naming convention

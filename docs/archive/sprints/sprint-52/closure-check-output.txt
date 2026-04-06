@@ -1,6 +1,0 @@
-Backend: 917 passed, 2 skipped in 105.01s
-Frontend TSC: 0 errors
-Ruff: 0 new errors on sprint-52 files (pre-existing 52 unchanged)
-OpenAPI: 82 endpoints, 40 schemas, 69 paths
-Sprint 52 new tests: +46 (15 recovery + 18 replay + 13 seed_demo)
-Total: 917 backend + 217 frontend + 13 Playwright = 1147

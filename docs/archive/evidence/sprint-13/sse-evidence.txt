@@ -1,3 +1,0 @@
-SSE infrastructure unchanged in Sprint 13 (no SSE code modified).
-Reference: evidence/sprint-12/sse-evidence.txt (14 SSE tests pass)
-Current: SSE tests included in pytest-output.txt (458 total PASS)

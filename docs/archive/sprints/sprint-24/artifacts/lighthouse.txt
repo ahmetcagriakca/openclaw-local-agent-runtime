@@ -1,1 +1,0 @@
-NO EVIDENCE — Sprint 24 scope has no UI changes. Frontend Lighthouse deferred.

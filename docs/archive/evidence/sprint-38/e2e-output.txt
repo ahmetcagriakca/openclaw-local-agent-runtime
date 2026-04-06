@@ -1,6 +1,0 @@
-Sprint 38 — E2E output (unit-e2e from backend test suite)
-Tests run via: python -m pytest tests/test_e2e.py -v
-
-39 unit-e2e tests included in pytest backend suite (all PASS).
-Playwright E2E not run separately — no frontend changes in Sprint 38.
-See pytest-output.txt for full backend results including test_e2e.py.

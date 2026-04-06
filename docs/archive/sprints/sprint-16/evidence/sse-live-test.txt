@@ -1,2 +1,0 @@
-SSE endpoint test — dashboard live endpoint exists in server routes
-RESULT: SSE live endpoint PASS

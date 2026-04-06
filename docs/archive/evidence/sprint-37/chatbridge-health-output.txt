@@ -1,9 +1,0 @@
-{
-  "target": "gpt",
-  "session": true,
-  "loginValid": true,
-  "selectorsValid": true,
-  "status": "healthy",
-  "error": null,
-  "screenshotPath": null
-}

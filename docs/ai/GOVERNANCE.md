@@ -127,8 +127,8 @@ Mega-commit (3+ unrelated tasks in one commit) forbidden
 ## 11. Archive Rule (D-113)
 
 - Active sprints in `docs/sprints/`: last closed + current only
-- Historical sprints → `docs/archive/sprints/`
-- Superseded process docs → `docs/archive/process-history/`
+- Historical sprints → [vezir-archive](https://github.com/ahmetcagriakca/vezir-archive) repo
+- Superseded process docs → [vezir-archive](https://github.com/ahmetcagriakca/vezir-archive) repo
 - One truth per topic. Duplicates archived or deleted.
 
 ---

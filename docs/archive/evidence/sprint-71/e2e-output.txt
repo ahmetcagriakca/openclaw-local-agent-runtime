@@ -1,3 +1,0 @@
-NO EVIDENCE — Sprint 71 did not change runtime code. E2E tests pass on CI (Playwright 13/13).
-Raw Playwright output is in CI workflow artifacts (GitHub Actions run on PR #356).
-No local E2E re-run needed — no runtime code changed.

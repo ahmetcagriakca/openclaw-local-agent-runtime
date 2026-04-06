@@ -1,6 +1,0 @@
-Scanning 13 documents for stale references...
-
-References checked: 62
-Stale references: 0
-
-PASS: No stale references found

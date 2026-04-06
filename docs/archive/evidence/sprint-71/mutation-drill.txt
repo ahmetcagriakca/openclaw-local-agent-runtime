@@ -1,3 +1,0 @@
-NO EVIDENCE — Sprint 71 is governance/tooling only. No runtime mutations.
-No mission controller changes, no API changes, no state machine changes.
-Mutation drill is not applicable for process/workflow-only sprints.

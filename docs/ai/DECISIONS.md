@@ -983,7 +983,7 @@ Formal record: `docs/decisions/D-112-governance-consolidation.md`.
 
 **Phase:** Sprint 18 | **Status:** Frozen
 
-Archive boundary: `docs/archive/` sub-structured by type (sprints, phase-reports, process-history, debt-plans, review-packets). Active sprints in `docs/sprints/` = last closed + current only. Old phase reports archived except PHASE-5.5-CLOSURE-REPORT.md and Sprint 15/16 reports.
+Archive boundary: historical artifacts migrated to [vezir-archive](https://github.com/ahmetcagriakca/vezir-archive) repo. Active sprints in `docs/sprints/` = last closed + current only. `docs/archive/README.md` contains pointer to archive repo.
 Formal record: `docs/decisions/D-113-archive-boundary.md`.
 
 ---

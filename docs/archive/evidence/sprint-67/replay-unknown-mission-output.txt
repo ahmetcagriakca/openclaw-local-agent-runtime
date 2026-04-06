@@ -1,5 +1,0 @@
-Error: No events found for mission 'nonexistent-mission-xyz'.
-Checked:
-  - logs/audit-trail.jsonl, logs/agent-audit.jsonl
-  - logs/missions/nonexistent-mission-xyz*.json
-  - logs/policy-telemetry.jsonl

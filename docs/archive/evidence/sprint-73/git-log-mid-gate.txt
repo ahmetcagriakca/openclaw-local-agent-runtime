@@ -1,9 +1,0 @@
-249a7f5 2026-04-06 13:54:56 +0300 Sprint 73 R5: inline raw evidence, class normalized to governance
-0d0741f 2026-04-06 13:53:48 +0300 Sprint 73 R4: git chronology artifact, evidence count reconciled
-91e408c 2026-04-06 13:52:39 +0300 Sprint 73 R3: gate artifacts, claim-evidence map, raw proof
-e7dd4bc 2026-04-06 13:50:03 +0300 Sprint 73 R2: complete evidence bundle, patch all GPT R1 blockers
-370d195 2026-04-06 13:30:53 +0300 Fix doc drift: D-143 frozen placeholder, decision count 142+2=144
-0400480 2026-04-06 13:28:24 +0300 Fix D-143 heading for doc drift check: deferred status
-3638593 2026-04-06 13:22:54 +0300 Sprint 73 doc drift fixes: decision count 140 frozen + D-143 skipped
-e991c39 2026-04-06 13:16:12 +0300 Sprint 73 closure fixes: CLAUDE.md test count, D-143 heading, review packet
-8f8eae3 2026-04-06 13:04:22 +0300 Sprint 73: Project Entity + CRUD (Phase 10 Faz 1, D-144)

@@ -1,2 +1,0 @@
-SSE infrastructure operational. 14 SSE tests in pytest suite.
-16

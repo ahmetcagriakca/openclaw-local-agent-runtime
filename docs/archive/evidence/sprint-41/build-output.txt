@@ -1,3 +1,0 @@
-NO EVIDENCE — Governance sprint, no frontend build changes required.
-Sprint 41 scope: agent/ Python files + docs/ + tools/ only.
-Frontend build was not modified.

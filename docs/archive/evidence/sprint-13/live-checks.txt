@@ -1,4 +1,0 @@
-=== Live Checks — Sprint 13 (retroactive) ===
-Backend: 458 tests collected, 0 failures
-Frontend: 29 tests, 6 files, 0 failures
-TSC: 0 errors, Ruff: 0 errors

@@ -1,8 +1,0 @@
-=== Sprint 40 Mutation Drill ===
-Date: 2026-03-29T16:35:54+03:00
-1. Isolation module: filter_by_owner, check_ownership — 20 backend tests ALL PASS
-2. ApiKey user_id field: extended in auth/keys.py
-3. Mission create userId: tracked in mission_create_api.py
-4. Alert namespace: get_active/get_history accept user_id filter
-5. Frontend isolation: 7 Vitest tests ALL PASS (identity switch, logout, localStorage)
-=== ALL PASS ===

@@ -1,5 +1,0 @@
-SSE Evidence: Live curl capture not possible in automated closure (streaming endpoint does not terminate).
-Backend SSE tests provide equivalent coverage:
-- test_13_stream_connected_event: verifies SSE stream returns event:connected
-- test_14_host_validation_rejects: verifies D-070 Host security
-- Full test output: see pytest-output.txt (184 passed)

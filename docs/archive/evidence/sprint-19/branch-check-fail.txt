@@ -1,2 +1,0 @@
-FAIL: Branch 'bad-branch-name' does not match pattern sprint-N/tN.M-slug
-Expected: sprint-N/tN.M-slug or sprint-N/tN.M.K-slug

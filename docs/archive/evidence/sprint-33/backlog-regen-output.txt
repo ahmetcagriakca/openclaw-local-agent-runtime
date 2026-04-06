@@ -1,4 +1,0 @@
-Fetching backlog issues from GitHub...
-Found 39 backlog issues
-Generated: C:\Users\AKCA\vezir\docs\ai\BACKLOG.md
-Total: 39 issues

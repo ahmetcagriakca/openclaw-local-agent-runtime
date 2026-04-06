@@ -1,7 +1,0 @@
-.github/workflows/close-sprint-issues.yml:          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-.github/workflows/closure-preflight.yml:          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-.github/workflows/issue-from-plan.yml:          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-.github/workflows/issue-from-plan.yml:          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-.github/workflows/issue-from-plan.yml:          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-.github/workflows/project-auto-add.yml:          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-.github/workflows/status-sync.yml:          GH_TOKEN: ${{ secrets.PROJECT_TOKEN != '' && secrets.PROJECT_TOKEN || secrets.GITHUB_TOKEN }}

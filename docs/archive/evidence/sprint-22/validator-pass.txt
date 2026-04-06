@@ -1,8 +1,0 @@
-plan.yaml:       docs\sprints\sprint-22\plan.yaml
-task breakdown:  docs\sprints\sprint-22\SPRINT-22-TASK-BREAKDOWN.md
-
-Plan tasks:      7 (['22.1', '22.2', '22.3', '22.CLOSURE', '22.G1', '22.G2', '22.RETRO'])
-Breakdown tasks: 7 (['22.1', '22.2', '22.3', '22.CLOSURE', '22.G1', '22.G2', '22.RETRO'])
-Common:          7
-
-PASS: plan.yaml and task breakdown are in sync

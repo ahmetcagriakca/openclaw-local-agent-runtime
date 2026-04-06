@@ -1,3 +1,0 @@
-No frontend source code modified in Sprint 13.
-Lighthouse score from Sprint 12 remains valid: accessibility=95
-Reference: evidence/sprint-12/lighthouse-report.report.json

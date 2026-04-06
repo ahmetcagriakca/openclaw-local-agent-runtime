@@ -1,2 +1,0 @@
-capabilities: 5, endpoints: 14, guide sections: 11
-All checks passed

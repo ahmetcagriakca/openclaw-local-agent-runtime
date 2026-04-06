@@ -1,7 +1,0 @@
-Auth + Observability closure gate evidence
-Auth middleware: agent/auth/middleware.py (D-117)
-Key registry: agent/auth/keys.py (with expiration)
-Protected endpoints: 11 mutation endpoints
-Observability: Jaeger + Grafana in docker-compose.yml
-Frontend auth: AuthContext + LoginPage
-Tests: 465 backend + 67 frontend

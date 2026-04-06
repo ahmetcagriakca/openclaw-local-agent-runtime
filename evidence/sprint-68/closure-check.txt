@@ -1,0 +1,47 @@
+Sprint 68 Closure Check — Design-Only (Model B)
+=================================================
+Date: 2026-04-06
+Sprint: 68 | Phase: 8C | Model: B (design-only freeze)
+
+1. Runtime Code Change Check
+   Command: git diff --name-only HEAD -- agent/ frontend/ | grep -v "docs|evidence|tools"
+   Result: (empty — no runtime files changed)
+   Status: PASS
+
+2. Decision File Exists
+   Command: test -f docs/decisions/D-141-patch-apply-contract.md
+   Result: File exists (16-field schema, 6-state FSM, anti-drift preconditions)
+   Status: PASS
+
+3. Decision Index Updated
+   File: docs/ai/DECISIONS.md
+   Entry: D-141 | Patch/Review/Apply/Revert Contract | Sprint 68
+   Count: 138 frozen + 2 superseded (D-001 through D-141, D-126 skipped, D-132 deferred, D-082/D-098 superseded)
+   Reconciliation: 141 index rows - 1 (D-126 unused) = 140 actual decisions - 2 (D-132 deferred + counted separately) = 138 frozen + 2 superseded
+   Status: PASS
+
+4. GitHub Issue Reconciled
+   Issue: #335 (B-147) — closed with comment referencing D-141 and Sprint 68
+   Milestone: S67 closed (S68 has no separate milestone — design-only)
+   Status: PASS
+
+5. Tests Unchanged
+   Backend: 1555 tests (not rerun — no runtime change, Model B waiver)
+   Frontend: 217 tests (not rerun — no runtime change, Model B waiver)
+   Playwright: 13 tests (not rerun — no runtime change, Model B waiver)
+   Total: 1785
+   Status: PASS (Model B waiver — design-only sprint, zero runtime code touched)
+
+6. Evidence Artifacts
+   - evidence/sprint-68/review-summary.md (sprint review summary)
+   - evidence/sprint-68/file-manifest.txt (file manifest)
+   - evidence/sprint-68/closure-check.txt (this file)
+   Status: PASS
+
+7. Handoff Updated
+   File: docs/ai/handoffs/current.md — updated for S68/Session 44
+   Status: PASS
+
+8. STATE.md Updated
+   File: docs/ai/STATE.md — updated for S68 closure
+   Status: PASS

@@ -1,6 +1,6 @@
 # Architectural Decisions
 
-**Last updated:** 2026-04-06 (D-140)
+**Last updated:** 2026-04-06 (D-141)
 
 All decisions below are frozen unless marked otherwise.
 Reopening requires explicit phase gate approval + operator sign-off.
@@ -1298,9 +1298,18 @@ Formal record: `docs/decisions/D-140-persistence-boundary.md`.
 
 ---
 
-## Decision Index (D-001 → D-140)
+### D-141: Patch/Review/Apply/Revert Contract
 
-137 frozen + 2 superseded decisions. D-126 skipped, D-132 deferred, D-082/D-098 superseded.
+**Phase:** Sprint 68 (Phase 8C) | **Status:** Frozen
+
+Patch artifact schema (16 fields) + review state machine (proposed → reviewed → approved → applied, with rejected/reverted terminal states). Anti-drift preconditions: target_file_hashes (SHA-256 per file, enforced at apply — fail-closed on mismatch), base_revision (git SHA, informational). Revert precondition uses post-apply hashes. Operator-only apply/revert (D-117). Revert = new patch with inverted diff (no data deletion). Integration: D-106 persistence, EventBus events, D-129 audit trail, D-053 working set validation, D-128 risk engine, D-133 policy engine. G2 quality gate maps to review phase. PatchService as new controller decomposition boundary (D-139). Deferred: auto-diff from LLM, IDE integration, git commit automation, merge conflicts, multi-patch ordering, patch amendment.
+Formal record: `docs/decisions/D-141-patch-apply-contract.md`.
+
+---
+
+## Decision Index (D-001 → D-141)
+
+138 frozen + 2 superseded decisions. D-126 skipped, D-132 deferred, D-082/D-098 superseded.
 
 | ID | Title | Phase |
 |----|-------|-------|
@@ -1444,3 +1453,4 @@ Formal record: `docs/decisions/D-140-persistence-boundary.md`.
 | D-138 | Approval Timeout=Deny + Escalation FSM | Sprint 61 |
 | D-139 | Controller Decomposition Boundary + Budget Ownership | Sprint 63 |
 | D-140 | Persistence Boundary Contract | Sprint 66 |
+| D-141 | Patch/Review/Apply/Revert Contract | Sprint 68 |

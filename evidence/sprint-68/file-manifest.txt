@@ -1,0 +1,18 @@
+Sprint 68 File Manifest
+=======================
+Date: 2026-04-06
+Model: B (design-only, no runtime code change)
+
+Created:
+  docs/decisions/D-141-patch-apply-contract.md    — D-141 decision record (patch/apply contract)
+  evidence/sprint-68/review-summary.md            — Sprint review summary
+  evidence/sprint-68/file-manifest.txt            — This file
+  evidence/sprint-68/closure-check.txt            — Design-sprint closure verification (8 checks)
+
+Modified:
+  docs/ai/DECISIONS.md                            — Added D-141 entry + index row (138 frozen + 2 superseded)
+  docs/ai/STATE.md                                — Updated for S68 closure
+  docs/ai/handoffs/current.md                     — Updated for S68 closure
+
+Runtime code changed: NONE
+  Proof: git diff --name-only HEAD -- agent/ frontend/ | grep -v "docs|evidence|tools" = (empty)

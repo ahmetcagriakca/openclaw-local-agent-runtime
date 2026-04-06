@@ -1,4 +1,4 @@
-# Session Handoff — 2026-04-06 (Session 43 — Sprint 67)
+# Session Handoff — 2026-04-06 (Session 44 — Sprint 68)
 
 **Platform:** Vezir Platform
 **Operator:** Claude Code (Opus) — AKCA delegated
@@ -7,22 +7,21 @@
 
 ## Session Summary
 
-Session 43: Sprint 67 fully implemented and closed. Model B (docs + CLI tool, no runtime change).
+Session 44: Sprint 68 fully designed and closed. Model B (design-only freeze, no runtime change).
 
-- B-145: Enforcement chain documentation (`docs/shared/ENFORCEMENT-CHAIN.md`) — all 7 layers documented with fail behavior, decision records, key files, interaction rules, known gaps. GOVERNANCE.md cross-reference added (section 15).
-- B-146: Mission replay CLI tool (`tools/replay-mission.py`) — merges 3 sources (audit trail, mission state transitions, policy telemetry) into chronological timeline. Supports `--json` and `--filter` flags. Graceful degradation on missing sources. Sample output generated.
+- B-147: Patch/Review/Apply/Revert Contract Design (`docs/decisions/D-141-patch-apply-contract.md`) — patch artifact schema (14 fields), review state machine (6 states, 6 transitions, fail-closed), operator control rules (apply/revert = operator-only D-117, bypass allowed, revert = new patch), integration points (D-106/EventBus/D-129/D-053/D-128/D-133), architectural implications (mission lifecycle placement, hot state storage D-140, G2 gate mapping, PatchService decomposition D-139), 6 explicit deferrals.
 
 ## Current State
 
-- **Phase:** 8 active — S67 closed
-- **Last closed sprint:** 67
-- **Decisions:** 137 frozen + 2 superseded (D-001 → D-140, D-126 skipped, D-132 deferred, D-082/D-098 superseded)
+- **Phase:** 8 active — S68 closed (Phase 8C design freeze complete)
+- **Last closed sprint:** 68
+- **Decisions:** 138 frozen + 2 superseded (D-001 → D-141, D-126 skipped, D-132 deferred, D-082/D-098 superseded)
 - **Tests:** 1555 backend + 217 frontend + 13 Playwright = 1785 total (no change — Model B)
 - **CI:** All green
 - **Security:** 0 CodeQL open, 0 secret scanning, 0 dependabot critical
 - **PRs:** 0 open
-- **Open issues:** 1 (Phase 8 backlog B-147)
-- **Project board:** Synced through S67
+- **Open issues:** 0 (B-147 closed)
+- **Project board:** Synced through S68
 - **Blockers:** None
 
 ## Review History
@@ -40,16 +39,28 @@ Session 43: Sprint 67 fully implemented and closed. Model B (docs + CLI tool, no
 | S65 | PASS | PASS (R2) |
 | S66 | PASS | PASS (R2) |
 | S67 | PASS | PASS (R2) |
+| S68 | PASS | PASS (R2) |
 
-## Phase 8 Backlog (Remaining)
+## Phase 8 Status (Complete)
 
-| Issue | ID | Priority | Sprint | Scope |
-|-------|-----|----------|--------|-------|
-| #335 | B-147 | P3 | S68 | Patch/review/apply/revert contract |
+| Sub-Phase | Scope | Sprints | Status |
+|-----------|-------|---------|--------|
+| Phase 8A | Governance gap closure | S62-S63 | Complete |
+| Phase 8B | Platform hardening | S64-S67 | Complete |
+| Phase 8C | Claude Code-like convergence prep | S68 | Complete (design freeze) |
+
+Phase 8 governance hardening is now complete. Phase 9 or Phase 8D planning is operator decision.
+
+## Phase 8C Implementation Candidates (Future)
+
+- D-141 patch/apply implementation
+- Task graph model (D-144 candidate)
+- Deterministic teammate orchestration design
+- Agent simulation harness
 
 ## Dependency Status
 
-No changes from S66.
+No changes from S67.
 
 ## Carry-Forward
 
@@ -64,13 +75,6 @@ No changes from S66.
 | react-router-dom 6→7 migration | Dependabot | Deferred — breaking API changes |
 | vite 6→8 + plugin-react 6 | Dependabot | Deferred — blocked on vite major bump |
 
-## Next Session — Sprint 68
-
-**Sprint:** 68 | **Phase:** 8 | **Class:** Contract Design
-
-### Planned Tasks
-- B-147: Patch/review/apply/revert contract
-
 ## GPT Memo
 
-Session 43 (S67 closure): Model B sprint. B-145 enforcement chain documentation — 7-layer sequence (Auth D-117 > Tool Gateway D-024 > Working Set D-053 > Risk Engine D-128 > Policy Engine D-133 > Execute > Audit Trail D-129) with per-layer fail behavior, decision refs, key files, interaction rules, known gaps. GOVERNANCE.md cross-ref added (section 15). B-146 mission replay CLI tool — tools/replay-mission.py merges 3 sources (audit trail JSONL, mission summary stateTransitions, policy telemetry JSONL) into chronological unified timeline, supports --json and --filter, graceful degradation. GPT R1 HOLD (CLI under-verified, waiver too broad) > R2 PASS: +5 raw CLI evidence outputs (smoke, json, filter, missing-source degradation, unknown-mission exit code 1), waiver language corrected. Frontend 217 tests pass, tsc clean. Core runtime unchanged, CLI-specific evidence provided. Total: 1785 tests unchanged.
+Session 44 (S68 closure): Model B design-only sprint. B-147 Patch/Review/Apply/Revert Contract — D-141 frozen. Patch artifact schema: 14-field JSON (patch_id, mission_id, author, created_at, target_files, diff, description, review_status, risk_assessment with 4 sub-fields, applied_at, reverted_at, revert_patch_id). Review state machine: 6 states (proposed, reviewed, approved, rejected, applied, reverted), 6 valid transitions, fail-closed on invalid. Operator control: apply/revert = operator-only (D-117), operator bypass proposed→approved allowed, revert = new patch with inverted diff (preserves audit trail, no data deletion), rejection is terminal. Integration: D-106 file store (hot state per D-140), EventBus 6 event types, D-129 audit trail, D-053 working set validation on target_files, D-128 risk engine on risk_assessment, D-133 policy engine on apply decision. Architectural implications: develop stage output → patch artifact (decouples AI generation from codebase landing), patch store as hot state (logs/patches/patch-{id}.json), G2 quality gate = review phase transition, PatchService as D-139 decomposition boundary. 6 explicit deferrals: auto-diff from LLM, IDE integration, git commit automation, merge conflicts, multi-patch ordering, patch amendment. Phase 8C design freeze complete. No runtime code changed. 1785 tests unchanged.

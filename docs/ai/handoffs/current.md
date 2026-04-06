@@ -1,4 +1,4 @@
-# Session Handoff — 2026-04-06 (Session 45 — Sprint 69)
+# Session Handoff — 2026-04-06 (Session 46 — Sprint 70)
 
 **Platform:** Vezir Platform
 **Operator:** Claude Code (Opus) — AKCA delegated
@@ -7,24 +7,26 @@
 
 ## Session Summary
 
-Session 45: Sprint 69 completed. Phase 9 entry — D-142 frozen, state-sync governed doc consistency.
+Session 46: Sprint 70 implementation complete. Phase 9 — Validator/Closer Drift Hardening.
 
-- D-142: Intake-to-Sprint Operating Model Freeze — canonical model frozen (backlog != sprint task, intake = hard gate, fail-closed session protocol, governed doc set = 4 files). Decision record at `docs/decisions/D-142-intake-to-sprint-operating-model.md`.
-- state-sync.py --check: New D-142 governed doc consistency mode. Cross-checks sprint number, phase, decision count, next sprint across handoff/open-items/STATE.md/NEXT.md. 10 test cases covering aligned state, sprint mismatch, phase mismatch, stale open-items, missing file, decision count mismatch.
-- Phase 9 plan.yaml files created for S69-S72.
+- T70.1: project-validator.py — replaced hardcoded `CLOSED_SPRINTS=set(range(19,33))` with `derive_closed_sprints()` that queries GitHub milestones API (paginated, case-insensitive, graceful fallback). `validate_item()` now accepts `closed_sprints` parameter.
+- T70.2: 8 new validator tests (6 derive_closed_sprints + 2 closed sprint edge cases for None/empty set).
+- T70.3: close-merged-issues.py — added merge evidence gate: `is_branch_merged()`, `has_merged_pr()`. Main loop verifies merge evidence before closing. Added `--dry-run` mode. Blocks parent issue close when child tasks lack merge evidence. Exit 1 on unmerged tasks.
+- T70.4: 11 new closer tests (5 is_branch_merged + 4 has_merged_pr + 4 main() dry-run integration).
+- PR #348 merged to main. CI 12/12 green. Commit 4ca9240.
 
 ## Current State
 
-- **Phase:** 9 active — S69 closed
+- **Phase:** 9 active — S69 closed, S70 implementation done (GPT review pending)
 - **Last closed sprint:** 69
 - **Decisions:** 139 frozen + 2 superseded (D-001 → D-142, D-126 skipped, D-132 deferred, D-082/D-098 superseded)
-- **Tests:** 1555 backend + 217 frontend + 13 Playwright = 1785 total + 10 state-sync tests = 1795
+- **Tests:** 1555 backend + 217 frontend + 13 Playwright + 60 root-level = 1845 total (was 1795, +19 new root + 31 existing root = 60 root)
 - **CI:** All green (2 pre-existing WinError failures in test_audit_integrity — subprocess.py on Win32)
 - **Security:** 0 CodeQL open, 0 secret scanning, 0 dependabot critical
-- **PRs:** 0 open
-- **Open issues:** 1 (#346 — S69 sprint issue, to be closed after push)
-- **Project board:** Synced through S69
-- **Blockers:** None
+- **PRs:** 0 open (#348 merged)
+- **Open issues:** 1 (#347 — S70 sprint issue, to be closed after GPT PASS)
+- **Project board:** Synced through S69, S70 milestone created (#46)
+- **Blockers:** GPT review R2 delivery — ChatGPT connection timeouts prevented R2 resubmit delivery
 
 ## Review History
 
@@ -43,13 +45,14 @@ Session 45: Sprint 69 completed. Phase 9 entry — D-142 frozen, state-sync gove
 | S67 | PASS | PASS (R2) |
 | S68 | PASS | PASS (R2) |
 | S69 | PASS | PASS (R3) |
+| S70 | — | HOLD (R1 — title only, R2 pending delivery) |
 
 ## Phase 9 Status
 
 | Sprint | Scope | Status |
 |--------|-------|--------|
 | S69 | Operating Model Freeze + State Drift Guard (D-142) | Closed |
-| S70 | Validator/Closer Drift Hardening | Not started |
+| S70 | Validator/Closer Drift Hardening | Implementation done, GPT review pending |
 | S71 | Intake Gate + Workflow Writer Enforcement | Not started |
 | S72 | Session Protocol Enforcement | Not started |
 
@@ -73,4 +76,4 @@ No new dependencies introduced. Phase 9 is governance/tooling-only.
 
 ## GPT Memo
 
-Session 45 (S69 closure): Phase 9 entry sprint. D-142 Intake-to-Sprint Operating Model Freeze — frozen. Key points: backlog item != sprint task (per D-122), intake binding = hard gate before implementation (not closure cleanup), session protocol fail-closed on governed doc mismatch, Project V2 canonical fields narrow (Status/Sprint/Priority/Task ID), validators and workflows must enforce same model. Governed doc set frozen as 4 files: current.md, open-items.md, STATE.md, NEXT.md. state-sync.py --check mode: cross-checks sprint number, phase, decision count, next sprint across all 4 governed docs + DECISIONS.md. 10 new tests. Governed doc drift fixed during sprint: open-items stale S65 reference updated to S69, STATE.md/NEXT.md/handoff phase updated to 9, decision count aligned to 139+2. Phase 9 plan.yaml files created for S69-S72. No runtime code changes. 1795 total tests (10 new state-sync tests).
+Session 46 (S70): Validator/Closer Drift Hardening. 4 tasks implemented: T70.1 dynamic closed sprint derivation from milestones (replaces hardcoded set), T70.2 8 validator tests, T70.3 merge evidence gate for closer (is_branch_merged + has_merged_pr + --dry-run + exit 1 on unmerged + parent block), T70.4 11 closer tests. 19 new tests total. PR #348 merged, CI 12/12 green. No new decisions, no runtime code changes. GPT R1 was HOLD (title-only submission due to ChatGPT streaming issues). R2 resubmit with full packet was attempted but ChatGPT connection timed out repeatedly. Next session: retry GPT review with full packet, then close S70.

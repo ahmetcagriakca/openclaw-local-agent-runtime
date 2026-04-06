@@ -43,13 +43,19 @@ Rules:
 
 ### Stage 3 — AI Review
 Use:
-- system prompt: `gpt-review-system_v3.md`
+- system prompt: `gpt-review-system_v3.1.md`
 - user payload: filled `review-delta-packet_v2.md`
 - output contract: `review-verdict-contract_v2.md`
 
 Execution:
 ```bash
 tools/ask-gpt-review.sh <sprint-number>
+```
+
+Full pipeline execution:
+```bash
+tools/review-loop.sh {N}              # Manual patch mode
+tools/review-loop.sh {N} --auto-patch # Auto Claude Code patch
 ```
 
 Expected result:
@@ -67,11 +73,20 @@ Required inputs:
 
 Do not re-review already accepted findings.
 
+Blocker resolution verification (mandatory before re-review):
+```bash
+tools/blocker-resolution-check.sh {N}
+# Exit 0: all resolved → re-review
+# Exit 1: unresolved → fix first
+# Exit 2: unresolvable → auto-escalate
+```
+
 ### Stage 5 — Operator Escalation
 Triggered when:
 - Same finding persists unchanged across 3+ rounds
 - Round count reaches 5
 - Reviewer explicitly issues ESCALATE verdict
+- blocker-resolution-check.sh exits with code 2 (UNRESOLVABLE)
 
 Operator actions:
 1. Review the blocker history across rounds

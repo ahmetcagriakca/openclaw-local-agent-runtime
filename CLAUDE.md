@@ -21,6 +21,10 @@ Windows 11 + WSL2 + Python 3.14 + PowerShell.
 | `frontend/` | React dashboard on :3000 (Vite + Tailwind, Node.js 20) |
 | `bridge/oc-bridge.ps1` | PowerShell bridge to Windows |
 | `config/capabilities.json` | Capability manifest (auto-generated) |
+| `tools/review-loop.sh` | Autonomous review pipeline orchestrator |
+| `tools/blocker-resolution-check.sh` | Deterministic blocker resolution check |
+| `tools/ask-gpt-review.sh` | GPT review API call via Azure APIM |
+| `docs/ai/prompts/` | Review system prompt, verdict contract, delta packet, runbook |
 
 ## Documentation
 
@@ -28,7 +32,7 @@ Windows 11 + WSL2 + Python 3.14 + PowerShell.
 |-----|---------|
 | `docs/ai/STATE.md` | Canonical system state |
 | `docs/ai/NEXT.md` | Roadmap + carry-forward |
-| `docs/ai/DECISIONS.md` | Frozen decisions (D-001→D-140, D-126 skipped, D-132 deferred) |
+| `docs/ai/DECISIONS.md` | Frozen decisions (D-001→D-146, D-126 skipped, D-143 placeholder) |
 | `docs/ai/GOVERNANCE.md` | Sprint governance rules |
 | `docs/ai/BACKLOG.md` | Open backlog items |
 | `docs/ai/handoffs/current.md` | Session context (supplementary) |

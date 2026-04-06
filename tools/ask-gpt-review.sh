@@ -24,7 +24,7 @@ APIM_KEY="${APIM_KEY:?Set APIM_KEY env var}"
 APIM_MODEL="${APIM_MODEL:-gpt-5.3-codex-cagri}"
 
 # File paths
-SYSTEM_PROMPT="$REPO_ROOT/docs/ai/prompts/gpt-review-system_v3.md"
+SYSTEM_PROMPT="$REPO_ROOT/docs/ai/prompts/gpt-review-system_v3.1.md"
 VERDICT_CONTRACT="$REPO_ROOT/docs/ai/prompts/review-verdict-contract_v2.md"
 DELTA_PACKET="$REPO_ROOT/docs/sprints/sprint-${SPRINT}/review-delta-packet.md"
 OUTPUT_FILE="$REPO_ROOT/docs/ai/reviews/S${SPRINT}-GPT-REVIEW.md"

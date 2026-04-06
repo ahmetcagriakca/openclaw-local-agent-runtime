@@ -15,6 +15,7 @@ const NAV_ITEMS = [
   { to: '/templates', label: 'Templates', icon: '📋' },
   { to: '/costs', label: 'Costs', icon: '💰' },
   { to: '/agents', label: 'Agents', icon: '🤖' },
+  { to: '/projects', label: 'Projects', icon: '📁' },
 ]
 
 interface SidebarProps {

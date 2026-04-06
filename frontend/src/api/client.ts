@@ -23,6 +23,10 @@ import type {
   AgentRolesResponse,
   CapabilityMatrixResponse,
   AgentPerformanceResponse,
+  ProjectListResponse,
+  ProjectDetailResponse,
+  ProjectRollupResponse,
+  PublishedArtifact,
 } from '../types/api'
 
 const BASE = '/api/v1'
@@ -278,4 +282,31 @@ export function getCapabilityMatrix(): Promise<CapabilityMatrixResponse> {
 
 export function getAgentPerformance(): Promise<AgentPerformanceResponse> {
   return apiGet<AgentPerformanceResponse>('/agents/performance')
+}
+
+// ── Projects (D-144/D-145) ──────────────────────────────────────
+
+export function getProjects(params?: {
+  status?: string
+  search?: string
+  sort?: string
+}): Promise<ProjectListResponse> {
+  const qs = new URLSearchParams()
+  if (params?.status) qs.set('status', params.status)
+  if (params?.search) qs.set('search', params.search)
+  if (params?.sort) qs.set('sort', params.sort)
+  const query = qs.toString()
+  return apiGet<ProjectListResponse>(`/projects${query ? `?${query}` : ''}`)
+}
+
+export function getProject(id: string): Promise<ProjectDetailResponse> {
+  return apiGet<ProjectDetailResponse>(`/projects/${encodeURIComponent(id)}`)
+}
+
+export function getProjectRollup(id: string): Promise<ProjectRollupResponse> {
+  return apiGet<ProjectRollupResponse>(`/projects/${encodeURIComponent(id)}/rollup`)
+}
+
+export function getProjectArtifacts(id: string): Promise<{ meta: unknown; data: PublishedArtifact[] }> {
+  return apiGet<{ meta: unknown; data: PublishedArtifact[] }>(`/projects/${encodeURIComponent(id)}/artifacts`)
 }

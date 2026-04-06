@@ -461,6 +461,67 @@ export interface AgentPerformanceResponse {
   performance: RolePerformance[]
 }
 
+// ── Project (D-144/D-145) ──────────────────────────────────────
+
+export interface ProjectItem {
+  project_id: string
+  name: string
+  description: string
+  status: string
+  owner: string
+  created_at: string
+  updated_at: string
+  workspace_root?: string | null
+  artifact_root?: string | null
+  shared_root?: string | null
+}
+
+export interface MissionSummaryRollup {
+  total: number
+  by_status: Record<string, number>
+  active_count: number
+  quiescent_count: number
+  last_activity: string | null
+}
+
+export interface ProjectRollup {
+  project_id: string
+  total_missions: number
+  by_status: Record<string, number>
+  active_count: number
+  quiescent_count: number
+  total_tokens: number
+  last_activity: string | null
+  computed_at: string
+}
+
+export interface ProjectDetailResponse {
+  meta: ResponseMeta
+  data: {
+    project: ProjectItem
+    mission_summary: MissionSummaryRollup
+  }
+}
+
+export interface ProjectListResponse {
+  meta: ResponseMeta
+  data: ProjectItem[]
+  total: number
+}
+
+export interface ProjectRollupResponse {
+  meta: ResponseMeta
+  data: ProjectRollup
+}
+
+export interface PublishedArtifact {
+  artifact_id: string
+  mission_id: string
+  source_path: string
+  published_path: string
+  published_at: string
+}
+
 // ── Mutation Response (D-096) ───────────────────────────────────
 
 export interface MutationResponse {

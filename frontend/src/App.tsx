@@ -14,6 +14,8 @@ import { MonitoringPage } from './features/monitoring/MonitoringPage'
 import { TemplatesPage } from './pages/TemplatesPage'
 import { CostDashboardPage } from './pages/CostDashboardPage'
 import { AgentHealthPage } from './pages/AgentHealthPage'
+import { ProjectsPage } from './pages/ProjectsPage'
+import { ProjectDetailPage } from './pages/ProjectDetailPage'
 import { NotFoundPage } from './pages/NotFoundPage'
 
 export default function App() {
@@ -91,6 +93,22 @@ export default function App() {
             element={
               <ErrorBoundary fallbackLabel="Agent health panel error">
                 <AgentHealthPage />
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path="/projects"
+            element={
+              <ErrorBoundary fallbackLabel="Projects panel error">
+                <ProjectsPage />
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path="/projects/:id"
+            element={
+              <ErrorBoundary fallbackLabel="Project detail panel error">
+                <ProjectDetailPage />
               </ErrorBoundary>
             }
           />

@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     if: contains(github.event.issue.labels.*.name, 'sprint')
     steps:
-      - name: Add issue to project
+      - name: Add issue to project and init canonical fields
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ISSUE_URL: ${{ github.event.issue.html_url }}
@@ -22,6 +22,9 @@ jobs:
         run: |
           echo "Issue #${ISSUE_NUMBER}: ${ISSUE_TITLE}"
           echo "Labels include 'sprint' — eligible for project board"
+
+          OWNER="${GITHUB_REPOSITORY_OWNER}"
+          REPO="${GITHUB_REPOSITORY#*/}"
 
           # Get project ID (first project in repo)
           PROJECT_ID=$(gh api graphql -f query='
@@ -32,7 +35,7 @@ jobs:
                 }
               }
             }
-          ' -f owner="${GITHUB_REPOSITORY_OWNER}" -f repo="${GITHUB_REPOSITORY#*/}" \
+          ' -f owner="$OWNER" -f repo="$REPO" \
             --jq '.data.repository.projectsV2.nodes[0].id' 2>/dev/null || true)
 
           if [ -z "$PROJECT_ID" ] || [ "$PROJECT_ID" = "null" ]; then
@@ -50,19 +53,127 @@ jobs:
                 issue(number: $number) { id }
               }
             }
-          ' -f owner="${GITHUB_REPOSITORY_OWNER}" -f repo="${GITHUB_REPOSITORY#*/}" \
+          ' -f owner="$OWNER" -f repo="$REPO" \
             -F number="$ISSUE_NUMBER" --jq '.data.repository.issue.id')
 
           echo "Issue Node ID: $ISSUE_NODE_ID"
 
           # Add to project (idempotent — adding existing item is a no-op)
-          RESULT=$(gh api graphql -f query='
+          ITEM_ID=$(gh api graphql -f query='
             mutation($projectId: ID!, $contentId: ID!) {
               addProjectV2ItemById(input: {projectId: $projectId, contentId: $contentId}) {
                 item { id }
               }
             }
-          ' -f projectId="$PROJECT_ID" -f contentId="$ISSUE_NODE_ID" 2>&1 || true)
+          ' -f projectId="$PROJECT_ID" -f contentId="$ISSUE_NODE_ID" \
+            --jq '.data.addProjectV2ItemById.item.id' 2>&1 || true)
 
-          echo "Result: $RESULT"
+          echo "Item ID: $ITEM_ID"
+
+          if [ -z "$ITEM_ID" ] || [ "$ITEM_ID" = "null" ]; then
+            echo "Could not add issue to project. Exiting."
+            exit 0
+          fi
+
           echo "Issue #${ISSUE_NUMBER} added to project board."
+
+          # D-142: Initialize canonical fields (Status, Sprint)
+          # Get project fields
+          FIELDS=$(gh api graphql -f query='
+            query($projectId: ID!) {
+              node(id: $projectId) {
+                ... on ProjectV2 {
+                  fields(first: 20) {
+                    nodes {
+                      ... on ProjectV2Field { id name }
+                      ... on ProjectV2SingleSelectField {
+                        id name
+                        options { id name }
+                      }
+                      ... on ProjectV2IterationField { id name }
+                    }
+                  }
+                }
+              }
+            }
+          ' -f projectId="$PROJECT_ID" --jq '.data.node.fields.nodes' 2>/dev/null || echo "[]")
+
+          echo "Fields: $FIELDS"
+
+          # Extract Status field ID and "Todo" option ID
+          STATUS_FIELD_ID=$(echo "$FIELDS" | python3 -c "
+          import json, sys
+          fields = json.load(sys.stdin)
+          for f in fields:
+              if f.get('name') == 'Status':
+                  print(f['id'])
+                  break
+          " 2>/dev/null || true)
+
+          TODO_OPTION_ID=$(echo "$FIELDS" | python3 -c "
+          import json, sys
+          fields = json.load(sys.stdin)
+          for f in fields:
+              if f.get('name') == 'Status':
+                  for opt in f.get('options', []):
+                      if opt.get('name') == 'Todo':
+                          print(opt['id'])
+                          break
+                  break
+          " 2>/dev/null || true)
+
+          # Extract Sprint number field ID
+          SPRINT_FIELD_ID=$(echo "$FIELDS" | python3 -c "
+          import json, sys
+          fields = json.load(sys.stdin)
+          for f in fields:
+              if f.get('name') == 'Sprint':
+                  print(f['id'])
+                  break
+          " 2>/dev/null || true)
+
+          # Set Status = Todo if field exists
+          if [ -n "$STATUS_FIELD_ID" ] && [ -n "$TODO_OPTION_ID" ]; then
+            echo "Setting Status=Todo (field=$STATUS_FIELD_ID, option=$TODO_OPTION_ID)"
+            gh api graphql -f query='
+              mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $optionId: String!) {
+                updateProjectV2ItemFieldValue(input: {
+                  projectId: $projectId
+                  itemId: $itemId
+                  fieldId: $fieldId
+                  value: { singleSelectOptionId: $optionId }
+                }) { projectV2Item { id } }
+              }
+            ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" \
+              -f fieldId="$STATUS_FIELD_ID" -f optionId="$TODO_OPTION_ID" 2>&1 || true
+          else
+            echo "Status field or Todo option not found, skipping Status init"
+          fi
+
+          # Extract sprint number from issue title [S<N>...] pattern
+          SPRINT_NUM=$(echo "$ISSUE_TITLE" | python3 -c "
+          import re, sys
+          title = sys.stdin.read().strip()
+          m = re.search(r'\[S(\d+)', title)
+          print(m.group(1) if m else '')
+          " 2>/dev/null || true)
+
+          # Set Sprint number if field exists and sprint was extracted
+          if [ -n "$SPRINT_FIELD_ID" ] && [ -n "$SPRINT_NUM" ]; then
+            echo "Setting Sprint=$SPRINT_NUM (field=$SPRINT_FIELD_ID)"
+            gh api graphql -f query='
+              mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $value: Float!) {
+                updateProjectV2ItemFieldValue(input: {
+                  projectId: $projectId
+                  itemId: $itemId
+                  fieldId: $fieldId
+                  value: { number: $value }
+                }) { projectV2Item { id } }
+              }
+            ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" \
+              -f fieldId="$SPRINT_FIELD_ID" -F value="$SPRINT_NUM" 2>&1 || true
+          else
+            echo "Sprint field not found or sprint number not in title, skipping Sprint init"
+          fi
+
+          echo "D-142: Canonical field initialization complete."

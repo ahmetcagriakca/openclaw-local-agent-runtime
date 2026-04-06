@@ -212,17 +212,41 @@ class TestClosedSprintOpenIssue:
         findings = validate_item(item, closed_sprints={19, 20, 31, 32})
         assert not find_code(findings, validator.CLOSED_SPRINT_OPEN_ISSUE)
 
-    def test_no_closed_sprints_skips_check(self):
-        """When closed_sprints is None (API unavailable), skip the check."""
+    def test_none_closed_sprints_skips_item_check(self):
+        """When closed_sprints is None (API failure), item-level check is skipped.
+
+        Fail-closed enforcement happens at main() level via MILESTONE_SOURCE_FAILURE.
+        """
         item = make_item(sprint=32, state="OPEN", status="In Progress")
         findings = validate_item(item, closed_sprints=None)
         assert not find_code(findings, validator.CLOSED_SPRINT_OPEN_ISSUE)
 
     def test_empty_closed_sprints_skips_check(self):
-        """When closed_sprints is empty, skip the check."""
+        """When closed_sprints is empty (no milestones closed), skip the check."""
         item = make_item(sprint=32, state="OPEN", status="In Progress")
         findings = validate_item(item, closed_sprints=set())
         assert not find_code(findings, validator.CLOSED_SPRINT_OPEN_ISSUE)
+
+    def test_milestone_source_failure_main_json_mode(self):
+        """main() with None closed_sprints emits MILESTONE_SOURCE_FAILURE and exits 1 (JSON)."""
+        with patch.object(validator, "derive_closed_sprints", return_value=None), \
+             patch.object(validator, "fetch_project_items", return_value=[]), \
+             patch.object(sys, "argv", ["project-validator.py", "--json"]):
+            with pytest.raises(SystemExit) as exc_info:
+                validator.main()
+            assert exc_info.value.code == 1
+
+    def test_milestone_source_failure_main_human_mode(self, capsys):
+        """main() with None closed_sprints prints UNAVAILABLE and exits 1 (human)."""
+        with patch.object(validator, "derive_closed_sprints", return_value=None), \
+             patch.object(validator, "fetch_project_items", return_value=[]), \
+             patch.object(sys, "argv", ["project-validator.py"]):
+            with pytest.raises(SystemExit) as exc_info:
+                validator.main()
+            assert exc_info.value.code == 1
+            captured = capsys.readouterr()
+            assert "UNAVAILABLE" in captured.out
+            assert "MILESTONE_SOURCE_FAILURE" in captured.out
 
 
 # --- CLOSED_NOT_DONE ---
@@ -335,13 +359,14 @@ class TestDeriveClosedSprints:
         assert result == set()
 
     @patch("subprocess.run")
-    def test_api_failure_returns_empty(self, mock_run):
+    def test_api_failure_returns_none(self, mock_run):
+        """API failure must return None (fail-closed), not empty set."""
         mock_result = MagicMock()
         mock_result.returncode = 1
         mock_result.stderr = "API error"
         mock_run.return_value = mock_result
         result = derive_closed_sprints()
-        assert result == set()
+        assert result is None
 
     @patch("subprocess.run")
     def test_pagination(self, mock_run):

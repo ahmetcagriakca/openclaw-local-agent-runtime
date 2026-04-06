@@ -93,35 +93,42 @@ class TestIsBranchMerged:
 
 class TestHasMergedPr:
     @patch.object(closer, "gh")
-    def test_issue_has_merged_pr_via_search(self, mock):
-        mock.side_effect = mock_gh(
-            ("1", 0),  # pr list search found 1
-        )
-        assert has_merged_pr(347) is True
-
-    @patch.object(closer, "gh")
     def test_issue_has_merged_pr_via_timeline(self, mock):
+        """Exact timeline cross-reference with merged_at satisfies evidence."""
         mock.side_effect = mock_gh(
-            ("0", 0),  # pr list search found 0
             ("1", 0),  # timeline cross-ref found 1
         )
         assert has_merged_pr(347) is True
 
     @patch.object(closer, "gh")
     def test_issue_no_merged_pr(self, mock):
+        """No timeline cross-reference means no merge evidence."""
         mock.side_effect = mock_gh(
-            ("0", 0),  # pr list search = 0
             ("0", 0),  # timeline = 0
         )
         assert has_merged_pr(347) is False
 
     @patch.object(closer, "gh")
-    def test_both_api_calls_fail(self, mock):
+    def test_timeline_api_failure(self, mock):
+        """API failure means no merge evidence (fail-closed)."""
         mock.side_effect = mock_gh(
-            ("", 1),   # search fails
-            ("", 1),   # timeline fails
+            ("", 1),   # timeline API fails
         )
         assert has_merged_pr(347) is False
+
+    @patch.object(closer, "gh")
+    def test_broad_mention_not_accepted(self, mock):
+        """Verify that has_merged_pr only uses timeline, not broad search.
+
+        The function should make exactly one API call (timeline).
+        A broad --search based match would be a false positive.
+        """
+        mock.side_effect = mock_gh(
+            ("0", 0),  # timeline = 0 (no exact linkage)
+        )
+        assert has_merged_pr(347) is False
+        # Only one call should have been made (timeline only, no search)
+        assert mock.call_count == 1
 
 
 # --- main() integration-level tests ---

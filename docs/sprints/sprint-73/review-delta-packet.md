@@ -1,14 +1,14 @@
 # Review Delta Packet v2 — Sprint 73
 
 ## 0. REVIEW TYPE
-- Round: 4
+- Round: 5
 - Review Type: re-review
 - Ask: Return verdict using review-verdict-contract.v2
 
 ## 1. BASELINE
 - Phase: 10
 - Sprint: 73
-- Class: architecture + governance
+- Class: governance
 - Model: A
 - implementation_status: done
 - closure_status: review_pending
@@ -120,6 +120,53 @@
 | project-tests-raw.txt | PRESENT | `pytest -v` raw output: 110 project tests all PASSED |
 | git-log-mid-gate.txt | PRESENT | `git log --oneline` chronology: impl commit 8f8eae3 precedes all closure commits |
 
+## 8a. RAW EVIDENCE EXCERPTS
+
+### git-log-mid-gate.txt (full content)
+```
+8f8eae3 Sprint 73: Project Entity + CRUD (Phase 10 Faz 1, D-144)
+---
+91e408c Sprint 73 R3: gate artifacts, claim-evidence map, raw proof
+e7dd4bc Sprint 73 R2: complete evidence bundle, patch all GPT R1 blockers
+370d195 Fix doc drift: D-143 frozen placeholder, decision count 142+2=144
+0400480 Fix D-143 heading for doc drift check: deferred status
+3638593 Sprint 73 doc drift fixes: decision count 140 frozen + D-143 skipped
+e991c39 Sprint 73 closure fixes: CLAUDE.md test count, D-143 heading, review packet
+All impl tasks (73.1-73.7) in commit 8f8eae3. All subsequent commits are closure/evidence/docs.
+```
+
+### pytest-output.txt (tail)
+```
+================= 1661 passed, 4 skipped in 172.00s (0:02:52) =================
+```
+
+### project-tests-raw.txt (tail)
+```
+============================= 110 passed in 5.37s =============================
+```
+
+### vitest-output.txt (tail)
+```
+ Tests  217 passed (217)
+```
+
+### tsc-output.txt
+```
+(empty — 0 errors)
+```
+
+### closure-check-output.txt (doc drift section)
+```
+RESULT: ALL CHECKS PASSED
+```
+
+### evidence file listing (14 files)
+```
+build-output.txt claim-evidence-map.md closure-check-output.txt contract-evidence.txt
+file-manifest.txt git-log-mid-gate.txt grep-evidence.txt lint-output.txt mid-review-gate.md
+project-tests-raw.txt pytest-output.txt sprint-class.txt tsc-output.txt vitest-output.txt
+```
+
 ## 9. CLAIMS TO VERIFY
 1. project_store.py uses atomic_write_json (temp → fsync → os.replace) matching mission_store.py pattern
 2. 7 API endpoints (create, list, detail, update, delete, link, unlink) respond with correct status codes (201, 200, 404, 409, 422)
@@ -153,3 +200,5 @@
 | P7 | R2-B3 | Created evidence/sprint-73/claim-evidence-map.md — all 10 claims mapped to exact test names, file paths, and raw output files. Also saved project-tests-raw.txt (110 passed in 5.37s) as direct proof. | this commit | evidence/sprint-73/claim-evidence-map.md + project-tests-raw.txt |
 | P8 | R3-B1 | Created evidence/sprint-73/git-log-mid-gate.txt — raw `git log --oneline` output proving commit 8f8eae3 (all impl tasks) precedes all subsequent closure/evidence commits. Referenced in mid-review-gate.md and evidence manifest. | this commit | evidence/sprint-73/git-log-mid-gate.txt |
 | P9 | R3-B2 | Reconciled evidence file count: 14 files in evidence/sprint-73/ (all listed in manifest). Changed Files section updated to match. No contradictions. | this commit | evidence/sprint-73/ (14 files) |
+| P10 | R4-B1 | Added §8a RAW EVIDENCE EXCERPTS inline in delta packet: git chronology, pytest/vitest/tsc tail, closure-check PASS, full file listing. All verifiable from packet text. | this commit | delta-packet §8a |
+| P11 | R4-B2 | Normalized Class field to single value "governance" (per contract enum). | this commit | delta-packet §1 |

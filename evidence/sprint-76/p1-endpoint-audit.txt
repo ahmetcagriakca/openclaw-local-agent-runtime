@@ -1,0 +1,157 @@
+agent/api/alerts_api.py:72:@router.put("/rules/{rule_id}")
+agent/api/alerts_api.py:94:@router.post("/rules")
+agent/api/allowlist_api.py:56:@router.post("/allowlists", status_code=201)
+agent/api/allowlist_api.py:67:@router.put("/allowlists/{name}")
+agent/api/allowlist_api.py:81:@router.delete("/allowlists/{name}")
+agent/api/allowlist_api.py:85:        _store.delete(name)
+agent/api/allowlist_api.py:91:@router.post("/allowlists/check")
+agent/api/allowlist_api.py:98:@router.post("/allowlists/reload")
+agent/api/approval_mutation_api.py:104:@router.post(
+agent/api/approval_mutation_api.py:174:@router.post(
+agent/api/backup_api.py:66:@router.post("/backup")
+agent/api/backup_api.py:102:@router.post("/restore")
+agent/api/dlq_api.py:56:@router.post("/dlq/{dlq_id}/retry")
+agent/api/dlq_api.py:122:@router.delete("/dlq/{dlq_id}")
+agent/api/dlq_api.py:130:@router.post("/dlq/purge-resolved")
+agent/api/file_watcher.py:246:            self.event_queue.put_nowait(event)
+agent/api/knowledge_api.py:44:@router.post("/knowledge")
+agent/api/knowledge_api.py:99:@router.patch("/knowledge/{entry_id}")
+agent/api/knowledge_api.py:117:@router.delete("/knowledge/{entry_id}")
+agent/api/knowledge_api.py:121:    deleted = store.delete(entry_id)
+agent/api/knowledge_api.py:127:@router.post("/knowledge/mission-context")
+agent/api/mission_create_api.py:132:@router.post(
+agent/api/mission_mutation_api.py:195:@router.post(
+agent/api/mission_mutation_api.py:274:@router.post(
+agent/api/mission_mutation_api.py:371:@router.post(
+agent/api/mission_mutation_api.py:450:@router.post(
+agent/api/mission_mutation_api.py:529:@router.post(
+agent/api/plugins_api.py:154:@router.post("/plugins/{plugin_id}/install", response_model=MessageResponse)
+agent/api/plugins_api.py:169:@router.post("/plugins/{plugin_id}/uninstall", response_model=MessageResponse)
+agent/api/plugins_api.py:184:@router.post("/plugins/{plugin_id}/enable", response_model=MessageResponse)
+agent/api/plugins_api.py:197:@router.post("/plugins/{plugin_id}/disable", response_model=MessageResponse)
+agent/api/plugins_api.py:210:@router.put("/plugins/{plugin_id}/config", response_model=MessageResponse)
+agent/api/policy_api.py:49:@router.post("/policies/reload")
+agent/api/policy_api.py:59:@router.post("/policies", status_code=201)
+agent/api/policy_api.py:78:@router.put("/policies/{name}")
+agent/api/policy_api.py:97:@router.delete("/policies/{name}")
+agent/api/policy_api.py:101:        _engine.delete_rule(name)
+agent/api/project_api.py:69:@router.post("", status_code=201)
+agent/api/project_api.py:124:@router.patch("/{project_id}")
+agent/api/project_api.py:163:@router.delete("/{project_id}")
+agent/api/project_api.py:176:        project = store.delete(project_id)
+agent/api/project_api.py:191:@router.post("/{project_id}/missions/{mission_id}", status_code=200)
+agent/api/project_api.py:212:@router.delete("/{project_id}/missions/{mission_id}")
+agent/api/project_api.py:236:@router.post("/{project_id}/workspace/enable", status_code=201)
+agent/api/project_api.py:305:@router.post("/{project_id}/artifacts", status_code=201)
+agent/api/project_api.py:353:@router.delete("/{project_id}/artifacts/{artifact_id}", status_code=204)
+agent/api/recovery_api.py:47:@router.post("/recovery/repair")
+agent/api/recovery_api.py:74:@router.post("/recovery/quarantine")
+agent/api/retention_api.py:54:@router.post("/missions/cleanup")
+agent/api/retention_api.py:87:@router.post("/bak/cleanup")
+agent/api/schedules_api.py:69:@router.post("/schedules", status_code=201)
+agent/api/schedules_api.py:98:@router.put("/schedules/{schedule_id}")
+agent/api/schedules_api.py:118:@router.delete("/schedules/{schedule_id}")
+agent/api/schedules_api.py:122:    if not store.delete(schedule_id):
+agent/api/schedules_api.py:127:@router.post("/schedules/{schedule_id}/run")
+agent/api/schedules_api.py:149:@router.post("/schedules/{schedule_id}/toggle")
+agent/api/secret_rotation_api.py:59:@router.put("/secrets/rotation/policy")
+agent/api/signal_api.py:19:@router.delete(
+agent/api/sse_manager.py:93:                    client.put_nowait(sse_event)
+agent/api/sse_manager.py:164:                    client.put_nowait(None)
+agent/api/templates_api.py:87:@router.post("", status_code=201)
+agent/api/templates_api.py:95:@router.put("/{template_id}")
+agent/api/templates_api.py:106:@router.delete("/{template_id}")
+agent/api/templates_api.py:110:    if not store.delete(template_id):
+agent/api/templates_api.py:115:@router.post("/{template_id}/run", status_code=201)
+agent/api/tenant_api.py:46:@router.post("/tenants")
+agent/api/tenant_api.py:92:@router.patch("/tenants/{tenant_id}")
+agent/api/tenant_api.py:108:@router.delete("/tenants/{tenant_id}")
+agent/api/tenant_api.py:113:        deleted = store.delete(tenant_id)
+agent/api/tenant_api.py:121:@router.post("/tenants/{tenant_id}/quota-check")
+agent/api/wmcp_credential_api.py:65:@router.post("/wmcp/credentials/register")
+agent/api/wmcp_credential_api.py:82:@router.post("/wmcp/credentials/rotate")
+agent/api/wmcp_credential_api.py:98:@router.post("/wmcp/credentials/verify")
+agent/api/wmcp_credential_api.py:108:@router.post("/wmcp/credentials/migrate")
+--- require_operator audit ---
+agent/api/alerts_api.py:14:from auth.middleware import require_operator
+agent/api/alerts_api.py:73:async def update_rule(rule_id: str, body: RuleUpdate, _operator=Depends(require_operator)):
+agent/api/alerts_api.py:95:async def create_rule(body: RuleCreate, _operator=Depends(require_operator)):
+agent/api/allowlist_api.py:11:from auth.middleware import require_operator
+agent/api/allowlist_api.py:57:def create_allowlist(req: AllowlistCreateRequest, _operator=Depends(require_operator)):
+agent/api/allowlist_api.py:68:def update_allowlist(name: str, req: AllowlistUpdateRequest, _operator=Depends(require_operator)):
+agent/api/allowlist_api.py:82:def delete_allowlist(name: str, _operator=Depends(require_operator)):
+agent/api/allowlist_api.py:99:def reload_allowlists(_operator=Depends(require_operator)):
+agent/api/approval_mutation_api.py:22:from auth.middleware import require_operator
+agent/api/approval_mutation_api.py:109:async def approve_approval(apv_id: str, request: Request, _operator=Depends(require_operator)):
+agent/api/approval_mutation_api.py:179:async def reject_approval(apv_id: str, request: Request, _operator=Depends(require_operator)):
+agent/api/audit_export_api.py:12:from auth.middleware import require_operator
+agent/api/audit_export_api.py:40:    _operator=Depends(require_operator),
+agent/api/backup_api.py:15:from auth.middleware import require_operator
+agent/api/backup_api.py:70:    _operator=Depends(require_operator),
+agent/api/backup_api.py:106:    _operator=Depends(require_operator),
+agent/api/dlq_api.py:10:from auth.middleware import require_operator
+agent/api/dlq_api.py:57:def retry_dlq_entry(dlq_id: str, _operator=Depends(require_operator)) -> DLQRetryResponse:
+agent/api/dlq_api.py:123:def purge_dlq_entry(dlq_id: str, _operator=Depends(require_operator)):
+agent/api/dlq_api.py:131:def purge_resolved(_operator=Depends(require_operator)):
+agent/api/knowledge_api.py:8:from auth.middleware import require_operator
+agent/api/knowledge_api.py:45:async def create_knowledge(req: KnowledgeCreateRequest, _operator=Depends(require_operator)):
+agent/api/knowledge_api.py:100:async def update_knowledge(entry_id: str, req: KnowledgeUpdateRequest, _operator=Depends(require_operator)):
+agent/api/knowledge_api.py:118:async def delete_knowledge(entry_id: str, _operator=Depends(require_operator)):
+agent/api/mission_create_api.py:20:from auth.middleware import require_operator
+agent/api/mission_create_api.py:137:async def create_mission(body: CreateMissionRequest, request: Request, _operator=Depends(require_operator)):
+agent/api/mission_mutation_api.py:40:from auth.middleware import require_operator
+agent/api/mission_mutation_api.py:200:async def cancel_mission(mission_id: str, request: Request, _operator=Depends(require_operator)):
+agent/api/mission_mutation_api.py:279:async def retry_mission(mission_id: str, request: Request, _operator=Depends(require_operator)):
+agent/api/mission_mutation_api.py:376:async def pause_mission(mission_id: str, request: Request, _operator=Depends(require_operator)):
+agent/api/mission_mutation_api.py:455:async def resume_mission(mission_id: str, request: Request, _operator=Depends(require_operator)):
+agent/api/mission_mutation_api.py:534:async def skip_stage(mission_id: str, request: Request, _operator=Depends(require_operator)):
+agent/api/plugins_api.py:15:from auth.middleware import require_operator
+agent/api/plugins_api.py:155:def install_plugin(plugin_id: str, _operator=Depends(require_operator)):
+agent/api/plugins_api.py:170:def uninstall_plugin(plugin_id: str, _operator=Depends(require_operator)):
+agent/api/plugins_api.py:185:def enable_plugin(plugin_id: str, _operator=Depends(require_operator)):
+agent/api/plugins_api.py:198:def disable_plugin(plugin_id: str, _operator=Depends(require_operator)):
+agent/api/plugins_api.py:211:def update_plugin_config(plugin_id: str, body: PluginConfigRequest, _operator=Depends(require_operator)):
+agent/api/policy_api.py:13:from auth.middleware import require_operator
+agent/api/policy_api.py:50:def reload_policies(_operator=Depends(require_operator)):
+agent/api/policy_api.py:60:def create_policy(body: dict, _operator=Depends(require_operator)):
+agent/api/policy_api.py:79:def update_policy(name: str, body: dict, _operator=Depends(require_operator)):
+agent/api/policy_api.py:98:def delete_policy(name: str, _operator=Depends(require_operator)):
+agent/api/project_api.py:15:from auth.middleware import require_operator
+agent/api/project_api.py:70:async def create_project(req: CreateProjectRequest, _operator=Depends(require_operator)):
+agent/api/project_api.py:125:async def update_project(project_id: str, req: UpdateProjectRequest, _operator=Depends(require_operator)):
+agent/api/project_api.py:164:async def delete_project(project_id: str, _operator=Depends(require_operator)):
+agent/api/project_api.py:192:async def link_mission(project_id: str, mission_id: str, _operator=Depends(require_operator)):
+agent/api/project_api.py:213:async def unlink_mission(project_id: str, mission_id: str, _operator=Depends(require_operator)):
+agent/api/project_api.py:237:async def enable_workspace(project_id: str, _operator=Depends(require_operator)):
+agent/api/project_api.py:306:async def publish_artifact(project_id: str, req: PublishArtifactRequest, _operator=Depends(require_operator)):
+agent/api/project_api.py:354:async def unpublish_artifact(project_id: str, artifact_id: str, _operator=Depends(require_operator)):
+agent/api/recovery_api.py:12:from auth.middleware import require_operator
+agent/api/recovery_api.py:48:async def repair_corrupted(_operator=Depends(require_operator)):
+agent/api/recovery_api.py:75:async def quarantine_corrupted(_operator=Depends(require_operator)):
+agent/api/retention_api.py:11:from auth.middleware import require_operator
+agent/api/retention_api.py:59:    _operator=Depends(require_operator),
+agent/api/retention_api.py:91:    _operator=Depends(require_operator),
+agent/api/schedules_api.py:11:from auth.middleware import require_operator
+agent/api/schedules_api.py:70:async def create_schedule(body: CreateScheduleRequest, _operator=Depends(require_operator)):
+agent/api/schedules_api.py:99:async def update_schedule(schedule_id: str, body: UpdateScheduleRequest, _operator=Depends(require_operator)):
+agent/api/schedules_api.py:119:async def delete_schedule(schedule_id: str, _operator=Depends(require_operator)):
+agent/api/schedules_api.py:128:async def run_schedule_now(schedule_id: str, _operator=Depends(require_operator)):
+agent/api/schedules_api.py:150:async def toggle_schedule(schedule_id: str, _operator=Depends(require_operator)):
+agent/api/secret_rotation_api.py:12:from auth.middleware import require_operator
+agent/api/secret_rotation_api.py:60:def update_rotation_policy(req: PolicyUpdateRequest, _operator=Depends(require_operator)):
+agent/api/signal_api.py:7:from auth.middleware import require_operator
+agent/api/signal_api.py:23:async def delete_signal(request_id: str, _operator=Depends(require_operator)):
+agent/api/templates_api.py:12:from auth.middleware import require_operator
+agent/api/templates_api.py:88:async def create_template(body: CreateTemplateRequest, _op=Depends(require_operator)):
+agent/api/templates_api.py:96:async def update_template(template_id: str, body: UpdateTemplateRequest, _op=Depends(require_operator)):
+agent/api/templates_api.py:107:async def delete_template(template_id: str, _op=Depends(require_operator)):
+agent/api/templates_api.py:117:                       _op=Depends(require_operator)):
+agent/api/tenant_api.py:8:from auth.middleware import require_operator
+agent/api/tenant_api.py:47:async def create_tenant(req: TenantCreateRequest, _operator=Depends(require_operator)):
+agent/api/tenant_api.py:93:async def update_tenant(tenant_id: str, req: TenantUpdateRequest, _operator=Depends(require_operator)):
+agent/api/tenant_api.py:109:async def delete_tenant(tenant_id: str, _operator=Depends(require_operator)):
+agent/api/wmcp_credential_api.py:8:from auth.middleware import require_operator
+agent/api/wmcp_credential_api.py:66:async def register_wmcp_credential(req: CredentialRegisterRequest, _operator=Depends(require_operator)):
+agent/api/wmcp_credential_api.py:83:async def rotate_wmcp_credential(req: CredentialRotateRequest, _operator=Depends(require_operator)):
+agent/api/wmcp_credential_api.py:99:async def verify_wmcp_credential(req: CredentialVerifyRequest, _operator=Depends(require_operator)):
+agent/api/wmcp_credential_api.py:109:async def migrate_wmcp_credentials(_operator=Depends(require_operator)):

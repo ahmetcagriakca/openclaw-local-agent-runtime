@@ -1,0 +1,42 @@
+============================= test session starts =============================
+platform win32 -- Python 3.14.3, pytest-7.4.4, pluggy-1.6.0 -- C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\AKCA\vezir\agent
+configfile: pyproject.toml
+plugins: anyio-4.12.1, cov-4.1.0, mock-3.12.0, timeout-2.4.0
+timeout: 30.0s
+timeout method: thread
+timeout func_only: False
+collecting ... collected 29 items
+
+tests/test_project_auth.py::TestProjectCreateAuth::test_create_no_auth_401 PASSED [  3%]
+tests/test_project_auth.py::TestProjectCreateAuth::test_create_viewer_403 PASSED [  6%]
+tests/test_project_auth.py::TestProjectCreateAuth::test_create_operator_201 PASSED [ 10%]
+tests/test_project_auth.py::TestProjectUpdateAuth::test_update_no_auth_401 PASSED [ 13%]
+tests/test_project_auth.py::TestProjectUpdateAuth::test_update_viewer_403 PASSED [ 17%]
+tests/test_project_auth.py::TestProjectUpdateAuth::test_update_operator_200 PASSED [ 20%]
+tests/test_project_auth.py::TestProjectDeleteAuth::test_delete_no_auth_401 PASSED [ 24%]
+tests/test_project_auth.py::TestProjectLinkAuth::test_link_no_auth_401 PASSED [ 27%]
+tests/test_project_auth.py::TestProjectWorkspaceAuth::test_workspace_no_auth_401 PASSED [ 31%]
+tests/test_project_auth.py::TestProjectArtifactAuth::test_publish_no_auth_401 PASSED [ 34%]
+tests/test_project_auth.py::TestProjectArtifactAuth::test_unpublish_no_auth_401 PASSED [ 37%]
+tests/test_project_auth.py::TestGetEndpointsNoAuth::test_list_projects_no_auth PASSED [ 41%]
+tests/test_project_auth.py::TestGetEndpointsNoAuth::test_get_project_no_auth PASSED [ 44%]
+tests/test_project_auth.py::TestGetEndpointsNoAuth::test_get_rollup_no_auth PASSED [ 48%]
+tests/test_policy_defaults.py::TestDefaultAllowYaml::test_default_allow_has_condition PASSED [ 51%]
+tests/test_policy_defaults.py::TestDefaultAllowYaml::test_default_allow_has_environment_condition PASSED [ 55%]
+tests/test_policy_defaults.py::TestDefaultAllowYaml::test_default_allow_priority_is_lowest PASSED [ 58%]
+tests/test_policy_defaults.py::TestPolicyEngineDefaults::test_no_rules_returns_deny PASSED [ 62%]
+tests/test_policy_defaults.py::TestPolicyEngineDefaults::test_constrained_default_allow_denies_non_matching PASSED [ 65%]
+tests/test_audit_ownership.py::TestAuditWriterSeparation::test_audit_integrity_targets_audit_jsonl PASSED [ 68%]
+tests/test_audit_ownership.py::TestAuditWriterSeparation::test_audit_trail_targets_audit_trail_jsonl PASSED [ 72%]
+tests/test_audit_ownership.py::TestAuditWriterSeparation::test_audit_service_targets_agent_audit_jsonl PASSED [ 75%]
+tests/test_audit_ownership.py::TestAuditWriterSeparation::test_all_three_targets_are_distinct PASSED [ 79%]
+tests/test_audit_ownership.py::TestGovernanceChainFailure::test_append_entry_creates_valid_chain PASSED [ 82%]
+tests/test_audit_ownership.py::TestGovernanceChainFailure::test_append_entry_writes_to_file PASSED [ 86%]
+tests/test_audit_ownership.py::TestOperationalLogFailure::test_log_agent_run_silent_on_write_error PASSED [ 89%]
+tests/test_audit_ownership.py::TestChainIntegrity::test_chain_integrity_after_writes PASSED [ 93%]
+tests/test_audit_ownership.py::TestChainIntegrity::test_chain_detects_tampering PASSED [ 96%]
+tests/test_audit_ownership.py::TestChainIntegrity::test_audit_trail_handler_chain_integrity PASSED [100%]
+
+============================= 29 passed in 1.86s ==============================

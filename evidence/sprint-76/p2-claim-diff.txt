@@ -1,0 +1,4 @@
+ docs/ai/STATE.md                 | 10 +++++-----
+ docs/generated/architecture.md   |  2 +-
+ docs/shared/ENFORCEMENT-CHAIN.md |  6 +++---
+ 3 files changed, 9 insertions(+), 9 deletions(-)

@@ -1,0 +1,3 @@
+agent/api/error_envelope.py:61:def register_error_handlers(app: FastAPI) -> None:
+agent/api/server.py:324:from api.error_envelope import register_error_handlers
+agent/api/server.py:326:register_error_handlers(app)

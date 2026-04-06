@@ -1,0 +1,23 @@
+============================= test session starts =============================
+platform win32 -- Python 3.14.3, pytest-7.4.4, pluggy-1.6.0 -- C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\AKCA\vezir\agent
+configfile: pyproject.toml
+plugins: anyio-4.12.1, cov-4.1.0, mock-3.12.0, timeout-2.4.0
+timeout: 30.0s
+timeout method: thread
+timeout func_only: False
+collecting ... collected 10 items
+
+tests/test_audit_ownership.py::TestAuditWriterSeparation::test_audit_integrity_targets_audit_jsonl PASSED [ 10%]
+tests/test_audit_ownership.py::TestAuditWriterSeparation::test_audit_trail_targets_audit_trail_jsonl PASSED [ 20%]
+tests/test_audit_ownership.py::TestAuditWriterSeparation::test_audit_service_targets_agent_audit_jsonl PASSED [ 30%]
+tests/test_audit_ownership.py::TestAuditWriterSeparation::test_all_three_targets_are_distinct PASSED [ 40%]
+tests/test_audit_ownership.py::TestGovernanceChainFailure::test_append_entry_creates_valid_chain PASSED [ 50%]
+tests/test_audit_ownership.py::TestGovernanceChainFailure::test_append_entry_writes_to_file PASSED [ 60%]
+tests/test_audit_ownership.py::TestOperationalLogFailure::test_log_agent_run_silent_on_write_error PASSED [ 70%]
+tests/test_audit_ownership.py::TestChainIntegrity::test_chain_integrity_after_writes PASSED [ 80%]
+tests/test_audit_ownership.py::TestChainIntegrity::test_chain_detects_tampering PASSED [ 90%]
+tests/test_audit_ownership.py::TestChainIntegrity::test_audit_trail_handler_chain_integrity PASSED [100%]
+
+============================= 10 passed in 0.23s ==============================

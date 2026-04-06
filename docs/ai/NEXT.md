@@ -1,7 +1,7 @@
 # Next Steps — Vezir Platform
 
 **Last updated:** 2026-04-06
-**Current:** Phase 10 active. Sprint 75 closed. S76 starting.
+**Current:** Phase 10 active. Sprint 76 closed. S77 next.
 
 ---
 

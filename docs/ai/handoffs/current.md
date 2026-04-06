@@ -1,4 +1,4 @@
-# Session Handoff — 2026-04-06 (Session 51 — Sprint 75)
+# Session Handoff — 2026-04-07 (Session 51 — Sprint 75+76+Cleanup)
 
 **Platform:** Vezir Platform
 **Operator:** Claude Code (Opus) — AKCA delegated
@@ -7,93 +7,85 @@
 
 ## Session Summary
 
-Session 51: Sprint 75 implementation complete. Phase 10 — Project Aggregate (Faz 2B, D-145).
+Session 51: Sprint 75 + Sprint 76 + repo hygiene cleanup + archive migration — all in single session.
 
-### Implementation (single session)
-- Pre-sprint: State doc hygiene (NEXT.md phase 9→10, open-items next sprint 74→75).
-- T75.1-T75.2: `persistence/project_store.py` — compute_rollup(), get_rollup() with staleness cache (300s default), invalidate_rollup().
-- T75.3: `api/project_api.py` — GET /projects/{id}/rollup endpoint (200/404).
-- T75.4: `events/catalog.py` — PROJECT_ROLLUP_UPDATED event type (37 total).
-- T75.5: `events/handlers/project_handler.py` — SSE broadcast for 4 event types (status_changed, rollup_updated, artifact_published, artifact_unpublished), rollup cache invalidation on link/unlink/status events. Handler now accepts optional sse_manager + project_store.
-- T75.6: `frontend/src/pages/ProjectsPage.tsx` — List view with search, status filter, sort, status badges.
-- T75.7: `frontend/src/pages/ProjectDetailPage.tsx` — Detail view with rollup KPIs, status breakdown, artifacts list.
-- T75.8: `frontend/src/api/client.ts` + types — getProjects, getProject, getProjectRollup, getProjectArtifacts. Router + sidebar wired.
-- T75.9-T75.13: 58 new tests (36 backend + 22 frontend). Updated event count assertions (+1).
-- OpenAPI spec + TS types regenerated (145→146 endpoints).
-- GitHub issues #371-#389 assigned to Sprint 75 milestone (#51). Parent issue #374.
+### S75 — Rollup + SSE + Dashboard (D-145 Faz 2B)
+- Rollup cache (compute/get/invalidate), rollup API endpoint, 1 new event type (37 total)
+- SSE broadcast for 4 event types + rollup invalidation
+- ProjectsPage (list), ProjectDetailPage (detail), API client, router + sidebar
+- 58 new tests (36 BE + 22 FE). OpenAPI regenerated (146 endpoints).
+- GPT PASS (R4). CI green. Pushed.
 
-### Governance
-- Separate impl/test commits per S73 retro carry-forward.
-- Intake gate PASS before implementation.
-- OpenAPI spec + TS types regenerated (146 endpoints, 61 schemas).
+### S76 — Governance Contract Hardening
+- P1: Auth enforcement on 8 project_api.py mutation endpoints, fail-closed policy (VEZIR_AUTH_BYPASS=1), default-allow.yaml condition-gated
+- P2: D-147 frozen — EventBus classified as internal/test infrastructure, claims rolled back in STATE/ENFORCEMENT-CHAIN/architecture
+- P3: D-129 amended — 3 audit writers with explicit scope separation
+- 29 new tests (14 auth + 5 policy + 10 audit). CI auth bypass wiring across all workflows.
+- GPT PASS (R2). CI green. Pushed.
+
+### Repo Hygiene Cleanup
+- Archived 29 sprint folders + 9 legacy sprint folders to docs/archive/sprints/
+- Archived 44 evidence folders to docs/archive/evidence/
+- Archived stale loose docs (8 files) to docs/archive/stale/
+- Removed empty dirs (review-packets, handoffs/archive)
+- Deleted untracked prompt artifacts (.task_prompt, claude-code-prompt-full-setup.md, project_implementation.zip)
+
+### Archive Migration to vezir-archive
+- Created https://github.com/ahmetcagriakca/vezir-archive with 862 files
+- Removed 840+ historical files from main repo
+- Updated references in GOVERNANCE.md, DECISIONS.md, NEXT.md
+- Removed obsolete tools/generate-archive-manifest.py
+- docs/archive/ now contains only README.md pointer
 
 ## Current State
 
-- **Phase:** 10 active — S75 implementation done, closure pending
-- **Last closed sprint:** 75
-- **Sprint 75 status:** implementation_status=done, closure_status=not_started
-- **Decisions:** 143 frozen + 2 superseded (D-001 → D-146, D-126 skipped, D-143 placeholder, D-082/D-098 superseded)
-- **Tests:** 1748 backend + 239 frontend + 13 Playwright + 139 root = 2139 total (was 2081, +36 backend +22 frontend)
-- **CI:** Pending push
-- **Security:** 0 CodeQL open, 0 secret scanning, 0 dependabot critical
+- **Phase:** 10 active — S76 closed
+- **Last closed sprint:** 76
+- **Sprint 76 status:** implementation_status=done, closure_status=closed
+- **Decisions:** 144 frozen + 2 superseded (D-001 → D-147, D-126 skipped, D-143 placeholder, D-082/D-098 superseded)
+- **Tests:** 1777 backend + 239 frontend + 13 Playwright + 139 root = 2168 total
+- **CI:** All green (3/3 workflows)
+- **Security:** 0 CodeQL open, 0 secret scanning, 2 dependabot (pre-existing)
 - **PRs:** 0 open
-- **Open issues:** 6 backlog (B-148 PAT, B-153-B-157 Phase 10 — B-156/B-157 in S75)
-- **Project board:** Synced through S75
+- **Open issues:** B-148 PAT (pre-existing)
 - **Blockers:** None
+- **Archive:** Historical artifacts in vezir-archive repo
 
 ## Review History
 
 | Sprint | Claude Code | GPT |
 |--------|-------------|-----|
-| S57 | PASS | PASS (R2) |
-| S58 | PASS | PASS (R4) |
-| S59 | PASS | PASS (R2) |
-| S60 | PASS | PASS (R2) |
-| S61 | PASS | PASS (R2) |
-| S62 | PASS | PASS (R1) |
-| S63 | PASS | PASS (R2) |
-| S64 | PASS | PASS (R2) |
-| S65 | PASS | PASS (R2) |
-| S66 | PASS | PASS (R2) |
-| S67 | PASS | PASS (R2) |
-| S68 | PASS | PASS (R2) |
-| S69 | PASS | PASS (R3) |
-| S70 | — | PASS (R4) |
-| S71 | — | PASS (R8) |
-| S72 | — | PASS (R5) |
 | S73 | — | HOLD R10 → Operator Override (D-146) |
 | S74 | — | HOLD R5 → Operator Override |
-| S75 | — | Pending |
+| S75 | — | PASS (R4) |
+| S76 | — | PASS (R2) |
 
 ## Phase 10 Status
 
 | Sprint | Scope | Status |
 |--------|-------|--------|
 | S73 | Project Entity + CRUD (D-144, Faz 1) | Closed |
-| S74 | Workspace + Artifacts (D-145, Faz 2A) | Closed (operator override) |
-| S75 | Rollup + SSE + Dashboard (D-145, Faz 2B) | Implementation done |
-| S76 | TBD (D-145, Faz 3 — policy, budget, deps) | Not started |
-
-## Dependency Status
-
-No new runtime dependencies. Phase 10 adds rollup cache + SSE broadcast + dashboard UI (additive).
+| S74 | Workspace + Artifacts (D-145, Faz 2A) | Closed |
+| S75 | Rollup + SSE + Dashboard (D-145, Faz 2B) | Closed |
+| S76 | Governance Contract Hardening | Closed |
+| S77 | TBD | Not started |
 
 ## Carry-Forward
 
 | Item | Source | Status |
 |------|--------|--------|
-| S76+ impl/test separate commits | S73 retro | Required — prevents GPT review gate-timing loop |
 | PROJECT_TOKEN rotation | S23 retro | AKCA-owned, non-blocking |
 | Docker prod image optimization | D-116 | Partial — docker-compose done |
 | SSO/RBAC (full external auth) | D-104/D-108/D-117 | Partial — D-117 + isolation done |
 | D-021→D-058 extraction | S8 | AKCA-assigned decision debt |
-| Flaky test: test_cannot_approve_expired | S64 | Pre-existing timing race (timeout_seconds=0) |
-| eslint 9→10 migration | Dependabot | Deferred — needs dedicated effort |
-| react-router-dom 6→7 migration | Dependabot | Deferred — breaking API changes |
-| vite 6→8 + plugin-react 6 | Dependabot | Deferred — blocked on vite major bump |
-| test_audit_integrity WinError | Pre-existing | subprocess.py WinError 50 on Win32 — CI (Ubuntu) not affected |
-| B-148 PAT-backed Project V2 credentials | S71 T71.4 | Code-ready, blocked by GITHUB_TOKEN limitation (#358) |
+| Flaky test: test_cannot_approve_expired | S64 | Pre-existing timing race |
+| eslint 9→10 migration | Dependabot | Deferred |
+| react-router-dom 6→7 migration | Dependabot | Deferred |
+| vite 6→8 + plugin-react 6 | Dependabot | Deferred |
+| test_audit_integrity WinError | Pre-existing | Win32 only, CI not affected |
+| B-148 PAT-backed Project V2 credentials | S71 | Blocked by GITHUB_TOKEN limitation |
+| EventBus production wiring | D-147 | Future sprint — currently test-only |
 
 ## GPT Memo
 
-Session 51 (S75): Phase 10 Faz 2B — Rollup + SSE + Dashboard (D-145). 13 tasks (8 impl + 5 test). MODIFIED: project_store.py (compute_rollup, get_rollup, invalidate_rollup), project_api.py (+1 rollup endpoint → 14 total), catalog.py (+1 rollup event → 37 total), project_handler.py (SSE broadcast + rollup invalidation, accepts sse_manager/project_store), client.ts (+4 project API methods), api.ts (+7 project types). NEW: ProjectsPage.tsx (list view), ProjectDetailPage.tsx (detail view), 4 test files backend, 2 test files frontend. UPDATED: test_eventbus.py (36→37), test_project_events.py (8→9), App.tsx (+2 routes), Sidebar.tsx (+Projects nav). 58 new tests (36 backend + 22 frontend), 1748+239=1987 backend+frontend. Separate impl/test commits. OpenAPI regenerated (146 endpoints). TS types regenerated.
+Session 51 (S75+S76+Cleanup): S75 Phase 10 Faz 2B done (rollup+SSE+dashboard, 58 tests). S76 governance hardening done (auth enforcement, D-147 EventBus truth, D-129 audit ownership, 29 tests). Repo cleanup: archived 840+ historical files to vezir-archive repo, removed stale docs, cleaned empty dirs. Total: 1777 BE + 239 FE + 13 PW + 139 root = 2168. 144 frozen + 2 superseded decisions. CI green. All pushed.

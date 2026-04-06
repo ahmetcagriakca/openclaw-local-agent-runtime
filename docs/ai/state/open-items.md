@@ -91,10 +91,11 @@
 | Sprint 73 | Project Entity + CRUD (D-144, Phase 10 Faz 1) + D-146 Anti-Loop | CLOSED (operator override) |
 | Sprint 74 | Workspace + Artifacts (D-145, Phase 10 Faz 2A) | CLOSED (operator override) |
 | Sprint 75 | Rollup + SSE + Dashboard (D-145, Phase 10 Faz 2B) | CLOSED |
+| Sprint 76 | Governance Contract Hardening (Security + EventBus + Audit) | CLOSED |
 
 ## Next Sprint
 
-S76 ready: Governance Contract Hardening (Security + EventBus + Audit). Plan: `docs/sprints/sprint-76/plan.yaml`.
+S77 next: scope TBD by operator.
 
 ### Carry-Forward
 | Item | Source | Status |

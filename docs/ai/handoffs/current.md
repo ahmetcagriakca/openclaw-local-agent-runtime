@@ -37,6 +37,24 @@ Session 51: Sprint 75 + Sprint 76 + repo hygiene cleanup + archive migration —
 - Removed obsolete tools/generate-archive-manifest.py
 - docs/archive/ now contains only README.md pointer
 
+### Docs Cleanup (Phase 2)
+- Archived 8 stale loose docs from docs/ root to docs/archive/stale/
+- Moved sprint-48/49/50 kickoff docs to their archive sprint folders
+- Archived superseded gpt-review-system_v3.md (v3.1 is active)
+- Removed empty docs/review-packets/ and docs/ai/handoffs/archive/
+- Kept docs/shared/GOVERNANCE.md (GPT review prompt references it)
+
+### Dynamic Badges + README Overhaul
+- CI badges job: parses test count + coverage from pytest/vitest, generates JSON to `badges` branch
+- 6 dynamic badges via shields.io/endpoint (backend/frontend tests, coverage, decisions, phase)
+- README fully updated: test counts, endpoint count (146), decisions (144), phase (10)
+- EventBus removed from architecture diagram (D-147)
+- Archive repo link added
+
+### Issue/Milestone Cleanup
+- S75: 16 issues closed, milestone #51 closed
+- S76: 19 issues closed, milestone #52 closed
+
 ## Current State
 
 - **Phase:** 10 active — S76 closed
@@ -88,4 +106,4 @@ Session 51: Sprint 75 + Sprint 76 + repo hygiene cleanup + archive migration —
 
 ## GPT Memo
 
-Session 51 (S75+S76+Cleanup): S75 Phase 10 Faz 2B done (rollup+SSE+dashboard, 58 tests). S76 governance hardening done (auth enforcement, D-147 EventBus truth, D-129 audit ownership, 29 tests). Repo cleanup: archived 840+ historical files to vezir-archive repo, removed stale docs, cleaned empty dirs. Total: 1777 BE + 239 FE + 13 PW + 139 root = 2168. 144 frozen + 2 superseded decisions. CI green. All pushed.
+Session 51 (S75+S76+Cleanup+Badges): S75 Phase 10 Faz 2B done (rollup+SSE+dashboard, 58 tests). S76 governance hardening done (auth enforcement, D-147 EventBus truth, D-129 audit ownership, 29 tests). Repo cleanup: archived 840+ historical files to vezir-archive repo, removed stale docs, cleaned empty dirs. Dynamic CI badges (6 endpoint badges on badges branch). README overhauled. S75+S76 issues/milestones closed. Total: 1777 BE + 239 FE + 13 PW + 139 root = 2168. 144 frozen + 2 superseded decisions. CI green. All pushed.

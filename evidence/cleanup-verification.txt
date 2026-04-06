@@ -1,0 +1,8 @@
+=== Verification Summary ===
+docs/sprints/: sprint-75
+sprint-76
+legacy sprint folders: none
+docs/evidence/: removed
+archive/: removed
+state-sync: PASS
+reference sweep: 1 historical review ref (acceptable)

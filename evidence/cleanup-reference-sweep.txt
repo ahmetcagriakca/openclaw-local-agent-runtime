@@ -1,0 +1,34 @@
+docs/ai/reviews/S34-REVIEW.md:88:-> RETRO: committed at `docs/sprint34/SPRINT-34-RETRO.md`
+docs/archive/process-history/PROCESS-GATES.md:163:After closure, old copies are moved to `archive/stale/` or prefixed with `STALE — DO NOT USE FOR CLOSURE`. Two different closure truths for the same sprint cannot coexist in the active repo.
+docs/archive/sprint-13/SCOPE-MEASUREMENT.md:69:| Root (*.md) | 9 | docs/archive/stale-handoffs/ |
+docs/archive/sprint-13/SCOPE-MEASUREMENT.md:70:| docs/ai/ | 12 | docs/archive/stale-ai-docs/ |
+docs/archive/sprint-13/SCOPE-MEASUREMENT.md:71:| Sprint handoffs | 5 | docs/archive/stale-handoffs/ |
+docs/archive/sprint-13/SESSION-REPORT-20260326-B.md:48:| 13.5 Stale docs archive | 12 files moved from docs/ai/ to docs/archive/stale-ai-docs/ |
+docs/archive/sprint-13/SESSION-REPORT-20260326-B.md:96:| 12 stale docs | Moved to docs/archive/stale-ai-docs/ |
+docs/archive/sprints/sprint-13/S13-README.md:49:| 13.5 | Stale docs archive | 12 files moved from docs/ai/ to docs/archive/stale-ai-docs/ |
+docs/archive/sprints/sprint-13/S13-TASK-BREAKDOWN.md:40:| 13.5 | Stale docs archive + Turkish cleanup | DONE | 12 files → docs/archive/stale-ai-docs/ |
+docs/archive/sprints/sprint-16/S16-CLOSURE-CONFIRMATION.md:141:| Any session/temp handoff files | ARCHIVE_STALE | Move to `archive/stale/` — not closure truth. |
+docs/archive/sprints/sprint-18/vezir_repo_cleanup_audit.md:220:- archive/stale/handoff historical dumps main repo’dan
+docs/archive/sprints/sprint-36/SPRINT-36-KICKOFF.md:121:- **Produced:** `docs/sprint36/SPRINT-36-RETRO.md`
+docs/archive/sprints/sprint-36/SPRINT-36-KICKOFF.md:123:- **Verification:** `cat docs/sprint36/SPRINT-36-RETRO.md | head -20`
+docs/archive/sprints/sprint-36/SPRINT-36-KICKOFF.md:124:- **Evidence:** `docs/sprint36/SPRINT-36-RETRO.md`
+docs/archive/sprints/sprint-36/SPRINT-36-KICKOFF.md:205:| `docs/sprint36/SPRINT-36-RETRO.md` | create | RETRO | Retrospective |
+docs/archive/sprints/sprint-37/artifacts/governance-audit.md:115:`docs/sprint36/SPRINT-36-RETRO.md` has "What Went Well", "What Didn't Go Well", and "Metrics" but is missing:
+docs/archive/sprints/sprint-37/artifacts/governance-audit.md:122:**Evidence:** Full file contents of `docs/sprint36/SPRINT-36-RETRO.md` — 23 lines, no "Root Cause", "Actions", "Output" sections.
+docs/archive/sprints/sprint-37/artifacts/governance-audit.md:140:**Evidence:** `grep "backlog_ref" docs/sprint37/*.yaml` → no match, no yaml files exist.
+docs/archive/sprints/sprint-37/artifacts/governance-audit.md:219:`docs/sprint36/SPRINT-36-RETRO.md` exists (content quality flagged in F-08 separately).
+docs/archive/sprints/sprint-37/artifacts/governance-audit.md:241:| R-09 | Add Root Cause, Concrete Actions, Net Judgment to S36 retro | `docs/sprint36/SPRINT-36-RETRO.md` | P2 |
+docs/archive/sprints/sprint-37/artifacts/governance-audit.md:243:| R-11 | Create plan.yaml for S37 with backlog_ref per D-122 | `docs/sprint37/plan.yaml` | P2 |
+docs/archive/sprints/sprint-37/SPRINT-37-KICKOFF.md:99:- **Produced:** `docs/sprint37/SPRINT-37-RETRO.md`
+docs/archive/sprints/sprint-37/SPRINT-37-KICKOFF.md:101:- **Verification:** `cat docs/sprint37/SPRINT-37-RETRO.md | head -20`
+docs/archive/sprints/sprint-37/SPRINT-37-KICKOFF.md:102:- **Evidence:** `docs/sprint37/SPRINT-37-RETRO.md`
+docs/archive/sprints/sprint-37/SPRINT-37-KICKOFF.md:164:| `docs/sprint37/SPRINT-37-RETRO.md` | create | RETRO | Retrospective |
+docs/archive/stale-handoffs/PROCESS-PATCH-v4-copy.md:375:| Old phase reports | `archive/stale/` or respective sprint folder | Move/Archive | Stale quarantine |
+docs/archive/stale-handoffs/PROCESS-PATCH-v4.md:375:| Old phase reports | `archive/stale/` or respective sprint folder | Move/Archive | Stale quarantine |
+docs/archive/stale-handoffs/SPRINT-11-CLAUDE-ASSESSMENT-copy.md:172:| `archive/stale/` | Old docs that are no longer active | Stale quarantine rule unchanged |
+docs/archive/stale-handoffs/SPRINT-11-CLAUDE-ASSESSMENT-copy.md:182:| Old phase reports in `docs/phase-reports/` | Move to respective sprint folders or `archive/stale/` | Consolidation |
+docs/archive/stale-handoffs/SPRINT-11-CLAUDE-ASSESSMENT-copy.md:279:| 3 | Archive/stale cleanup | Move all stale docs to `archive/stale/`. Remove duplicates. |
+docs/archive/stale-handoffs/SPRINT-11-CLAUDE-ASSESSMENT.md:172:| `archive/stale/` | Old docs that are no longer active | Stale quarantine rule unchanged |
+docs/archive/stale-handoffs/SPRINT-11-CLAUDE-ASSESSMENT.md:182:| Old phase reports in `docs/phase-reports/` | Move to respective sprint folders or `archive/stale/` | Consolidation |
+docs/archive/stale-handoffs/SPRINT-11-CLAUDE-ASSESSMENT.md:279:| 3 | Archive/stale cleanup | Move all stale docs to `archive/stale/`. Remove duplicates. |
+.github/copilot-instructions.md:379:- Old copies are moved to `docs/archive/stale/` or prefixed with `STALE — DO NOT USE FOR CLOSURE`.

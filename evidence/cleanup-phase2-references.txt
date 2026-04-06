@@ -1,0 +1,248 @@
+docs/ai/DECISIONS.md:1288:Formal record: `docs/sprints/sprint-63/D-139-controller-decomposition.md`.
+docs/ai/GOVERNANCE.md:89:Evidence directory: `docs/sprints/sprint-{N}/artifacts/`
+docs/ai/NEXT.md:59:**Modified:** `tools/project-validator.py`, `tools/close-merged-issues.py`, `tests/test_project_validator.py`, `docs/sprints/sprint-70/plan.yaml`, `config/capabilities.json`
+docs/ai/NEXT.md:73:**New files:** `docs/decisions/D-142-intake-to-sprint-operating-model.md`, `tests/test_state_sync.py`, `docs/sprints/sprint-{69,70,71,72}/plan.yaml`
+docs/ai/NEXT.md:127:**New files:** `docs/sprints/sprint-63/responsibility-map.md`, `docs/sprints/sprint-63/D-139-controller-decomposition.md`, `docs/sprints/sprint-63/budget-data-flow.md`, `docs/sprints/sprint-63/budget-enforcement-draft.yaml`
+docs/ai/reviews/S24-REVIEW.md:30:- Evidence packet in `docs/sprints/sprint-24/artifacts/`
+docs/ai/reviews/S34-REVIEW.md:88:-> RETRO: committed at `docs/sprint34/SPRINT-34-RETRO.md`
+docs/ai/reviews/S51-REVIEW.md:35:GPT HOLD reason: evidence packet format mismatch. GPT expects `evidence/sprint-51/` with individual output files (mutation-drill.txt, lighthouse.txt, etc.). Our governance (GOVERNANCE.md Rule 7, D-132) uses `docs/sprints/sprint-{N}/closure-check-output.txt` as the canonical evidence location. All substantive evidence is present — the HOLD is about format, not quality.
+docs/ai/reviews/S54-REVIEW.md:46:  - B2: Evidence path (`docs/sprints/sprint-{N}/` vs `evidence/sprint-{N}/`) — **project convention per GOVERNANCE.md Rule 16 step 15 is `docs/sprints/sprint-{N}/`**, GPT's suggested path does not match project structure
+docs/ai/reviews/S72-GPT-REVIEW.md:6:**Delta Packet:** docs/sprints/sprint-72/review-delta-packet.md
+docs/ai/reviews/S73-GPT-REVIEW.md:6:**Delta Packet:** docs/sprints/sprint-73/review-delta-packet.md
+docs/ai/reviews/S74-GPT-REVIEW.md:6:**Delta Packet:** docs/sprints/sprint-74/review-delta-packet.md
+docs/ai/reviews/S75-GPT-REVIEW.md:6:**Delta Packet:** docs/sprints/sprint-75/review-delta-packet.md
+docs/ai/reviews/S76-GPT-REVIEW.md:6:**Delta Packet:** docs/sprints/sprint-76/review-delta-packet.md
+docs/ai/state/open-items.md:97:S76 ready: Governance Contract Hardening (Security + EventBus + Audit). Plan: `docs/sprints/sprint-76/plan.yaml`.
+docs/archive/evidence/sprint-19/final-review-verdict.md:69:| docs/sprints/sprint-19/plan.yaml | 19.1 | In main |
+docs/archive/evidence/sprint-19/final-review-verdict.md:70:| docs/sprints/sprint-19/issues.json | 19.3/19.4 | In main |
+docs/archive/evidence/sprint-19/final-review-verdict.md:71:| docs/sprints/sprint-19/SPRINT-19-TASK-BREAKDOWN.md | 19.2 | In main |
+docs/archive/evidence/sprint-19/final-review-verdict.md:72:| docs/sprints/sprint-19/S19-MID-REVIEW.md | 19.G1 | In main (PR #27) |
+docs/archive/evidence/sprint-20/final-review-verdict.md:26:| docs/sprints/sprint-20/plan.yaml | 20.1 |
+docs/archive/evidence/sprint-20/final-review-verdict.md:27:| docs/sprints/sprint-20/SPRINT-20-TASK-BREAKDOWN.md | 20.1 |
+docs/archive/evidence/sprint-20/final-review-verdict.md:28:| docs/sprints/sprint-20/PROJECT-FIELD-SCHEMA.md | 20.1 |
+docs/archive/handoffs/2026-03-27-v2.md:60:  docs/sprints/sprint-14/S14-KICKOFF-GATE.md
+docs/archive/handoffs/2026-03-27-v2.md:61:  docs/sprints/sprint-14/S14-README.md
+docs/archive/handoffs/2026-03-27-v2.md:62:  docs/sprints/sprint-14/S14-TASK-BREAKDOWN.md
+docs/archive/handoffs/2026-03-27-v2.md:65:  docs/sprints/sprint-14/S14-POST-CLOSURE-HANDOFF.md
+docs/archive/handoffs/2026-03-27-v2.md:66:  docs/sprints/sprint-14/S14-SESSION-REPORT.md
+docs/archive/handoffs/2026-03-27-v2.md:67:  docs/sprints/sprint-14/SESSION-HANDOFF.md
+docs/archive/handoffs/2026-03-27-v2.md:68:  docs/sprints/sprint-14/SPRINT-14-ADVANCE-PLAN.md
+docs/archive/handoffs/2026-03-27-v2.md:69:  docs/sprints/sprint-15/SESSION-HANDOFF.md
+docs/archive/handoffs/2026-03-27-v2.md:70:  docs/sprints/sprint-15/SPRINT-15-ADVANCE-PLAN.md
+docs/archive/handoffs/2026-03-27-v2.md:76:  docs/sprints/sprint-15/S15-CLOSURE-CONFIRMATION.md
+docs/archive/handoffs/2026-03-27-v2.md:77:  docs/sprints/sprint-15/S15-EVIDENCE-AUDIT-RESULT.md
+docs/archive/handoffs/2026-03-27-v2.md:102:| PLACED | `S16-CLOSURE-CONFIRMATION.md` | → `docs/sprints/sprint-16/` |
+docs/archive/handoffs/2026-03-27-v2.md:103:| PLACED | `S16-EVIDENCE-AUDIT-RESULT.md` | → `docs/sprints/sprint-16/` |
+docs/archive/phase-reports/PHASE-5D-SPRINT-12-POLISH-CLOSURE.md:80:  docs/sprints/sprint-12/SPRINT-12-MID-REVIEW.md
+docs/archive/phase-reports/PHASE-5D-SPRINT-12-POLISH-CLOSURE.md:81:  docs/sprints/sprint-12/SPRINT-12-FINAL-REVIEW.md
+docs/archive/phase-reports/PHASE-5D-SPRINT-12-POLISH-CLOSURE.md:82:  docs/sprints/sprint-12/SPRINT-12-RETROSPECTIVE.md
+docs/archive/phase-reports/PHASE-5D-SPRINT-12-POLISH-CLOSURE.md:83:  docs/sprints/sprint-12/SPRINT-12-CLOSURE-SUMMARY.md
+docs/archive/process-history/PROCESS-GATES.md:57:| `docs/sprints/sprint-{N}/` directory created with `artifacts/` subfolder | Copilot |
+docs/archive/process-history/PROCESS-GATES.md:71:3. Evidence produced and saved to `docs/sprints/sprint-{N}/artifacts/`
+docs/archive/process-history/PROCESS-GATES.md:92:Evidence directory: `docs/sprints/sprint-{N}/artifacts/`
+docs/archive/process-history/PROCESS-GATES.md:281:All new sprints use `docs/sprints/sprint-{N}/` from Sprint 12 onward.
+docs/archive/process-history/PROCESS-GATES.md:284:docs/sprints/sprint-{N}/
+docs/archive/process-history/PROCESS-GATES.md:331:- All NEW sprint material goes to `docs/sprints/sprint-12/` + `artifacts/`
+docs/archive/review-packets/S16-REVIEW-PACKET.md:48:- NON-COMPLIANT path: evidence at 'docs/sprints/sprint-16/evidence' not 'evidence/sprint-16' (process debt)
+docs/archive/review-packets/S17-REVIEW-PACKET.md:46:- BLOCKER: Evidence directory not found (checked: evidence/sprint-17, docs/sprints/sprint-17/evidence)
+docs/archive/review-packets/S17-REVIEW-PACKET.md:47:- BLOCKER: Sprint doc directory not found under docs/sprints/sprint-17/
+docs/archive/sprint-12/S12-KICKOFF-GATE.md:3:**Repo path:** `docs/sprints/sprint-12/SPRINT-12-KICKOFF-GATE.md`
+docs/archive/sprint-12/S12-KICKOFF-GATE.md:28:| 15 | Sprint folder created | ✅ DONE | docs/sprints/sprint-12/ |
+docs/archive/sprint-12/S12-README.md:3:**Repo path:** `docs/sprints/sprint-12/README.md`
+docs/archive/sprint-12/S12-TASK-BREAKDOWN.md:3:**Repo path:** `docs/sprints/sprint-12/SPRINT-12-TASK-BREAKDOWN.md`
+docs/archive/sprint-12/S12-TASK-BREAKDOWN.md:113:find docs/sprints/sprint-12/ -type f
+docs/archive/sprint-12/SPRINT-12-GPT-KICKOFF-PACKET.md:29:**File:** `docs/sprints/sprint-12/SPRINT-12-README.md` (canonical sprint entry point)
+docs/archive/sprint-12/SPRINT-12-GPT-KICKOFF-PACKET.md:44:**File:** `docs/sprints/sprint-12/SPRINT-12-KICKOFF-GATE.md`
+docs/archive/sprint-12/SPRINT-12-GPT-KICKOFF-PACKET.md:61:**File:** `docs/sprints/sprint-12/SPRINT-12-TASK-BREAKDOWN.md`
+docs/archive/sprint-12/SPRINT-12-GPT-KICKOFF-PACKET.md:121:**File:** `docs/sprints/sprint-12/DECISIONS-DELTA-D097-D101.md`
+docs/archive/sprint-12/SPRINT-12-GPT-KICKOFF-PACKET.md:203:ls -la docs/sprints/sprint-12/
+docs/archive/sprint-12/SPRINT-12-GPT-KICKOFF-PACKET.md:222:| 10 | Folder structure matches convention | docs/sprints/sprint-12/ + evidence/sprint-12/ |
+docs/archive/sprint-12/SPRINT-12-SESSION-REPORT.md:155:docs/sprints/sprint-12/*.md         — Sprint dokümanları (8 dosya)
+docs/archive/sprint-13/SCOPE-MEASUREMENT.md:36:| docs/sprints/sprint-12/ | 17 | Closed — all closure docs present |
+docs/archive/sprint-13/SCOPE-MEASUREMENT.md:37:| docs/sprints/sprint-13/ | 7 | Review pending |
+docs/archive/sprint-13/SCOPE-MEASUREMENT.md:38:| docs/sprints/sprint-14/ | 5 | Advance plan + kickoff draft |
+docs/archive/sprint-13/SCOPE-MEASUREMENT.md:101:| docs/sprints/sprint-13/ | Zero Turkish |
+docs/archive/sprints/sprint-12/S12-EVIDENCE-AUDIT-RESULT.md:137:- Misplaced moved: D-102-ARCHITECTURE-SPEC, KNOWN-ISSUES-PATCH-PLAN → `docs/sprints/sprint-13/`
+docs/archive/sprints/sprint-12/S12-EVIDENCE-AUDIT-RESULT.md:144:**Final canonical manifest — `docs/sprints/sprint-12/`:**
+docs/archive/sprints/sprint-12/SPRINT-12-KICKOFF-GATE.md:57:| E1 | Sprint folder created: `docs/sprints/sprint-12/` | ✅ DONE | Folder exists with SPRINT-12-README + kickoff + breakdown |
+docs/archive/sprints/sprint-12/SPRINT-12-KICKOFF-GATE.md:59:| E3 | All Sprint 12 narrative docs placed in `docs/sprints/sprint-12/` | ✅ DONE | No Sprint 12 docs at repo root |
+docs/archive/sprints/sprint-12/SPRINT-12-KICKOFF-GATE.md:79:| 1 | `docs/sprints/sprint-12/SPRINT-12-README.md` | Sprint entry point |
+docs/archive/sprints/sprint-12/SPRINT-12-KICKOFF-GATE.md:80:| 2 | `docs/sprints/sprint-12/SPRINT-12-KICKOFF-GATE.md` | Gate checklist |
+docs/archive/sprints/sprint-12/SPRINT-12-KICKOFF-GATE.md:81:| 3 | `docs/sprints/sprint-12/SPRINT-12-TASK-BREAKDOWN.md` | Full plan |
+docs/archive/sprints/sprint-12/SPRINT-12-KICKOFF-GATE.md:82:| 4 | `docs/sprints/sprint-12/DECISIONS-DELTA-D097-D101.md (archived → docs/archive/sprint-12/)` | Decision context |
+docs/archive/sprints/sprint-12/SPRINT-12-README.md:79:Evidence is NOT stored under `docs/`. Narrative docs live in `docs/sprints/sprint-12/`. Raw outputs live in `evidence/sprint-12/`. Never mixed.
+docs/archive/sprints/sprint-12/SPRINT-12-README.md:142:| Phase 5 closure report | docs/sprints/sprint-12/SPRINT-12-PHASE-CLOSURE.md | Sprint-local |
+docs/archive/sprints/sprint-12/SPRINT-12-README.md:178:This file and all Sprint 12 narrative docs live at `docs/sprints/sprint-12/` in the repo. Block E verified: `ls docs/sprints/sprint-12/` confirms physical placement.
+docs/archive/sprints/sprint-12/SPRINT-12-TASK-BREAKDOWN.md:55:6. Sprint folder `docs/sprints/sprint-12/` + evidence folder `evidence/sprint-12/` created
+docs/archive/sprints/sprint-12/SPRINT-12-TASK-BREAKDOWN.md:168:**Output:** `docs/sprints/sprint-12/SPRINT-12-MID-REVIEW.md`
+docs/archive/sprints/sprint-12/SPRINT-12-TASK-BREAKDOWN.md:324:**Output:** `docs/sprints/sprint-12/SPRINT-12-FINAL-REVIEW.md`
+docs/archive/sprints/sprint-12/SPRINT-12-TASK-BREAKDOWN.md:329:**Output:** `docs/sprints/sprint-12/SPRINT-12-RETROSPECTIVE.md`
+docs/archive/sprints/sprint-12/SPRINT-12-TASK-BREAKDOWN.md:343:- `docs/sprints/sprint-12/SPRINT-12-CLOSURE-SUMMARY.md`
+docs/archive/sprints/sprint-12/SPRINT-12-TASK-BREAKDOWN.md:393:find docs/sprints/sprint-12/ -type f
+docs/archive/sprints/sprint-12/SPRINT-12-TASK-BREAKDOWN.md:453:| docs/sprints/sprint-12/README.md | Create | kickoff | — |
+docs/archive/sprints/sprint-12/SPRINT-12-TASK-BREAKDOWN.md:454:| docs/sprints/sprint-12/SPRINT-12-KICKOFF-GATE.md | Create | kickoff | — |
+docs/archive/sprints/sprint-12/SPRINT-12-TASK-BREAKDOWN.md:455:| docs/sprints/sprint-12/SPRINT-12-TASK-BREAKDOWN.md | Create | kickoff | — |
+docs/archive/sprints/sprint-14/S14-KICKOFF-GATE.md:20:| 5 | docs/sprints/sprint-14/ directory ready | Copilot | DONE |
+docs/archive/sprints/sprint-14/S14-KICKOFF-GATE.md:43:| 1 | docs/sprints/sprint-14/S14-README.md |
+docs/archive/sprints/sprint-14/S14-KICKOFF-GATE.md:44:| 2 | docs/sprints/sprint-14/S14-KICKOFF-GATE.md |
+docs/archive/sprints/sprint-14/S14-KICKOFF-GATE.md:45:| 3 | docs/sprints/sprint-14/S14-TASK-BREAKDOWN.md |
+docs/archive/sprints/sprint-15/S15-CLOSURE-CONFIRMATION.md:32:12/12 files in `docs/sprints/sprint-15/evidence/`:
+docs/archive/sprints/sprint-15/S15-CLOSURE-CONFIRMATION.md:51:Sprint 15 evidence lives under `docs/sprints/sprint-15/evidence/` rather than `evidence/sprint-15/`. This follows the sprint's own evidence checklist (12 OTel-specific files) rather than the generic 16-file baseline used in S14A/S14B. The evidence is complete per the sprint's own definition.
+docs/archive/sprints/sprint-15/S15-CLOSURE-SUMMARY.md:17:| 7 | Evidence | 12 files in `docs/sprints/sprint-15/evidence/` |
+docs/archive/sprints/sprint-15/S15-EVIDENCE-AUDIT-RESULT.md:10:12 files verified in `docs/sprints/sprint-15/evidence/`:
+docs/archive/sprints/sprint-15/S15-EVIDENCE-AUDIT-RESULT.md:42:| N-1 | Non-blocking | Evidence path is `docs/sprints/sprint-15/evidence/` not `evidence/sprint-15/` | Sprint 15 defined its own 12-file checklist. Path consistent with sprint's own definition. Noted in S15-CLOSURE-CONFIRMATION.md. |
+docs/archive/sprints/sprint-15/S15-README.md:72:12 evidence files in `docs/sprints/sprint-15/evidence/`.
+docs/archive/sprints/sprint-16/S16-CLOSURE-CONFIRMATION.md:100:**Finding:** Evidence under `docs/sprints/sprint-16/evidence/` instead of `evidence/sprint-16/`.
+docs/archive/sprints/sprint-16/S16-CLOSURE-CONFIRMATION.md:159:| `S16-README.md` | `docs/sprints/sprint-16/` |
+docs/archive/sprints/sprint-16/S16-CLOSURE-CONFIRMATION.md:160:| `S16-CLOSURE-SUMMARY.md` | `docs/sprints/sprint-16/` |
+docs/archive/sprints/sprint-16/S16-CLOSURE-CONFIRMATION.md:161:| `S16-RETROSPECTIVE.md` | `docs/sprints/sprint-16/` |
+docs/archive/sprints/sprint-16/S16-CLOSURE-CONFIRMATION.md:162:| `S16-CLOSURE-CONFIRMATION.md` | `docs/sprints/sprint-16/` |
+docs/archive/sprints/sprint-16/S16-CLOSURE-CONFIRMATION.md:163:| `S16-EVIDENCE-AUDIT-RESULT.md` | `docs/sprints/sprint-16/` |
+docs/archive/sprints/sprint-16/S16-CLOSURE-CONFIRMATION.md:164:| Evidence bundle | `docs/sprints/sprint-16/evidence/` |
+docs/archive/sprints/sprint-16/S16-CLOSURE-SUMMARY.md:22:| 12 | Evidence | 18 files in `docs/sprints/sprint-16/evidence/` |
+docs/archive/sprints/sprint-16/S16-EVIDENCE-AUDIT-RESULT.md:6:**Evidence path:** `docs/sprints/sprint-16/evidence/`
+docs/archive/sprints/sprint-16/S16-EVIDENCE-AUDIT-RESULT.md:20:All files in `docs/sprints/sprint-16/evidence/`, verified non-empty:
+docs/archive/sprints/sprint-16/S16-EVIDENCE-AUDIT-RESULT.md:86:**Gap:** Evidence under `docs/sprints/sprint-16/evidence/` instead of `evidence/sprint-16/`.
+docs/archive/sprints/sprint-16/S16-README.md:132:18 evidence files in `docs/sprints/sprint-16/evidence/`.
+docs/archive/sprints/sprint-18/sprint-18-plan.md:28:| **18.0** | Freeze D-111→D-114 in DECISIONS.md, create `docs/sprints/sprint-18/` with kickoff doc |
+docs/archive/sprints/sprint-18/vezir_repo_cleanup_audit.md:385:- `docs/sprints/sprint-17/*`
+docs/archive/sprints/sprint-19/S19-FINAL-REVIEW.md:69:| docs/sprints/sprint-19/plan.yaml | 19.1 | In main |
+docs/archive/sprints/sprint-19/S19-FINAL-REVIEW.md:70:| docs/sprints/sprint-19/issues.json | 19.3/19.4 | In main |
+docs/archive/sprints/sprint-19/S19-FINAL-REVIEW.md:71:| docs/sprints/sprint-19/SPRINT-19-TASK-BREAKDOWN.md | 19.2 | In main |
+docs/archive/sprints/sprint-19/S19-FINAL-REVIEW.md:72:| docs/sprints/sprint-19/S19-MID-REVIEW.md | 19.G1 | In main (PR #27) |
+docs/archive/sprints/sprint-19/SPRINT-19-TASK-BREAKDOWN.md:13:Create `docs/sprints/sprint-19/plan.yaml` with full schema. Include: sprint metadata, authority block, issue config, all tasks with IDs/titles/types/branch_names, validation flags.
+docs/archive/sprints/sprint-20/S20-FINAL-REVIEW.md:26:| docs/sprints/sprint-20/plan.yaml | 20.1 |
+docs/archive/sprints/sprint-20/S20-FINAL-REVIEW.md:27:| docs/sprints/sprint-20/SPRINT-20-TASK-BREAKDOWN.md | 20.1 |
+docs/archive/sprints/sprint-20/S20-FINAL-REVIEW.md:28:| docs/sprints/sprint-20/PROJECT-FIELD-SCHEMA.md | 20.1 |
+docs/archive/sprints/sprint-23/S23-KICKOFF.md:23:4. **Closure:** artifacts under `docs/sprints/sprint-23/artifacts/`.
+docs/archive/sprints/sprint-23/S23-KICKOFF.md:51:- [ ] `python tools/validate-plan-sync.py docs/sprints/sprint-23/` → PASS
+docs/archive/sprints/sprint-23/SPRINT-23-TASK-BREAKDOWN.md:109:**Evidence required:** Before/after `check-stale-refs.py` output in `docs/sprints/sprint-23/artifacts/`
+docs/archive/sprints/sprint-23/SPRINT-23-TASK-BREAKDOWN.md:123:All implementation task branches merged to `main`; evidence under `docs/sprints/sprint-23/artifacts/`; operator sets `closure_status=closed`.
+docs/archive/sprints/sprint-24/S24-KICKOFF.md:41:- [ ] `python tools/validate-plan-sync.py docs/sprints/sprint-24/` → PASS
+docs/archive/sprints/sprint-24/SPRINT-24-TASK-BREAKDOWN.md:157:All implementation task branches merged to `main`; evidence under `docs/sprints/sprint-24/artifacts/`; GPT operator sets `closure_status=closed`.
+docs/archive/stale-handoffs/PROCESS-PATCH-v4-copy.md:44:**Produced:** Tasks 12.1→12.6 complete. Mid-review report draft at docs/sprints/sprint-12/SPRINT-12-MID-REVIEW.md
+docs/archive/stale-handoffs/PROCESS-PATCH-v4-copy.md:53:**Produced:** All tasks done. Report draft + evidence at docs/sprints/sprint-12/
+docs/archive/stale-handoffs/PROCESS-PATCH-v4-copy.md:104:**Report draft goes to:** `docs/sprints/sprint-{N}/SPRINT-{N}-FINAL-REVIEW.md`
+docs/archive/stale-handoffs/PROCESS-PATCH-v4-copy.md:198:### Rule: All new sprints use `docs/sprints/sprint-{N}/` from Sprint 12 onward.
+docs/archive/stale-handoffs/PROCESS-PATCH-v4-copy.md:201:docs/sprints/sprint-12/
+docs/archive/stale-handoffs/PROCESS-PATCH-v4-copy.md:322:| P-06 | `docs/sprints/sprint-{N}/` with `artifacts/` subfolder | R-05 + User directive + GPT patch | Sprint 12 |
+docs/archive/stale-handoffs/PROCESS-PATCH-v4-copy.md:360:- All NEW sprint material goes to `docs/sprints/sprint-12/` + `artifacts/`
+docs/archive/stale-handoffs/PROCESS-PATCH-v4-copy.md:370:| `evidence/sprint-11/*.txt` | `docs/sprints/sprint-11/artifacts/` | Move | Update closure script path check |
+docs/archive/stale-handoffs/PROCESS-PATCH-v4-copy.md:371:| `evidence/sprint-10/*.txt` | `docs/sprints/sprint-10/artifacts/` | Move | Historical only |
+docs/archive/stale-handoffs/PROCESS-PATCH-v4-copy.md:374:| `docs/ai/SPRINT-12-CLOSURE-GATE.md` | `docs/sprints/sprint-12/` | Move | Sprint-specific |
+docs/archive/stale-handoffs/PROCESS-PATCH-v4.md:44:**Produced:** Tasks 12.1→12.6 complete. Mid-review report draft at docs/sprints/sprint-12/SPRINT-12-MID-REVIEW.md
+docs/archive/stale-handoffs/PROCESS-PATCH-v4.md:53:**Produced:** All tasks done. Report draft + evidence at docs/sprints/sprint-12/
+docs/archive/stale-handoffs/PROCESS-PATCH-v4.md:104:**Report draft goes to:** `docs/sprints/sprint-{N}/SPRINT-{N}-FINAL-REVIEW.md`
+docs/archive/stale-handoffs/PROCESS-PATCH-v4.md:198:### Rule: All new sprints use `docs/sprints/sprint-{N}/` from Sprint 12 onward.
+docs/archive/stale-handoffs/PROCESS-PATCH-v4.md:201:docs/sprints/sprint-12/
+docs/archive/stale-handoffs/PROCESS-PATCH-v4.md:322:| P-06 | `docs/sprints/sprint-{N}/` with `artifacts/` subfolder | R-05 + User directive + GPT patch | Sprint 12 |
+docs/archive/stale-handoffs/PROCESS-PATCH-v4.md:360:- All NEW sprint material goes to `docs/sprints/sprint-12/` + `artifacts/`
+docs/archive/stale-handoffs/PROCESS-PATCH-v4.md:370:| `evidence/sprint-11/*.txt` | `docs/sprints/sprint-11/artifacts/` | Move | Update closure script path check |
+docs/archive/stale-handoffs/PROCESS-PATCH-v4.md:371:| `evidence/sprint-10/*.txt` | `docs/sprints/sprint-10/artifacts/` | Move | Historical only |
+docs/archive/stale-handoffs/PROCESS-PATCH-v4.md:374:| `docs/ai/SPRINT-12-CLOSURE-GATE.md` | `docs/sprints/sprint-12/` | Move | Sprint-specific |
+docs/archive/stale-handoffs/SPRINT-11-CLAUDE-ASSESSMENT-copy.md:64:This supersedes the original GPT proposal of separate `evidence/sprint-{N}/` and `docs/sprints/sprint-{N}/`.
+docs/archive/stale-handoffs/SPRINT-11-CLAUDE-ASSESSMENT-copy.md:73:| 2 | All sprint material under `docs/sprints/sprint-{N}/` (including evidence) | **ACCEPT** | One sprint = one folder. No jumping between trees. Operator opens one folder, sees everything. Raw outputs and human-readable docs coexist but are clearly named. | Folder gets large for big sprints. Mitigated by clear naming convention. | New folder structure below. |
+docs/archive/stale-handoffs/SPRINT-11-CLAUDE-ASSESSMENT-copy.md:168:| `docs/sprints/sprint-{N}/` | Narrative sprint docs (SPRINT-{N}-*.md) + README.md | Human-readable planning/review/retrospective at folder root |
+docs/archive/stale-handoffs/SPRINT-11-CLAUDE-ASSESSMENT-copy.md:169:| `docs/sprints/sprint-{N}/artifacts/` | Raw evidence outputs (*.txt, review-*.md) | Raw outputs only. Never mixed with narrative docs at same level |
+docs/archive/stale-handoffs/SPRINT-11-CLAUDE-ASSESSMENT-copy.md:178:| `evidence/sprint-{N}/` | Move contents into `docs/sprints/sprint-{N}/artifacts/`, delete empty `evidence/` tree | All sprint material in one folder, raw outputs under artifacts/ |
+docs/archive/stale-handoffs/SPRINT-11-CLAUDE-ASSESSMENT-copy.md:181:| `docs/ai/SPRINT-12-CLOSURE-GATE.md` | Move to `docs/sprints/sprint-12/SPRINT-12-CLOSURE-GATE.md` | Sprint-specific |
+docs/archive/stale-handoffs/SPRINT-11-CLAUDE-ASSESSMENT-copy.md:214:The `{N}.MID` and `{N}.FINAL` review tasks now have an explicit prerequisite: "report draft exists in `docs/sprints/sprint-{N}/`."
+docs/archive/stale-handoffs/SPRINT-11-CLAUDE-ASSESSMENT-copy.md:233:All sprint material goes under `docs/sprints/sprint-{N}/`. No separate evidence tree. Narrative docs (SPRINT-{N}-*.md) at folder root. Raw outputs under `artifacts/` subfolder. Never mix narrative and raw at the same level.
+docs/archive/stale-handoffs/SPRINT-11-CLAUDE-ASSESSMENT-copy.md:278:| 2 | Folder structure migration | Move existing sprint material into `docs/sprints/sprint-{N}/` + `artifacts/`. Delete empty `evidence/` tree. |
+docs/archive/stale-handoffs/SPRINT-11-CLAUDE-ASSESSMENT-copy.md:286:| 10 | sprint-closure-check.sh update | Update script paths from `evidence/sprint-{N}/` to `docs/sprints/sprint-{N}/artifacts/`. |
+docs/archive/stale-handoffs/SPRINT-11-CLAUDE-ASSESSMENT-copy.md:299:| 2 | Zero files in `evidence/` (all moved to `docs/sprints/sprint-{N}/artifacts/`) |
+docs/archive/stale-handoffs/SPRINT-11-CLAUDE-ASSESSMENT-copy.md:305:| 8 | closure-check.sh paths updated to `docs/sprints/sprint-{N}/artifacts/` and working |
+docs/archive/stale-handoffs/SPRINT-11-CLAUDE-ASSESSMENT-copy.md:336:| A-07 | Folder structure: `docs/sprints/sprint-{N}/` with `artifacts/` subfolder | Copilot | Sprint 12 kickoff (new), Sprint 13 (migration) |
+docs/archive/stale-handoffs/SPRINT-11-CLAUDE-ASSESSMENT-copy.md:338:| A-09 | Update closure script paths to `docs/sprints/sprint-{N}/artifacts/` | Copilot | When migration happens |
+docs/archive/stale-handoffs/SPRINT-11-CLAUDE-ASSESSMENT.md:64:This supersedes the original GPT proposal of separate `evidence/sprint-{N}/` and `docs/sprints/sprint-{N}/`.
+docs/archive/stale-handoffs/SPRINT-11-CLAUDE-ASSESSMENT.md:73:| 2 | All sprint material under `docs/sprints/sprint-{N}/` (including evidence) | **ACCEPT** | One sprint = one folder. No jumping between trees. Operator opens one folder, sees everything. Raw outputs and human-readable docs coexist but are clearly named. | Folder gets large for big sprints. Mitigated by clear naming convention. | New folder structure below. |
+docs/archive/stale-handoffs/SPRINT-11-CLAUDE-ASSESSMENT.md:168:| `docs/sprints/sprint-{N}/` | Narrative sprint docs (SPRINT-{N}-*.md) + README.md | Human-readable planning/review/retrospective at folder root |
+docs/archive/stale-handoffs/SPRINT-11-CLAUDE-ASSESSMENT.md:169:| `docs/sprints/sprint-{N}/artifacts/` | Raw evidence outputs (*.txt, review-*.md) | Raw outputs only. Never mixed with narrative docs at same level |
+docs/archive/stale-handoffs/SPRINT-11-CLAUDE-ASSESSMENT.md:178:| `evidence/sprint-{N}/` | Move contents into `docs/sprints/sprint-{N}/artifacts/`, delete empty `evidence/` tree | All sprint material in one folder, raw outputs under artifacts/ |
+docs/archive/stale-handoffs/SPRINT-11-CLAUDE-ASSESSMENT.md:181:| `docs/ai/SPRINT-12-CLOSURE-GATE.md` | Move to `docs/sprints/sprint-12/SPRINT-12-CLOSURE-GATE.md` | Sprint-specific |
+docs/archive/stale-handoffs/SPRINT-11-CLAUDE-ASSESSMENT.md:214:The `{N}.MID` and `{N}.FINAL` review tasks now have an explicit prerequisite: "report draft exists in `docs/sprints/sprint-{N}/`."
+docs/archive/stale-handoffs/SPRINT-11-CLAUDE-ASSESSMENT.md:233:All sprint material goes under `docs/sprints/sprint-{N}/`. No separate evidence tree. Narrative docs (SPRINT-{N}-*.md) at folder root. Raw outputs under `artifacts/` subfolder. Never mix narrative and raw at the same level.
+docs/archive/stale-handoffs/SPRINT-11-CLAUDE-ASSESSMENT.md:278:| 2 | Folder structure migration | Move existing sprint material into `docs/sprints/sprint-{N}/` + `artifacts/`. Delete empty `evidence/` tree. |
+docs/archive/stale-handoffs/SPRINT-11-CLAUDE-ASSESSMENT.md:286:| 10 | sprint-closure-check.sh update | Update script paths from `evidence/sprint-{N}/` to `docs/sprints/sprint-{N}/artifacts/`. |
+docs/archive/stale-handoffs/SPRINT-11-CLAUDE-ASSESSMENT.md:299:| 2 | Zero files in `evidence/` (all moved to `docs/sprints/sprint-{N}/artifacts/`) |
+docs/archive/stale-handoffs/SPRINT-11-CLAUDE-ASSESSMENT.md:305:| 8 | closure-check.sh paths updated to `docs/sprints/sprint-{N}/artifacts/` and working |
+docs/archive/stale-handoffs/SPRINT-11-CLAUDE-ASSESSMENT.md:336:| A-07 | Folder structure: `docs/sprints/sprint-{N}/` with `artifacts/` subfolder | Copilot | Sprint 12 kickoff (new), Sprint 13 (migration) |
+docs/archive/stale-handoffs/SPRINT-11-CLAUDE-ASSESSMENT.md:338:| A-09 | Update closure script paths to `docs/sprints/sprint-{N}/artifacts/` | Copilot | When migration happens |
+docs/archive/stale-handoffs/sprint-12-handoff-old.md:30:- Phase 5 kapatıldı, docs/sprints/sprint-12/ altında tüm dokümanlar
+docs/decisions/D-132-sprint-folder-naming.md:9:All sprint evidence and artifacts use the canonical path `docs/sprints/sprint-NN/`.
+docs/decisions/D-132-sprint-folder-naming.md:13:- Sprint folders: `docs/sprints/sprint-{number}/` (e.g., `docs/sprints/sprint-50/`)
+docs/decisions/D-132-sprint-folder-naming.md:16:- CI workflows reference `docs/sprints/sprint-{N}/` format
+docs/decisions/D-132-sprint-folder-naming.md:22:- Flattened `docs/sprints/evidence/sprint-NN/` to `docs/sprints/sprint-NN/`
+docs/decisions/D-132-sprint-folder-naming.md:26:- CI workflows (issue-from-plan, close-sprint-issues, closure-preflight) already use `docs/sprints/sprint-{N}/` format
+docs/phase-reports/SPRINT-15-OTEL-OBSERVABILITY.md:127:docs/sprints/sprint-15/evidence/         (12 evidence files)
+docs/sprint-48-debt-first-hybrid-final-v5.md:122:1. `docs/sprints/sprint-{N}/` — S23-S32
+docs/sprint-48-debt-first-hybrid-final-v5.md:127:1. `docs/sprints/sprint-{23..32}/` ile `docs/archive/sprints/` arasında çakışma audit
+docs/sprint-48-debt-first-hybrid-final-v5.md:132:**Explicit constraint:** Bu task **path rename/migration yapmaz.** `docs/sprint{N}/` → `docs/sprints/sprint-{N}/` dönüşümü S49 scope'u. S48'de sadece duplicate temizliği ve durum tespiti.
+docs/sprint-50-api-devex-governance.md:83:Sprint folder structure has nested `docs/sprints/docs/sprints/` legacy path. Standardize to flat `docs/sprints/sprint-NN/`.
+docs/sprint-50-api-devex-governance.md:91:| 50.12 | Freeze D-132 decision | Write D-132 decision: canonical sprint folder path = `docs/sprints/sprint-NN/` |
+docs/sprint-50-api-devex-governance.md:95:- All sprint evidence in `docs/sprints/sprint-NN/`
+docs/sprint33/SPRINT-33-RETRO.md:21:3. **Evidence dizin tutarsızlığı** — Brief `docs/sprints/sprint-33/artifacts/` diyor, gerçek lokasyon `evidence/sprint-33/`. Standardize edilmeli.
+docs/sprint36/SPRINT-36-KICKOFF.md:121:- **Produced:** `docs/sprint36/SPRINT-36-RETRO.md`
+docs/sprint36/SPRINT-36-KICKOFF.md:123:- **Verification:** `cat docs/sprint36/SPRINT-36-RETRO.md | head -20`
+docs/sprint36/SPRINT-36-KICKOFF.md:124:- **Evidence:** `docs/sprint36/SPRINT-36-RETRO.md`
+docs/sprint36/SPRINT-36-KICKOFF.md:205:| `docs/sprint36/SPRINT-36-RETRO.md` | create | RETRO | Retrospective |
+docs/sprint37/artifacts/governance-audit.md:81:Note: S33-S37 use `docs/sprint{N}/` pattern (no `s`), not `docs/sprints/sprint-{N}/`, creating an additional inconsistency.
+docs/sprint37/artifacts/governance-audit.md:115:`docs/sprint36/SPRINT-36-RETRO.md` has "What Went Well", "What Didn't Go Well", and "Metrics" but is missing:
+docs/sprint37/artifacts/governance-audit.md:122:**Evidence:** Full file contents of `docs/sprint36/SPRINT-36-RETRO.md` — 23 lines, no "Root Cause", "Actions", "Output" sections.
+docs/sprint37/artifacts/governance-audit.md:140:**Evidence:** `grep "backlog_ref" docs/sprint37/*.yaml` → no match, no yaml files exist.
+docs/sprint37/artifacts/governance-audit.md:173:S23-S32 use `docs/sprints/sprint-{N}/` pattern. S33-S37 use `docs/sprint{N}/` (no `sprints/` parent, no hyphen). No decision or documented reason for the path change.
+docs/sprint37/artifacts/governance-audit.md:219:`docs/sprint36/SPRINT-36-RETRO.md` exists (content quality flagged in F-08 separately).
+docs/sprint37/artifacts/governance-audit.md:237:| R-05 | Archive docs/sprints/sprint-23 through sprint-32 to docs/archive/sprints/ | `docs/sprints/sprint-{23..32}/` | P1 |
+docs/sprint37/artifacts/governance-audit.md:241:| R-09 | Add Root Cause, Concrete Actions, Net Judgment to S36 retro | `docs/sprint36/SPRINT-36-RETRO.md` | P2 |
+docs/sprint37/artifacts/governance-audit.md:243:| R-11 | Create plan.yaml for S37 with backlog_ref per D-122 | `docs/sprint37/plan.yaml` | P2 |
+docs/sprint37/artifacts/governance-audit.md:244:| R-12 | Standardize sprint folder naming (decide: `docs/sprints/sprint-N/` or `docs/sprintN/`) | governance decision needed | P3 |
+docs/sprint37/SPRINT-37-KICKOFF.md:99:- **Produced:** `docs/sprint37/SPRINT-37-RETRO.md`
+docs/sprint37/SPRINT-37-KICKOFF.md:101:- **Verification:** `cat docs/sprint37/SPRINT-37-RETRO.md | head -20`
+docs/sprint37/SPRINT-37-KICKOFF.md:102:- **Evidence:** `docs/sprint37/SPRINT-37-RETRO.md`
+docs/sprint37/SPRINT-37-KICKOFF.md:164:| `docs/sprint37/SPRINT-37-RETRO.md` | create | RETRO | Retrospective |
+docs/sprints/sprint-54/plan.md:92:| `docs/sprints/sprint-54/closure-check-output.txt` | Closure evidence |
+docs/sprints/sprint-55/plan.md:28:- Closure evidence in `docs/sprints/sprint-55/closure-check-output.txt` (D-132 convention)
+docs/sprints/sprint-55/plan.md:112:| `docs/sprints/sprint-55/closure-check-output.txt` | Closure evidence (D-132) |
+docs/sprints/sprint-55/plan.md:128:**Note:** Project closure evidence convention per D-132 and GOVERNANCE.md Rule 16 step 15 is `docs/sprints/sprint-{N}/closure-check-output.txt` — single file containing all verification output.
+docs/sprints/sprint-56/file-manifest.md:27:| Closure check output | `docs/sprints/sprint-56/closure-check-output.txt` |
+docs/sprints/sprint-56/file-manifest.md:29:| Retrospective | `docs/sprints/sprint-56/retrospective.md` |
+docs/sprints/sprint-56/file-manifest.md:30:| File manifest | `docs/sprints/sprint-56/file-manifest.md` |
+docs/sprints/sprint-57/file-manifest.md:34:| Closure check | `docs/sprints/sprint-57/closure-check-output.txt` |
+docs/sprints/sprint-57/file-manifest.md:35:| Retrospective | `docs/sprints/sprint-57/retrospective.md` |
+docs/sprints/sprint-57/file-manifest.md:36:| File manifest | `docs/sprints/sprint-57/file-manifest.md` |
+docs/sprints/sprint-63/D-139-controller-decomposition.md:82:- `docs/sprints/sprint-63/responsibility-map.md` — full method mapping
+docs/sprints/sprint-63/D-139-controller-decomposition.md:83:- `docs/sprints/sprint-63/budget-data-flow.md` — budget enforcement design
+docs/sprints/sprint-63/D-139-controller-decomposition.md:84:- `docs/sprints/sprint-63/budget-enforcement-draft.yaml` — rule draft
+docs/sprints/sprint-72/review-delta-packet.md:57:| T72.1 | Y (e7d0da4) | Y (no test change) | Y (`evidence/sprint-72/`) | Y (`docs/sprints/sprint-72/implementation-notes.md` T72.1 section) | Y (`docs/sprints/sprint-72/file-manifest.md` Modified Files table) |
+docs/sprints/sprint-72/review-delta-packet.md:58:| T72.2 | Y (9187bc6) | Y (37/37 in T72.3) | Y (`evidence/sprint-72/pre-impl-check-output.txt`) | Y (`docs/sprints/sprint-72/implementation-notes.md` T72.2 section) | Y (`docs/sprints/sprint-72/file-manifest.md` New Files table) |
+docs/sprints/sprint-72/review-delta-packet.md:59:| T72.3 | Y (688c43e) | Y (37/37 `evidence/sprint-72/pytest-output.txt`) | Y (`evidence/sprint-72/pytest-output.txt`) | Y (`docs/sprints/sprint-72/implementation-notes.md` T72.3 section) | Y (`docs/sprints/sprint-72/file-manifest.md` New Files table) |
+docs/sprints/sprint-72/review-delta-packet.md:103:| P3 | B3 | Created `docs/sprints/sprint-72/implementation-notes.md` and `docs/sprints/sprint-72/file-manifest.md` as independent authoritative artifacts; updated DONE 5/5 table to reference these files per task | N/A (artifact creation) | `docs/sprints/sprint-72/implementation-notes.md`, `docs/sprints/sprint-72/file-manifest.md` |
+docs/sprints/sprint-72/review-delta-packet.md:161:### E. Implementation Notes — `docs/sprints/sprint-72/implementation-notes.md`
+docs/sprints/sprint-72/review-delta-packet.md:164:### F. File Manifest — `docs/sprints/sprint-72/file-manifest.md`
+docs/sprints/sprint-73/review-delta-packet.md:79: docs/sprints/sprint-73/plan.yaml      (NEW)  — sprint plan
+docs/sprints/sprint-74/review-delta-packet.md:59:| `docs/sprints/sprint-74/plan.yaml` | ~60 | Sprint plan |
+docs/sprints/sprint-75/review-delta-packet.md:69: docs/sprints/sprint-75/plan.yaml                  | 114 +++++++++++++++
+docs/sprints/sprint-76/review-delta-packet.md:43:| Kickoff Gate | yes | PASS | docs/sprints/sprint-76/plan.yaml — 18 tasks, P1/P2/P3 sequential |
+docs/sprints/sprint-76/review-delta-packet.md:87: docs/sprints/sprint-76/plan.yaml                   | 119 +++++++++++++
+docs/STASH-BOOTSTRAP-PROMPT.md:411:docs/sprints/sprint-N/
+tools/ask-gpt-review.sh:7:#         docs/sprints/sprint-{N}/review-delta-packet.md (filled delta packet)
+tools/ask-gpt-review.sh:29:DELTA_PACKET="$REPO_ROOT/docs/sprints/sprint-${SPRINT}/review-delta-packet.md"
+tools/ask-gpt-review.sh:171:**Delta Packet:** docs/sprints/sprint-${SPRINT}/review-delta-packet.md
+tools/blocker-resolution-check.sh:12:DELTA_PACKET="$REPO_ROOT/docs/sprints/sprint-${SPRINT}/review-delta-packet.md"
+tools/close-merged-issues.py:4:Usage: python tools/close-merged-issues.py docs/sprints/sprint-19/
+tools/close-merged-issues.py:5:       python tools/close-merged-issues.py docs/sprints/sprint-20/
+tools/generate-archive-manifest.py:17:    sprint_dir = Path(f"docs/sprints/sprint-{sprint}")
+tools/generate-review-packet.py:24:    sprint_dir = Path(f"docs/sprints/sprint-{sprint}")
+tools/pre-implementation-check.py:177:        return CheckResult("PLAN_YAML_EXISTS", False, f"docs/sprints/sprint-{sprint_num}/plan.yaml not found")
+tools/review-loop.sh:29:SPRINT_DIR="$REPO_ROOT/docs/sprints/sprint-${SPRINT}"
+tools/sprint-audit.py:36:    "docs/sprints/sprint-{N}/evidence",
+tools/sprint-audit.py:39:    "docs/sprints/sprint-{N}",
+tools/sprint-audit.py:290:        result["blockers"].append(f"BLOCKER: Sprint doc directory not found under docs/sprints/sprint-{n}/")
+tools/sprint-finalize.sh:105:for tmpl in "evidence/sprint-${SPRINT}" "docs/sprints/sprint-${SPRINT}/evidence"; do
+tools/sprint-finalize.sh:114:    check_fail "Evidence directory not found (checked evidence/sprint-$SPRINT and docs/sprints/sprint-$SPRINT/evidence)"
+tools/sprint-finalize.sh:140:SPRINT_DIR="$REPO_ROOT/docs/sprints/sprint-$SPRINT"
+tools/sprint-finalize.sh:144:    check_fail "Sprint doc directory missing: docs/sprints/sprint-$SPRINT"
+tools/sprint-plan.sh:92:    PREV_README="$REPO_ROOT/docs/sprints/sprint-${PREV}/S${PREV}-README.md"
+tools/update-pr-linkage.py:4:Usage: python tools/update-pr-linkage.py docs/sprints/sprint-19/
+tools/update-pr-linkage.py:5:       python tools/update-pr-linkage.py docs/sprints/sprint-20/
+tools/validate-plan-sync.py:4:Usage: python tools/validate-plan-sync.py docs/sprints/sprint-19/

@@ -299,6 +299,7 @@ class TestDefaultRules:
             "sourceFreshness": {"mission_age_seconds": 100},
             "timeoutConfig": {"missionSeconds": 3600},
             "tenantLimits": {"max_stages": 15},
+            "environment": "development",  # S76 P1.5: default-allow is condition-gated
         }
         mission = {"stages": [1, 2], "approval_state": "approved"}
         result = engine.evaluate(ctx, mission)

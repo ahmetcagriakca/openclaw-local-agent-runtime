@@ -4,10 +4,10 @@ Tests that:
 1. No matching rules → deny (fail-closed)
 2. default-allow.yaml is condition-gated (not unconditional)
 """
-import yaml
 from pathlib import Path
 
 import pytest
+import yaml
 
 
 class TestDefaultAllowYaml:

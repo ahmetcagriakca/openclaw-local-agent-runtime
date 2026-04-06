@@ -11,8 +11,6 @@ import os
 from pathlib import Path
 from unittest.mock import patch
 
-import pytest
-
 
 class TestAuditWriterSeparation:
     """P3.5: Verify 3 writers target distinct files."""

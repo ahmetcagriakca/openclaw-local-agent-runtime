@@ -1,8 +1,8 @@
 # Mid Review Gate — Sprint 73
 
 **Gate ID:** 73.MID
-**Timestamp:** 2026-04-06T10:30:00Z
-**Decision:** PASS
+**Timestamp:** 2026-04-06T13:04:22+0300 (commit 8f8eae3)
+**Decision:** WAIVED (single-commit exception, see mid-gate-waiver.md)
 **Reviewer:** Claude Code (automated)
 
 ## Criteria

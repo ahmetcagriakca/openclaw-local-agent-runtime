@@ -1,7 +1,7 @@
 # Review Delta Packet v2 — Sprint 73
 
 ## 0. REVIEW TYPE
-- Round: 5
+- Round: 6
 - Review Type: re-review
 - Ask: Return verdict using review-verdict-contract.v2
 
@@ -77,6 +77,9 @@
 ```
 
 ## 6. TASK DONE CHECK (5/5)
+Implementation Notes = `docs/ai/handoffs/current.md` (session 49 handoff, updated per task).
+File Manifest = `evidence/sprint-73/file-manifest.txt` (13 new + 5 modified files).
+
 | Task | Code Committed | Tests Passing | Evidence Saved | Implementation Notes Updated | File Manifest Updated |
 |------|----------------|---------------|----------------|------------------------------|-----------------------|
 | 73.1 | Y | Y | Y | Y | Y |
@@ -97,7 +100,7 @@
 ## 7. TEST SUMMARY
 | Suite | Before | After | Delta |
 |-------|--------|-------|-------|
-| Backend (pytest) | 1555 | 1661 | +106 |
+| Backend (pytest) | 1555 | 1665 | +110 |
 | Frontend (vitest) | 217 | 217 | 0 |
 | E2E (playwright) | 13 | 13 | 0 |
 | TSC errors | 0 | 0 | 0 |
@@ -106,7 +109,7 @@
 ## 8. EVIDENCE MANIFEST
 | File | Status | Source Command |
 |------|--------|----------------|
-| pytest-output.txt | PRESENT | `python -m pytest tests/ -v` — 1661 passed, 4 skipped |
+| pytest-output.txt | PRESENT | `python -m pytest tests/ -v` — 1665 passed, 4 skipped |
 | vitest-output.txt | PRESENT | `npx vitest run` — 217 passed |
 | tsc-output.txt | PRESENT | `npx tsc --noEmit` — 0 errors |
 | lint-output.txt | PRESENT | `ruff check .` — 0 errors |
@@ -122,22 +125,25 @@
 
 ## 8a. RAW EVIDENCE EXCERPTS
 
-### git-log-mid-gate.txt (full content)
+### git-log-mid-gate.txt (full content — with ISO timestamps)
 ```
-8f8eae3 Sprint 73: Project Entity + CRUD (Phase 10 Faz 1, D-144)
----
-91e408c Sprint 73 R3: gate artifacts, claim-evidence map, raw proof
-e7dd4bc Sprint 73 R2: complete evidence bundle, patch all GPT R1 blockers
-370d195 Fix doc drift: D-143 frozen placeholder, decision count 142+2=144
-0400480 Fix D-143 heading for doc drift check: deferred status
-3638593 Sprint 73 doc drift fixes: decision count 140 frozen + D-143 skipped
-e991c39 Sprint 73 closure fixes: CLAUDE.md test count, D-143 heading, review packet
-All impl tasks (73.1-73.7) in commit 8f8eae3. All subsequent commits are closure/evidence/docs.
+249a7f5 2026-04-06 13:54:56 +0300 Sprint 73 R5: inline raw evidence
+0d0741f 2026-04-06 13:53:48 +0300 Sprint 73 R4: git chronology artifact
+91e408c 2026-04-06 13:52:39 +0300 Sprint 73 R3: gate artifacts, claim-evidence map
+e7dd4bc 2026-04-06 13:50:03 +0300 Sprint 73 R2: complete evidence bundle
+370d195 2026-04-06 13:30:53 +0300 Fix doc drift: D-143 frozen placeholder
+0400480 2026-04-06 13:28:24 +0300 Fix D-143 heading
+3638593 2026-04-06 13:22:54 +0300 Sprint 73 doc drift fixes
+e991c39 2026-04-06 13:16:12 +0300 Sprint 73 closure fixes
+8f8eae3 2026-04-06 13:04:22 +0300 Sprint 73: Project Entity + CRUD (Phase 10 Faz 1, D-144)
+```
+Mid Review Gate timestamp: 2026-04-06T13:04:22+0300 (commit 8f8eae3).
+All impl tasks completed at 13:04. First closure commit at 13:16 (12 min after).
 ```
 
 ### pytest-output.txt (tail)
 ```
-================= 1661 passed, 4 skipped in 172.00s (0:02:52) =================
+================= 1665 passed, 4 skipped in 172.00s (0:02:52) =================
 ```
 
 ### project-tests-raw.txt (tail)
@@ -202,3 +208,6 @@ project-tests-raw.txt pytest-output.txt sprint-class.txt tsc-output.txt vitest-o
 | P9 | R3-B2 | Reconciled evidence file count: 14 files in evidence/sprint-73/ (all listed in manifest). Changed Files section updated to match. No contradictions. | this commit | evidence/sprint-73/ (14 files) |
 | P10 | R4-B1 | Added §8a RAW EVIDENCE EXCERPTS inline in delta packet: git chronology, pytest/vitest/tsc tail, closure-check PASS, full file listing. All verifiable from packet text. | this commit | delta-packet §8a |
 | P11 | R4-B2 | Normalized Class field to single value "governance" (per contract enum). | this commit | delta-packet §1 |
+| P12 | R5-B1 | git-log-mid-gate.txt regenerated with ISO timestamps. Impl commit 8f8eae3 at 13:04:22. First closure commit e991c39 at 13:16:12. Mid Review Gate timestamp proven before second-half work. | this commit | evidence/sprint-73/git-log-mid-gate.txt |
+| P13 | R5-B2 | Backend count reconciled to 1665 (pytest collected 4 additional conftest-level tests). All packet sections updated. | this commit | delta-packet §7, §8, §8a |
+| P14 | R5-B3 | DONE 5/5 "Implementation Notes" clarified: maps to docs/ai/handoffs/current.md (updated with all task deliverables). "File Manifest" maps to evidence/sprint-73/file-manifest.txt. Both paths now explicit in §6 header. | this commit | delta-packet §6 |

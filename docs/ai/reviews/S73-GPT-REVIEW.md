@@ -8,7 +8,7 @@
 ---
 
 ```markdown
-# Sprint 73 Review — Round 9
+# Sprint 73 Review — Round 10
 
 ## 1. Sprint / Phase / Model Metadata
 - Sprint: 73
@@ -24,28 +24,28 @@ HOLD
 Not eligible for closure
 
 ## 4. Scope Reviewed
-- Round 9 delta patches (P19-P20) and waiver authority/citation updates
-- Mid Review Gate waiver validity against frozen decision evidence
+- Round 10 re-review delta (P21, P22) and waiver authority evidence for Mid Review Gate
+- Gate timing/validity and closure evidence consistency for Sprint 73
 
 ## 5. Accepted Findings
-- D-105 is now explicitly cited in the packet with waiver authority reference.
-- Mid-gate waiver artifact path is provided (`evidence/sprint-73/mid-gate-waiver.md`).
+- Final Review Gate raw artifact is present: `evidence/sprint-73/closure-check-output.txt` with pass claim.
+- Evidence bundle includes raw test outputs (`pytest-output.txt`, `vitest-output.txt`, `tsc-output.txt`, `build-output.txt`, `lint-output.txt`) under `evidence/sprint-73/`.
 
 ## 6. Blocking Findings
-- B1 — Waiver authority is asserted from `docs/ai/GOVERNANCE.md` instead of frozen `DECISIONS.md` D-105 text; no raw excerpt of D-105 proving waiver clause is provided. [evidence: authority claim cites non-frozen governance doc; missing direct D-105 proof]
-- B2 — Mid Review Gate requirement says gate must exist as a real task and pass before second-half gated work; packet still models gate as `WAIVED` rather than a passed gate task with frozen-decision-backed exception semantics. [evidence: §3 Gate Status shows “Mid Review Gate | WAIVED”]
+- B1 — Mid Review Gate is still not proven to have passed before second-half gated work; packet states single-commit implementation+tests (`8f8eae3`) and also claims gate pass before second-half work, which is unverifiable as a distinct precondition checkpoint. [evidence: `git-log-mid-gate.txt`, `commit-8f8eae3-stat.txt`, Mid Gate narrative]
+- B2 — Waiver authority remains unsupported by higher-priority frozen decision text as provided; packet cites both `DECISIONS.md` and `GOVERNANCE.md` language but only excerpt artifact is submitter-provided and not independently verifiable here, while gate exception is closure-critical. [evidence: reliance on `evidence/sprint-73/d105-waiver-excerpt.txt` without independently validated frozen source lines]
 
 ## 7. Required Patch Set
-- P1 (B1) — Add raw evidence artifact under `evidence/sprint-73/` containing exact D-105 clause text (or immutable reference with excerpt) that explicitly permits gate waivers; update packet to cite D-105 as primary authority, with governance doc only secondary.
-- P2 (B2) — Normalize Mid Review Gate status to contract-compliant pass semantics with explicit “waiver-approved pass” task record (timestamp, criteria, approver basis, before second-half boundary), or provide frozen rule text that explicitly allows `WAIVED` as valid gate status.
+- P1 (B1) — Provide a distinct, timestamped Mid Review Gate pass artifact generated before any second-half gated work commit(s), or split chronology to show first-half completion commit, then gate pass, then second-half commits; include raw git commands proving order.
+- P2 (B2) — Add raw, full-context frozen-source extracts (not paraphrase) for D-105 and governing waiver rule from canonical repo paths with line ranges and command output (`git show`/`sed -n`), and map exact clause authorizing this specific waiver pattern.
 
 ## 8. PASS Criteria
-- Frozen decision evidence directly proves waiver authority for this gate.
-- Mid Review Gate representation is contract-valid and temporally compliant.
+- Mid Review Gate timing is independently proven as a real precondition checkpoint (or explicitly authorized equivalent) before second-half gated work.
+- Waiver authority is proven from canonical frozen sources with raw, reproducible evidence.
 
 ## 9. Final Judgment
-HOLD until waiver authority and gate-status semantics are proven with frozen-source evidence and contract-valid gate state.
+HOLD due to unresolved Mid Review Gate precondition proof and waiver-authority verification gaps.
 
 ## 10. Next Step
-Claude Code patch + rerun evidence + resubmit Round 10
+Claude Code patch + rerun evidence + resubmit Round 11
 ```

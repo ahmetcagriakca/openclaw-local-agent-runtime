@@ -1,11 +1,11 @@
 # Next Steps — Vezir Platform
 
 **Last updated:** 2026-04-06
-**Current:** Phase 9 active. Sprint 71 review pending. S72 session protocol enforcement next.
+**Current:** Phase 9 active. Sprint 71 closed. S72 session protocol enforcement next.
 
 ---
 
-## Sprint 71 — Intake Gate + Workflow Writer Enforcement (REVIEW PENDING)
+## Sprint 71 — Intake Gate + Workflow Writer Enforcement (CLOSED)
 
 **Model:** A (full closure) | **Class:** Governance
 **Scope:** D-142 intake gate tool, issue-from-plan writer contract, project-auto-add field init (code-ready, blocked by PAT credential), governance patch
@@ -15,7 +15,7 @@
 **New files:** `tools/task-intake.py`, `tests/test_task_intake.py`
 **Modified:** `.github/workflows/issue-from-plan.yml`, `.github/workflows/project-auto-add.yml`, `docs/ai/GOVERNANCE.md`, `docs/ai/state/open-items.md`
 **PRs:** #356 (implementation)
-**Review:** GPT R7 pending
+**Review:** GPT PASS (R8)
 **Evidence:** `evidence/sprint-71/`
 
 ---

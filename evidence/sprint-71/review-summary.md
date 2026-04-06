@@ -37,4 +37,4 @@ manual board sync (closure step 9). Follow-up: B-148 PAT-backed Project V2 crede
 
 ## Review Verdict
 
-GPT review: R6 HOLD → R7 pending (re-scoped T71.4)
+GPT review: PASS (R8)

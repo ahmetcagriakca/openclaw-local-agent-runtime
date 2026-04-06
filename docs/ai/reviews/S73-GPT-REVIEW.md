@@ -8,7 +8,7 @@
 ---
 
 ```markdown
-# Sprint 73 Review — Round 8
+# Sprint 73 Review — Round 9
 
 ## 1. Sprint / Phase / Model Metadata
 - Sprint: 73
@@ -24,28 +24,28 @@ HOLD
 Not eligible for closure
 
 ## 4. Scope Reviewed
-- Round 8 re-review delta: P17–P18 (mid-gate waiver + timestamp reconciliation)
-- Gate validity and evidence consistency for Sprint 73 closure packet
+- Round 9 delta patches (P19-P20) and waiver authority/citation updates
+- Mid Review Gate waiver validity against frozen decision evidence
 
 ## 5. Accepted Findings
-- Final Review Gate artifact is present with raw output reference (`evidence/sprint-73/closure-check-output.txt`).
-- Evidence bundle includes core raw test outputs (`pytest-output.txt`, `vitest-output.txt`, `tsc-output.txt`, `build-output.txt`, `lint-output.txt`).
+- D-105 is now explicitly cited in the packet with waiver authority reference.
+- Mid-gate waiver artifact path is provided (`evidence/sprint-73/mid-gate-waiver.md`).
 
 ## 6. Blocking Findings
-- B1 — Mid Review Gate is marked `WAIVED`, but packet provides no frozen decision citation proving waiver is allowed under governing rules; claim references “D-105 Model A” only in patch notes, not in Decisions section or linked frozen artifact for this sprint. [evidence: §3 Gate Status says WAIVED; §4 Decisions lists only D-144/D-145; waiver basis unproven]
-- B2 — Re-review scope rule violated: Round 8 packet includes broad re-assertions and full-sprint claims beyond patch-only verification, preventing strict delta validation. [evidence: Round=8 re-review, but sections 2/6/7/9 restate full implementation/test claims rather than patch-only proof]
+- B1 — Waiver authority is asserted from `docs/ai/GOVERNANCE.md` instead of frozen `DECISIONS.md` D-105 text; no raw excerpt of D-105 proving waiver clause is provided. [evidence: authority claim cites non-frozen governance doc; missing direct D-105 proof]
+- B2 — Mid Review Gate requirement says gate must exist as a real task and pass before second-half gated work; packet still models gate as `WAIVED` rather than a passed gate task with frozen-decision-backed exception semantics. [evidence: §3 Gate Status shows “Mid Review Gate | WAIVED”]
 
 ## 7. Required Patch Set
-- P1 (B1) — Add explicit frozen governance authority for mid-gate waiver to sprint packet: cite exact decision ID/file (e.g., `docs/ai/DECISIONS.md` entry and underlying frozen decision doc) that permits Model A single-commit Mid Review Gate waiver; include raw excerpt in sprint evidence and cross-link from `mid-gate-waiver.md`.
-- P2 (B2) — Submit Round 9 as strict delta packet: include only newly changed artifacts and verification for unresolved blockers; remove non-delta re-assertions and keep scope to waiver-proof chain + any directly impacted evidence.
+- P1 (B1) — Add raw evidence artifact under `evidence/sprint-73/` containing exact D-105 clause text (or immutable reference with excerpt) that explicitly permits gate waivers; update packet to cite D-105 as primary authority, with governance doc only secondary.
+- P2 (B2) — Normalize Mid Review Gate status to contract-compliant pass semantics with explicit “waiver-approved pass” task record (timestamp, criteria, approver basis, before second-half boundary), or provide frozen rule text that explicitly allows `WAIVED` as valid gate status.
 
 ## 8. PASS Criteria
-- Mid Review Gate waiver authority is proven by frozen decision evidence and is traceable in sprint-scoped artifacts.
-- Round 9 packet follows re-review delta-only contract with no scope laundering.
+- Frozen decision evidence directly proves waiver authority for this gate.
+- Mid Review Gate representation is contract-valid and temporally compliant.
 
 ## 9. Final Judgment
-HOLD until waiver authority is proven from frozen governance sources and re-review is resubmitted as strict delta.
+HOLD until waiver authority and gate-status semantics are proven with frozen-source evidence and contract-valid gate state.
 
 ## 10. Next Step
-Claude Code patch + rerun evidence + resubmit Round 9
+Claude Code patch + rerun evidence + resubmit Round 10
 ```

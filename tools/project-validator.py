@@ -21,8 +21,7 @@ OWNER = "ahmetcagriakca"
 PROJECT_NUMBER = 4
 CURRENT_CONTRACT_SPRINT = 31  # D-122: full contract starts at S31
 TASK_ID_PATTERN = re.compile(r"\[S\d+-\d+\.\w+\]")
-# Closed sprints — add new closed sprints here
-CLOSED_SPRINTS = set(range(19, 33))  # S19-S32 are closed
+SPRINT_MILESTONE_PATTERN = re.compile(r"^Sprint\s+(\d+)$", re.IGNORECASE)
 
 # Fail codes per GPT P6
 BLANK_STATUS = "BLANK_STATUS"
@@ -59,6 +58,39 @@ class ProjectItem:
     milestone: Optional[str]
     labels: list = field(default_factory=list)
     item_class: str = ""  # Classification result
+
+
+def derive_closed_sprints() -> set[int]:
+    """Derive closed sprints from GitHub milestones (state=closed).
+
+    Queries all closed milestones matching 'Sprint N' pattern.
+    Falls back to empty set on API failure (findings will still surface
+    CLOSED_SPRINT_OPEN_ISSUE if the set can be populated).
+    """
+    closed: set[int] = set()
+    page = 1
+    while True:
+        result = subprocess.run(
+            ["gh", "api", f"repos/{OWNER}/vezir/milestones",
+             "--method", "GET",
+             "-f", "state=closed",
+             "-f", f"page={page}",
+             "-f", "per_page=100"],
+            capture_output=True, text=True,
+        )
+        if result.returncode != 0:
+            print(f"Warning: could not fetch milestones (page {page}): {result.stderr}",
+                  file=sys.stderr)
+            break
+        milestones = json.loads(result.stdout)
+        if not milestones:
+            break
+        for ms in milestones:
+            m = SPRINT_MILESTONE_PATTERN.match(ms.get("title", ""))
+            if m:
+                closed.add(int(m.group(1)))
+        page += 1
+    return closed
 
 
 def run_gh_graphql(query: str) -> dict:
@@ -173,7 +205,7 @@ def classify_item(item: ProjectItem) -> str:
     return "unclassified"
 
 
-def validate_item(item: ProjectItem) -> list[Finding]:
+def validate_item(item: ProjectItem, closed_sprints: set[int] | None = None) -> list[Finding]:
     """Validate a single item per D-123/D-125."""
     findings = []
 
@@ -214,7 +246,7 @@ def validate_item(item: ProjectItem) -> list[Finding]:
             add(INVALID_SPRINT_FORMAT, "FAIL", f"Sprint field value '{item.sprint}' is not a valid integer")
 
         # Closed sprint + open issue check (D-125)
-        if item.sprint is not None and int(item.sprint) in CLOSED_SPRINTS and item.state == "OPEN":
+        if item.sprint is not None and closed_sprints and int(item.sprint) in closed_sprints and item.state == "OPEN":
             add(CLOSED_SPRINT_OPEN_ISSUE, "FAIL",
                 f"Issue OPEN but Sprint {int(item.sprint)} is closed")
 
@@ -235,6 +267,9 @@ def validate_item(item: ProjectItem) -> list[Finding]:
 def main():
     json_mode = "--json" in sys.argv
 
+    # Derive closed sprints dynamically from GitHub milestones
+    closed_sprints = derive_closed_sprints()
+
     items = fetch_project_items()
     all_findings: list[Finding] = []
 
@@ -244,7 +279,7 @@ def main():
 
     # Validate all items
     for item in items:
-        findings = validate_item(item)
+        findings = validate_item(item, closed_sprints)
         all_findings.extend(findings)
 
     # Separate by severity
@@ -258,6 +293,7 @@ def main():
         output = {
             "valid": is_valid,
             "total_items": len(items),
+            "closed_sprints_count": len(closed_sprints),
             "classifications": {},
             "findings": [
                 {
@@ -287,6 +323,7 @@ def main():
     else:
         print(f"=== Project V2 Board Validator ===")
         print(f"Total items: {len(items)}")
+        print(f"Closed sprints (from milestones): {len(closed_sprints)} ({min(closed_sprints) if closed_sprints else '-'}-{max(closed_sprints) if closed_sprints else '-'})")
         print()
 
         # Classification summary

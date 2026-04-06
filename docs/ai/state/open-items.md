@@ -95,7 +95,7 @@
 
 ## Next Sprint
 
-S77 next: scope TBD by operator.
+S77 in progress: Azure OpenAI Provider Foundation (D-148).
 
 ### Carry-Forward
 | Item | Source | Status |

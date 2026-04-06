@@ -1,9 +1,9 @@
 # Current State
 
-**Last updated:** 2026-04-06
-**Active phase:** Phase 10 — Sprint 76 closed
+**Last updated:** 2026-04-07
+**Active phase:** Phase 10 — Sprint 76 closed, Sprint 77 in progress
 **Doc model:** This file is canonical for system state. Session context lives in `docs/ai/handoffs/current.md`.
-**Note:** All sprints through 53 closed. S54 deferred. S55-S74 closed. All P1 backlog items complete (50/50). Phase 10 active (S73+). Phase 9 complete (S69-S72). Phase 8 complete (S60-S68). 144 frozen + 2 superseded decisions (D-001 → D-147, D-126 skipped, D-143 placeholder, D-082/D-098 superseded). Governance: 20-step closure checklist. Review pipeline: max 5 rounds + ESCALATE (D-146).
+**Note:** All sprints through 53 closed. S54 deferred. S55-S76 closed. S77 in progress. All P1 backlog items complete (50/50). Phase 10 active (S73+). Phase 9 complete (S69-S72). Phase 8 complete (S60-S68). 145 frozen + 2 superseded decisions (D-001 → D-148, D-126 skipped, D-143 placeholder, D-082/D-098 superseded). Governance: 20-step closure checklist. Review pipeline: max 5 rounds + ESCALATE (D-146).
 **Persistence:** State is file-persisted (state.json, mission.json). Mission history via persistence layer (Sprint 16).
 **API:** Vezir API on 127.0.0.1:8003 (FastAPI + Uvicorn). Schemas FROZEN (D-067). SSE on /api/v1/events/stream. Dashboard API + Alert API + Telemetry Query API (Sprint 16).
 **Frontend:** React dashboard on localhost:3000 (Vite + Tailwind). SSE live updates + polling fallback + intervention buttons + monitoring dashboard. Node.js 20 required.
@@ -135,6 +135,8 @@
 | Sprint 73 | Project Entity + CRUD (D-144) — Phase 10 | Closed |
 | Sprint 74 | Workspace + Artifacts (D-145) — Phase 10 | Closed |
 | Sprint 75 | Rollup + SSE + Dashboard (D-145 Faz 2B) — Phase 10 | Closed |
+| Sprint 76 | Governance Contract Hardening — Phase 10 | Closed |
+| Sprint 77 | Azure OpenAI Provider Foundation (D-148) — Phase 10 | In Progress |
 
 ## Test Evidence
 
@@ -185,7 +187,7 @@
 
 ## Architectural Decisions
 
-144 frozen + 2 superseded decisions (D-001 through D-147, D-126 skipped, D-143 placeholder, D-082/D-098 superseded S62). See `docs/ai/DECISIONS.md`. Recent: D-144 project aggregate contract, D-145 workspace/artifact boundary, D-146 review max round + escalation, D-147 EventBus operational status (S76). Governance: 20-step closure checklist.
+145 frozen + 2 superseded decisions (D-001 through D-148, D-126 skipped, D-143 placeholder, D-082/D-098 superseded S62). See `docs/ai/DECISIONS.md`. Recent: D-144 project aggregate contract, D-145 workspace/artifact boundary, D-146 review max round + escalation, D-147 EventBus operational status (S76), D-148 Azure OpenAI primary provider adoption (S77). Governance: 20-step closure checklist.
 
 ## Port Map
 

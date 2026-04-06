@@ -1,6 +1,6 @@
 # Architectural Decisions
 
-**Last updated:** 2026-04-06 (D-145)
+**Last updated:** 2026-04-07 (D-148)
 
 All decisions below are frozen unless marked otherwise.
 Reopening requires explicit phase gate approval + operator sign-off.
@@ -1348,11 +1348,18 @@ Formal record: `docs/decisions/D-146-review-max-round-escalation.md`.
 EventBus classified as internal test/development infrastructure, NOT a production control plane. Controller does not pass EventBus to runner. No startup wiring. Handler registration is test-only. OTel tracing/metrics operate independently. Future sprint may upgrade to production status with startup evidence.
 Formal record: `docs/decisions/D-147-eventbus-operational-status.md`.
 
+### D-148: Azure OpenAI Primary Provider Adoption
+
+**Phase:** Sprint 77 (Phase 10) | **Status:** Frozen
+
+Azure OpenAI = default primary provider for agent calls. Existing OpenAI/Anthropic/Ollama = controlled fallback. Responses API contract mandatory. All providers normalized to single canonical internal request schema (TaskRequest/ProviderResponse). Retirement-aware deployment guard mandatory. Fallback deterministic (unsupported capability, unhealthy, budget exceed → reroute). Provider choice traceable in telemetry. Kill switch: `azure.enabled=false` → all traffic falls back. No Azure-specific branching outside provider layer.
+Formal record: `docs/decisions/D-148-azure-primary-provider.md`.
+
 ---
 
-## Decision Index (D-001 → D-147)
+## Decision Index (D-001 → D-148)
 
-144 frozen + 2 superseded decisions. D-126 skipped, D-132 deferred, D-143 skipped, D-082/D-098 superseded.
+145 frozen + 2 superseded decisions. D-126 skipped, D-132 deferred, D-143 skipped, D-082/D-098 superseded.
 
 | ID | Title | Phase |
 |----|-------|-------|
@@ -1503,3 +1510,4 @@ Formal record: `docs/decisions/D-147-eventbus-operational-status.md`.
 | D-145 | Project Workspace and Artifact Boundary | Sprint 74-75 |
 | D-146 | Review Max Round + Escalation Rule | Sprint 73 |
 | D-147 | EventBus Operational Status | Sprint 76 |
+| D-148 | Azure OpenAI Primary Provider Adoption | Sprint 77 |

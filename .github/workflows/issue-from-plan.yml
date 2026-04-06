@@ -76,6 +76,28 @@ jobs:
               print(f"FAIL: Invalid YAML in {plan_path}: {e}")
               sys.exit(1)
 
+          # D-142: Validate plan.yaml structure
+          required_keys = {"sprint", "phase", "title", "model", "status", "tasks"}
+          missing_keys = required_keys - set(plan.keys())
+          if missing_keys:
+              print(f"FAIL: plan.yaml missing required keys: {sorted(missing_keys)}")
+              sys.exit(1)
+          if plan.get("sprint") != int(sprint):
+              print(f"FAIL: plan.yaml sprint={plan.get('sprint')}, expected {sprint}")
+              sys.exit(1)
+          if plan.get("model") not in ("A", "B"):
+              print(f"FAIL: plan.yaml model='{plan.get('model')}' invalid (expected A or B)")
+              sys.exit(1)
+          for t in plan.get("tasks", []):
+              if not isinstance(t, dict):
+                  print(f"FAIL: task is not a dict: {t}")
+                  sys.exit(1)
+              for key in ("id", "title", "type"):
+                  if key not in t:
+                      print(f"FAIL: task {t.get('id', '?')} missing required key: {key}")
+                      sys.exit(1)
+          print(f"plan.yaml validated: {len(plan.get('tasks', []))} tasks, model={plan.get('model')}")
+
           issue_config = plan.get("issue", {})
           parent_title = issue_config.get("parent_title", f"[S{sprint}] Sprint {sprint}")
           labels = issue_config.get("labels", [])
@@ -83,6 +105,7 @@ jobs:
 
           repo = os.environ.get("GITHUB_REPOSITORY", "")
           marker_prefix = "vezir-task"
+          milestone_title = issue_config.get("milestone", f"Sprint {sprint}")
 
           def gh(*args):
               """Run gh CLI command and return output."""
@@ -91,6 +114,15 @@ jobs:
               if result.returncode != 0:
                   print(f"gh error: {result.stderr}")
               return result.stdout.strip(), result.returncode
+
+          # D-142: Ensure milestone exists
+          ms_out, ms_rc = gh("api", f"repos/{repo}/milestones",
+                             "--jq", f'.[] | select(.title == "{milestone_title}") | .number')
+          if ms_rc != 0 or not ms_out.strip():
+              print(f"Creating milestone: {milestone_title}")
+              gh("api", f"repos/{repo}/milestones", "-f", f"title={milestone_title}", "-f", "state=open")
+          else:
+              print(f"Milestone exists: {milestone_title} (#{ms_out.strip()})")
 
           def find_issue_by_marker(marker):
               """Search for existing issue by HTML comment marker."""
@@ -150,6 +182,7 @@ jobs:
               out, rc = gh("issue", "create",
                           "--title", parent_title,
                           "--body", parent_body,
+                          "--milestone", milestone_title,
                           *label_args)
               if rc == 0:
                   # Extract issue number from URL
@@ -226,6 +259,7 @@ jobs:
               out, rc = gh("issue", "create",
                           "--title", child_title,
                           "--body", child_body,
+                          "--milestone", milestone_title,
                           *label_args)
 
               if rc == 0:
@@ -250,6 +284,7 @@ jobs:
                   }
 
           # --- Write issues.json ---
+          issues_mapping["milestone"] = milestone_title
           issues_json_path = f"docs/sprints/sprint-{sprint}/issues.json"
           with open(issues_json_path, "w") as f:
               json.dump(issues_mapping, f, indent=2)

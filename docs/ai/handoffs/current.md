@@ -17,16 +17,16 @@ Session 46: Sprint 70 implementation complete. Phase 9 — Validator/Closer Drif
 
 ## Current State
 
-- **Phase:** 9 active — S69 closed, S70 implementation done (GPT review pending)
-- **Last closed sprint:** 69
+- **Phase:** 9 active — S70 closed
+- **Last closed sprint:** 70
 - **Decisions:** 139 frozen + 2 superseded (D-001 → D-142, D-126 skipped, D-132 deferred, D-082/D-098 superseded)
 - **Tests:** 1555 backend + 217 frontend + 13 Playwright + 60 root-level = 1845 total (was 1795, +19 new root + 31 existing root = 60 root)
 - **CI:** All green (2 pre-existing WinError failures in test_audit_integrity — subprocess.py on Win32)
 - **Security:** 0 CodeQL open, 0 secret scanning, 0 dependabot critical
-- **PRs:** 0 open (#348 merged)
-- **Open issues:** 1 (#347 — S70 sprint issue, to be closed after GPT PASS)
-- **Project board:** Synced through S69, S70 milestone created (#46)
-- **Blockers:** GPT review R2 delivery — ChatGPT connection timeouts prevented R2 resubmit delivery
+- **PRs:** 0 open (#348, #349 merged)
+- **Open issues:** 0
+- **Project board:** Synced through S70
+- **Blockers:** None
 
 ## Review History
 
@@ -45,14 +45,14 @@ Session 46: Sprint 70 implementation complete. Phase 9 — Validator/Closer Drif
 | S67 | PASS | PASS (R2) |
 | S68 | PASS | PASS (R2) |
 | S69 | PASS | PASS (R3) |
-| S70 | — | HOLD (R1 — title only, R2 pending delivery) |
+| S70 | — | PASS (R4) |
 
 ## Phase 9 Status
 
 | Sprint | Scope | Status |
 |--------|-------|--------|
 | S69 | Operating Model Freeze + State Drift Guard (D-142) | Closed |
-| S70 | Validator/Closer Drift Hardening | Implementation done, GPT review pending |
+| S70 | Validator/Closer Drift Hardening | Closed |
 | S71 | Intake Gate + Workflow Writer Enforcement | Not started |
 | S72 | Session Protocol Enforcement | Not started |
 

@@ -1,7 +1,22 @@
 # Next Steps — Vezir Platform
 
 **Last updated:** 2026-04-06
-**Current:** Phase 9 active. Sprint 69 closed. S70 validator/closer drift hardening next.
+**Current:** Phase 9 active. Sprint 70 closed. S71 intake gate + workflow writer enforcement next.
+
+---
+
+## Sprint 70 — Validator/Closer Drift Hardening (CLOSED)
+
+**Model:** A (full closure) | **Class:** Governance
+**Scope:** Validator fail-closed derivation, closer exact merge evidence, doc/state hygiene
+**Issues:** #347
+**Milestone:** Sprint 70
+**Tests:** 1555 backend + 217 frontend + 13 Playwright + 60 root = 1845 total (+21 root new)
+**New files:** `tests/test_close_merged_issues.py`
+**Modified:** `tools/project-validator.py`, `tools/close-merged-issues.py`, `tests/test_project_validator.py`, `docs/sprints/sprint-70/plan.yaml`, `config/capabilities.json`
+**PRs:** #348 (implementation), #349 (GPT review patches)
+**Review:** GPT PASS (R4)
+**Evidence:** `evidence/sprint-70/`
 
 ---
 

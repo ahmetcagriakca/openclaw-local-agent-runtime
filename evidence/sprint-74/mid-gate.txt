@@ -1,0 +1,23 @@
+Mid Review Gate — Sprint 74
+============================
+Timestamp: 2026-04-06T15:02:06Z
+
+Gate Requirement (S73 retro carry-forward):
+  Separate implementation and test commits.
+
+Verification:
+  Impl commit: 2993fa7 (2026-04-06T15:02:06Z)
+    "feat: workspace enable + artifact publish/unpublish (D-145 Faz 2A)"
+    Files: project_store.py, project_api.py, controller.py, catalog.py,
+           project_handler.py, mission_store.py, plan.yaml
+    Type: implementation only, no test files
+
+  Test commit: 4f40112 (2026-04-06T15:02:06Z, after impl)
+    "test: 51 new tests for workspace + artifact publish (D-145 S74)"
+    Files: test_project_workspace.py, test_artifact_publish.py,
+           test_working_set_project.py, test_project_workspace_integration.py,
+           test_eventbus.py (count fix), test_project_events.py (count fix)
+    Type: test files only
+
+Order proof: git log shows 4f40112 after 2993fa7.
+Result: PASS — implementation committed before tests, separate commits.

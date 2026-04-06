@@ -9,6 +9,13 @@ os.environ["TESTING"] = "1"
 # Auth bypass for tests — no auth.json in test environment (S76 P1.4)
 os.environ["VEZIR_AUTH_BYPASS"] = "1"
 
+# Force keys module to reload after bypass env var is set
+try:
+    from auth.keys import reload_keys
+    reload_keys()
+except ImportError:
+    pass
+
 # Auth test headers (D-117) — use test operator key for mutation tests
 AUTH_HEADERS = {"Authorization": "Bearer vz_test_operator_key_001"}
 VIEWER_HEADERS = {"Authorization": "Bearer vz_test_viewer_key_001"}

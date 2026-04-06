@@ -30,6 +30,8 @@ jobs:
 
       - name: Pytest
         run: cd agent && python -m pytest tests/ -v --timeout=30 --cov=. --cov-report=xml
+        env:
+          VEZIR_AUTH_BYPASS: "1"
 
   frontend:
     runs-on: ubuntu-latest
@@ -128,7 +130,7 @@ jobs:
 
       - name: Start Vezir API
         run: |
-          cd agent && python -m uvicorn api.server:app --host 127.0.0.1 --port 8003 2>&1 &
+          cd agent && VEZIR_AUTH_BYPASS=1 python -m uvicorn api.server:app --host 127.0.0.1 --port 8003 2>&1 &
           echo "Waiting for API to start..."
           for i in $(seq 1 30); do
             if curl -sf http://127.0.0.1:8003/api/v1/health > /dev/null 2>&1; then
@@ -162,7 +164,7 @@ jobs:
 
       - name: Start container
         run: |
-          docker run -d --name vezir-ci -p 8003:8003 vezir-api:ci
+          docker run -d --name vezir-ci -p 8003:8003 -e VEZIR_AUTH_BYPASS=1 vezir-api:ci
           echo "Waiting for container to start..."
           for i in $(seq 1 30); do
             if curl -sf http://127.0.0.1:8003/api/v1/health > /dev/null 2>&1; then

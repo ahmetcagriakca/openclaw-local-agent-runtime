@@ -5760,6 +5760,11 @@
         "summary": "Create Project",
         "description": "Create a new project (starts in draft status).",
         "operationId": "create_project_api_v1_projects_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -5931,6 +5936,11 @@
         "summary": "Update Project",
         "description": "Update project fields and/or transition status.",
         "operationId": "update_project_api_v1_projects__project_id__patch",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "project_id",
@@ -5980,6 +5990,11 @@
         "summary": "Delete Project",
         "description": "Soft-delete a project (sets status to cancelled).\n\nD-144 §5: Only draft/active/paused. Reject completed/archived.\nReject if active missions linked.",
         "operationId": "delete_project_api_v1_projects__project_id__delete",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "project_id",
@@ -6021,6 +6036,11 @@
         "summary": "Link Mission",
         "description": "Link a mission to a project.\n\nD-144 §5: Only draft/active projects accept links.",
         "operationId": "link_mission_api_v1_projects__project_id__missions__mission_id__post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "project_id",
@@ -6069,6 +6089,11 @@
         "summary": "Unlink Mission",
         "description": "Unlink a mission from a project.\n\nD-144 §5: Only draft/active/paused. Historical links preserved.",
         "operationId": "unlink_mission_api_v1_projects__project_id__missions__mission_id__delete",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "project_id",
@@ -6119,6 +6144,11 @@
         "summary": "Enable Workspace",
         "description": "Enable workspace for a project. Creates directory structure.\n\nD-145 §5: 409 if already enabled, 404 if not found,\n403 if project status not in {draft, active}.",
         "operationId": "enable_workspace_api_v1_projects__project_id__workspace_enable_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "project_id",
@@ -6242,6 +6272,11 @@
         "summary": "Publish Artifact",
         "description": "Publish a mission artifact to project space.\n\nD-145 §5: 404 if not found, 409 if workspace not enabled,\n422 if mission not linked, 403 if project inactive.",
         "operationId": "publish_artifact_api_v1_projects__project_id__artifacts_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "project_id",
@@ -6348,6 +6383,11 @@
         "summary": "Unpublish Artifact",
         "description": "Unpublish (remove) an artifact from project space.\n\nD-145 §5: 404 if not found, 403 if project inactive.",
         "operationId": "unpublish_artifact_api_v1_projects__project_id__artifacts__artifact_id__delete",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "project_id",

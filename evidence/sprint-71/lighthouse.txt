@@ -1,0 +1,2 @@
+NO EVIDENCE — Sprint 71 did not change frontend code. No lighthouse regression possible.
+No UI changes, no bundle changes, no CSS/HTML changes.

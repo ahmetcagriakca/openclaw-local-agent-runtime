@@ -39,7 +39,7 @@ class TestProjectEventTypes:
 
     def test_project_namespace(self):
         project_types = EventType.namespace("project")
-        assert len(project_types) == 5
+        assert len(project_types) == 8  # 5 D-144 + 3 D-145
 
 
 class TestProjectHandler:

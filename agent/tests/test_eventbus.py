@@ -172,7 +172,7 @@ class TestEventCatalog:
 
     def test_has_33_types(self):
         all_types = EventType.all_types()
-        assert len(all_types) == 33  # 28 original + 5 project (D-144)
+        assert len(all_types) == 36  # 28 original + 5 project (D-144) + 3 workspace/artifact (D-145)
 
     def test_namespace_mission(self):
         ns = EventType.namespace("mission")

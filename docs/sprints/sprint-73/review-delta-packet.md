@@ -1,8 +1,8 @@
 # Review Delta Packet v2 — Sprint 73
 
 ## 0. REVIEW TYPE
-- Round: 1
-- Review Type: closure
+- Round: 2
+- Review Type: re-review
 - Ask: Return verdict using review-verdict-contract.v2
 
 ## 1. BASELINE
@@ -106,15 +106,15 @@
 ## 8. EVIDENCE MANIFEST
 | File | Status | Source Command |
 |------|--------|----------------|
-| pytest-output.txt | PRESENT | `python -m pytest tests/ -v` |
-| vitest-output.txt | NO EVIDENCE | No frontend changes |
-| tsc-output.txt | NO EVIDENCE | No frontend changes |
-| lint-output.txt | PRESENT | `ruff check .` |
-| build-output.txt | NO EVIDENCE | No frontend changes |
-| grep-evidence.txt | PRESENT | `grep -rn project_id agent/` |
-| file-manifest.txt | PRESENT | Manual compilation |
-| review-summary.md | MISSING | This review |
-| closure-check-output.txt | NO EVIDENCE | Sprint closure check not yet run |
+| pytest-output.txt | PRESENT | `python -m pytest tests/ -v` — 1661 passed, 4 skipped |
+| vitest-output.txt | PRESENT | `npx vitest run` — 217 passed |
+| tsc-output.txt | PRESENT | `npx tsc --noEmit` — 0 errors |
+| lint-output.txt | PRESENT | `ruff check .` — 0 errors |
+| build-output.txt | PRESENT | `npx vite build` — success |
+| grep-evidence.txt | PRESENT | `grep -rn project_id agent/` — 64 lines |
+| file-manifest.txt | PRESENT | Manual compilation — 13 new, 5 modified files |
+| review-summary.md | PRESENT | `docs/ai/reviews/S73-GPT-REVIEW.md` — R1 HOLD |
+| closure-check-output.txt | PRESENT | `bash tools/sprint-closure-check.sh 73` — doc drift ALL PASS |
 
 ## 9. CLAIMS TO VERIFY
 1. project_store.py uses atomic_write_json (temp → fsync → os.replace) matching mission_store.py pattern
@@ -136,3 +136,11 @@
 - No future task is cited as evidence for a current blocker.
 - No status language outside canonical model.
 - No missing raw output masked as a report.
+
+## 12. PATCHES APPLIED (Round 2)
+| Patch | Blocker Ref | Fix Description | Commit | New Evidence |
+|-------|-------------|-----------------|--------|--------------|
+| P1 | B1 | Collected all missing evidence: vitest-output.txt (217 passed), tsc-output.txt (0 errors), build-output.txt (success), closure-check-output.txt (doc drift ALL PASS). No frontend changes in S73 but evidence collected for regression proof. | 370d195..HEAD | evidence/sprint-73/{vitest,tsc,build,closure-check}-output.txt |
+| P2 | B2 | Mid Review Gate: all 7 impl tasks (73.1-73.7) completed and committed before test tasks (73.8-73.14) started. Gate verified by commit ordering in git log. Implementation commit: 8f8eae3. | 8f8eae3 | `git log --oneline 8f8eae3` |
+| P3 | B3 | DONE 5/5 table reconciled — all evidence files now PRESENT. Evidence manifest updated to match actual files in evidence/sprint-73/. | this commit | evidence/sprint-73/ (9 files) |
+| P4 | B4 | Claims mapped to evidence: (1) grep project_store.py for atomic_write_json → grep-evidence.txt. (2-6) test_project_api.py 22 tests verify all endpoints+error codes → pytest-output.txt. (7) test_project_events.py 15 tests → pytest-output.txt. (8) 1661 passed = 1555 pre-S73 + 106 new, 0 fail → pytest-output.txt. (9) test_project_historical_link.py 9 tests → pytest-output.txt. (10) test_backward_compat.py::TestPersistenceRoundTrip → pytest-output.txt. |

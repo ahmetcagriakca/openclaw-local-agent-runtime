@@ -1,8 +1,8 @@
-[2026-04-06T13:06:02+03:00] === Sprint 73 Closure Check ===
-[2026-04-06T13:06:02+03:00] Class: governance (auto-detected)
-[2026-04-06T13:06:03+03:00] Date: 2026-04-06T13:06:03+03:00
-[2026-04-06T13:06:03+03:00] 
-[2026-04-06T13:06:03+03:00] --- Backend Tests ---
+[2026-04-06T13:36:37+03:00] === Sprint 73 Closure Check ===
+[2026-04-06T13:36:37+03:00] Class: governance (auto-detected)
+[2026-04-06T13:36:37+03:00] Date: 2026-04-06T13:36:37+03:00
+[2026-04-06T13:36:38+03:00] 
+[2026-04-06T13:36:38+03:00] --- Backend Tests ---
 ============================= test session starts =============================
 platform win32 -- Python 3.14.3, pytest-7.4.4, pluggy-1.6.0 -- C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\python.exe
 cachedir: .pytest_cache
@@ -230,7 +230,8 @@ tests/test_audit_trail.py::TestAuditTrailHandler::test_resumes_chain_on_restart 
 tests/test_audit_trail.py::TestAuditTrailHandler::test_works_with_eventbus PASSED [ 12%]
 tests/test_auth_integration.py::TestAuthIntegration::test_01_get_endpoints_public PASSED [ 12%]
 tests/test_auth_integration.py::TestAuthIntegration::test_02_operator_can_create_mission --- Logging error ---
-PASSED [ 12%]  File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\logging\handlers.py", line 80, in emit
+PASSED [ 12%]Traceback (most recent call last):
+  File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\logging\handlers.py", line 80, in emit
     self.doRollover()
     ~~~~~~~~~~~~~~~^^
   File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\logging\handlers.py", line 185, in doRollover
@@ -250,13 +251,18 @@ Call stack:
   File "C:\Users\AKCA\vezir\agent\api\mission_create_api.py", line 73, in _run_mission_background
     logger.info("Mission %s bg thread: cwd=%s agent_dir=%s", mission_id, os.getcwd(), agent_dir)
 Message: 'Mission %s bg thread: cwd=%s agent_dir=%s'
-Arguments: ('mission-20260406-100620-75be92', 'C:\\Users\\AKCA\\vezir\\agent', 'C:\\Users\\AKCA\\vezir\\agent')
+Arguments: ('mission-20260406-103654-963d3f', 'C:\\Users\\AKCA\\vezir\\agent', 'C:\\Users\\AKCA\\vezir\\agent')
 
 tests/test_auth_integration.py::TestAuthIntegration::test_03_viewer_denied_mutation PASSED [ 13%]
 tests/test_auth_integration.py::TestAuthIntegration::test_04_invalid_key_denied PASSED [ 13%]
 tests/test_auth_integration.py::TestAuthIntegration::test_05_missing_auth_denied --- Logging error ---
-PASSED [ 13%]Traceback (most recent call last):
-  File "C:\Users\AKCA\vezir\agent\mission\controller.py", line 85, in _recover_orphaned_missions
+PASSED [ 13%]
+tests/test_auth_integration.py::TestAuthIntegration::test_06_get_still_works_without_auth Traceback (most recent call last):
+PASSED [ 13%]--- Logging error ---
+
+tests/test_auth_integration.py::TestAuthDisabled::test_07_no_config_allows_mutations --- Logging error ---
+Traceback (most recent call last):
+PASSED [ 13%]  File "C:\Users\AKCA\vezir\agent\mission\controller.py", line 85, in _recover_orphaned_missions
     mission = json.load(f)
   File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\json\__init__.py", line 298, in load
     return loads(fp.read(),
@@ -266,10 +272,12 @@ PASSED [ 13%]Traceback (most recent call last):
   File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\json\__init__.py", line 352, in loads
     return _default_decoder.decode(s)
            ~~~~~~~~~~~~~~~~~~~~~~~^^^
-
-tests/test_auth_integration.py::TestAuthIntegration::test_06_get_still_works_without_auth   File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\json\decoder.py", line 363, in raw_decode
+  File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\json\decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\json\decoder.py", line 363, in raw_decode
     raise JSONDecodeError("Expecting value", s, err.value) from None
-json.decoder.JSONDecodeError: Expecting value: line 37 column 22 (char 1326)
+json.decoder.JSONDecodeError: Expecting value: line 19 column 22 (char 813)
 
 During handling of the above exception, another exception occurred:
 
@@ -291,12 +299,6 @@ Call stack:
     self._context.run(self.run)
   File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\threading.py", line 1024, in run
     self._target(*self._args, **self._kwargs)
-PASSED [ 13%]Call stack:
-  File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\threading.py", line 1044, in _bootstrap
-    self._bootstrap_inner()
-
-tests/test_auth_integration.py::TestAuthDisabled::test_07_no_config_allows_mutations   File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\threading.py", line 1024, in run
-    self._target(*self._args, **self._kwargs)
   File "C:\Users\AKCA\vezir\agent\api\mission_create_api.py", line 79, in _run_mission_background
     controller = MissionController()
   File "C:\Users\AKCA\vezir\agent\mission\controller.py", line 58, in __init__
@@ -304,9 +306,35 @@ tests/test_auth_integration.py::TestAuthDisabled::test_07_no_config_allows_mutat
   File "C:\Users\AKCA\vezir\agent\mission\controller.py", line 87, in _recover_orphaned_missions
     logger.warning("Cannot read mission file %s: %s", mission_path, exc)
 Message: 'Cannot read mission file %s: %s'
-Arguments: ('C:\\Users\\AKCA\\vezir\\logs\\missions\\mission-20260323124624-23736.json', JSONDecodeError('Expecting value: line 52 column 22 (char 2418)'))
---- Logging error ---
+Arguments: ('C:\\Users\\AKCA\\vezir\\logs\\missions\\mission-20260323140910-24364.json', JSONDecodeError('Expecting value: line 19 column 22 (char 813)'))
+
+tests/test_auth_quarantine.py::TestSessionDeprecation::test_get_operator_still_works PASSED [ 13%]--- Logging error ---
 Traceback (most recent call last):
+  File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\logging\handlers.py", line 80, in emit
+    self.doRollover()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\logging\handlers.py", line 185, in doRollover
+    self.rotate(self.baseFilename, dfn)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\logging\handlers.py", line 121, in rotate
+    os.rename(source, dest)
+    ~~~~~~~~~^^^^^^^^^^^^^^
+PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\AKCA\\vezir\\logs\\mission-control-api.log' -> 'C:\\Users\\AKCA\\vezir\\logs\\mission-control-api.log.1'
+Call stack:
+  File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\threading.py", line 1044, in _bootstrap
+    self._bootstrap_inner()
+
+tests/test_auth_quarantine.py::TestSessionDeprecation::test_get_session_emits_deprecation_warning   File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+  File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+  File "C:\Users\AKCA\vezir\agent\api\mission_create_api.py", line 73, in _run_mission_background
+    logger.info("Mission %s bg thread: cwd=%s agent_dir=%s", mission_id, os.getcwd(), agent_dir)
+Message: 'Mission %s bg thread: cwd=%s agent_dir=%s'
+Arguments: ('mission-20260406-103654-7baeb2', 'C:\\Users\\AKCA\\vezir\\agent', 'C:\\Users\\AKCA\\vezir\\agent')
+PASSED [ 13%]--- Logging error ---
+
+tests/test_auth_quarantine.py::TestSessionDeprecation::test_new_session_still_works Traceback (most recent call last):
 PASSED [ 13%]  File "C:\Users\AKCA\vezir\agent\mission\controller.py", line 85, in _recover_orphaned_missions
     mission = json.load(f)
   File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\json\__init__.py", line 298, in load
@@ -353,33 +381,9 @@ Call stack:
 Message: 'Cannot read mission file %s: %s'
 Arguments: ('C:\\Users\\AKCA\\vezir\\logs\\missions\\mission-20260323141338-3512.json', JSONDecodeError('Expecting value: line 59 column 22 (char 2685)'))
 
-tests/test_auth_quarantine.py::TestSessionDeprecation::test_get_operator_still_works PASSED [ 13%]--- Logging error ---
-Traceback (most recent call last):
-  File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\logging\handlers.py", line 80, in emit
-    self.doRollover()
-    ~~~~~~~~~~~~~~~^^
-  File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\logging\handlers.py", line 185, in doRollover
-    self.rotate(self.baseFilename, dfn)
-    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\logging\handlers.py", line 121, in rotate
-    os.rename(source, dest)
-    ~~~~~~~~~^^^^^^^^^^^^^^
-PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\AKCA\\vezir\\logs\\mission-control-api.log' -> 'C:\\Users\\AKCA\\vezir\\logs\\mission-control-api.log.1'
-Call stack:
-
-tests/test_auth_quarantine.py::TestSessionDeprecation::test_get_session_emits_deprecation_warning   File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\threading.py", line 1044, in _bootstrap
-    self._bootstrap_inner()
-  File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\threading.py", line 1082, in _bootstrap_inner
-    self._context.run(self.run)
-  File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\threading.py", line 1024, in run
-    self._target(*self._args, **self._kwargs)
-  File "C:\Users\AKCA\vezir\agent\api\mission_create_api.py", line 73, in _run_mission_background
-    logger.info("Mission %s bg thread: cwd=%s agent_dir=%s", mission_id, os.getcwd(), agent_dir)
-Message: 'Mission %s bg thread: cwd=%s agent_dir=%s'
-Arguments: ('mission-20260406-100620-a5c885', 'C:\\Users\\AKCA\\vezir\\agent', 'C:\\Users\\AKCA\\vezir\\agent')
-PASSED [ 13%]--- Logging error ---
-
-tests/test_auth_quarantine.py::TestSessionDeprecation::test_new_session_still_works Traceback (most recent call last):
+tests/test_auth_quarantine.py::TestSessionDeprecation::test_session_dataclass_still_works PASSED [ 13%]
+tests/test_auth_quarantine.py::TestSourceUserResolver::test_tier1_operator_dict --- Logging error ---
+PASSED [ 13%]Traceback (most recent call last):
   File "C:\Users\AKCA\vezir\agent\mission\controller.py", line 85, in _recover_orphaned_missions
     mission = json.load(f)
   File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\json\__init__.py", line 298, in load
@@ -390,7 +394,7 @@ tests/test_auth_quarantine.py::TestSessionDeprecation::test_new_session_still_wo
   File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\json\__init__.py", line 352, in loads
     return _default_decoder.decode(s)
            ~~~~~~~~~~~~~~~~~~~~~~~^^^
-PASSED [ 13%]  File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\json\decoder.py", line 345, in decode
+  File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\json\decoder.py", line 345, in decode
     obj, end = self.raw_decode(s, idx=_w(s, 0).end())
                ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
   File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\json\decoder.py", line 363, in raw_decode
@@ -417,16 +421,18 @@ Call stack:
     self._context.run(self.run)
   File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\threading.py", line 1024, in run
     self._target(*self._args, **self._kwargs)
-
-tests/test_auth_quarantine.py::TestSessionDeprecation::test_session_dataclass_still_works   File "C:\Users\AKCA\vezir\agent\mission\controller.py", line 58, in __init__
+  File "C:\Users\AKCA\vezir\agent\api\mission_create_api.py", line 79, in _run_mission_background
+    controller = MissionController()
+  File "C:\Users\AKCA\vezir\agent\mission\controller.py", line 58, in __init__
     self._recover_orphaned_missions()
   File "C:\Users\AKCA\vezir\agent\mission\controller.py", line 87, in _recover_orphaned_missions
     logger.warning("Cannot read mission file %s: %s", mission_path, exc)
 Message: 'Cannot read mission file %s: %s'
 Arguments: ('C:\\Users\\AKCA\\vezir\\logs\\missions\\mission-20260323142422-32764.json', JSONDecodeError('Expecting value: line 85 column 22 (char 7215)'))
-PASSED [ 13%]
-tests/test_auth_quarantine.py::TestSourceUserResolver::test_tier1_operator_dict PASSED [ 13%]--- Logging error ---
-Traceback (most recent call last):
+
+tests/test_auth_quarantine.py::TestSourceUserResolver::test_tier1_operator_dict_user_id PASSED [ 13%]--- Logging error ---
+
+tests/test_auth_quarantine.py::TestSourceUserResolver::test_tier1_operator_string Traceback (most recent call last):
   File "C:\Users\AKCA\vezir\agent\mission\controller.py", line 85, in _recover_orphaned_missions
     mission = json.load(f)
   File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\json\__init__.py", line 298, in load
@@ -458,8 +464,7 @@ Traceback (most recent call last):
     ~~~~~~~~~^^^^^^^^^^^^^^
 PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\AKCA\\vezir\\logs\\mission-control-api.log' -> 'C:\\Users\\AKCA\\vezir\\logs\\mission-control-api.log.1'
 Call stack:
-
-tests/test_auth_quarantine.py::TestSourceUserResolver::test_tier1_operator_dict_user_id   File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\threading.py", line 1044, in _bootstrap
+PASSED [ 13%]  File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\threading.py", line 1044, in _bootstrap
     self._bootstrap_inner()
   File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\threading.py", line 1082, in _bootstrap_inner
     self._context.run(self.run)
@@ -473,10 +478,10 @@ tests/test_auth_quarantine.py::TestSourceUserResolver::test_tier1_operator_dict_
     logger.warning("Cannot read mission file %s: %s", mission_path, exc)
 Message: 'Cannot read mission file %s: %s'
 Arguments: ('C:\\Users\\AKCA\\vezir\\logs\\missions\\mission-20260324072030-35088.json', JSONDecodeError('Expecting value: line 91 column 22 (char 8844)'))
-PASSED [ 13%]
-tests/test_auth_quarantine.py::TestSourceUserResolver::test_tier1_operator_string --- Logging error ---
-PASSED [ 13%]Traceback (most recent call last):
-  File "C:\Users\AKCA\vezir\agent\mission\controller.py", line 85, in _recover_orphaned_missions
+
+tests/test_auth_quarantine.py::TestSourceUserResolver::test_tier2_header_trusted_origin PASSED [ 13%]--- Logging error ---
+
+tests/test_auth_quarantine.py::TestSourceUserResolver::test_tier2_header_untrusted_origin_falls_to_tier3   File "C:\Users\AKCA\vezir\agent\mission\controller.py", line 85, in _recover_orphaned_missions
     mission = json.load(f)
   File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\json\__init__.py", line 298, in load
     return loads(fp.read(),
@@ -513,6 +518,46 @@ Call stack:
     self._context.run(self.run)
   File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\threading.py", line 1024, in run
     self._target(*self._args, **self._kwargs)
+PASSED [ 13%]--- Logging error ---
+
+tests/test_auth_quarantine.py::TestSourceUserResolver::test_tier3_config_fallback Traceback (most recent call last):
+PASSED [ 13%]  File "C:\Users\AKCA\vezir\agent\mission\controller.py", line 85, in _recover_orphaned_missions
+    mission = json.load(f)
+  File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\json\__init__.py", line 298, in load
+    return loads(fp.read(),
+        cls=cls, object_hook=object_hook,
+        parse_float=parse_float, parse_int=parse_int,
+        parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)
+  File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\json\__init__.py", line 352, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\json\decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\json\decoder.py", line 363, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 109 column 22 (char 5733)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\logging\handlers.py", line 80, in emit
+    self.doRollover()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\logging\handlers.py", line 185, in doRollover
+    self.rotate(self.baseFilename, dfn)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\logging\handlers.py", line 121, in rotate
+    os.rename(source, dest)
+    ~~~~~~~~~^^^^^^^^^^^^^^
+PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\AKCA\\vezir\\logs\\mission-control-api.log' -> 'C:\\Users\\AKCA\\vezir\\logs\\mission-control-api.log.1'
+Call stack:
+  File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\threading.py", line 1044, in _bootstrap
+    self._bootstrap_inner()
+  File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+  File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
   File "C:\Users\AKCA\vezir\agent\api\mission_create_api.py", line 79, in _run_mission_background
     controller = MissionController()
   File "C:\Users\AKCA\vezir\agent\mission\controller.py", line 58, in __init__
@@ -520,14 +565,11 @@ Call stack:
   File "C:\Users\AKCA\vezir\agent\mission\controller.py", line 87, in _recover_orphaned_missions
     logger.warning("Cannot read mission file %s: %s", mission_path, exc)
 Message: 'Cannot read mission file %s: %s'
-Arguments: ('C:\\Users\\AKCA\\vezir\\logs\\missions\\mission-20260324072453-35852.json', JSONDecodeError('Expecting value: line 70 column 22 (char 6880)'))
+Arguments: ('C:\\Users\\AKCA\\vezir\\logs\\missions\\mission-20260324073233-35816.json', JSONDecodeError('Expecting value: line 109 column 22 (char 5733)'))
 
-tests/test_auth_quarantine.py::TestSourceUserResolver::test_tier2_header_trusted_origin PASSED [ 13%]--- Logging error ---
+tests/test_auth_quarantine.py::TestSourceUserResolver::test_tier3_default_dashboard PASSED [ 13%]--- Logging error ---
 
-tests/test_auth_quarantine.py::TestSourceUserResolver::test_tier2_header_untrusted_origin_falls_to_tier3 Traceback (most recent call last):
-PASSED [ 13%]
-tests/test_auth_quarantine.py::TestSourceUserResolver::test_tier3_config_fallback PASSED [ 13%]--- Logging error ---
-Traceback (most recent call last):
+tests/test_auth_quarantine.py::TestMutationAuditActor::test_log_mutation_actor_defaults_to_unknown Traceback (most recent call last):
   File "C:\Users\AKCA\vezir\agent\mission\controller.py", line 85, in _recover_orphaned_missions
     mission = json.load(f)
   File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\json\__init__.py", line 298, in load
@@ -559,8 +601,7 @@ Traceback (most recent call last):
     ~~~~~~~~~^^^^^^^^^^^^^^
 PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\AKCA\\vezir\\logs\\mission-control-api.log' -> 'C:\\Users\\AKCA\\vezir\\logs\\mission-control-api.log.1'
 Call stack:
-
-tests/test_auth_quarantine.py::TestSourceUserResolver::test_tier3_default_dashboard   File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\threading.py", line 1044, in _bootstrap
+PASSED [ 13%]  File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\threading.py", line 1044, in _bootstrap
     self._bootstrap_inner()
   File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\threading.py", line 1082, in _bootstrap_inner
     self._context.run(self.run)
@@ -568,14 +609,17 @@ tests/test_auth_quarantine.py::TestSourceUserResolver::test_tier3_default_dashbo
     self._target(*self._args, **self._kwargs)
   File "C:\Users\AKCA\vezir\agent\api\mission_create_api.py", line 79, in _run_mission_background
     controller = MissionController()
+  File "C:\Users\AKCA\vezir\agent\mission\controller.py", line 58, in __init__
+    self._recover_orphaned_missions()
+  File "C:\Users\AKCA\vezir\agent\mission\controller.py", line 87, in _recover_orphaned_missions
+    logger.warning("Cannot read mission file %s: %s", mission_path, exc)
 Message: 'Cannot read mission file %s: %s'
 Arguments: ('C:\\Users\\AKCA\\vezir\\logs\\missions\\mission-20260324073631-37572.json', JSONDecodeError('Expecting value: line 111 column 22 (char 6115)'))
-PASSED [ 13%]
-tests/test_auth_quarantine.py::TestMutationAuditActor::test_log_mutation_actor_defaults_to_unknown PASSED [ 13%]--- Logging error ---
+
+tests/test_auth_quarantine.py::TestMutationAuditActor::test_log_mutation_includes_actor PASSED [ 14%]--- Logging error ---
 Traceback (most recent call last):
-  File "C:\Users\AKCA\vezir\agent\mission\controller.py", line 85, in _recover_orphaned_missions
-    mission = json.load(f)
-  File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\json\__init__.py", line 298, in load
+
+tests/test_auth_quarantine.py::TestMutationAuditActor::test_log_mutation_includes_all_fields   File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\json\__init__.py", line 298, in load
     return loads(fp.read(),
         cls=cls, object_hook=object_hook,
         parse_float=parse_float, parse_int=parse_int,
@@ -604,8 +648,7 @@ Traceback (most recent call last):
     ~~~~~~~~~^^^^^^^^^^^^^^
 PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\AKCA\\vezir\\logs\\mission-control-api.log' -> 'C:\\Users\\AKCA\\vezir\\logs\\mission-control-api.log.1'
 Call stack:
-
-tests/test_auth_quarantine.py::TestMutationAuditActor::test_log_mutation_includes_actor   File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\threading.py", line 1044, in _bootstrap
+  File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\threading.py", line 1044, in _bootstrap
     self._bootstrap_inner()
   File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\threading.py", line 1082, in _bootstrap_inner
     self._context.run(self.run)
@@ -620,55 +663,7 @@ tests/test_auth_quarantine.py::TestMutationAuditActor::test_log_mutation_include
 Message: 'Cannot read mission file %s: %s'
 Arguments: ('C:\\Users\\AKCA\\vezir\\logs\\missions\\mission-20260324074036-25528.json', JSONDecodeError('Expecting value: line 110 column 22 (char 5933)'))
 PASSED [ 14%]
-tests/test_auth_quarantine.py::TestMutationAuditActor::test_log_mutation_includes_all_fields --- Logging error ---
-PASSED [ 14%]Traceback (most recent call last):
-  File "C:\Users\AKCA\vezir\agent\mission\controller.py", line 85, in _recover_orphaned_missions
-    mission = json.load(f)
-  File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\json\__init__.py", line 298, in load
-    return loads(fp.read(),
-        cls=cls, object_hook=object_hook,
-        parse_float=parse_float, parse_int=parse_int,
-        parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)
-  File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\json\__init__.py", line 352, in loads
-    return _default_decoder.decode(s)
-           ~~~~~~~~~~~~~~~~~~~~~~~^^^
-  File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\json\decoder.py", line 345, in decode
-    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
-               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\json\decoder.py", line 363, in raw_decode
-    raise JSONDecodeError("Expecting value", s, err.value) from None
-json.decoder.JSONDecodeError: Expecting value: line 28 column 22 (char 6023)
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\logging\handlers.py", line 80, in emit
-    self.doRollover()
-    ~~~~~~~~~~~~~~~^^
-  File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\logging\handlers.py", line 185, in doRollover
-    self.rotate(self.baseFilename, dfn)
-    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\logging\handlers.py", line 121, in rotate
-    os.rename(source, dest)
-    ~~~~~~~~~^^^^^^^^^^^^^^
-PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\AKCA\\vezir\\logs\\mission-control-api.log' -> 'C:\\Users\\AKCA\\vezir\\logs\\mission-control-api.log.1'
-Call stack:
-
-tests/test_backup.py::TestBackupCLI::test_01_create_backup_produces_manifest   File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\threading.py", line 1044, in _bootstrap
-    self._bootstrap_inner()
-  File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\threading.py", line 1082, in _bootstrap_inner
-    self._context.run(self.run)
-  File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\threading.py", line 1024, in run
-    self._target(*self._args, **self._kwargs)
-  File "C:\Users\AKCA\vezir\agent\api\mission_create_api.py", line 79, in _run_mission_background
-    controller = MissionController()
-  File "C:\Users\AKCA\vezir\agent\mission\controller.py", line 58, in __init__
-    self._recover_orphaned_missions()
-  File "C:\Users\AKCA\vezir\agent\mission\controller.py", line 87, in _recover_orphaned_missions
-    logger.warning("Cannot read mission file %s: %s", mission_path, exc)
-Message: 'Cannot read mission file %s: %s'
-Arguments: ('C:\\Users\\AKCA\\vezir\\logs\\missions\\mission-20260324074455-3528.json', JSONDecodeError('Expecting value: line 28 column 22 (char 6023)'))
-PASSED [ 14%]
+tests/test_backup.py::TestBackupCLI::test_01_create_backup_produces_manifest PASSED [ 14%]
 tests/test_backup.py::TestBackupCLI::test_02_backup_includes_state_files PASSED [ 14%]
 tests/test_backup.py::TestBackupCLI::test_03_backup_sha256_integrity PASSED [ 14%]
 tests/test_backup.py::TestBackupCLI::test_04_backup_with_configs PASSED  [ 14%]
@@ -895,24 +890,11 @@ tests/test_e2e.py::TestE2E_09_ApprovalFSMGuard::test_reject_non_pending_409 PASS
 tests/test_e2e.py::TestE2E_10_MissionCancel::test_a_cancel_executing_mission PASSED [ 27%]
 tests/test_e2e.py::TestE2E_10_MissionCancel::test_b_cancel_creates_signal_artifact PASSED [ 27%]
 tests/test_e2e.py::TestE2E_11_MissionRetry::test_retry_failed_mission PASSED [ 27%]
-tests/test_e2e.py::TestE2E_12_MissionFSMGuard::test_cancel_completed_409 PASSED [ 27%]
-tests/test_e2e.py::TestE2E_12_MissionFSMGuard::test_cancel_not_found_404   File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\threading.py", line 1044, in _bootstrap
-    self._bootstrap_inner()
-  File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\threading.py", line 1082, in _bootstrap_inner
-    self._context.run(self.run)
-  File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\threading.py", line 1024, in run
-    self._target(*self._args, **self._kwargs)
-  File "C:\Users\AKCA\vezir\agent\api\mission_mutation_api.py", line 125, in _run_retry_background
-    controller = MissionController()
-  File "C:\Users\AKCA\vezir\agent\mission\controller.py", line 58, in __init__
-    self._recover_orphaned_missions()
-  File "C:\Users\AKCA\vezir\agent\mission\controller.py", line 87, in _recover_orphaned_missions
-    logger.warning("Cannot read mission file %s: %s", mission_path, exc)
-Message: 'Cannot read mission file %s: %s'
-Arguments: ('C:\\Users\\AKCA\\vezir\\logs\\missions\\mission-20260323124624-23736.json', JSONDecodeError('Expecting value: line 52 column 22 (char 2418)'))
---- Logging error ---
-Traceback (most recent call last):
-PASSED [ 27%]  File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\json\__init__.py", line 298, in load
+tests/test_e2e.py::TestE2E_12_MissionFSMGuard::test_cancel_completed_409 --- Logging error ---
+PASSED [ 27%]Traceback (most recent call last):
+  File "C:\Users\AKCA\vezir\agent\mission\controller.py", line 85, in _recover_orphaned_missions
+    mission = json.load(f)
+  File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\json\__init__.py", line 298, in load
     return loads(fp.read(),
         cls=cls, object_hook=object_hook,
         parse_float=parse_float, parse_int=parse_int,
@@ -925,7 +907,7 @@ PASSED [ 27%]  File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\j
                ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
   File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\json\decoder.py", line 363, in raw_decode
     raise JSONDecodeError("Expecting value", s, err.value) from None
-json.decoder.JSONDecodeError: Expecting value: line 85 column 22 (char 7215)
+json.decoder.JSONDecodeError: Expecting value: line 37 column 22 (char 1253)
 
 During handling of the above exception, another exception occurred:
 
@@ -941,6 +923,11 @@ Traceback (most recent call last):
     ~~~~~~~~~^^^^^^^^^^^^^^
 PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\AKCA\\vezir\\logs\\mission-control-api.log' -> 'C:\\Users\\AKCA\\vezir\\logs\\mission-control-api.log.1'
 Call stack:
+
+tests/test_e2e.py::TestE2E_12_MissionFSMGuard::test_cancel_not_found_404   File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\threading.py", line 1044, in _bootstrap
+    self._bootstrap_inner()
+PASSED [ 27%]
+tests/test_e2e.py::TestE2E_12_MissionFSMGuard::test_retry_executing_409 Call stack:
   File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\threading.py", line 1044, in _bootstrap
     self._bootstrap_inner()
   File "C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\threading.py", line 1082, in _bootstrap_inner
@@ -951,17 +938,13 @@ Call stack:
     controller = MissionController()
   File "C:\Users\AKCA\vezir\agent\mission\controller.py", line 58, in __init__
     self._recover_orphaned_missions()
-  File "C:\Users\AKCA\vezir\agent\mission\controller.py", line 87, in _recover_orphaned_missions
-    logger.warning("Cannot read mission file %s: %s", mission_path, exc)
-Message: 'Cannot read mission file %s: %s'
-Arguments: ('C:\\Users\\AKCA\\vezir\\logs\\missions\\mission-20260323142422-32764.json', JSONDecodeError('Expecting value: line 85 column 22 (char 7215)'))
+PASSED [ 27%]Call stack:
 
-tests/test_e2e.py::TestE2E_12_MissionFSMGuard::test_retry_executing_409 --- Logging error ---
-PASSED [ 27%]Message: 'Cannot read mission file %s: %s'
-Arguments: ('C:\\Users\\AKCA\\vezir\\logs\\missions\\mission-20260324074455-3528.json', JSONDecodeError('Expecting value: line 28 column 22 (char 6023)'))
+tests/test_e2e.py::TestE2E_13_Telemetry::test_telemetry_all PASSED       [ 27%]Message: 'Cannot read mission file %s: %s'
+Arguments: ('C:\\Users\\AKCA\\vezir\\logs\\missions\\mission-20260325092357-27804.json', JSONDecodeError('Expecting value: line 44 column 22 (char 3826)'))
 
-tests/test_e2e.py::TestE2E_13_Telemetry::test_telemetry_all PASSED       [ 27%]
-tests/test_e2e.py::TestE2E_13_Telemetry::test_telemetry_filter_by_mission PASSED [ 28%]
+tests/test_e2e.py::TestE2E_13_Telemetry::test_telemetry_filter_by_mission PASSED [ 28%]--- Logging error ---
+
 tests/test_e2e.py::TestE2E_13_Telemetry::test_telemetry_limit PASSED     [ 28%]
 tests/test_e2e.py::TestE2E_14_HostSecurity::test_invalid_host_403 PASSED [ 28%]
 tests/test_e2e.py::TestE2E_14_HostSecurity::test_localhost_with_port_ok PASSED [ 28%]
@@ -2161,14 +2144,98 @@ tests/test_wmcp_credential_manager.py::TestCredentialMigration::test_migrate_ski
 tests/test_wmcp_credential_manager.py::TestCredentialMigration::test_migrate_no_env PASSED [ 99%]
 tests/test_wmcp_credential_manager.py::TestCredentialPersistence::test_meta_round_trip PASSED [100%]
 
-================= 1661 passed, 4 skipped in 156.50s (0:02:36) =================
-[2026-04-06T13:08:47+03:00] Backend test count (collected): 1665
-[2026-04-06T13:08:47+03:00] ✅ PASS: Backend tests: 1665 collected
-[2026-04-06T13:08:47+03:00] 
-[2026-04-06T13:08:48+03:00] --- Frontend Tests ---
+================= 1661 passed, 4 skipped in 162.52s (0:02:42) =================
+[2026-04-06T13:39:28+03:00] Backend test count (collected): 1665
+[2026-04-06T13:39:28+03:00] ✅ PASS: Backend tests: 1665 collected
+[2026-04-06T13:39:28+03:00] 
+[2026-04-06T13:39:29+03:00] --- Frontend Tests ---
 
  RUN  v4.1.2 C:/Users/AKCA/vezir/frontend
 
+Error: Uncaught [Error: Test crash]
+    at reportException (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\helpers\runtime-script-errors.js:66:24)
+    at innerInvokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:353:9)
+    at invokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:286:3)
+    at HTMLUnknownElementImpl._dispatch (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:233:9)
+    at HTMLUnknownElementImpl.dispatchEvent (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:104:17)
+    at HTMLUnknownElement.dispatchEvent (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\generated\EventTarget.js:241:34)
+    at Object.invokeGuardedCallbackDev (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:4213:16)
+    at invokeGuardedCallback (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:4277:31)
+    at beginWork$1 (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:27490:7)
+    at performUnitOfWork (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:26599:12) Error: Test crash
+    at ThrowingComponent (C:/Users/AKCA/vezir/frontend/src/__tests__/ErrorBoundary.test.tsx:11:26)
+    at renderWithHooks (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:15486:18)
+    at mountIndeterminateComponent (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:20103:13)
+    at beginWork (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:21626:16)
+    at HTMLUnknownElement.callCallback (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:4164:14)
+    at HTMLUnknownElement.callTheUserObjectsOperation (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\generated\EventListener.js:26:30)
+    at innerInvokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:350:25)
+    at invokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:286:3)
+    at HTMLUnknownElementImpl._dispatch (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:233:9)
+    at HTMLUnknownElementImpl.dispatchEvent (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:104:17)
+Error: Uncaught [Error: Test crash]
+    at reportException (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\helpers\runtime-script-errors.js:66:24)
+    at innerInvokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:353:9)
+    at invokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:286:3)
+    at HTMLUnknownElementImpl._dispatch (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:233:9)
+    at HTMLUnknownElementImpl.dispatchEvent (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:104:17)
+    at HTMLUnknownElement.dispatchEvent (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\generated\EventTarget.js:241:34)
+    at Object.invokeGuardedCallbackDev (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:4213:16)
+    at invokeGuardedCallback (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:4277:31)
+    at beginWork$1 (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:27490:7)
+    at performUnitOfWork (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:26599:12) Error: Test crash
+    at ThrowingComponent (C:/Users/AKCA/vezir/frontend/src/__tests__/ErrorBoundary.test.tsx:11:26)
+    at renderWithHooks (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:15486:18)
+    at mountIndeterminateComponent (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:20103:13)
+    at beginWork (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:21626:16)
+    at HTMLUnknownElement.callCallback (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:4164:14)
+    at HTMLUnknownElement.callTheUserObjectsOperation (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\generated\EventListener.js:26:30)
+    at innerInvokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:350:25)
+    at invokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:286:3)
+    at HTMLUnknownElementImpl._dispatch (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:233:9)
+    at HTMLUnknownElementImpl.dispatchEvent (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:104:17)
+Error: Uncaught [Error: Test crash]
+    at reportException (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\helpers\runtime-script-errors.js:66:24)
+    at innerInvokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:353:9)
+    at invokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:286:3)
+    at HTMLUnknownElementImpl._dispatch (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:233:9)
+    at HTMLUnknownElementImpl.dispatchEvent (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:104:17)
+    at HTMLUnknownElement.dispatchEvent (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\generated\EventTarget.js:241:34)
+    at Object.invokeGuardedCallbackDev (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:4213:16)
+    at invokeGuardedCallback (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:4277:31)
+    at beginWork$1 (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:27490:7)
+    at performUnitOfWork (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:26599:12) Error: Test crash
+    at ThrowingComponent (C:/Users/AKCA/vezir/frontend/src/__tests__/ErrorBoundary.test.tsx:11:26)
+    at renderWithHooks (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:15486:18)
+    at mountIndeterminateComponent (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:20103:13)
+    at beginWork (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:21626:16)
+    at HTMLUnknownElement.callCallback (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:4164:14)
+    at HTMLUnknownElement.callTheUserObjectsOperation (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\generated\EventListener.js:26:30)
+    at innerInvokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:350:25)
+    at invokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:286:3)
+    at HTMLUnknownElementImpl._dispatch (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:233:9)
+    at HTMLUnknownElementImpl.dispatchEvent (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:104:17)
+Error: Uncaught [Error: Test crash]
+    at reportException (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\helpers\runtime-script-errors.js:66:24)
+    at innerInvokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:353:9)
+    at invokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:286:3)
+    at HTMLUnknownElementImpl._dispatch (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:233:9)
+    at HTMLUnknownElementImpl.dispatchEvent (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:104:17)
+    at HTMLUnknownElement.dispatchEvent (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\generated\EventTarget.js:241:34)
+    at Object.invokeGuardedCallbackDev (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:4213:16)
+    at invokeGuardedCallback (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:4277:31)
+    at beginWork$1 (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:27490:7)
+    at performUnitOfWork (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:26599:12) Error: Test crash
+    at ThrowingComponent (C:/Users/AKCA/vezir/frontend/src/__tests__/ErrorBoundary.test.tsx:11:26)
+    at renderWithHooks (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:15486:18)
+    at mountIndeterminateComponent (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:20103:13)
+    at beginWork (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:21626:16)
+    at HTMLUnknownElement.callCallback (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:4164:14)
+    at HTMLUnknownElement.callTheUserObjectsOperation (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\generated\EventListener.js:26:30)
+    at innerInvokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:350:25)
+    at invokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:286:3)
+    at HTMLUnknownElementImpl._dispatch (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:233:9)
+    at HTMLUnknownElementImpl.dispatchEvent (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:104:17)
 Error: Uncaught [Error: Test explosion]
     at reportException (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\helpers\runtime-script-errors.js:66:24)
     at innerInvokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:353:9)
@@ -2328,90 +2395,6 @@ Error: Uncaught [Error: Boom]
     at beginWork$1 (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:27490:7)
     at performUnitOfWork (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:26599:12) Error: Boom
     at ConditionalThrower (C:/Users/AKCA/vezir/frontend/src/__tests__/ErrorBoundary.extended.test.tsx:59:30)
-    at renderWithHooks (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:15486:18)
-    at mountIndeterminateComponent (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:20103:13)
-    at beginWork (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:21626:16)
-    at HTMLUnknownElement.callCallback (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:4164:14)
-    at HTMLUnknownElement.callTheUserObjectsOperation (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\generated\EventListener.js:26:30)
-    at innerInvokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:350:25)
-    at invokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:286:3)
-    at HTMLUnknownElementImpl._dispatch (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:233:9)
-    at HTMLUnknownElementImpl.dispatchEvent (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:104:17)
-Error: Uncaught [Error: Test crash]
-    at reportException (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\helpers\runtime-script-errors.js:66:24)
-    at innerInvokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:353:9)
-    at invokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:286:3)
-    at HTMLUnknownElementImpl._dispatch (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:233:9)
-    at HTMLUnknownElementImpl.dispatchEvent (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:104:17)
-    at HTMLUnknownElement.dispatchEvent (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\generated\EventTarget.js:241:34)
-    at Object.invokeGuardedCallbackDev (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:4213:16)
-    at invokeGuardedCallback (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:4277:31)
-    at beginWork$1 (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:27490:7)
-    at performUnitOfWork (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:26599:12) Error: Test crash
-    at ThrowingComponent (C:/Users/AKCA/vezir/frontend/src/__tests__/ErrorBoundary.test.tsx:11:26)
-    at renderWithHooks (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:15486:18)
-    at mountIndeterminateComponent (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:20103:13)
-    at beginWork (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:21626:16)
-    at HTMLUnknownElement.callCallback (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:4164:14)
-    at HTMLUnknownElement.callTheUserObjectsOperation (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\generated\EventListener.js:26:30)
-    at innerInvokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:350:25)
-    at invokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:286:3)
-    at HTMLUnknownElementImpl._dispatch (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:233:9)
-    at HTMLUnknownElementImpl.dispatchEvent (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:104:17)
-Error: Uncaught [Error: Test crash]
-    at reportException (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\helpers\runtime-script-errors.js:66:24)
-    at innerInvokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:353:9)
-    at invokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:286:3)
-    at HTMLUnknownElementImpl._dispatch (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:233:9)
-    at HTMLUnknownElementImpl.dispatchEvent (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:104:17)
-    at HTMLUnknownElement.dispatchEvent (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\generated\EventTarget.js:241:34)
-    at Object.invokeGuardedCallbackDev (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:4213:16)
-    at invokeGuardedCallback (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:4277:31)
-    at beginWork$1 (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:27490:7)
-    at performUnitOfWork (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:26599:12) Error: Test crash
-    at ThrowingComponent (C:/Users/AKCA/vezir/frontend/src/__tests__/ErrorBoundary.test.tsx:11:26)
-    at renderWithHooks (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:15486:18)
-    at mountIndeterminateComponent (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:20103:13)
-    at beginWork (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:21626:16)
-    at HTMLUnknownElement.callCallback (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:4164:14)
-    at HTMLUnknownElement.callTheUserObjectsOperation (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\generated\EventListener.js:26:30)
-    at innerInvokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:350:25)
-    at invokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:286:3)
-    at HTMLUnknownElementImpl._dispatch (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:233:9)
-    at HTMLUnknownElementImpl.dispatchEvent (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:104:17)
-Error: Uncaught [Error: Test crash]
-    at reportException (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\helpers\runtime-script-errors.js:66:24)
-    at innerInvokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:353:9)
-    at invokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:286:3)
-    at HTMLUnknownElementImpl._dispatch (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:233:9)
-    at HTMLUnknownElementImpl.dispatchEvent (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:104:17)
-    at HTMLUnknownElement.dispatchEvent (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\generated\EventTarget.js:241:34)
-    at Object.invokeGuardedCallbackDev (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:4213:16)
-    at invokeGuardedCallback (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:4277:31)
-    at beginWork$1 (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:27490:7)
-    at performUnitOfWork (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:26599:12) Error: Test crash
-    at ThrowingComponent (C:/Users/AKCA/vezir/frontend/src/__tests__/ErrorBoundary.test.tsx:11:26)
-    at renderWithHooks (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:15486:18)
-    at mountIndeterminateComponent (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:20103:13)
-    at beginWork (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:21626:16)
-    at HTMLUnknownElement.callCallback (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:4164:14)
-    at HTMLUnknownElement.callTheUserObjectsOperation (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\generated\EventListener.js:26:30)
-    at innerInvokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:350:25)
-    at invokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:286:3)
-    at HTMLUnknownElementImpl._dispatch (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:233:9)
-    at HTMLUnknownElementImpl.dispatchEvent (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:104:17)
-Error: Uncaught [Error: Test crash]
-    at reportException (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\helpers\runtime-script-errors.js:66:24)
-    at innerInvokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:353:9)
-    at invokeEventListeners (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:286:3)
-    at HTMLUnknownElementImpl._dispatch (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:233:9)
-    at HTMLUnknownElementImpl.dispatchEvent (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:104:17)
-    at HTMLUnknownElement.dispatchEvent (C:\Users\AKCA\vezir\frontend\node_modules\jsdom\lib\jsdom\living\generated\EventTarget.js:241:34)
-    at Object.invokeGuardedCallbackDev (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:4213:16)
-    at invokeGuardedCallback (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:4277:31)
-    at beginWork$1 (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:27490:7)
-    at performUnitOfWork (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:26599:12) Error: Test crash
-    at ThrowingComponent (C:/Users/AKCA/vezir/frontend/src/__tests__/ErrorBoundary.test.tsx:11:26)
     at renderWithHooks (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:15486:18)
     at mountIndeterminateComponent (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:20103:13)
     at beginWork (C:\Users\AKCA\vezir\frontend\node_modules\react-dom\cjs\react-dom.development.js:21626:16)
@@ -2424,16 +2407,16 @@ Error: Uncaught [Error: Test crash]
 
  Test Files  30 passed (30)
       Tests  217 passed (217)
-   Start at  13:08:51
-   Duration  14.98s (transform 7.59s, setup 15.52s, import 29.87s, tests 13.99s, environment 58.18s)
+   Start at  13:39:42
+   Duration  27.10s (transform 9.11s, setup 22.94s, import 50.28s, tests 28.26s, environment 113.64s)
 
-[2026-04-06T13:09:32+03:00] Frontend test count (collected): 217
-[2026-04-06T13:09:32+03:00] ✅ PASS: Frontend tests: 217 collected
-[2026-04-06T13:09:32+03:00] 
-[2026-04-06T13:09:33+03:00] --- TypeScript Check ---
-[2026-04-06T13:09:41+03:00] ✅ PASS: TypeScript: 0 errors
-[2026-04-06T13:09:41+03:00] 
-[2026-04-06T13:09:41+03:00] --- Lint Check ---
+[2026-04-06T13:40:38+03:00] Frontend test count (collected): 217
+[2026-04-06T13:40:38+03:00] ✅ PASS: Frontend tests: 217 collected
+[2026-04-06T13:40:38+03:00] 
+[2026-04-06T13:40:39+03:00] --- TypeScript Check ---
+[2026-04-06T13:40:50+03:00] ✅ PASS: TypeScript: 0 errors
+[2026-04-06T13:40:51+03:00] 
+[2026-04-06T13:40:51+03:00] --- Lint Check ---
 
 > vezir-platform@1.0.0 lint
 > eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0
@@ -2515,9 +2498,9 @@ C:\Users\AKCA\vezir\frontend\src\hooks\useSSE.ts:59:3
 
 ✖ 4 problems (4 errors, 0 warnings)
 
-[2026-04-06T13:09:55+03:00] ❌ FAIL: Lint errors found
-[2026-04-06T13:09:55+03:00] 
-[2026-04-06T13:09:55+03:00] --- Production Build ---
+[2026-04-06T13:41:07+03:00] ❌ FAIL: Lint errors found
+[2026-04-06T13:41:07+03:00] 
+[2026-04-06T13:41:07+03:00] --- Production Build ---
 
 > vezir-platform@1.0.0 build
 > tsc -b && vite build
@@ -2530,32 +2513,32 @@ computing gzip size...
 [2mdist/[22m[32mindex.html                 [39m[1m[2m  0.76 kB[22m[1m[22m[2m │ gzip:  0.47 kB[22m
 [2mdist/[22m[35massets/index-CcDjoBp0.css  [39m[1m[2m 30.99 kB[22m[1m[22m[2m │ gzip:  6.18 kB[22m
 [2mdist/[22m[36massets/index-CKAMe_DQ.js   [39m[1m[2m275.70 kB[22m[1m[22m[2m │ gzip: 77.53 kB[22m
-[32m✓ built in 3.33s[39m
-[2026-04-06T13:10:09+03:00] ✅ PASS: Production build successful
-[2026-04-06T13:10:14+03:00] 
-[2026-04-06T13:10:15+03:00] --- Sprint Doc Validator ---
-[2026-04-06T13:10:15+03:00]   Sprint doc validator not found — skipped
-[2026-04-06T13:10:15+03:00] 
-[2026-04-06T13:10:15+03:00] --- Doc Drift Check ---
+[32m✓ built in 2.84s[39m
+[2026-04-06T13:41:20+03:00] ✅ PASS: Production build successful
+[2026-04-06T13:41:21+03:00] 
+[2026-04-06T13:41:21+03:00] --- Sprint Doc Validator ---
+[2026-04-06T13:41:21+03:00]   Sprint doc validator not found — skipped
+[2026-04-06T13:41:27+03:00] 
+[2026-04-06T13:41:27+03:00] --- Doc Drift Check ---
 ============================================================
 Documentation Drift Check
 ============================================================
 
 [1] DECISIONS.md heading completeness
-  FAIL: Missing headings in D-001..D-145: D-143
+  PASS: 144 headings found, D-001..D-145 complete (known skips: D-126)
 
 [2] Decision count: DECISIONS.md vs STATE.md
-  PASS: STATE.md total (141 frozen + 2 superseded + 0 deferred = 143) matches DECISIONS.md headings (143)
+  PASS: STATE.md total (142 frozen + 2 superseded + 0 deferred = 144) matches DECISIONS.md headings (144)
   PASS: STATE.md range claim D-001..D-145 matches actual max D-145
 
 [3] Test count consistency
-  FAIL: Backend count mismatch: STATE.md says 1661, CLAUDE.md says 1536
+  PASS: Backend count: STATE.md (1661) == CLAUDE.md (1661)
   PASS: Frontend count: STATE.md (217) == CLAUDE.md (217)
   (--skip-tests: skipping actual test collection)
 
 ============================================================
-RESULT: 2 CHECK(S) FAILED
+RESULT: ALL CHECKS PASSED
 ============================================================
-[2026-04-06T13:10:16+03:00] ❌ FAIL: Doc drift check: mismatches found
-[2026-04-06T13:10:16+03:00] 
-[2026-04-06T13:10:17+03:00] --- Project V2 Board Validator ---
+[2026-04-06T13:41:27+03:00] ✅ PASS: Doc drift check: all checks passed
+[2026-04-06T13:41:33+03:00] 
+[2026-04-06T13:41:33+03:00] --- Project V2 Board Validator ---

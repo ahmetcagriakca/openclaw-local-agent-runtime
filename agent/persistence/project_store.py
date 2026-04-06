@@ -1,12 +1,14 @@
 """ProjectStore — project aggregate persistence (JSON file).
 
 D-144: Project entity + CRUD + FSM enforcement + lifecycle constraints.
+D-145: Workspace enable + artifact publish/unpublish flow.
 Persists project data with atomic write pattern (temp → fsync → os.replace).
 """
 from __future__ import annotations
 
 import json
 import logging
+import shutil
 import threading
 import uuid
 from datetime import datetime, timezone
@@ -56,6 +58,12 @@ UNLINKABLE_STATUSES = {ProjectStatus.DRAFT, ProjectStatus.ACTIVE, ProjectStatus.
 
 # D-144 §5: Archive only from these
 ARCHIVABLE_STATUSES = {ProjectStatus.COMPLETED, ProjectStatus.CANCELLED}
+
+# D-145 §1: Workspace can only be enabled for draft/active projects
+WORKSPACE_ENABLED_STATUSES = {ProjectStatus.DRAFT, ProjectStatus.ACTIVE}
+
+# D-145 §3: Artifact publish/unpublish restricted to draft/active projects
+ARTIFACT_MUTABLE_STATUSES = {ProjectStatus.DRAFT, ProjectStatus.ACTIVE}
 
 # D-144 §3: Mission quiescent states
 MISSION_QUIESCENT_STATUSES = {"completed", "failed", "timed_out"}
@@ -413,3 +421,216 @@ class ProjectStore:
         with self._lock:
             self._projects.clear()
             self._save()
+
+    # ── Workspace (D-145 §1) ────────────────────────────────────
+
+    def enable_workspace(self, project_id: str,
+                         projects_root: Path | str | None = None) -> dict:
+        """Enable workspace for a project. Creates directory structure.
+
+        D-145 §1: Only draft/active projects. 409 if already enabled.
+        """
+        with self._lock:
+            proj = self._projects.get(project_id)
+            if proj is None:
+                raise ProjectStoreError(f"Project not found: {project_id}")
+
+            current = ProjectStatus(proj["status"])
+            if current not in WORKSPACE_ENABLED_STATUSES:
+                raise ProjectLifecycleError(
+                    f"Cannot enable workspace for {current.value} project. "
+                    f"Project must be draft or active."
+                )
+
+            if proj.get("workspace_root") is not None:
+                raise ProjectStoreError(
+                    f"Workspace already enabled for {project_id}")
+
+            # Resolve projects root
+            if projects_root is None:
+                root = Path(__file__).resolve().parent.parent.parent
+                projects_root = root / "projects"
+            else:
+                projects_root = Path(projects_root)
+
+            proj_dir = projects_root / project_id
+            workspace_dir = proj_dir / "workspace"
+            artifact_dir = proj_dir / "artifacts"
+            shared_dir = proj_dir / "shared"
+
+            # Create directory structure
+            workspace_dir.mkdir(parents=True, exist_ok=True)
+            artifact_dir.mkdir(parents=True, exist_ok=True)
+            (shared_dir / "decisions").mkdir(parents=True, exist_ok=True)
+            (shared_dir / "notes").mkdir(parents=True, exist_ok=True)
+            (shared_dir / "briefs").mkdir(parents=True, exist_ok=True)
+
+            # Update project record
+            proj["workspace_root"] = str(workspace_dir)
+            proj["artifact_root"] = str(artifact_dir)
+            proj["shared_root"] = str(shared_dir)
+            proj["updated_at"] = datetime.now(timezone.utc).isoformat()
+            self._save()
+            logger.info("Workspace enabled for project %s", project_id)
+            return dict(proj)
+
+    def get_workspace(self, project_id: str) -> dict | None:
+        """Get workspace metadata for a project."""
+        with self._lock:
+            proj = self._projects.get(project_id)
+            if proj is None:
+                return None
+            return {
+                "project_id": project_id,
+                "enabled": proj.get("workspace_root") is not None,
+                "workspace_root": proj.get("workspace_root"),
+                "artifact_root": proj.get("artifact_root"),
+                "shared_root": proj.get("shared_root"),
+            }
+
+    # ── Artifacts (D-145 §3) ────────────────────────────────────
+
+    def publish_artifact(self, project_id: str, mission_id: str,
+                         artifact_id: str) -> dict:
+        """Publish a mission artifact to project space.
+
+        D-145 §3: Resolves artifact source from mission store.
+        No caller-supplied paths. Copy to project artifact dir.
+        """
+        with self._lock:
+            proj = self._projects.get(project_id)
+            if proj is None:
+                raise ProjectStoreError(f"Project not found: {project_id}")
+
+            current = ProjectStatus(proj["status"])
+            if current not in ARTIFACT_MUTABLE_STATUSES:
+                raise ProjectLifecycleError(
+                    f"Cannot publish artifact on {current.value} project. "
+                    f"Project must be draft or active."
+                )
+
+            if proj.get("artifact_root") is None:
+                raise ProjectStoreError(
+                    f"Workspace not enabled for {project_id}")
+
+        # Verify mission is linked to this project
+        if self._mission_store is not None:
+            mission = self._mission_store.get(mission_id)
+            if mission is None:
+                raise ProjectStoreError(f"Mission not found: {mission_id}")
+            if mission.get("project_id") != project_id:
+                raise ProjectLifecycleError(
+                    f"Mission {mission_id} is not linked to project "
+                    f"{project_id}")
+        else:
+            raise ProjectStoreError("Mission store not available")
+
+        # Resolve artifact source from mission artifacts
+        source_path = self._resolve_artifact_path(mission, artifact_id)
+        if source_path is None:
+            raise ProjectStoreError(
+                f"Artifact {artifact_id} not found in mission {mission_id}")
+
+        source = Path(source_path)
+        if not source.exists():
+            raise ProjectStoreError(
+                f"Artifact file not found: {source_path}")
+
+        # Copy to project artifact directory
+        with self._lock:
+            proj = self._projects[project_id]
+            dest_dir = Path(proj["artifact_root"]) / mission_id
+            dest_dir.mkdir(parents=True, exist_ok=True)
+            dest = dest_dir / source.name
+            shutil.copy2(str(source), str(dest))
+
+            # Track published artifacts in project record
+            published = proj.setdefault("published_artifacts", [])
+            artifact_entry = {
+                "artifact_id": artifact_id,
+                "mission_id": mission_id,
+                "source_path": str(source),
+                "published_path": str(dest),
+                "published_at": datetime.now(timezone.utc).isoformat(),
+                "published_to_project": True,
+            }
+            published.append(artifact_entry)
+            proj["updated_at"] = datetime.now(timezone.utc).isoformat()
+            self._save()
+
+        logger.info("Artifact %s published to project %s from mission %s",
+                     artifact_id, project_id, mission_id)
+        return artifact_entry
+
+    def list_artifacts(self, project_id: str,
+                       mission_id: str | None = None) -> list[dict]:
+        """List published artifacts for a project."""
+        with self._lock:
+            proj = self._projects.get(project_id)
+            if proj is None:
+                raise ProjectStoreError(f"Project not found: {project_id}")
+
+            published = proj.get("published_artifacts", [])
+            if mission_id:
+                published = [a for a in published
+                             if a.get("mission_id") == mission_id]
+            return [dict(a) for a in published]
+
+    def unpublish_artifact(self, project_id: str,
+                           artifact_id: str) -> dict | None:
+        """Remove a published artifact from project space.
+
+        D-145 §3: Only draft/active projects. Removes copy, original intact.
+        """
+        with self._lock:
+            proj = self._projects.get(project_id)
+            if proj is None:
+                raise ProjectStoreError(f"Project not found: {project_id}")
+
+            current = ProjectStatus(proj["status"])
+            if current not in ARTIFACT_MUTABLE_STATUSES:
+                raise ProjectLifecycleError(
+                    f"Cannot unpublish artifact on {current.value} project. "
+                    f"Inactive projects have immutable artifact sets."
+                )
+
+            published = proj.get("published_artifacts", [])
+            entry = None
+            for i, a in enumerate(published):
+                if a.get("artifact_id") == artifact_id:
+                    entry = published.pop(i)
+                    break
+
+            if entry is None:
+                return None
+
+            # Remove the copied file
+            published_path = Path(entry["published_path"])
+            if published_path.exists():
+                published_path.unlink()
+
+            proj["updated_at"] = datetime.now(timezone.utc).isoformat()
+            self._save()
+            logger.info("Artifact %s unpublished from project %s",
+                         artifact_id, project_id)
+            return entry
+
+    def _resolve_artifact_path(self, mission: dict,
+                                artifact_id: str) -> str | None:
+        """Resolve artifact file path from mission data.
+
+        D-145 §3: Server-side resolution, no caller-supplied paths.
+        Checks mission artifacts list and stages_detail for artifact_id.
+        """
+        # Check top-level mission artifacts
+        for art in mission.get("artifacts", []):
+            if art.get("id") == artifact_id:
+                return art.get("path") or art.get("output_path")
+
+        # Check stages_detail artifacts
+        for stage in mission.get("stages_detail", []):
+            for art in stage.get("artifacts", []):
+                if art.get("id") == artifact_id:
+                    return art.get("path") or art.get("output_path")
+
+        return None

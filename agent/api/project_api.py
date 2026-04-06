@@ -1,7 +1,9 @@
-"""Project API — D-144 §7.
+"""Project API — D-144 §7, D-145 §5.
 
-7 REST endpoints: create, list, detail, update, delete, link, unlink.
-Error responses: 409 (active missions, lifecycle), 422 (invalid FSM), 404.
+13 REST endpoints: create, list, detail, update, delete, link, unlink,
+workspace enable, workspace get, artifact publish, artifact list,
+artifact unpublish.
+Error responses: 409 (active missions, lifecycle), 422 (invalid FSM), 404, 403.
 """
 import logging
 from datetime import datetime, timezone
@@ -225,3 +227,126 @@ async def unlink_mission(project_id: str, mission_id: str):
         raise HTTPException(status_code=404, detail=str(e))
 
     return {"meta": _meta(), "data": {"unlinked": True}}
+
+
+# ── Workspace (D-145 §5) ──────────────────────────────────────────
+
+
+@router.post("/{project_id}/workspace/enable", status_code=201)
+async def enable_workspace(project_id: str):
+    """Enable workspace for a project. Creates directory structure.
+
+    D-145 §5: 409 if already enabled, 404 if not found,
+    403 if project status not in {draft, active}.
+    """
+    store = _get_store()
+    project = store.get(project_id)
+    if project is None:
+        raise HTTPException(status_code=404, detail="Project not found")
+
+    try:
+        project = store.enable_workspace(project_id)
+    except ProjectLifecycleError as e:
+        raise HTTPException(status_code=403, detail=str(e))
+    except ProjectStoreError as e:
+        if "already enabled" in str(e):
+            raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=400, detail=str(e))
+
+    return {
+        "meta": _meta(),
+        "data": {
+            "workspace_root": project.get("workspace_root"),
+            "artifact_root": project.get("artifact_root"),
+            "shared_root": project.get("shared_root"),
+        },
+    }
+
+
+@router.get("/{project_id}/workspace")
+async def get_workspace(project_id: str):
+    """Get workspace metadata for a project."""
+    store = _get_store()
+    workspace = store.get_workspace(project_id)
+    if workspace is None:
+        raise HTTPException(status_code=404, detail="Project not found")
+
+    return {"meta": _meta(), "data": workspace}
+
+
+# ── Artifacts (D-145 §5) ──────────────────────────────────────────
+
+
+class PublishArtifactRequest(BaseModel):
+    mission_id: str
+    artifact_id: str
+
+
+@router.post("/{project_id}/artifacts", status_code=201)
+async def publish_artifact(project_id: str, req: PublishArtifactRequest):
+    """Publish a mission artifact to project space.
+
+    D-145 §5: 404 if not found, 409 if workspace not enabled,
+    422 if mission not linked, 403 if project inactive.
+    """
+    store = _get_store()
+    project = store.get(project_id)
+    if project is None:
+        raise HTTPException(status_code=404, detail="Project not found")
+
+    try:
+        entry = store.publish_artifact(
+            project_id, req.mission_id, req.artifact_id)
+    except ProjectLifecycleError as e:
+        if "not linked" in str(e):
+            raise HTTPException(status_code=422, detail=str(e))
+        raise HTTPException(status_code=403, detail=str(e))
+    except ProjectStoreError as e:
+        if "not enabled" in str(e):
+            raise HTTPException(status_code=409, detail=str(e))
+        if "not found" in str(e).lower():
+            raise HTTPException(status_code=404, detail=str(e))
+        raise HTTPException(status_code=400, detail=str(e))
+
+    return {"meta": _meta(), "data": entry}
+
+
+@router.get("/{project_id}/artifacts")
+async def list_artifacts(
+    project_id: str,
+    mission_id: Optional[str] = None,
+):
+    """List published artifacts for a project."""
+    store = _get_store()
+    project = store.get(project_id)
+    if project is None:
+        raise HTTPException(status_code=404, detail="Project not found")
+
+    try:
+        artifacts = store.list_artifacts(project_id, mission_id=mission_id)
+    except ProjectStoreError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+    return {"meta": _meta(), "data": artifacts}
+
+
+@router.delete("/{project_id}/artifacts/{artifact_id}", status_code=204)
+async def unpublish_artifact(project_id: str, artifact_id: str):
+    """Unpublish (remove) an artifact from project space.
+
+    D-145 §5: 404 if not found, 403 if project inactive.
+    """
+    store = _get_store()
+    project = store.get(project_id)
+    if project is None:
+        raise HTTPException(status_code=404, detail="Project not found")
+
+    try:
+        entry = store.unpublish_artifact(project_id, artifact_id)
+    except ProjectLifecycleError as e:
+        raise HTTPException(status_code=403, detail=str(e))
+    except ProjectStoreError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+    if entry is None:
+        raise HTTPException(status_code=404, detail="Artifact not found")

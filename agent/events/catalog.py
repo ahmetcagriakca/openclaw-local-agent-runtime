@@ -51,6 +51,11 @@ class EventType:
     PROJECT_MISSION_UNLINKED = "project.mission_unlinked"
     PROJECT_DELETED = "project.deleted"
 
+    # ── Project workspace/artifacts (D-145) ─────────────────────
+    PROJECT_WORKSPACE_ENABLED = "project.workspace_enabled"
+    PROJECT_ARTIFACT_PUBLISHED = "project.artifact_published"
+    PROJECT_ARTIFACT_UNPUBLISHED = "project.artifact_unpublished"
+
     # ── Quality gates ────────────────────────────────────────────
     GATE_CHECKED = "gate.checked"
     GATE_PASSED = "gate.passed"

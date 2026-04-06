@@ -1,6 +1,6 @@
-"""ProjectHandler — audit trail for project lifecycle events (D-144 §9).
+"""ProjectHandler — audit trail for project lifecycle events (D-144 §9, D-145).
 
-Handles 5 project event types. Logs to structured logger.
+Handles 8 project event types. Logs to structured logger.
 Does not halt event propagation.
 """
 from __future__ import annotations
@@ -18,6 +18,9 @@ PROJECT_EVENT_TYPES = frozenset({
     EventType.PROJECT_MISSION_LINKED,
     EventType.PROJECT_MISSION_UNLINKED,
     EventType.PROJECT_DELETED,
+    EventType.PROJECT_WORKSPACE_ENABLED,
+    EventType.PROJECT_ARTIFACT_PUBLISHED,
+    EventType.PROJECT_ARTIFACT_UNPUBLISHED,
 })
 
 
@@ -63,5 +66,22 @@ class ProjectHandler:
                 project_id,
                 data.get("deleted_at"),
                 data.get("actor", "operator"))
+
+        elif event.type == EventType.PROJECT_WORKSPACE_ENABLED:
+            logger.info(
+                "[PROJECT] Workspace enabled: %s root=%s",
+                project_id, data.get("workspace_root"))
+
+        elif event.type == EventType.PROJECT_ARTIFACT_PUBLISHED:
+            logger.info(
+                "[PROJECT] Artifact published: %s artifact=%s mission=%s",
+                project_id,
+                data.get("artifact_id"),
+                data.get("mission_id"))
+
+        elif event.type == EventType.PROJECT_ARTIFACT_UNPUBLISHED:
+            logger.info(
+                "[PROJECT] Artifact unpublished: %s artifact=%s",
+                project_id, data.get("artifact_id"))
 
         return HandlerResult.proceed()

@@ -275,7 +275,8 @@ class MissionController:
                 mission_state.transition_to(MissionStatus.READY,
                                             f"retry: reusing plan, resuming from stage {resume_from_index + 1}")
             else:
-                plan, complexity = self._plan_mission(goal, mission_id)
+                plan, complexity = self._plan_mission(goal, mission_id,
+                                                       mission=mission)
                 mission["stages"] = plan["stages"]
                 mission["complexity"] = complexity
                 self._mission_complexity = complexity
@@ -798,7 +799,8 @@ class MissionController:
 
         return mission
 
-    def _plan_mission(self, goal: str, mission_id: str) -> tuple[dict, str]:
+    def _plan_mission(self, goal: str, mission_id: str,
+                       mission: dict | None = None) -> tuple[dict, str]:
         """Plan mission with complexity-routed stage template.
 
         Returns (plan_dict, complexity_class).
@@ -957,7 +959,8 @@ Respond ONLY with a JSON object, no markdown:
 
             stage["working_set"] = self._build_default_working_set(
                 stage.get("id", "unknown"),
-                canonical_role
+                canonical_role,
+                mission=mission,
             )
 
         return plan, complexity
@@ -1395,11 +1398,14 @@ Respond ONLY with a JSON object, no markdown:
         "executor": "remote-operator",
     }
 
-    def _build_default_working_set(self, stage_id: str, specialist: str):
+    def _build_default_working_set(self, stage_id: str, specialist: str,
+                                     mission: dict | None = None):
         """Build a default working set for a specialist role.
 
         D-053: Every mission stage must have a working set.
         D-048: Canonical role naming — "executor" maps to "remote-operator".
+        D-145 §2: Inject project read-only paths when mission is linked
+        to an active project with workspace enabled.
         """
         from context.working_set import FileAccess, ReadBudget, WorkingSet
 
@@ -1422,12 +1428,22 @@ Respond ONLY with a JSON object, no markdown:
 
         gen_outputs = [os.path.join(oc_root, p) for p in template["generated_outputs"]]
 
+        read_only = []
+        extra_dirs = []
+
+        # D-145 §2: Project path injection
+        if mission is not None:
+            project_paths = self._get_project_paths(mission)
+            if project_paths:
+                read_only.extend(project_paths)
+                extra_dirs.extend(project_paths)
+
         files = FileAccess(
-            read_only=[],
+            read_only=read_only,
             read_write=[],
             creatable=[],
             generated_outputs=gen_outputs,
-            directory_list=[oc_root, results_dir]
+            directory_list=[oc_root, results_dir] + extra_dirs
         )
 
         budget = ReadBudget(
@@ -1448,6 +1464,49 @@ Respond ONLY with a JSON object, no markdown:
             forbidden_directories=template["forbidden_directories"],
             forbidden_patterns=template["forbidden_patterns"]
         )
+
+    def _get_project_paths(self, mission: dict) -> list[str]:
+        """D-145 §2: Get read-only project paths for a mission.
+
+        Returns empty list if:
+        - Mission has no project_id
+        - Project not found or has no workspace
+        - Project is inactive (completed/cancelled/archived)
+        """
+        project_id = mission.get("project_id")
+        if not project_id:
+            return []
+
+        try:
+            from api.project_api import _get_store
+            from persistence.project_store import ProjectStatus
+
+            store = _get_store()
+            proj = store.get(project_id)
+            if proj is None:
+                return []
+
+            # Only inject for active projects with workspace
+            status = ProjectStatus(proj.get("status", "draft"))
+            if status not in {ProjectStatus.DRAFT, ProjectStatus.ACTIVE}:
+                return []
+
+            workspace_root = proj.get("workspace_root")
+            if workspace_root is None:
+                return []
+
+            paths = []
+            shared_root = proj.get("shared_root")
+            artifact_root = proj.get("artifact_root")
+            if shared_root:
+                paths.append(shared_root)
+            if artifact_root:
+                paths.append(artifact_root)
+            if workspace_root:
+                paths.append(workspace_root)
+            return paths
+        except Exception:
+            return []
 
     # 6C-1: Resolve artifact type from skill contract
     def _resolve_artifact_type(self, skill_name: str) -> str:

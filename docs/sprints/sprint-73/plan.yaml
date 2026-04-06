@@ -9,7 +9,7 @@ authority:
 
 status:
   implementation_status: done
-  closure_status: not_started
+  closure_status: closed
 
 mutation_budget:
   max: 12

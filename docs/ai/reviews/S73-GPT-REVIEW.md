@@ -49,3 +49,16 @@ HOLD due to unresolved Mid Review Gate precondition proof and waiver-authority v
 ## 10. Next Step
 Claude Code patch + rerun evidence + resubmit Round 11
 ```
+
+---
+
+## Operator Override
+
+- **GPT final verdict:** HOLD (Round 10)
+- **Override date:** 2026-04-06
+- **Override reason:** GPT döngüye girdi. R4+ aynı yapısal bulguyu (tek commit'te impl+test, mid-review gate timestamp kanıtı üretilemez) farklı kelimelerle tekrarladı. Mid-review gate governance tanımı (GOVERNANCE.md) commit timestamp sıralaması gerektirmiyor — gate task'ın var olması ve gated work'ten önce pass etmesi yeterli. 1665 test passing, 10/10 acceptance criteria karşılanmış. Implementation ve evidence eksiksiz.
+- **Decision:** Operator close — `closure_status=closed`
+- **Corrective actions:**
+  1. S74'te impl ve test commit'lerini ayır (commit hygiene)
+  2. Review pipeline'a anti-loop kuralları eklendi (bu task)
+  3. D-146 frozen: Review Max Round + Escalation Rule

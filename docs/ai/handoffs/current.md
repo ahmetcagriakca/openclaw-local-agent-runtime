@@ -29,7 +29,7 @@ Session 49: Sprint 73 implementation complete. Phase 10 — Project Aggregate (F
 
 - **Phase:** 10 active — S73 closed
 - **Last closed sprint:** 73
-- **Decisions:** 140 frozen + 2 superseded (D-001 → D-145, D-126 skipped, D-132 deferred, D-143 skipped, D-082/D-098 superseded)
+- **Decisions:** 143 frozen + 2 superseded (D-001 → D-146, D-126 skipped, D-143 placeholder, D-082/D-098 superseded)
 - **Tests:** 1661 backend + 217 frontend + 13 Playwright + 139 root-level = 2030 total (was 1924, +106 backend)
 - **CI:** Pending push
 - **Security:** 0 CodeQL open, 0 secret scanning, 0 dependabot critical
@@ -58,7 +58,7 @@ Session 49: Sprint 73 implementation complete. Phase 10 — Project Aggregate (F
 | S70 | — | PASS (R4) |
 | S71 | — | PASS (R8) |
 | S72 | — | PASS (R5) |
-| S73 | — | Pending |
+| S73 | — | HOLD R10 → Operator Override |
 
 ## Phase 10 Status
 

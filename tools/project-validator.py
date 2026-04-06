@@ -35,6 +35,7 @@ DONE_BUT_OPEN = "DONE_BUT_OPEN"
 CLOSED_SPRINT_OPEN_ISSUE = "CLOSED_SPRINT_OPEN_ISSUE"
 CLOSED_NOT_DONE = "CLOSED_NOT_DONE"
 UNCLASSIFIED = "UNCLASSIFIED"
+MILESTONE_SOURCE_FAILURE = "MILESTONE_SOURCE_FAILURE"
 BACKLOG_CLOSURE_ELIGIBLE = "BACKLOG_CLOSURE_ELIGIBLE"
 
 
@@ -60,12 +61,11 @@ class ProjectItem:
     item_class: str = ""  # Classification result
 
 
-def derive_closed_sprints() -> set[int]:
+def derive_closed_sprints() -> set[int] | None:
     """Derive closed sprints from GitHub milestones (state=closed).
 
     Queries all closed milestones matching 'Sprint N' pattern.
-    Falls back to empty set on API failure (findings will still surface
-    CLOSED_SPRINT_OPEN_ISSUE if the set can be populated).
+    Returns None on API failure (fail-closed: caller must treat as source error).
     """
     closed: set[int] = set()
     page = 1
@@ -79,9 +79,9 @@ def derive_closed_sprints() -> set[int]:
             capture_output=True, text=True,
         )
         if result.returncode != 0:
-            print(f"Warning: could not fetch milestones (page {page}): {result.stderr}",
+            print(f"ERROR: could not fetch milestones (page {page}): {result.stderr}",
                   file=sys.stderr)
-            break
+            return None
         milestones = json.loads(result.stdout)
         if not milestones:
             break
@@ -272,6 +272,13 @@ def main():
 
     items = fetch_project_items()
     all_findings: list[Finding] = []
+
+    # Fail-closed: if milestone source is unavailable, emit a top-level FAIL
+    if closed_sprints is None:
+        all_findings.append(Finding(
+            MILESTONE_SOURCE_FAILURE, "FAIL", 0, "(validator)",
+            "GitHub milestones API unavailable — cannot enforce CLOSED_SPRINT_OPEN_ISSUE (D-125)"
+        ))
 
     # Classify all items
     for item in items:

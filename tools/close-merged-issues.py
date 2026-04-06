@@ -37,16 +37,14 @@ def is_branch_merged(branch_name: str) -> bool:
 
 
 def has_merged_pr(issue_number: int) -> bool:
-    """Check if an issue has an associated merged PR (linked or referenced)."""
-    # Search for PRs that mention the issue number
-    out, rc = gh("pr", "list", "--state", "merged", "--search", f"#{issue_number}",
-                 "--json", "number", "--jq", "length")
-    if rc == 0 and out.strip() not in ("", "0"):
-        return True
-    # Also check via issue timeline for linked PRs
-    out2, rc2 = gh("api", f"repos/ahmetcagriakca/vezir/issues/{issue_number}/timeline",
-                   "--jq", '[.[] | select(.event=="cross-referenced" and .source.issue.pull_request.merged_at != null)] | length')
-    return rc2 == 0 and out2.strip() not in ("", "0")
+    """Check if an issue has an associated merged PR via exact timeline linkage.
+
+    Uses only issue timeline cross-references with merged_at evidence.
+    Does NOT use broad search matching (which could match unrelated PRs).
+    """
+    out, rc = gh("api", f"repos/ahmetcagriakca/vezir/issues/{issue_number}/timeline",
+                 "--jq", '[.[] | select(.event=="cross-referenced" and .source.issue.pull_request.merged_at != null)] | length')
+    return rc == 0 and out.strip() not in ("", "0")
 
 
 def main():

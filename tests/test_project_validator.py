@@ -212,17 +212,31 @@ class TestClosedSprintOpenIssue:
         findings = validate_item(item, closed_sprints={19, 20, 31, 32})
         assert not find_code(findings, validator.CLOSED_SPRINT_OPEN_ISSUE)
 
-    def test_no_closed_sprints_skips_check(self):
-        """When closed_sprints is None (API unavailable), skip the check."""
+    def test_none_closed_sprints_skips_item_check(self):
+        """When closed_sprints is None (API failure), item-level check is skipped.
+
+        Fail-closed enforcement happens at main() level via MILESTONE_SOURCE_FAILURE.
+        """
         item = make_item(sprint=32, state="OPEN", status="In Progress")
         findings = validate_item(item, closed_sprints=None)
         assert not find_code(findings, validator.CLOSED_SPRINT_OPEN_ISSUE)
 
     def test_empty_closed_sprints_skips_check(self):
-        """When closed_sprints is empty, skip the check."""
+        """When closed_sprints is empty (no milestones closed), skip the check."""
         item = make_item(sprint=32, state="OPEN", status="In Progress")
         findings = validate_item(item, closed_sprints=set())
         assert not find_code(findings, validator.CLOSED_SPRINT_OPEN_ISSUE)
+
+    def test_milestone_source_failure_emits_fail(self):
+        """When derive_closed_sprints returns None, main must emit MILESTONE_SOURCE_FAILURE."""
+        # Simulate what main() does when closed_sprints is None
+        from importlib import import_module as _im
+        finding = validator.Finding(
+            validator.MILESTONE_SOURCE_FAILURE, "FAIL", 0, "(validator)",
+            "GitHub milestones API unavailable"
+        )
+        assert finding.severity == "FAIL"
+        assert finding.code == validator.MILESTONE_SOURCE_FAILURE
 
 
 # --- CLOSED_NOT_DONE ---
@@ -335,13 +349,14 @@ class TestDeriveClosedSprints:
         assert result == set()
 
     @patch("subprocess.run")
-    def test_api_failure_returns_empty(self, mock_run):
+    def test_api_failure_returns_none(self, mock_run):
+        """API failure must return None (fail-closed), not empty set."""
         mock_result = MagicMock()
         mock_result.returncode = 1
         mock_result.stderr = "API error"
         mock_run.return_value = mock_result
         result = derive_closed_sprints()
-        assert result == set()
+        assert result is None
 
     @patch("subprocess.run")
     def test_pagination(self, mock_run):

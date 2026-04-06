@@ -8,8 +8,8 @@ authority:
   automation_index: "plan.yaml"
 
 status:
-  implementation_status: in_progress
-  closure_status: not_started
+  implementation_status: done
+  closure_status: review_pending
 
 issue:
   parent_title: "[S70] Validator/Closer Drift Hardening"

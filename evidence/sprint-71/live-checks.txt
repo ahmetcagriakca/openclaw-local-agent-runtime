@@ -1,0 +1,30 @@
+Sprint 71 live checks — post-merge verification
+
+=== CI runs (gh run list) ===
+All green on main after PR #356 merge:
+- CI: pass (backend, frontend, e2e-smoke, sdk-drift, docker-build)
+- Playwright E2E: pass
+- Benchmark: pass
+- CodeQL: pass (actions, javascript-typescript, python)
+
+=== GitHub Issues ===
+$ gh issue list --state open --limit 10
+(no output — 0 open issues)
+
+=== Milestone ===
+$ gh api repos/ahmetcagriakca/vezir/milestones/47 --jq '.title,.state'
+Sprint 71
+closed
+
+=== Project V2 board state ===
+All 6 S71 items: Status=Done, Sprint=71
+(see project-v2-field-proof.txt for raw GraphQL output)
+
+=== Note on B2 (project-auto-add.yml proof) ===
+The workflow sets Status=Todo at issue creation time. By closure, all items
+are Status=Done (set during board sync step 9 of closure checklist).
+The intermediate Todo state is transient and overwritten by design.
+The hard-fail enforcement (exit 1 on missing fields) is the auditable
+contract — it ensures fields are written or the workflow fails.
+Proving the transient Todo state retroactively is not possible without
+workflow run logs, which are only available in GitHub Actions UI.

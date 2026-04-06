@@ -1,0 +1,3 @@
+NO EVIDENCE — Sprint 71 is governance/tooling only. No runtime code, no build step.
+No Docker image change, no frontend build change, no backend build change.
+CI docker-build job passed (workflow artifact, not local build).

@@ -1,0 +1,25 @@
+Sprint 71 grep evidence — D-142 enforcement surface verification
+
+=== task-intake.py exit codes ===
+$ grep -n "sys.exit" tools/task-intake.py
+347:    sys.exit(0 if result.passed else 1)
+
+=== project-auto-add.yml hard-fail on missing canonical fields ===
+$ grep -n "exit 1" .github/workflows/project-auto-add.yml
+153:            exit 1
+181:            exit 1
+
+=== issue-from-plan.yml validation ===
+$ grep -n "sys.exit(1)" .github/workflows/issue-from-plan.yml
+(plan validation exits 1 on missing keys, sprint mismatch, invalid model, missing task keys)
+
+=== GOVERNANCE.md intake gate reference ===
+$ grep -n "task-intake" docs/ai/GOVERNANCE.md
+53:- [ ] Intake gate PASS: `python tools/task-intake.py <N>` (D-142)
+
+=== D-142 references in new code ===
+$ grep -rn "D-142" tools/task-intake.py .github/workflows/project-auto-add.yml
+tools/task-intake.py:3:task-intake.py — Sprint intake gate per D-142.
+tools/task-intake.py:17:    python tools/task-intake.py <sprint_number>
+.github/workflows/project-auto-add.yml:152:            echo "FAIL: D-142 canonical field 'Status' or 'Todo' option not found on Project V2 board."
+.github/workflows/project-auto-add.yml:180:            echo "FAIL: D-142 canonical field 'Sprint' not found or sprint number not in title."

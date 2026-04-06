@@ -376,7 +376,7 @@ For Sprint 11+:
 ## 23. Stale Document Quarantine
 
 - Old snapshots and stale reports are not closure inputs.
-- Old copies are moved to `archive/stale/` or prefixed with `STALE — DO NOT USE FOR CLOSURE`.
+- Old copies are moved to `docs/archive/stale/` or prefixed with `STALE — DO NOT USE FOR CLOSURE`.
 - Two different closure truths for the same sprint cannot coexist in the active repo.
 - Old report copies from conversation history are not used as decision inputs — repo truth is authoritative.
 

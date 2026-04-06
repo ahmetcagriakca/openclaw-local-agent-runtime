@@ -48,9 +48,40 @@ class ProviderResponse:
 
 
 class AgentProvider:
-    """Base interface — every LLM provider implements this."""
+    """Base interface — every LLM provider implements this.
+
+    Canonical interface (D-148):
+      execute(request: TaskRequest, tools: list, max_tokens: int) -> ProviderResponse
+
+    Legacy interface (backward compatibility):
+      chat(messages: list, tools: list, max_tokens: int) -> AgentResponse
+
+    New providers MUST implement execute(). Legacy chat() is a compatibility
+    shim that converts messages to TaskRequest and delegates to execute().
+    Existing providers may override chat() directly until fully migrated.
+    """
+
+    def execute(self, request: TaskRequest, tools: list | None = None, max_tokens: int = 4096) -> ProviderResponse:
+        """Canonical entrypoint — TaskRequest in, ProviderResponse out.
+
+        Default implementation converts to legacy chat() for backward compat.
+        New providers should override this directly.
+        """
+        messages = [{"role": "user", "content": request.prompt}]
+        result = self.chat(messages, tools or [], max_tokens)
+        return ProviderResponse(
+            text=result.text,
+            tool_calls=result.tool_calls,
+            stop_reason=result.stop_reason,
+            provider_name=self.name(),
+        )
 
     def chat(self, messages: list, tools: list, max_tokens: int = 4096) -> AgentResponse:
+        """Legacy entrypoint — maintained for backward compatibility.
+
+        Default implementation converts to canonical execute() path.
+        Existing providers override this directly.
+        """
         raise NotImplementedError
 
     def name(self) -> str:

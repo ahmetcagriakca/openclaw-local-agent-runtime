@@ -10,7 +10,7 @@ tasks:
   - id: "T-77.00"
     title: "Azure tenant/deployment inventory + compatibility proof"
     type: research
-    status: pending
+    status: done
     evidence:
       - "evidence/sprint-77/azure-deployment-inventory.md"
       - "evidence/sprint-77/azure-smoke-precheck.txt"
@@ -18,7 +18,7 @@ tasks:
   - id: "T-77.01"
     title: "AzureDeploymentConfig + agent-config.json schema"
     type: implementation
-    status: pending
+    status: done
     depends_on: ["T-77.00"]
     evidence:
       - "evidence/sprint-77/pytest-output.txt"
@@ -26,7 +26,7 @@ tasks:
   - id: "T-77.02"
     title: "AzureOpenAIProvider adapter + canonical contract migration"
     type: implementation
-    status: pending
+    status: done
     depends_on: ["T-77.01"]
     evidence:
       - "evidence/sprint-77/pytest-output.txt"
@@ -34,7 +34,7 @@ tasks:
   - id: "T-77.03"
     title: "Provider factory + routing policy"
     type: implementation
-    status: pending
+    status: done
     depends_on: ["T-77.02"]
     evidence:
       - "evidence/sprint-77/pytest-output.txt"
@@ -42,7 +42,7 @@ tasks:
   - id: "T-77.04"
     title: "AzureHealthCheck + retirement guard"
     type: implementation
-    status: pending
+    status: done
     depends_on: ["T-77.03"]
     evidence:
       - "evidence/sprint-77/pytest-output.txt"
@@ -50,7 +50,7 @@ tasks:
   - id: "T-77.05"
     title: "ProviderSelectionTelemetry"
     type: implementation
-    status: pending
+    status: done
     depends_on: ["T-77.03"]
     evidence:
       - "evidence/sprint-77/pytest-output.txt"
@@ -59,7 +59,7 @@ tasks:
   - id: "T-77.06"
     title: "Integration smoke test + evidence collection"
     type: integration
-    status: pending
+    status: done
     depends_on: ["T-77.04", "T-77.05"]
     evidence:
       - "evidence/sprint-77/integration-smoke.txt"
@@ -67,7 +67,7 @@ tasks:
   - id: "T-77.07"
     title: "Review gate + closure"
     type: closure
-    status: pending
+    status: in_progress
     depends_on: ["T-77.06"]
     evidence:
       - "evidence/sprint-77/review-summary.md"

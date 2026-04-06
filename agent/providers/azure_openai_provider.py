@@ -6,7 +6,7 @@ from datetime import datetime
 
 import requests
 
-from .base import AgentProvider, AgentResponse, ProviderResponse, ToolCall
+from .base import AgentProvider, AgentResponse, ProviderResponse, TaskRequest, ToolCall
 
 logger = logging.getLogger(__name__)
 
@@ -149,19 +149,38 @@ class AzureOpenAIProvider(AgentProvider):
                 resp_tools.append(tool)
         return resp_tools
 
-    def chat(self, messages: list, tools: list, max_tokens: int = 4096) -> AgentResponse:
-        """Send a request via Azure OpenAI Responses API.
+    def execute(self, request: TaskRequest, tools: list | None = None, max_tokens: int = 4096) -> ProviderResponse:
+        """Canonical entrypoint — TaskRequest directly to Responses API.
 
-        Converts messages-based input to Responses API input format.
-        Returns standard AgentResponse for backward compatibility.
+        No messages conversion. D-148 compliant: TaskRequest -> Responses payload.
+        This is the primary path for Azure provider.
         """
-        resp = self.chat_canonical(messages, tools, max_tokens)
+        max_tokens = max(max_tokens, 16)  # Azure minimum
+
+        payload: dict = {
+            "model": self.deployment,
+            "input": request.prompt,
+            "max_output_tokens": max_tokens,
+        }
+
+        if tools:
+            payload["tools"] = self._convert_tools(tools)
+            payload["tool_choice"] = "auto"
+
+        return self._send_request(payload)
+
+    def chat(self, messages: list, tools: list, max_tokens: int = 4096) -> AgentResponse:
+        """Legacy compatibility entrypoint — converts messages to Responses API.
+
+        This is a backward-compatibility shim. New callers should use execute().
+        """
+        resp = self._chat_via_messages(messages, tools, max_tokens)
         return resp.to_agent_response()
 
-    def chat_canonical(
+    def _chat_via_messages(
         self, messages: list, tools: list, max_tokens: int = 4096
     ) -> ProviderResponse:
-        """Send request and return canonical ProviderResponse."""
+        """Legacy path: messages -> input conversion -> Responses API."""
         input_text = self._convert_messages_to_input(messages)
         max_tokens = max(max_tokens, 16)  # Azure minimum
 
@@ -175,6 +194,10 @@ class AzureOpenAIProvider(AgentProvider):
             payload["tools"] = self._convert_tools(tools)
             payload["tool_choice"] = "auto"
 
+        return self._send_request(payload)
+
+    def _send_request(self, payload: dict) -> ProviderResponse:
+        """Send HTTP request to Azure OpenAI Responses API and parse result."""
         headers = {
             "Content-Type": "application/json",
             "api-key": self.api_key,

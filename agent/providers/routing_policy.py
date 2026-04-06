@@ -31,6 +31,15 @@ class ProviderRoutingPolicy:
     primary: str = "azure-general"
     fallback_chain: list[str] = field(default_factory=lambda: ["gpt-general", "claude-general"])
 
+    # Capability manifest: which provider supports which capabilities
+    # Providers not listed are assumed to support all capabilities
+    capability_manifest: dict[str, list[str]] = field(default_factory=lambda: {
+        "azure-general": ["text_generation", "function_calling", "reasoning"],
+        "gpt-general": ["text_generation", "function_calling", "code_interpreter", "reasoning"],
+        "claude-general": ["text_generation", "function_calling", "reasoning", "long_context"],
+        "ollama-general": ["text_generation"],
+    })
+
     def select(
         self,
         agent_config: dict,
@@ -65,19 +74,30 @@ class ProviderRoutingPolicy:
         # Rule 2: Kill switch check
         if not self._is_azure_enabled():
             return self._select_fallback(
-                agents, health, "azure kill switch active (AZURE_ENABLED=false)"
+                agents, health, "azure kill switch active (AZURE_ENABLED=false)",
+                required_capabilities=required_capabilities,
             )
 
-        # Rule 3: Primary available?
+        # Rule 3: Capability check on primary
+        if required_capabilities and not self._has_capabilities(self.primary, required_capabilities):
+            return self._select_fallback(
+                agents, health,
+                f"primary '{self.primary}' missing capabilities: "
+                f"{self._missing_capabilities(self.primary, required_capabilities)}",
+                required_capabilities=required_capabilities,
+            )
+
+        # Rule 4: Primary available?
         if self.primary in agents and self._is_available(agents, self.primary, health):
             return RoutingDecision(
                 selected_provider=self.primary,
                 reason="primary provider (azure-first policy)",
             )
 
-        # Rule 4: Primary unavailable — fallback
+        # Rule 5: Primary unavailable — fallback
         return self._select_fallback(
-            agents, health, f"primary '{self.primary}' unavailable"
+            agents, health, f"primary '{self.primary}' unavailable",
+            required_capabilities=required_capabilities,
         )
 
     def _is_azure_enabled(self) -> bool:
@@ -108,24 +128,40 @@ class ProviderRoutingPolicy:
                 return agent_id
         return None
 
+    def _has_capabilities(self, agent_id: str, required: list[str]) -> bool:
+        """Check if agent supports all required capabilities."""
+        supported = self.capability_manifest.get(agent_id)
+        if supported is None:
+            return True  # Unknown providers assumed capable
+        return all(cap in supported for cap in required)
+
+    def _missing_capabilities(self, agent_id: str, required: list[str]) -> list[str]:
+        """Return list of capabilities the agent is missing."""
+        supported = self.capability_manifest.get(agent_id, [])
+        return [cap for cap in required if cap not in supported]
+
     def _select_fallback(
-        self, agents: dict, health: dict, fallback_reason: str
+        self, agents: dict, health: dict, fallback_reason: str,
+        required_capabilities: list[str] | None = None,
     ) -> RoutingDecision:
-        """Select first available fallback provider."""
+        """Select first available and capable fallback provider."""
         for agent_id in self.fallback_chain:
-            if agent_id in agents and self._is_available(agents, agent_id, health):
-                logger.info(
-                    "Routing fallback: %s → %s (reason: %s)",
-                    self.primary,
-                    agent_id,
-                    fallback_reason,
-                )
-                return RoutingDecision(
-                    selected_provider=agent_id,
-                    reason=f"fallback: {agent_id}",
-                    fallback_used=True,
-                    fallback_reason=fallback_reason,
-                )
+            if agent_id not in agents or not self._is_available(agents, agent_id, health):
+                continue
+            if required_capabilities and not self._has_capabilities(agent_id, required_capabilities):
+                continue
+            logger.info(
+                "Routing fallback: %s → %s (reason: %s)",
+                self.primary,
+                agent_id,
+                fallback_reason,
+            )
+            return RoutingDecision(
+                selected_provider=agent_id,
+                reason=f"fallback: {agent_id}",
+                fallback_used=True,
+                fallback_reason=fallback_reason,
+            )
 
         raise RuntimeError(
             f"No available provider. Primary: {self.primary}, "

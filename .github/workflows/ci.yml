@@ -276,19 +276,23 @@ jobs:
 
       - name: Push badges to badges branch
         run: |
+          # Save badge files to temp
+          cp -r badges /tmp/badge-files
+
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Create orphan badges branch or update existing
-          git checkout --orphan badges-update 2>/dev/null || git checkout -B badges-update
+          # Fetch badges branch if it exists, or create orphan
+          git fetch origin badges 2>/dev/null && git checkout badges || git checkout --orphan badges
+
+          # Clean working tree and copy only badge files
           git rm -rf . 2>/dev/null || true
-          cp -r badges/* . 2>/dev/null || true
-          ls *.json
+          cp /tmp/badge-files/*.json .
 
           git add *.json
           if git diff --cached --quiet; then
             echo "No badge changes"
           else
             git commit -m "chore(ci): update dynamic badges"
-            git push origin HEAD:badges --force
+            git push origin badges --force
           fi

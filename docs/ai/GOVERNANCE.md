@@ -50,6 +50,12 @@ All checked before code is written:
 - [ ] Open decisions max 2
 - [ ] Task breakdown frozen with evidence checklist
 - [ ] GPT pre-sprint review PASS
+- [ ] Intake gate PASS: `python tools/task-intake.py <N>` (D-142)
+  - plan.yaml valid (structure, sprint number, model, tasks)
+  - GitHub milestone exists and is open
+  - Parent + task issues exist with correct milestone
+  - Governed state docs consistent (state-sync --check)
+  - Project V2 board items have canonical fields initialized
 
 ---
 

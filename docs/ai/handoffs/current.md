@@ -62,7 +62,8 @@ Session 51: Sprint 75 + Sprint 76 + repo hygiene cleanup + archive migration —
 - **Sprint 76 status:** implementation_status=done, closure_status=closed
 - **Decisions:** 144 frozen + 2 superseded (D-001 → D-147, D-126 skipped, D-143 placeholder, D-082/D-098 superseded)
 - **Tests:** 1777 backend + 239 frontend + 13 Playwright + 139 root = 2168 total
-- **CI:** All green (3/3 workflows)
+- **CI:** All green (3/3 workflows + badges job)
+- **Badges:** 8 dynamic badges (6 endpoint + 2 GitHub Actions native), all auto-updated
 - **Security:** 0 CodeQL open, 0 secret scanning, 2 dependabot (pre-existing)
 - **PRs:** 0 open
 - **Open issues:** B-148 PAT (pre-existing)

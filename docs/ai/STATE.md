@@ -1,7 +1,7 @@
 # Current State
 
 **Last updated:** 2026-04-06
-**Active phase:** Phase 10 — Sprint 73 closed
+**Active phase:** Phase 10 — Sprint 74 impl done, closure pending
 **Doc model:** This file is canonical for system state. Session context lives in `docs/ai/handoffs/current.md`.
 **Note:** All sprints through 53 closed. S54 deferred. S55-S73 closed. All P1 backlog items complete (50/50). Phase 10 active (S73+). Phase 9 complete (S69-S72). Phase 8 complete (S60-S68). 143 frozen + 2 superseded decisions (D-001 → D-146, D-126 skipped, D-143 placeholder, D-082/D-098 superseded). Governance: 20-step closure checklist. Review pipeline: max 5 rounds + ESCALATE (D-146).
 **Persistence:** State is file-persisted (state.json, mission.json). Mission history via persistence layer (Sprint 16).
@@ -57,9 +57,9 @@
 | CI/CD Pipeline | 7 GitHub Actions workflows | `.github/workflows/` |
 | Branch Protection | Active on main (require PR, no direct push) | GitHub Settings |
 | Issue Automation | plan.yaml → issues + issues.json via workflow | `.github/workflows/issue-from-plan.yml` |
-| Project Store | Operational (CRUD, 6-state FSM, mission link, D-144) | `agent/persistence/project_store.py` |
-| Project API | Operational (7 endpoints, D-144) | `agent/api/project_api.py` |
-| Project EventBus | Operational (5 event types, audit handler) | `agent/events/handlers/project_handler.py` |
+| Project Store | Operational (CRUD, FSM, workspace, artifacts, D-144/D-145) | `agent/persistence/project_store.py` |
+| Project API | Operational (13 endpoints, D-144/D-145) | `agent/api/project_api.py` |
+| Project EventBus | Operational (8 event types, audit handler) | `agent/events/handlers/project_handler.py` |
 
 ## Completed Phases
 
@@ -133,6 +133,7 @@
 | Sprint 71 | Intake Gate + Workflow Writer Enforcement — Phase 9 | Closed |
 | Sprint 72 | Session Protocol Enforcement �� Phase 9 | Closed |
 | Sprint 73 | Project Entity + CRUD (D-144) — Phase 10 | Closed |
+| Sprint 74 | Workspace + Artifacts (D-145) — Phase 10 | Impl done, closure pending |
 
 ## Test Evidence
 
@@ -177,6 +178,7 @@
 | Sprint 71 | 1555 tests, 0 fail | 217 tests, 0 TS errors | +40 root tests (task-intake). 13 Playwright. 102 root. 1887 total |
 | Sprint 72 | 1555 tests, 0 fail | 217 tests, 0 TS errors | +37 root tests (pre-impl-check). 13 Playwright. 139 root. 1924 total |
 | Sprint 73 | 1661 tests, 0 fail | 217 tests, 0 TS errors | +106 backend (project store 23, API 22, FSM 22, historical 9, events 15, compat 12, integration 8, event count fix -2+2). 13 Playwright. 139 root. 2030 total |
+| Sprint 74 | 1712 tests, 0 fail | 217 tests, 0 TS errors | +51 backend (workspace 13, artifacts 18, WorkingSet 8, integration 7, events 3, count fix +2). 13 Playwright. 139 root. 2081 total |
 
 ## Architectural Decisions
 

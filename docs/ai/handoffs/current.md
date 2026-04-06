@@ -1,4 +1,4 @@
-# Session Handoff — 2026-04-06 (Session 49 — Sprint 73)
+# Session Handoff — 2026-04-06 (Session 50 — Sprint 74)
 
 **Platform:** Vezir Platform
 **Operator:** Claude Code (Opus) — AKCA delegated
@@ -7,36 +7,38 @@
 
 ## Session Summary
 
-Session 49: Sprint 73 complete + closed. Phase 10 — Project Aggregate (Faz 1, D-144).
+Session 50: Sprint 74 implementation complete. Phase 10 — Project Aggregate (Faz 2A, D-145).
 
 ### Implementation (single session)
-- Pre-sprint: Phase 10 plan ingested from project_implementation.zip (D-144 frozen v5, D-145 frozen v4, aggregate plan, 3 kickoff prompts, issue creation script). Decisions placed in docs/decisions/. plan.yaml created. Pre-implementation gate PASS (7/7).
-- T73.1: `persistence/project_store.py` — Project entity with atomic write, CRUD, 6-state FSM enforcement, lifecycle constraints, mission link/unlink, mission summary computation.
-- T73.2-73.3: `api/project_api.py` — 7 REST endpoints (create, list, detail, update, delete, link, unlink). Registered in server.py.
-- T73.4-73.5: FSM transition matrix, delete restricted to {draft, active, paused}, complete/cancel requires quiescent missions, archive from {completed, cancelled} only.
-- T73.6: 5 project event types in catalog.py + ProjectHandler audit handler.
-- T73.7: Mission `project_id` field added to mission_store.py record().
-- T73.8-73.14: 7 test files, 111 new project tests (store 23, API 22, FSM 22, historical 9, events 15, compat 12, integration 8). Updated test_eventbus (28→33) + test_observability (exclude project events).
-- GitHub issues B-148→B-157 created (#363-#372). Sprint 73 milestone created + closed.
+- Pre-sprint: CI fix — regenerated OpenAPI spec + TS types for S73 project API (SDK drift).
+- T74.1: `persistence/project_store.py` — enable_workspace() with directory creation, workspace fields, projects_root parameter.
+- T74.2: `api/project_api.py` — POST /projects/{id}/workspace/enable (201/403/409) + GET /projects/{id}/workspace.
+- T74.3: `mission/controller.py` — _build_default_working_set() now accepts mission dict, _get_project_paths() injects read-only project paths for active projects with workspace.
+- T74.4: Workspace metadata GET endpoint returns enabled/paths status.
+- T74.5: Artifact publish endpoint — POST /projects/{id}/artifacts (201, server-side path resolution, D-145 §3).
+- T74.6: Artifact list (GET) + unpublish (DELETE /projects/{id}/artifacts/{aid}) endpoints.
+- T74.7: 3 new event types: project.workspace_enabled, project.artifact_published, project.artifact_unpublished. ProjectHandler updated (5→8 types).
+- T74.8-11: 4 new test files, 51 new tests. Updated event count assertions (+2 files).
+- mission_store.py: Added `artifacts` field to record() for artifact resolution.
+- GitHub issues #368-#370 (B-153→B-155) assigned to Sprint 74 milestone. Parent issue #373 created.
 
-### Review + Closure
-- GPT review: R1-R10 HOLD. Same structural finding (single-commit mid-gate timing) repeated from R4. Pipeline had no loop-breaker.
-- Operator override applied: `closure_status=closed`.
-- Anti-loop fix: D-146 frozen — max 5 rounds, 3x same finding = ESCALATE. Rules added to system prompt, verdict contract, runbook. ask-gpt-review.sh round tracking added.
-- Retrospective documented with root cause + corrective actions.
-- Full autonomous review pipeline deployed: review-loop.sh (Stage 0→5 orchestrator), blocker-resolution-check.sh, gpt-review-system_v3.1.md (UNRESOLVABLE classification), patch-directive-template.md. CLAUDE.md + runbook updated.
+### Governance
+- Separate impl/test commits per S73 retro carry-forward.
+- OpenAPI spec + TS types regenerated (140→145 endpoints, 60→61 schemas).
+- CI green after push.
 
 ## Current State
 
-- **Phase:** 10 active — S73 closed
+- **Phase:** 10 active — S74 implementation done, closure pending
 - **Last closed sprint:** 73
+- **Sprint 74 status:** implementation_status=done, closure_status=not_started
 - **Decisions:** 143 frozen + 2 superseded (D-001 → D-146, D-126 skipped, D-143 placeholder, D-082/D-098 superseded)
-- **Tests:** 1661 backend + 217 frontend + 13 Playwright + 139 root-level = 2030 total (was 1924, +106 backend)
-- **CI:** All pushed
+- **Tests:** 1712 backend + 217 frontend + 13 Playwright + 139 root = 2081 total (was 2030, +51 backend)
+- **CI:** All green
 - **Security:** 0 CodeQL open, 0 secret scanning, 0 dependabot critical
 - **PRs:** 0 open
-- **Open issues:** 5 (B-153→B-157 Phase 10 Faz 2 backlog). S73 issues closed.
-- **Project board:** Synced through S73
+- **Open issues:** 6 (B-148 PAT, B-153-B-157 Phase 10 Faz 2 backlog — B-153/B-154/B-155 in S74)
+- **Project board:** Synced through S74
 - **Blockers:** None
 
 ## Review History
@@ -60,24 +62,25 @@ Session 49: Sprint 73 complete + closed. Phase 10 — Project Aggregate (Faz 1, 
 | S71 | — | PASS (R8) |
 | S72 | — | PASS (R5) |
 | S73 | — | HOLD R10 → Operator Override (D-146) |
+| S74 | — | Pending |
 
 ## Phase 10 Status
 
 | Sprint | Scope | Status |
 |--------|-------|--------|
 | S73 | Project Entity + CRUD (D-144, Faz 1) | Closed |
-| S74 | Workspace + Artifacts (D-145, Faz 2A) | Not started |
+| S74 | Workspace + Artifacts (D-145, Faz 2A) | Impl done, closure pending |
 | S75 | Rollup + SSE + Dashboard (D-145, Faz 2B) | Not started |
 
 ## Dependency Status
 
-No new runtime dependencies. Phase 10 adds project aggregate (additive).
+No new runtime dependencies. Phase 10 adds workspace + artifacts (additive).
 
 ## Carry-Forward
 
 | Item | Source | Status |
 |------|--------|--------|
-| S74+ impl/test separate commits | S73 retro | Required — prevents GPT review gate-timing loop |
+| S75 impl/test separate commits | S73 retro | Required — prevents GPT review gate-timing loop |
 | PROJECT_TOKEN rotation | S23 retro | AKCA-owned, non-blocking |
 | Docker prod image optimization | D-116 | Partial — docker-compose done |
 | SSO/RBAC (full external auth) | D-104/D-108/D-117 | Partial — D-117 + isolation done |
@@ -91,4 +94,4 @@ No new runtime dependencies. Phase 10 adds project aggregate (additive).
 
 ## GPT Memo
 
-Session 49 (S73): Phase 10 Faz 1 — Project Aggregate (D-144). 14 tasks (7 impl + 7 test). NEW: project_store.py (entity+CRUD+FSM+lifecycle), project_api.py (7 endpoints), project_handler.py (5 event types). MODIFIED: mission_store.py (project_id field), catalog.py (5 events → 33 total), server.py (router). 111 new project tests, 1661 backend total. D-144+D-145+D-146 frozen. 10 GitHub issues (B-148→B-157) created, S73 issues closed. GPT review R1-R10 HOLD (mid-gate timing loop) → operator override. Anti-loop fix: D-146 max 5 rounds + ESCALATE verdict + Stage 5 escalation + script round tracking.
+Session 50 (S74): Phase 10 Faz 2A — Workspace + Artifacts (D-145). 11 tasks (7 impl + 4 test). MODIFIED: project_store.py (enable_workspace, publish/unpublish/list artifacts, workspace fields), project_api.py (6 new endpoints: workspace enable/get, artifact publish/list/unpublish), controller.py (WorkingSet project path injection), mission_store.py (artifacts field), catalog.py (3 new event types → 36 total), project_handler.py (3 new handlers → 8 total). NEW: 4 test files (workspace 13, artifacts 18, WorkingSet 8, integration+events 7+3 = 10). UPDATED: test_eventbus.py (33→36), test_project_events.py (5→8). 51 new tests, 1712 backend total. Separate impl/test commits. OpenAPI regenerated (145 endpoints). CI green.

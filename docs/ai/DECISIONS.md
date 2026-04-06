@@ -1334,11 +1334,18 @@ Formal record: `docs/decisions/D-144-project-aggregate-contract.md`.
 Workspace creation explicit (operator enables per project). WorkingSet injection: read-only paths for active project missions. Artifact publish: server-side path resolution only, no caller-supplied paths. Rollup cache with configurable staleness. SSE broadcast on existing channel. Minimal dashboard UI (list + detail views).
 Formal record: `docs/decisions/D-145-project-workspace-artifact-boundary.md`.
 
+### D-146: Review Max Round + Escalation Rule
+
+**Phase:** Sprint 73 (Phase 10) | **Status:** Frozen
+
+Maximum 5 review rounds per sprint. Same core finding unchanged across 3 consecutive rounds triggers ESCALATE verdict instead of HOLD. Operator escalation (Stage 5) added to review pipeline. ask-gpt-review.sh enforces round limit. Triggered by S73 10-round review loop.
+Formal record: `docs/decisions/D-146-review-max-round-escalation.md`.
+
 ---
 
-## Decision Index (D-001 → D-145)
+## Decision Index (D-001 → D-146)
 
-142 frozen + 2 superseded decisions. D-126 skipped, D-132 deferred, D-143 skipped, D-082/D-098 superseded.
+143 frozen + 2 superseded decisions. D-126 skipped, D-132 deferred, D-143 skipped, D-082/D-098 superseded.
 
 | ID | Title | Phase |
 |----|-------|-------|
@@ -1487,3 +1494,4 @@ Formal record: `docs/decisions/D-145-project-workspace-artifact-boundary.md`.
 | D-143 | (Skipped) | — |
 | D-144 | Project Aggregate Contract | Sprint 73 |
 | D-145 | Project Workspace and Artifact Boundary | Sprint 74-75 |
+| D-146 | Review Max Round + Escalation Rule | Sprint 73 |

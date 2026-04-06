@@ -56,6 +56,9 @@ srv.capability_checker = CapabilityChecker(str(_caps_path))
 
 from fastapi.testclient import TestClient
 
+# Disable auth bypass for this test — we need real auth enforcement
+os.environ.pop("VEZIR_AUTH_BYPASS", None)
+
 # Patch keys module to load from our test config
 import auth.keys as keys_mod
 
@@ -145,11 +148,12 @@ class TestAuthIntegration(unittest.TestCase):
 class TestAuthDisabled(unittest.TestCase):
     """Tests when auth is not configured (no keys)."""
 
-    def test_07_no_config_allows_mutations(self):
-        """When auth disabled, mutations work without headers."""
-        # Temporarily disable auth
+    def test_07_no_config_allows_mutations_with_bypass(self):
+        """When VEZIR_AUTH_BYPASS=1, mutations work without headers (S76 P1.4)."""
+        # Temporarily disable auth via bypass env var
         keys_mod._keys = {}
         keys_mod._loaded = True
+        os.environ["VEZIR_AUTH_BYPASS"] = "1"
 
         r = client.post(
             "/api/v1/missions",
@@ -157,6 +161,9 @@ class TestAuthDisabled(unittest.TestCase):
             headers={"Origin": "http://localhost:3000"},
         )
         self.assertIn(r.status_code, (201, 200))
+
+        # Restore
+        os.environ.pop("VEZIR_AUTH_BYPASS", None)
 
     @classmethod
     def tearDownClass(cls):

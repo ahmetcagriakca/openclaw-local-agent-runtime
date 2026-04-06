@@ -1,7 +1,7 @@
 # open-items.md — Active State Tracker
 
 **Last updated:** 2026-04-06
-**Updated by:** Claude Code (Session 45 — S69)
+**Updated by:** Claude Code (Session 47 — S71)
 
 ---
 
@@ -85,10 +85,11 @@
 | Sprint 67 | Enforcement Chain Doc + Mission Replay CLI (B-145, B-146) | CLOSED |
 | Sprint 68 | Patch/Apply Contract Design (B-147, D-141) — Phase 8C | CLOSED |
 | Sprint 69 | Operating Model Freeze + State Drift Guard (D-142) — Phase 9 | CLOSED |
+| Sprint 70 | Validator/Closer Drift Hardening — Phase 9 | CLOSED |
 
 ## Next Sprint
 
-**Phase 9 active.** S70 ready: Validator/closer drift hardening.
+**Phase 9 active.** S71 ready: Intake Gate + Workflow Writer Enforcement.
 
 ### Carry-Forward
 | Item | Source | Status |

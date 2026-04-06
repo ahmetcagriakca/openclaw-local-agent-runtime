@@ -48,7 +48,7 @@ Session 47: Sprint 71 implementation complete. Phase 9 — Intake Gate + Workflo
 | S68 | PASS | PASS (R2) |
 | S69 | PASS | PASS (R3) |
 | S70 | — | PASS (R4) |
-| S71 | — | Pending |
+| S71 | — | HOLD (R6) — see below |
 
 ## Phase 9 Status
 
@@ -79,4 +79,4 @@ No new dependencies introduced. Phase 9 is governance/tooling-only.
 
 ## GPT Memo
 
-Session 47 (S71): Intake Gate + Workflow Writer Enforcement. 5 tasks implemented: T71.1 task-intake.py intake gate (validates plan.yaml, milestone, issues, state-sync, project board), T71.2 40 intake tests, T71.3 issue-from-plan.yml writer contract (validation + milestone assignment), T71.4 project-auto-add.yml canonical field init (Status=Todo, Sprint=N), T71.5 GOVERNANCE.md intake gate in kickoff checklist. 40 new root tests. PR #356 merged, CI all green. No new decisions, no runtime code changes. GPT review pending.
+Session 47 (S71): Intake Gate + Workflow Writer Enforcement. 5 tasks implemented: T71.1 task-intake.py intake gate (validates plan.yaml, milestone, issues, state-sync, project board), T71.2 40 intake tests, T71.3 issue-from-plan.yml writer contract (validation + milestone assignment), T71.4 project-auto-add.yml canonical field init (Status=Todo, Sprint=N), T71.5 GOVERNANCE.md intake gate in kickoff checklist. 40 new root tests. PR #356 merged, CI all green. No new decisions, no runtime code changes. GPT review R6 HOLD — remaining blocker is proof that patched project-auto-add.yml field init path actually executes (GITHUB_TOKEN lacks Project V2 access — pre-existing limitation, workflow exits at "No project found"). Code review shows hard-fail exit 1 on missing canonical fields is deployed. 17 evidence files in bundle. Next session: operator decision on whether code review is sufficient for T71.4 proof, or PAT configuration needed.

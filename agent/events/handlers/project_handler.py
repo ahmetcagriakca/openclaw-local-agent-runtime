@@ -1,14 +1,21 @@
-"""ProjectHandler — audit trail for project lifecycle events (D-144 §9, D-145).
+"""ProjectHandler — audit trail + SSE broadcast for project lifecycle events.
 
-Handles 8 project event types. Logs to structured logger.
+D-144 §9: Audit logging for project events.
+D-145 Faz 2B: SSE broadcast for project events + rollup invalidation.
+Handles 9 project event types. Logs to structured logger.
 Does not halt event propagation.
 """
 from __future__ import annotations
 
 import logging
+from typing import TYPE_CHECKING
 
 from events.bus import Event, HandlerResult
 from events.catalog import EventType
+
+if TYPE_CHECKING:
+    from api.sse_manager import SSEManager
+    from persistence.project_store import ProjectStore
 
 logger = logging.getLogger("mcc.project.events")
 
@@ -21,14 +28,36 @@ PROJECT_EVENT_TYPES = frozenset({
     EventType.PROJECT_WORKSPACE_ENABLED,
     EventType.PROJECT_ARTIFACT_PUBLISHED,
     EventType.PROJECT_ARTIFACT_UNPUBLISHED,
+    EventType.PROJECT_ROLLUP_UPDATED,
+})
+
+# Events that should trigger SSE broadcast
+SSE_BROADCAST_EVENTS = frozenset({
+    EventType.PROJECT_STATUS_CHANGED,
+    EventType.PROJECT_ROLLUP_UPDATED,
+    EventType.PROJECT_ARTIFACT_PUBLISHED,
+    EventType.PROJECT_ARTIFACT_UNPUBLISHED,
+})
+
+# Events that should invalidate rollup cache
+ROLLUP_INVALIDATION_EVENTS = frozenset({
+    EventType.PROJECT_MISSION_LINKED,
+    EventType.PROJECT_MISSION_UNLINKED,
+    EventType.PROJECT_STATUS_CHANGED,
 })
 
 
 class ProjectHandler:
     """Audit handler for project lifecycle events.
 
-    Phase 1: logging only. Phase 2 adds SSE broadcast + rollup cache.
+    Phase 1: logging only.
+    Phase 2 (D-145 Faz 2B): SSE broadcast + rollup cache invalidation.
     """
+
+    def __init__(self, sse_manager: SSEManager | None = None,
+                 project_store: ProjectStore | None = None):
+        self._sse_manager = sse_manager
+        self._project_store = project_store
 
     def __call__(self, event: Event) -> HandlerResult:
         if event.type not in PROJECT_EVENT_TYPES:
@@ -83,5 +112,31 @@ class ProjectHandler:
             logger.info(
                 "[PROJECT] Artifact unpublished: %s artifact=%s",
                 project_id, data.get("artifact_id"))
+
+        elif event.type == EventType.PROJECT_ROLLUP_UPDATED:
+            logger.info(
+                "[PROJECT] Rollup updated: %s total=%s active=%s",
+                project_id,
+                data.get("total_missions"),
+                data.get("active_count"))
+
+        # Rollup cache invalidation
+        if (event.type in ROLLUP_INVALIDATION_EVENTS
+                and self._project_store is not None):
+            self._project_store.invalidate_rollup(project_id)
+
+        # SSE broadcast for relevant events
+        if event.type in SSE_BROADCAST_EVENTS and self._sse_manager is not None:
+            import asyncio
+            try:
+                loop = asyncio.get_event_loop()
+                if loop.is_running():
+                    loop.create_task(
+                        self._sse_manager.broadcast(event.type, data))
+                else:
+                    loop.run_until_complete(
+                        self._sse_manager.broadcast(event.type, data))
+            except RuntimeError:
+                logger.debug("SSE broadcast skipped: no event loop")
 
         return HandlerResult.proceed()

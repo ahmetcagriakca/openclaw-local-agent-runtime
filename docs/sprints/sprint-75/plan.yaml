@@ -1,0 +1,114 @@
+sprint: 75
+phase: 10
+title: "Rollup + SSE + Dashboard (Phase 10 Faz 2B)"
+model: "A"
+
+authority:
+  source_of_truth: "D-145 frozen v4"
+  automation_index: "plan.yaml"
+
+status:
+  implementation_status: in_progress
+  closure_status: not_started
+
+mutation_budget:
+  max: 16
+  planned: 13
+  stop_rule: "no additional repo code/config mutation without explicit rescope"
+
+tasks:
+  - id: "75.1"
+    title: "EventBus-driven rollup cache computation"
+    type: "implementation"
+    backlog: "B-156"
+    files:
+      - "agent/persistence/project_store.py"
+
+  - id: "75.2"
+    title: "Rollup staleness policy + recompute"
+    type: "implementation"
+    backlog: "B-156"
+    files:
+      - "agent/persistence/project_store.py"
+
+  - id: "75.3"
+    title: "Rollup API endpoint (GET /projects/{id}/rollup)"
+    type: "implementation"
+    backlog: "B-156"
+    files:
+      - "agent/api/project_api.py"
+
+  - id: "75.4"
+    title: "SSE project event types (4 new types)"
+    type: "implementation"
+    backlog: "B-156"
+    files:
+      - "agent/events/catalog.py"
+      - "agent/events/handlers/project_handler.py"
+      - "agent/api/sse_manager.py"
+
+  - id: "75.5"
+    title: "SSE broadcast wiring for project events"
+    type: "implementation"
+    backlog: "B-156"
+    files:
+      - "agent/api/sse_manager.py"
+      - "agent/events/handlers/project_handler.py"
+
+  - id: "75.6"
+    title: "Dashboard project list page (React)"
+    type: "implementation"
+    backlog: "B-157"
+    files:
+      - "frontend/src/pages/ProjectsPage.tsx"
+
+  - id: "75.7"
+    title: "Dashboard project detail page (React)"
+    type: "implementation"
+    backlog: "B-157"
+    files:
+      - "frontend/src/pages/ProjectDetailPage.tsx"
+
+  - id: "75.8"
+    title: "Frontend API client + router wiring"
+    type: "implementation"
+    backlog: "B-157"
+    files:
+      - "frontend/src/api/client.ts"
+      - "frontend/src/App.tsx"
+
+  - id: "75.9"
+    title: "Rollup cache tests"
+    type: "test"
+    backlog: "B-156"
+    files:
+      - "agent/tests/test_project_rollup.py"
+
+  - id: "75.10"
+    title: "Rollup API tests"
+    type: "test"
+    backlog: "B-156"
+    files:
+      - "agent/tests/test_project_rollup_api.py"
+
+  - id: "75.11"
+    title: "SSE project event tests"
+    type: "test"
+    backlog: "B-156"
+    files:
+      - "agent/tests/test_project_sse_events.py"
+
+  - id: "75.12"
+    title: "Dashboard project pages tests (Vitest)"
+    type: "test"
+    backlog: "B-157"
+    files:
+      - "frontend/src/pages/__tests__/ProjectsPage.test.tsx"
+      - "frontend/src/pages/__tests__/ProjectDetailPage.test.tsx"
+
+  - id: "75.13"
+    title: "Rollup + SSE integration test"
+    type: "test"
+    backlog: "B-156"
+    files:
+      - "agent/tests/test_project_rollup_integration.py"

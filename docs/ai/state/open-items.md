@@ -89,10 +89,11 @@
 | Sprint 71 | Intake Gate + Workflow Writer Enforcement — Phase 9 | CLOSED |
 | Sprint 72 | Session Protocol Enforcement — Phase 9 | CLOSED |
 | Sprint 73 | Project Entity + CRUD (D-144, Phase 10 Faz 1) + D-146 Anti-Loop | CLOSED (operator override) |
+| Sprint 74 | Workspace + Artifacts (D-145, Phase 10 Faz 2A) | CLOSED (operator override) |
 
 ## Next Sprint
 
-S74 ready: Workspace + Artifacts (D-145, Faz 2A). Kickoff prompt: `phase10_tmp/s74-kickoff-prompt.md`.
+S75 ready: Rollup + SSE + Dashboard (D-145, Faz 2B). Plan: `docs/sprints/sprint-75/plan.yaml`.
 
 ### Carry-Forward
 | Item | Source | Status |

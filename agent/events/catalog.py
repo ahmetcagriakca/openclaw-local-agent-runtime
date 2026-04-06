@@ -56,6 +56,9 @@ class EventType:
     PROJECT_ARTIFACT_PUBLISHED = "project.artifact_published"
     PROJECT_ARTIFACT_UNPUBLISHED = "project.artifact_unpublished"
 
+    # ── Project SSE (D-145 Faz 2B) ───────────────────────────────
+    PROJECT_ROLLUP_UPDATED = "project.rollup_updated"
+
     # ── Quality gates ────────────────────────────────────────────
     GATE_CHECKED = "gate.checked"
     GATE_PASSED = "gate.passed"

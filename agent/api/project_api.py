@@ -274,6 +274,25 @@ async def get_workspace(project_id: str):
     return {"meta": _meta(), "data": workspace}
 
 
+# ── Rollup (D-145 Faz 2B) ────────────────────────────────────────
+
+
+@router.get("/{project_id}/rollup")
+async def get_rollup(project_id: str):
+    """Get rollup summary for a project (staleness-aware cache)."""
+    store = _get_store()
+    project = store.get(project_id)
+    if project is None:
+        raise HTTPException(status_code=404, detail="Project not found")
+
+    try:
+        rollup = store.get_rollup(project_id)
+    except ProjectStoreError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+    return {"meta": _meta(), "data": rollup}
+
+
 # ── Artifacts (D-145 §5) ──────────────────────────────────────────
 
 

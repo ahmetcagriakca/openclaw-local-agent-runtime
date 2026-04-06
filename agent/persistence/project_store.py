@@ -615,6 +615,90 @@ class ProjectStore:
                          artifact_id, project_id)
             return entry
 
+    # ── Rollup Cache (D-145 Faz 2B) ──────────────────────────────
+
+    def compute_rollup(self, project_id: str) -> dict:
+        """Compute rollup summary for a project.
+
+        Returns total missions, by-status breakdown, active/quiescent counts,
+        total tokens, last activity, computed timestamp.
+        Caches result in project record; use get_rollup() for staleness-aware access.
+        """
+        missions = self.get_missions(project_id)
+        by_status: dict[str, int] = {}
+        active_count = 0
+        quiescent_count = 0
+        total_tokens = 0
+        last_activity = ""
+
+        for m in missions:
+            status = m.get("status", "unknown")
+            by_status[status] = by_status.get(status, 0) + 1
+            if status in MISSION_QUIESCENT_STATUSES:
+                quiescent_count += 1
+            else:
+                active_count += 1
+            total_tokens += m.get("total_tokens", 0) or 0
+            ts = m.get("ts", "")
+            if ts > last_activity:
+                last_activity = ts
+
+        now = datetime.now(timezone.utc).isoformat()
+        rollup = {
+            "project_id": project_id,
+            "total_missions": len(missions),
+            "by_status": by_status,
+            "active_count": active_count,
+            "quiescent_count": quiescent_count,
+            "total_tokens": total_tokens,
+            "last_activity": last_activity or None,
+            "computed_at": now,
+        }
+
+        # Cache in project record
+        with self._lock:
+            proj = self._projects.get(project_id)
+            if proj is not None:
+                proj["_rollup_cache"] = rollup
+                self._save()
+
+        return rollup
+
+    def get_rollup(self, project_id: str,
+                   staleness_threshold_s: float = 300.0) -> dict:
+        """Get rollup for a project with staleness-aware caching.
+
+        If cached rollup is fresh (< staleness_threshold_s), return cached.
+        Otherwise recompute from live mission store.
+        """
+        with self._lock:
+            proj = self._projects.get(project_id)
+            if proj is None:
+                raise ProjectStoreError(f"Project not found: {project_id}")
+
+            cached = proj.get("_rollup_cache")
+            if cached is not None:
+                computed_at = cached.get("computed_at", "")
+                if computed_at:
+                    try:
+                        computed_dt = datetime.fromisoformat(computed_at)
+                        age = (datetime.now(timezone.utc) - computed_dt).total_seconds()
+                        if age < staleness_threshold_s:
+                            return dict(cached)
+                    except (ValueError, TypeError):
+                        pass
+
+        # Cache miss or stale — recompute
+        return self.compute_rollup(project_id)
+
+    def invalidate_rollup(self, project_id: str) -> None:
+        """Invalidate rollup cache for a project. Called by event handlers."""
+        with self._lock:
+            proj = self._projects.get(project_id)
+            if proj is not None:
+                proj.pop("_rollup_cache", None)
+                self._save()
+
     def _resolve_artifact_path(self, mission: dict,
                                 artifact_id: str) -> str | None:
         """Resolve artifact file path from mission data.

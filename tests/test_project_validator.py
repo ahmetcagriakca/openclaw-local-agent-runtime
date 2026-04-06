@@ -227,16 +227,26 @@ class TestClosedSprintOpenIssue:
         findings = validate_item(item, closed_sprints=set())
         assert not find_code(findings, validator.CLOSED_SPRINT_OPEN_ISSUE)
 
-    def test_milestone_source_failure_emits_fail(self):
-        """When derive_closed_sprints returns None, main must emit MILESTONE_SOURCE_FAILURE."""
-        # Simulate what main() does when closed_sprints is None
-        from importlib import import_module as _im
-        finding = validator.Finding(
-            validator.MILESTONE_SOURCE_FAILURE, "FAIL", 0, "(validator)",
-            "GitHub milestones API unavailable"
-        )
-        assert finding.severity == "FAIL"
-        assert finding.code == validator.MILESTONE_SOURCE_FAILURE
+    def test_milestone_source_failure_main_json_mode(self):
+        """main() with None closed_sprints emits MILESTONE_SOURCE_FAILURE and exits 1 (JSON)."""
+        with patch.object(validator, "derive_closed_sprints", return_value=None), \
+             patch.object(validator, "fetch_project_items", return_value=[]), \
+             patch.object(sys, "argv", ["project-validator.py", "--json"]):
+            with pytest.raises(SystemExit) as exc_info:
+                validator.main()
+            assert exc_info.value.code == 1
+
+    def test_milestone_source_failure_main_human_mode(self, capsys):
+        """main() with None closed_sprints prints UNAVAILABLE and exits 1 (human)."""
+        with patch.object(validator, "derive_closed_sprints", return_value=None), \
+             patch.object(validator, "fetch_project_items", return_value=[]), \
+             patch.object(sys, "argv", ["project-validator.py"]):
+            with pytest.raises(SystemExit) as exc_info:
+                validator.main()
+            assert exc_info.value.code == 1
+            captured = capsys.readouterr()
+            assert "UNAVAILABLE" in captured.out
+            assert "MILESTONE_SOURCE_FAILURE" in captured.out
 
 
 # --- CLOSED_NOT_DONE ---

@@ -300,7 +300,7 @@ def main():
         output = {
             "valid": is_valid,
             "total_items": len(items),
-            "closed_sprints_count": len(closed_sprints),
+            "closed_sprints_count": len(closed_sprints) if closed_sprints is not None else None,
             "classifications": {},
             "findings": [
                 {
@@ -330,7 +330,10 @@ def main():
     else:
         print(f"=== Project V2 Board Validator ===")
         print(f"Total items: {len(items)}")
-        print(f"Closed sprints (from milestones): {len(closed_sprints)} ({min(closed_sprints) if closed_sprints else '-'}-{max(closed_sprints) if closed_sprints else '-'})")
+        if closed_sprints is not None:
+            print(f"Closed sprints (from milestones): {len(closed_sprints)} ({min(closed_sprints) if closed_sprints else '-'}-{max(closed_sprints) if closed_sprints else '-'})")
+        else:
+            print("Closed sprints (from milestones): UNAVAILABLE — milestone source failure")
         print()
 
         # Classification summary

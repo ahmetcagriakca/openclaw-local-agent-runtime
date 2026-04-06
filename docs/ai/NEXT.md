@@ -15,7 +15,7 @@
 **New files:** `docs/decisions/D-142-intake-to-sprint-operating-model.md`, `tests/test_state_sync.py`, `docs/sprints/sprint-{69,70,71,72}/plan.yaml`
 **Modified:** `tools/state-sync.py` (--check mode), `docs/ai/DECISIONS.md`, `docs/ai/STATE.md`, `docs/ai/NEXT.md`, `docs/ai/handoffs/current.md`, `docs/ai/state/open-items.md`
 **Decision:** D-142 frozen
-**Review:** Claude Code PASS, GPT PENDING
+**Review:** Claude Code PASS, GPT PASS (R3)
 **Evidence:** `evidence/sprint-69/`
 
 ---
@@ -29,7 +29,7 @@
 **Tests:** 1555 backend + 217 frontend + 13 Playwright = 1785 total (no change — Model B)
 **New files:** `docs/shared/ENFORCEMENT-CHAIN.md`, `tools/replay-mission.py`
 **Modified:** `docs/ai/GOVERNANCE.md` (section 15 enforcement chain cross-ref)
-**Review:** Claude Code PASS, GPT PENDING
+**Review:** Claude Code PASS, GPT PASS (R3)
 **Evidence:** `evidence/sprint-67/`
 
 ---

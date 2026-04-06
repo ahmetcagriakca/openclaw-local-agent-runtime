@@ -88,7 +88,7 @@ CREATED -> PLANNING -> READY -> RUNNING -> COMPLETED
 - 132+ frozen architectural decisions (D-001 to D-133)
 - 18-step sprint closure checklist (Rule 16)
 - File-persisted state (atomic writes: temp -> fsync -> os.replace)
-- EventBus: 28 event types, 14 governance handlers
+- EventBus: 37 event types, internal/test infrastructure (D-147, not wired to production startup)
 - Alert engine: 9 rules with Telegram notification
 
 ## Data Flow

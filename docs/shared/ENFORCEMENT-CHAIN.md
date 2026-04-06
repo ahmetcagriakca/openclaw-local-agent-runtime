@@ -115,7 +115,7 @@ Request → Auth Middleware (D-117)
 | **Fail behavior** | `log` — never halts. Write failures are logged but do not block execution. |
 | **Bypass possible?** | NO. Priority 0 global handler runs before all type-specific handlers. |
 | **Decision records** | D-129 (audit integrity, hash-chain) |
-| **Key files** | `agent/events/handlers/audit_trail.py` — `AuditTrailHandler` (EventBus global handler) |
+| **Key files** | `agent/events/handlers/audit_trail.py` — `AuditTrailHandler` (EventBus handler, test/dev only — D-147) |
 |  | `agent/persistence/audit_integrity.py` — `append_entry()`, `verify_chain()` (D-129 contract) |
 |  | `logs/audit-trail.jsonl` — append-only audit log |
 |  | `logs/audit/audit.jsonl` — D-129 integrity-verified audit log |
@@ -126,9 +126,9 @@ Request → Auth Middleware (D-117)
 
 1. **Earlier layer deny = later layers never reached.** Auth deny (401/403) means the request never reaches the Tool Gateway. Tool Gateway block means Working Set Enforcer never runs.
 
-2. **EventBus handlers run in priority order, parallel to the main chain.** The EventBus dispatches `tool.requested` events to registered handlers. Global handlers (priority-ordered) run first, then type-specific handlers.
+2. **EventBus handlers are internal/test infrastructure (D-147).** The EventBus dispatches events to registered handlers in priority order, but is NOT wired to production startup. Controller does not pass EventBus to runner. Handler registration exists only in test fixtures. Future sprint may upgrade to production status.
 
-3. **Audit Trail handler (priority=0) sees ALL events.** Because it is registered with `on_all()` at priority 0, it observes every event — including denied tool requests, policy violations, and state transitions. It never halts propagation.
+3. **Audit Trail handler (priority=0) sees ALL events in test context.** When EventBus is wired (tests/future production), it observes every event. In current production, audit logging operates independently via direct file writes.
 
 4. **Policy telemetry is emitted at each enforcement point.** The Working Set Enforcer, Risk Engine, and Policy Engine all emit telemetry events (`policy_denied`, `budget_exhausted`, `mutation_surface_mismatch`, etc.) that feed the Audit Trail and observability stack.
 

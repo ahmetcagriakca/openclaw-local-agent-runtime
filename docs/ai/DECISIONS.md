@@ -1341,11 +1341,18 @@ Formal record: `docs/decisions/D-145-project-workspace-artifact-boundary.md`.
 Maximum 5 review rounds per sprint. Same core finding unchanged across 3 consecutive rounds triggers ESCALATE verdict instead of HOLD. Operator escalation (Stage 5) added to review pipeline. ask-gpt-review.sh enforces round limit. Triggered by S73 10-round review loop.
 Formal record: `docs/decisions/D-146-review-max-round-escalation.md`.
 
+### D-147: EventBus Operational Status
+
+**Phase:** Sprint 76 (Phase 10) | **Status:** Frozen
+
+EventBus classified as internal test/development infrastructure, NOT a production control plane. Controller does not pass EventBus to runner. No startup wiring. Handler registration is test-only. OTel tracing/metrics operate independently. Future sprint may upgrade to production status with startup evidence.
+Formal record: `docs/decisions/D-147-eventbus-operational-status.md`.
+
 ---
 
-## Decision Index (D-001 → D-146)
+## Decision Index (D-001 → D-147)
 
-143 frozen + 2 superseded decisions. D-126 skipped, D-132 deferred, D-143 skipped, D-082/D-098 superseded.
+144 frozen + 2 superseded decisions. D-126 skipped, D-132 deferred, D-143 skipped, D-082/D-098 superseded.
 
 | ID | Title | Phase |
 |----|-------|-------|
@@ -1495,3 +1502,4 @@ Formal record: `docs/decisions/D-146-review-max-round-escalation.md`.
 | D-144 | Project Aggregate Contract | Sprint 73 |
 | D-145 | Project Workspace and Artifact Boundary | Sprint 74-75 |
 | D-146 | Review Max Round + Escalation Rule | Sprint 73 |
+| D-147 | EventBus Operational Status | Sprint 76 |

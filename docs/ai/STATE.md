@@ -30,7 +30,7 @@
 | Telegram notifications | Operational | `bin\oc-health-notify.ps1` |
 | Agent Runner | Operational (multi-agent missions + 3 providers + 24 tools) | `agent/oc-agent-runner.py` |
 | Mission Controller | Operational (9 governed roles, quality gates, state machine) | `agent/mission/controller.py` |
-| EventBus | Operational (28 event types, 14 governance handlers) | `agent/events/bus.py` |
+| EventBus | Internal/test infrastructure (37 event types, not wired to startup — D-147) | `agent/events/bus.py` |
 | OTel TracingHandler | Operational (28/28 event coverage) | `agent/observability/tracing.py` |
 | OTel MetricsHandler | Operational (17 instruments) | `agent/observability/meters.py` |
 | StructuredLogHandler | Operational (JSON + trace context) | `agent/observability/structured_logging.py` |
@@ -59,7 +59,7 @@
 | Issue Automation | plan.yaml → issues + issues.json via workflow | `.github/workflows/issue-from-plan.yml` |
 | Project Store | Operational (CRUD, FSM, workspace, artifacts, D-144/D-145) | `agent/persistence/project_store.py` |
 | Project API | Operational (13 endpoints, D-144/D-145) | `agent/api/project_api.py` |
-| Project EventBus | Operational (8 event types, audit handler) | `agent/events/handlers/project_handler.py` |
+| Project EventBus | Internal/test infrastructure (9 event types, audit+SSE handlers — D-147) | `agent/events/handlers/project_handler.py` |
 
 ## Completed Phases
 
@@ -184,7 +184,7 @@
 
 ## Architectural Decisions
 
-143 frozen + 2 superseded decisions (D-001 through D-146, D-126 skipped, D-143 placeholder, D-082/D-098 superseded S62). See `docs/ai/DECISIONS.md`. Recent: D-144 project aggregate contract, D-145 workspace/artifact boundary, D-146 review max round + escalation (all S73). Governance: 20-step closure checklist.
+144 frozen + 2 superseded decisions (D-001 through D-147, D-126 skipped, D-143 placeholder, D-082/D-098 superseded S62). See `docs/ai/DECISIONS.md`. Recent: D-144 project aggregate contract, D-145 workspace/artifact boundary, D-146 review max round + escalation, D-147 EventBus operational status (S76). Governance: 20-step closure checklist.
 
 ## Port Map
 

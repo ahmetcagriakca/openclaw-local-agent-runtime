@@ -30,8 +30,8 @@ Session 50: Sprint 74 implementation complete. Phase 10 — Project Aggregate (F
 ## Current State
 
 - **Phase:** 10 active — S74 implementation done, closure pending
-- **Last closed sprint:** 73
-- **Sprint 74 status:** implementation_status=done, closure_status=not_started
+- **Last closed sprint:** 74
+- **Sprint 74 status:** implementation_status=done, closure_status=closed (operator override)
 - **Decisions:** 143 frozen + 2 superseded (D-001 → D-146, D-126 skipped, D-143 placeholder, D-082/D-098 superseded)
 - **Tests:** 1712 backend + 217 frontend + 13 Playwright + 139 root = 2081 total (was 2030, +51 backend)
 - **CI:** All green
@@ -62,14 +62,14 @@ Session 50: Sprint 74 implementation complete. Phase 10 — Project Aggregate (F
 | S71 | — | PASS (R8) |
 | S72 | — | PASS (R5) |
 | S73 | — | HOLD R10 → Operator Override (D-146) |
-| S74 | — | Pending |
+| S74 | — | HOLD R5 → Operator Override |
 
 ## Phase 10 Status
 
 | Sprint | Scope | Status |
 |--------|-------|--------|
 | S73 | Project Entity + CRUD (D-144, Faz 1) | Closed |
-| S74 | Workspace + Artifacts (D-145, Faz 2A) | Impl done, closure pending |
+| S74 | Workspace + Artifacts (D-145, Faz 2A) | Closed (operator override) |
 | S75 | Rollup + SSE + Dashboard (D-145, Faz 2B) | Not started |
 
 ## Dependency Status

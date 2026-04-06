@@ -1,9 +1,9 @@
 # Current State
 
 **Last updated:** 2026-04-06
-**Active phase:** Phase 10 — Sprint 74 impl done, closure pending
+**Active phase:** Phase 10 — Sprint 74 closed
 **Doc model:** This file is canonical for system state. Session context lives in `docs/ai/handoffs/current.md`.
-**Note:** All sprints through 53 closed. S54 deferred. S55-S73 closed. All P1 backlog items complete (50/50). Phase 10 active (S73+). Phase 9 complete (S69-S72). Phase 8 complete (S60-S68). 143 frozen + 2 superseded decisions (D-001 → D-146, D-126 skipped, D-143 placeholder, D-082/D-098 superseded). Governance: 20-step closure checklist. Review pipeline: max 5 rounds + ESCALATE (D-146).
+**Note:** All sprints through 53 closed. S54 deferred. S55-S74 closed. All P1 backlog items complete (50/50). Phase 10 active (S73+). Phase 9 complete (S69-S72). Phase 8 complete (S60-S68). 143 frozen + 2 superseded decisions (D-001 → D-146, D-126 skipped, D-143 placeholder, D-082/D-098 superseded). Governance: 20-step closure checklist. Review pipeline: max 5 rounds + ESCALATE (D-146).
 **Persistence:** State is file-persisted (state.json, mission.json). Mission history via persistence layer (Sprint 16).
 **API:** Vezir API on 127.0.0.1:8003 (FastAPI + Uvicorn). Schemas FROZEN (D-067). SSE on /api/v1/events/stream. Dashboard API + Alert API + Telemetry Query API (Sprint 16).
 **Frontend:** React dashboard on localhost:3000 (Vite + Tailwind). SSE live updates + polling fallback + intervention buttons + monitoring dashboard. Node.js 20 required.
@@ -133,7 +133,7 @@
 | Sprint 71 | Intake Gate + Workflow Writer Enforcement — Phase 9 | Closed |
 | Sprint 72 | Session Protocol Enforcement �� Phase 9 | Closed |
 | Sprint 73 | Project Entity + CRUD (D-144) — Phase 10 | Closed |
-| Sprint 74 | Workspace + Artifacts (D-145) — Phase 10 | Impl done, closure pending |
+| Sprint 74 | Workspace + Artifacts (D-145) — Phase 10 | Closed |
 
 ## Test Evidence
 

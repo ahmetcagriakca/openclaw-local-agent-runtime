@@ -8,8 +8,8 @@ authority:
   automation_index: "plan.yaml"
 
 status:
-  implementation_status: not_started
-  closure_status: not_started
+  implementation_status: done
+  closure_status: closed
 
 mutation_budget:
   max: 14

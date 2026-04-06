@@ -6110,6 +6110,239 @@
           }
         }
       }
+    },
+    "/api/v1/projects/{project_id}/workspace/enable": {
+      "post": {
+        "tags": [
+          "projects"
+        ],
+        "summary": "Enable Workspace",
+        "description": "Enable workspace for a project. Creates directory structure.\n\nD-145 §5: 409 if already enabled, 404 if not found,\n403 if project status not in {draft, active}.",
+        "operationId": "enable_workspace_api_v1_projects__project_id__workspace_enable_post",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project_id}/workspace": {
+      "get": {
+        "tags": [
+          "projects"
+        ],
+        "summary": "Get Workspace",
+        "description": "Get workspace metadata for a project.",
+        "operationId": "get_workspace_api_v1_projects__project_id__workspace_get",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project_id}/artifacts": {
+      "post": {
+        "tags": [
+          "projects"
+        ],
+        "summary": "Publish Artifact",
+        "description": "Publish a mission artifact to project space.\n\nD-145 §5: 404 if not found, 409 if workspace not enabled,\n422 if mission not linked, 403 if project inactive.",
+        "operationId": "publish_artifact_api_v1_projects__project_id__artifacts_post",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PublishArtifactRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "projects"
+        ],
+        "summary": "List Artifacts",
+        "description": "List published artifacts for a project.",
+        "operationId": "list_artifacts_api_v1_projects__project_id__artifacts_get",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Project Id"
+            }
+          },
+          {
+            "name": "mission_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Mission Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project_id}/artifacts/{artifact_id}": {
+      "delete": {
+        "tags": [
+          "projects"
+        ],
+        "summary": "Unpublish Artifact",
+        "description": "Unpublish (remove) an artifact from project space.\n\nD-145 §5: 404 if not found, 403 if project inactive.",
+        "operationId": "unpublish_artifact_api_v1_projects__project_id__artifacts__artifact_id__delete",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Project Id"
+            }
+          },
+          {
+            "name": "artifact_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Artifact Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -7646,6 +7879,24 @@
         },
         "type": "object",
         "title": "PolicyUpdateRequest"
+      },
+      "PublishArtifactRequest": {
+        "properties": {
+          "mission_id": {
+            "type": "string",
+            "title": "Mission Id"
+          },
+          "artifact_id": {
+            "type": "string",
+            "title": "Artifact Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "mission_id",
+          "artifact_id"
+        ],
+        "title": "PublishArtifactRequest"
       },
       "QuotaCheckRequest": {
         "properties": {

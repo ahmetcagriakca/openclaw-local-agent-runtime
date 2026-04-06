@@ -1,7 +1,7 @@
 # open-items.md — Active State Tracker
 
 **Last updated:** 2026-04-06
-**Updated by:** Claude Code (Session 47 — S71)
+**Updated by:** Claude Code (Session 49 — S73)
 
 ---
 
@@ -88,14 +88,16 @@
 | Sprint 70 | Validator/Closer Drift Hardening — Phase 9 | CLOSED |
 | Sprint 71 | Intake Gate + Workflow Writer Enforcement — Phase 9 | CLOSED |
 | Sprint 72 | Session Protocol Enforcement — Phase 9 | CLOSED |
+| Sprint 73 | Project Entity + CRUD (D-144, Phase 10 Faz 1) + D-146 Anti-Loop | CLOSED (operator override) |
 
 ## Next Sprint
 
-S73 ready: TBD (Phase 9).
+S74 ready: Workspace + Artifacts (D-145, Faz 2A). Kickoff prompt: `phase10_tmp/s74-kickoff-prompt.md`.
 
 ### Carry-Forward
 | Item | Source | Status |
 |------|--------|--------|
+| S74+ impl/test separate commits | S73 retro | Required — prevents GPT review gate-timing loop |
 | PROJECT_TOKEN rotation/docs | S23 retro | AKCA-owned, non-blocking |
 | Docker prod image optimization | D-116 (S26) | Partial — docker-compose done, prod image remaining |
 | SSO/RBAC (full external auth) | D-104/D-108/D-117 | Partial — D-117 + backend isolation done. SSO + full RBAC remaining |

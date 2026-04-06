@@ -7,23 +7,23 @@
 
 ## Session Summary
 
-Session 49: Sprint 73 implementation complete. Phase 10 — Project Aggregate (Faz 1, D-144).
+Session 49: Sprint 73 complete + closed. Phase 10 — Project Aggregate (Faz 1, D-144).
 
-- Pre-sprint: Phase 10 plan ingested from project_implementation.zip (D-144 frozen v5, D-145 frozen v4, aggregate plan, 3 kickoff prompts, issue creation script). Decisions placed in docs/decisions/. plan.yaml created. Pre-implementation gate PASS.
+### Implementation (single session)
+- Pre-sprint: Phase 10 plan ingested from project_implementation.zip (D-144 frozen v5, D-145 frozen v4, aggregate plan, 3 kickoff prompts, issue creation script). Decisions placed in docs/decisions/. plan.yaml created. Pre-implementation gate PASS (7/7).
 - T73.1: `persistence/project_store.py` — Project entity with atomic write, CRUD, 6-state FSM enforcement, lifecycle constraints, mission link/unlink, mission summary computation.
 - T73.2-73.3: `api/project_api.py` — 7 REST endpoints (create, list, detail, update, delete, link, unlink). Registered in server.py.
 - T73.4-73.5: FSM transition matrix, delete restricted to {draft, active, paused}, complete/cancel requires quiescent missions, archive from {completed, cancelled} only.
 - T73.6: 5 project event types in catalog.py + ProjectHandler audit handler.
 - T73.7: Mission `project_id` field added to mission_store.py record().
-- T73.8: Backward compatibility test suite — 12 tests, project_id=null unchanged.
-- T73.9: Project store tests — 23 tests.
-- T73.10: Project API tests — 22 tests (with CSRF Origin header).
-- T73.11: Project FSM tests — 22 tests (valid/invalid transitions, quiescent checks).
-- T73.12: Historical link tests — 9 tests.
-- T73.13: EventBus event tests — 15 tests.
-- T73.14: Integration test — 8 tests (full lifecycle).
-- Also updated test_eventbus.py (28→33 events) and test_observability.py (exclude project events from TracingHandler check).
-- GitHub issues B-148→B-157 created, Sprint 73 milestone created.
+- T73.8-73.14: 7 test files, 111 new project tests (store 23, API 22, FSM 22, historical 9, events 15, compat 12, integration 8). Updated test_eventbus (28→33) + test_observability (exclude project events).
+- GitHub issues B-148→B-157 created (#363-#372). Sprint 73 milestone created + closed.
+
+### Review + Closure
+- GPT review: R1-R10 HOLD. Same structural finding (single-commit mid-gate timing) repeated from R4. Pipeline had no loop-breaker.
+- Operator override applied: `closure_status=closed`.
+- Anti-loop fix: D-146 frozen — max 5 rounds, 3x same finding = ESCALATE. Rules added to system prompt, verdict contract, runbook. ask-gpt-review.sh round tracking added.
+- Retrospective documented with root cause + corrective actions.
 
 ## Current State
 
@@ -31,10 +31,10 @@ Session 49: Sprint 73 implementation complete. Phase 10 — Project Aggregate (F
 - **Last closed sprint:** 73
 - **Decisions:** 143 frozen + 2 superseded (D-001 → D-146, D-126 skipped, D-143 placeholder, D-082/D-098 superseded)
 - **Tests:** 1661 backend + 217 frontend + 13 Playwright + 139 root-level = 2030 total (was 1924, +106 backend)
-- **CI:** Pending push
+- **CI:** All pushed
 - **Security:** 0 CodeQL open, 0 secret scanning, 0 dependabot critical
 - **PRs:** 0 open
-- **Open issues:** 10 (B-148→B-157 Phase 10 backlog)
+- **Open issues:** 5 (B-153→B-157 Phase 10 Faz 2 backlog). S73 issues closed.
 - **Project board:** Synced through S73
 - **Blockers:** None
 
@@ -58,7 +58,7 @@ Session 49: Sprint 73 implementation complete. Phase 10 — Project Aggregate (F
 | S70 | — | PASS (R4) |
 | S71 | — | PASS (R8) |
 | S72 | — | PASS (R5) |
-| S73 | — | HOLD R10 → Operator Override |
+| S73 | — | HOLD R10 → Operator Override (D-146) |
 
 ## Phase 10 Status
 
@@ -76,6 +76,7 @@ No new runtime dependencies. Phase 10 adds project aggregate (additive).
 
 | Item | Source | Status |
 |------|--------|--------|
+| S74+ impl/test separate commits | S73 retro | Required — prevents GPT review gate-timing loop |
 | PROJECT_TOKEN rotation | S23 retro | AKCA-owned, non-blocking |
 | Docker prod image optimization | D-116 | Partial — docker-compose done |
 | SSO/RBAC (full external auth) | D-104/D-108/D-117 | Partial — D-117 + isolation done |
@@ -89,4 +90,4 @@ No new runtime dependencies. Phase 10 adds project aggregate (additive).
 
 ## GPT Memo
 
-Session 49 (S73): Phase 10 Faz 1 — Project Aggregate (D-144). 7 impl tasks + 6 test tasks. NEW: project_store.py (entity+CRUD+FSM+lifecycle), project_api.py (7 endpoints), project_handler.py (5 event types). MODIFIED: mission_store.py (project_id field), catalog.py (5 events), server.py (router). 111 new project tests + 2 updated existing tests = +106 net backend. 1661 backend total. D-144+D-145 frozen decisions placed. 10 GitHub issues (B-148→B-157) created. No runtime code changes to mission execution.
+Session 49 (S73): Phase 10 Faz 1 — Project Aggregate (D-144). 14 tasks (7 impl + 7 test). NEW: project_store.py (entity+CRUD+FSM+lifecycle), project_api.py (7 endpoints), project_handler.py (5 event types). MODIFIED: mission_store.py (project_id field), catalog.py (5 events → 33 total), server.py (router). 111 new project tests, 1661 backend total. D-144+D-145+D-146 frozen. 10 GitHub issues (B-148→B-157) created, S73 issues closed. GPT review R1-R10 HOLD (mid-gate timing loop) → operator override. Anti-loop fix: D-146 max 5 rounds + ESCALATE verdict + Stage 5 escalation + script round tracking.

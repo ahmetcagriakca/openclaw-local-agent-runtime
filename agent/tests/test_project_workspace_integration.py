@@ -8,7 +8,6 @@ from persistence.mission_store import MissionStore
 from persistence.project_store import (
     ProjectLifecycleError,
     ProjectStore,
-    ProjectStoreError,
 )
 
 
@@ -164,8 +163,8 @@ class TestEventTypes:
         assert EventType.PROJECT_ARTIFACT_UNPUBLISHED == "project.artifact_unpublished"
 
     def test_project_handler_accepts_new_events(self):
-        from events.handlers.project_handler import PROJECT_EVENT_TYPES
         from events.catalog import EventType
+        from events.handlers.project_handler import PROJECT_EVENT_TYPES
         assert EventType.PROJECT_WORKSPACE_ENABLED in PROJECT_EVENT_TYPES
         assert EventType.PROJECT_ARTIFACT_PUBLISHED in PROJECT_EVENT_TYPES
         assert EventType.PROJECT_ARTIFACT_UNPUBLISHED in PROJECT_EVENT_TYPES

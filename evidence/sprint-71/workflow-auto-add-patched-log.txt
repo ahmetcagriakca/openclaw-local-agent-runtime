@@ -1,0 +1,203 @@
+add-to-project	Set up job	﻿2026-04-06T08:07:06.3630008Z Current runner version: '2.333.1'
+add-to-project	Set up job	2026-04-06T08:07:06.3653311Z ##[group]Runner Image Provisioner
+add-to-project	Set up job	2026-04-06T08:07:06.3654119Z Hosted Compute Agent
+add-to-project	Set up job	2026-04-06T08:07:06.3654633Z Version: 20260213.493
+add-to-project	Set up job	2026-04-06T08:07:06.3655153Z Commit: 5c115507f6dd24b8de37d8bbe0bb4509d0cc0fa3
+add-to-project	Set up job	2026-04-06T08:07:06.3655808Z Build Date: 2026-02-13T00:28:41Z
+add-to-project	Set up job	2026-04-06T08:07:06.3656380Z Worker ID: {5c3af633-ad9f-4fee-9391-6867326f1707}
+add-to-project	Set up job	2026-04-06T08:07:06.3657008Z Azure Region: centralus
+add-to-project	Set up job	2026-04-06T08:07:06.3657514Z ##[endgroup]
+add-to-project	Set up job	2026-04-06T08:07:06.3658778Z ##[group]Operating System
+add-to-project	Set up job	2026-04-06T08:07:06.3659370Z Ubuntu
+add-to-project	Set up job	2026-04-06T08:07:06.3659793Z 24.04.4
+add-to-project	Set up job	2026-04-06T08:07:06.3660233Z LTS
+add-to-project	Set up job	2026-04-06T08:07:06.3660616Z ##[endgroup]
+add-to-project	Set up job	2026-04-06T08:07:06.3661060Z ##[group]Runner Image
+add-to-project	Set up job	2026-04-06T08:07:06.3661506Z Image: ubuntu-24.04
+add-to-project	Set up job	2026-04-06T08:07:06.3662034Z Version: 20260329.72.1
+add-to-project	Set up job	2026-04-06T08:07:06.3663037Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260329.72/images/ubuntu/Ubuntu2404-Readme.md
+add-to-project	Set up job	2026-04-06T08:07:06.3664479Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260329.72
+add-to-project	Set up job	2026-04-06T08:07:06.3665245Z ##[endgroup]
+add-to-project	Set up job	2026-04-06T08:07:06.3666247Z ##[group]GITHUB_TOKEN Permissions
+add-to-project	Set up job	2026-04-06T08:07:06.3668384Z Issues: read
+add-to-project	Set up job	2026-04-06T08:07:06.3669239Z Metadata: read
+add-to-project	Set up job	2026-04-06T08:07:06.3669986Z RepositoryProjects: write
+add-to-project	Set up job	2026-04-06T08:07:06.3670817Z ##[endgroup]
+add-to-project	Set up job	2026-04-06T08:07:06.3673691Z Secret source: Actions
+add-to-project	Set up job	2026-04-06T08:07:06.3674669Z Prepare workflow directory
+add-to-project	Set up job	2026-04-06T08:07:06.4031770Z Prepare all required actions
+add-to-project	Set up job	2026-04-06T08:07:06.4145904Z Complete job name: add-to-project
+add-to-project	Add issue to project and init canonical fields	﻿2026-04-06T08:07:06.4992477Z ##[group]Run echo "Issue #${ISSUE_NUMBER}: ${ISSUE_TITLE}"
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.4994326Z [36;1mecho "Issue #${ISSUE_NUMBER}: ${ISSUE_TITLE}"[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.4995105Z [36;1mecho "Labels include 'sprint' — eligible for project board"[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.4995806Z [36;1m[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.4996306Z [36;1mOWNER="${GITHUB_REPOSITORY_OWNER}"[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.4996934Z [36;1mREPO="${GITHUB_REPOSITORY#*/}"[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.4997436Z [36;1m[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.4997919Z [36;1m# Get project ID (first project in repo)[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.4998551Z [36;1mPROJECT_ID=$(gh api graphql -f query='[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.4999163Z [36;1m  query($owner: String!, $repo: String!) {[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.4999814Z [36;1m    repository(owner: $owner, name: $repo) {[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5000384Z [36;1m      projectsV2(first: 1) {[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5000920Z [36;1m        nodes { id title }[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5001411Z [36;1m      }[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5001903Z [36;1m    }[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5002425Z [36;1m  }[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5003114Z [36;1m' -f owner="$OWNER" -f repo="$REPO" \[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5003827Z [36;1m  --jq '.data.repository.projectsV2.nodes[0].id' 2>/dev/null || true)[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5004550Z [36;1m[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5005082Z [36;1mif [ -z "$PROJECT_ID" ] || [ "$PROJECT_ID" = "null" ]; then[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5005830Z [36;1m  echo "No project found in repository. Skipping auto-add."[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5006704Z [36;1m  echo "Create a GitHub Project V2 board to enable this workflow."[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5007356Z [36;1m  exit 0[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5007781Z [36;1mfi[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5008167Z [36;1m[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5008627Z [36;1mecho "Project ID: $PROJECT_ID"[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5009180Z [36;1m[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5009575Z [36;1m# Get issue node ID[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5010146Z [36;1mISSUE_NODE_ID=$(gh api graphql -f query='[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5010821Z [36;1m  query($owner: String!, $repo: String!, $number: Int!) {[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5011534Z [36;1m    repository(owner: $owner, name: $repo) {[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5012133Z [36;1m      issue(number: $number) { id }[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5012863Z [36;1m    }[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5013336Z [36;1m  }[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5013765Z [36;1m' -f owner="$OWNER" -f repo="$REPO" \[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5014640Z [36;1m  -F number="$ISSUE_NUMBER" --jq '.data.repository.issue.id')[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5015254Z [36;1m[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5015723Z [36;1mecho "Issue Node ID: $ISSUE_NODE_ID"[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5016257Z [36;1m[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5016858Z [36;1m# Add to project (idempotent — adding existing item is a no-op)[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5017574Z [36;1mITEM_ID=$(gh api graphql -f query='[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5018167Z [36;1m  mutation($projectId: ID!, $contentId: ID!) {[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5019029Z [36;1m    addProjectV2ItemById(input: {projectId: $projectId, contentId: $contentId}) {[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5019781Z [36;1m      item { id }[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5020263Z [36;1m    }[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5020682Z [36;1m  }[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5021239Z [36;1m' -f projectId="$PROJECT_ID" -f contentId="$ISSUE_NODE_ID" \[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5022001Z [36;1m  --jq '.data.addProjectV2ItemById.item.id' 2>&1 || true)[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5022626Z [36;1m[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5023174Z [36;1mecho "Item ID: $ITEM_ID"[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5023663Z [36;1m[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5024183Z [36;1mif [ -z "$ITEM_ID" ] || [ "$ITEM_ID" = "null" ]; then[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5024877Z [36;1m  echo "Could not add issue to project. Exiting."[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5025465Z [36;1m  exit 0[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5025921Z [36;1mfi[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5026296Z [36;1m[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5026809Z [36;1mecho "Issue #${ISSUE_NUMBER} added to project board."[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5027419Z [36;1m[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5027931Z [36;1m# D-142: Initialize canonical fields (Status, Sprint)[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5028631Z [36;1m# Get project fields[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5029174Z [36;1mFIELDS=$(gh api graphql -f query='[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5029775Z [36;1m  query($projectId: ID!) {[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5030277Z [36;1m    node(id: $projectId) {[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5030823Z [36;1m      ... on ProjectV2 {[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5031321Z [36;1m        fields(first: 20) {[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5031832Z [36;1m          nodes {[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5032355Z [36;1m            ... on ProjectV2Field { id name }[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5033171Z [36;1m            ... on ProjectV2SingleSelectField {[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5033802Z [36;1m              id name[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5034318Z [36;1m              options { id name }[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5034856Z [36;1m            }[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5035426Z [36;1m            ... on ProjectV2IterationField { id name }[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5036016Z [36;1m          }[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5036523Z [36;1m        }[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5036940Z [36;1m      }[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5037405Z [36;1m    }[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5037801Z [36;1m  }[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5038446Z [36;1m' -f projectId="$PROJECT_ID" --jq '.data.node.fields.nodes' 2>/dev/null || echo "[]")[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5039232Z [36;1m[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5039644Z [36;1mecho "Fields: $FIELDS"[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5040120Z [36;1m[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5040596Z [36;1m# Extract Status field ID and "Todo" option ID[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5041282Z [36;1mSTATUS_FIELD_ID=$(echo "$FIELDS" | python3 -c "[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5041845Z [36;1mimport json, sys[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5042375Z [36;1mfields = json.load(sys.stdin)[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5042945Z [36;1mfor f in fields:[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5043450Z [36;1m    if f.get('name') == 'Status':[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5044043Z [36;1m        print(f['id'])[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5044509Z [36;1m        break[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5044997Z [36;1m" 2>/dev/null || true)[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5045471Z [36;1m[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5045958Z [36;1mTODO_OPTION_ID=$(echo "$FIELDS" | python3 -c "[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5046528Z [36;1mimport json, sys[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5047039Z [36;1mfields = json.load(sys.stdin)[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5047579Z [36;1mfor f in fields:[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5048037Z [36;1m    if f.get('name') == 'Status':[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5048778Z [36;1m        for opt in f.get('options', []):[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5049437Z [36;1m            if opt.get('name') == 'Todo':[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5050010Z [36;1m                print(opt['id'])[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5050523Z [36;1m                break[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5051011Z [36;1m        break[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5051480Z [36;1m" 2>/dev/null || true)[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5051939Z [36;1m[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5052391Z [36;1m# Extract Sprint number field ID[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5053124Z [36;1mSPRINT_FIELD_ID=$(echo "$FIELDS" | python3 -c "[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5053769Z [36;1mimport json, sys[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5054233Z [36;1mfields = json.load(sys.stdin)[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5054796Z [36;1mfor f in fields:[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5055311Z [36;1m    if f.get('name') == 'Sprint':[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5055836Z [36;1m        print(f['id'])[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5056329Z [36;1m        break[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5056784Z [36;1m" 2>/dev/null || true)[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5057293Z [36;1m[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5057711Z [36;1m# Set Status = Todo if field exists[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5058394Z [36;1mif [ -n "$STATUS_FIELD_ID" ] && [ -n "$TODO_OPTION_ID" ]; then[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5059270Z [36;1m  echo "Setting Status=Todo (field=$STATUS_FIELD_ID, option=$TODO_OPTION_ID)"[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5059997Z [36;1m  gh api graphql -f query='[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5060735Z [36;1m    mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $optionId: String!) {[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5061510Z [36;1m      updateProjectV2ItemFieldValue(input: {[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5062224Z [36;1m        projectId: $projectId[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5062995Z [36;1m        itemId: $itemId[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5063594Z [36;1m        fieldId: $fieldId[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5064206Z [36;1m        value: { singleSelectOptionId: $optionId }[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5064800Z [36;1m      }) { projectV2Item { id } }[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5065347Z [36;1m    }[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5065851Z [36;1m  ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" \[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5066680Z [36;1m    -f fieldId="$STATUS_FIELD_ID" -f optionId="$TODO_OPTION_ID" 2>&1 || true[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5067367Z [36;1melse[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5068071Z [36;1m  echo "FAIL: D-142 canonical field 'Status' or 'Todo' option not found on Project V2 board."[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5069037Z [36;1m  echo "This is a hard failure — canonical fields must exist per D-142."[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5069706Z [36;1m  exit 1[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5070145Z [36;1mfi[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5070546Z [36;1m[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5071081Z [36;1m# Extract sprint number from issue title [S<N>...] pattern[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5071816Z [36;1mSPRINT_NUM=$(echo "$ISSUE_TITLE" | python3 -c "[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5072380Z [36;1mimport re, sys[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5073058Z [36;1mtitle = sys.stdin.read().strip()[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5073650Z [36;1mm = re.search(r'\[S(\d+)', title)[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5074224Z [36;1mprint(m.group(1) if m else '')[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5074743Z [36;1m" 2>/dev/null || true)[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5075257Z [36;1m[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5075805Z [36;1m# Set Sprint number if field exists and sprint was extracted[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5076538Z [36;1mif [ -n "$SPRINT_FIELD_ID" ] && [ -n "$SPRINT_NUM" ]; then[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5077309Z [36;1m  echo "Setting Sprint=$SPRINT_NUM (field=$SPRINT_FIELD_ID)"[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5077965Z [36;1m  gh api graphql -f query='[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5078742Z [36;1m    mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $value: Float!) {[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5079547Z [36;1m      updateProjectV2ItemFieldValue(input: {[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5080119Z [36;1m        projectId: $projectId[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5080653Z [36;1m        itemId: $itemId[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5081168Z [36;1m        fieldId: $fieldId[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5081872Z [36;1m        value: { number: $value }[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5082404Z [36;1m      }) { projectV2Item { id } }[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5083081Z [36;1m    }[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5083605Z [36;1m  ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" \[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5084320Z [36;1m    -f fieldId="$SPRINT_FIELD_ID" -F value="$SPRINT_NUM" 2>&1 || true[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5085019Z [36;1melse[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5085662Z [36;1m  echo "FAIL: D-142 canonical field 'Sprint' not found or sprint number not in title."[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5086561Z [36;1m  echo "Sprint field must exist and be writable per D-142."[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5087217Z [36;1m  exit 1[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5087612Z [36;1mfi[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5088024Z [36;1m[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5088521Z [36;1mecho "D-142: Canonical field initialization complete."[0m
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5701638Z shell: /usr/bin/bash -e {0}
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5703152Z env:
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5703885Z   GH_TOKEN: ***
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5704472Z   ISSUE_URL: https://github.com/ahmetcagriakca/vezir/issues/357
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5705227Z   ISSUE_NUMBER: 357
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5705756Z   ISSUE_TITLE: [S71-TEST] Workflow proof issue — will be deleted
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5706371Z ##[endgroup]
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5977897Z Issue #357: [S71-TEST] Workflow proof issue — will be deleted
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.5978890Z Labels include 'sprint' — eligible for project board
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.8647945Z No project found in repository. Skipping auto-add.
+add-to-project	Add issue to project and init canonical fields	2026-04-06T08:07:06.8649509Z Create a GitHub Project V2 board to enable this workflow.
+add-to-project	Complete job	﻿2026-04-06T08:07:06.8763665Z Cleaning up orphan processes

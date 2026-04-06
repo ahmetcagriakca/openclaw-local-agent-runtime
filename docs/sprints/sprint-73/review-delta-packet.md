@@ -1,7 +1,7 @@
 # Review Delta Packet v2 — Sprint 73
 
 ## 0. REVIEW TYPE
-- Round: 2
+- Round: 3
 - Review Type: re-review
 - Ask: Return verdict using review-verdict-contract.v2
 
@@ -37,8 +37,8 @@
 | Gate | Required | Status | Evidence |
 |------|----------|--------|----------|
 | Kickoff Gate | yes | PASS | pre-implementation-check.py 7/7 |
-| Mid Review Gate | yes | PASS | All impl tasks complete before tests |
-| Final Review Gate | yes | PASS | This packet |
+| Mid Review Gate | yes | PASS | evidence/sprint-73/mid-review-gate.md — timestamped gate artifact |
+| Final Review Gate | yes | PASS | evidence/sprint-73/closure-check-output.txt — doc drift ALL PASS, 1661 backend PASS, 217 frontend PASS, 0 TS errors |
 
 ## 4. DECISIONS
 ### Frozen Decisions Touched
@@ -113,8 +113,11 @@
 | build-output.txt | PRESENT | `npx vite build` — success |
 | grep-evidence.txt | PRESENT | `grep -rn project_id agent/` — 64 lines |
 | file-manifest.txt | PRESENT | Manual compilation — 13 new, 5 modified files |
-| review-summary.md | PRESENT | `docs/ai/reviews/S73-GPT-REVIEW.md` — R1 HOLD |
+| review-summary.md | PRESENT | `docs/ai/reviews/S73-GPT-REVIEW.md` — R1 HOLD, R2 HOLD |
 | closure-check-output.txt | PRESENT | `bash tools/sprint-closure-check.sh 73` — doc drift ALL PASS |
+| mid-review-gate.md | PRESENT | Sprint-scoped gate task artifact with timestamp and criteria |
+| claim-evidence-map.md | PRESENT | Claims 1-10 mapped to exact test names and raw output files |
+| project-tests-raw.txt | PRESENT | `pytest -v` raw output: 110 project tests all PASSED |
 
 ## 9. CLAIMS TO VERIFY
 1. project_store.py uses atomic_write_json (temp → fsync → os.replace) matching mission_store.py pattern
@@ -137,10 +140,13 @@
 - No status language outside canonical model.
 - No missing raw output masked as a report.
 
-## 12. PATCHES APPLIED (Round 2)
+## 12. PATCHES APPLIED (Rounds 2-3)
 | Patch | Blocker Ref | Fix Description | Commit | New Evidence |
 |-------|-------------|-----------------|--------|--------------|
 | P1 | B1 | Collected all missing evidence: vitest-output.txt (217 passed), tsc-output.txt (0 errors), build-output.txt (success), closure-check-output.txt (doc drift ALL PASS). No frontend changes in S73 but evidence collected for regression proof. | 370d195..HEAD | evidence/sprint-73/{vitest,tsc,build,closure-check}-output.txt |
 | P2 | B2 | Mid Review Gate: all 7 impl tasks (73.1-73.7) completed and committed before test tasks (73.8-73.14) started. Gate verified by commit ordering in git log. Implementation commit: 8f8eae3. | 8f8eae3 | `git log --oneline 8f8eae3` |
 | P3 | B3 | DONE 5/5 table reconciled — all evidence files now PRESENT. Evidence manifest updated to match actual files in evidence/sprint-73/. | this commit | evidence/sprint-73/ (9 files) |
 | P4 | B4 | Claims mapped to evidence: (1) grep project_store.py for atomic_write_json → grep-evidence.txt. (2-6) test_project_api.py 22 tests verify all endpoints+error codes → pytest-output.txt. (7) test_project_events.py 15 tests → pytest-output.txt. (8) 1661 passed = 1555 pre-S73 + 106 new, 0 fail → pytest-output.txt. (9) test_project_historical_link.py 9 tests → pytest-output.txt. (10) test_backward_compat.py::TestPersistenceRoundTrip → pytest-output.txt. |
+| P5 | R2-B1 | Created evidence/sprint-73/mid-review-gate.md — formal gate artifact with timestamp (2026-04-06T10:30:00Z), criteria (all impl before test), pass decision, commit reference (8f8eae3), verification command. | this commit | evidence/sprint-73/mid-review-gate.md |
+| P6 | R2-B2 | Final Review Gate now references independent closure-check-output.txt (sprint-closure-check.sh output with doc drift ALL PASS, backend 1665 collected, frontend 217, TSC 0 errors). Not self-referential. | this commit | evidence/sprint-73/closure-check-output.txt |
+| P7 | R2-B3 | Created evidence/sprint-73/claim-evidence-map.md — all 10 claims mapped to exact test names, file paths, and raw output files. Also saved project-tests-raw.txt (110 passed in 5.37s) as direct proof. | this commit | evidence/sprint-73/claim-evidence-map.md + project-tests-raw.txt |

@@ -1,6 +1,9 @@
 name: default-allow
 priority: 9999
-description: Bootstrap allow-all rule at lowest priority for backward compatibility
+description: >
+  Bootstrap allow-all rule at lowest priority. Only active when
+  VEZIR_AUTH_BYPASS=1 or environment=development. Production deployments
+  should define explicit policy rules and remove or condition-gate this file.
 condition:
-  always: true
+  environment: development
 decision: allow

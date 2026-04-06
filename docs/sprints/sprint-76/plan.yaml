@@ -1,0 +1,119 @@
+sprint: 76
+phase: 10
+title: "Governance Contract Hardening (Security + EventBus Truth + Audit Ownership)"
+model: "A"
+
+authority:
+  source_of_truth: "Operator S76 plan (2026-04-06)"
+  automation_index: "plan.yaml"
+
+status:
+  implementation_status: in_progress
+  closure_status: not_started
+
+mutation_budget:
+  max: 5
+  planned: 5
+  stop_rule: "no additional repo code/config mutation without explicit rescope"
+
+execution_order: "P1 → P2 → P3 (strict sequential, no parallel)"
+
+tasks:
+  # ── P1: Security + Policy Default Semantics ──
+  - id: "76.1"
+    title: "Grep audit: catalog every POST/PUT/PATCH/DELETE endpoint + auth status"
+    type: "analysis"
+    patch: "P1"
+
+  - id: "76.2"
+    title: "Add require_operator to all 8 unprotected project_api.py mutations"
+    type: "implementation"
+    patch: "P1"
+    files:
+      - "agent/api/project_api.py"
+
+  - id: "76.3"
+    title: "Audit remaining route files — fix any other gaps found in P1.1"
+    type: "implementation"
+    patch: "P1"
+
+  - id: "76.4"
+    title: "Make auth-disabled explicit: reject without VEZIR_AUTH_BYPASS=1"
+    type: "implementation"
+    patch: "P1"
+    files:
+      - "agent/auth/middleware.py"
+
+  - id: "76.5"
+    title: "Constrain default-allow.yaml: condition-gated or removed"
+    type: "implementation"
+    patch: "P1"
+    files:
+      - "config/policies/default-allow.yaml"
+
+  - id: "76.6"
+    title: "Negative auth tests: project endpoints 401/403/200"
+    type: "test"
+    patch: "P1"
+
+  - id: "76.7"
+    title: "Policy fail-closed test: no rules → deny, constrained default-allow"
+    type: "test"
+    patch: "P1"
+
+  # ── P2: EventBus Truth Patch ──
+  - id: "76.8"
+    title: "Trace startup path: EventBus instantiation + handler registration"
+    type: "analysis"
+    patch: "P2"
+
+  - id: "76.9"
+    title: "Trace controller: bus.emit() calls in production code path"
+    type: "analysis"
+    patch: "P2"
+
+  - id: "76.10"
+    title: "Freeze D-147: EventBus operational status decision"
+    type: "decision"
+    patch: "P2"
+
+  - id: "76.11"
+    title: "Implement D-147 — wire startup or roll back claims"
+    type: "implementation"
+    patch: "P2"
+
+  - id: "76.12"
+    title: "Evidence: startup trace or claim rollback diff"
+    type: "evidence"
+    patch: "P2"
+
+  # ── P3: Audit Ownership Patch ──
+  - id: "76.13"
+    title: "Inspect all 3 audit writers: targets, callers, chain verification"
+    type: "analysis"
+    patch: "P3"
+
+  - id: "76.14"
+    title: "Inspect audit_service.py: purpose, callers, target file"
+    type: "analysis"
+    patch: "P3"
+
+  - id: "76.15"
+    title: "Freeze audit ownership decision (amend D-129)"
+    type: "decision"
+    patch: "P3"
+
+  - id: "76.16"
+    title: "Implement consolidation or explicit separation"
+    type: "implementation"
+    patch: "P3"
+
+  - id: "76.17"
+    title: "Failure-mode tests: governance append fail semantics"
+    type: "test"
+    patch: "P3"
+
+  - id: "76.18"
+    title: "Chain integrity tests after consolidation"
+    type: "test"
+    patch: "P3"

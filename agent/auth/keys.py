@@ -69,10 +69,18 @@ def validate_key(token: str) -> Optional[ApiKey]:
 
 
 def is_auth_enabled() -> bool:
-    """Check if auth is configured (keys exist)."""
+    """Check if auth is configured (keys exist).
+
+    When no keys are configured, auth is disabled ONLY if
+    VEZIR_AUTH_BYPASS=1 is explicitly set. Otherwise, fail-closed.
+    """
     if not _loaded:
         _load_keys()
-    return len(_keys) > 0
+    if len(_keys) > 0:
+        return True
+    # No keys configured — check explicit bypass
+    import os
+    return os.environ.get("VEZIR_AUTH_BYPASS") != "1"
 
 
 def reload_keys() -> None:

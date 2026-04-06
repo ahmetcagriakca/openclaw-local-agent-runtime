@@ -20,7 +20,11 @@ async def get_current_user(
 
     Returns ApiKey if valid, None if no credentials provided.
     Raises 401 if credentials provided but invalid.
+    When auth is bypassed (VEZIR_AUTH_BYPASS=1), skips validation.
     """
+    if not is_auth_enabled():
+        return None  # Auth bypassed — skip validation
+
     if credentials is None:
         return None
 
@@ -39,7 +43,10 @@ async def require_operator(
     When auth is not configured (no keys in auth.json), allows all mutations.
     """
     if not is_auth_enabled():
-        return None  # Auth not configured — allow all mutations
+        import logging
+        logging.getLogger("mcc.auth").warning(
+            "Auth bypassed (VEZIR_AUTH_BYPASS=1). All mutations allowed without authentication.")
+        return None  # Auth explicitly bypassed
 
     if user is None:
         raise HTTPException(

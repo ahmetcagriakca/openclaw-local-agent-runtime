@@ -30,7 +30,7 @@ Session 51: Sprint 75 implementation complete. Phase 10 — Project Aggregate (F
 ## Current State
 
 - **Phase:** 10 active — S75 implementation done, closure pending
-- **Last closed sprint:** 74
+- **Last closed sprint:** 75
 - **Sprint 75 status:** implementation_status=done, closure_status=not_started
 - **Decisions:** 143 frozen + 2 superseded (D-001 → D-146, D-126 skipped, D-143 placeholder, D-082/D-098 superseded)
 - **Tests:** 1748 backend + 239 frontend + 13 Playwright + 139 root = 2139 total (was 2081, +36 backend +22 frontend)

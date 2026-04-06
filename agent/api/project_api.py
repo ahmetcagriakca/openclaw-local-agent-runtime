@@ -9,9 +9,10 @@ import logging
 from datetime import datetime, timezone
 from typing import Optional
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
+from auth.middleware import require_operator
 from persistence.project_store import (
     ActiveMissionsError,
     InvalidTransitionError,
@@ -66,7 +67,7 @@ def _meta():
 
 
 @router.post("", status_code=201)
-async def create_project(req: CreateProjectRequest):
+async def create_project(req: CreateProjectRequest, _operator=Depends(require_operator)):
     """Create a new project (starts in draft status)."""
     store = _get_store()
     project = store.create(
@@ -121,7 +122,7 @@ async def get_project(project_id: str):
 
 
 @router.patch("/{project_id}")
-async def update_project(project_id: str, req: UpdateProjectRequest):
+async def update_project(project_id: str, req: UpdateProjectRequest, _operator=Depends(require_operator)):
     """Update project fields and/or transition status."""
     store = _get_store()
     project = store.get(project_id)
@@ -160,7 +161,7 @@ async def update_project(project_id: str, req: UpdateProjectRequest):
 
 
 @router.delete("/{project_id}")
-async def delete_project(project_id: str):
+async def delete_project(project_id: str, _operator=Depends(require_operator)):
     """Soft-delete a project (sets status to cancelled).
 
     D-144 §5: Only draft/active/paused. Reject completed/archived.
@@ -188,7 +189,7 @@ async def delete_project(project_id: str):
 
 
 @router.post("/{project_id}/missions/{mission_id}", status_code=200)
-async def link_mission(project_id: str, mission_id: str):
+async def link_mission(project_id: str, mission_id: str, _operator=Depends(require_operator)):
     """Link a mission to a project.
 
     D-144 §5: Only draft/active projects accept links.
@@ -209,7 +210,7 @@ async def link_mission(project_id: str, mission_id: str):
 
 
 @router.delete("/{project_id}/missions/{mission_id}")
-async def unlink_mission(project_id: str, mission_id: str):
+async def unlink_mission(project_id: str, mission_id: str, _operator=Depends(require_operator)):
     """Unlink a mission from a project.
 
     D-144 §5: Only draft/active/paused. Historical links preserved.
@@ -233,7 +234,7 @@ async def unlink_mission(project_id: str, mission_id: str):
 
 
 @router.post("/{project_id}/workspace/enable", status_code=201)
-async def enable_workspace(project_id: str):
+async def enable_workspace(project_id: str, _operator=Depends(require_operator)):
     """Enable workspace for a project. Creates directory structure.
 
     D-145 §5: 409 if already enabled, 404 if not found,
@@ -302,7 +303,7 @@ class PublishArtifactRequest(BaseModel):
 
 
 @router.post("/{project_id}/artifacts", status_code=201)
-async def publish_artifact(project_id: str, req: PublishArtifactRequest):
+async def publish_artifact(project_id: str, req: PublishArtifactRequest, _operator=Depends(require_operator)):
     """Publish a mission artifact to project space.
 
     D-145 §5: 404 if not found, 409 if workspace not enabled,
@@ -350,7 +351,7 @@ async def list_artifacts(
 
 
 @router.delete("/{project_id}/artifacts/{artifact_id}", status_code=204)
-async def unpublish_artifact(project_id: str, artifact_id: str):
+async def unpublish_artifact(project_id: str, artifact_id: str, _operator=Depends(require_operator)):
     """Unpublish (remove) an artifact from project space.
 
     D-145 §5: 404 if not found, 403 if project inactive.

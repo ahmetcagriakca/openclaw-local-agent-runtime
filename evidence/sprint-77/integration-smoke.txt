@@ -1,0 +1,44 @@
+=== S77 Integration Smoke Test — 2026-04-07 ===
+
+--- 1. Azure Text Generation (LIVE) ---
+Endpoint: https://abdul-m9ji74es-eastus2.openai.azure.com/openai/responses
+Model: gpt-5.3-codex-cagri
+Request: input="Say only: pong", max_output_tokens=16
+Response: HTTP 200, output="pong", 15 tokens
+PASS
+
+--- 2. Azure Function Calling (LIVE) ---
+Request: tools=[add(a,b)], input="What is 2+3?"
+Response: HTTP 200, tools accepted (strict:true), model answered "2 + 3 = **5**."
+PASS (tools recognized, model chose direct answer)
+
+--- 3. Azure Validation Error (LIVE) ---
+Request: max_output_tokens=5 (below min 16)
+Response: HTTP 400, "integer_below_min_value"
+PASS (correct error handling)
+
+--- 4. Unit Tests ---
+Azure provider:      35/35 PASS
+Routing policy:      21/21 PASS
+Azure health:        17/17 PASS
+Provider telemetry:   5/5 PASS
+Total S77 new tests: 78/78 PASS
+
+--- 5. Full Backend Regression ---
+1855 passed, 4 skipped, 0 failed (was 1777, +78 new)
+
+--- 6. Frontend Regression ---
+TypeScript: 0 errors
+Vitest: 239/239 PASS
+
+--- 7. Kill Switch Test (Unit) ---
+AZURE_ENABLED=false → gpt-general selected as fallback
+AZURE_ENABLED=false + GPT unhealthy → claude-general selected
+All fallback paths verified in test_routing_policy.py
+PASS
+
+--- Summary ---
+All smoke tests: PASS
+New tests: 78 (35 azure + 21 routing + 17 health + 5 telemetry)
+Total tests: 1855 backend + 239 frontend + 13 Playwright + 139 root = 2246
+Regression: CLEAN

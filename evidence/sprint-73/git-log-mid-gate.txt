@@ -1,0 +1,9 @@
+8f8eae3 Sprint 73: Project Entity + CRUD (Phase 10 Faz 1, D-144)
+---
+91e408c Sprint 73 R3: gate artifacts, claim-evidence map, raw proof
+e7dd4bc Sprint 73 R2: complete evidence bundle, patch all GPT R1 blockers
+370d195 Fix doc drift: D-143 frozen placeholder, decision count 142+2=144
+0400480 Fix D-143 heading for doc drift check: deferred status
+3638593 Sprint 73 doc drift fixes: decision count 140 frozen + D-143 skipped
+e991c39 Sprint 73 closure fixes: CLAUDE.md test count, D-143 heading, review packet
+All impl tasks (73.1-73.7) in commit 8f8eae3. All subsequent commits are closure/evidence/docs.

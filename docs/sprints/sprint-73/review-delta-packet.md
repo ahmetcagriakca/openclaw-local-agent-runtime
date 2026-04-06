@@ -1,7 +1,7 @@
 # Review Delta Packet v2 — Sprint 73
 
 ## 0. REVIEW TYPE
-- Round: 3
+- Round: 4
 - Review Type: re-review
 - Ask: Return verdict using review-verdict-contract.v2
 
@@ -73,7 +73,7 @@
  docs/ai/DECISIONS.md                  (MOD)  — D-144, D-145 entries
  docs/ai/STATE.md                      (MOD)  — Phase 10, S73 entries
  docs/ai/handoffs/current.md           (MOD)  — session 49 handoff
- evidence/sprint-73/*                  (NEW)  — 4 evidence files
+ evidence/sprint-73/*                  (NEW)  — 14 evidence files (pytest, vitest, tsc, build, lint, grep, closure-check, sprint-class, contract, file-manifest, mid-review-gate, claim-evidence-map, project-tests-raw, git-log-mid-gate)
 ```
 
 ## 6. TASK DONE CHECK (5/5)
@@ -118,6 +118,7 @@
 | mid-review-gate.md | PRESENT | Sprint-scoped gate task artifact with timestamp and criteria |
 | claim-evidence-map.md | PRESENT | Claims 1-10 mapped to exact test names and raw output files |
 | project-tests-raw.txt | PRESENT | `pytest -v` raw output: 110 project tests all PASSED |
+| git-log-mid-gate.txt | PRESENT | `git log --oneline` chronology: impl commit 8f8eae3 precedes all closure commits |
 
 ## 9. CLAIMS TO VERIFY
 1. project_store.py uses atomic_write_json (temp → fsync → os.replace) matching mission_store.py pattern
@@ -150,3 +151,5 @@
 | P5 | R2-B1 | Created evidence/sprint-73/mid-review-gate.md — formal gate artifact with timestamp (2026-04-06T10:30:00Z), criteria (all impl before test), pass decision, commit reference (8f8eae3), verification command. | this commit | evidence/sprint-73/mid-review-gate.md |
 | P6 | R2-B2 | Final Review Gate now references independent closure-check-output.txt (sprint-closure-check.sh output with doc drift ALL PASS, backend 1665 collected, frontend 217, TSC 0 errors). Not self-referential. | this commit | evidence/sprint-73/closure-check-output.txt |
 | P7 | R2-B3 | Created evidence/sprint-73/claim-evidence-map.md — all 10 claims mapped to exact test names, file paths, and raw output files. Also saved project-tests-raw.txt (110 passed in 5.37s) as direct proof. | this commit | evidence/sprint-73/claim-evidence-map.md + project-tests-raw.txt |
+| P8 | R3-B1 | Created evidence/sprint-73/git-log-mid-gate.txt — raw `git log --oneline` output proving commit 8f8eae3 (all impl tasks) precedes all subsequent closure/evidence commits. Referenced in mid-review-gate.md and evidence manifest. | this commit | evidence/sprint-73/git-log-mid-gate.txt |
+| P9 | R3-B2 | Reconciled evidence file count: 14 files in evidence/sprint-73/ (all listed in manifest). Changed Files section updated to match. No contradictions. | this commit | evidence/sprint-73/ (14 files) |

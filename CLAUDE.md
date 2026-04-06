@@ -79,9 +79,25 @@ python tools/benchmark_api.py
 
 ## Session Protocol
 
-1. Read `docs/ai/handoffs/current.md` + `docs/ai/state/open-items.md`
-2. Work autonomously, commit at milestones
-3. Update handoff + open-items at session end
+### Session Entry (mandatory before any implementation)
+
+1. Read `docs/ai/handoffs/current.md` — understand last session state
+2. Read `docs/ai/state/open-items.md` — check blockers and carry-forward
+3. Read `docs/ai/STATE.md` — verify system status
+4. Run `py tools/pre-implementation-check.py` — deterministic gate
+5. If gate FAIL: fix all issues before writing any code
+
+### During Session
+
+6. Work autonomously, commit at milestones
+7. Stay inside active sprint scope (GOVERNANCE.md §4)
+8. Resolve blockers before new work
+
+### Session Exit
+
+9. Update `docs/ai/handoffs/current.md` with session deliverables
+10. Update `docs/ai/state/open-items.md` with resolved/new items
+11. Commit and push all changes
 
 ## Do Not
 

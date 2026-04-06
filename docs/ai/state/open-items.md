@@ -90,7 +90,7 @@
 
 ## Next Sprint
 
-**Phase 9 active.** S72 next: Session Protocol Enforcement.
+S72 ready: Session Protocol Enforcement (Phase 9).
 
 ### Carry-Forward
 | Item | Source | Status |

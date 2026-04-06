@@ -274,14 +274,21 @@ jobs:
           echo "Badge JSONs generated:"
           cat badges/*.json
 
-      - name: Commit badge updates
+      - name: Push badges to badges branch
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add badges/
+
+          # Create orphan badges branch or update existing
+          git checkout --orphan badges-update 2>/dev/null || git checkout -B badges-update
+          git rm -rf . 2>/dev/null || true
+          cp -r badges/* . 2>/dev/null || true
+          ls *.json
+
+          git add *.json
           if git diff --cached --quiet; then
             echo "No badge changes"
           else
-            git commit -m "chore(ci): update dynamic badges [skip ci]"
-            git push
+            git commit -m "chore(ci): update dynamic badges"
+            git push origin HEAD:badges --force
           fi

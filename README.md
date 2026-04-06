@@ -2,12 +2,12 @@
 
 [![CI](https://github.com/ahmetcagriakca/vezir/actions/workflows/ci.yml/badge.svg)](https://github.com/ahmetcagriakca/vezir/actions/workflows/ci.yml)
 [![Playwright](https://github.com/ahmetcagriakca/vezir/actions/workflows/playwright.yml/badge.svg)](https://github.com/ahmetcagriakca/vezir/actions/workflows/playwright.yml)
-[![Backend Tests](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/ahmetcagriakca/vezir/main/badges/backend-tests.json)](https://github.com/ahmetcagriakca/vezir/actions/workflows/ci.yml)
-[![Frontend Tests](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/ahmetcagriakca/vezir/main/badges/frontend-tests.json)](https://github.com/ahmetcagriakca/vezir/actions/workflows/ci.yml)
-[![Backend Coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/ahmetcagriakca/vezir/main/badges/backend-coverage.json)](https://github.com/ahmetcagriakca/vezir/actions/workflows/ci.yml)
-[![Frontend Coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/ahmetcagriakca/vezir/main/badges/frontend-coverage.json)](https://github.com/ahmetcagriakca/vezir/actions/workflows/ci.yml)
-[![Decisions](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/ahmetcagriakca/vezir/main/badges/decisions.json)](https://github.com/ahmetcagriakca/vezir/blob/main/docs/ai/DECISIONS.md)
-[![Phase](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/ahmetcagriakca/vezir/main/badges/phase.json)](https://github.com/ahmetcagriakca/vezir/blob/main/docs/ai/STATE.md)
+[![Backend Tests](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/ahmetcagriakca/vezir/badges/backend-tests.json)](https://github.com/ahmetcagriakca/vezir/actions/workflows/ci.yml)
+[![Frontend Tests](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/ahmetcagriakca/vezir/badges/frontend-tests.json)](https://github.com/ahmetcagriakca/vezir/actions/workflows/ci.yml)
+[![Backend Coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/ahmetcagriakca/vezir/badges/backend-coverage.json)](https://github.com/ahmetcagriakca/vezir/actions/workflows/ci.yml)
+[![Frontend Coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/ahmetcagriakca/vezir/badges/frontend-coverage.json)](https://github.com/ahmetcagriakca/vezir/actions/workflows/ci.yml)
+[![Decisions](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/ahmetcagriakca/vezir/badges/decisions.json)](https://github.com/ahmetcagriakca/vezir/blob/main/docs/ai/DECISIONS.md)
+[![Phase](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/ahmetcagriakca/vezir/badges/phase.json)](https://github.com/ahmetcagriakca/vezir/blob/main/docs/ai/STATE.md)
 
 Governed multi-agent mission platform for Windows. Natural language goals become structured, auditable missions executed by 9 specialist AI roles with quality gates, risk classification, and encrypted audit trails.
 

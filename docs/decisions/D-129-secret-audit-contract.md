@@ -70,9 +70,15 @@
 - Path: `logs/audit/audit.jsonl` (append-only JSONL, one JSON object per line)
 - Entry schema: `{"timestamp", "event", "actor", "detail", "prev_hash", "entry_hash"}`
 
-### Runtime Ownership
-- Single append owner: `agent/persistence/audit_integrity.py:append_entry()`
-- No other component may write to the audit log directly
+### Runtime Ownership (amended S76)
+- Governance chain owner: `agent/persistence/audit_integrity.py:append_entry()` → `logs/audit/audit.jsonl`
+  - Single owner for governance-critical chain. Failure → explicit error (not silent).
+- Operational log: `agent/services/audit_service.py:log_agent_run()` → `logs/agent-audit.jsonl`
+  - Agent run tracking, best-effort, no chain hash. Failure → logged, continue.
+- EventBus handler: `agent/events/handlers/audit_trail.py` → `logs/audit-trail.jsonl`
+  - Internal/test infrastructure (D-147). Not wired to production startup.
+  - Has independent chain hash but only operates when EventBus is explicitly wired.
+- Each writer targets a **distinct file**. No cross-write contention.
 
 ### Verification Surface
 - CLI only in Sprint 36: `tools/verify-audit-chain.py`

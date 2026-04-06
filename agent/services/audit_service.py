@@ -1,4 +1,10 @@
-"""Simple audit logging for agent actions."""
+"""Operational audit logging for agent actions (D-129 amended S76).
+
+This is the operational log writer. NOT the governance chain.
+Target: logs/agent-audit.jsonl (best-effort, no chain hash).
+Failure: silent continue (operational, not governance-critical).
+Governance chain: agent/persistence/audit_integrity.py → logs/audit/audit.jsonl.
+"""
 import json
 import os
 from datetime import datetime, timezone

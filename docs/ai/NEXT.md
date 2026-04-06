@@ -1,7 +1,22 @@
 # Next Steps — Vezir Platform
 
 **Last updated:** 2026-04-06
-**Current:** Phase 9 active. Sprint 71 closed. S72 session protocol enforcement next.
+**Current:** Phase 9 active. Sprint 72 closed. S73 next.
+
+---
+
+## Sprint 72 — Session Protocol Enforcement (CLOSED)
+
+**Model:** A (full closure) | **Class:** Governance
+**Scope:** CLAUDE.md session protocol expansion (3→11 steps), pre-implementation-check.py session entry gate, 37 unit tests
+**Issues:** #359 (parent), #360-#362 (tasks)
+**Milestone:** Sprint 72
+**Tests:** 1555 backend + 217 frontend + 13 Playwright + 139 root = 1924 total (+37 root new)
+**New files:** `tools/pre-implementation-check.py`, `tests/test_pre_implementation_check.py`
+**Modified:** `CLAUDE.md` (session protocol), `docs/ai/state/open-items.md` (format fix)
+**Pre-sprint:** `tools/ask-gpt-review.sh`, `docs/ai/prompts/*` (4 files), `AGENTS.md`, `.env.example`
+**Review:** GPT PASS (R5)
+**Evidence:** `evidence/sprint-72/`
 
 ---
 

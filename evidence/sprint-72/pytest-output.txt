@@ -1,0 +1,46 @@
+============================= test session starts =============================
+platform win32 -- Python 3.14.3, pytest-7.4.4, pluggy-1.6.0 -- C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\AKCA\vezir
+plugins: anyio-4.12.1, cov-4.1.0, mock-3.12.0, timeout-2.4.0
+collecting ... collected 37 items
+
+tests/test_pre_implementation_check.py::TestCheckResult::test_create_passed PASSED [  2%]
+tests/test_pre_implementation_check.py::TestCheckResult::test_create_failed PASSED [  5%]
+tests/test_pre_implementation_check.py::TestGateResult::test_empty_gate_passes PASSED [  8%]
+tests/test_pre_implementation_check.py::TestGateResult::test_all_pass PASSED [ 10%]
+tests/test_pre_implementation_check.py::TestGateResult::test_one_fail PASSED [ 13%]
+tests/test_pre_implementation_check.py::TestGateResult::test_multiple_fails PASSED [ 16%]
+tests/test_pre_implementation_check.py::TestCheckFileExists::test_existing_file PASSED [ 18%]
+tests/test_pre_implementation_check.py::TestCheckFileExists::test_missing_file PASSED [ 21%]
+tests/test_pre_implementation_check.py::TestCheckFileExists::test_empty_file PASSED [ 24%]
+tests/test_pre_implementation_check.py::TestExtractLastClosedSprint::test_standard_format PASSED [ 27%]
+tests/test_pre_implementation_check.py::TestExtractLastClosedSprint::test_table_format PASSED [ 29%]
+tests/test_pre_implementation_check.py::TestExtractLastClosedSprint::test_no_match PASSED [ 32%]
+tests/test_pre_implementation_check.py::TestExtractNextSprint::test_not_started_in_table PASSED [ 35%]
+tests/test_pre_implementation_check.py::TestExtractNextSprint::test_no_match PASSED [ 37%]
+tests/test_pre_implementation_check.py::TestDetectActiveSprint::test_from_state_md PASSED [ 40%]
+tests/test_pre_implementation_check.py::TestDetectActiveSprint::test_fallback_last_closed_plus_one PASSED [ 43%]
+tests/test_pre_implementation_check.py::TestDetectActiveSprint::test_no_state_file PASSED [ 45%]
+tests/test_pre_implementation_check.py::TestCheckActiveBlockers::test_no_blockers PASSED [ 48%]
+tests/test_pre_implementation_check.py::TestCheckActiveBlockers::test_has_blockers PASSED [ 51%]
+tests/test_pre_implementation_check.py::TestCheckActiveBlockers::test_blockers_allowed PASSED [ 54%]
+tests/test_pre_implementation_check.py::TestCheckActiveBlockers::test_missing_file PASSED [ 56%]
+tests/test_pre_implementation_check.py::TestCheckActiveBlockers::test_no_blocker_section PASSED [ 59%]
+tests/test_pre_implementation_check.py::TestCheckPreviousSprintClosed::test_sprint_closed PASSED [ 62%]
+tests/test_pre_implementation_check.py::TestCheckPreviousSprintClosed::test_last_closed_sprint_format PASSED [ 64%]
+tests/test_pre_implementation_check.py::TestCheckPreviousSprintClosed::test_no_closure_info PASSED [ 67%]
+tests/test_pre_implementation_check.py::TestCheckPreviousSprintClosed::test_missing_handoff PASSED [ 70%]
+tests/test_pre_implementation_check.py::TestCheckPlanYaml::test_plan_exists PASSED [ 72%]
+tests/test_pre_implementation_check.py::TestCheckPlanYaml::test_plan_missing PASSED [ 75%]
+tests/test_pre_implementation_check.py::TestCheckPlanYaml::test_none_sprint PASSED [ 78%]
+tests/test_pre_implementation_check.py::TestCheckStateSync::test_pass PASSED [ 81%]
+tests/test_pre_implementation_check.py::TestCheckStateSync::test_fail PASSED [ 83%]
+tests/test_pre_implementation_check.py::TestCheckStateSync::test_timeout PASSED [ 86%]
+tests/test_pre_implementation_check.py::TestCheckStateSync::test_missing_script PASSED [ 89%]
+tests/test_pre_implementation_check.py::TestAstuple::test_converts_to_tuple PASSED [ 91%]
+tests/test_pre_implementation_check.py::TestRunGate::test_full_pass PASSED [ 94%]
+tests/test_pre_implementation_check.py::TestRunGate::test_missing_handoff_fails PASSED [ 97%]
+tests/test_pre_implementation_check.py::TestRunGate::test_allow_blockers_flag PASSED [100%]
+
+============================= 37 passed in 0.19s ==============================

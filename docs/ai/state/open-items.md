@@ -87,10 +87,11 @@
 | Sprint 69 | Operating Model Freeze + State Drift Guard (D-142) — Phase 9 | CLOSED |
 | Sprint 70 | Validator/Closer Drift Hardening — Phase 9 | CLOSED |
 | Sprint 71 | Intake Gate + Workflow Writer Enforcement — Phase 9 | CLOSED |
+| Sprint 72 | Session Protocol Enforcement — Phase 9 | CLOSED |
 
 ## Next Sprint
 
-S72 ready: Session Protocol Enforcement (Phase 9).
+S73 ready: TBD (Phase 9).
 
 ### Carry-Forward
 | Item | Source | Status |

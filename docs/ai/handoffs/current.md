@@ -1,4 +1,4 @@
-# Session Handoff — 2026-04-06 (Session 47 — Sprint 71)
+# Session Handoff — 2026-04-06 (Session 48 — Sprint 72)
 
 **Platform:** Vezir Platform
 **Operator:** Claude Code (Opus) — AKCA delegated
@@ -7,27 +7,27 @@
 
 ## Session Summary
 
-Session 47: Sprint 71 implementation complete. Phase 9 — Intake Gate + Workflow Writer Enforcement.
+Session 48: Sprint 72 implementation complete. Phase 9 — Session Protocol Enforcement.
 
-- T71.1: `tools/task-intake.py` — new intake gate tool enforcing D-142 prerequisites. Validates plan.yaml structure, GitHub milestone existence, parent+task issue binding with correct milestone, governed state doc consistency (delegates to state-sync --check), Project V2 board item detection. Supports `--json` and `--skip-project` flags.
-- T71.2: `tests/test_task_intake.py` — 40 unit tests (IntakeResult 5, plan structure 12, milestone 4, issues 6, state consistency 4, project board 4, load plan 2, integration 3).
-- T71.3: `.github/workflows/issue-from-plan.yml` — full writer contract: plan.yaml validation before issue creation, auto-creates milestone if missing, assigns milestone to all parent+child issues.
-- T71.4: `.github/workflows/project-auto-add.yml` — canonical field initialization code: sets Status=Todo and Sprint=N with D-142 hard-fail (exit 1). **Code-ready but operationally blocked:** `GITHUB_TOKEN` lacks Project V2 access. Manual board sync remains production path. Follow-up: B-148 (#358) PAT-backed credentials.
-- T71.5: `docs/ai/GOVERNANCE.md` — intake gate added to Sprint Kickoff Gate (section 4) with 5 sub-checks.
-- Also fixed stale `open-items.md` next-sprint reference (S70 → S71).
-- PR #356 merged to main. CI all green.
+- Pre-sprint: Review pipeline setup (ask-gpt-review.sh, prompts, verdict contract, runbook, AGENTS.md).
+- T72.1: `CLAUDE.md` session protocol expanded from 3 steps to 11 (entry/during/exit phases). Entry mandates reading handoff+open-items+STATE.md and running pre-implementation gate.
+- T72.2: `tools/pre-implementation-check.py` — new deterministic session entry gate (7 checks: file existence, blocker detection, state-sync consistency, closure verification, plan.yaml detection). Supports --json and --allow-blockers.
+- T72.3: `tests/test_pre_implementation_check.py` — 37 unit tests (CheckResult 2, GateResult 4, file existence 3, sprint extraction 5, active sprint detection 3, blocker detection 5, closure verification 4, plan.yaml 3, state-sync 4, astuple 1, integration 3).
+- Also fixed open-items.md next-sprint format for state-sync regex compatibility.
+- GPT review PASS (R5) via new API pipeline (`tools/ask-gpt-review.sh`).
+- CI all green (3/3 workflows).
 
 ## Current State
 
-- **Phase:** 9 active — S71 closed
-- **Last closed sprint:** 71
+- **Phase:** 9 active — S72 closed
+- **Last closed sprint:** 72
 - **Decisions:** 139 frozen + 2 superseded (D-001 → D-142, D-126 skipped, D-132 deferred, D-082/D-098 superseded)
-- **Tests:** 1555 backend + 217 frontend + 13 Playwright + 102 root-level = 1887 total (was 1845, +40 new root)
+- **Tests:** 1555 backend + 217 frontend + 13 Playwright + 139 root-level = 1924 total (was 1887, +37 new root)
 - **CI:** All green
 - **Security:** 0 CodeQL open, 0 secret scanning, 0 dependabot critical
-- **PRs:** 0 open (#356 merged)
+- **PRs:** 0 open
 - **Open issues:** 0
-- **Project board:** Synced through S71
+- **Project board:** Synced through S72
 - **Blockers:** None
 
 ## Review History
@@ -49,6 +49,7 @@ Session 47: Sprint 71 implementation complete. Phase 9 — Intake Gate + Workflo
 | S69 | PASS | PASS (R3) |
 | S70 | — | PASS (R4) |
 | S71 | — | PASS (R8) |
+| S72 | — | PASS (R5) |
 
 ## Phase 9 Status
 
@@ -57,7 +58,8 @@ Session 47: Sprint 71 implementation complete. Phase 9 — Intake Gate + Workflo
 | S69 | Operating Model Freeze + State Drift Guard (D-142) | Closed |
 | S70 | Validator/Closer Drift Hardening | Closed |
 | S71 | Intake Gate + Workflow Writer Enforcement | Closed |
-| S72 | Session Protocol Enforcement | Not started |
+| S72 | Session Protocol Enforcement | Closed |
+| S73 | TBD | Not started |
 
 ## Dependency Status
 
@@ -80,4 +82,4 @@ No new dependencies introduced. Phase 9 is governance/tooling-only.
 
 ## GPT Memo
 
-Session 47 (S71): Intake Gate + Workflow Writer Enforcement. 5 tasks implemented: T71.1 task-intake.py intake gate (validates plan.yaml, milestone, issues, state-sync, project board), T71.2 40 intake tests, T71.3 issue-from-plan.yml writer contract (validation + milestone assignment), T71.4 project-auto-add.yml canonical field init (Status=Todo, Sprint=N), T71.5 GOVERNANCE.md intake gate in kickoff checklist. 40 new root tests. PR #356 merged, CI all green. No new decisions, no runtime code changes. GPT review R6 HOLD — remaining blocker is proof that patched project-auto-add.yml field init path actually executes (GITHUB_TOKEN lacks Project V2 access — pre-existing limitation, workflow exits at "No project found"). Code review shows hard-fail exit 1 on missing canonical fields is deployed. 17 evidence files in bundle. Next session: operator decision on whether code review is sufficient for T71.4 proof, or PAT configuration needed.
+Session 48 (S72): Session Protocol Enforcement. 3 tasks: T72.1 CLAUDE.md session protocol expanded (3→11 steps, entry/during/exit), T72.2 pre-implementation-check.py session entry gate (7 checks, --json/--allow-blockers), T72.3 37 unit tests. Also set up GPT review API pipeline (ask-gpt-review.sh + 4 prompt docs). 37 new root tests. CI all green. GPT review R5 PASS via new API pipeline. No new decisions, no runtime code changes.

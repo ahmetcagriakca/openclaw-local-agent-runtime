@@ -1,7 +1,7 @@
 # Current State
 
 **Last updated:** 2026-04-06
-**Active phase:** Phase 9 — Sprint 71 closed
+**Active phase:** Phase 9 — Sprint 72 closed
 **Doc model:** This file is canonical for system state. Session context lives in `docs/ai/handoffs/current.md`.
 **Note:** All sprints through 53 closed. S54 deferred. S55-S71 closed. All P1 backlog items complete (50/50). Phase 9 active (S69+). Phase 8 complete (S60-S68). 139 frozen decisions + 2 superseded (D-001 → D-142, D-126 skipped, D-132 deferred, D-082/D-098 superseded). Governance: 20-step closure checklist.
 **Persistence:** State is file-persisted (state.json, mission.json). Mission history via persistence layer (Sprint 16).
@@ -128,6 +128,7 @@
 | Sprint 69 | Operating Model Freeze + State Drift Guard (D-142) — Phase 9 | Closed |
 | Sprint 70 | Validator/Closer Drift Hardening — Phase 9 | Closed |
 | Sprint 71 | Intake Gate + Workflow Writer Enforcement — Phase 9 | Closed |
+| Sprint 72 | Session Protocol Enforcement — Phase 9 | Closed |
 
 ## Test Evidence
 
@@ -170,6 +171,7 @@
 | Sprint 69 | 1555 tests, 0 fail | 217 tests, 0 TS errors | +10 state-sync tests. 13 Playwright. 1795 total |
 | Sprint 70 | 1555 tests, 0 fail | 217 tests, 0 TS errors | +21 root tests (validator+closer). 13 Playwright. 60 root. 1845 total |
 | Sprint 71 | 1555 tests, 0 fail | 217 tests, 0 TS errors | +40 root tests (task-intake). 13 Playwright. 102 root. 1887 total |
+| Sprint 72 | 1555 tests, 0 fail | 217 tests, 0 TS errors | +37 root tests (pre-impl-check). 13 Playwright. 139 root. 1924 total |
 
 ## Architectural Decisions
 

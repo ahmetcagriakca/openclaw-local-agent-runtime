@@ -1,0 +1,124 @@
+=== Project V2 Board Validator ===
+Total items: 100
+Closed sprints (from milestones): 41 (19-71)
+
+Classifications:
+  backlog: 39
+  legacy-sprint: 16
+  sprint-task: 31
+  unclassified: 14
+
+FAILURES (14):
+  [UNCLASSIFIED] #221 [S38-38.1] Telegram bridge fix
+    Cannot classify item — no backlog or sprint label
+  [UNCLASSIFIED] #222 [S38-38.2] B-101 Scheduled mission execution
+    Cannot classify item — no backlog or sprint label
+  [UNCLASSIFIED] #223 [S38-38.3] B-103 Mission presets / quick-run
+    Cannot classify item — no backlog or sprint label
+  [UNCLASSIFIED] #224 [S39-39.1] B-102 Full approval inbox UI
+    Cannot classify item — no backlog or sprint label
+  [UNCLASSIFIED] #225 [S39-39.2] Live mission E2E
+    Cannot classify item — no backlog or sprint label
+  [UNCLASSIFIED] #226 [S39-39.3] Playwright live API test in CI
+    Cannot classify item — no backlog or sprint label
+  [UNCLASSIFIED] #227 [S39-39.4] Benchmark regression gate D-109
+    Cannot classify item — no backlog or sprint label
+  [UNCLASSIFIED] #228 [S40-40.1] Backend isolation enforcement (D-102)
+    Cannot classify item — no backlog or sprint label
+  [UNCLASSIFIED] #229 [S40-40.2] Multi-user auth boundary (D-104/D-108)
+    Cannot classify item — no backlog or sprint label
+  [UNCLASSIFIED] #230 [S40-40.3] Frontend isolation regression pack
+    Cannot classify item — no backlog or sprint label
+  [UNCLASSIFIED] #231 [S41-41.1] D-071 atomic write remediation
+    Cannot classify item — no backlog or sprint label
+  [UNCLASSIFIED] #232 [S41-41.2] DECISIONS.md index/footer repair
+    Cannot classify item — no backlog or sprint label
+  [UNCLASSIFIED] #233 [S41-41.3] Closure/read-model drift hardening
+    Cannot classify item — no backlog or sprint label
+  [UNCLASSIFIED] #234 [S43] Tech debt: Pydantic V2, bare pass, frontend tests, branch cleanup, feature flag
+    Cannot classify item — no backlog or sprint label
+
+INFO (39):
+  [BACKLOG_CLOSURE_ELIGIBLE] #187 [B-118] Plugin marketplace / discovery
+    Backlog item closed and Done — eligible for archive
+  [BACKLOG_CLOSURE_ELIGIBLE] #186 [B-117] Grafana dashboard pack
+    Backlog item closed and Done — eligible for archive
+  [BACKLOG_CLOSURE_ELIGIBLE] #185 [B-116] Multi-tenant isolation
+    Backlog item closed and Done — eligible for archive
+  [BACKLOG_CLOSURE_ELIGIBLE] #184 [B-115] Audit export / compliance bundle
+    Backlog item closed and Done — eligible for archive
+  [BACKLOG_CLOSURE_ELIGIBLE] #183 [B-114] Knowledge/connector input layer
+    Backlog item closed and Done — eligible for archive
+  [BACKLOG_CLOSURE_ELIGIBLE] #182 [B-028] Stale .bak files
+    Backlog item closed and Done — eligible for archive
+  [BACKLOG_CLOSURE_ELIGIBLE] #181 [B-027] Task directory retention
+    Backlog item closed and Done — eligible for archive
+  [BACKLOG_CLOSURE_ELIGIBLE] #180 [B-025] Bootstrap heredoc reduction
+    Backlog item closed and Done — eligible for archive
+  [BACKLOG_CLOSURE_ELIGIBLE] #179 [B-019] Intent mapping refinement
+    Backlog item closed and Done — eligible for archive
+  [BACKLOG_CLOSURE_ELIGIBLE] #178 [B-018] Dynamic sourceUserId
+    Backlog item closed and Done — eligible for archive
+  [BACKLOG_CLOSURE_ELIGIBLE] #177 [B-010] WMCP credential replacement
+    Backlog item closed and Done — eligible for archive
+  [BACKLOG_CLOSURE_ELIGIBLE] #176 [B-009] Multi-source allowlist
+    Backlog item closed and Done — eligible for archive
+  [BACKLOG_CLOSURE_ELIGIBLE] #175 [B-007] Automatic secret rotation
+    Backlog item closed and Done — eligible for archive
+  [BACKLOG_CLOSURE_ELIGIBLE] #174 [B-113] Docs-as-product pack
+    Backlog item closed and Done — eligible for archive
+  [BACKLOG_CLOSURE_ELIGIBLE] #173 [B-112] Local dev sandbox / seeded demo
+    Backlog item closed and Done — eligible for archive
+  [BACKLOG_CLOSURE_ELIGIBLE] #172 [B-111] Mission replay / fixture runner
+    Backlog item closed and Done — eligible for archive
+  [BACKLOG_CLOSURE_ELIGIBLE] #171 [B-110] Contract test pack
+    Backlog item closed and Done — eligible for archive
+  [BACKLOG_CLOSURE_ELIGIBLE] #170 [B-109] Template/plugin scaffolding CLI
+    Backlog item closed and Done — eligible for archive
+  [BACKLOG_CLOSURE_ELIGIBLE] #169 [B-014] timeoutSeconds in contract
+    Backlog item closed and Done — eligible for archive
+  [BACKLOG_CLOSURE_ELIGIBLE] #168 [B-013] Richer policyContext
+    Backlog item closed and Done — eligible for archive
+  [BACKLOG_CLOSURE_ELIGIBLE] #167 [B-026] Dead-letter retention policy
+    Backlog item closed and Done — eligible for archive
+  [BACKLOG_CLOSURE_ELIGIBLE] #166 [B-023] Corrupted runtime recovery
+    Backlog item closed and Done — eligible for archive
+  [BACKLOG_CLOSURE_ELIGIBLE] #165 [B-022] Backup / restore
+    Backlog item closed and Done — eligible for archive
+  [BACKLOG_CLOSURE_ELIGIBLE] #164 [B-016] Task result artifact access
+    Backlog item closed and Done — eligible for archive
+  [BACKLOG_CLOSURE_ELIGIBLE] #163 [B-108] Agent health / capability view
+    Backlog item closed and Done — eligible for archive
+  [BACKLOG_CLOSURE_ELIGIBLE] #162 [B-107] Policy engine
+    Backlog item closed and Done — eligible for archive
+  [BACKLOG_CLOSURE_ELIGIBLE] #161 [B-106] Retry/DLQ/replay/resume
+    Backlog item closed and Done — eligible for archive
+  [BACKLOG_CLOSURE_ELIGIBLE] #160 [B-105] Cost/outcome dashboard
+    Backlog item closed and Done — eligible for archive
+  [BACKLOG_CLOSURE_ELIGIBLE] #159 [B-104] Template parameter UI
+    Backlog item closed and Done — eligible for archive
+  [BACKLOG_CLOSURE_ELIGIBLE] #158 [B-103] Mission presets / quick-run
+    Backlog item closed and Done — eligible for archive
+  [BACKLOG_CLOSURE_ELIGIBLE] #157 [B-102] Full approval inbox UI
+    Backlog item closed and Done — eligible for archive
+  [BACKLOG_CLOSURE_ELIGIBLE] #156 [B-101] Scheduled mission execution
+    Backlog item closed and Done — eligible for archive
+  [BACKLOG_CLOSURE_ELIGIBLE] #155 [B-008] Audit log tamper resistance
+    Backlog item closed and Done — eligible for archive
+  [BACKLOG_CLOSURE_ELIGIBLE] #154 [B-005] HTTP rate limiting
+    Backlog item closed and Done — eligible for archive
+  [BACKLOG_CLOSURE_ELIGIBLE] #153 [B-012] Full request idempotency
+    Backlog item closed and Done — eligible for archive
+  [BACKLOG_CLOSURE_ELIGIBLE] #152 [B-011] Transport encryption
+    Backlog item closed and Done — eligible for archive
+  [BACKLOG_CLOSURE_ELIGIBLE] #151 [B-006] Encrypted secret storage
+    Backlog item closed and Done — eligible for archive
+  [BACKLOG_CLOSURE_ELIGIBLE] #150 [B-004] Filesystem confinement
+    Backlog item closed and Done — eligible for archive
+  [BACKLOG_CLOSURE_ELIGIBLE] #149 [B-003] Task risk classification
+    Backlog item closed and Done — eligible for archive
+
+BACKLOG_CLOSURE_ELIGIBLE: [187, 186, 185, 184, 183, 182, 181, 180, 179, 178, 177, 176, 175, 174, 173, 172, 171, 170, 169, 168, 167, 166, 165, 164, 163, 162, 161, 160, 159, 158, 157, 156, 155, 154, 153, 152, 151, 150, 149]
+
+Summary: 14 FAIL, 0 WARN, 39 INFO
+Result: NOT VALID

@@ -2,10 +2,12 @@
 
 [![CI](https://github.com/ahmetcagriakca/vezir/actions/workflows/ci.yml/badge.svg)](https://github.com/ahmetcagriakca/vezir/actions/workflows/ci.yml)
 [![Playwright](https://github.com/ahmetcagriakca/vezir/actions/workflows/playwright.yml/badge.svg)](https://github.com/ahmetcagriakca/vezir/actions/workflows/playwright.yml)
-[![Tests](https://img.shields.io/badge/tests-1494%20backend%20%C2%B7%20217%20frontend-brightgreen)](https://github.com/ahmetcagriakca/vezir/actions/workflows/ci.yml)
-[![Coverage](https://img.shields.io/badge/coverage-74%25%20backend%20%C2%B7%2031%25%20frontend-yellow)](https://github.com/ahmetcagriakca/vezir/actions/workflows/ci.yml)
-[![Decisions](https://img.shields.io/badge/decisions-136%20frozen-blueviolet)](https://github.com/ahmetcagriakca/vezir/blob/main/docs/ai/DECISIONS.md)
-[![Phase](https://img.shields.io/badge/phase-8-blue)](https://github.com/ahmetcagriakca/vezir/blob/main/docs/ai/STATE.md)
+[![Backend Tests](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/ahmetcagriakca/vezir/main/badges/backend-tests.json)](https://github.com/ahmetcagriakca/vezir/actions/workflows/ci.yml)
+[![Frontend Tests](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/ahmetcagriakca/vezir/main/badges/frontend-tests.json)](https://github.com/ahmetcagriakca/vezir/actions/workflows/ci.yml)
+[![Backend Coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/ahmetcagriakca/vezir/main/badges/backend-coverage.json)](https://github.com/ahmetcagriakca/vezir/actions/workflows/ci.yml)
+[![Frontend Coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/ahmetcagriakca/vezir/main/badges/frontend-coverage.json)](https://github.com/ahmetcagriakca/vezir/actions/workflows/ci.yml)
+[![Decisions](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/ahmetcagriakca/vezir/main/badges/decisions.json)](https://github.com/ahmetcagriakca/vezir/blob/main/docs/ai/DECISIONS.md)
+[![Phase](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/ahmetcagriakca/vezir/main/badges/phase.json)](https://github.com/ahmetcagriakca/vezir/blob/main/docs/ai/STATE.md)
 
 Governed multi-agent mission platform for Windows. Natural language goals become structured, auditable missions executed by 9 specialist AI roles with quality gates, risk classification, and encrypted audit trails.
 
@@ -43,10 +45,6 @@ graph TB
         SCHED["Scheduler\nCron-based"]
     end
 
-    subgraph Bus["EventBus"]
-        EB["28 events\n14 handlers"]
-    end
-
     subgraph Obs["Observability"]
         OTEL["OTel Traces + Metrics\n28 events 17 instruments"]
         ALERT["Alert Engine\n9 rules Telegram"]
@@ -70,9 +68,8 @@ graph TB
     MC --> AUDIT
     MC --> TMPL
     MC --> SCHED
-    MC --> EB
-    EB --> OTEL
-    EB --> ALERT
+    MC --> OTEL
+    OTEL --> ALERT
     MC --> MCP
     MC --> LLM
     MC --> STORE
@@ -83,12 +80,13 @@ graph TB
 | Category | What |
 |----------|------|
 | **Mission Orchestration** | 9 specialist roles, 11-state FSM, 4-tier complexity routing, 3 quality gates |
-| **Security** | 4-level risk classification, AES-256-GCM secret store, SHA-256 audit chain, filesystem confinement, API key auth |
+| **Security** | 4-level risk classification, AES-256-GCM secret store, SHA-256 audit chain, filesystem confinement, API key auth (fail-closed) |
 | **Observability** | OpenTelemetry traces (28/28), 17 metrics, structured JSON logs, 9 alert rules with Telegram notification |
-| **API** | ~40 REST endpoints, SSE live updates, per-endpoint throttling, idempotency keys, OpenAPI schema |
-| **Dashboard** | React + Vite + Tailwind, mission timeline, approval inbox, health monitoring, SSE connection indicator |
+| **API** | 146 REST endpoints, SSE live updates, per-endpoint throttling, idempotency keys, OpenAPI schema |
+| **Dashboard** | React + Vite + Tailwind, mission timeline, approval inbox, project dashboard, health monitoring, SSE connection indicator |
 | **Automation** | 7 GitHub Actions workflows, plan.yaml → issues, PR validator, status sync, evidence collection |
 | **Extensibility** | Plugin system (D-118), mission templates (D-119), scheduled execution (D-120), presets/quick-run, multi-provider LLM |
+| **Governance** | 144 frozen decisions, 20-step closure checklist, GPT cross-review pipeline, D-113 archive boundary |
 
 ## Quick Start
 
@@ -128,11 +126,14 @@ python agent/oc-agent-runner.py --mission -m "dashboard'a CPU grafik ekle"
 ### Test
 
 ```bash
-# Backend (1128 tests)
+# Backend (1777 tests)
 cd agent && python -m pytest tests/ -v
 
-# Frontend (217 tests)
+# Frontend (239 tests)
 cd frontend && npx vitest run
+
+# E2E (13 Playwright tests)
+cd frontend && npx playwright test
 
 # Type check
 cd frontend && npx tsc --noEmit
@@ -143,26 +144,26 @@ cd frontend && npx tsc --noEmit
 ```
 agent/                  Python backend
   mission/                Mission controller, roles, gates, FSM, router
-  api/                    FastAPI endpoints, SSE, schemas
-  events/                 EventBus + governance handlers
+  api/                    FastAPI endpoints (146), SSE, schemas
+  events/                 EventBus + governance handlers (37 event types)
   observability/          OTel traces, metrics, alerts
   services/               Risk engine, approval, secrets, audit, tools
   providers/              LLM abstraction (GPT-4o, Claude, Ollama)
-  persistence/            JSON file stores
+  persistence/            JSON file stores (mission, project, audit)
   context/                Context assembler, working set, telemetry
-  auth/                   API key auth + session
-  tests/                  1128 pytest tests
+  auth/                   API key auth + session (fail-closed, D-117)
+  tests/                  1777 pytest tests
   schedules/              Cron-based mission scheduling
-frontend/               React dashboard (Vite + Tailwind)
+frontend/               React dashboard (Vite + Tailwind, 239 tests)
 bridge/                 PowerShell bridge to Windows
 bin/                    Runtime scripts (WMCP, watchdog, health)
-config/                 Environment templates, capabilities manifest
-decisions/              Formal decision records (D-105+)
+config/                 Environment templates, capabilities manifest, policies
 docs/
   ai/                     Living state: STATE, NEXT, DECISIONS, GOVERNANCE, BACKLOG
-  architecture/           Architecture overview (HTML interactive)
-  archive/                Historical sprint data
-.github/workflows/      9 CI/CD workflows
+  architecture/           Architecture contracts
+  decisions/              Formal decision records (D-105+)
+  archive/                Pointer to vezir-archive repo
+.github/workflows/      7 CI/CD workflows
 ```
 
 ## Ports
@@ -175,7 +176,7 @@ docs/
 
 ## Governance
 
-The project follows a sprint-based governance model with 129 frozen architectural decisions, formal quality gates, and GPT-assisted cross-review. Every sprint produces auditable evidence packets.
+The project follows a sprint-based governance model with 144 frozen architectural decisions, formal quality gates, and GPT-assisted cross-review. Every sprint produces auditable evidence packets.
 
 See [`docs/ai/GOVERNANCE.md`](docs/ai/GOVERNANCE.md) for sprint rules and [`docs/ai/DECISIONS.md`](docs/ai/DECISIONS.md) for the full decision log.
 
@@ -184,11 +185,15 @@ See [`docs/ai/GOVERNANCE.md`](docs/ai/GOVERNANCE.md) for sprint rules and [`docs
 | Doc | Purpose |
 |-----|---------|
 | [`docs/ai/STATE.md`](docs/ai/STATE.md) | Canonical system state |
-| [`docs/ai/DECISIONS.md`](docs/ai/DECISIONS.md) | 129 frozen decisions (D-001 → D-130) |
+| [`docs/ai/DECISIONS.md`](docs/ai/DECISIONS.md) | 144 frozen decisions (D-001 → D-147) |
 | [`docs/ai/GOVERNANCE.md`](docs/ai/GOVERNANCE.md) | Sprint governance rules |
-| [`docs/ai/BACKLOG.md`](docs/ai/BACKLOG.md) | Open backlog (33 items) |
+| [`docs/ai/BACKLOG.md`](docs/ai/BACKLOG.md) | Open backlog items |
 | [`docs/ai/NEXT.md`](docs/ai/NEXT.md) | Roadmap + carry-forward |
-| [`docs/architecture/`](docs/architecture/) | Architecture overview (interactive HTML) |
+| [`docs/architecture/`](docs/architecture/) | Architecture contracts |
+
+## Archive
+
+Historical sprint artifacts, evidence packets, and stale documents are maintained in a separate repository: [vezir-archive](https://github.com/ahmetcagriakca/vezir-archive)
 
 ## License
 

@@ -67,6 +67,22 @@ Required inputs:
 
 Do not re-review already accepted findings.
 
+### Stage 5 — Operator Escalation
+Triggered when:
+- Same finding persists unchanged across 3+ rounds
+- Round count reaches 5
+- Reviewer explicitly issues ESCALATE verdict
+
+Operator actions:
+1. Review the blocker history across rounds
+2. Determine if blocker is valid, invalid, or unresolvable
+3. Either:
+   a. Override: close sprint with documented override reason
+   b. Agree: create remediation task for next sprint
+   c. Defer: waiver + carry-forward to backlog
+
+Document decision in `docs/ai/reviews/S{N}-GPT-REVIEW.md` under `## Operator Override` section.
+
 ## Stop Rules
 
 Stop and hold immediately if:

@@ -66,3 +66,6 @@ HOLD means blockers remain.
 10. If there are zero blockers: write `None.` under Blocking Findings and `None.` under Required Patch Set.
 11. If PASS: PASS Criteria must say `Satisfied.` unless a narrower wording is needed.
 12. Stay under 600 tokens total.
+13. Maximum 5 rounds per sprint. Round 5 HOLD triggers automatic operator escalation.
+14. If the same blocker text (same core finding) appears in 3 consecutive rounds without new evidence from the reviewer, verdict must be `ESCALATE` instead of `HOLD`.
+15. `ESCALATE` verdict uses the same template but replaces `## 2. Verdict` value with `ESCALATE — operator decision required` and `## 10. Next Step` with `Operator override review required. Reviewer cannot resolve this finding through further rounds.`

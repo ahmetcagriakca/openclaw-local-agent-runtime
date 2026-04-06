@@ -45,6 +45,20 @@ if [[ ! -f "$CLOSURE_CHECK" ]]; then
   exit 1
 fi
 
+# ─── Round tracking ─────────────────────────────────────────────────
+ROUND=$(grep -oP 'Round:\s*\K[0-9]+' "$DELTA_PACKET" 2>/dev/null || echo "1")
+if [[ "$ROUND" -ge 5 ]]; then
+  echo "WARNING: Round $ROUND reached. Max rounds exceeded." >&2
+  echo "Pipeline recommends operator escalation instead of further AI review." >&2
+  echo "To proceed anyway, set FORCE_REVIEW=1" >&2
+  if [[ "${FORCE_REVIEW:-0}" != "1" ]]; then
+    exit 2
+  fi
+elif [[ "$ROUND" -ge 3 ]]; then
+  echo "NOTE: Round $ROUND — checking for repeat blocker pattern." >&2
+  echo "If GPT returns same finding again, consider operator escalation." >&2
+fi
+
 # ─── Build payloads ─────────────────────────────────────────────────
 # System = review rules + verdict contract
 SYSTEM_CONTENT="$(cat "$SYSTEM_PROMPT")

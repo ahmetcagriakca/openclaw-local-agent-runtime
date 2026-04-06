@@ -79,6 +79,12 @@ For Round 2+:
 - Preserve blocker numbering for traceability
 - New defect introduced by a patch becomes a new blocker
 
+## Anti-Loop Rule
+- If the same blocker persists unchanged across 3 consecutive rounds (same finding, no new evidence-based argument from reviewer), the reviewer must escalate to operator instead of issuing another HOLD.
+- Escalation format: replace Verdict with `ESCALATE — operator decision required` and explain why the finding cannot be resolved by the submitter.
+- Maximum total rounds per sprint: 5. If Round 5 still results in HOLD, automatic escalation to operator regardless of blocker status.
+- Re-review must not introduce cosmetic or interpretive variations of a previously stated finding as a "new" blocker. If the core issue is identical, it counts as the same finding.
+
 ## Output Rules
 - Output exactly one markdown code block
 - Follow review-verdict-contract.v2 exactly

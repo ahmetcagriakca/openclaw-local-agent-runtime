@@ -1,7 +1,7 @@
 # open-items.md — Active State Tracker
 
 **Last updated:** 2026-04-06
-**Updated by:** Claude Code (Session 43 — S67 closure)
+**Updated by:** Claude Code (Session 45 — S69)
 
 ---
 
@@ -80,10 +80,15 @@
 | Sprint 62 | Approval FSM Wiring + Decision Drift + Auth Quarantine (B-134, B-135, B-136) | CLOSED |
 | Sprint 63 | Controller Decomposition Boundary + Budget Ownership Design (B-137, B-138, D-139) | CLOSED |
 | Sprint 64 | Controller Extraction Phase 1 + Hard Budget Enforcement (B-139, B-140) | CLOSED |
+| Sprint 65 | Mission Startup Recovery + Plugin Mutation Auth Boundary (B-141, B-142) | CLOSED |
+| Sprint 66 | Persistence Boundary ADR + Tool Reversibility Metadata (B-143, B-144, D-140) | CLOSED |
+| Sprint 67 | Enforcement Chain Doc + Mission Replay CLI (B-145, B-146) | CLOSED |
+| Sprint 68 | Patch/Apply Contract Design (B-147, D-141) — Phase 8C | CLOSED |
+| Sprint 69 | Operating Model Freeze + State Drift Guard (D-142) — Phase 9 | CLOSED |
 
 ## Next Sprint
 
-**Phase 8 active.** S65 ready: B-141 mission startup recovery, B-142 plugin mutation auth boundary.
+**Phase 9 active.** S70 ready: Validator/closer drift hardening.
 
 ### Carry-Forward
 | Item | Source | Status |

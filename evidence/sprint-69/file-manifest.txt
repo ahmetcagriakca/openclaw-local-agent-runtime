@@ -1,0 +1,16 @@
+ config/capabilities.json    |  12 +-
+ docs/ai/DECISIONS.md        |  14 +-
+ docs/ai/NEXT.md             |   2 +-
+ docs/ai/STATE.md            |   6 +-
+ docs/ai/handoffs/current.md |   4 +-
+ docs/ai/state/open-items.md |   8 +-
+ tools/state-sync.py         | 337 +++++++++++++++++++++++++++++++++++++-------
+ 7 files changed, 314 insertions(+), 69 deletions(-)
+---
+config/capabilities.json
+docs/ai/DECISIONS.md
+docs/ai/NEXT.md
+docs/ai/STATE.md
+docs/ai/handoffs/current.md
+docs/ai/state/open-items.md
+tools/state-sync.py

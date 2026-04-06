@@ -1,4 +1,4 @@
-# Session Handoff — 2026-04-06 (Session 44 — Sprint 68)
+# Session Handoff — 2026-04-06 (Session 45 — Sprint 69)
 
 **Platform:** Vezir Platform
 **Operator:** Claude Code (Opus) — AKCA delegated
@@ -7,21 +7,23 @@
 
 ## Session Summary
 
-Session 44: Sprint 68 fully designed and closed. Model B (design-only freeze, no runtime change).
+Session 45: Sprint 69 completed. Phase 9 entry — D-142 frozen, state-sync governed doc consistency.
 
-- B-147: Patch/Review/Apply/Revert Contract Design (`docs/decisions/D-141-patch-apply-contract.md`) — patch artifact schema (14 fields), review state machine (6 states, 6 transitions, fail-closed), operator control rules (apply/revert = operator-only D-117, bypass allowed, revert = new patch), integration points (D-106/EventBus/D-129/D-053/D-128/D-133), architectural implications (mission lifecycle placement, hot state storage D-140, G2 gate mapping, PatchService decomposition D-139), 6 explicit deferrals.
+- D-142: Intake-to-Sprint Operating Model Freeze — canonical model frozen (backlog != sprint task, intake = hard gate, fail-closed session protocol, governed doc set = 4 files). Decision record at `docs/decisions/D-142-intake-to-sprint-operating-model.md`.
+- state-sync.py --check: New D-142 governed doc consistency mode. Cross-checks sprint number, phase, decision count, next sprint across handoff/open-items/STATE.md/NEXT.md. 10 test cases covering aligned state, sprint mismatch, phase mismatch, stale open-items, missing file, decision count mismatch.
+- Phase 9 plan.yaml files created for S69-S72.
 
 ## Current State
 
-- **Phase:** 8 active — S68 closed (Phase 8C design freeze complete)
-- **Last closed sprint:** 68
-- **Decisions:** 138 frozen + 2 superseded (D-001 → D-141, D-126 skipped, D-132 deferred, D-082/D-098 superseded)
-- **Tests:** 1555 backend + 217 frontend + 13 Playwright = 1785 total (no change — Model B)
-- **CI:** All green
+- **Phase:** 9 active — S69 closed
+- **Last closed sprint:** 69
+- **Decisions:** 139 frozen + 2 superseded (D-001 → D-142, D-126 skipped, D-132 deferred, D-082/D-098 superseded)
+- **Tests:** 1555 backend + 217 frontend + 13 Playwright = 1785 total + 10 state-sync tests = 1795
+- **CI:** All green (2 pre-existing WinError failures in test_audit_integrity — subprocess.py on Win32)
 - **Security:** 0 CodeQL open, 0 secret scanning, 0 dependabot critical
 - **PRs:** 0 open
-- **Open issues:** 0 (B-147 closed)
-- **Project board:** Synced through S68
+- **Open issues:** 1 (#346 — S69 sprint issue, to be closed after push)
+- **Project board:** Synced through S69
 - **Blockers:** None
 
 ## Review History
@@ -40,27 +42,20 @@ Session 44: Sprint 68 fully designed and closed. Model B (design-only freeze, no
 | S66 | PASS | PASS (R2) |
 | S67 | PASS | PASS (R2) |
 | S68 | PASS | PASS (R2) |
+| S69 | PASS | PENDING |
 
-## Phase 8 Status (Complete)
+## Phase 9 Status
 
-| Sub-Phase | Scope | Sprints | Status |
-|-----------|-------|---------|--------|
-| Phase 8A | Governance gap closure | S62-S63 | Complete |
-| Phase 8B | Platform hardening | S64-S67 | Complete |
-| Phase 8C | Claude Code-like convergence prep | S68 | Complete (design freeze) |
-
-Phase 8 governance hardening is now complete. Phase 9 or Phase 8D planning is operator decision.
-
-## Phase 8C Implementation Candidates (Future)
-
-- D-141 patch/apply implementation
-- Task graph model (D-144 candidate)
-- Deterministic teammate orchestration design
-- Agent simulation harness
+| Sprint | Scope | Status |
+|--------|-------|--------|
+| S69 | Operating Model Freeze + State Drift Guard (D-142) | Closed |
+| S70 | Validator/Closer Drift Hardening | Not started |
+| S71 | Intake Gate + Workflow Writer Enforcement | Not started |
+| S72 | Session Protocol Enforcement | Not started |
 
 ## Dependency Status
 
-No changes from S67.
+No new dependencies introduced. Phase 9 is governance/tooling-only.
 
 ## Carry-Forward
 
@@ -74,7 +69,8 @@ No changes from S67.
 | eslint 9→10 migration | Dependabot | Deferred — needs dedicated effort |
 | react-router-dom 6→7 migration | Dependabot | Deferred — breaking API changes |
 | vite 6→8 + plugin-react 6 | Dependabot | Deferred — blocked on vite major bump |
+| test_audit_integrity WinError | Pre-existing | subprocess.py WinError 50 on Win32 — CI (Ubuntu) not affected |
 
 ## GPT Memo
 
-Session 44 (S68 closure): Model B design-only sprint. B-147 Patch/Review/Apply/Revert Contract — D-141 frozen. Patch artifact schema: 14-field JSON (patch_id, mission_id, author, created_at, target_files, diff, description, review_status, risk_assessment with 4 sub-fields, applied_at, reverted_at, revert_patch_id). Review state machine: 6 states (proposed, reviewed, approved, rejected, applied, reverted), 6 valid transitions, fail-closed on invalid. Operator control: apply/revert = operator-only (D-117), operator bypass proposed→approved allowed, revert = new patch with inverted diff (preserves audit trail, no data deletion), rejection is terminal. Integration: D-106 file store (hot state per D-140), EventBus 6 event types, D-129 audit trail, D-053 working set validation on target_files, D-128 risk engine on risk_assessment, D-133 policy engine on apply decision. Architectural implications: develop stage output → patch artifact (decouples AI generation from codebase landing), patch store as hot state (logs/patches/patch-{id}.json), G2 quality gate = review phase transition, PatchService as D-139 decomposition boundary. 6 explicit deferrals: auto-diff from LLM, IDE integration, git commit automation, merge conflicts, multi-patch ordering, patch amendment. Phase 8C design freeze complete. No runtime code changed. 1785 tests unchanged.
+Session 45 (S69 closure): Phase 9 entry sprint. D-142 Intake-to-Sprint Operating Model Freeze — frozen. Key points: backlog item != sprint task (per D-122), intake binding = hard gate before implementation (not closure cleanup), session protocol fail-closed on governed doc mismatch, Project V2 canonical fields narrow (Status/Sprint/Priority/Task ID), validators and workflows must enforce same model. Governed doc set frozen as 4 files: current.md, open-items.md, STATE.md, NEXT.md. state-sync.py --check mode: cross-checks sprint number, phase, decision count, next sprint across all 4 governed docs + DECISIONS.md. 10 new tests. Governed doc drift fixed during sprint: open-items stale S65 reference updated to S69, STATE.md/NEXT.md/handoff phase updated to 9, decision count aligned to 139+2. Phase 9 plan.yaml files created for S69-S72. No runtime code changes. 1795 total tests (10 new state-sync tests).

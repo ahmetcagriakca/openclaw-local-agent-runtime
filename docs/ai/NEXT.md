@@ -1,7 +1,22 @@
 # Next Steps — Vezir Platform
 
 **Last updated:** 2026-04-06
-**Current:** Phase 8 active. Sprint 67 closed. B-147 patch/review/apply/revert contract next (S68).
+**Current:** Phase 9 active. Sprint 69 closed. S70 validator/closer drift hardening next.
+
+---
+
+## Sprint 69 — Operating Model Freeze + State Drift Guard (CLOSED)
+
+**Model:** A (full closure) | **Class:** Governance
+**Scope:** D-142 intake-to-sprint operating model freeze, state-sync --check governed doc consistency
+**Issues:** #346
+**Milestone:** Sprint 69
+**Tests:** 1555 backend + 217 frontend + 13 Playwright + 10 state-sync = 1795 total
+**New files:** `docs/decisions/D-142-intake-to-sprint-operating-model.md`, `tests/test_state_sync.py`, `docs/sprints/sprint-{69,70,71,72}/plan.yaml`
+**Modified:** `tools/state-sync.py` (--check mode), `docs/ai/DECISIONS.md`, `docs/ai/STATE.md`, `docs/ai/NEXT.md`, `docs/ai/handoffs/current.md`, `docs/ai/state/open-items.md`
+**Decision:** D-142 frozen
+**Review:** Claude Code PASS, GPT PENDING
+**Evidence:** `evidence/sprint-69/`
 
 ---
 

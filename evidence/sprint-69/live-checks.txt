@@ -1,0 +1,13 @@
+[state-sync --check] D-142 governed doc consistency check
+
+  OK  docs\ai\handoffs\current.md
+  OK  docs\ai\state\open-items.md
+  OK  docs\ai\STATE.md
+  OK  docs\ai\NEXT.md
+  OK  Last closed sprint: 68 (consistent)
+  OK  Current phase: 9 (consistent)
+  OK  NEXT.md phase matches STATE.md: 9
+  OK  open-items next sprint (69) > last closed (68)
+  OK  Decision count: 139 frozen + 2 superseded (consistent)
+
+[state-sync --check] PASS (0 warning(s))

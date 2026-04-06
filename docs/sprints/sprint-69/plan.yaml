@@ -1,0 +1,59 @@
+sprint: 69
+phase: 9
+title: "Operating Model Freeze + State Drift Guard"
+model: "A"
+
+authority:
+  source_of_truth: "phase-9-plan.md"
+  automation_index: "plan.yaml"
+
+status:
+  implementation_status: not_started
+  closure_status: not_started
+
+issue:
+  parent_title: "[S69] Operating Model Freeze + State Drift Guard"
+  labels: ["sprint", "sprint-69", "governance"]
+  milestone: "Sprint 69"
+
+mutation_budget:
+  max: 5
+  planned: 4
+  stop_rule: "no additional repo code/config mutation without explicit rescope"
+
+tasks:
+  - id: "69.1"
+    title: "D-142 freeze"
+    type: "implementation"
+    branch_name: "sprint-69/t69.1-d142-freeze"
+    files:
+      - "docs/decisions/D-142-intake-to-sprint-operating-model.md"
+      - "docs/ai/DECISIONS.md"
+  - id: "69.2"
+    title: "state-sync.py governed doc consistency"
+    type: "implementation"
+    branch_name: "sprint-69/t69.2-state-sync-hardening"
+    files:
+      - "tools/state-sync.py"
+  - id: "69.3"
+    title: "state-sync tests"
+    type: "implementation"
+    branch_name: "sprint-69/t69.3-state-sync-tests"
+    files:
+      - "tests/test_state_sync.py"
+  - id: "69.G1"
+    title: "Mid Review Gate"
+    type: "gate"
+    branch_exempt: true
+  - id: "69.G2"
+    title: "Final Review Gate"
+    type: "gate"
+    branch_exempt: true
+  - id: "69.RETRO"
+    title: "Retrospective"
+    type: "process"
+    branch_exempt: true
+  - id: "69.CLOSURE"
+    title: "Sprint Closure"
+    type: "process"
+    branch_exempt: true

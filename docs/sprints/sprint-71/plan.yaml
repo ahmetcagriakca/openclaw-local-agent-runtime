@@ -1,0 +1,70 @@
+sprint: 71
+phase: 9
+title: "Intake Gate + Workflow Writer Enforcement"
+model: "A"
+
+authority:
+  source_of_truth: "phase-9-plan.md"
+  automation_index: "plan.yaml"
+
+status:
+  implementation_status: not_started
+  closure_status: not_started
+
+issue:
+  parent_title: "[S71] Intake Gate + Workflow Writer Enforcement"
+  labels: ["sprint", "sprint-71", "governance"]
+  milestone: "Sprint 71"
+
+mutation_budget:
+  max: 5
+  planned: 5
+  stop_rule: "no additional repo code/config mutation without explicit rescope"
+
+tasks:
+  - id: "71.1"
+    title: "task-intake.py intake gate"
+    type: "implementation"
+    branch_name: "sprint-71/t71.1-task-intake"
+    files:
+      - "tools/task-intake.py"
+  - id: "71.2"
+    title: "task-intake tests"
+    type: "implementation"
+    branch_name: "sprint-71/t71.2-task-intake-tests"
+    files:
+      - "tests/test_task_intake.py"
+  - id: "71.3"
+    title: "issue-from-plan.yml full writer contract"
+    type: "implementation"
+    branch_name: "sprint-71/t71.3-issue-from-plan-patch"
+    files:
+      - ".github/workflows/issue-from-plan.yml"
+  - id: "71.4"
+    title: "project-auto-add.yml canonical field init"
+    type: "implementation"
+    branch_name: "sprint-71/t71.4-auto-add-init"
+    files:
+      - ".github/workflows/project-auto-add.yml"
+  - id: "71.5"
+    title: "GOVERNANCE.md intake gate patch"
+    type: "implementation"
+    branch_name: "sprint-71/t71.5-governance-intake"
+    files:
+      - "docs/ai/GOVERNANCE.md"
+  - id: "71.G1"
+    title: "Mid Review Gate"
+    type: "gate"
+    branch_exempt: true
+  - id: "71.G2"
+    title: "Final Review Gate"
+    type: "gate"
+    branch_exempt: true
+  - id: "71.RETRO"
+    title: "Retrospective"
+    type: "process"
+    branch_exempt: true
+  - id: "71.CLOSURE"
+    title: "Sprint Closure"
+    type: "process"
+    branch_exempt: true

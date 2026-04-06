@@ -1307,9 +1307,18 @@ Formal record: `docs/decisions/D-141-patch-apply-contract.md`.
 
 ---
 
-## Decision Index (D-001 → D-141)
+### D-142: Intake-to-Sprint Operating Model Freeze
 
-138 frozen + 2 superseded decisions. D-126 skipped, D-132 deferred, D-082/D-098 superseded.
+**Phase:** Sprint 69 (Phase 9) | **Status:** Frozen
+
+Canonical operating model frozen: backlog item != sprint task (D-122), sprint membership explicit and machine-written, intake binding before implementation (hard gate, not closure cleanup). Project V2 canonical fields: Status, Sprint, Priority, Task ID (sprint tasks only). Session protocol fail-closed: governed state docs (current.md, open-items.md, STATE.md, NEXT.md) must be consistent before work starts. Validators and workflows must enforce the same model — no workflow may create state that validator rejects. Governed state document set frozen as 4-file coherent source of truth.
+Formal record: `docs/decisions/D-142-intake-to-sprint-operating-model.md`.
+
+---
+
+## Decision Index (D-001 → D-142)
+
+139 frozen + 2 superseded decisions. D-126 skipped, D-132 deferred, D-082/D-098 superseded.
 
 | ID | Title | Phase |
 |----|-------|-------|
@@ -1454,3 +1463,4 @@ Formal record: `docs/decisions/D-141-patch-apply-contract.md`.
 | D-139 | Controller Decomposition Boundary + Budget Ownership | Sprint 63 |
 | D-140 | Persistence Boundary Contract | Sprint 66 |
 | D-141 | Patch/Review/Apply/Revert Contract | Sprint 68 |
+| D-142 | Intake-to-Sprint Operating Model Freeze | Sprint 69 |

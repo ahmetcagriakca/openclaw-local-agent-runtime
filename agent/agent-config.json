@@ -1,6 +1,17 @@
 {
-  "defaultAgent": "gpt-general",
+  "defaultAgent": "azure-general",
   "agents": {
+    "azure-general": {
+      "provider": "azure-openai",
+      "model": "gpt-5.3-codex-cagri",
+      "endpointEnv": "AZURE_OPENAI_ENDPOINT",
+      "apiKeyEnv": "AZURE_OPENAI_API_KEY",
+      "apiVersion": "2025-04-01-preview",
+      "maxTokens": 4096,
+      "maxTurns": 10,
+      "timeoutSeconds": 120,
+      "enabled": true
+    },
     "gpt-general": {
       "provider": "gpt",
       "model": "gpt-4o",

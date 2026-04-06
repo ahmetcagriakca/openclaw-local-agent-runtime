@@ -19,6 +19,8 @@ def emit_policy_event(event_type: str, details: dict):
     - path_resolution_failed
     - mutation_surface_mismatch
     - budget_exhausted
+    - provider_selection (D-148)
+    - provider_fallback (D-148)
     """
     event = {
         "timestamp": datetime.now(timezone.utc).isoformat(),

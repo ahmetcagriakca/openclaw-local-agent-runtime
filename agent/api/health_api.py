@@ -280,6 +280,9 @@ async def get_health(request: Request):
 
     # 11. LLM Providers (check env vars)
     providers = []
+    azure_key = os.environ.get("AZURE_OPENAI_API_KEY") or os.environ.get("APIM_KEY")
+    if azure_key:
+        providers.append("Azure OpenAI")
     if os.environ.get("OPENAI_API_KEY"):
         providers.append("OpenAI")
     if os.environ.get("ANTHROPIC_API_KEY"):
@@ -289,7 +292,7 @@ async def get_health(request: Request):
     prov_status = "ok" if providers else "error"
     components["llm_providers"] = ComponentHealth(
         name="LLM Providers", status=prov_status,
-        detail=", ".join(providers) if providers else "No API keys configured (OPENAI_API_KEY, ANTHROPIC_API_KEY)",
+        detail=", ".join(providers) if providers else "No API keys configured",
         lastCheckAt=now)
 
     # Overall status

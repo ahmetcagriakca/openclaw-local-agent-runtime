@@ -5,7 +5,7 @@
 
 ---
 
-## Sprint 71 — Intake Gate + Workflow Writer Enforcement (CLOSED)
+## Sprint 71 — Intake Gate + Workflow Writer Enforcement (REVIEW PENDING)
 
 **Model:** A (full closure) | **Class:** Governance
 **Scope:** D-142 intake gate tool, issue-from-plan writer contract, project-auto-add field init (code-ready, blocked by PAT credential), governance patch
@@ -15,7 +15,7 @@
 **New files:** `tools/task-intake.py`, `tests/test_task_intake.py`
 **Modified:** `.github/workflows/issue-from-plan.yml`, `.github/workflows/project-auto-add.yml`, `docs/ai/GOVERNANCE.md`, `docs/ai/state/open-items.md`
 **PRs:** #356 (implementation)
-**Review:** GPT pending
+**Review:** GPT R7 pending
 **Evidence:** `evidence/sprint-71/`
 
 ---

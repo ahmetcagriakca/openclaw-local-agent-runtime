@@ -1316,9 +1316,9 @@ Formal record: `docs/decisions/D-142-intake-to-sprint-operating-model.md`.
 
 ### D-143: (Reserved — Number Gap)
 
-**Status:** Deferred
+**Phase:** — | **Status:** Frozen
 
-Number gap between D-142 (Sprint 69) and D-144 (Sprint 73). No decision was proposed for this ID. Retained for numbering continuity.
+Number gap between D-142 (Sprint 69) and D-144 (Sprint 73). No decision was proposed for this ID. Placeholder retained for numbering continuity.
 
 ### D-144: Project Aggregate Contract
 
@@ -1338,7 +1338,7 @@ Formal record: `docs/decisions/D-145-project-workspace-artifact-boundary.md`.
 
 ## Decision Index (D-001 → D-145)
 
-140 frozen + 2 superseded decisions. D-126 skipped, D-132 deferred, D-143 skipped, D-082/D-098 superseded.
+142 frozen + 2 superseded decisions. D-126 skipped, D-132 deferred, D-143 skipped, D-082/D-098 superseded.
 
 | ID | Title | Phase |
 |----|-------|-------|

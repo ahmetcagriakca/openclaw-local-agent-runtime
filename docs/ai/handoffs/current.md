@@ -1,4 +1,4 @@
-# Session Handoff — 2026-04-06 (Session 46 — Sprint 70)
+# Session Handoff — 2026-04-06 (Session 47 — Sprint 71)
 
 **Platform:** Vezir Platform
 **Operator:** Claude Code (Opus) — AKCA delegated
@@ -7,25 +7,27 @@
 
 ## Session Summary
 
-Session 46: Sprint 70 implementation complete. Phase 9 — Validator/Closer Drift Hardening.
+Session 47: Sprint 71 implementation complete. Phase 9 — Intake Gate + Workflow Writer Enforcement.
 
-- T70.1: project-validator.py — replaced hardcoded `CLOSED_SPRINTS=set(range(19,33))` with `derive_closed_sprints()` that queries GitHub milestones API (paginated, case-insensitive, graceful fallback). `validate_item()` now accepts `closed_sprints` parameter.
-- T70.2: 8 new validator tests (6 derive_closed_sprints + 2 closed sprint edge cases for None/empty set).
-- T70.3: close-merged-issues.py — added merge evidence gate: `is_branch_merged()`, `has_merged_pr()`. Main loop verifies merge evidence before closing. Added `--dry-run` mode. Blocks parent issue close when child tasks lack merge evidence. Exit 1 on unmerged tasks.
-- T70.4: 11 new closer tests (5 is_branch_merged + 4 has_merged_pr + 4 main() dry-run integration).
-- PR #348 merged to main. CI 12/12 green. Commit 4ca9240.
+- T71.1: `tools/task-intake.py` — new intake gate tool enforcing D-142 prerequisites. Validates plan.yaml structure, GitHub milestone existence, parent+task issue binding with correct milestone, governed state doc consistency (delegates to state-sync --check), Project V2 board item detection. Supports `--json` and `--skip-project` flags.
+- T71.2: `tests/test_task_intake.py` — 40 unit tests (IntakeResult 5, plan structure 12, milestone 4, issues 6, state consistency 4, project board 4, load plan 2, integration 3).
+- T71.3: `.github/workflows/issue-from-plan.yml` — full writer contract: plan.yaml validation before issue creation, auto-creates milestone if missing, assigns milestone to all parent+child issues.
+- T71.4: `.github/workflows/project-auto-add.yml` — canonical field initialization: sets Status=Todo and Sprint=N on Project V2 board when issues are added.
+- T71.5: `docs/ai/GOVERNANCE.md` — intake gate added to Sprint Kickoff Gate (section 4) with 5 sub-checks.
+- Also fixed stale `open-items.md` next-sprint reference (S70 → S71).
+- PR #356 merged to main. CI all green.
 
 ## Current State
 
-- **Phase:** 9 active — S70 closed
-- **Last closed sprint:** 70
+- **Phase:** 9 active — S71 closed
+- **Last closed sprint:** 71
 - **Decisions:** 139 frozen + 2 superseded (D-001 → D-142, D-126 skipped, D-132 deferred, D-082/D-098 superseded)
-- **Tests:** 1555 backend + 217 frontend + 13 Playwright + 60 root-level = 1845 total (was 1795, +19 new root + 31 existing root = 60 root)
-- **CI:** All green (2 pre-existing WinError failures in test_audit_integrity — subprocess.py on Win32)
+- **Tests:** 1555 backend + 217 frontend + 13 Playwright + 102 root-level = 1887 total (was 1845, +40 new root)
+- **CI:** All green
 - **Security:** 0 CodeQL open, 0 secret scanning, 0 dependabot critical
-- **PRs:** 0 open (#348, #349 merged)
+- **PRs:** 0 open (#356 merged)
 - **Open issues:** 0
-- **Project board:** Synced through S70
+- **Project board:** Synced through S71
 - **Blockers:** None
 
 ## Review History
@@ -46,6 +48,7 @@ Session 46: Sprint 70 implementation complete. Phase 9 — Validator/Closer Drif
 | S68 | PASS | PASS (R2) |
 | S69 | PASS | PASS (R3) |
 | S70 | — | PASS (R4) |
+| S71 | — | Pending |
 
 ## Phase 9 Status
 
@@ -53,7 +56,7 @@ Session 46: Sprint 70 implementation complete. Phase 9 — Validator/Closer Drif
 |--------|-------|--------|
 | S69 | Operating Model Freeze + State Drift Guard (D-142) | Closed |
 | S70 | Validator/Closer Drift Hardening | Closed |
-| S71 | Intake Gate + Workflow Writer Enforcement | Not started |
+| S71 | Intake Gate + Workflow Writer Enforcement | Closed |
 | S72 | Session Protocol Enforcement | Not started |
 
 ## Dependency Status
@@ -76,4 +79,4 @@ No new dependencies introduced. Phase 9 is governance/tooling-only.
 
 ## GPT Memo
 
-Session 46 (S70): Validator/Closer Drift Hardening. 4 tasks implemented: T70.1 dynamic closed sprint derivation from milestones (replaces hardcoded set), T70.2 8 validator tests, T70.3 merge evidence gate for closer (is_branch_merged + has_merged_pr + --dry-run + exit 1 on unmerged + parent block), T70.4 11 closer tests. 19 new tests total. PR #348 merged, CI 12/12 green. No new decisions, no runtime code changes. GPT R1 was HOLD (title-only submission due to ChatGPT streaming issues). R2 resubmit with full packet was attempted but ChatGPT connection timed out repeatedly. Next session: retry GPT review with full packet, then close S70.
+Session 47 (S71): Intake Gate + Workflow Writer Enforcement. 5 tasks implemented: T71.1 task-intake.py intake gate (validates plan.yaml, milestone, issues, state-sync, project board), T71.2 40 intake tests, T71.3 issue-from-plan.yml writer contract (validation + milestone assignment), T71.4 project-auto-add.yml canonical field init (Status=Todo, Sprint=N), T71.5 GOVERNANCE.md intake gate in kickoff checklist. 40 new root tests. PR #356 merged, CI all green. No new decisions, no runtime code changes. GPT review pending.

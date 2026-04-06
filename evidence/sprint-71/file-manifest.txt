@@ -1,0 +1,20 @@
+Sprint 71 File Manifest — Intake Gate + Workflow Writer Enforcement
+
+New files:
+  tools/task-intake.py               — D-142 intake gate tool
+  tests/test_task_intake.py          — 40 unit tests for intake gate
+
+Modified files:
+  .github/workflows/issue-from-plan.yml    — plan validation + milestone assignment
+  .github/workflows/project-auto-add.yml   — canonical field initialization (Status, Sprint)
+  docs/ai/GOVERNANCE.md                    — intake gate in Sprint Kickoff Gate
+  docs/ai/state/open-items.md             — next sprint reference fix (S70 → S71)
+  docs/ai/STATE.md                        — S71 test evidence row, sprint status
+  docs/ai/NEXT.md                         — S71 entry added
+  docs/ai/handoffs/current.md             — session 47 handoff
+
+Evidence:
+  evidence/sprint-71/pytest-output.txt     — 102 root tests passing
+  evidence/sprint-71/file-manifest.txt     — this file
+  evidence/sprint-71/review-summary.md     — GPT review summary
+  evidence/sprint-71/retrospective.md      — sprint retrospective

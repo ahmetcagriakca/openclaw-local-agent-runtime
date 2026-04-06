@@ -1314,9 +1314,7 @@ Formal record: `docs/decisions/D-141-patch-apply-contract.md`.
 Canonical operating model frozen: backlog item != sprint task (D-122), sprint membership explicit and machine-written, intake binding before implementation (hard gate, not closure cleanup). Project V2 canonical fields: Status, Sprint, Priority, Task ID (sprint tasks only). Session protocol fail-closed: governed state docs (current.md, open-items.md, STATE.md, NEXT.md) must be consistent before work starts. Validators and workflows must enforce the same model — no workflow may create state that validator rejects. Governed state document set frozen as 4-file coherent source of truth.
 Formal record: `docs/decisions/D-142-intake-to-sprint-operating-model.md`.
 
-### D-143: (Skipped)
-
-**Status:** Skipped — number reserved, not used.
+*D-143: Reserved, not used — number gap between D-142 (Sprint 69) and D-144 (Sprint 73). No decision was proposed for this ID.*
 
 ### D-144: Project Aggregate Contract
 
@@ -1336,7 +1334,7 @@ Formal record: `docs/decisions/D-145-project-workspace-artifact-boundary.md`.
 
 ## Decision Index (D-001 → D-145)
 
-141 frozen + 2 superseded decisions. D-126 skipped, D-132 deferred, D-143 skipped, D-082/D-098 superseded.
+140 frozen + 2 superseded decisions. D-126 skipped, D-132 deferred, D-143 skipped, D-082/D-098 superseded.
 
 | ID | Title | Phase |
 |----|-------|-------|

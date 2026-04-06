@@ -1,0 +1,8 @@
+{"fields":[{"field":"Title","value":"[S71-71.5] GOVERNANCE.md intake gate patch"},{"field":"Status","value":"Done"},{"field":"Sprint","value":71}],"number":355,"title":"[S71-71.5] GOVERNANCE.md intake gate patch"}
+{"fields":[{"field":"Title","value":"[S71-71.4] project-auto-add.yml canonical field init"},{"field":"Status","value":"Done"},{"field":"Sprint","value":71}],"number":354,"title":"[S71-71.4] project-auto-add.yml canonical field init"}
+{"fields":[{"field":"Title","value":"[S71-71.3] issue-from-plan.yml full writer contract"},{"field":"Status","value":"Done"},{"field":"Sprint","value":71}],"number":353,"title":"[S71-71.3] issue-from-plan.yml full writer contract"}
+{"fields":[{"field":"Title","value":"[S71-71.2] task-intake tests"},{"field":"Status","value":"Done"},{"field":"Sprint","value":71}],"number":352,"title":"[S71-71.2] task-intake tests"}
+{"fields":[{"field":"Title","value":"[S71-71.1] task-intake.py intake gate"},{"field":"Status","value":"Done"},{"field":"Sprint","value":71}],"number":351,"title":"[S71-71.1] task-intake.py intake gate"}
+{"fields":[{"field":"Title","value":"[S71] Intake Gate + Workflow Writer Enforcement"},{"field":"Status","value":"Done"},{"field":"Sprint","value":71}],"number":350,"title":"[S71] Intake Gate + Workflow Writer Enforcement"}
+---
+All 6 S71 items have Status=Done and Sprint=71 on Project V2 board.

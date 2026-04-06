@@ -28,7 +28,6 @@ Exit codes:
 import argparse
 import json
 import os
-import re
 import subprocess
 import sys
 from dataclasses import asdict, dataclass, field
@@ -93,7 +92,7 @@ def load_plan(sprint: int) -> tuple[dict | None, str | None]:
         with open(plan_path, encoding="utf-8") as f:
             plan = yaml.safe_load(f)
         if not isinstance(plan, dict):
-            return None, f"plan.yaml is not a valid YAML mapping"
+            return None, "plan.yaml is not a valid YAML mapping"
         return plan, None
     except ImportError:
         return None, "PyYAML not installed (pip install pyyaml)"
@@ -185,7 +184,6 @@ def check_milestone(sprint: int, result: IntakeResult) -> int | None:
 
 def check_issues(sprint: int, plan: dict, result: IntakeResult):
     """Check parent and task issues exist with correct milestone."""
-    issue_config = plan.get("issue", {})
     parent_title_prefix = f"[S{sprint}]"
 
     # Search for parent issue
@@ -199,7 +197,7 @@ def check_issues(sprint: int, plan: dict, result: IntakeResult):
     try:
         issues = json.loads(out)
     except json.JSONDecodeError:
-        result.add("ISSUE_PARSE_ERROR", "FAIL", f"Could not parse issue list")
+        result.add("ISSUE_PARSE_ERROR", "FAIL", "Could not parse issue list")
         return
 
     parent = None
@@ -290,7 +288,7 @@ def check_state_consistency(result: IntakeResult):
         else:
             # Extract first few lines of output for context
             lines = (proc.stdout + proc.stderr).strip().split("\n")[:5]
-            summary = "; ".join(l.strip() for l in lines if l.strip())
+            summary = "; ".join(line.strip() for line in lines if line.strip())
             result.add("STATE_INCONSISTENT", "FAIL",
                         f"Governed state docs inconsistent: {summary}")
     except subprocess.TimeoutExpired:
@@ -315,8 +313,6 @@ def check_project_board(sprint: int, result: IntakeResult):
         result.add("PROJECT_NOT_FOUND", "WARN",
                     "No Project V2 board found, skipping board checks")
         return
-
-    project_id = out.strip()
 
     # Search for sprint issues on the board
     search = f"[S{sprint}]"

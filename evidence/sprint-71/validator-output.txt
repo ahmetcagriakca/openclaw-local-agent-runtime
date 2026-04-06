@@ -1,0 +1,10 @@
+=== Sprint 71 Intake Gate ===
+
+  [ OK ] PLAN_VALID: plan.yaml valid: 9 tasks, model=A
+  [FAIL] MILESTONE_MISSING: Milestone 'Sprint 71' not found on GitHub
+  [FAIL] PARENT_ISSUE_MISSING: Parent issue with '[S71]' not found
+  [FAIL] STATE_INCONSISTENT: Governed state docs inconsistent: [state-sync --check] D-142 governed doc consistency check; OK  docs\ai\handoffs\current.md; OK  docs\ai\state\open-items.md; OK  docs\ai\STATE.md
+  [WARN] PROJECT_NO_SPRINT_ISSUES: No issues with [S71] prefix found
+
+VERDICT: FAIL — 3 blocker(s) found
+Fix all FAIL items before starting implementation.

@@ -147,7 +147,9 @@ jobs:
             ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" \
               -f fieldId="$STATUS_FIELD_ID" -f optionId="$TODO_OPTION_ID" 2>&1 || true
           else
-            echo "Status field or Todo option not found, skipping Status init"
+            echo "FAIL: D-142 canonical field 'Status' or 'Todo' option not found on Project V2 board."
+            echo "This is a hard failure — canonical fields must exist per D-142."
+            exit 1
           fi
 
           # Extract sprint number from issue title [S<N>...] pattern
@@ -173,7 +175,9 @@ jobs:
             ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" \
               -f fieldId="$SPRINT_FIELD_ID" -F value="$SPRINT_NUM" 2>&1 || true
           else
-            echo "Sprint field not found or sprint number not in title, skipping Sprint init"
+            echo "FAIL: D-142 canonical field 'Sprint' not found or sprint number not in title."
+            echo "Sprint field must exist and be writable per D-142."
+            exit 1
           fi
 
           echo "D-142: Canonical field initialization complete."

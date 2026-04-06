@@ -107,4 +107,4 @@ tests/test_task_intake.py::TestMainIntegration::test_full_pass_flow PASSED [ 98%
 tests/test_task_intake.py::TestMainIntegration::test_plan_load_error_flow PASSED [ 99%]
 tests/test_task_intake.py::TestMainIntegration::test_multiple_failures_accumulate PASSED [100%]
 
-============================= 102 passed in 0.50s =============================
+============================= 102 passed in 0.75s =============================

@@ -1,7 +1,12 @@
-"""Tests for project-validator.py — D-123/D-124/D-125 fail code coverage."""
+"""Tests for project-validator.py — D-123/D-124/D-125 fail code coverage.
 
+T70.2: Added derive_closed_sprints tests with subprocess mocking.
+"""
+
+import json
 import sys
 import os
+from unittest.mock import patch, MagicMock
 import pytest
 
 # Add tools/ to path so we can import the validator module
@@ -15,6 +20,7 @@ validator = import_module("project-validator")
 ProjectItem = validator.ProjectItem
 classify_item = validator.classify_item
 validate_item = validator.validate_item
+derive_closed_sprints = validator.derive_closed_sprints
 Finding = validator.Finding
 
 
@@ -198,12 +204,24 @@ class TestDoneButOpen:
 class TestClosedSprintOpenIssue:
     def test_closed_sprint_open_issue_fails(self):
         item = make_item(sprint=32, state="OPEN", status="In Progress")
-        findings = validate_item(item)
+        findings = validate_item(item, closed_sprints={19, 20, 31, 32})
         assert find_code(findings, validator.CLOSED_SPRINT_OPEN_ISSUE)
 
     def test_open_sprint_open_issue_passes(self):
         item = make_item(sprint=99, state="OPEN", status="In Progress")
-        findings = validate_item(item)
+        findings = validate_item(item, closed_sprints={19, 20, 31, 32})
+        assert not find_code(findings, validator.CLOSED_SPRINT_OPEN_ISSUE)
+
+    def test_no_closed_sprints_skips_check(self):
+        """When closed_sprints is None (API unavailable), skip the check."""
+        item = make_item(sprint=32, state="OPEN", status="In Progress")
+        findings = validate_item(item, closed_sprints=None)
+        assert not find_code(findings, validator.CLOSED_SPRINT_OPEN_ISSUE)
+
+    def test_empty_closed_sprints_skips_check(self):
+        """When closed_sprints is empty, skip the check."""
+        item = make_item(sprint=32, state="OPEN", status="In Progress")
+        findings = validate_item(item, closed_sprints=set())
         assert not find_code(findings, validator.CLOSED_SPRINT_OPEN_ISSUE)
 
 
@@ -264,3 +282,78 @@ class TestGatePatterns:
         # since RETRO isn't a digit. This is expected to FAIL unless we adjust regex.
         # Per the contract, gate/process items with sprint label will be checked.
         # This is acceptable — gate items in practice have this title format.
+
+
+# --- derive_closed_sprints (T70.2) ---
+
+class TestDeriveClosedSprints:
+    """Tests for dynamic closed sprint derivation from GitHub milestones."""
+
+    def _mock_subprocess(self, milestones_pages):
+        """Helper: mock subprocess.run for paginated milestone API calls."""
+        call_count = [0]
+
+        def side_effect(cmd, **kwargs):
+            result = MagicMock()
+            if call_count[0] < len(milestones_pages):
+                result.returncode = 0
+                result.stdout = json.dumps(milestones_pages[call_count[0]])
+            else:
+                result.returncode = 0
+                result.stdout = "[]"
+            call_count[0] += 1
+            return result
+
+        return side_effect
+
+    @patch("subprocess.run")
+    def test_parses_sprint_milestones(self, mock_run):
+        milestones = [
+            {"title": "Sprint 19", "state": "closed"},
+            {"title": "Sprint 32", "state": "closed"},
+            {"title": "Sprint 69", "state": "closed"},
+        ]
+        mock_run.side_effect = self._mock_subprocess([milestones])
+        result = derive_closed_sprints()
+        assert result == {19, 32, 69}
+
+    @patch("subprocess.run")
+    def test_ignores_non_sprint_milestones(self, mock_run):
+        milestones = [
+            {"title": "Sprint 19", "state": "closed"},
+            {"title": "v1.0 Release", "state": "closed"},
+            {"title": "Phase 8", "state": "closed"},
+        ]
+        mock_run.side_effect = self._mock_subprocess([milestones])
+        result = derive_closed_sprints()
+        assert result == {19}
+
+    @patch("subprocess.run")
+    def test_empty_milestones(self, mock_run):
+        mock_run.side_effect = self._mock_subprocess([[]])
+        result = derive_closed_sprints()
+        assert result == set()
+
+    @patch("subprocess.run")
+    def test_api_failure_returns_empty(self, mock_run):
+        mock_result = MagicMock()
+        mock_result.returncode = 1
+        mock_result.stderr = "API error"
+        mock_run.return_value = mock_result
+        result = derive_closed_sprints()
+        assert result == set()
+
+    @patch("subprocess.run")
+    def test_pagination(self, mock_run):
+        page1 = [{"title": f"Sprint {i}", "state": "closed"} for i in range(19, 32)]
+        page2 = [{"title": f"Sprint {i}", "state": "closed"} for i in range(32, 45)]
+        mock_run.side_effect = self._mock_subprocess([page1, page2])
+        result = derive_closed_sprints()
+        assert result == set(range(19, 45))
+
+    @patch("subprocess.run")
+    def test_case_insensitive_match(self, mock_run):
+        milestones = [{"title": "sprint 42", "state": "closed"}]
+        mock_run.side_effect = self._mock_subprocess([milestones])
+        result = derive_closed_sprints()
+        assert result == {42}

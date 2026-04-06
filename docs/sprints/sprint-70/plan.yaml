@@ -8,7 +8,7 @@ authority:
   automation_index: "plan.yaml"
 
 status:
-  implementation_status: not_started
+  implementation_status: in_progress
   closure_status: not_started
 
 issue:

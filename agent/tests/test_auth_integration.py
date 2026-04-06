@@ -56,9 +56,6 @@ srv.capability_checker = CapabilityChecker(str(_caps_path))
 
 from fastapi.testclient import TestClient
 
-# Disable auth bypass for this test — we need real auth enforcement
-os.environ.pop("VEZIR_AUTH_BYPASS", None)
-
 # Patch keys module to load from our test config
 import auth.keys as keys_mod
 
@@ -91,6 +88,18 @@ BAD_HEADERS = {"Authorization": "Bearer vz_invalid_key"}
 
 class TestAuthIntegration(unittest.TestCase):
     """Auth integration tests with real config/auth.json."""
+
+    def setUp(self):
+        """Disable bypass so real auth is enforced."""
+        self._saved_bypass = os.environ.pop("VEZIR_AUTH_BYPASS", None)
+        _patched_load()  # Ensure test keys are loaded
+
+    def tearDown(self):
+        """Restore bypass for other tests."""
+        if self._saved_bypass is not None:
+            os.environ["VEZIR_AUTH_BYPASS"] = self._saved_bypass
+        else:
+            os.environ.setdefault("VEZIR_AUTH_BYPASS", "1")
 
     def test_01_get_endpoints_public(self):
         """GET endpoints work without auth."""
@@ -167,7 +176,8 @@ class TestAuthDisabled(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        """Restore auth to disabled state for other test modules."""
+        """Restore auth bypass for other test modules."""
+        os.environ["VEZIR_AUTH_BYPASS"] = "1"
         keys_mod._keys = {}
         keys_mod._loaded = True
 

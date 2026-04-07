@@ -8,7 +8,7 @@
 ---
 
 ```markdown
-# Sprint 79 Review — Round 4
+# Sprint 79 Review — Round 5
 
 ## 1. Sprint / Phase / Model Metadata
 - Sprint: 79
@@ -24,28 +24,28 @@ HOLD
 Not eligible for closure
 
 ## 4. Scope Reviewed
-- R4-P1 (R3-B1): commit-order proof for Mid Review Gate timing
-- R4-P2 (R3-B2): closure-check PASS/FAIL extraction and raw linkage
+- Round 5 patch delta: R5-P1 (lint fix evidence), R5-P2 (final checks evidence)
+- Prior blockers referenced in Round 4: lint pass requirement and gate timing provenance
 
 ## 5. Accepted Findings
-- Mid Review Gate artifact and git-log evidence are now present under `evidence/sprint-79/` and provide implementation→tests ordering proof.
-- Closure-check raw output and extracted summary are present and linked.
+- Lint blocker addressed: `evidence/sprint-79/lint-output.txt` provided and claimed 0 errors (R5-P1).
+- Git ordering evidence artifact exists: `evidence/sprint-79/git-log-evidence.txt` (from prior round, still present).
 
 ## 6. Blocking Findings
-- B1 — Final Review Gate requires validator pass; closure-check shows `Lint Check: ❌ FAIL` and no sprint-scoped validator-pass artifact demonstrates all required checks passing for closure gate. [evidence: `evidence/sprint-79/closure-check-output.txt` FAIL line; no alternate pass artifact in manifest]
-- B2 — Mid Review Gate timing remains partially unverifiable from provided packet because gate pass is asserted via markdown artifact plus git log, but no raw command outputs timestamped at gate point (tsc/vitest raw files captured at gate time) are identified as gate-time artifacts. [evidence: `evidence/sprint-79/mid-review-gate.md` is narrative artifact; manifest lists current run outputs only]
+- B1 — Final Review Gate still marked `PENDING`; required final gate pass artifact is not provided as completed review artifact/evidence bundle sign-off. [evidence: Section 3 shows “Final Review Gate | yes | PENDING | This packet”]
+- B2 — Round 5 re-review packet does not provide raw command provenance for lint run in manifest table (lint artifact omitted from Section 8 manifest despite being cited in patches). [evidence: Section 8 lacks `lint-output.txt` entry while Section 12 claims it as new evidence]
 
 ## 7. Required Patch Set
-- P1 (B1) — Produce a passing final-gate validator artifact for Sprint 79 (or update closure checker policy/evidence to exclude known pre-existing lint from gate criteria) and save raw output under `evidence/sprint-79/` with command and timestamp.
-- P2 (B2) — Add raw gate-time command outputs (or immutable CI/job logs) proving Mid Review Gate pass occurred before second-half gated work, and reference exact files in `mid-review-gate.md`.
+- P1 (B1) — Add completed Final Review Gate artifact under `evidence/sprint-79/` with validator/check outputs and explicit PASS state; update gate table from `PENDING` to `PASS` with artifact path.
+- P2 (B2) — Add `lint-output.txt` to Section 8 Evidence Manifest with exact source command and ensure file exists at `evidence/sprint-79/lint-output.txt`.
 
 ## 8. PASS Criteria
-- Final Review Gate validator shows pass per enforced gate policy with raw evidence.
-- Mid Review Gate has independently verifiable raw timing evidence, not only narrative summary.
+- Final Review Gate is completed and evidenced as PASS with sprint-scoped artifact.
+- Evidence manifest fully enumerates all claimed raw outputs, including lint raw output with command provenance.
 
 ## 9. Final Judgment
-Closure evidence improved, but gate-verification requirements are still not fully satisfied.
+Closure cannot proceed until final gate completion evidence and manifest consistency are corrected.
 
 ## 10. Next Step
-Claude Code patch + rerun evidence + resubmit Round 5
+Claude Code patch + rerun evidence + resubmit Round 6
 ```

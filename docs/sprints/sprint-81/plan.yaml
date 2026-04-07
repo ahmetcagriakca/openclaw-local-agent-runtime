@@ -1,0 +1,41 @@
+sprint: 81
+title: "EventBus Production Wiring (D-147)"
+model: A
+class: Product
+phase: 10
+status: not_started
+
+scope: |
+  Wire EventBus to application startup so events flow in production,
+  not just in tests. SSE broadcast and audit handlers already exist
+  but are not connected at startup.
+
+tasks:
+  - id: T-81.01
+    title: "Wire EventBus to application lifespan"
+    description: |
+      Connect EventBus initialization in server.py lifespan.
+      Register production handlers (SSE broadcast, audit log).
+      Feature flag for gradual rollout (EVENTBUS_ENABLED=true).
+    evidence: "Server starts with EventBus active, events logged"
+
+  - id: T-81.02
+    title: "Production handler validation"
+    description: |
+      Verify SSE handler broadcasts project/mission events.
+      Verify audit handler persists events to audit store.
+      Verify no duplicate events with existing SSE manager.
+    evidence: "curl SSE stream receives EventBus events"
+
+  - id: T-81.03
+    title: "Integration tests for production event flow"
+    description: |
+      End-to-end test: create project → EventBus fires → SSE receives.
+      Test graceful degradation when EventBus disabled.
+    evidence: "pytest tests pass with EventBus enabled and disabled"
+
+done_criteria:
+  - EventBus wired to startup with feature flag
+  - SSE + audit handlers active in production
+  - Integration tests passing
+  - D-147 status updated to "Operational"

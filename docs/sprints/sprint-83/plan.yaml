@@ -1,0 +1,50 @@
+sprint: 83
+title: "D-150 Capability Routing Transition"
+model: A
+class: Architecture
+phase: 10
+status: not_started
+prerequisite: "Operator review of D-150 proposal required before kickoff"
+
+scope: |
+  Transition from direct provider calls to capability-based routing.
+  D-150 proposed in S77, needs operator review before implementation.
+  Design-first: ADR + migration plan, then incremental implementation.
+
+tasks:
+  - id: T-83.01
+    title: "D-150 operator review + scope freeze"
+    description: |
+      Present D-150 proposal to operator for review.
+      Freeze scope based on operator feedback.
+      Document approved transition plan.
+    evidence: "D-150 decision frozen in DECISIONS.md"
+
+  - id: T-83.02
+    title: "Capability registry implementation"
+    description: |
+      Build capability registry mapping task types → provider capabilities.
+      Support: text generation, code analysis, summarization, etc.
+      Wire into complexity_router.py.
+    evidence: "Registry resolves capabilities to providers"
+
+  - id: T-83.03
+    title: "Controller migration to capability routing"
+    description: |
+      Migrate controller.py from direct provider selection to capability-based.
+      Maintain backward compatibility with existing ProviderRoutingPolicy.
+    evidence: "Existing tests pass, new capability routing tests pass"
+
+  - id: T-83.04
+    title: "Telemetry + fallback"
+    description: |
+      Add telemetry for capability resolution (which provider selected, why).
+      Implement fallback chain when primary capability provider unavailable.
+    evidence: "OTel traces show capability routing decisions"
+
+done_criteria:
+  - D-150 frozen
+  - Capability registry operational
+  - Controller uses capability routing
+  - Backward compatible with existing routing
+  - Telemetry + fallback working

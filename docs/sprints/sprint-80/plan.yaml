@@ -1,0 +1,57 @@
+sprint: 80
+title: "Housekeeping + Dependency Upgrades"
+model: A
+class: Governance + DevEx
+phase: 10
+status: not_started
+
+scope: |
+  Close stale GitHub issues (S79 tasks + B-148), upgrade eslint 9→10 and vite 6→8,
+  clean stale carry-forward docs, update GOVERNANCE.md B-148 reference.
+
+tasks:
+  - id: T-80.01
+    title: "Close stale GitHub issues"
+    description: |
+      Close S79 task issues (#416, #418, #419, #420, #421) and B-148 (#358).
+      Verify each is actually done before closing.
+    evidence: "gh issue list --state closed shows all 6"
+
+  - id: T-80.02
+    title: "eslint 9→10 migration"
+    description: |
+      Upgrade eslint from 9.x to 10.x in frontend/.
+      Update eslint config if breaking changes.
+      Fix any new lint errors.
+    evidence: "npx eslint . passes with 0 errors"
+
+  - id: T-80.03
+    title: "vite 6→8 + @vitejs/plugin-react upgrade"
+    description: |
+      Upgrade vite from 6.x to 8.x and plugin-react to latest.
+      Fix any breaking config changes in vite.config.ts.
+      Verify dev server and build work.
+    evidence: "npm run build succeeds, npx vitest run passes"
+
+  - id: T-80.04
+    title: "Doc hygiene — stale carry-forward cleanup"
+    description: |
+      - NEXT.md carry-forward: remove retired items (Vitest, CONTEXT_ISOLATION, D-102, Jaeger, UIOverview, backend restructure)
+      - open-items.md: update to reflect S79 closure, B-148 resolved, remove stale references
+      - GOVERNANCE.md §4: update B-148 note (now resolved)
+      - BACKLOG.md: regenerate with `python tools/generate-backlog.py`
+    evidence: "No stale items in carry-forward tables"
+
+  - id: T-80.05
+    title: "Verify PROJECT_TOKEN in CI"
+    description: |
+      Create a test issue with sprint label, verify project-auto-add.yml
+      picks it up and sets Project V2 fields via PROJECT_TOKEN.
+    evidence: "Workflow run log shows project field mutation success"
+
+done_criteria:
+  - All 6 stale issues closed on GitHub
+  - eslint 10.x installed, 0 lint errors
+  - vite 8.x installed, build + tests pass
+  - Carry-forward docs cleaned
+  - PROJECT_TOKEN verified in CI

@@ -1,0 +1,41 @@
+sprint: 82
+title: "Docker Production Image Optimization (D-116)"
+model: A
+class: DevEx + Operations
+phase: 10
+status: not_started
+
+scope: |
+  Complete Docker production image optimization (D-116).
+  docker-compose already operational. Remaining: multi-stage
+  production Dockerfile, image size reduction, CI build workflow.
+
+tasks:
+  - id: T-82.01
+    title: "Multi-stage production Dockerfile"
+    description: |
+      Create optimized multi-stage Dockerfile:
+      Stage 1: build (dependencies + compile)
+      Stage 2: runtime (minimal base, copy only needed files)
+      Target: <200MB image size.
+    evidence: "docker build succeeds, image size < 200MB"
+
+  - id: T-82.02
+    title: "Docker compose production profile"
+    description: |
+      Add 'production' profile to docker-compose.yml.
+      Separate dev (with Jaeger, hot-reload) from prod (optimized, no dev tools).
+    evidence: "docker compose --profile production up works"
+
+  - id: T-82.03
+    title: "CI workflow for Docker build"
+    description: |
+      Add docker-build.yml workflow: build + push on main merge.
+      Verify image starts and passes health check.
+    evidence: "CI workflow green, health endpoint responds"
+
+done_criteria:
+  - Production Dockerfile < 200MB
+  - Docker compose production profile works
+  - CI builds Docker image on merge
+  - D-116 carry-forward marked complete

@@ -1,0 +1,53 @@
+sprint: 84
+title: "SSO/RBAC Full External Auth (D-104/D-108/D-117)"
+model: A
+class: Security
+phase: 10
+status: not_started
+
+scope: |
+  Complete external authentication and authorization.
+  Foundation done: D-117 session model (S27), backend isolation (S40),
+  auth quarantine (S62). Remaining: SSO provider integration, full RBAC,
+  frontend auth flow.
+
+tasks:
+  - id: T-84.01
+    title: "OAuth2/OIDC provider integration"
+    description: |
+      Implement OAuth2 authorization code flow.
+      Support at least one provider (GitHub OAuth).
+      Token exchange, refresh, revocation.
+    evidence: "OAuth login flow works end-to-end"
+
+  - id: T-84.02
+    title: "Role-based access control"
+    description: |
+      Define roles: operator, viewer, agent.
+      Implement RBAC middleware for API endpoints.
+      Map OAuth claims to internal roles.
+    evidence: "Unauthorized requests return 403"
+
+  - id: T-84.03
+    title: "Frontend auth flow"
+    description: |
+      Login page with OAuth redirect.
+      Token storage (httpOnly cookie or secure storage).
+      Protected routes, auth context provider.
+      Logout + session expiry handling.
+    evidence: "Frontend login/logout works, protected routes enforce auth"
+
+  - id: T-84.04
+    title: "Migration + backward compatibility"
+    description: |
+      Graceful migration: existing no-auth mode still works.
+      AUTH_ENABLED feature flag for gradual rollout.
+      Update session.py to use real identity from OAuth.
+    evidence: "Both auth-enabled and auth-disabled modes work"
+
+done_criteria:
+  - OAuth2 login flow operational
+  - RBAC enforced on API endpoints
+  - Frontend auth flow complete
+  - Backward compatible (AUTH_ENABLED flag)
+  - D-104/D-108 carry-forward marked complete

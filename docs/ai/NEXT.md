@@ -1,11 +1,25 @@
 # Next Steps — Vezir Platform
 
 **Last updated:** 2026-04-07
-**Current:** Phase 10 active. Sprint 77 in progress.
+**Current:** Phase 10 active. Sprint 78 closed.
 
 ---
 
-## Sprint 77 — Azure OpenAI Provider Foundation (IN PROGRESS)
+## Sprint 78 — Router Bypass Fix + Browser Analysis Contract (CLOSED)
+
+**Model:** A (full closure) | **Class:** Product
+**Scope:** D-149 — Router bypass fix (planner/summary through ProviderRoutingPolicy), CSRF origin centralization, Browser Analysis 3-Mode Observation Contract, observe_only UX audit (7 findings)
+**Decision:** D-149 frozen
+**Issues:** #411 (parent), #412-#414 (tasks)
+**Milestone:** Sprint 78
+**Tests:** 1877 backend + 239 frontend + 13 Playwright + 139 root = 2268 total (+11 backend)
+**New files:** `test_router_bypass_fix.py`, `D-149-browser-analysis-contract.md`, `browser-audit-template.md`, `ux-finding-schema.yaml`, 5 browser-audit evidence artifacts
+**Modified:** `controller.py` (routing), `project_store.py` (409 fix), `conftest.py` (CSRF_ORIGIN), 7 test files (port fix), `telegram_bot.py`, `live-mission-e2e.spec.ts`, `openapi.json`, `generated.ts`
+**Review:** GPT HOLD R1 → HOLD R2 → HOLD R3 → PASS R4
+
+---
+
+## Sprint 77 — Azure OpenAI Provider Foundation (CLOSED)
 
 **Model:** A (full closure) | **Class:** Product
 **Scope:** D-148 — Azure OpenAI primary provider, canonical TaskRequest/ProviderResponse contract, fallback chain, health + retirement guard, telemetry

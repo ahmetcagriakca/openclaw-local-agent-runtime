@@ -1,9 +1,9 @@
 # Current State
 
 **Last updated:** 2026-04-07
-**Active phase:** Phase 10 — Sprint 77 closed
+**Active phase:** Phase 10 — Sprint 78 closed
 **Doc model:** This file is canonical for system state. Session context lives in `docs/ai/handoffs/current.md`.
-**Note:** All sprints through 53 closed. S54 deferred. S55-S77 closed. All P1 backlog items complete (50/50). Phase 10 active (S73+). Phase 9 complete (S69-S72). Phase 8 complete (S60-S68). 145 frozen + 2 superseded decisions (D-001 → D-148, D-126 skipped, D-143 placeholder, D-082/D-098 superseded). Governance: 20-step closure checklist. Review pipeline: max 5 rounds + ESCALATE (D-146).
+**Note:** All sprints through 53 closed. S54 deferred. S55-S78 closed. All P1 backlog items complete (50/50). Phase 10 active (S73+). Phase 9 complete (S69-S72). Phase 8 complete (S60-S68). 146 frozen + 2 superseded decisions (D-001 → D-149, D-126 skipped, D-143 placeholder, D-082/D-098 superseded). Governance: 20-step closure checklist. Review pipeline: max 5 rounds + ESCALATE (D-146).
 **Persistence:** State is file-persisted (state.json, mission.json). Mission history via persistence layer (Sprint 16).
 **API:** Vezir API on 127.0.0.1:8003 (FastAPI + Uvicorn). Schemas FROZEN (D-067). SSE on /api/v1/events/stream. Dashboard API + Alert API + Telemetry Query API (Sprint 16).
 **Frontend:** React dashboard on localhost:4000 (Vite + Tailwind). SSE live updates + polling fallback + intervention buttons + monitoring dashboard. Node.js 20 required.
@@ -137,6 +137,7 @@
 | Sprint 75 | Rollup + SSE + Dashboard (D-145 Faz 2B) — Phase 10 | Closed |
 | Sprint 76 | Governance Contract Hardening — Phase 10 | Closed |
 | Sprint 77 | Azure OpenAI Provider Foundation (D-148) — Phase 10 | Closed |
+| Sprint 78 | Router Bypass Fix + Browser Analysis Contract (D-149) — Phase 10 | Closed |
 
 ## Test Evidence
 
@@ -185,10 +186,11 @@
 | Sprint 75 | 1748 tests, 0 fail | 239 tests, 0 TS errors | +36 backend (rollup 12, API 5, SSE 13, integration 6), +22 frontend (projects list 11, detail 11, count fix +1). 13 Playwright. 139 root. 2139 total |
 | Sprint 76 | 1777 tests, 0 fail | 239 tests, 0 TS errors | +29 backend (auth 14, policy 5, audit 10). 13 Playwright. 139 root. 2168 total |
 | Sprint 77 | 1866 tests, 0 fail | 239 tests, 0 TS errors | +89 backend (azure provider 39, routing 28, health 17, telemetry 5). 13 Playwright. 139 root. 2257 total |
+| Sprint 78 | 1877 tests, 0 fail | 239 tests, 0 TS errors | +11 backend (routing bypass 7, CSRF centralization 4). 13 Playwright. 139 root. 2268 total |
 
 ## Architectural Decisions
 
-145 frozen + 2 superseded decisions (D-001 through D-148, D-126 skipped, D-143 placeholder, D-082/D-098 superseded S62). See `docs/ai/DECISIONS.md`. Recent: D-144 project aggregate contract, D-145 workspace/artifact boundary, D-146 review max round + escalation, D-147 EventBus operational status (S76), D-148 Azure OpenAI primary provider adoption (S77). Governance: 20-step closure checklist.
+146 frozen + 2 superseded decisions (D-001 through D-149, D-126 skipped, D-143 placeholder, D-082/D-098 superseded S62). See `docs/ai/DECISIONS.md`. Recent: D-144 project aggregate contract, D-145 workspace/artifact boundary, D-146 review max round + escalation, D-147 EventBus operational status (S76), D-148 Azure OpenAI primary provider adoption (S77), D-149 Browser Analysis 3-Mode Observation Contract (S78). Governance: 20-step closure checklist.
 
 ## Port Map
 

@@ -92,10 +92,11 @@
 | Sprint 74 | Workspace + Artifacts (D-145, Phase 10 Faz 2A) | CLOSED (operator override) |
 | Sprint 75 | Rollup + SSE + Dashboard (D-145, Phase 10 Faz 2B) | CLOSED |
 | Sprint 76 | Governance Contract Hardening (Security + EventBus + Audit) | CLOSED |
+| Sprint 78 | Router Bypass Fix + Browser Analysis Contract (D-149) | CLOSED |
 
 ## Next Sprint
 
-S78 in progress: Router Bypass Fix + Browser Analysis Contract (D-149). Issues #411-#414.
+S78 closed: Router Bypass Fix + Browser Analysis Contract (D-149). PR #415 merged. S79 next: scope TBD (UX remediation candidate).
 
 ### Carry-Forward
 | Item | Source | Status |
@@ -104,3 +105,5 @@ S78 in progress: Router Bypass Fix + Browser Analysis Contract (D-149). Issues #
 | PROJECT_TOKEN rotation/docs | S23 retro | AKCA-owned, non-blocking |
 | Docker prod image optimization | D-116 (S26) | Partial — docker-compose done, prod image remaining |
 | SSO/RBAC (full external auth) | D-104/D-108/D-117 | Partial — D-117 + backend isolation done. SSO + full RBAC remaining |
+| UX findings remediation (UX-001→UX-007) | S78 D-149 audit | 7 findings open (3 high, 4 medium) — S79 candidate |
+| D-150 Capability Routing Transition | S77 proposed | Needs operator review |

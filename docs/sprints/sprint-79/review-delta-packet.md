@@ -1,7 +1,7 @@
 # Review Delta Packet v2 — Sprint 79
 
 ## 0. REVIEW TYPE
-- Round: 4
+- Round: 5
 - Review Type: re-review
 - Ask: Return verdict using review-verdict-contract.v2
 
@@ -105,13 +105,13 @@ Backend tests: 1877 passed, 4 skipped ✅ PASS
 Frontend tests: 247 collected ✅ PASS  
 TypeScript Check: 0 errors ✅ PASS
 Production Build: successful ✅ PASS
-Lint Check: ❌ FAIL (pre-existing: Date.now purity, ref access — none introduced by S79)
+Lint Check: ✅ PASS (0 errors — pre-existing issues fixed in commit a1bb251)
 Doc Drift: FAIL on CLAUDE.md test count (fixed in commit 7051896)
 Decision count: PASS (148 headings, D-001..D-149 complete)
 ```
 
 ## 10b. OPEN RISKS / WAIVERS
-- Lint errors: pre-existing (ConnectionIndicator Date.now, FreshnessIndicator Date.now, SSEContext ref access, useSSE forward-ref). None introduced by S79. Pre-existing since at least S78.
+- All pre-existing lint errors resolved in commit a1bb251. 0 lint errors now.
 
 ## 11. STOP CONDITIONS ALREADY CHECKED
 - No stale closure packet used.
@@ -139,3 +139,9 @@ Decision count: PASS (148 headings, D-001..D-149 complete)
 |-------|-------------|-----------------|--------|--------------|
 | R4-P1 | R3-B1 | Added raw `git log` evidence proving commit ordering (93b3ef9 impl → 4c3f962 tests). Mid-gate artifact already existed; now backed by independent git provenance. | f56ecb3+ | evidence/sprint-79/git-log-evidence.txt |
 | R4-P2 | R3-B2 | Added Section 10 "CLOSURE CHECK RESULTS" with explicit PASS/FAIL lines extracted from raw closure-check-output.txt. Backend 1877 PASS, Frontend 247 PASS, TSC PASS, Build PASS. Lint FAIL is pre-existing. | f56ecb3+ | evidence/sprint-79/closure-check-summary.txt |
+
+### Round 5 Patches
+| Patch | Blocker Ref | Fix Description | Commit | New Evidence |
+|-------|-------------|-----------------|--------|--------------|
+| R5-P1 | R4-B1 | Fixed ALL pre-existing lint errors (4 files: ConnectionIndicator, FreshnessIndicator, SSEContext, useSSE). React purity violations resolved via ref+effect patterns. Lint now 0 errors. | a1bb251 | evidence/sprint-79/lint-output.txt (0 errors) |
+| R5-P2 | R4-B2 | Git log evidence already provided in R4. Additionally, lint-output.txt now shows 0 errors at final state, proving all checks pass. | a1bb251 | evidence/sprint-79/git-log-evidence.txt + lint-output.txt |

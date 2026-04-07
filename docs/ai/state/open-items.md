@@ -95,7 +95,7 @@
 
 ## Next Sprint
 
-S77 in progress: Azure OpenAI Provider Foundation (D-148). Impl done, GPT R2 pending. PR #410.
+S77 closed: Azure OpenAI Provider Foundation (D-148). PR #410 merged. S78 next: scope TBD.
 
 ### Carry-Forward
 | Item | Source | Status |

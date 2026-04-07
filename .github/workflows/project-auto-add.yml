@@ -15,7 +15,9 @@ jobs:
     steps:
       - name: Add issue to project and init canonical fields
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # PROJECT_TOKEN: classic PAT with project scope (see docs/shared/SECRETS-CONTRACT.md)
+          # Falls back to GITHUB_TOKEN if PROJECT_TOKEN not set
+          GH_TOKEN: ${{ secrets.PROJECT_TOKEN != '' && secrets.PROJECT_TOKEN || secrets.GITHUB_TOKEN }}
           ISSUE_URL: ${{ github.event.issue.html_url }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
           ISSUE_TITLE: ${{ github.event.issue.title }}

@@ -2,7 +2,7 @@
 
 **Effective:** Sprint 24+
 **Owner:** AKCA (Operator)
-**Last updated:** 2026-03-28
+**Last updated:** 2026-04-07
 
 ---
 
@@ -11,7 +11,7 @@
 | Secret | Scope | Used By | Owner | Created |
 |--------|-------|---------|-------|---------|
 | `GITHUB_TOKEN` | Auto-generated | All workflows | GitHub | Auto |
-| `PROJECT_TOKEN` | Project V2 read/write | `status-sync.yml` | AKCA | 2026-03-28 |
+| `PROJECT_TOKEN` | Project V2 read/write + repo | `status-sync.yml`, `project-auto-add.yml` | AKCA | 2026-04-07 (rotated) |
 
 ## Secret Details
 
@@ -24,19 +24,21 @@
 
 ### PROJECT_TOKEN
 
-- **Type:** Fine-grained PAT or OAuth token with `project` scope
-- **Purpose:** Project V2 field mutations (status-sync workflow)
-- **Required scopes:** `project:read`, `project:write`, `repo` (for issue lookup)
-- **Consumer:** `.github/workflows/status-sync.yml` — used when `PROJECT_TOKEN` secret exists, falls back to `GITHUB_TOKEN` otherwise
+- **Type:** Classic PAT with `repo` + `project` scopes
+- **Purpose:** Project V2 field mutations (status-sync, project-auto-add workflows)
+- **Required scopes:** `repo` (full), `project` (read/write)
+- **Expiration:** 90 days from creation (expires Jul 06, 2026)
+- **Consumer:** `.github/workflows/status-sync.yml`, `.github/workflows/project-auto-add.yml` — used when `PROJECT_TOKEN` secret exists, falls back to `GITHUB_TOKEN` otherwise
+- **Note:** Fine-grained PATs do not support `project` scope for personal accounts — classic PAT required (B-148)
 - **Fallback behavior:** Without `PROJECT_TOKEN`, status-sync skips project field update with "No project found" log
 
 #### Rotation Runbook
 
 1. **Generate new token:**
-   - GitHub Settings → Developer Settings → Personal Access Tokens → Fine-grained tokens
-   - Repository: `ahmetcagriakca/vezir`
-   - Permissions: `Projects: Read and write`, `Issues: Read`, `Pull requests: Read`
+   - GitHub Settings → Developer Settings → Personal Access Tokens → Tokens (classic)
+   - Scopes: `repo` (full) + `project` (read/write)
    - Expiration: 90 days recommended
+   - Note: Fine-grained PATs lack `project` scope for personal accounts
 
 2. **Update secret:**
    - Repo Settings → Secrets and variables → Actions

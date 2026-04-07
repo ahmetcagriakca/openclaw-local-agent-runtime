@@ -66,14 +66,14 @@ Session 54: Sprint 79 closed. UX Remediation + GPT Review Process Improvement.
 
 | Item | Source | Status |
 |------|--------|--------|
-| PROJECT_TOKEN rotation | S23 retro | AKCA-owned, non-blocking |
+| PROJECT_TOKEN rotation | S23 retro | Rotated 2026-04-07, classic PAT, expires Jul 06, 2026 |
 | Docker prod image optimization | D-116 | Partial — docker-compose done |
 | SSO/RBAC (full external auth) | D-104/D-108/D-117 | Partial — D-117 + isolation done |
 | D-021→D-058 extraction | S8 | AKCA-assigned decision debt |
 | D-150 Capability Routing Transition | Proposed | Needs operator review |
 | eslint 9→10 migration | Dependabot | Deferred |
 | vite 6→8 + plugin-react 6 | Dependabot | Deferred |
-| B-148 PAT-backed Project V2 | S71 | Blocked by GITHUB_TOKEN limitation |
+| B-148 PAT-backed Project V2 | S71 | Resolved — classic PAT with `repo`+`project` scope, secret updated 2026-04-07 |
 | EventBus production wiring | D-147 | Future sprint — currently test-only |
 
 ## GPT Memo

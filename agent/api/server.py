@@ -126,7 +126,7 @@ async def lifespan(app: FastAPI):
     # Step 4: Register service
     _register_service("running")
     logger.info(f"MCC startup: serving on 127.0.0.1:{PORT}")
-    # D-097: Legacy dashboard removed in Sprint 13. Vezir UI on :3000 is primary.
+    # D-097: Legacy dashboard removed in Sprint 13. Vezir UI on :4000 is primary.
 
     # Step 5: Start heartbeat background task (GPT Fix 6)
     import asyncio
@@ -193,15 +193,15 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# D-070: CORS — only localhost:3000 (React dev)
+# D-070: CORS — only localhost:4000 (React dev)
 # Sprint 11: POST added for mutation endpoints
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-        "http://localhost:3001",
-        "http://127.0.0.1:3001",
+        "http://localhost:4000",
+        "http://127.0.0.1:4000",
+        "http://localhost:4001",
+        "http://127.0.0.1:4001",
     ],
     allow_credentials=False,
     allow_methods=["GET", "POST"],

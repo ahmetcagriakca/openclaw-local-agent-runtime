@@ -50,7 +50,7 @@ export function ProjectDetailPage() {
   const rollupFetcher = useCallback(() => getProjectRollup(id!), [id])
   const artifactsFetcher = useCallback(() => getProjectArtifacts(id!), [id])
 
-  const { data: projectData, loading: projectLoading, error: projectError } = usePolling(projectFetcher)
+  const { data: projectData, loading: projectLoading, error: projectError, refresh: refreshProject } = usePolling(projectFetcher)
   const { data: rollupData } = usePolling(rollupFetcher)
   const { data: artifactsData } = usePolling(artifactsFetcher)
 
@@ -91,6 +91,7 @@ export function ProjectDetailPage() {
       if (editPath.trim() !== (project?.local_path || '')) updates.local_path = editPath.trim()
       if (Object.keys(updates).length > 0) {
         await updateProject(id, updates)
+        refreshProject()
       }
       setEditing(false)
     } catch (err) {

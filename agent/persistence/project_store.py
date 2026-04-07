@@ -230,7 +230,7 @@ class ProjectStore:
             if proj is None:
                 raise ProjectStoreError(f"Project not found: {project_id}")
 
-            allowed_fields = {"name", "description", "owner"}
+            allowed_fields = {"name", "description", "owner", "local_path", "workspace_root"}
             for key, value in fields.items():
                 if key in allowed_fields:
                     proj[key] = value

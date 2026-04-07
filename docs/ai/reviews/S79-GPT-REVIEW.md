@@ -46,3 +46,13 @@ Process limit breach is unresolvable by submitter in-repo, so operator escalatio
 ## 10. Next Step
 Operator override review required. Reviewer cannot resolve this finding through further rounds.
 ```
+
+---
+
+## Operator Override
+
+- **GPT final verdict:** ESCALATE (Round 6 — D-146 round limit)
+- **Override date:** 2026-04-07
+- **Override reason:** Tüm teknik blocker'lar çözüldü. R2-R6 arası GPT her round'da yeni prosedürel detay buldu (raw output formatı, gate timing kanıtı, manifest satırı). Bunlar R1'de tespit edilmeliydi. 2276 test passing, 0 TSC error, 0 lint error, CI green.
+- **Corrective action:** Exhaustive First Round Rule + Scope Lock Rule eklendi (bu task).
+- **Decision:** Operator close — closure_status=closed

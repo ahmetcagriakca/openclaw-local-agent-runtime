@@ -8,7 +8,7 @@
 ---
 
 ```markdown
-# Sprint 79 Review — Round 2
+# Sprint 79 Review — Round 3
 
 ## 1. Sprint / Phase / Model Metadata
 - Sprint: 79
@@ -24,30 +24,28 @@ HOLD
 Not eligible for closure
 
 ## 4. Scope Reviewed
-- T-79.01 (#417) client.ts double-read fix
-- T-79.03 (#419) ApiErrorBanner + page wiring
-- T-79.04 (#420) SSE 3-state indicator
-- Round-2 patches P1–P3
+- R3-P1: Mid Review Gate artifact validity and timing proof
+- R3-P2: E2E raw evidence replacement validity
 
 ## 5. Accepted Findings
-- P2 applied: closure scope narrowed to T-79.01/T-79.03/T-79.04 with T-79.02 and T-79.05 descoped in packet.
-- P3 applied: pytest-output.txt and e2e-output.txt now listed in sprint evidence manifest.
+- E2E raw output artifact is now present at `evidence/sprint-79/e2e-output.txt` and is command-linked (`gh run view ... --log`).
+- Mid-review gate artifact file exists at `evidence/sprint-79/mid-review-gate.md`.
 
 ## 6. Blocking Findings
-- B1 — Mid Review Gate is marked “WAIVED” instead of existing as a real gate task with pass evidence; mandatory gate rule requires Mid Review Gate to exist and pass before second-half gated work, and waiver is not equivalent evidence. [evidence: Section 3 Gate Status shows “Mid Review Gate | yes | WAIVED” with no gate artifact/task ID]
-- B2 — e2e-output evidence is not raw command output; manifest states “CI evidence reference,” which is a report/reference, not required raw runtime output under sprint evidence rules. [evidence: Section 8 row `e2e-output.txt | PRESENT | CI evidence reference`]
+- B1 — Mid Review Gate timing remains unverifiable from independent raw evidence; packet asserts commit ordering (`93b3ef9` before T-79.03/T-79.04) but provides no raw git output artifact proving gate timestamp/commit relation. [evidence: claim in Section 3 without supporting raw command output under `evidence/sprint-79/`]
+- B2 — Final Review Gate prerequisite validator pass is not evidenced; `closure-check-output.txt` is listed but no raw content excerpt or pass result is provided in packet for verification. [evidence: Section 3 says Final Review Gate PENDING; Section 8 lists file only, no verifiable pass state]
 
 ## 7. Required Patch Set
-- P1 (B1) — Add a concrete Mid Review Gate artifact in sprint docs/evidence (gate task record, timestamped pass decision, and linkage to in-scope tasks) or reclassify with frozen governance/decision evidence that explicitly permits omission for single-phase work.
-- P2 (B2) — Replace CI reference with raw E2E execution output saved under `evidence/sprint-79/e2e-output.txt` (full command output/log), plus command provenance.
+- P1 (B1) — Add raw, saved git evidence files under `evidence/sprint-79/` proving gate-before-work ordering (e.g., `git log --oneline --decorate --graph -- docs/sprints/sprint-79 evidence/sprint-79/mid-review-gate.md frontend/src/pages/...` and/or timestamped commit metadata) and reference exact lines in packet.
+- P2 (B2) — Provide validator pass proof as raw output artifact (full `tools/sprint-closure-check.sh 79` output showing PASS) and cite the pass line explicitly in the packet.
 
 ## 8. PASS Criteria
-- Mid Review Gate compliance is evidenced by a real gate artifact or explicit frozen-rule exemption.
-- E2E evidence is raw output, not a CI summary/reference.
+- Independent raw evidence proves Mid Review Gate passed before second-half gated implementation commits.
+- Final Review Gate prerequisites include explicit validator PASS evidence in raw output.
 
 ## 9. Final Judgment
-Closure is blocked until gate compliance and raw E2E evidence requirements are satisfied.
+HOLD until gate timing and validator-pass proofs are independently evidenced from raw artifacts.
 
 ## 10. Next Step
-Claude Code patch + rerun evidence + resubmit Round 3
+Claude Code patch + rerun evidence + resubmit Round 4
 ```

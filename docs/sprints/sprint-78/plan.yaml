@@ -1,0 +1,36 @@
+sprint: 78
+title: "Router Bypass Fix + Browser Analysis Contract"
+phase: 10
+model: A
+class: product
+decision: D-149
+mutation_budget: 5
+status:
+  implementation_status: not_started
+  closure_status: not_started
+
+tasks:
+  - id: "T-78.01"
+    title: "Fix planner/summary router bypass — wire through ProviderRoutingPolicy"
+    type: implementation
+    status: pending
+    evidence:
+      - "evidence/sprint-78/pytest-output.txt"
+
+  - id: "T-78.02"
+    title: "D-149 Browser Analysis Contract — freeze decision + create templates"
+    type: implementation
+    status: pending
+    depends_on: []
+    evidence:
+      - "docs/decisions/D-149-browser-analysis-contract.md"
+      - "docs/shared/browser-audit-template.md"
+      - "docs/shared/ux-finding-schema.yaml"
+
+  - id: "T-78.03"
+    title: "Browser observe_only audit — run UX analysis on frontend"
+    type: research
+    status: pending
+    depends_on: ["T-78.02"]
+    evidence:
+      - "evidence/sprint-78/browser-audit/"

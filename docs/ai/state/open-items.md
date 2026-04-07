@@ -95,7 +95,7 @@
 
 ## Next Sprint
 
-S77 closed: Azure OpenAI Provider Foundation (D-148). PR #410 merged. S78 next: scope TBD.
+S78 in progress: Router Bypass Fix + Browser Analysis Contract (D-149). Issues #411-#414.
 
 ### Carry-Forward
 | Item | Source | Status |

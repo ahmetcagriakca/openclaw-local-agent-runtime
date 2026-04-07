@@ -33,7 +33,7 @@
 | 3 | DOM observations | `browser-dom-notes.md` | [ ] |
 | 4 | UX friction report | `ux-friction-report.md` | [ ] |
 | 5 | Reproduction steps | `repro-steps.md` | [ ] |
-| 6 | Screenshots | `screenshot-evidence/` | [ ] |
+| 6 | Screenshots | `screenshot-evidence/` (PNG) or session-ID references in report header (Claude in Chrome) | [ ] |
 
 ---
 

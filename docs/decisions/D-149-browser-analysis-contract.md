@@ -48,7 +48,7 @@ Each browser analysis session produces:
 | `browser-dom-notes.md` | Markdown | DOM state observations: missing elements, broken layouts, empty states |
 | `ux-friction-report.md` | Markdown | Structured finding report (see Finding Schema) |
 | `repro-steps.md` | Markdown | Step-by-step reproduction for each finding |
-| `screenshot-evidence/` | PNG | Annotated screenshots per finding |
+| `screenshot-evidence/` | PNG or session-ID reference | Screenshots per finding. When captured via Claude in Chrome, session IDs (e.g., `ss_6911kxpcc`) are the accepted format with traceability note in the report header. Standalone PNG export is preferred when tooling supports it. |
 
 ---
 
@@ -69,7 +69,7 @@ finding:
   actual: "what actually happens"
   console_errors: none
   network_errors: none
-  screenshot: screenshot-evidence/UX-001.png
+  screenshot: screenshot-evidence/UX-001.png OR session-ID (e.g., ss_6911kxpcc)
   owner: TBD
   status: open
 ```

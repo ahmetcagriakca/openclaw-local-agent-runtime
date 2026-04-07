@@ -68,8 +68,8 @@ finding:
 
   screenshot:
     type: string
-    description: "Path to screenshot evidence"
-    example: "screenshot-evidence/UX-001.png"
+    description: "Path to screenshot file OR Claude in Chrome session ID (e.g., ss_6911kxpcc)"
+    example: "screenshot-evidence/UX-001.png OR ss_6911kxpcc"
 
   owner:
     type: string

@@ -1572,17 +1572,10 @@ Respond ONLY with a JSON object, no markdown:
         canonical = resolve_role(role_name)
         role_def = get_role(canonical)
 
-        # Map role's preferred model to provider type for routing hint
+        # D-148: Role preferredModel is informational only.
+        # Routing policy decides provider (Azure-first).
+        # No provider_preference override — all roles go through Azure-first routing.
         provider_preference = None
-        if role_def:
-            preferred = role_def.get("preferredModel", "gpt-4o")
-            pref_map = {
-                "claude-sonnet": "anthropic",
-                "claude-opus": "anthropic",
-                "gpt-4o": None,  # No preference → routing policy decides (Azure-first)
-                "ollama-local": "ollama",
-            }
-            provider_preference = pref_map.get(preferred)
 
         # D-148: All calls go through ProviderRoutingPolicy
         policy = ProviderRoutingPolicy()

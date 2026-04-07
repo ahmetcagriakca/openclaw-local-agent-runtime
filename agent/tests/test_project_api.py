@@ -3,11 +3,8 @@
 Task 73.10: 7 endpoints + error codes (409, 422, 404).
 """
 import pytest
-from conftest import AUTH_HEADERS
+from conftest import AUTH_HEADERS, MUTATION_HEADERS as POST_HEADERS
 from fastapi.testclient import TestClient
-
-# CSRF middleware requires Origin header for POST requests (D-089)
-POST_HEADERS = {**AUTH_HEADERS, "Origin": "http://localhost:3000"}
 
 
 @pytest.fixture
@@ -135,7 +132,7 @@ class TestUpdateProject:
         resp = c.patch(
             f"/api/v1/projects/{proj['project_id']}",
             json={"name": "New Name"},
-            headers=AUTH_HEADERS,
+            headers=POST_HEADERS,
         )
         assert resp.status_code == 200
         assert resp.json()["data"]["name"] == "New Name"
@@ -146,7 +143,7 @@ class TestUpdateProject:
         resp = c.patch(
             f"/api/v1/projects/{proj['project_id']}",
             json={"status": "active"},
-            headers=AUTH_HEADERS,
+            headers=POST_HEADERS,
         )
         assert resp.status_code == 200
         assert resp.json()["data"]["status"] == "active"
@@ -157,7 +154,7 @@ class TestUpdateProject:
         resp = c.patch(
             f"/api/v1/projects/{proj['project_id']}",
             json={"status": "archived"},
-            headers=AUTH_HEADERS,
+            headers=POST_HEADERS,
         )
         assert resp.status_code == 422
 
@@ -174,7 +171,7 @@ class TestUpdateProject:
         resp = c.patch(
             f"/api/v1/projects/{proj['project_id']}",
             json={"status": "completed"},
-            headers=AUTH_HEADERS,
+            headers=POST_HEADERS,
         )
         assert resp.status_code == 409
 
@@ -183,7 +180,7 @@ class TestUpdateProject:
         resp = c.patch(
             "/api/v1/projects/proj_fake",
             json={"name": "Fail"},
-            headers=AUTH_HEADERS,
+            headers=POST_HEADERS,
         )
         assert resp.status_code == 404
 
@@ -194,7 +191,7 @@ class TestDeleteProject:
         proj = ps.create("Delete Me")
         resp = c.delete(
             f"/api/v1/projects/{proj['project_id']}",
-            headers=AUTH_HEADERS,
+            headers=POST_HEADERS,
         )
         assert resp.status_code == 200
         assert resp.json()["data"]["status"] == "cancelled"
@@ -206,7 +203,7 @@ class TestDeleteProject:
         ps.transition_status(proj["project_id"], "completed")
         resp = c.delete(
             f"/api/v1/projects/{proj['project_id']}",
-            headers=AUTH_HEADERS,
+            headers=POST_HEADERS,
         )
         assert resp.status_code == 409
 
@@ -222,7 +219,7 @@ class TestDeleteProject:
         })
         resp = c.delete(
             f"/api/v1/projects/{proj['project_id']}",
-            headers=AUTH_HEADERS,
+            headers=POST_HEADERS,
         )
         assert resp.status_code == 409
 
@@ -230,7 +227,7 @@ class TestDeleteProject:
         c, _, _ = client
         resp = c.delete(
             "/api/v1/projects/proj_fake",
-            headers=AUTH_HEADERS,
+            headers=POST_HEADERS,
         )
         assert resp.status_code == 404
 
@@ -290,7 +287,7 @@ class TestUnlinkMission:
         })
         resp = c.delete(
             f"/api/v1/projects/{proj['project_id']}/missions/mis-1",
-            headers=AUTH_HEADERS,
+            headers=POST_HEADERS,
         )
         assert resp.status_code == 200
         assert resp.json()["data"]["unlinked"] is True
@@ -311,6 +308,6 @@ class TestUnlinkMission:
         })
         resp = c.delete(
             f"/api/v1/projects/{proj['project_id']}/missions/mis-2",
-            headers=AUTH_HEADERS,
+            headers=POST_HEADERS,
         )
         assert resp.status_code == 409

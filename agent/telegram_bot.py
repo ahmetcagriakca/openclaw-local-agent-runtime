@@ -158,7 +158,7 @@ def handle_health(chat_id):
     chat_id = str(chat_id)
     try:
         url = "http://localhost:8003/api/v1/health"
-        req = urllib.request.Request(url, headers={"Origin": "http://localhost:3000"})
+        req = urllib.request.Request(url, headers={"Origin": "http://localhost:4000"})
         with urllib.request.urlopen(req, timeout=5) as resp:
             d = json.loads(resp.read())
         lines = [f"*Vezir Health* — {d['status'].upper()}"]
@@ -175,7 +175,7 @@ def handle_status(chat_id):
     chat_id = str(chat_id)
     try:
         url = "http://localhost:8003/api/v1/missions"
-        req = urllib.request.Request(url, headers={"Origin": "http://localhost:3000"})
+        req = urllib.request.Request(url, headers={"Origin": "http://localhost:4000"})
         with urllib.request.urlopen(req, timeout=5) as resp:
             d = json.loads(resp.read())
         missions = d.get("missions", [])

@@ -783,7 +783,8 @@ class MissionController:
         # Step 3: Generate final summary
         try:
             summary = self._generate_summary(goal, mission["stages"],
-                                             all_artifacts)
+                                             all_artifacts,
+                                             mission_id=mission_id)
         except Exception:
             summary = "Mission completed but summary generation failed."
 
@@ -820,7 +821,9 @@ class MissionController:
         from mission.skill_contracts import validate_role_skill
         from providers.factory import create_provider
 
-        provider, _ = create_provider(self.planner_agent_id)
+        # D-148: Route through ProviderRoutingPolicy, not direct create_provider
+        routed_agent = self._select_agent_for_role("planner", mission_id)
+        provider, _ = create_provider(routed_agent)
 
         # Step 1: Complexity classification (Tier 0 deterministic first)
         classification = classify_complexity(goal, provider)
@@ -1609,10 +1612,14 @@ Respond ONLY with a JSON object, no markdown:
 
         return agent_name
 
-    def _generate_summary(self, goal: str, stages: list, artifacts: list) -> str:
+    def _generate_summary(self, goal: str, stages: list, artifacts: list,
+                           mission_id: str = "") -> str:
         """Generate a human-readable mission summary."""
         from providers.factory import create_provider
-        provider, _ = create_provider(self.planner_agent_id)
+
+        # D-148: Route through ProviderRoutingPolicy, not direct create_provider
+        routed_agent = self._select_agent_for_role("planner", mission_id)
+        provider, _ = create_provider(routed_agent)
 
         stages_text = ""
         for s in stages:

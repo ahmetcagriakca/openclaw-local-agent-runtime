@@ -56,6 +56,8 @@ srv.capability_checker = CapabilityChecker(str(_caps_path))
 
 from fastapi.testclient import TestClient
 
+from conftest import CSRF_ORIGIN
+
 # Patch keys module to load from our test config
 import auth.keys as keys_mod
 
@@ -114,7 +116,7 @@ class TestAuthIntegration(unittest.TestCase):
         r = client.post(
             "/api/v1/missions",
             json={"goal": "auth test mission"},
-            headers={**OP_HEADERS, "Origin": "http://localhost:3000"},
+            headers={**OP_HEADERS, "Origin": CSRF_ORIGIN},
         )
         self.assertIn(r.status_code, (201, 200))
 
@@ -123,7 +125,7 @@ class TestAuthIntegration(unittest.TestCase):
         r = client.post(
             "/api/v1/missions",
             json={"goal": "viewer test"},
-            headers={**VW_HEADERS, "Origin": "http://localhost:3000"},
+            headers={**VW_HEADERS, "Origin": CSRF_ORIGIN},
         )
         self.assertEqual(r.status_code, 403)
 
@@ -132,7 +134,7 @@ class TestAuthIntegration(unittest.TestCase):
         r = client.post(
             "/api/v1/missions",
             json={"goal": "invalid test"},
-            headers={**BAD_HEADERS, "Origin": "http://localhost:3000"},
+            headers={**BAD_HEADERS, "Origin": CSRF_ORIGIN},
         )
         self.assertEqual(r.status_code, 401)
 
@@ -141,7 +143,7 @@ class TestAuthIntegration(unittest.TestCase):
         r = client.post(
             "/api/v1/missions",
             json={"goal": "no auth test"},
-            headers={"Origin": "http://localhost:3000"},
+            headers={"Origin": CSRF_ORIGIN},
         )
         self.assertEqual(r.status_code, 401)
 
@@ -167,7 +169,7 @@ class TestAuthDisabled(unittest.TestCase):
         r = client.post(
             "/api/v1/missions",
             json={"goal": "no auth config test"},
-            headers={"Origin": "http://localhost:3000"},
+            headers={"Origin": CSRF_ORIGIN},
         )
         self.assertIn(r.status_code, (201, 200))
 

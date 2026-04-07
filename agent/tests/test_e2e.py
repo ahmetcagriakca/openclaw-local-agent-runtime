@@ -28,6 +28,8 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+from conftest import CSRF_ORIGIN
+
 
 def _make_e2e_client():
     """Create isolated TestClient with fresh temp data directories."""
@@ -305,7 +307,7 @@ class TestE2E_07_ApproveFlow(unittest.TestCase):
         r = self.client.post(
             "/api/v1/approvals/apv-approve-1/approve",
             headers={
-                "Origin": "http://localhost:3000",
+                "Origin": CSRF_ORIGIN,
                 "X-Tab-Id": "tab-1",
                 "X-Session-Id": "sess-1",
             },
@@ -341,7 +343,7 @@ class TestE2E_08_RejectFlow(unittest.TestCase):
     def test_reject_returns_requested(self):
         r = self.client.post(
             "/api/v1/approvals/apv-reject-1/reject",
-            headers={"Origin": "http://localhost:3000"},
+            headers={"Origin": CSRF_ORIGIN},
         )
         self.assertEqual(r.status_code, 200)
         data = r.json()
@@ -364,21 +366,21 @@ class TestE2E_09_ApprovalFSMGuard(unittest.TestCase):
     def test_approve_non_pending_409(self):
         r = self.client.post(
             "/api/v1/approvals/apv-done-1/approve",
-            headers={"Origin": "http://localhost:3000"},
+            headers={"Origin": CSRF_ORIGIN},
         )
         self.assertEqual(r.status_code, 409)
 
     def test_reject_non_pending_409(self):
         r = self.client.post(
             "/api/v1/approvals/apv-done-1/reject",
-            headers={"Origin": "http://localhost:3000"},
+            headers={"Origin": CSRF_ORIGIN},
         )
         self.assertEqual(r.status_code, 409)
 
     def test_approve_not_found_404(self):
         r = self.client.post(
             "/api/v1/approvals/nonexistent/approve",
-            headers={"Origin": "http://localhost:3000"},
+            headers={"Origin": CSRF_ORIGIN},
         )
         self.assertEqual(r.status_code, 404)
 
@@ -400,7 +402,7 @@ class TestE2E_10_MissionCancel(unittest.TestCase):
         r = self.client.post(
             "/api/v1/missions/mission-cancel-1/cancel",
             headers={
-                "Origin": "http://localhost:3000",
+                "Origin": CSRF_ORIGIN,
                 "X-Tab-Id": "tab-c",
                 "X-Session-Id": "sess-c",
             },
@@ -432,7 +434,7 @@ class TestE2E_11_MissionRetry(unittest.TestCase):
     def test_retry_failed_mission(self):
         r = self.client.post(
             "/api/v1/missions/mission-retry-1/retry",
-            headers={"Origin": "http://localhost:3000"},
+            headers={"Origin": CSRF_ORIGIN},
         )
         self.assertEqual(r.status_code, 200)
         data = r.json()
@@ -457,21 +459,21 @@ class TestE2E_12_MissionFSMGuard(unittest.TestCase):
     def test_cancel_completed_409(self):
         r = self.client.post(
             "/api/v1/missions/mission-done-1/cancel",
-            headers={"Origin": "http://localhost:3000"},
+            headers={"Origin": CSRF_ORIGIN},
         )
         self.assertEqual(r.status_code, 409)
 
     def test_retry_executing_409(self):
         r = self.client.post(
             "/api/v1/missions/mission-active-1/retry",
-            headers={"Origin": "http://localhost:3000"},
+            headers={"Origin": CSRF_ORIGIN},
         )
         self.assertEqual(r.status_code, 409)
 
     def test_cancel_not_found_404(self):
         r = self.client.post(
             "/api/v1/missions/nonexistent/cancel",
-            headers={"Origin": "http://localhost:3000"},
+            headers={"Origin": CSRF_ORIGIN},
         )
         self.assertEqual(r.status_code, 404)
 
@@ -569,7 +571,7 @@ class TestE2E_15_CSRFValidation(unittest.TestCase):
     def test_post_with_valid_origin_ok(self):
         r = self.client.post(
             "/api/v1/approvals/apv-csrf-1/approve",
-            headers={"Origin": "http://localhost:3000"},
+            headers={"Origin": CSRF_ORIGIN},
         )
         # Should pass CSRF (may be 200 or 409 depending on state, but not 403)
         self.assertNotEqual(r.status_code, 403)

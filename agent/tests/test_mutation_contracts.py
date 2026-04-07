@@ -27,6 +27,8 @@ from unittest.mock import patch
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+from conftest import CSRF_ORIGIN
+
 TEST_TIMEOUT = 10.0
 
 
@@ -80,7 +82,7 @@ class TestMutationContract01_LifecycleRequested(unittest.TestCase):
                 client = _make_test_client()
                 resp = client.post(
                     "/api/v1/approvals/apv-001/approve",
-                    headers={"Origin": "http://localhost:3000"},
+                    headers={"Origin": CSRF_ORIGIN},
                 )
 
             self.assertEqual(resp.status_code, 200)
@@ -130,7 +132,7 @@ class TestMutationContract02_SSEMutationRequested(unittest.TestCase):
                 client = _make_test_client()
                 resp = client.post(
                     "/api/v1/approvals/apv-001/approve",
-                    headers={"Origin": "http://localhost:3000"},
+                    headers={"Origin": CSRF_ORIGIN},
                 )
 
             self.assertEqual(resp.status_code, 200)
@@ -168,7 +170,7 @@ class TestMutationContract03_SSERejected(unittest.TestCase):
                 client = _make_test_client()
                 resp = client.post(
                     "/api/v1/approvals/apv-001/reject",
-                    headers={"Origin": "http://localhost:3000"},
+                    headers={"Origin": CSRF_ORIGIN},
                 )
 
             # Should still return 200 with lifecycleState=requested,
@@ -201,7 +203,7 @@ class TestMutationContract04_SSETimedOut(unittest.TestCase):
                 client = _make_test_client()
                 resp = client.post(
                     "/api/v1/approvals/apv-001/approve",
-                    headers={"Origin": "http://localhost:3000"},
+                    headers={"Origin": CSRF_ORIGIN},
                 )
 
             self.assertEqual(resp.status_code, 200)
@@ -230,7 +232,7 @@ class TestMutationContract05_DuplicateConflict(unittest.TestCase):
             with patch("api.server.APPROVALS_DIR", approvals_dir), \
                  patch("api.server.MISSIONS_DIR", tmppath / "missions"):
                 client = _make_test_client()
-                headers = {"Origin": "http://localhost:3000"}
+                headers = {"Origin": CSRF_ORIGIN}
 
                 resp1 = client.post(
                     "/api/v1/approvals/apv-001/approve", headers=headers)
@@ -265,7 +267,7 @@ class TestMutationContract06_InvalidFSMState(unittest.TestCase):
                 client = _make_test_client()
                 resp = client.post(
                     "/api/v1/approvals/apv-001/approve",
-                    headers={"Origin": "http://localhost:3000"},
+                    headers={"Origin": CSRF_ORIGIN},
                 )
 
             self.assertIn(resp.status_code, [409, 422],
@@ -304,7 +306,7 @@ class TestMutationContract07_AuditLogFields(unittest.TestCase):
                     resp = client.post(
                         "/api/v1/approvals/apv-001/approve",
                         headers={
-                            "Origin": "http://localhost:3000",
+                            "Origin": CSRF_ORIGIN,
                             "X-Tab-Id": "tab-123",
                             "X-Session-Id": "sess-456",
                         },
@@ -350,7 +352,7 @@ class TestMutationContract08_AtomicArtifactCreated(unittest.TestCase):
                 client = _make_test_client()
                 resp = client.post(
                     "/api/v1/approvals/apv-001/approve",
-                    headers={"Origin": "http://localhost:3000"},
+                    headers={"Origin": CSRF_ORIGIN},
                 )
 
             self.assertEqual(resp.status_code, 200)
@@ -415,14 +417,14 @@ class TestMutationContract10_TwoTabRace(unittest.TestCase):
                 resp_tab1 = client.post(
                     "/api/v1/approvals/apv-001/approve",
                     headers={
-                        "Origin": "http://localhost:3000",
+                        "Origin": CSRF_ORIGIN,
                         "X-Tab-Id": "tab-A",
                     },
                 )
                 resp_tab2 = client.post(
                     "/api/v1/approvals/apv-001/approve",
                     headers={
-                        "Origin": "http://localhost:3000",
+                        "Origin": CSRF_ORIGIN,
                         "X-Tab-Id": "tab-B",
                     },
                 )
@@ -455,7 +457,7 @@ class TestMutationContract11_CancelDuringExecution(unittest.TestCase):
                 client = _make_test_client()
                 resp = client.post(
                     "/api/v1/missions/m-001/cancel",
-                    headers={"Origin": "http://localhost:3000"},
+                    headers={"Origin": CSRF_ORIGIN},
                 )
 
             self.assertEqual(resp.status_code, 200)

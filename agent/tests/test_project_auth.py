@@ -7,6 +7,7 @@ import json
 import os
 
 import pytest
+from conftest import CSRF_ORIGIN
 from fastapi.testclient import TestClient
 
 
@@ -72,14 +73,14 @@ def auth_client(tmp_path):
 
 OPERATOR_HEADERS = {
     "Authorization": "Bearer op_key_001",
-    "Origin": "http://localhost:3000",
+    "Origin": CSRF_ORIGIN,
 }
 VIEWER_HEADERS = {
     "Authorization": "Bearer vw_key_001",
-    "Origin": "http://localhost:3000",
+    "Origin": CSRF_ORIGIN,
 }
 NO_AUTH_HEADERS = {
-    "Origin": "http://localhost:3000",
+    "Origin": CSRF_ORIGIN,
 }
 
 

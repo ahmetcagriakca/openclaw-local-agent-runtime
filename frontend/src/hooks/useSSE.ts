@@ -5,7 +5,7 @@
  */
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-export type SSEStatus = 'connecting' | 'connected' | 'reconnecting' | 'polling'
+export type SSEStatus = 'connecting' | 'connected' | 'reconnecting' | 'disconnected'
 
 export interface UseSSEResult {
   status: SSEStatus
@@ -28,7 +28,7 @@ export function useSSE(options: UseSSEOptions): UseSSEResult {
   const [lastEventAt, setLastEventAt] = useState<Date | null>(null)
 
   const onEventRef = useRef(onEvent)
-  onEventRef.current = onEvent
+  useEffect(() => { onEventRef.current = onEvent })
 
   const eventSourceRef = useRef<EventSource | null>(null)
   const lastEventIdRef = useRef<string>('')
@@ -37,6 +37,7 @@ export function useSSE(options: UseSSEOptions): UseSSEResult {
   const reconnectTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const pollingTimerRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const mountedRef = useRef(true)
+  const connectRef = useRef<() => void>(() => {})
 
   const stopPolling = useCallback(() => {
     if (pollingTimerRef.current) {
@@ -128,8 +129,8 @@ export function useSSE(options: UseSSEOptions): UseSSEResult {
       failCountRef.current++
 
       if (failCountRef.current >= MAX_RECONNECT_FAILURES) {
-        // Switch to polling fallback
-        setStatus('polling')
+        // Switch to polling fallback — show as disconnected since SSE failed
+        setStatus('disconnected')
         if (!pollingTimerRef.current) {
           pollingTimerRef.current = setInterval(() => {
             onEventRef.current('polling_tick', {})
@@ -137,7 +138,7 @@ export function useSSE(options: UseSSEOptions): UseSSEResult {
         }
         // Keep trying to reconnect in background with max backoff
         reconnectTimerRef.current = setTimeout(() => {
-          connect()
+          connectRef.current()
         }, MAX_BACKOFF_MS)
       } else {
         // Exponential backoff reconnect
@@ -147,16 +148,18 @@ export function useSSE(options: UseSSEOptions): UseSSEResult {
           MAX_BACKOFF_MS,
         )
         reconnectTimerRef.current = setTimeout(() => {
-          connect()
+          connectRef.current()
         }, delay)
       }
     }
   }, [closeSSE, stopPolling, fallbackIntervalMs])
 
+  useEffect(() => { connectRef.current = connect })
+
   // Page Visibility: tab hidden → close, visible → reconnect
   useEffect(() => {
     mountedRef.current = true
-    connect()
+    connect() // eslint-disable-line react-hooks/set-state-in-effect -- SSE must init on mount
 
     const handleVisibility = () => {
       if (document.hidden) {

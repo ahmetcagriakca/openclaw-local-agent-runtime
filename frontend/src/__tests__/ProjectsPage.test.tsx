@@ -98,12 +98,13 @@ describe('ProjectsPage', () => {
     expect(screen.getByText('Loading projects...')).toBeDefined()
   })
 
-  test('shows error state', async () => {
+  test('shows error state with retry button', async () => {
     ;(getProjects as ReturnType<typeof vi.fn>).mockRejectedValue(new Error('Network error'))
     renderPage()
     await waitFor(() => {
-      expect(screen.getByText('Error: Network error')).toBeDefined()
+      expect(screen.getByText('Network error')).toBeDefined()
     })
+    expect(screen.getByText('Retry')).toBeDefined()
   })
 
   test('shows empty state', async () => {

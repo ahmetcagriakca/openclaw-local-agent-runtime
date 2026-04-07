@@ -1,4 +1,4 @@
-# Session Handoff — 2026-04-07 (Session 53 — Sprint 78 Closed + UX Review)
+# Session Handoff — 2026-04-07 (Session 54 — Sprint 79 Implementation Done)
 
 **Platform:** Vezir Platform
 **Operator:** Claude Code (Opus) — AKCA delegated
@@ -7,44 +7,50 @@
 
 ## Session Summary
 
-Session 53: Sprint 78 closed + GPT UX Analysis Report cross-review received.
+Session 54: Sprint 79 (UX Remediation) implementation complete. GPT ESCALATE R6 — operator override needed for closure.
 
-### S78 — Router Bypass Fix + Browser Analysis Contract (D-149) — CLOSED
-- D-149 frozen: Browser Analysis 3-Mode Observation Contract (observe_only v1)
-- T-78.01: _plan_mission/_generate_summary wired through ProviderRoutingPolicy (D-148). Closes S77 GPT R3 carry-forward.
-- T-78.01 bonus: CSRF origin centralized (conftest.CSRF_ORIGIN/MUTATION_HEADERS), port 3000→4000 across all tests + E2E + telegram_bot. Workspace enable_workspace 409 restored.
-- T-78.02: D-149 frozen with Validation Method section. Templates: browser-audit-template.md, ux-finding-schema.yaml.
-- T-78.03: Browser observe_only audit — 7 verified UX findings across 5 categories (3 high, 4 medium). Key theme: failure visibility when backend offline.
-- 11 new backend tests. OpenAPI spec + SDK types synced.
-- GPT Sprint Review: R1 HOLD → R2 HOLD → R3 HOLD → R4 PASS. PR #415 merged.
+### S79 — UX Remediation: Error States + SSE Health + Sidebar (D-149 findings)
 
-### GPT UX Analysis Report Cross-Review — HOLD (pending patches)
-GPT reviewed S78-UX-ANALYSIS-REPORT.md and gave HOLD with 5 blockers:
-- **B1 — Decision drift (D-147 vs D-149):** FALSE POSITIVE. s77.zip had D-147 but D-147 was already used (EventBus, S76). We correctly numbered it D-149. Decision record exists: `docs/decisions/D-149-browser-analysis-contract.md`. Needs clarification to GPT, not code change.
-- **B2 — Evidence artifacts missing:** FALSE POSITIVE. All 5 text artifacts exist in `evidence/sprint-78/browser-audit/`. GPT couldn't find them via repo search. Only screenshot-evidence/ directory lacks physical PNG files (same as B3).
-- **B3 — Screenshot refs not repo-evidence:** VALID. Session IDs (ss_*) are conversation-scoped, not durable. D-149 contract was updated to accept session-ID format, but GPT's UX review wants actual PNG files. Next session should capture PNGs via Playwright or manual export.
-- **B4 — Root cause is hypothesis, not verified:** VALID. "body stream already read" double-read hypothesis needs code verification. Inspect `frontend/src/api/client.ts` (or equivalent) and trace the actual error path. Label clearly as hypothesis until verified.
-- **B5 — Remediation task map missing:** VALID. Findings exist but no finding→task/owner/component/sprint mapping. Needed before S79 can scope UX remediation properly.
+**Implementation:**
+- T-79.01: Fixed client.ts body stream double-read bug in apiGet/apiPost/apiPostJson/apiPatchJson. Text-first approach: res.text() once, then JSON.parse.
+- T-79.03: ApiErrorBanner component with Retry + network-aware messaging. Wired into MissionListPage, HealthPage, AgentHealthPage, ProjectsPage, TelemetryPage.
+- T-79.04: SSE status 'polling' renamed to 'disconnected'. ConnectionIndicator shows red dot with "Disconnected" label.
+- T-79.05: Sidebar tooltip already existed (verified at Sidebar.tsx:83).
 
-### S79 Scope Candidates
-1. **UX Remediation** — Fix 7 findings. 3 work packages proposed by GPT:
-   - FE-ERR-01: Unified error boundary / state contract (UX-001/002/003/004/005)
-   - FE-SSE-01: SSE connection truthfulness / status FSM (UX-007)
-   - FE-NAV-01: Collapsed sidebar tooltip / accessibility (UX-006)
-2. **D-150 Capability Routing Transition** — Shadow mode capability routing. Proposed, needs operator review.
+**Bonus fixes (pre-existing lint):**
+- Fixed 4 React purity/ref-access lint violations in ConnectionIndicator, FreshnessIndicator, SSEContext, useSSE.
+- 0 lint errors now (was 4 pre-existing).
+- Fixed CLAUDE.md test count drift (1777→1877 backend).
+
+**GPT Review History:** R1 HOLD → R2 HOLD → R3 HOLD → R4 HOLD → R5 HOLD → R6 ESCALATE
+- R1-R2: scope/evidence/gate accounting
+- R3-R4: gate timing provenance, lint FAIL
+- R5: final gate PENDING, manifest gap
+- R6: D-146 round limit exceeded. All technical blockers resolved. Process-only ESCALATE.
+
+**PR:** #422 — CI green, all checks passing. Awaiting operator merge.
+
+### S79 Scope Status
+| Task | Issue | Status | Finding |
+|------|-------|--------|---------|
+| T-79.01 | #417 | Done | UX-001 (double-read) |
+| T-79.02 | #418 | Descoped | Merged into T-79.03 |
+| T-79.03 | #419 | Done | UX-001/002/003/004/005 |
+| T-79.04 | #420 | Done | UX-007 (SSE truthfulness) |
+| T-79.05 | #421 | Verified pre-existing | UX-006 (sidebar tooltip) |
 
 ## Current State
 
-- **Phase:** 10 active — S78 closed
+- **Phase:** 10 active — S79 implementation done, review ESCALATE
 - **Last closed sprint:** 78
-- **Sprint 78 status:** closure_status=closed, PR #415 merged
+- **Sprint 79 status:** implementation_status=done, closure_status=review_pending (ESCALATE)
 - **Decisions:** 146 frozen + 2 superseded (D-001 → D-149)
-- **Tests:** 1877 backend + 239 frontend + 13 Playwright + 139 root = 2268 total
-- **CI:** Green on main
+- **Tests:** 1877 backend + 247 frontend + 13 Playwright + 139 root = 2276 total
+- **CI:** Green on sprint-79/ux-remediation branch
+- **Lint:** 0 errors
 - **Port map:** API :8003, Frontend :4000, WMCP :8001
 - **Security:** 0 CodeQL open, 2 dependabot (pre-existing)
-- **Open issues:** B-148 PAT (pre-existing)
-- **Blockers:** None
+- **Blockers:** GPT ESCALATE requires operator override for closure
 
 ## Review History
 
@@ -53,7 +59,8 @@ GPT reviewed S78-UX-ANALYSIS-REPORT.md and gave HOLD with 5 blockers:
 | S76 | — | PASS (R2) |
 | S77 | — | HOLD R1 → HOLD R2 → PASS R3 |
 | S78 | — | HOLD R1 → HOLD R2 → HOLD R3 → PASS R4 |
-| S78 UX Report | — | HOLD R1 → PASS R2 (B1-B5 cleared) |
+| S78 UX Report | — | HOLD R1 → PASS R2 |
+| S79 | — | HOLD R1-R5 → ESCALATE R6 (operator override needed) |
 
 ## Phase 10 Status
 
@@ -65,7 +72,7 @@ GPT reviewed S78-UX-ANALYSIS-REPORT.md and gave HOLD with 5 blockers:
 | S76 | Governance Contract Hardening | Closed |
 | S77 | Azure OpenAI Provider Foundation (D-148) | Closed |
 | S78 | Router Bypass Fix + Browser Analysis (D-149) | Closed |
-| S79 | TBD (UX Remediation candidate) | Not started |
+| S79 | UX Remediation — Error States + SSE Health | Impl done, ESCALATE |
 
 ## Carry-Forward
 
@@ -75,13 +82,12 @@ GPT reviewed S78-UX-ANALYSIS-REPORT.md and gave HOLD with 5 blockers:
 | Docker prod image optimization | D-116 | Partial — docker-compose done |
 | SSO/RBAC (full external auth) | D-104/D-108/D-117 | Partial — D-117 + isolation done |
 | D-021→D-058 extraction | S8 | AKCA-assigned decision debt |
-| D-150 Capability Routing Transition | Proposed (S79) | From s77.zip — needs operator review |
+| D-150 Capability Routing Transition | Proposed (S79) | Needs operator review |
 | eslint 9→10 migration | Dependabot | Deferred |
 | vite 6→8 + plugin-react 6 | Dependabot | Deferred |
 | B-148 PAT-backed Project V2 | S71 | Blocked by GITHUB_TOKEN limitation |
 | EventBus production wiring | D-147 | Future sprint — currently test-only |
-| UX findings remediation (UX-001→UX-007) | S78 D-149 audit | 7 findings open, 3 high. S79 remediation-ready (GPT PASS R2) |
 
 ## GPT Memo
 
-Session 53 (S78+UX review): Sprint 78 closed. D-149 frozen. PR #415 merged. GPT Sprint Review PASS R4. GPT UX Analysis Report: HOLD R1 → PASS R2. B3 screenshots captured (Playwright PNG), B4 root cause confirmed (client.ts:46-52 double-read), B5 remediation-task-map.md created (FE-ERR-01, FE-SSE-01, FE-NAV-01). S79 candidate: UX remediation. 146+2 decisions. 2268 tests.
+Session 54 (S79): UX remediation implementation complete. 3 work packages done (FE-ERR-01, FE-SSE-01, FE-NAV-01). client.ts double-read fixed. ApiErrorBanner with Retry on all pages. SSE disconnected indicator. Pre-existing lint errors fixed (4→0). PR #422 open. GPT review ESCALATE R6 (D-146 round limit). All technical checks pass. Operator override needed for merge+closure. 146+2 decisions. 2276 tests.

@@ -6,6 +6,7 @@ import { getHealth, getCapabilities, getRecentLogs } from '../api/client'
 import { usePolling } from '../hooks/usePolling'
 import { useSSEInvalidation } from '../hooks/SSEContext'
 import { DataQualityBadge } from '../components/DataQualityBadge'
+import { ApiErrorBanner } from '../components/ApiErrorBanner'
 import { CapabilityStatus } from '../types/api'
 
 const HEALTH_STATUS: Record<string, { color: string; label: string; dot: string }> = {
@@ -56,10 +57,7 @@ export function HealthPage() {
       )}
 
       {health.error && (
-        <div className="rounded border border-red-500/50 bg-red-950/30 p-4 text-red-300">
-          <p className="font-medium">Failed to load health</p>
-          <p className="mt-1 text-sm">{health.error.message}</p>
-        </div>
+        <ApiErrorBanner error={health.error} onRetry={health.refresh} />
       )}
 
       {health.data && (() => {
@@ -217,9 +215,7 @@ export function HealthPage() {
         )}
 
         {caps.error && !caps.data && (
-          <div className="rounded border border-red-500/50 bg-red-950/30 p-3 text-sm text-red-300">
-            Failed to load capabilities: {caps.error.message}
-          </div>
+          <ApiErrorBanner error={caps.error} onRetry={caps.refresh} compact />
         )}
 
         {caps.data && (

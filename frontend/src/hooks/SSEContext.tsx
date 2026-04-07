@@ -29,7 +29,10 @@ export function useSSEContext(): SSEContextValue {
 export function useSSEInvalidation(eventType: string | string[], callback: () => void) {
   const { subscribe } = useSSEContext()
   const callbackRef = useRef(callback)
-  callbackRef.current = callback
+
+  useEffect(() => {
+    callbackRef.current = callback
+  })
 
   useEffect(() => {
     const types = Array.isArray(eventType) ? eventType : [eventType]

@@ -42,7 +42,7 @@ describe('API Client', () => {
     globalThis.fetch = vi.fn().mockResolvedValue({
       ok: false,
       status: 404,
-      json: () => Promise.resolve({ error: 'not_found' }),
+      text: () => Promise.resolve(JSON.stringify({ error: 'not_found' })),
     })
 
     await expect(getHealth()).rejects.toThrow(ApiError)
@@ -50,6 +50,7 @@ describe('API Client', () => {
       await getHealth()
     } catch (e) {
       expect((e as ApiError).status).toBe(404)
+      expect((e as ApiError).body).toEqual({ error: 'not_found' })
     }
   })
 
@@ -57,7 +58,6 @@ describe('API Client', () => {
     globalThis.fetch = vi.fn().mockResolvedValue({
       ok: false,
       status: 500,
-      json: () => Promise.reject(new Error('not json')),
       text: () => Promise.resolve('Internal Server Error'),
     })
 

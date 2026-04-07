@@ -5,6 +5,7 @@
 import { getProviders, getAgentRoles, getCapabilityMatrix, getAgentPerformance } from '../api/client'
 import { usePolling } from '../hooks/usePolling'
 import { DataQualityBadge } from '../components/DataQualityBadge'
+import { ApiErrorBanner } from '../components/ApiErrorBanner'
 
 const PROVIDER_STATUS: Record<string, { color: string; dot: string; label: string }> = {
   ok: { color: 'bg-green-600 text-white', dot: 'bg-green-500', label: 'Online' },
@@ -62,6 +63,10 @@ export function AgentHealthPage() {
             <div className="h-5 w-5 animate-spin rounded-full border-2 border-gray-400 border-t-transparent" />
             Loading providers...
           </div>
+        )}
+
+        {providers.error && !providers.data && (
+          <ApiErrorBanner error={providers.error} onRetry={providers.refresh} />
         )}
 
         {providers.data && (

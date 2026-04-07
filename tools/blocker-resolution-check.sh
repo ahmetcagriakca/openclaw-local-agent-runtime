@@ -40,6 +40,18 @@ TOTAL=${#BLOCKER_IDS[@]}; RESOLVED=0; UNRESOLVED=0; UNRESOLVABLE=0
   echo "|---------|-------|--------|----------|--------|"
 } > "$RESOLUTION_LOG"
 
+# ─── Round 2+ scope lock enforcement ────────────────────────────────
+ROUND=$(grep -oP 'Round:\s*\K[0-9]+' "$DELTA_PACKET" 2>/dev/null || echo "1")
+if [[ "$ROUND" -gt 1 ]]; then
+  # Check if review file contains MISSED-R1 tagged findings promoted to blocker
+  INVALID_BLOCKERS=$(grep -c '\[MISSED-R1\].*blocker' "$REVIEW_FILE" 2>/dev/null || echo 0)
+  if [[ "$INVALID_BLOCKERS" -gt 0 ]]; then
+    echo -e "${YELLOW}WARNING: Review contains $INVALID_BLOCKERS findings tagged [MISSED-R1] as blocker severity${NC}"
+    echo -e "${YELLOW}These are scope-locked and should not block closure per Exhaustive First Round Rule${NC}"
+    echo "SCOPE-LOCK-VIOLATION: $INVALID_BLOCKERS invalid blockers detected" >> "$RESOLUTION_LOG"
+  fi
+fi
+
 for bid in "${BLOCKER_IDS[@]}"; do
   patch_found="NO"; commit_found="NO"; evidence_found="NO"; status="UNRESOLVED"
 

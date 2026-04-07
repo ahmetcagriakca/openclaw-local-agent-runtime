@@ -36,9 +36,15 @@ describe('ConnectionIndicator', () => {
     expect(screen.getByText('Reconnecting…')).toBeTruthy()
   })
 
-  it('shows "Polling 30s" when polling', () => {
-    renderWithStatus('polling')
-    expect(screen.getByText('Polling 30s')).toBeTruthy()
+  it('shows "Disconnected" when disconnected', () => {
+    renderWithStatus('disconnected')
+    expect(screen.getByText('Disconnected')).toBeTruthy()
+  })
+
+  it('has red dot for disconnected status', () => {
+    const { container } = renderWithStatus('disconnected')
+    const dot = container.querySelector('span.bg-red-500')
+    expect(dot).toBeTruthy()
   })
 
   it('has green dot for connected status', () => {

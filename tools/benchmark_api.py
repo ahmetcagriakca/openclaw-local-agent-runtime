@@ -114,7 +114,7 @@ def main():
         ("GET", "/api/v1/telemetry", None),
         ("GET", "/api/v1/telemetry?mission_id=mission-bench-001&limit=10", None),
         ("POST", "/api/v1/approvals/apv-bench-000/approve",
-         {"Origin": "http://localhost:3000"}),
+         {"Origin": "http://localhost:4000"}),
     ]
 
     print("=" * 70)

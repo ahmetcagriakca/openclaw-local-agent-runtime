@@ -1,0 +1,263 @@
+# Vezir Platform — Frontend UX Analysis Report
+
+**Date:** 2026-04-07
+**Sprint:** S78
+**Decision:** D-149 (Browser Analysis — 3-Mode Observation Contract)
+**Auditor:** Claude Code (Opus) — observe_only mode
+**Target:** http://localhost:4000 (React + Vite + Tailwind, Node.js 20)
+**Condition:** Backend API (port 8003) offline during audit
+**Tool:** Claude in Chrome (DOM/console/network capture, screenshot)
+
+---
+
+## Executive Summary
+
+Vezir Platform frontend has **no graceful degradation when the backend API is unreachable**. Every page either shows a cryptic internal error, displays contradictory states, or fails silently with no feedback. The SSE connection indicator gives false confidence by showing "Polling 30s" even when the backend is down. Navigation relies on emoji icons without tooltips.
+
+**7 verified findings** across **5 UX categories**. **3 high severity**, **4 medium severity**. All reproducible on every page load when backend is offline.
+
+---
+
+## Findings
+
+### UX-001 [HIGH] — Technical error message exposed to user
+
+**Category:** failure_visibility
+**Pages:** /missions, /health, /approvals, /telemetry, /templates, /costs, /projects (7/9 pages)
+**Reproducibility:** always
+
+**Problem:** When backend API is unreachable, users see:
+
+```
+Failed to load missions
+Failed to execute 'text' on 'Response': body stream already read
+```
+
+This is an internal JavaScript Fetch API error. It leaks implementation details and is meaningless to any user. The root cause: frontend catch block attempts `response.text()` on a failed response object whose body stream was already consumed.
+
+**Expected:** User-friendly message like "Backend API is not reachable. Please ensure the API server is running." with a clear Retry action.
+
+**Impact:** Users cannot distinguish "API is down" from "frontend has a bug". First-time users will assume the product is broken.
+
+**Stuck party:** User — cannot self-diagnose or recover.
+
+---
+
+### UX-002 [MEDIUM] — Health page has no Retry button
+
+**Category:** failure_visibility
+**Page:** /health
+**Reproducibility:** always
+
+**Problem:** Health page shows "Failed to load health" and "Failed to load capabilities" errors but provides no Retry button. Other pages (/missions, /approvals, /templates) have a Retry button — Health does not.
+
+**Expected:** Consistent error UX across all pages. Every error state should offer a recovery action.
+
+**Impact:** User must manually refresh the browser tab. Inconsistent patterns erode trust.
+
+**Stuck party:** User — no recovery action available.
+
+---
+
+### UX-003 [HIGH] — Agent Health page fails silently
+
+**Category:** failure_visibility
+**Page:** /agents
+**Reproducibility:** always
+
+**Problem:** Agent Health page shows "Agent Health" heading and "LLM PROVIDERS" label, then completely blank. No error message, no loading indicator, no empty state text, no retry button. This is the worst failure mode: **silent nothing**.
+
+**Expected:** Error banner consistent with other pages + Retry button. At minimum: "Failed to load agent data."
+
+**Impact:** Users cannot tell if (a) data is loading, (b) there are no agents configured, or (c) the API is unreachable. All three states look identical: blank white space.
+
+**Stuck party:** User — indistinguishable failure vs empty vs loading.
+
+---
+
+### UX-004 [MEDIUM] — Projects shows error AND empty state simultaneously
+
+**Category:** data_quality_display
+**Page:** /projects
+**Reproducibility:** always
+
+**Problem:** Projects page displays two contradictory signals at the same time:
+1. Red error text: `Error: Failed to execute 'text' on 'Response': body stream already read`
+2. Gray text: `No projects found.`
+3. Header: `Projects (0)` — implying a successful zero-result response
+
+These three pieces of information tell the user: "something failed" AND "there are zero projects" AND "the fetch succeeded with no results." They cannot all be true.
+
+**Expected:** Show EITHER error state (with retry) OR empty state (with create CTA) — never both. On API failure: error + retry. On successful empty: "No projects yet" + "Create your first project" CTA.
+
+**Impact:** Contradictory signals confuse users and undermine confidence in data accuracy.
+
+**Stuck party:** User — conflicting information prevents correct mental model.
+
+---
+
+### UX-005 [HIGH] — Monitoring Dashboard stuck in mixed loading/error/empty state
+
+**Category:** latency_perception
+**Page:** /monitoring
+**Reproducibility:** always
+
+**Problem:** Monitoring Dashboard shows 4 simultaneous conflicting states:
+1. Red banner: "Error: HTTP 500" (misleading — backend is unreachable, not returning 500)
+2. "Loading summary..." text that never resolves (perpetual loading indicator)
+3. "Missions (0)" / "No missions recorded yet." (empty state implying successful fetch)
+4. "Live Events: Disconnected" with Connect button (SSE disconnected)
+
+The "HTTP 500" label is generated by the frontend as a catch-all — no actual HTTP 500 was received because the connection was never established.
+
+**Expected:** Single clear state: "API Unreachable" with full-page error and retry. Summary loading should timeout and show error after N seconds. SSE should show "Disconnected" prominently.
+
+**Impact:** Most complex page in the app shows the most confusing failure state. Operators relying on this dashboard for mission monitoring will misinterpret system status.
+
+**Stuck party:** Both — agent cannot send events (SSE down), user cannot read system state.
+
+---
+
+### UX-006 [MEDIUM] — Sidebar icons have no tooltips in collapsed state
+
+**Category:** navigation_confusion
+**Pages:** All (global sidebar)
+**Reproducibility:** always
+
+**Problem:** Default sidebar is collapsed (~50px wide) showing only emoji icons:
+- Target emoji → Missions
+- Heart emoji → Health
+- Lock emoji → Approvals
+- Chart emoji → Telemetry
+- Envelope emoji → Monitoring
+- Clipboard emoji → Templates
+- Coin emoji → Costs
+- Robot emoji → Agents
+- Folder emoji → Projects
+
+On hover, the icon highlights but **no tooltip text appears**. Users must either memorize the emoji-to-page mapping or expand the sidebar every time.
+
+Note: Accessibility tree correctly contains text labels (good for screen readers). The issue is visual-only.
+
+**Expected:** Tooltip on hover showing page name. Standard practice for collapsed sidebars (VS Code, Slack, Discord all do this).
+
+**Impact:** Learning curve for new users. Repeated sidebar expansion/collapse for experienced users.
+
+**Stuck party:** User — must guess or expand sidebar.
+
+---
+
+### UX-007 [MEDIUM] — SSE status indicator misleading when backend is offline
+
+**Category:** agent_stuck_vs_user_stuck
+**Pages:** All (global header, top-right)
+**Reproducibility:** always
+
+**Problem:** Top-right status indicator shows "Polling 30s" with a green/yellow dot when backend is completely unreachable. Some pages briefly flash "Reconnecting..." then settle back to "Polling 30s".
+
+The indicator implies: "System is actively and successfully polling for events every 30 seconds." Reality: every poll attempt fails with connection refused.
+
+**Expected:** When backend is unreachable: red dot + "Disconnected" or "API Unreachable". The status indicator should reflect actual connection health, not the configured polling interval.
+
+**Impact:** Gives operators false confidence that the system is operational. In a multi-agent mission platform, this can mask critical outages.
+
+**Stuck party:** Both — user thinks system is working; agent cannot deliver events.
+
+---
+
+## Cross-Cutting Analysis
+
+### Error Handling Patterns Observed
+
+| Pattern | Pages | Description |
+|---------|-------|-------------|
+| A: Error + Retry | /missions, /approvals, /templates | Red banner + technical error + Retry button |
+| B: Error, no Retry | /health, /costs, /telemetry | Red banner + technical error, no recovery action |
+| C: Silent empty | /agents | No error, no loading, no empty state — blank |
+| D: Mixed states | /monitoring | Error + loading + empty all visible simultaneously |
+| E: Error + empty | /projects | Error text AND "No items" text both shown |
+
+**5 different failure patterns across 9 pages.** There is no unified error handling strategy.
+
+### Root Cause Hypothesis
+
+The `body stream already read` error suggests the API client layer (likely in `frontend/src/api/client.ts` or similar) has a double-read bug in its error handler:
+
+```
+try {
+  const response = await fetch(url);
+  const data = await response.json(); // reads body
+} catch (e) {
+  const text = await response.text(); // ERROR: body already consumed
+}
+```
+
+When the backend is unreachable, `fetch()` throws a `TypeError: Failed to fetch` (no response object). But if there's a response with an error status, the handler reads the body twice. This secondary error is what gets displayed to users.
+
+### Severity Distribution
+
+| Severity | Count | Finding IDs |
+|----------|-------|-------------|
+| High | 3 | UX-001, UX-003, UX-005 |
+| Medium | 4 | UX-002, UX-004, UX-006, UX-007 |
+| Low | 0 | — |
+| Critical | 0 | — |
+
+### Category Distribution
+
+| Category | Count | Finding IDs |
+|----------|-------|-------------|
+| failure_visibility | 3 | UX-001, UX-002, UX-003 |
+| data_quality_display | 1 | UX-004 |
+| latency_perception | 1 | UX-005 |
+| navigation_confusion | 1 | UX-006 |
+| agent_stuck_vs_user_stuck | 1 | UX-007 |
+
+---
+
+## Remediation Recommendations
+
+### Priority 1 — Unified error boundary (fixes UX-001, UX-002, UX-003, UX-004, UX-005)
+
+Create a shared `ApiErrorBoundary` component and `useApiCall` hook that:
+1. Catches fetch errors and displays user-friendly messages
+2. Distinguishes "connection refused" from "HTTP 4xx/5xx" from "parse error"
+3. Always provides a Retry button
+4. Never shows raw JS error messages to users
+5. Shows error OR empty state, never both
+
+### Priority 2 — SSE health indicator (fixes UX-007)
+
+SSE status component should track actual connection health:
+- Green "Connected" — receiving heartbeats
+- Yellow "Reconnecting..." — attempting reconnect
+- Red "Disconnected" — consecutive failures exceed threshold
+
+### Priority 3 — Sidebar tooltips (fixes UX-006)
+
+Add `title` attribute or tooltip component to sidebar nav items in collapsed state.
+
+---
+
+## Audit Methodology
+
+- **Mode:** observe_only (D-149 v1) — no clicks on forms, no input, no mutation
+- **Evidence:** Console logs, network requests, DOM accessibility tree, screenshots (Claude in Chrome session captures)
+- **Scope:** All 9 navigable pages + 1 invalid route (404 test)
+- **Limitation:** Backend was offline — findings are specific to "API unreachable" scenario. "API available but slow" and "API available but returns errors" are separate audit scenarios not covered.
+
+---
+
+## Appendix: Screenshot Session IDs
+
+| Finding | Session ID | Description |
+|---------|------------|-------------|
+| UX-001 | ss_6911kxpcc | Missions page error state |
+| UX-002 | ss_6703gb1l0 | Health page no retry |
+| UX-003 | ss_4060ejms9 | Agent Health silent empty |
+| UX-004 | ss_5638mk39f | Projects contradictory states |
+| UX-005 | ss_5905dnunz | Monitoring mixed states |
+| UX-006 | ss_6859w2o7j | Sidebar hover no tooltip |
+| UX-007 | ss_6911kxpcc | SSE "Polling 30s" misleading |
+
+Screenshots captured via Claude in Chrome browser automation. Session IDs are traceable within the Claude Code conversation context.

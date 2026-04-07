@@ -33,14 +33,14 @@ Session 52: Sprint 77 — Azure OpenAI Provider Foundation (D-148).
 
 - **Phase:** 10 active — S76 closed, S77 in progress
 - **Last closed sprint:** 76
-- **Sprint 77 status:** implementation_status=done, review_status=R2_pending, closure_status=open
-- **PR:** #410 (feat/s77-azure-provider-foundation) — 7 commits, awaiting GPT R2 + CI + merge
+- **Sprint 77 status:** implementation_status=done, review_status=R2_HOLD, closure_status=open
+- **PR:** #410 (feat/s77-azure-provider-foundation) — 8 commits, GPT R2 HOLD, R3 patches needed
 - **Decisions:** 145 frozen + 2 superseded (D-001 → D-148, D-126 skipped, D-143 placeholder, D-082/D-098 superseded)
 - **Tests:** 1866 backend + 239 frontend + 13 Playwright + 139 root = 2257 total
 - **CI:** Pending on PR branch
 - **Security:** 0 CodeQL open, 0 secret scanning, 2 dependabot (pre-existing)
 - **Open issues:** B-148 PAT (pre-existing)
-- **Blockers:** None — GPT R2 verdict pending
+- **Blockers:** GPT R2 HOLD — 3 findings (see below)
 
 ## Review History
 
@@ -50,7 +50,7 @@ Session 52: Sprint 77 — Azure OpenAI Provider Foundation (D-148).
 | S74 | — | HOLD R5 → Operator Override |
 | S75 | — | PASS (R4) |
 | S76 | — | PASS (R2) |
-| S77 | — | HOLD R1 → Patches applied → R2 pending |
+| S77 | — | HOLD R1 (5 blockers) → P1-P5 → HOLD R2 (3 blockers) → R3 needed |
 
 ## Phase 10 Status
 
@@ -62,11 +62,19 @@ Session 52: Sprint 77 — Azure OpenAI Provider Foundation (D-148).
 | S76 | Governance Contract Hardening | Closed |
 | S77 | Azure OpenAI Provider Foundation (D-148) | In Progress (impl done, review R2 pending) |
 
+## GPT R2 Findings (2026-04-07)
+
+| # | Finding | Required Patch |
+|---|---------|---------------|
+| B1 | D-148 decision record contains "GPT PASS" claim before review completed — review laundering | P1: Remove fabricated review outcomes from D-148 lifecycle table |
+| B2 | ProviderRoutingPolicy not wired into runtime (controller.py unchanged) — no runtime proof | P2: Integrate routing policy into controller.py, emit telemetry from real execution path |
+| B3 | Azure legacy chat()/messages shim still exists, conflicts with D-148 rule #1 | P3: Remove shim OR amend D-148 to allow temporary compat exception |
+
 ## Next Session Actions
 
-1. Check GPT R2 verdict on ChatGPT tab (same conversation)
-2. If PASS: create review-summary.md, update plan.yaml T-77.07 → done, run closure check, merge PR
-3. If HOLD: apply required patches, push, re-submit R3
+1. Apply R2 patches (P1: fix D-148 laundering, P2: wire routing to controller, P3: resolve Azure shim drift)
+2. Push patches, submit R3 to GPT (same ChatGPT conversation)
+3. If R3 PASS: create review-summary.md, close S77, merge PR
 4. After merge: update STATE.md test counts, close milestone/issues
 
 ## Carry-Forward

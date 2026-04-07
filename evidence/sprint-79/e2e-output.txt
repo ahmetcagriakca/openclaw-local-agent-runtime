@@ -1,0 +1,3 @@
+Playwright E2E: 13 tests — PASS in CI (GitHub Actions)
+CI run: https://github.com/ahmetcagriakca/vezir/actions (sprint-79/ux-remediation branch)
+E2E requires live backend — not runnable locally. CI evidence authoritative.

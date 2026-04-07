@@ -1,0 +1,25 @@
+=== Sprint 79 Evidence Manifest ===
+Generated: 2026-04-07T16:14:43+03:00
+Class: product
+
+total 105
+drwxr-xr-x 1 AKCA 197609     0 Apr  7 16:14 .
+drwxr-xr-x 1 AKCA 197609     0 Apr  7 16:00 ..
+-rw-r--r-- 1 AKCA 197609   572 Apr  7 16:14 build-output.txt
+-rw-r--r-- 1 AKCA 197609    49 Apr  7 16:14 closure-check-output.txt
+-rw-r--r-- 1 AKCA 197609    62 Apr  7 16:14 contract-evidence.txt
+-rw-r--r-- 1 AKCA 197609 15542 Apr  7 16:14 e2e-output.txt
+-rw-r--r-- 1 AKCA 197609    89 Apr  7 16:14 file-manifest.txt
+-rw-r--r-- 1 AKCA 197609    62 Apr  7 16:14 grep-evidence.txt
+-rw-r--r-- 1 AKCA 197609    40 Apr  7 16:14 lighthouse.txt
+-rw-r--r-- 1 AKCA 197609  3799 Apr  7 16:14 lint-output.txt
+-rw-r--r-- 1 AKCA 197609    97 Apr  7 16:14 live-checks.txt
+-rw-r--r-- 1 AKCA 197609    40 Apr  7 16:14 mutation-drill.txt
+-rw-r--r-- 1 AKCA 197609 15542 Apr  7 16:14 playwright-output.txt
+-rw-r--r-- 1 AKCA 197609   177 Apr  7 16:13 pytest-output.txt
+-rw-r--r-- 1 AKCA 197609    23 Apr  7 16:14 review-summary.md
+-rw-r--r-- 1 AKCA 197609     8 Apr  7 16:13 sprint-class.txt
+-rw-r--r-- 1 AKCA 197609     0 Apr  7 16:14 tsc-output.txt
+-rw-r--r-- 1 AKCA 197609   177 Apr  7 16:13 validator-output.txt
+-rw-r--r-- 1 AKCA 197609   177 Apr  7 16:13 validator-tests.txt
+-rw-r--r-- 1 AKCA 197609 31829 Apr  7 16:14 vitest-output.txt

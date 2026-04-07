@@ -5,8 +5,8 @@ model: A
 class: product
 mutation_budget: 12
 status:
-  implementation_status: not_started
-  closure_status: not_started
+  implementation_status: done
+  closure_status: closed
 
 tasks:
   - id: "T-79.01"

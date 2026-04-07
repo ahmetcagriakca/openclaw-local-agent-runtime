@@ -1,0 +1,656 @@
+playwright	Set up job	﻿2026-04-07T13:22:35.7144034Z Current runner version: '2.333.1'
+playwright	Set up job	2026-04-07T13:22:35.7170637Z ##[group]Runner Image Provisioner
+playwright	Set up job	2026-04-07T13:22:35.7171708Z Hosted Compute Agent
+playwright	Set up job	2026-04-07T13:22:35.7172316Z Version: 20260213.493
+playwright	Set up job	2026-04-07T13:22:35.7172871Z Commit: 5c115507f6dd24b8de37d8bbe0bb4509d0cc0fa3
+playwright	Set up job	2026-04-07T13:22:35.7173590Z Build Date: 2026-02-13T00:28:41Z
+playwright	Set up job	2026-04-07T13:22:35.7174249Z Worker ID: {29a6e7df-db09-464c-8f1a-9fc765c0b14e}
+playwright	Set up job	2026-04-07T13:22:35.7174917Z Azure Region: westus
+playwright	Set up job	2026-04-07T13:22:35.7175460Z ##[endgroup]
+playwright	Set up job	2026-04-07T13:22:35.7176884Z ##[group]Operating System
+playwright	Set up job	2026-04-07T13:22:35.7177514Z Ubuntu
+playwright	Set up job	2026-04-07T13:22:35.7177964Z 24.04.4
+playwright	Set up job	2026-04-07T13:22:35.7178539Z LTS
+playwright	Set up job	2026-04-07T13:22:35.7178958Z ##[endgroup]
+playwright	Set up job	2026-04-07T13:22:35.7179424Z ##[group]Runner Image
+playwright	Set up job	2026-04-07T13:22:35.7180057Z Image: ubuntu-24.04
+playwright	Set up job	2026-04-07T13:22:35.7180557Z Version: 20260329.72.1
+playwright	Set up job	2026-04-07T13:22:35.7182016Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260329.72/images/ubuntu/Ubuntu2404-Readme.md
+playwright	Set up job	2026-04-07T13:22:35.7183732Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260329.72
+playwright	Set up job	2026-04-07T13:22:35.7184592Z ##[endgroup]
+playwright	Set up job	2026-04-07T13:22:35.7185646Z ##[group]GITHUB_TOKEN Permissions
+playwright	Set up job	2026-04-07T13:22:35.7188204Z Contents: read
+playwright	Set up job	2026-04-07T13:22:35.7188842Z Metadata: read
+playwright	Set up job	2026-04-07T13:22:35.7189288Z ##[endgroup]
+playwright	Set up job	2026-04-07T13:22:35.7191915Z Secret source: Actions
+playwright	Set up job	2026-04-07T13:22:35.7192883Z Prepare workflow directory
+playwright	Set up job	2026-04-07T13:22:35.7534599Z Prepare all required actions
+playwright	Set up job	2026-04-07T13:22:35.7574483Z Getting action download info
+playwright	Set up job	2026-04-07T13:22:36.3450117Z Download action repository 'actions/checkout@v6' (SHA:de0fac2e4500dabe0009e67214ff5f5447ce83dd)
+playwright	Set up job	2026-04-07T13:22:36.4536052Z Download action repository 'actions/setup-python@v6' (SHA:a309ff8b426b58ec0e2a45f0f869d46889d02405)
+playwright	Set up job	2026-04-07T13:22:36.5236166Z Download action repository 'actions/setup-node@v6' (SHA:53b83947a5a98c8d113130e565377fae1a50d02f)
+playwright	Set up job	2026-04-07T13:22:36.6255101Z Download action repository 'actions/upload-artifact@v7' (SHA:bbbca2ddaa5d8feaa63e36b76fdaad77386f024f)
+playwright	Set up job	2026-04-07T13:22:36.8015736Z Complete job name: playwright
+playwright	Run actions/checkout@v6	﻿2026-04-07T13:22:36.8732860Z ##[group]Run actions/checkout@v6
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.8733719Z with:
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.8734123Z   repository: ahmetcagriakca/vezir
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.8734807Z   token: ***
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.8735178Z   ssh-strict: true
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.8735614Z   ssh-user: git
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.8736001Z   persist-credentials: true
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.8736434Z   clean: true
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.8736845Z   sparse-checkout-cone-mode: true
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.8737315Z   fetch-depth: 1
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.8737691Z   fetch-tags: false
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.8738076Z   show-progress: true
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.8738468Z   lfs: false
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.8738819Z   submodules: false
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.8739210Z   set-safe-directory: true
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.8739844Z ##[endgroup]
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.9669503Z Syncing repository: ahmetcagriakca/vezir
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.9671626Z ##[group]Getting Git version info
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.9672319Z Working directory is '/home/runner/work/vezir/vezir'
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.9673188Z [command]/usr/bin/git version
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.9709591Z git version 2.53.0
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.9734869Z ##[endgroup]
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.9752055Z Temporarily overriding HOME='/home/runner/work/_temp/598749b9-0ca9-4dc8-ae32-4264877af512' before making global git config changes
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.9754381Z Adding repository directory to the temporary git global config as a safe directory
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.9757904Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/vezir/vezir
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.9794100Z Deleting the contents of '/home/runner/work/vezir/vezir'
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.9798433Z ##[group]Initializing the repository
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.9803391Z [command]/usr/bin/git init /home/runner/work/vezir/vezir
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.9875360Z hint: Using 'master' as the name for the initial branch. This default branch name
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.9877003Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.9878997Z hint: to use in all of your new repositories, which will suppress this warning,
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.9880311Z hint: call:
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.9881168Z hint:
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.9882335Z hint: 	git config --global init.defaultBranch <name>
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.9883370Z hint:
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.9884291Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.9885849Z hint: 'development'. The just-created branch can be renamed via this command:
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.9887040Z hint:
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.9887765Z hint: 	git branch -m <name>
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.9888547Z hint:
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.9889593Z hint: Disable this message with "git config set advice.defaultBranchName false"
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.9891461Z Initialized empty Git repository in /home/runner/work/vezir/vezir/.git/
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.9894019Z [command]/usr/bin/git remote add origin https://github.com/ahmetcagriakca/vezir
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.9955887Z ##[endgroup]
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.9958514Z ##[group]Disabling automatic garbage collection
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.9959992Z [command]/usr/bin/git config --local gc.auto 0
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.9993426Z ##[endgroup]
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.9994111Z ##[group]Setting up auth
+playwright	Run actions/checkout@v6	2026-04-07T13:22:36.9994808Z Removing SSH command configuration
+playwright	Run actions/checkout@v6	2026-04-07T13:22:37.0000612Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+playwright	Run actions/checkout@v6	2026-04-07T13:22:37.0032012Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+playwright	Run actions/checkout@v6	2026-04-07T13:22:37.0312525Z Removing HTTP extra header
+playwright	Run actions/checkout@v6	2026-04-07T13:22:37.0318062Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+playwright	Run actions/checkout@v6	2026-04-07T13:22:37.0348646Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+playwright	Run actions/checkout@v6	2026-04-07T13:22:37.0561824Z Removing includeIf entries pointing to credentials config files
+playwright	Run actions/checkout@v6	2026-04-07T13:22:37.0568488Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+playwright	Run actions/checkout@v6	2026-04-07T13:22:37.0600413Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+playwright	Run actions/checkout@v6	2026-04-07T13:22:37.0824950Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-6336d168-fff0-41e6-8ab5-a5b4fdde8afa.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+playwright	Run actions/checkout@v6	2026-04-07T13:22:37.0864668Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/vezir/vezir/.git.path /home/runner/work/_temp/git-credentials-6336d168-fff0-41e6-8ab5-a5b4fdde8afa.config
+playwright	Run actions/checkout@v6	2026-04-07T13:22:37.0894809Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/vezir/vezir/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-6336d168-fff0-41e6-8ab5-a5b4fdde8afa.config
+playwright	Run actions/checkout@v6	2026-04-07T13:22:37.0925819Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-6336d168-fff0-41e6-8ab5-a5b4fdde8afa.config
+playwright	Run actions/checkout@v6	2026-04-07T13:22:37.0955880Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-6336d168-fff0-41e6-8ab5-a5b4fdde8afa.config
+playwright	Run actions/checkout@v6	2026-04-07T13:22:37.0982998Z ##[endgroup]
+playwright	Run actions/checkout@v6	2026-04-07T13:22:37.0984168Z ##[group]Fetching the repository
+playwright	Run actions/checkout@v6	2026-04-07T13:22:37.0991558Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +c226707e2953c663986f9ccf91fb6c8b5e2a1877:refs/remotes/pull/422/merge
+playwright	Run actions/checkout@v6	2026-04-07T13:22:37.8083832Z From https://github.com/ahmetcagriakca/vezir
+playwright	Run actions/checkout@v6	2026-04-07T13:22:37.8087899Z  * [new ref]         c226707e2953c663986f9ccf91fb6c8b5e2a1877 -> pull/422/merge
+playwright	Run actions/checkout@v6	2026-04-07T13:22:37.8124444Z ##[endgroup]
+playwright	Run actions/checkout@v6	2026-04-07T13:22:37.8126807Z ##[group]Determining the checkout info
+playwright	Run actions/checkout@v6	2026-04-07T13:22:37.8128838Z ##[endgroup]
+playwright	Run actions/checkout@v6	2026-04-07T13:22:37.8132784Z [command]/usr/bin/git sparse-checkout disable
+playwright	Run actions/checkout@v6	2026-04-07T13:22:37.8175635Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+playwright	Run actions/checkout@v6	2026-04-07T13:22:37.8207435Z ##[group]Checking out the ref
+playwright	Run actions/checkout@v6	2026-04-07T13:22:37.8211272Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/422/merge
+playwright	Run actions/checkout@v6	2026-04-07T13:22:37.8729130Z Note: switching to 'refs/remotes/pull/422/merge'.
+playwright	Run actions/checkout@v6	2026-04-07T13:22:37.8730289Z 
+playwright	Run actions/checkout@v6	2026-04-07T13:22:37.8731242Z You are in 'detached HEAD' state. You can look around, make experimental
+playwright	Run actions/checkout@v6	2026-04-07T13:22:37.8733074Z changes and commit them, and you can discard any commits you make in this
+playwright	Run actions/checkout@v6	2026-04-07T13:22:37.8734837Z state without impacting any branches by switching back to a branch.
+playwright	Run actions/checkout@v6	2026-04-07T13:22:37.8736215Z 
+playwright	Run actions/checkout@v6	2026-04-07T13:22:37.8737008Z If you want to create a new branch to retain commits you create, you may
+playwright	Run actions/checkout@v6	2026-04-07T13:22:37.8738692Z do so (now or later) by using -c with the switch command. Example:
+playwright	Run actions/checkout@v6	2026-04-07T13:22:37.8739739Z 
+playwright	Run actions/checkout@v6	2026-04-07T13:22:37.8740085Z   git switch -c <new-branch-name>
+playwright	Run actions/checkout@v6	2026-04-07T13:22:37.8741140Z 
+playwright	Run actions/checkout@v6	2026-04-07T13:22:37.8741517Z Or undo this operation with:
+playwright	Run actions/checkout@v6	2026-04-07T13:22:37.8742438Z 
+playwright	Run actions/checkout@v6	2026-04-07T13:22:37.8742891Z   git switch -
+playwright	Run actions/checkout@v6	2026-04-07T13:22:37.8743434Z 
+playwright	Run actions/checkout@v6	2026-04-07T13:22:37.8744415Z Turn off this advice by setting config variable advice.detachedHead to false
+playwright	Run actions/checkout@v6	2026-04-07T13:22:37.8745789Z 
+playwright	Run actions/checkout@v6	2026-04-07T13:22:37.8747349Z HEAD is now at c226707 Merge 705189677fff432d65399419e342c632b33148fc into 3ada99421b2bd7afd1f70840f582d21b9d8c9ada
+playwright	Run actions/checkout@v6	2026-04-07T13:22:37.8752004Z ##[endgroup]
+playwright	Run actions/checkout@v6	2026-04-07T13:22:37.8779221Z [command]/usr/bin/git log -1 --format=%H
+playwright	Run actions/checkout@v6	2026-04-07T13:22:37.8804614Z c226707e2953c663986f9ccf91fb6c8b5e2a1877
+playwright	Set up Python	﻿2026-04-07T13:22:37.9225115Z ##[group]Run actions/setup-python@v6
+playwright	Set up Python	2026-04-07T13:22:37.9226239Z with:
+playwright	Set up Python	2026-04-07T13:22:37.9226959Z   python-version: 3.12
+playwright	Set up Python	2026-04-07T13:22:37.9227799Z   check-latest: false
+playwright	Set up Python	2026-04-07T13:22:37.9228927Z   token: ***
+playwright	Set up Python	2026-04-07T13:22:37.9229684Z   update-environment: true
+playwright	Set up Python	2026-04-07T13:22:37.9230598Z   allow-prereleases: false
+playwright	Set up Python	2026-04-07T13:22:37.9231722Z   freethreaded: false
+playwright	Set up Python	2026-04-07T13:22:37.9232507Z ##[endgroup]
+playwright	Set up Python	2026-04-07T13:22:38.0502120Z ##[group]Installed versions
+playwright	Set up Python	2026-04-07T13:22:38.0609988Z Successfully set up CPython (3.12.13)
+playwright	Set up Python	2026-04-07T13:22:38.0612884Z ##[endgroup]
+playwright	Set up Node.js	﻿2026-04-07T13:22:38.0851900Z ##[group]Run actions/setup-node@v6
+playwright	Set up Node.js	2026-04-07T13:22:38.0852942Z with:
+playwright	Set up Node.js	2026-04-07T13:22:38.0853581Z   node-version: 20
+playwright	Set up Node.js	2026-04-07T13:22:38.0854315Z   check-latest: false
+playwright	Set up Node.js	2026-04-07T13:22:38.0855342Z   token: ***
+playwright	Set up Node.js	2026-04-07T13:22:38.0856049Z   package-manager-cache: true
+playwright	Set up Node.js	2026-04-07T13:22:38.0856897Z env:
+playwright	Set up Node.js	2026-04-07T13:22:38.0857759Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.13/x64
+playwright	Set up Node.js	2026-04-07T13:22:38.0859541Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib/pkgconfig
+playwright	Set up Node.js	2026-04-07T13:22:38.0861445Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+playwright	Set up Node.js	2026-04-07T13:22:38.0862931Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+playwright	Set up Node.js	2026-04-07T13:22:38.0864391Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+playwright	Set up Node.js	2026-04-07T13:22:38.0865830Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib
+playwright	Set up Node.js	2026-04-07T13:22:38.0867335Z ##[endgroup]
+playwright	Set up Node.js	2026-04-07T13:22:38.2539639Z Found in cache @ /opt/hostedtoolcache/node/20.20.2/x64
+playwright	Set up Node.js	2026-04-07T13:22:38.2543617Z ##[group]Environment details
+playwright	Set up Node.js	2026-04-07T13:22:38.5485385Z node: v20.20.2
+playwright	Set up Node.js	2026-04-07T13:22:38.5486168Z npm: 10.8.2
+playwright	Set up Node.js	2026-04-07T13:22:38.5486670Z yarn: 1.22.22
+playwright	Set up Node.js	2026-04-07T13:22:38.5487761Z ##[endgroup]
+playwright	Install backend dependencies	﻿2026-04-07T13:22:38.5637209Z ##[group]Run pip install -r agent/requirements.txt
+playwright	Install backend dependencies	2026-04-07T13:22:38.5637951Z [36;1mpip install -r agent/requirements.txt[0m
+playwright	Install backend dependencies	2026-04-07T13:22:38.5679296Z shell: /usr/bin/bash -e {0}
+playwright	Install backend dependencies	2026-04-07T13:22:38.5679795Z env:
+playwright	Install backend dependencies	2026-04-07T13:22:38.5680270Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.13/x64
+playwright	Install backend dependencies	2026-04-07T13:22:38.5681253Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib/pkgconfig
+playwright	Install backend dependencies	2026-04-07T13:22:38.5682182Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+playwright	Install backend dependencies	2026-04-07T13:22:38.5682822Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+playwright	Install backend dependencies	2026-04-07T13:22:38.5683461Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+playwright	Install backend dependencies	2026-04-07T13:22:38.5684088Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib
+playwright	Install backend dependencies	2026-04-07T13:22:38.5684628Z ##[endgroup]
+playwright	Install backend dependencies	2026-04-07T13:22:39.3493767Z Collecting openai>=1.50.0 (from -r agent/requirements.txt (line 1))
+playwright	Install backend dependencies	2026-04-07T13:22:39.4030454Z   Downloading openai-2.30.0-py3-none-any.whl.metadata (29 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:39.4532076Z Collecting anthropic>=0.40.0 (from -r agent/requirements.txt (line 2))
+playwright	Install backend dependencies	2026-04-07T13:22:39.4559357Z   Downloading anthropic-0.89.0-py3-none-any.whl.metadata (3.1 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:39.4779504Z Collecting requests>=2.31.0 (from -r agent/requirements.txt (line 3))
+playwright	Install backend dependencies	2026-04-07T13:22:39.4806660Z   Downloading requests-2.33.1-py3-none-any.whl.metadata (4.8 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:39.5006722Z Collecting opentelemetry-api>=1.40.0 (from -r agent/requirements.txt (line 4))
+playwright	Install backend dependencies	2026-04-07T13:22:39.5033378Z   Downloading opentelemetry_api-1.40.0-py3-none-any.whl.metadata (1.5 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:39.5200061Z Collecting opentelemetry-sdk>=1.40.0 (from -r agent/requirements.txt (line 5))
+playwright	Install backend dependencies	2026-04-07T13:22:39.5245462Z   Downloading opentelemetry_sdk-1.40.0-py3-none-any.whl.metadata (1.6 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:39.5776992Z Collecting fastapi>=0.115.0 (from -r agent/requirements.txt (line 6))
+playwright	Install backend dependencies	2026-04-07T13:22:39.5805048Z   Downloading fastapi-0.135.3-py3-none-any.whl.metadata (28 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:39.6072076Z Collecting uvicorn>=0.34.0 (from -r agent/requirements.txt (line 7))
+playwright	Install backend dependencies	2026-04-07T13:22:39.6098593Z   Downloading uvicorn-0.44.0-py3-none-any.whl.metadata (6.7 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:39.7330071Z Collecting pydantic>=2.10.0 (from -r agent/requirements.txt (line 8))
+playwright	Install backend dependencies	2026-04-07T13:22:39.7360401Z   Downloading pydantic-2.12.5-py3-none-any.whl.metadata (90 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:39.7609263Z Collecting httpx>=0.28.0 (from -r agent/requirements.txt (line 9))
+playwright	Install backend dependencies	2026-04-07T13:22:39.7639346Z   Downloading httpx-0.28.1-py3-none-any.whl.metadata (7.1 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:39.9327195Z Collecting cryptography>=43.0.0 (from -r agent/requirements.txt (line 10))
+playwright	Install backend dependencies	2026-04-07T13:22:39.9358131Z   Downloading cryptography-46.0.6-cp311-abi3-manylinux_2_34_x86_64.whl.metadata (5.7 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:39.9781896Z Collecting pyyaml>=6.0 (from -r agent/requirements.txt (line 11))
+playwright	Install backend dependencies	2026-04-07T13:22:39.9824748Z   Downloading pyyaml-6.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.4 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:40.0005411Z Collecting anyio<5,>=3.5.0 (from openai>=1.50.0->-r agent/requirements.txt (line 1))
+playwright	Install backend dependencies	2026-04-07T13:22:40.0031620Z   Downloading anyio-4.13.0-py3-none-any.whl.metadata (4.5 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:40.0138885Z Collecting distro<2,>=1.7.0 (from openai>=1.50.0->-r agent/requirements.txt (line 1))
+playwright	Install backend dependencies	2026-04-07T13:22:40.0164912Z   Downloading distro-1.9.0-py3-none-any.whl.metadata (6.8 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:40.0911819Z Collecting jiter<1,>=0.10.0 (from openai>=1.50.0->-r agent/requirements.txt (line 1))
+playwright	Install backend dependencies	2026-04-07T13:22:40.0946334Z   Downloading jiter-0.13.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (5.2 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:40.1087191Z Collecting sniffio (from openai>=1.50.0->-r agent/requirements.txt (line 1))
+playwright	Install backend dependencies	2026-04-07T13:22:40.1115489Z   Downloading sniffio-1.3.1-py3-none-any.whl.metadata (3.9 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:40.1458055Z Collecting tqdm>4 (from openai>=1.50.0->-r agent/requirements.txt (line 1))
+playwright	Install backend dependencies	2026-04-07T13:22:40.1487345Z   Downloading tqdm-4.67.3-py3-none-any.whl.metadata (57 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:40.1688715Z Collecting typing-extensions<5,>=4.11 (from openai>=1.50.0->-r agent/requirements.txt (line 1))
+playwright	Install backend dependencies	2026-04-07T13:22:40.1718001Z   Downloading typing_extensions-4.15.0-py3-none-any.whl.metadata (3.3 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:40.1835930Z Collecting annotated-types>=0.6.0 (from pydantic>=2.10.0->-r agent/requirements.txt (line 8))
+playwright	Install backend dependencies	2026-04-07T13:22:40.1862979Z   Downloading annotated_types-0.7.0-py3-none-any.whl.metadata (15 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:40.8561570Z Collecting pydantic-core==2.41.5 (from pydantic>=2.10.0->-r agent/requirements.txt (line 8))
+playwright	Install backend dependencies	2026-04-07T13:22:40.8591915Z   Downloading pydantic_core-2.41.5-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (7.3 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.0353357Z Collecting typing-inspection>=0.4.2 (from pydantic>=2.10.0->-r agent/requirements.txt (line 8))
+playwright	Install backend dependencies	2026-04-07T13:22:41.0379225Z   Downloading typing_inspection-0.4.2-py3-none-any.whl.metadata (2.6 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.0571466Z Collecting certifi (from httpx>=0.28.0->-r agent/requirements.txt (line 9))
+playwright	Install backend dependencies	2026-04-07T13:22:41.0602163Z   Downloading certifi-2026.2.25-py3-none-any.whl.metadata (2.5 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.0765923Z Collecting httpcore==1.* (from httpx>=0.28.0->-r agent/requirements.txt (line 9))
+playwright	Install backend dependencies	2026-04-07T13:22:41.0797233Z   Downloading httpcore-1.0.9-py3-none-any.whl.metadata (21 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.0967479Z Collecting idna (from httpx>=0.28.0->-r agent/requirements.txt (line 9))
+playwright	Install backend dependencies	2026-04-07T13:22:41.1004095Z   Downloading idna-3.11-py3-none-any.whl.metadata (8.4 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.1306567Z Collecting h11>=0.16 (from httpcore==1.*->httpx>=0.28.0->-r agent/requirements.txt (line 9))
+playwright	Install backend dependencies	2026-04-07T13:22:41.1333818Z   Downloading h11-0.16.0-py3-none-any.whl.metadata (8.3 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.1488748Z Collecting docstring-parser<1,>=0.15 (from anthropic>=0.40.0->-r agent/requirements.txt (line 2))
+playwright	Install backend dependencies	2026-04-07T13:22:41.1513186Z   Downloading docstring_parser-0.17.0-py3-none-any.whl.metadata (3.5 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.2852251Z Collecting charset_normalizer<4,>=2 (from requests>=2.31.0->-r agent/requirements.txt (line 3))
+playwright	Install backend dependencies	2026-04-07T13:22:41.2880676Z   Downloading charset_normalizer-3.4.7-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (40 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.3125745Z Collecting urllib3<3,>=1.26 (from requests>=2.31.0->-r agent/requirements.txt (line 3))
+playwright	Install backend dependencies	2026-04-07T13:22:41.3155229Z   Downloading urllib3-2.6.3-py3-none-any.whl.metadata (6.9 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.3425644Z Collecting importlib-metadata<8.8.0,>=6.0 (from opentelemetry-api>=1.40.0->-r agent/requirements.txt (line 4))
+playwright	Install backend dependencies	2026-04-07T13:22:41.3451687Z   Downloading importlib_metadata-8.7.1-py3-none-any.whl.metadata (4.7 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.3625529Z Collecting zipp>=3.20 (from importlib-metadata<8.8.0,>=6.0->opentelemetry-api>=1.40.0->-r agent/requirements.txt (line 4))
+playwright	Install backend dependencies	2026-04-07T13:22:41.3651394Z   Downloading zipp-3.23.0-py3-none-any.whl.metadata (3.6 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.3809687Z Collecting opentelemetry-semantic-conventions==0.61b0 (from opentelemetry-sdk>=1.40.0->-r agent/requirements.txt (line 5))
+playwright	Install backend dependencies	2026-04-07T13:22:41.3848267Z   Downloading opentelemetry_semantic_conventions-0.61b0-py3-none-any.whl.metadata (2.5 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.4071237Z Collecting starlette>=0.46.0 (from fastapi>=0.115.0->-r agent/requirements.txt (line 6))
+playwright	Install backend dependencies	2026-04-07T13:22:41.4099344Z   Downloading starlette-1.0.0-py3-none-any.whl.metadata (6.3 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.4237775Z Collecting annotated-doc>=0.0.2 (from fastapi>=0.115.0->-r agent/requirements.txt (line 6))
+playwright	Install backend dependencies	2026-04-07T13:22:41.4264274Z   Downloading annotated_doc-0.0.4-py3-none-any.whl.metadata (6.6 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.4426906Z Collecting click>=7.0 (from uvicorn>=0.34.0->-r agent/requirements.txt (line 7))
+playwright	Install backend dependencies	2026-04-07T13:22:41.4452253Z   Downloading click-8.3.2-py3-none-any.whl.metadata (2.6 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.5379707Z Collecting cffi>=2.0.0 (from cryptography>=43.0.0->-r agent/requirements.txt (line 10))
+playwright	Install backend dependencies	2026-04-07T13:22:41.5408909Z   Downloading cffi-2.0.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.6 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.5541045Z Collecting pycparser (from cffi>=2.0.0->cryptography>=43.0.0->-r agent/requirements.txt (line 10))
+playwright	Install backend dependencies	2026-04-07T13:22:41.5565509Z   Downloading pycparser-3.0-py3-none-any.whl.metadata (8.2 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.5715979Z Downloading openai-2.30.0-py3-none-any.whl (1.1 MB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.5816893Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.1/1.1 MB 164.1 MB/s  0:00:00
+playwright	Install backend dependencies	2026-04-07T13:22:41.5842403Z Downloading pydantic-2.12.5-py3-none-any.whl (463 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.5897272Z Downloading pydantic_core-2.41.5-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.1 MB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.5991042Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.1/2.1 MB 262.7 MB/s  0:00:00
+playwright	Install backend dependencies	2026-04-07T13:22:41.6024797Z Downloading httpx-0.28.1-py3-none-any.whl (73 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.6075752Z Downloading anyio-4.13.0-py3-none-any.whl (114 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.6125868Z Downloading distro-1.9.0-py3-none-any.whl (20 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.6169701Z Downloading httpcore-1.0.9-py3-none-any.whl (78 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.6227057Z Downloading jiter-0.13.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (360 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.6281345Z Downloading typing_extensions-4.15.0-py3-none-any.whl (44 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.6327894Z Downloading anthropic-0.89.0-py3-none-any.whl (478 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.6383899Z Downloading docstring_parser-0.17.0-py3-none-any.whl (36 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.6430311Z Downloading requests-2.33.1-py3-none-any.whl (64 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.6479926Z Downloading charset_normalizer-3.4.7-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (216 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.6533287Z Downloading idna-3.11-py3-none-any.whl (71 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.6579999Z Downloading urllib3-2.6.3-py3-none-any.whl (131 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.6629663Z Downloading opentelemetry_api-1.40.0-py3-none-any.whl (68 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.6678412Z Downloading importlib_metadata-8.7.1-py3-none-any.whl (27 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.6725886Z Downloading opentelemetry_sdk-1.40.0-py3-none-any.whl (141 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.6780026Z Downloading opentelemetry_semantic_conventions-0.61b0-py3-none-any.whl (231 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.6830404Z Downloading fastapi-0.135.3-py3-none-any.whl (117 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.6877699Z Downloading uvicorn-0.44.0-py3-none-any.whl (69 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.6930531Z Downloading cryptography-46.0.6-cp311-abi3-manylinux_2_34_x86_64.whl (4.5 MB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.7078193Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.5/4.5 MB 340.5 MB/s  0:00:00
+playwright	Install backend dependencies	2026-04-07T13:22:41.7108202Z Downloading pyyaml-6.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (807 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.7168460Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 807.9/807.9 kB 147.3 MB/s  0:00:00
+playwright	Install backend dependencies	2026-04-07T13:22:41.7197327Z Downloading annotated_doc-0.0.4-py3-none-any.whl (5.3 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.7254515Z Downloading annotated_types-0.7.0-py3-none-any.whl (13 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.7304057Z Downloading certifi-2026.2.25-py3-none-any.whl (153 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.7353119Z Downloading cffi-2.0.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (219 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.7408800Z Downloading click-8.3.2-py3-none-any.whl (108 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.7457514Z Downloading h11-0.16.0-py3-none-any.whl (37 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.7501886Z Downloading starlette-1.0.0-py3-none-any.whl (72 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.7596463Z Downloading tqdm-4.67.3-py3-none-any.whl (78 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.7649673Z Downloading typing_inspection-0.4.2-py3-none-any.whl (14 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.7741045Z Downloading zipp-3.23.0-py3-none-any.whl (10 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.7785498Z Downloading pycparser-3.0-py3-none-any.whl (48 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.7834153Z Downloading sniffio-1.3.1-py3-none-any.whl (10 kB)
+playwright	Install backend dependencies	2026-04-07T13:22:41.8937640Z Installing collected packages: zipp, urllib3, typing-extensions, tqdm, sniffio, pyyaml, pycparser, jiter, idna, h11, docstring-parser, distro, click, charset_normalizer, certifi, annotated-types, annotated-doc, uvicorn, typing-inspection, requests, pydantic-core, importlib-metadata, httpcore, cffi, anyio, starlette, pydantic, opentelemetry-api, httpx, cryptography, opentelemetry-semantic-conventions, openai, fastapi, anthropic, opentelemetry-sdk
+playwright	Install backend dependencies	2026-04-07T13:22:45.1056562Z 
+playwright	Install backend dependencies	2026-04-07T13:22:45.1094942Z Successfully installed annotated-doc-0.0.4 annotated-types-0.7.0 anthropic-0.89.0 anyio-4.13.0 certifi-2026.2.25 cffi-2.0.0 charset_normalizer-3.4.7 click-8.3.2 cryptography-46.0.6 distro-1.9.0 docstring-parser-0.17.0 fastapi-0.135.3 h11-0.16.0 httpcore-1.0.9 httpx-0.28.1 idna-3.11 importlib-metadata-8.7.1 jiter-0.13.0 openai-2.30.0 opentelemetry-api-1.40.0 opentelemetry-sdk-1.40.0 opentelemetry-semantic-conventions-0.61b0 pycparser-3.0 pydantic-2.12.5 pydantic-core-2.41.5 pyyaml-6.0.3 requests-2.33.1 sniffio-1.3.1 starlette-1.0.0 tqdm-4.67.3 typing-extensions-4.15.0 typing-inspection-0.4.2 urllib3-2.6.3 uvicorn-0.44.0 zipp-3.23.0
+playwright	Install root dependencies (Playwright)	﻿2026-04-07T13:22:45.4810557Z ##[group]Run npm ci
+playwright	Install root dependencies (Playwright)	2026-04-07T13:22:45.4811170Z [36;1mnpm ci[0m
+playwright	Install root dependencies (Playwright)	2026-04-07T13:22:45.4839194Z shell: /usr/bin/bash -e {0}
+playwright	Install root dependencies (Playwright)	2026-04-07T13:22:45.4839424Z env:
+playwright	Install root dependencies (Playwright)	2026-04-07T13:22:45.4839669Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.13/x64
+playwright	Install root dependencies (Playwright)	2026-04-07T13:22:45.4840095Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib/pkgconfig
+playwright	Install root dependencies (Playwright)	2026-04-07T13:22:45.4840506Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+playwright	Install root dependencies (Playwright)	2026-04-07T13:22:45.4841038Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+playwright	Install root dependencies (Playwright)	2026-04-07T13:22:45.4841390Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+playwright	Install root dependencies (Playwright)	2026-04-07T13:22:45.4841747Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib
+playwright	Install root dependencies (Playwright)	2026-04-07T13:22:45.4842040Z ##[endgroup]
+playwright	Install root dependencies (Playwright)	2026-04-07T13:22:46.5252215Z 
+playwright	Install root dependencies (Playwright)	2026-04-07T13:22:46.5254294Z added 5 packages, and audited 6 packages in 976ms
+playwright	Install root dependencies (Playwright)	2026-04-07T13:22:46.5259085Z 
+playwright	Install root dependencies (Playwright)	2026-04-07T13:22:46.5261208Z found 0 vulnerabilities
+playwright	Install frontend dependencies	﻿2026-04-07T13:22:46.5389931Z ##[group]Run cd frontend && npm ci
+playwright	Install frontend dependencies	2026-04-07T13:22:46.5390248Z [36;1mcd frontend && npm ci[0m
+playwright	Install frontend dependencies	2026-04-07T13:22:46.5419563Z shell: /usr/bin/bash -e {0}
+playwright	Install frontend dependencies	2026-04-07T13:22:46.5419799Z env:
+playwright	Install frontend dependencies	2026-04-07T13:22:46.5420048Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.13/x64
+playwright	Install frontend dependencies	2026-04-07T13:22:46.5420472Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib/pkgconfig
+playwright	Install frontend dependencies	2026-04-07T13:22:46.5421200Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+playwright	Install frontend dependencies	2026-04-07T13:22:46.5421603Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+playwright	Install frontend dependencies	2026-04-07T13:22:46.5421992Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+playwright	Install frontend dependencies	2026-04-07T13:22:46.5422362Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib
+playwright	Install frontend dependencies	2026-04-07T13:22:46.5422654Z ##[endgroup]
+playwright	Install frontend dependencies	2026-04-07T13:22:48.3159436Z npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+playwright	Install frontend dependencies	2026-04-07T13:22:52.0439476Z 
+playwright	Install frontend dependencies	2026-04-07T13:22:52.0440625Z added 417 packages, and audited 418 packages in 5s
+playwright	Install frontend dependencies	2026-04-07T13:22:52.0441533Z 
+playwright	Install frontend dependencies	2026-04-07T13:22:52.0441875Z 98 packages are looking for funding
+playwright	Install frontend dependencies	2026-04-07T13:22:52.0442679Z   run `npm fund` for details
+playwright	Install frontend dependencies	2026-04-07T13:22:52.0502643Z 
+playwright	Install frontend dependencies	2026-04-07T13:22:52.0503251Z 1 high severity vulnerability
+playwright	Install frontend dependencies	2026-04-07T13:22:52.0503593Z 
+playwright	Install frontend dependencies	2026-04-07T13:22:52.0503782Z To address all issues, run:
+playwright	Install frontend dependencies	2026-04-07T13:22:52.0504164Z   npm audit fix
+playwright	Install frontend dependencies	2026-04-07T13:22:52.0504350Z 
+playwright	Install frontend dependencies	2026-04-07T13:22:52.0504531Z Run `npm audit` for details.
+playwright	Install Playwright browsers	﻿2026-04-07T13:22:52.0796315Z ##[group]Run npx playwright install --with-deps chromium
+playwright	Install Playwright browsers	2026-04-07T13:22:52.0796741Z [36;1mnpx playwright install --with-deps chromium[0m
+playwright	Install Playwright browsers	2026-04-07T13:22:52.0825223Z shell: /usr/bin/bash -e {0}
+playwright	Install Playwright browsers	2026-04-07T13:22:52.0825454Z env:
+playwright	Install Playwright browsers	2026-04-07T13:22:52.0825705Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.13/x64
+playwright	Install Playwright browsers	2026-04-07T13:22:52.0826127Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib/pkgconfig
+playwright	Install Playwright browsers	2026-04-07T13:22:52.0826535Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+playwright	Install Playwright browsers	2026-04-07T13:22:52.0826891Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+playwright	Install Playwright browsers	2026-04-07T13:22:52.0827257Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+playwright	Install Playwright browsers	2026-04-07T13:22:52.0827617Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib
+playwright	Install Playwright browsers	2026-04-07T13:22:52.0827911Z ##[endgroup]
+playwright	Install Playwright browsers	2026-04-07T13:22:53.1195298Z Installing dependencies...
+playwright	Install Playwright browsers	2026-04-07T13:22:53.1424053Z Switching to root user to install dependencies...
+playwright	Install Playwright browsers	2026-04-07T13:22:53.2402729Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+playwright	Install Playwright browsers	2026-04-07T13:22:53.2737868Z Hit:2 http://azure.archive.ubuntu.com/ubuntu noble InRelease
+playwright	Install Playwright browsers	2026-04-07T13:22:53.2742879Z Get:6 https://packages.microsoft.com/repos/azure-cli noble InRelease [3564 B]
+playwright	Install Playwright browsers	2026-04-07T13:22:53.2755014Z Get:7 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease [3600 B]
+playwright	Install Playwright browsers	2026-04-07T13:22:53.2764760Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+playwright	Install Playwright browsers	2026-04-07T13:22:53.2811013Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+playwright	Install Playwright browsers	2026-04-07T13:22:53.2827856Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+playwright	Install Playwright browsers	2026-04-07T13:22:53.4086993Z Get:8 https://packages.microsoft.com/repos/azure-cli noble/main amd64 Packages [2135 B]
+playwright	Install Playwright browsers	2026-04-07T13:22:53.4522101Z Get:9 https://packages.microsoft.com/ubuntu/24.04/prod noble/main armhf Packages [11.4 kB]
+playwright	Install Playwright browsers	2026-04-07T13:22:53.4544234Z Get:10 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [113 kB]
+playwright	Install Playwright browsers	2026-04-07T13:22:53.4578741Z Get:11 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [89.5 kB]
+playwright	Install Playwright browsers	2026-04-07T13:22:53.5023913Z Get:12 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1875 kB]
+playwright	Install Playwright browsers	2026-04-07T13:22:53.5111078Z Get:13 http://azure.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [342 kB]
+playwright	Install Playwright browsers	2026-04-07T13:22:53.5139063Z Get:14 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Components [177 kB]
+playwright	Install Playwright browsers	2026-04-07T13:22:53.5154421Z Get:15 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 c-n-f Metadata [16.9 kB]
+playwright	Install Playwright browsers	2026-04-07T13:22:53.5164476Z Get:16 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1663 kB]
+playwright	Install Playwright browsers	2026-04-07T13:22:53.5242424Z Get:17 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe Translation-en [322 kB]
+playwright	Install Playwright browsers	2026-04-07T13:22:53.5285591Z Get:18 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Components [386 kB]
+playwright	Install Playwright browsers	2026-04-07T13:22:53.5292176Z Get:19 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 c-n-f Metadata [34.2 kB]
+playwright	Install Playwright browsers	2026-04-07T13:22:53.5305172Z Get:20 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [2894 kB]
+playwright	Install Playwright browsers	2026-04-07T13:22:53.5445942Z Get:21 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted Translation-en [671 kB]
+playwright	Install Playwright browsers	2026-04-07T13:22:53.5908754Z Get:22 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Components [212 B]
+playwright	Install Playwright browsers	2026-04-07T13:22:53.5921898Z Get:23 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Components [940 B]
+playwright	Install Playwright browsers	2026-04-07T13:22:53.5936434Z Get:24 http://azure.archive.ubuntu.com/ubuntu noble-backports/main amd64 Components [7380 B]
+playwright	Install Playwright browsers	2026-04-07T13:22:53.5945213Z Get:25 http://azure.archive.ubuntu.com/ubuntu noble-backports/universe amd64 Components [13.2 kB]
+playwright	Install Playwright browsers	2026-04-07T13:22:53.5953461Z Get:26 http://azure.archive.ubuntu.com/ubuntu noble-backports/restricted amd64 Components [216 B]
+playwright	Install Playwright browsers	2026-04-07T13:22:53.5962581Z Get:27 http://azure.archive.ubuntu.com/ubuntu noble-backports/multiverse amd64 Components [212 B]
+playwright	Install Playwright browsers	2026-04-07T13:22:53.6262464Z Get:28 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Packages [1576 kB]
+playwright	Install Playwright browsers	2026-04-07T13:22:53.6306517Z Get:29 http://azure.archive.ubuntu.com/ubuntu noble-security/main Translation-en [252 kB]
+playwright	Install Playwright browsers	2026-04-07T13:22:53.6324704Z Get:30 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Components [21.6 kB]
+playwright	Install Playwright browsers	2026-04-07T13:22:53.6333895Z Get:31 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 c-n-f Metadata [10.7 kB]
+playwright	Install Playwright browsers	2026-04-07T13:22:53.6342340Z Get:32 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1167 kB]
+playwright	Install Playwright browsers	2026-04-07T13:22:53.6406436Z Get:33 http://azure.archive.ubuntu.com/ubuntu noble-security/universe Translation-en [225 kB]
+playwright	Install Playwright browsers	2026-04-07T13:22:53.6424309Z Get:34 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Components [74.2 kB]
+playwright	Install Playwright browsers	2026-04-07T13:22:53.6435445Z Get:35 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 c-n-f Metadata [22.8 kB]
+playwright	Install Playwright browsers	2026-04-07T13:22:53.6868795Z Get:36 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [2757 kB]
+playwright	Install Playwright browsers	2026-04-07T13:22:53.7009263Z Get:37 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted Translation-en [642 kB]
+playwright	Install Playwright browsers	2026-04-07T13:22:53.7045694Z Get:38 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Components [208 B]
+playwright	Install Playwright browsers	2026-04-07T13:22:53.7054486Z Get:39 http://azure.archive.ubuntu.com/ubuntu noble-security/multiverse amd64 Components [212 B]
+playwright	Install Playwright browsers	2026-04-07T13:23:02.8070313Z Fetched 15.8 MB in 2s (8670 kB/s)
+playwright	Install Playwright browsers	2026-04-07T13:23:03.6372531Z Reading package lists...
+playwright	Install Playwright browsers	2026-04-07T13:23:03.6615420Z Reading package lists...
+playwright	Install Playwright browsers	2026-04-07T13:23:03.8634244Z Building dependency tree...
+playwright	Install Playwright browsers	2026-04-07T13:23:03.8642087Z Reading state information...
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0698133Z libasound2t64 is already the newest version (1.2.11-1ubuntu0.2).
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0698926Z libasound2t64 set to manually installed.
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0699715Z libatk-bridge2.0-0t64 is already the newest version (2.52.0-1build1).
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0700550Z libatk-bridge2.0-0t64 set to manually installed.
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0701502Z libatk1.0-0t64 is already the newest version (2.52.0-1build1).
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0701974Z libatk1.0-0t64 set to manually installed.
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0702430Z libatspi2.0-0t64 is already the newest version (2.52.0-1build1).
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0702876Z libatspi2.0-0t64 set to manually installed.
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0703313Z libcairo2 is already the newest version (1.18.0-3build1).
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0703709Z libcairo2 set to manually installed.
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0704365Z libcups2t64 is already the newest version (2.4.7-1.2ubuntu7.9).
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0705044Z libcups2t64 set to manually installed.
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0705527Z libdbus-1-3 is already the newest version (1.14.10-4ubuntu4.1).
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0705958Z libdbus-1-3 set to manually installed.
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0706411Z libdrm2 is already the newest version (2.4.125-1ubuntu0.1~24.04.1).
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0706863Z libdrm2 set to manually installed.
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0707284Z libgbm1 is already the newest version (25.2.8-0ubuntu0.24.04.1).
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0707673Z libgbm1 set to manually installed.
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0708064Z libglib2.0-0t64 is already the newest version (2.80.0-6ubuntu3.8).
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0708467Z libglib2.0-0t64 set to manually installed.
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0708855Z libnspr4 is already the newest version (2:4.35-1.1build1).
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0709213Z libnspr4 set to manually installed.
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0709572Z libnss3 is already the newest version (2:3.98-1ubuntu0.1).
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0709919Z libnss3 set to manually installed.
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0710314Z libpango-1.0-0 is already the newest version (1.52.1+ds-1build1).
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0710713Z libpango-1.0-0 set to manually installed.
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0711291Z libx11-6 is already the newest version (2:1.8.7-1build1).
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0711656Z libx11-6 set to manually installed.
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0712365Z libxcb1 is already the newest version (1.15-1ubuntu2).
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0712709Z libxcb1 set to manually installed.
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0713102Z libxcomposite1 is already the newest version (1:0.4.5-1build3).
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0713492Z libxcomposite1 set to manually installed.
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0713886Z libxdamage1 is already the newest version (1:1.1.6-1build1).
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0714247Z libxdamage1 set to manually installed.
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0714645Z libxext6 is already the newest version (2:1.3.4-1build2).
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0714989Z libxext6 set to manually installed.
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0715350Z libxfixes3 is already the newest version (1:6.0.0-2build1).
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0715715Z libxfixes3 set to manually installed.
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0716090Z libxkbcommon0 is already the newest version (1.6.0-1build1).
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0716455Z libxkbcommon0 set to manually installed.
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0716835Z libxrandr2 is already the newest version (2:1.5.2-2build1).
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0717351Z libxrandr2 set to manually installed.
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0717709Z xvfb is already the newest version (2:21.1.12-1ubuntu1.5).
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0718212Z fonts-noto-color-emoji is already the newest version (2.047-0ubuntu0.24.04.1).
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0718735Z libfontconfig1 is already the newest version (2.15.0-1.1ubuntu2).
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0719119Z libfontconfig1 set to manually installed.
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0719497Z fonts-liberation is already the newest version (1:2.1.5-3).
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0719864Z fonts-liberation set to manually installed.
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0720233Z The following additional packages will be installed:
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0720561Z   xfonts-encodings xfonts-utils
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0720935Z Recommended packages:
+playwright	Install Playwright browsers	2026-04-07T13:23:04.0721187Z   fonts-ipafont-mincho fonts-tlwg-loma
+playwright	Install Playwright browsers	2026-04-07T13:23:04.1991356Z The following NEW packages will be installed:
+playwright	Install Playwright browsers	2026-04-07T13:23:04.1992168Z   fonts-freefont-ttf fonts-ipafont-gothic fonts-tlwg-loma-otf fonts-unifont
+playwright	Install Playwright browsers	2026-04-07T13:23:04.1998637Z   fonts-wqy-zenhei xfonts-cyrillic xfonts-encodings xfonts-scalable
+playwright	Install Playwright browsers	2026-04-07T13:23:04.1999254Z   xfonts-utils
+playwright	Install Playwright browsers	2026-04-07T13:23:04.2003204Z The following packages will be upgraded:
+playwright	Install Playwright browsers	2026-04-07T13:23:04.2007854Z   libfreetype6
+playwright	Install Playwright browsers	2026-04-07T13:23:04.2172898Z 1 upgraded, 9 newly installed, 0 to remove and 82 not upgraded.
+playwright	Install Playwright browsers	2026-04-07T13:23:04.2173625Z Need to get 21.5 MB of archives.
+playwright	Install Playwright browsers	2026-04-07T13:23:04.2174071Z After this operation, 79.5 MB of additional disk space will be used.
+playwright	Install Playwright browsers	2026-04-07T13:23:04.2174558Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+playwright	Install Playwright browsers	2026-04-07T13:23:04.3692165Z Get:2 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-ipafont-gothic all 00303-21ubuntu1 [3513 kB]
+playwright	Install Playwright browsers	2026-04-07T13:23:05.0075092Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 fonts-freefont-ttf all 20211204+svn4273-2 [5641 kB]
+playwright	Install Playwright browsers	2026-04-07T13:23:05.2775971Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-tlwg-loma-otf all 1:0.7.3-1 [107 kB]
+playwright	Install Playwright browsers	2026-04-07T13:23:05.3439535Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-unifont all 1:15.1.01-1build1 [2993 kB]
+playwright	Install Playwright browsers	2026-04-07T13:23:05.5010115Z Get:6 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-wqy-zenhei all 0.9.45-8 [7472 kB]
+playwright	Install Playwright browsers	2026-04-07T13:23:05.7511975Z Get:7 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libfreetype6 amd64 2.13.2+dfsg-1ubuntu0.1 [402 kB]
+playwright	Install Playwright browsers	2026-04-07T13:23:05.8285807Z Get:8 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-encodings all 1:1.0.5-0ubuntu2 [578 kB]
+playwright	Install Playwright browsers	2026-04-07T13:23:05.9035585Z Get:9 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-utils amd64 1:7.7+6build3 [94.4 kB]
+playwright	Install Playwright browsers	2026-04-07T13:23:05.9731206Z Get:10 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 xfonts-cyrillic all 1:1.0.5+nmu1 [384 kB]
+playwright	Install Playwright browsers	2026-04-07T13:23:06.0445298Z Get:11 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-scalable all 1:1.0.3-1.3 [304 kB]
+playwright	Install Playwright browsers	2026-04-07T13:23:06.3016692Z Fetched 21.5 MB in 2s (11.7 MB/s)
+playwright	Install Playwright browsers	2026-04-07T13:23:06.3271759Z Selecting previously unselected package fonts-ipafont-gothic.
+playwright	Install Playwright browsers	2026-04-07T13:23:06.3611982Z (Reading database ... 
+playwright	Install Playwright browsers	2026-04-07T13:23:06.3612432Z (Reading database ... 5%
+playwright	Install Playwright browsers	2026-04-07T13:23:06.3612686Z (Reading database ... 10%
+playwright	Install Playwright browsers	2026-04-07T13:23:06.3612915Z (Reading database ... 15%
+playwright	Install Playwright browsers	2026-04-07T13:23:06.3613180Z (Reading database ... 20%
+playwright	Install Playwright browsers	2026-04-07T13:23:06.3613565Z (Reading database ... 25%
+playwright	Install Playwright browsers	2026-04-07T13:23:06.3614523Z (Reading database ... 30%
+playwright	Install Playwright browsers	2026-04-07T13:23:06.3614933Z (Reading database ... 35%
+playwright	Install Playwright browsers	2026-04-07T13:23:06.3615160Z (Reading database ... 40%
+playwright	Install Playwright browsers	2026-04-07T13:23:06.3615397Z (Reading database ... 45%
+playwright	Install Playwright browsers	2026-04-07T13:23:06.3615635Z (Reading database ... 50%
+playwright	Install Playwright browsers	2026-04-07T13:23:06.3697723Z (Reading database ... 55%
+playwright	Install Playwright browsers	2026-04-07T13:23:06.4778309Z (Reading database ... 60%
+playwright	Install Playwright browsers	2026-04-07T13:23:06.6804695Z (Reading database ... 65%
+playwright	Install Playwright browsers	2026-04-07T13:23:06.8704809Z (Reading database ... 70%
+playwright	Install Playwright browsers	2026-04-07T13:23:07.0055812Z (Reading database ... 75%
+playwright	Install Playwright browsers	2026-04-07T13:23:07.1784610Z (Reading database ... 80%
+playwright	Install Playwright browsers	2026-04-07T13:23:07.3517543Z (Reading database ... 85%
+playwright	Install Playwright browsers	2026-04-07T13:23:07.4437192Z (Reading database ... 90%
+playwright	Install Playwright browsers	2026-04-07T13:23:07.5727002Z (Reading database ... 95%
+playwright	Install Playwright browsers	2026-04-07T13:23:07.5727563Z (Reading database ... 100%
+playwright	Install Playwright browsers	2026-04-07T13:23:07.5728317Z (Reading database ... 220446 files and directories currently installed.)
+playwright	Install Playwright browsers	2026-04-07T13:23:07.5773767Z Preparing to unpack .../0-fonts-ipafont-gothic_00303-21ubuntu1_all.deb ...
+playwright	Install Playwright browsers	2026-04-07T13:23:07.5869513Z Unpacking fonts-ipafont-gothic (00303-21ubuntu1) ...
+playwright	Install Playwright browsers	2026-04-07T13:23:07.8221263Z Selecting previously unselected package fonts-freefont-ttf.
+playwright	Install Playwright browsers	2026-04-07T13:23:07.8361785Z Preparing to unpack .../1-fonts-freefont-ttf_20211204+svn4273-2_all.deb ...
+playwright	Install Playwright browsers	2026-04-07T13:23:07.8371592Z Unpacking fonts-freefont-ttf (20211204+svn4273-2) ...
+playwright	Install Playwright browsers	2026-04-07T13:23:07.9179765Z Selecting previously unselected package fonts-tlwg-loma-otf.
+playwright	Install Playwright browsers	2026-04-07T13:23:07.9317751Z Preparing to unpack .../2-fonts-tlwg-loma-otf_1%3a0.7.3-1_all.deb ...
+playwright	Install Playwright browsers	2026-04-07T13:23:07.9329423Z Unpacking fonts-tlwg-loma-otf (1:0.7.3-1) ...
+playwright	Install Playwright browsers	2026-04-07T13:23:07.9558886Z Selecting previously unselected package fonts-unifont.
+playwright	Install Playwright browsers	2026-04-07T13:23:07.9695529Z Preparing to unpack .../3-fonts-unifont_1%3a15.1.01-1build1_all.deb ...
+playwright	Install Playwright browsers	2026-04-07T13:23:07.9706057Z Unpacking fonts-unifont (1:15.1.01-1build1) ...
+playwright	Install Playwright browsers	2026-04-07T13:23:08.0768492Z Selecting previously unselected package fonts-wqy-zenhei.
+playwright	Install Playwright browsers	2026-04-07T13:23:08.0901370Z Preparing to unpack .../4-fonts-wqy-zenhei_0.9.45-8_all.deb ...
+playwright	Install Playwright browsers	2026-04-07T13:23:08.1003833Z Unpacking fonts-wqy-zenhei (0.9.45-8) ...
+playwright	Install Playwright browsers	2026-04-07T13:23:08.5735432Z Preparing to unpack .../5-libfreetype6_2.13.2+dfsg-1ubuntu0.1_amd64.deb ...
+playwright	Install Playwright browsers	2026-04-07T13:23:08.5786905Z Unpacking libfreetype6:amd64 (2.13.2+dfsg-1ubuntu0.1) over (2.13.2+dfsg-1build3) ...
+playwright	Install Playwright browsers	2026-04-07T13:23:08.6049259Z Selecting previously unselected package xfonts-encodings.
+playwright	Install Playwright browsers	2026-04-07T13:23:08.6185181Z Preparing to unpack .../6-xfonts-encodings_1%3a1.0.5-0ubuntu2_all.deb ...
+playwright	Install Playwright browsers	2026-04-07T13:23:08.6197759Z Unpacking xfonts-encodings (1:1.0.5-0ubuntu2) ...
+playwright	Install Playwright browsers	2026-04-07T13:23:08.6496996Z Selecting previously unselected package xfonts-utils.
+playwright	Install Playwright browsers	2026-04-07T13:23:08.6631628Z Preparing to unpack .../7-xfonts-utils_1%3a7.7+6build3_amd64.deb ...
+playwright	Install Playwright browsers	2026-04-07T13:23:08.6640224Z Unpacking xfonts-utils (1:7.7+6build3) ...
+playwright	Install Playwright browsers	2026-04-07T13:23:08.7030387Z Selecting previously unselected package xfonts-cyrillic.
+playwright	Install Playwright browsers	2026-04-07T13:23:08.7165519Z Preparing to unpack .../8-xfonts-cyrillic_1%3a1.0.5+nmu1_all.deb ...
+playwright	Install Playwright browsers	2026-04-07T13:23:08.7175418Z Unpacking xfonts-cyrillic (1:1.0.5+nmu1) ...
+playwright	Install Playwright browsers	2026-04-07T13:23:08.7539219Z Selecting previously unselected package xfonts-scalable.
+playwright	Install Playwright browsers	2026-04-07T13:23:08.7676478Z Preparing to unpack .../9-xfonts-scalable_1%3a1.0.3-1.3_all.deb ...
+playwright	Install Playwright browsers	2026-04-07T13:23:08.7684484Z Unpacking xfonts-scalable (1:1.0.3-1.3) ...
+playwright	Install Playwright browsers	2026-04-07T13:23:08.8112629Z Setting up fonts-wqy-zenhei (0.9.45-8) ...
+playwright	Install Playwright browsers	2026-04-07T13:23:08.8244746Z Setting up fonts-freefont-ttf (20211204+svn4273-2) ...
+playwright	Install Playwright browsers	2026-04-07T13:23:08.8270481Z Setting up fonts-tlwg-loma-otf (1:0.7.3-1) ...
+playwright	Install Playwright browsers	2026-04-07T13:23:08.8291116Z Setting up libfreetype6:amd64 (2.13.2+dfsg-1ubuntu0.1) ...
+playwright	Install Playwright browsers	2026-04-07T13:23:08.8316963Z Setting up xfonts-encodings (1:1.0.5-0ubuntu2) ...
+playwright	Install Playwright browsers	2026-04-07T13:23:08.8344349Z Setting up fonts-ipafont-gothic (00303-21ubuntu1) ...
+playwright	Install Playwright browsers	2026-04-07T13:23:08.8418410Z update-alternatives: using /usr/share/fonts/opentype/ipafont-gothic/ipag.ttf to provide /usr/share/fonts/truetype/fonts-japanese-gothic.ttf (fonts-japanese-gothic.ttf) in auto mode
+playwright	Install Playwright browsers	2026-04-07T13:23:08.8437152Z Setting up fonts-unifont (1:15.1.01-1build1) ...
+playwright	Install Playwright browsers	2026-04-07T13:23:08.8457807Z Setting up xfonts-utils (1:7.7+6build3) ...
+playwright	Install Playwright browsers	2026-04-07T13:23:08.8502074Z Setting up xfonts-cyrillic (1:1.0.5+nmu1) ...
+playwright	Install Playwright browsers	2026-04-07T13:23:08.8838026Z Setting up xfonts-scalable (1:1.0.3-1.3) ...
+playwright	Install Playwright browsers	2026-04-07T13:23:08.9129633Z Processing triggers for libc-bin (2.39-0ubuntu8.7) ...
+playwright	Install Playwright browsers	2026-04-07T13:23:08.9436507Z Processing triggers for man-db (2.12.0-4build2) ...
+playwright	Install Playwright browsers	2026-04-07T13:23:08.9460927Z Not building database; man-db/auto-update is not 'true'.
+playwright	Install Playwright browsers	2026-04-07T13:23:08.9472578Z Processing triggers for fontconfig (2.15.0-1.1ubuntu2) ...
+playwright	Install Playwright browsers	2026-04-07T13:23:09.6671669Z 
+playwright	Install Playwright browsers	2026-04-07T13:23:09.6672290Z Running kernel seems to be up-to-date.
+playwright	Install Playwright browsers	2026-04-07T13:23:09.6672760Z 
+playwright	Install Playwright browsers	2026-04-07T13:23:09.6672888Z Restarting services...
+playwright	Install Playwright browsers	2026-04-07T13:23:09.6746699Z  systemctl restart php8.3-fpm.service
+playwright	Install Playwright browsers	2026-04-07T13:23:09.7818546Z 
+playwright	Install Playwright browsers	2026-04-07T13:23:09.7819831Z No containers need to be restarted.
+playwright	Install Playwright browsers	2026-04-07T13:23:09.7821163Z 
+playwright	Install Playwright browsers	2026-04-07T13:23:09.7821513Z No user sessions are running outdated binaries.
+playwright	Install Playwright browsers	2026-04-07T13:23:09.7821881Z 
+playwright	Install Playwright browsers	2026-04-07T13:23:09.7822378Z No VM guests are running outdated hypervisor (qemu) binaries on this host.
+playwright	Install Playwright browsers	2026-04-07T13:23:10.7279046Z Downloading Chrome for Testing 145.0.7632.6 (playwright chromium v1208) from https://cdn.playwright.dev/builds/cft/145.0.7632.6/linux64/chrome-linux64.zip
+playwright	Install Playwright browsers	2026-04-07T13:23:10.9462357Z |                                                                                |   0% of 167.3 MiB
+playwright	Install Playwright browsers	2026-04-07T13:23:11.1343738Z |■■■■■■■■                                                                        |  10% of 167.3 MiB
+playwright	Install Playwright browsers	2026-04-07T13:23:11.2326136Z |■■■■■■■■■■■■■■■■                                                                |  20% of 167.3 MiB
+playwright	Install Playwright browsers	2026-04-07T13:23:11.3364633Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 167.3 MiB
+playwright	Install Playwright browsers	2026-04-07T13:23:11.4372695Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 167.3 MiB
+playwright	Install Playwright browsers	2026-04-07T13:23:11.5411883Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 167.3 MiB
+playwright	Install Playwright browsers	2026-04-07T13:23:11.6467965Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 167.3 MiB
+playwright	Install Playwright browsers	2026-04-07T13:23:11.7473453Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 167.3 MiB
+playwright	Install Playwright browsers	2026-04-07T13:23:11.8482289Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 167.3 MiB
+playwright	Install Playwright browsers	2026-04-07T13:23:11.9571064Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 167.3 MiB
+playwright	Install Playwright browsers	2026-04-07T13:23:12.0660215Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 167.3 MiB
+playwright	Install Playwright browsers	2026-04-07T13:23:15.4635758Z Chrome for Testing 145.0.7632.6 (playwright chromium v1208) downloaded to /home/runner/.cache/ms-playwright/chromium-1208
+playwright	Install Playwright browsers	2026-04-07T13:23:15.4640108Z Downloading FFmpeg (playwright ffmpeg v1011) from https://cdn.playwright.dev/dbazure/download/playwright/builds/ffmpeg/1011/ffmpeg-linux.zip
+playwright	Install Playwright browsers	2026-04-07T13:23:15.6287860Z |                                                                                |   0% of 2.3 MiB
+playwright	Install Playwright browsers	2026-04-07T13:23:15.6343406Z |■■■■■■■■                                                                        |  10% of 2.3 MiB
+playwright	Install Playwright browsers	2026-04-07T13:23:15.6381731Z |■■■■■■■■■■■■■■■■                                                                |  20% of 2.3 MiB
+playwright	Install Playwright browsers	2026-04-07T13:23:15.6409492Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 2.3 MiB
+playwright	Install Playwright browsers	2026-04-07T13:23:15.6444482Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 2.3 MiB
+playwright	Install Playwright browsers	2026-04-07T13:23:15.6482000Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 2.3 MiB
+playwright	Install Playwright browsers	2026-04-07T13:23:15.6508652Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 2.3 MiB
+playwright	Install Playwright browsers	2026-04-07T13:23:15.6537591Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 2.3 MiB
+playwright	Install Playwright browsers	2026-04-07T13:23:15.6568929Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 2.3 MiB
+playwright	Install Playwright browsers	2026-04-07T13:23:15.6597378Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 2.3 MiB
+playwright	Install Playwright browsers	2026-04-07T13:23:15.6636552Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 2.3 MiB
+playwright	Install Playwright browsers	2026-04-07T13:23:15.7505529Z FFmpeg (playwright ffmpeg v1011) downloaded to /home/runner/.cache/ms-playwright/ffmpeg-1011
+playwright	Install Playwright browsers	2026-04-07T13:23:15.7511273Z Downloading Chrome Headless Shell 145.0.7632.6 (playwright chromium-headless-shell v1208) from https://cdn.playwright.dev/builds/cft/145.0.7632.6/linux64/chrome-headless-shell-linux64.zip
+playwright	Install Playwright browsers	2026-04-07T13:23:16.0160156Z |                                                                                |   0% of 110.9 MiB
+playwright	Install Playwright browsers	2026-04-07T13:23:16.1721658Z |■■■■■■■■                                                                        |  10% of 110.9 MiB
+playwright	Install Playwright browsers	2026-04-07T13:23:16.2616853Z |■■■■■■■■■■■■■■■■                                                                |  20% of 110.9 MiB
+playwright	Install Playwright browsers	2026-04-07T13:23:16.3297060Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 110.9 MiB
+playwright	Install Playwright browsers	2026-04-07T13:23:16.4136063Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 110.9 MiB
+playwright	Install Playwright browsers	2026-04-07T13:23:16.4865948Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 110.9 MiB
+playwright	Install Playwright browsers	2026-04-07T13:23:16.5546051Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 110.9 MiB
+playwright	Install Playwright browsers	2026-04-07T13:23:16.6114907Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 110.9 MiB
+playwright	Install Playwright browsers	2026-04-07T13:23:16.6650550Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 110.9 MiB
+playwright	Install Playwright browsers	2026-04-07T13:23:16.7183953Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 110.9 MiB
+playwright	Install Playwright browsers	2026-04-07T13:23:16.7722571Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 110.9 MiB
+playwright	Install Playwright browsers	2026-04-07T13:23:19.0859194Z Chrome Headless Shell 145.0.7632.6 (playwright chromium-headless-shell v1208) downloaded to /home/runner/.cache/ms-playwright/chromium_headless_shell-1208
+playwright	Start API server	﻿2026-04-07T13:23:19.1078363Z ##[group]Run cd agent && VEZIR_AUTH_BYPASS=1 python -m uvicorn api.server:app --host 127.0.0.1 --port 8003 --log-level warning &
+playwright	Start API server	2026-04-07T13:23:19.1079242Z [36;1mcd agent && VEZIR_AUTH_BYPASS=1 python -m uvicorn api.server:app --host 127.0.0.1 --port 8003 --log-level warning &[0m
+playwright	Start API server	2026-04-07T13:23:19.1079926Z [36;1msleep 3[0m
+playwright	Start API server	2026-04-07T13:23:19.1080318Z [36;1mcurl -sf http://127.0.0.1:8003/api/v1/health || (echo "API server failed to start" && exit 1)[0m
+playwright	Start API server	2026-04-07T13:23:19.1107983Z shell: /usr/bin/bash -e {0}
+playwright	Start API server	2026-04-07T13:23:19.1108224Z env:
+playwright	Start API server	2026-04-07T13:23:19.1108473Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.13/x64
+playwright	Start API server	2026-04-07T13:23:19.1108901Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib/pkgconfig
+playwright	Start API server	2026-04-07T13:23:19.1109307Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+playwright	Start API server	2026-04-07T13:23:19.1109659Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+playwright	Start API server	2026-04-07T13:23:19.1110033Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+playwright	Start API server	2026-04-07T13:23:19.1110430Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib
+playwright	Start API server	2026-04-07T13:23:19.1110983Z   VEZIR_DEV: 1
+playwright	Start API server	2026-04-07T13:23:19.1111175Z   TESTING: 1
+playwright	Start API server	2026-04-07T13:23:19.1111351Z ##[endgroup]
+playwright	Run Playwright tests	﻿2026-04-07T13:23:27.1633087Z ##[group]Run npx playwright test --reporter=github
+playwright	Run Playwright tests	2026-04-07T13:23:27.1633484Z [36;1mnpx playwright test --reporter=github[0m
+playwright	Run Playwright tests	2026-04-07T13:23:27.1660028Z shell: /usr/bin/bash -e {0}
+playwright	Run Playwright tests	2026-04-07T13:23:27.1660263Z env:
+playwright	Run Playwright tests	2026-04-07T13:23:27.1660507Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.13/x64
+playwright	Run Playwright tests	2026-04-07T13:23:27.1661157Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib/pkgconfig
+playwright	Run Playwright tests	2026-04-07T13:23:27.1661579Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+playwright	Run Playwright tests	2026-04-07T13:23:27.1661951Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+playwright	Run Playwright tests	2026-04-07T13:23:27.1662310Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+playwright	Run Playwright tests	2026-04-07T13:23:27.1662667Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib
+playwright	Run Playwright tests	2026-04-07T13:23:27.1662961Z   CI: true
+playwright	Run Playwright tests	2026-04-07T13:23:27.1663122Z ##[endgroup]
+playwright	Run Playwright tests	2026-04-07T13:23:29.1140373Z 
+playwright	Run Playwright tests	2026-04-07T13:23:29.1140911Z Running 13 tests using 2 workers
+playwright	Run Playwright tests	2026-04-07T13:23:32.5983089Z ·············
+playwright	Run Playwright tests	2026-04-07T13:23:32.5988096Z   13 passed (4.0s)
+playwright	Run Playwright tests	2026-04-07T13:23:32.6010179Z ##[notice]  13 passed (4.0s)
+playwright	Upload test results	﻿2026-04-07T13:23:32.6366436Z ##[group]Run actions/upload-artifact@v7
+playwright	Upload test results	2026-04-07T13:23:32.6366721Z with:
+playwright	Upload test results	2026-04-07T13:23:32.6366904Z   name: playwright-report
+playwright	Upload test results	2026-04-07T13:23:32.6367118Z   path: test-results/
+playwright	Upload test results	2026-04-07T13:23:32.6367312Z   retention-days: 7
+playwright	Upload test results	2026-04-07T13:23:32.6367499Z   if-no-files-found: warn
+playwright	Upload test results	2026-04-07T13:23:32.6367696Z   compression-level: 6
+playwright	Upload test results	2026-04-07T13:23:32.6367886Z   overwrite: false
+playwright	Upload test results	2026-04-07T13:23:32.6368068Z   include-hidden-files: false
+playwright	Upload test results	2026-04-07T13:23:32.6368281Z   archive: true
+playwright	Upload test results	2026-04-07T13:23:32.6368441Z env:
+playwright	Upload test results	2026-04-07T13:23:32.6368671Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.13/x64
+playwright	Upload test results	2026-04-07T13:23:32.6369086Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib/pkgconfig
+playwright	Upload test results	2026-04-07T13:23:32.6369486Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+playwright	Upload test results	2026-04-07T13:23:32.6369837Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+playwright	Upload test results	2026-04-07T13:23:32.6370197Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+playwright	Upload test results	2026-04-07T13:23:32.6370550Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib
+playwright	Upload test results	2026-04-07T13:23:32.6371270Z ##[endgroup]
+playwright	Upload test results	2026-04-07T13:23:32.7765513Z ##[warning]No files were found with the provided path: test-results/. No artifacts will be uploaded.
+playwright	Post Set up Node.js	﻿2026-04-07T13:23:32.7900111Z Post job cleanup.
+playwright	Post Set up Python	﻿2026-04-07T13:23:32.9322370Z Post job cleanup.
+playwright	Post Run actions/checkout@v6	﻿2026-04-07T13:23:33.0568869Z Post job cleanup.
+playwright	Post Run actions/checkout@v6	2026-04-07T13:23:33.1422695Z [command]/usr/bin/git version
+playwright	Post Run actions/checkout@v6	2026-04-07T13:23:33.1494641Z git version 2.53.0
+playwright	Post Run actions/checkout@v6	2026-04-07T13:23:33.1535474Z Temporarily overriding HOME='/home/runner/work/_temp/6abe5824-0763-4363-9d30-5c8c51c87bb2' before making global git config changes
+playwright	Post Run actions/checkout@v6	2026-04-07T13:23:33.1536630Z Adding repository directory to the temporary git global config as a safe directory
+playwright	Post Run actions/checkout@v6	2026-04-07T13:23:33.1541281Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/vezir/vezir
+playwright	Post Run actions/checkout@v6	2026-04-07T13:23:33.1572628Z Removing SSH command configuration
+playwright	Post Run actions/checkout@v6	2026-04-07T13:23:33.1579250Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+playwright	Post Run actions/checkout@v6	2026-04-07T13:23:33.1614224Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+playwright	Post Run actions/checkout@v6	2026-04-07T13:23:33.1837047Z Removing HTTP extra header
+playwright	Post Run actions/checkout@v6	2026-04-07T13:23:33.1842381Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+playwright	Post Run actions/checkout@v6	2026-04-07T13:23:33.1876385Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+playwright	Post Run actions/checkout@v6	2026-04-07T13:23:33.2095265Z Removing includeIf entries pointing to credentials config files
+playwright	Post Run actions/checkout@v6	2026-04-07T13:23:33.2101655Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+playwright	Post Run actions/checkout@v6	2026-04-07T13:23:33.2125858Z includeif.gitdir:/home/runner/work/vezir/vezir/.git.path
+playwright	Post Run actions/checkout@v6	2026-04-07T13:23:33.2126979Z includeif.gitdir:/home/runner/work/vezir/vezir/.git/worktrees/*.path
+playwright	Post Run actions/checkout@v6	2026-04-07T13:23:33.2127972Z includeif.gitdir:/github/workspace/.git.path
+playwright	Post Run actions/checkout@v6	2026-04-07T13:23:33.2128888Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+playwright	Post Run actions/checkout@v6	2026-04-07T13:23:33.2136553Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/vezir/vezir/.git.path
+playwright	Post Run actions/checkout@v6	2026-04-07T13:23:33.2158409Z /home/runner/work/_temp/git-credentials-6336d168-fff0-41e6-8ab5-a5b4fdde8afa.config
+playwright	Post Run actions/checkout@v6	2026-04-07T13:23:33.2169268Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/vezir/vezir/.git.path /home/runner/work/_temp/git-credentials-6336d168-fff0-41e6-8ab5-a5b4fdde8afa.config
+playwright	Post Run actions/checkout@v6	2026-04-07T13:23:33.2202896Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/vezir/vezir/.git/worktrees/*.path
+playwright	Post Run actions/checkout@v6	2026-04-07T13:23:33.2224224Z /home/runner/work/_temp/git-credentials-6336d168-fff0-41e6-8ab5-a5b4fdde8afa.config
+playwright	Post Run actions/checkout@v6	2026-04-07T13:23:33.2233328Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/vezir/vezir/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-6336d168-fff0-41e6-8ab5-a5b4fdde8afa.config
+playwright	Post Run actions/checkout@v6	2026-04-07T13:23:33.2263739Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+playwright	Post Run actions/checkout@v6	2026-04-07T13:23:33.2284012Z /github/runner_temp/git-credentials-6336d168-fff0-41e6-8ab5-a5b4fdde8afa.config
+playwright	Post Run actions/checkout@v6	2026-04-07T13:23:33.2294986Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-6336d168-fff0-41e6-8ab5-a5b4fdde8afa.config
+playwright	Post Run actions/checkout@v6	2026-04-07T13:23:33.2325960Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+playwright	Post Run actions/checkout@v6	2026-04-07T13:23:33.2347039Z /github/runner_temp/git-credentials-6336d168-fff0-41e6-8ab5-a5b4fdde8afa.config
+playwright	Post Run actions/checkout@v6	2026-04-07T13:23:33.2354735Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-6336d168-fff0-41e6-8ab5-a5b4fdde8afa.config
+playwright	Post Run actions/checkout@v6	2026-04-07T13:23:33.2385180Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+playwright	Post Run actions/checkout@v6	2026-04-07T13:23:33.2605213Z Removing credentials config '/home/runner/work/_temp/git-credentials-6336d168-fff0-41e6-8ab5-a5b4fdde8afa.config'
+playwright	Complete job	﻿2026-04-07T13:23:33.2749479Z Cleaning up orphan processes
+playwright	Complete job	2026-04-07T13:23:33.3157260Z Terminate orphan process: pid (3136) (bash)
+playwright	Complete job	2026-04-07T13:23:33.3176372Z Terminate orphan process: pid (3138) (python)

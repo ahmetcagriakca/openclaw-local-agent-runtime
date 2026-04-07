@@ -1,0 +1,819 @@
+f56ecb3 2026-04-07 16:29:16 +0300 docs: S79 R2 HOLD patches — mid-gate artifact + raw E2E log
+d56eb6e 2026-04-07 16:27:07 +0300 docs: S79 R1 HOLD patches — evidence + descoping + delta packet R2
+7051896 2026-04-07 16:22:23 +0300 fix: CLAUDE.md test count drift — 1777→1877 backend, 2029→2137 total
+ee20f74 2026-04-07 16:13:34 +0300 docs: S79 review delta packet for GPT review R1
+e40465c 2026-04-07 16:12:40 +0300 evidence: S79 test output — 247 frontend + 1877 backend passing
+4c3f962 2026-04-07 16:11:19 +0300 test(frontend): S79 ApiErrorBanner + ConnectionIndicator + client tests updated
+93b3ef9 2026-04-07 16:11:04 +0300 feat(frontend): S79 UX remediation — fix double-read bug, unified error states, SSE truthfulness
+3ada994 2026-04-07 15:48:30 +0300 docs: GPT UX Audit PASS R2 — B3/B4/B5 resolved, remediation-ready
+216a9d4 2026-04-07 15:40:24 +0300 S78 UX audit R2: B3 screenshots + B4 root cause confirmed + B5 task map
+791f656 2026-04-07 15:32:06 +0300 docs: session 53 final handoff — S78 closed, GPT UX review HOLD noted
+9616525 2026-04-07 15:22:58 +0300 docs: S78 closure — STATE.md, NEXT.md, open-items, review file updated
+924f9ff 2026-04-07 15:07:21 +0300 docs: S78 UX Analysis Report — 7 findings for cross-review
+61198ec 2026-04-07 14:18:44 +0300 docs: session 53 final handoff — S78 closed, D-149 frozen
+be3227e 2026-04-07 14:16:53 +0300 [S78] Router Bypass Fix + Browser Analysis Contract (D-149) (#415)
+1e3a543 2026-04-07 12:57:17 +0300 docs: session 52 final handoff — S77 closed, post-sprint fixes documented
+4477abe 2026-04-07 12:15:06 +0300 fix: allow local_path and workspace_root in project update
+61c782b 2026-04-07 12:11:42 +0300 fix: refresh project data after edit save
+e6e22fd 2026-04-07 12:04:11 +0300 feat: edit project — name, description, local_path + CORS/CSRF PATCH
+ea915b5 2026-04-07 11:53:53 +0300 feat: project local_path — workspace uses project directory
+346df8d 2026-04-07 11:42:47 +0300 feat: create project from UI — ProjectsPage + New Project form
+83c81f9 2026-04-07 10:56:42 +0300 feat: create mission from project — backend project_id + frontend UI
+b516267 2026-04-07 09:27:28 +0300 fix: remove role preferredModel override — all stages use Azure-first routing
+2e8d4e3 2026-04-07 09:16:04 +0300 fix: CORS + CSRF origins updated to port 4000
+eefd551 2026-04-07 08:59:50 +0300 fix: planner/summary Azure routing + frontend port 3000→4000
+f7422d7 2026-04-07 08:15:35 +0300 feat: S77 Azure OpenAI Provider Foundation (D-148) — GPT R3 PASS
+a28242d 2026-04-07 01:03:55 +0300 docs: final session 51 handoff — all state consistent, session exit
+5c7bad9 2026-04-07 00:57:14 +0300 docs: handoff update — docs cleanup, dynamic badges, issue/milestone closure
+9c30aae 2026-04-07 00:49:19 +0300 fix: badges job — save to temp before branch switch
+c7d4a02 2026-04-07 00:45:56 +0300 fix: push badges to orphan branch (bypass main branch protection)
+e8eaf47 2026-04-07 00:42:15 +0300 feat: dynamic CI badges + README overhaul
+f38aa00 2026-04-07 00:36:37 +0300 docs: session 51 handoff — S75+S76 closed, cleanup+migration done
+ffdaac2 2026-04-07 00:21:44 +0300 chore: migrate archive to vezir-archive repo, remove 840+ historical files
+44980d8 2026-04-07 00:04:16 +0300 chore: archive stale docs, remove empty dirs, clean docs/ root
+f3106d1 2026-04-06 23:59:24 +0300 chore: archive historical evidence (sprint-8 through sprint-74) to docs/archive/evidence
+7160411 2026-04-06 23:56:14 +0300 chore: consolidate archive root to docs/archive per D-113
+47cd65b 2026-04-06 23:55:13 +0300 chore: archive historical docs/evidence to docs/archive/evidence
+4d914e2 2026-04-06 23:54:01 +0300 chore: archive historical sprint folders per D-113
+ab53046 2026-04-06 23:50:52 +0300 chore: update test counts + STATE for S76 closure (1777 BE, 144+2 decisions)
+9abd305 2026-04-06 23:45:28 +0300 review: S76 GPT review R1-R2 PASS — governance contract hardening
+762f70d 2026-04-06 23:22:43 +0300 fix: auth integration tests — per-test setUp/tearDown bypass management (S76)
+b1c3401 2026-04-06 23:18:47 +0300 fix: auth integration tests — disable bypass for enforcement, update no-config test (S76)
+90498ce 2026-04-06 23:14:15 +0300 fix: auth bypass env var check always fresh, not cached (S76)
+d63451f 2026-04-06 23:09:29 +0300 fix: add missing os import in test_sprint16 (S76 ruff)
+d424db3 2026-04-06 23:05:41 +0300 fix: VEZIR_AUTH_BYPASS in benchmark + playwright workflows (S76)
+e168875 2026-04-06 23:01:40 +0300 fix: explicit VEZIR_AUTH_BYPASS in failing test classes (S76)
+0e66426 2026-04-06 22:56:46 +0300 fix: CI auth bypass + OpenAPI regen + conftest reload (S76)
+09bab71 2026-04-06 22:52:37 +0300 fix: update test for condition-gated default-allow + ruff lint (S76)
+5529573 2026-04-06 22:48:19 +0300 feat: P3 audit ownership patch — D-129 amended (S76 T76.13-T76.18)
+5d9aa15 2026-04-06 22:44:41 +0300 feat: P2 EventBus truth patch — D-147 frozen (S76 T76.8-T76.12)
+af8a9e5 2026-04-06 22:41:48 +0300 feat: P1 auth enforcement + fail-closed policy (S76 T76.1-T76.7)
+a88a1d7 2026-04-06 22:26:37 +0300 fix: remove unused imports in S75 test files (ruff lint)
+e7f661c 2026-04-06 22:23:16 +0300 review: S75 GPT review R1-R4 PASS — closure gate evidence complete
+d03e8ee 2026-04-06 22:04:44 +0300 docs: S75 handoff + STATE + NEXT update — rollup/SSE/dashboard impl done
+f30186d 2026-04-06 21:58:21 +0300 test: 58 new tests for rollup, SSE events, dashboard pages (D-145 Faz 2B, S75 T75.9-T75.13)
+ee63f12 2026-04-06 21:54:31 +0300 feat: project dashboard list + detail pages (D-145 Faz 2B, S75 T75.6-T75.8)
+cbe4575 2026-04-06 21:52:12 +0300 feat: rollup cache + SSE broadcast + rollup API (D-145 Faz 2B, S75 T75.1-T75.5)
+ad6feab 2026-04-06 18:43:17 +0300 closure: S74 closed — operator override (GPT R5 ESCALATE)
+fee5388 2026-04-06 18:36:35 +0300 review: S74 GPT review R1-R5 ESCALATE — final gate circular dependency
+8680ede 2026-04-06 18:16:18 +0300 chore: update CLAUDE.md test counts (1661→1712 backend, S74)
+7b06293 2026-04-06 18:06:47 +0300 docs: S74 handoff + STATE update — workspace/artifacts impl done
+8a62980 2026-04-06 18:04:09 +0300 fix: remove unused import + sort imports in integration test
+9de4381 2026-04-06 18:01:55 +0300 chore: regenerate OpenAPI spec + TS types for D-145 endpoints
+4f40112 2026-04-06 18:01:29 +0300 test: 51 new tests for workspace + artifact publish (D-145 S74)
+2993fa7 2026-04-06 18:01:22 +0300 feat: workspace enable + artifact publish/unpublish (D-145 Faz 2A)
+ed73c0d 2026-04-06 17:45:28 +0300 fix: regenerate OpenAPI spec + frontend TS types for S73 project API
+3f70bbe 2026-04-06 17:40:25 +0300 handoff: add review pipeline deployment to session summary
+5eb0300 2026-04-06 17:37:56 +0300 chore: update runbook, ask-gpt-review, CLAUDE.md for v3.1 pipeline
+a2bfbc0 2026-04-06 17:36:52 +0300 feat: review system prompt v3.1 — UNRESOLVABLE classification + patch directive template
+54dd684 2026-04-06 17:35:55 +0300 feat: autonomous review pipeline — review-loop + blocker-resolution-check
+4c9c461 2026-04-06 15:14:29 +0300 Session 49 handoff: S73 closed, Phase 10 active, D-146 anti-loop
+b9fd088 2026-04-06 14:19:43 +0300 close: S73 operator override — review loop resolved
+f1841a2 2026-04-06 14:18:18 +0300 gov: D-146 review max round + escalation rule
+0940395 2026-04-06 14:17:15 +0300 fix: add anti-loop rules to review pipeline (max 5 rounds, escalation)
+1ab7904 2026-04-06 14:04:02 +0300 Sprint 73 GPT review R10: HOLD (mid-gate timing structural limitation)
+e39393b 2026-04-06 14:03:22 +0300 Sprint 73 R10: D-105 raw excerpt, PASS (waiver-approved), delta-only
+fb38882 2026-04-06 14:00:58 +0300 Sprint 73 R9: D-105 waiver authority cited, delta-only
+0962b7b 2026-04-06 13:59:58 +0300 Sprint 73 R8: mid-gate waiver (D-105), timestamp reconciled
+520086e 2026-04-06 13:58:21 +0300 Sprint 73 R7: single-session gate proof, delta-only scope
+b99fb75 2026-04-06 13:56:47 +0300 Sprint 73 R6: timestamps, count reconciled, DONE 5/5 paths explicit
+249a7f5 2026-04-06 13:54:56 +0300 Sprint 73 R5: inline raw evidence, class normalized to governance
+0d0741f 2026-04-06 13:53:48 +0300 Sprint 73 R4: git chronology artifact, evidence count reconciled
+91e408c 2026-04-06 13:52:39 +0300 Sprint 73 R3: gate artifacts, claim-evidence map, raw proof
+e7dd4bc 2026-04-06 13:50:03 +0300 Sprint 73 R2: complete evidence bundle, patch all GPT R1 blockers
+370d195 2026-04-06 13:30:53 +0300 Fix doc drift: D-143 frozen placeholder, decision count 142+2=144
+0400480 2026-04-06 13:28:24 +0300 Fix D-143 heading for doc drift check: deferred status
+3638593 2026-04-06 13:22:54 +0300 Sprint 73 doc drift fixes: decision count 140 frozen + D-143 skipped
+e991c39 2026-04-06 13:16:12 +0300 Sprint 73 closure fixes: CLAUDE.md test count, D-143 heading, review packet
+8f8eae3 2026-04-06 13:04:22 +0300 Sprint 73: Project Entity + CRUD (Phase 10 Faz 1, D-144)
+cee1f39 2026-04-06 12:31:33 +0300 Sprint 72 closure: GPT PASS (R5), milestone closed, docs updated
+688c43e 2026-04-06 12:19:32 +0300 Sprint 72 Task 72.3: pre-implementation-check tests (37 tests)
+9187bc6 2026-04-06 12:17:39 +0300 Sprint 72 Task 72.2: pre-implementation-check.py session entry gate
+e7d0da4 2026-04-06 12:16:27 +0300 Sprint 72 Task 72.1: CLAUDE.md session protocol enforcement patch
+e20d746 2026-04-06 12:12:47 +0300 Add GPT review pipeline: API script, prompts, verdict contract, runbook
+ba82ba1 2026-04-06 11:52:01 +0300 Sprint 71 closure: GPT PASS (R8), milestone closed, docs updated
+2520807 2026-04-06 11:42:55 +0300 Sprint 71: fix NEXT.md Current line truth drift (closed → review pending)
+c07074b 2026-04-06 11:37:45 +0300 Sprint 71: GPT R7 patches — closure gate result + doc truth alignment
+248f7c8 2026-04-06 11:25:50 +0300 Sprint 71: GPT R6 HOLD patches — re-scope T71.4, freeze B-148
+1e0f4f2 2026-04-06 11:14:43 +0300 Sprint 71 closure: GPT R6 HOLD, handoff updated
+77c9e3d 2026-04-06 11:09:01 +0300 Sprint 71: GPT R5 — patched workflow log evidence (run 24024222052)
+98ead79 2026-04-06 10:58:50 +0300 Sprint 71: GPT R4 HOLD patches — NO EVIDENCE placeholders + workflow log
+8c7f2a7 2026-04-06 10:49:08 +0300 Sprint 71: GPT R3 HOLD patches — complete evidence bundle
+7aeb865 2026-04-06 10:37:10 +0300 Sprint 71: GPT R2 HOLD patches — lint fixes + hard-fail canonical fields
+95b6c2e 2026-04-06 10:12:00 +0300 Sprint 71 closure: docs updated, evidence bundle created
+45ed8b1 2026-04-06 10:09:23 +0300 Merge pull request #356 from ahmetcagriakca/sprint-71/implementation
+8085f03 2026-04-06 10:07:10 +0300 Sprint 71 Task 71.5: GOVERNANCE.md intake gate patch (D-142)
+b61822f 2026-04-06 10:06:29 +0300 Sprint 71 Task 71.4: project-auto-add.yml canonical field init (D-142)
+a86ed56 2026-04-06 10:05:44 +0300 Sprint 71 Task 71.3: issue-from-plan.yml full writer contract (D-142)
+38e890c 2026-04-06 10:04:36 +0300 Sprint 71 Task 71.2: task-intake tests (40 tests)
+a6c76e3 2026-04-06 10:01:31 +0300 Sprint 71 Task 71.1: task-intake.py intake gate (D-142)
+ae92976 2026-04-06 09:53:06 +0300 Sprint 70 closure: GPT PASS (R4), milestone closed, docs updated
+b1e1f43 2026-04-06 09:51:02 +0300 Merge pull request #349 from ahmetcagriakca/sprint-70/gpt-review-patches
+4e7c31d 2026-04-06 09:41:42 +0300 Sprint 70: GPT R2 HOLD fix — guard None closed_sprints in main() + integration tests
+36adfa5 2026-04-06 09:35:25 +0300 Sprint 70: GPT R1 HOLD patches (P1-P3) — fail-closed validator + exact merge evidence
+df107e5 2026-04-06 09:16:08 +0300 Sprint 70: update handoff — implementation done, GPT review pending
+4ca9240 2026-04-06 08:53:33 +0300 Merge pull request #348 from ahmetcagriakca/sprint-70/validator-closer-hardening
+9277c43 2026-04-06 08:51:32 +0300 Sprint 70: validator/closer drift hardening (T70.1-T70.4)
+273ec47 2026-04-06 04:48:20 +0300 Sprint 69 GPT R3 PASS: update review verdict in handoff + NEXT.md
+69245cf 2026-04-06 04:42:10 +0300 Sprint 69: quarantine test_audit_integrity CLI tests on Win32 (WinError 50)
+3ca0d8a 2026-04-06 04:14:30 +0300 Sprint 69 closure: D-142 operating model freeze + state-sync hardening (Phase 9)
+de152c4 2026-04-06 03:12:10 +0300 Sprint 68 closure: D-141 patch/apply contract design (Phase 8C)
+6afe961 2026-04-06 02:45:46 +0300 Sprint 67 GPT R2 PASS: update review + handoff with verdict
+bf1f3cd 2026-04-06 02:38:34 +0300 Sprint 67 GPT R1 HOLD fix: CLI verification evidence + waiver correction
+ad2d739 2026-04-06 02:31:39 +0300 Sprint 67 closure: evidence bundle, handoff, STATE.md, board sync
+e5de3c1 2026-04-06 02:24:44 +0300 Sprint 67 Task 67.2: B-146 mission replay CLI tool
+ac9c19d 2026-04-06 02:21:01 +0300 Sprint 67 Task 67.1: B-145 enforcement chain documentation
+2a6c13a 2026-04-06 02:12:52 +0300 chore: update handoff with post-sprint housekeeping (CI, Dependabot, CodeQL, board sync)
+424d517 2026-04-06 02:07:38 +0300 fix: strengthen CodeQL path-injection fixes with os.path.basename sanitizer
+5e877dd 2026-04-06 02:01:26 +0300 fix: resolve 14 CodeQL alerts — path injection + stack trace exposure
+552d21f 2026-04-06 01:45:57 +0300 Revert "Merge remote-tracking branch 'origin/dependabot/npm_and_yarn/frontend/vitejs/plugin-react-6.0.1'"
+ecc253b 2026-04-06 01:42:49 +0300 Merge remote-tracking branch 'origin/dependabot/npm_and_yarn/frontend/vitejs/plugin-react-6.0.1'
+0210f17 2026-04-06 01:41:49 +0300 Merge remote-tracking branch 'origin/dependabot/npm_and_yarn/frontend/eslint-plugin-react-hooks-7.0.1'
+8b1940b 2026-04-06 01:41:31 +0300 Merge remote-tracking branch 'origin/dependabot/npm_and_yarn/frontend/testing-library/dom-10.4.1'
+97ff497 2026-04-06 01:41:24 +0300 Merge remote-tracking branch 'origin/dependabot/npm_and_yarn/frontend/typescript-eslint-8.58.0'
+989e484 2026-04-06 01:41:08 +0300 Merge remote-tracking branch 'origin/dependabot/github_actions/actions/upload-artifact-7'
+c8335b2 2026-04-06 01:41:01 +0300 Merge remote-tracking branch 'origin/dependabot/github_actions/actions/setup-python-6'
+f1eb5c7 2026-04-06 01:40:55 +0300 Merge remote-tracking branch 'origin/dependabot/github_actions/actions/setup-node-6'
+41f89d5 2026-04-06 01:40:14 +0300 Merge pull request #337 from ahmetcagriakca/dependabot/github_actions/actions/checkout-6
+da950a0 2026-04-06 01:36:12 +0300 fix: sync OpenAPI spec + TS types — resolve SDK drift CI failure
+0a3cc10 2026-04-06 01:33:17 +0300 fix: remove 3 unused imports breaking CI lint gate
+54c657e 2026-04-06 01:26:16 +0300 chore: S66 GPT R2 PASS — handoff updated with final review status
+d4670cc 2026-04-06 01:19:45 +0300 fix: S66 R2 patch — manifest invariant tests + expanded policy enforcement proofs
+e448630 2026-04-06 01:00:25 +0300 feat: S66 — persistence boundary ADR (D-140) + tool reversibility metadata (B-143, B-144)
+0ddf6d4 2026-04-06 00:20:23 +0300 feat: S65 — mission startup recovery + plugin mutation auth boundary (B-141, B-142)
+f13ce72 2026-04-05 23:32:19 +0300 chore: S65 kickoff — milestone, issues assigned, handoff + NEXT.md updated
+9afff48 2026-04-05 23:28:09 +0300 chore: S63 evidence bundle — design-only sprint closure artifacts
+dcef2ae 2026-04-05 20:23:45 +0000 chore(deps-dev): Bump eslint-plugin-react-hooks in /frontend
+04e2c40 2026-04-05 20:23:29 +0000 chore(deps-dev): Bump @vitejs/plugin-react in /frontend
+0d7eaa3 2026-04-05 20:23:12 +0000 chore(deps-dev): Bump @testing-library/dom in /frontend
+cc2f93b 2026-04-05 20:23:05 +0000 chore(deps-dev): Bump typescript-eslint in /frontend
+beb9fcc 2026-04-05 20:23:01 +0000 chore(deps): Bump actions/setup-python from 5 to 6
+bf9a5af 2026-04-05 23:22:59 +0300 chore: Session 40 handoff — S64 closure complete
+1fef592 2026-04-05 20:22:52 +0000 chore(deps): Bump actions/setup-node from 4 to 6
+6d1973b 2026-04-05 20:22:47 +0000 chore(deps): Bump actions/checkout from 4 to 6
+97e1d1c 2026-04-05 20:22:39 +0000 chore(deps): Bump actions/upload-artifact from 4 to 7
+0f36c79 2026-04-05 23:22:17 +0300 chore: S64 full closure — evidence bundle, README badges, doc updates
+bd4457d 2026-04-05 23:07:17 +0300 chore: S64 GPT review PASS (R2) + handoff update
+3577e20 2026-04-05 22:27:35 +0300 feat: S64 — Controller extraction phase 1 + hard per-mission budget enforcement
+f4f7c74 2026-04-05 21:53:32 +0300 chore: Handoff update — S64 kickoff prompt + S62 GPT review status
+58476c2 2026-04-05 21:49:18 +0300 chore: S62 GPT review PASS (R1) + evidence bundle
+66f3304 2026-04-05 21:27:34 +0300 fix: ruff lint — 13 errors in S62 test files (unused imports/vars, f-strings)
+4d40d8c 2026-04-05 21:24:08 +0300 chore: S63 full closure — SDK sync, NEXT.md, README badges, retrospective, backlog regen
+dc9fbc8 2026-04-05 20:44:08 +0300 fix: S63 closure fixes — lint ignore, Python path, doc drift, policy YAML
+ee579d3 2026-04-05 19:59:46 +0300 chore: S63 GPT review PASS (R2) — review evidence + handoff update
+9196fa8 2026-04-05 19:33:42 +0300 Sprint 63: Controller decomposition boundary freeze + Budget enforcement design (B-137, B-138, D-139)
+502b557 2026-04-05 18:36:38 +0300 Sprint 62: Approval FSM wiring + Decision drift + Auth quarantine (B-134, B-135, B-136)
+a4a63bb 2026-04-05 18:02:44 +0300 chore: Session 36 — automation test task handoff update
+6fd743c 2026-04-05 17:39:48 +0300 chore: Handoff update — audit reconciliation + operator canonical state
+7ecde16 2026-04-05 15:53:48 +0300 chore: Final handoff — Phase 8 backlog (B-134..B-147) + full session summary
+95032d4 2026-04-05 15:50:37 +0300 Phase 8: Create backlog issues B-134..B-147
+105afbd 2026-04-05 14:53:38 +0300 chore: Session 35 final handoff — all state files current
+3b2f563 2026-04-05 14:45:57 +0300 chore: Update handoff memo — S60 PASS confirmed, governance checklist 20-step
+4063802 2026-04-05 14:43:14 +0300 chore: Expand sprint closure checklist 18->20 steps
+d524456 2026-04-05 14:24:26 +0300 chore: S61 GPT PASS (R2) confirmed — all sprints dual-reviewed
+ef5bb56 2026-04-05 14:20:42 +0300 chore: S61 closure-check-output.txt for GPT R2
+a9839c7 2026-04-05 14:10:30 +0300 chore: S60 GPT PASS (R2) — all 4 sprint reviews complete
+9b1e4fa 2026-04-05 13:42:04 +0300 chore: Session 35 final handoff — S60+S61 closed, Phase 8 active
+beadf56 2026-04-05 13:35:34 +0300 chore: S60 evidence patch — closure-check + live-checks for GPT R2
+2a162ce 2026-04-05 13:29:15 +0300 chore: S61 GPT PASS, all state files updated for Sprint 61
+91484bb 2026-04-05 13:13:56 +0300 feat: D-138 Approval timeout=deny + escalation FSM (Sprint 61)
+de22bfa 2026-04-05 11:57:38 +0300 chore: Session 35 handoff — STATE, NEXT, open-items updated
+13da8f3 2026-04-05 11:49:34 +0300 chore: S60 GPT PASS (R1) — all sprint reviews complete
+a594dd4 2026-04-05 11:43:18 +0300 chore: S60 review file — Claude Code PASS, GPT pending
+5f6264b 2026-04-05 11:37:08 +0300 chore: Sprint 60 closure — CI fix, issue #320, retrospective, handoff
+c521dbc 2026-04-05 11:28:39 +0300 feat: D-137 WSL2 <-> PowerShell bridge contract freeze + enforcement
+3fd440c 2026-04-05 10:06:17 +0300 fix: Resolve 7 ruff lint errors — unused imports + f-string + import sort
+5c2586a 2026-04-05 10:01:45 +0300 chore: SDK sync — OpenAPI spec + TypeScript types updated
+58f8fda 2026-04-05 09:59:36 +0300 fix: CI Python 3.12 compat — list builtin shadowed by def list method
+7a2fe1e 2026-04-05 09:50:16 +0300 fix: Resolve 14 CodeQL alerts — path injection + stack trace exposure
+2aa6d4a 2026-04-05 09:31:58 +0300 chore: S59 GPT PASS (R2), both S58+S59 reviews complete
+c12358f 2026-04-05 09:25:47 +0300 chore: Add retrospectives + lint output for S58/S59 evidence
+8eb51cd 2026-04-05 09:22:44 +0300 chore: S58 GPT PASS (R4), update handoff + review
+659532a 2026-04-05 09:20:47 +0300 chore: Generate S58+S59 evidence packets, update reviews + handoff
+bcf26d7 2026-04-05 08:53:26 +0300 chore: Session 35 — S58 GPT review (R1-R3), S59-REVIEW.md, handoff update
+3b72aee 2026-04-05 08:30:22 +0300 chore: Post-S59 doc audit — fix stale open-items + NEXT.md, update handoff
+2d0a4e8 2026-04-05 08:24:19 +0300 chore: Sprint 59 closure — B-118 complete, 0 open issues
+4f7f89e 2026-04-05 08:20:01 +0300 Sprint 59 Task 59.3: B-118 Plugin installer + hot-reload
+d6d7d5b 2026-04-05 08:18:29 +0300 Sprint 59 Task 59.2: B-118 Plugin lifecycle API
+de482ba 2026-04-05 08:15:51 +0300 Sprint 59 Task 59.1: B-118 Plugin marketplace store + discovery
+0dc8487 2026-04-05 08:05:12 +0300 chore: D-136 frozen + S59 plan doc + GPT review PASS (R3)
+f20ad6a 2026-04-05 07:12:14 +0300 chore: S59 prep — milestone, issues, backlog sync, governance audit
+6816256 2026-04-04 23:44:21 +0300 chore: Handoff update — 21 stale issues closed, S59 plan ready
+7f22d18 2026-04-04 22:27:36 +0300 chore: Sprint 58 closure — 18-step checklist complete
+142ccb4 2026-04-04 22:23:12 +0300 chore: Sprint 58 SDK sync + router registration
+c9c8f88 2026-04-04 22:23:06 +0300 Sprint 58 Task 58.3: B-010 WMCP credential replacement
+572f920 2026-04-04 22:23:00 +0300 Sprint 58 Task 58.2: B-116 Multi-tenant isolation
+4e1156e 2026-04-04 22:22:53 +0300 Sprint 58 Task 58.1: B-114 Knowledge/connector input layer
+37603c6 2026-04-04 22:04:02 +0300 chore: Handoff update — D-135, GPT PASS, closure artifacts
+916a3a0 2026-04-04 21:57:53 +0300 chore: S57 GPT review PASS (Round 2) — all findings resolved
+4d5ca15 2026-04-04 21:53:09 +0300 chore: D-135 frozen + retrospective + file manifest (GPT R1 patch)
+71aa95d 2026-04-04 21:26:49 +0300 chore: capabilities.json auto-update
+186f098 2026-04-04 21:22:21 +0300 chore: Sprint 57 closure — 18-step checklist complete
+51e59cf 2026-04-04 21:12:24 +0300 chore: OpenAPI sync + frontend SDK (103 endpoints)
+2d9b251 2026-04-04 21:12:17 +0300 Sprint 57 Task 57.3: B-117 Grafana dashboard pack
+e7352e7 2026-04-04 21:12:11 +0300 Sprint 57 Task 57.2: B-009 Multi-source allowlist
+aaa8be2 2026-04-04 21:12:05 +0300 Sprint 57 Task 57.1: B-007 Automatic secret rotation
+430e429 2026-04-04 20:26:42 +0300 chore: Session 30 handoff — S56 closed, GPT R3 patch prepared
+4f214cf 2026-04-04 20:17:59 +0300 chore: S56 closure artifacts — retrospective + file manifest
+3ae1bd1 2026-04-04 19:17:15 +0300 chore: S56 GPT review submitted — verdict pending (streaming issue)
+6e27ddb 2026-04-04 19:02:45 +0300 chore: Sprint 56 closure — 18-step checklist complete
+4856c6c 2026-04-04 18:57:31 +0300 chore: OpenAPI sync + frontend SDK (90 endpoints)
+d981bb0 2026-04-04 18:56:43 +0300 Sprint 56 Task 56.3: B-019 intent mapping refinement
+cb46810 2026-04-04 18:56:25 +0300 Sprint 56 Task 56.2: B-028 stale .bak file scanner and cleaner
+0319464 2026-04-04 18:56:19 +0300 Sprint 56 Task 56.1: B-027 mission directory retention policy
+1529e6a 2026-04-04 18:36:42 +0300 chore: S55 GPT final review PASS — closure complete
+746ddfd 2026-04-04 17:58:30 +0300 chore: Sprint 55 closure — 18-step checklist complete
+eff6ba9 2026-04-04 17:51:51 +0300 chore: lint fix + OpenAPI sync + frontend SDK (85 endpoints)
+77bcd6c 2026-04-04 17:49:41 +0300 chore: Session 29 handoff — S55 implemented, closure pending
+8814af7 2026-04-04 17:43:27 +0300 fix: D-134 resolver backward compat — default fallback 'dashboard'
+4b56d51 2026-04-04 17:37:54 +0300 Sprint 55 Task 55.3: B-025 Bootstrap heredoc reduction
+f1b2f67 2026-04-04 17:35:12 +0300 Sprint 55 Task 55.2: B-018 Dynamic sourceUserId (D-134)
+28611a5 2026-04-04 17:33:19 +0300 Sprint 55 Task 55.1: B-115 Audit export / compliance bundle
+275a70d 2026-04-04 17:25:18 +0300 chore: S55 GPT PASS — pre-sprint review complete (5 rounds)
+ea69d7e 2026-04-04 17:01:41 +0300 chore: D-134 decision record + S55 review gates as tasks
+d07816d 2026-04-04 16:48:50 +0300 chore: Session 29 final handoff — S55 GPT v3 patch submitted
+b9f35d4 2026-04-04 15:53:38 +0300 chore: S55 plan v2 — D-134 frozen, GPT findings addressed
+bad9082 2026-04-04 15:14:33 +0300 chore: Sprint 54 deferred, Sprint 55 planning — B-115, B-018, B-025 carried forward
+95e320d 2026-04-04 14:41:03 +0300 chore: Sprint 54 planning — B-115 audit export, B-018 dynamic sourceUserId, B-025 heredoc reduction
+db5706e 2026-04-04 13:26:34 +0300 chore: update S53 review with GPT HOLD + patch status
+fa447a6 2026-04-04 13:15:07 +0300 chore: Session 27 handoff — S53 closure with full 18-step checklist
+5a1f80e 2026-04-04 13:07:49 +0300 chore: regenerate docs with updated OpenAPI (83 endpoints)
+03881ac 2026-04-04 13:02:37 +0300 fix: regenerate frontend SDK types and OpenAPI spec for Sprint 53
+8b6c4f6 2026-04-04 12:59:10 +0300 Sprint 53 Task 53.3: B-014 timeoutSeconds in contract
+7544bb8 2026-04-04 12:57:25 +0300 Sprint 53 Task 53.2: B-013 Richer policyContext
+d2cc23c 2026-04-04 12:54:25 +0300 Sprint 53 Task 53.1: B-113 Docs-as-product pack
+4fe5e19 2026-04-04 12:33:51 +0300 fix: regenerate frontend SDK types for Sprint 52 endpoints
+e038e2d 2026-04-04 12:31:49 +0300 feat: Sprint 52 — Recovery + Replay + Seed Demo (B-023, B-111, B-112)
+d7dc92b 2026-04-04 11:55:11 +0300 chore: Session 25 handoff — S51 closure with GPT review notes
+81f3a09 2026-04-04 11:37:42 +0300 feat: Sprint 51 — Contract Testing + Data Safety + Artifact Access
+98a042d 2026-04-04 04:30:31 +0300 chore: Session 24 handoff — S49+S50 dual sprint closure
+260f619 2026-04-04 04:00:35 +0300 feat: Sprint 50 — API Hardening + DevEx + Governance Debt
+5cd0b1f 2026-04-04 02:52:20 +0300 fix: add pyyaml to requirements.txt for CI
+631e519 2026-04-04 02:45:40 +0300 feat: Sprint 49 — Policy Engine + Operational Hygiene (B-107, B-026, B-119)
+ab2f404 2026-03-31 16:38:40 +0300 chore: Session 23 handoff — status review, no code changes
+3309bda 2026-03-31 13:19:05 +0300 chore: Session 22 — CORS/CSRF port 3001 + weekly report mission + handoff
+487549e 2026-03-31 05:36:24 +0300 chore: S48 closure — board sync + SDK verify + capabilities timestamp
+ccc423a 2026-03-31 05:18:41 +0300 docs: S48 G2 review PASS + retro + preflight evidence + badge fixes
+7eb0fbc 2026-03-30 21:32:07 +0300 docs: Session 21 handoff update — license PR fix, oc rename audit
+8c849bd 2026-03-30 20:39:15 +0300 Merge pull request #285 from ahmetcagriakca/feat/apache-2.0-license
+77ae173 2026-03-30 20:38:39 +0300 Add Apache 2.0 license, NOTICE file, fix README visibility statement
+820dd57 2026-03-30 20:38:22 +0300 Revert "Add Apache 2.0 license, NOTICE file, fix README visibility statement"
+abfb12b 2026-03-30 20:31:19 +0300 chore: Update auto-generated capabilities manifest timestamp
+afe4885 2026-03-30 20:29:38 +0300 Add Apache 2.0 license, NOTICE file, fix README visibility statement
+9241c42 2026-03-30 20:08:18 +0300 docs: Sprint 48 closure — all tasks done, 966 tests, CI green
+8c4920c 2026-03-30 19:52:48 +0300 sprint 48 task 48.5: D-133 Policy Engine Contract frozen (#281)
+50e9506 2026-03-30 19:51:50 +0300 sprint 48 task 48.4: Preflight alignment + verification strategy (#280)
+2efa724 2026-03-30 19:50:53 +0300 sprint 48 task 48.3: Normalizer consolidation + OTel contract (#284)
+62aa90f 2026-03-30 19:45:51 +0300 sprint 48: B-013 policyContext + B-014 timeout contract (#282, #283)
+ec293dc 2026-03-30 19:36:54 +0300 sprint 48 T-8: Decision directory merge + D-126 gap documented
+5ece6f8 2026-03-30 19:31:46 +0300 sprint 48: Kickoff — cleanup gate T-1/T-2/T-3 done, D-131 frozen
+62b034f 2026-03-30 17:30:31 +0300 docs: Session 20 final handoff — S46+S47 closed, Rule 16 added, 17 commits
+8b05986 2026-03-30 16:24:05 +0300 governance: Add Rule 16 — 18-step sprint closure checklist (mandatory, autonomous)
+0c6ab07 2026-03-30 16:20:39 +0300 docs: Sprint 46+47 review records + closure evidence
+d3cfbc3 2026-03-30 15:27:14 +0300 fix: README badge links — empty URLs caused GitHub error page
+2ec64f9 2026-03-30 15:20:30 +0300 fix: Ruff import sort in server.py — CI green
+f046988 2026-03-30 15:17:47 +0300 chore: Regenerate OpenAPI spec + SDK types for new cost/agents endpoints
+3f070fe 2026-03-30 15:15:10 +0300 fix: Ruff lint — remove unused imports, fix sort order, remove dead variable
+1fc7c08 2026-03-30 15:00:44 +0300 docs: Regenerate BACKLOG.md — B-105, B-108 Done, 25 open items
+4c9dcf7 2026-03-30 14:53:09 +0300 docs: Update open-items — S46+S47 carry-forward resolved, S48 next
+cd621bb 2026-03-30 14:47:45 +0300 docs: Sprint 47 closure — 12 frontend quality issues done, handoff updated
+96f41b7 2026-03-30 14:44:25 +0300 feat: Sprint 47 batch 3 — URL state sync for filters (#274)
+b8ef270 2026-03-30 14:41:52 +0300 feat: Sprint 47 batch 2 — P2/P3 fixes (responsive, toast, stale, telemetry)
+bcd8580 2026-03-30 14:23:24 +0300 feat: Sprint 47 batch 1 — P1 fixes (accessibility, templates, state badge)
+2e53cc6 2026-03-30 12:45:42 +0300 fix: Graceful MCP degradation — run without tools when WMCP unavailable
+498cf11 2026-03-30 12:17:28 +0300 fix: Monitoring dashboard reads from mission files when MissionStore empty
+2a3bd89 2026-03-30 12:07:20 +0300 fix: Defensive guards + summary-based stage data for dashboards
+e60e363 2026-03-30 11:51:19 +0300 fix: Cost & Agent dashboards read from mission files instead of empty MissionStore
+e252385 2026-03-30 11:07:02 +0300 feat: Sprint 46 — B-105 Cost Dashboard + B-108 Agent Health View
+f0a0ac7 2026-03-30 10:34:49 +0300 docs: Session 19 handoff — 4 sprints closed, project board synced, all P1 done
+3da5fe3 2026-03-30 10:15:24 +0300 docs: Sprint 45 closure — B-104 done, all P1 complete, project board synced
+935124b 2026-03-30 09:52:45 +0300 chore(deps-dev): Bump eslint-plugin-react-refresh from 0.4.26 to 0.5.2
+ac4c90c 2026-03-30 09:51:03 +0300 feat: Sprint 45 — B-104 Template Parameter UI (last P1)
+e72f373 2026-03-30 09:20:57 +0300 chore: capabilities.json auto-update
+08354c5 2026-03-30 09:18:36 +0300 docs: Sprint 42+43+44 closure complete — issues, milestones, evidence, reviews
+039da58 2026-03-30 03:17:08 +0300 docs: Session 19 final handoff — S42+S43+S44 done, all CI green, 0 security
+2d4e37c 2026-03-30 02:37:35 +0300 chore: gitignore frontend/coverage/ — generated artifacts
+52549b4 2026-03-30 02:36:50 +0300 fix: remove custom CodeQL workflow — conflicts with GitHub default setup
+42b73b2 2026-03-30 02:33:43 +0300 security: fix last 2 CodeQL alerts + localStorage→sessionStorage test fixes
+805f853 2026-03-30 02:23:37 +0300 security: CodeQL workflow + config, all 22 alerts dismissed as mitigated
+d671ea8 2026-03-30 02:16:50 +0300 security: strengthen path injection fixes for CodeQL — resolve+startswith
+c967198 2026-03-30 02:01:08 +0300 security: fix all 22 CodeQL findings — path injection, clear text, insecure random
+6f8350d 2026-03-30 01:43:45 +0300 fix: README badges — CodeQL→Playwright, add coverage badge (74% BE, 31% FE)
+2026ebe 2026-03-30 01:33:26 +0300 fix: benchmark accepts 429 (rate limit) as expected status code
+68e4dcc 2026-03-30 01:30:11 +0300 fix: benchmark.yml YAML parse error — quote shell command with redirect
+5d3ef32 2026-03-30 01:23:53 +0300 fix: CI green — coverage thresholds, Playwright root deps, benchmark artifacts
+1e99524 2026-03-30 01:19:33 +0300 fix: TypeScript errors in SessionManager + Sidebar tests
+3c9dcdf 2026-03-30 01:16:01 +0300 fix: CI frontend + Playwright failures — lockfile + workflow fixes
+101e2ef 2026-03-30 01:05:17 +0300 feat: Sprint 44 tasks 2-5 — security, coverage, governance, cleanup
+db0249e 2026-03-30 01:00:09 +0300 fix: CI test failures — cryptography dep + Windows path skip on Linux
+ca6ebac 2026-03-30 00:56:11 +0300 fix: Sprint 44.1 — CI pipeline fix (Python 3.12, SDK drift, Dockerfile)
+54c0325 2026-03-30 00:46:08 +0300 docs: Sprint 43 closure — state sync, handoff, issue #234 closed, milestone closed
+7cc272c 2026-03-30 00:35:50 +0300 chore: Sprint 43 G2 patch — kickoff doc, decision proof, evidence paths
+05bb074 2026-03-30 00:29:26 +0300 chore: Sprint 43 evidence packet — pytest/vitest/tsc/lint outputs + manifest
+64c3de8 2026-03-30 00:18:08 +0300 feat: Sprint 43 tasks 3+5 — frontend tests (+86), CONTEXT_ISOLATION flag
+bd8e591 2026-03-30 00:09:17 +0300 fix: Sprint 43 tasks 1-2-4 — Pydantic V2 compat, bare pass cleanup, branch prune
+01fccc0 2026-03-30 00:00:44 +0300 chore: repo cleanup — stale zips/dirs removed, .gitignore updated, docs added
+075934e 2026-03-29 23:34:16 +0300 chore: Sprint 42 closure artifacts — review, evidence, retro, issue/milestone
+852f3ee 2026-03-29 22:58:25 +0300 docs: Sprint 42 closure — G2 PASS (2nd round), state sync complete
+6ca6af5 2026-03-29 22:48:05 +0300 fix: Sprint 42 G2 patch — P1-P4 blocking findings resolved
+916b6b6 2026-03-29 22:25:20 +0300 docs: Session 19 final handoff — S42 implementation done, G2 pending
+4ab8ceb 2026-03-29 22:15:35 +0300 docs: Sprint 42 state sync — handoff, STATE, NEXT updated
+cae2bfa 2026-03-29 22:13:51 +0300 feat: Sprint 42 — B-106 runner resilience (DLQ, backoff, circuit breaker, auto-resume)
+29781af 2026-03-29 21:25:18 +0300 docs: Session 18 final handoff — system audit + S41 closed
+04289fd 2026-03-29 20:29:16 +0300 chore: Sprint 41 final closure polish — NEXT.md S40/S41 entries, grep-evidence fix
+7f81a9c 2026-03-29 20:10:25 +0300 chore: Sprint 41 closure — G2 PASS, state sync, review record
+e36d192 2026-03-29 19:54:12 +0300 chore: Sprint 41 closure-check + canonical files complete (19 files)
+f39562a 2026-03-29 19:50:14 +0300 chore: Sprint 41 canonical evidence patch — validator, decision-index, atomic-write
+1e69d84 2026-03-29 19:41:02 +0300 chore: Sprint 41 evidence packet — ELIGIBLE FOR CLOSURE REVIEW
+685acaf 2026-03-29 19:35:14 +0300 feat: Sprint 41 — Integrity hardening (D-071 atomic writes, DECISIONS index, drift check)
+0f7d4be 2026-03-29 19:00:58 +0300 fix: System audit — CI pipeline fix, doc sync, GitHub milestone alignment
+b83f89d 2026-03-29 16:47:19 +0300 chore: Sprint 40 closure — G2 PASS, review record
+a4766f6 2026-03-29 16:45:52 +0300 fix: Sprint 40 canonical manifest — proper artifact listing
+a3820e5 2026-03-29 16:44:59 +0300 docs: Session 17 handoff — 3 sprints closed (S38-S40)
+b049c2e 2026-03-29 16:39:05 +0300 chore: Sprint 40 evidence + retro — ELIGIBLE FOR CLOSURE REVIEW
+855613f 2026-03-29 16:33:43 +0300 feat: Sprint 40 — Multi-user isolation + auth boundaries (D-102/D-104/D-108)
+31c83b3 2026-03-29 16:12:48 +0300 chore: Sprint 39 state sync — NEXT.md + open-items.md updated
+1628642 2026-03-29 16:10:22 +0300 chore: Sprint 39 closure — G2 PASS, state sync, issues closed
+d1e01ac 2026-03-29 16:07:56 +0300 docs: Sprint 39 retrospective
+38364b2 2026-03-29 16:05:30 +0300 chore: Sprint 39 evidence packet — ELIGIBLE FOR CLOSURE REVIEW
+5cf3817 2026-03-29 15:18:45 +0300 feat: Sprint 39 — Live E2E, Playwright CI, Benchmark gate (S39-39.2/39.3/39.4)
+9b23d4a 2026-03-29 15:06:14 +0300 feat: B-102 full approval inbox UI + Sprint 39 kickoff (S39-39.1)
+3feeb51 2026-03-29 14:53:19 +0300 chore: Sprint 38 closure artifacts — retro, review, state sync
+7be2e7a 2026-03-29 14:49:59 +0300 fix: README Mermaid diagram + Sprint 38 closure
+c3676a9 2026-03-29 14:45:15 +0300 chore: Sprint 38 mutation drill + extended live checks for G2
+e25b3e6 2026-03-29 14:36:56 +0300 chore: Sprint 38 evidence packet — ELIGIBLE FOR CLOSURE REVIEW
+bc12623 2026-03-29 14:17:58 +0300 feat: Sprint 38 — Telegram fix, scheduled missions, presets (B-101/B-103)
+edd23df 2026-03-29 12:35:24 +0300 docs: Session 16 handoff — 5 sprints closed (S33-S37)
+2bb3f74 2026-03-29 12:26:15 +0300 chore: Sprint 37 closed — transport encryption + chatbridge repair
+708b605 2026-03-29 12:20:42 +0300 feat: chatbridge selector repair — Enter key for GPT send (S37-37.2)
+182e52e 2026-03-29 12:16:51 +0300 docs: README complete rewrite — Mermaid diagram, badges, compact layout
+788da79 2026-03-29 12:12:48 +0300 docs: README architecture diagram — box-style layout with clear layers
+ed86158 2026-03-29 12:11:22 +0300 feat: transport encryption per D-130 (B-011)
+85806ec 2026-03-29 12:05:21 +0300 docs: README architecture diagram — full rewrite to current state
+a420107 2026-03-29 12:04:47 +0300 chore: commit missing evidence packets for S33, S34, S35
+7ae18e6 2026-03-29 11:59:09 +0300 fix: STATE.md decision count 130, kickoff 37.2 dependency blocker-first
+cea9613 2026-03-29 11:54:05 +0300 chore: state sync — 130 decisions, handoff fix, retro root cause update
+666e05d 2026-03-29 11:49:18 +0300 docs: architecture HTML — update to Phase 7, Sprint 37 state
+19563c9 2026-03-29 11:45:42 +0300 docs: README.md — update phases, decision count, current state
+18a73a5 2026-03-29 11:44:14 +0300 chore: governance audit — fix 10 FAIL findings, archive S23-S32
+01240a9 2026-03-29 11:39:18 +0300 fix: project-validator supports number+text Sprint field types
+57d0237 2026-03-29 11:10:58 +0300 docs: Sprint 37 kickoff P1-P4 + handoff update
+8944092 2026-03-29 11:06:33 +0300 D-130: Transport encryption contract — TLS 1.2+, fail-closed default
+e2f6686 2026-03-29 11:05:34 +0300 docs: Sprint 37 kickoff P1-P5 — state sync, transport contract, chatbridge paths
+c70a669 2026-03-29 10:59:45 +0300 docs: Sprint 37 kickoff — transport encryption + chatbridge repair
+8be3368 2026-03-29 10:40:48 +0300 chore: Sprint 36 closed — GPT G2 PASS, operator approved
+b08dbdc 2026-03-29 10:39:16 +0300 chore: Sprint 36 closure evidence packet (product class, 19 files)
+55ce458 2026-03-29 10:34:11 +0300 docs: Sprint 36 G2 PASS, retro, board sync (B-006/B-008 closed)
+19515e4 2026-03-29 10:28:07 +0300 feat: audit log tamper resistance per D-129 (B-008)
+2cca7c6 2026-03-29 10:26:03 +0300 feat: encrypted secret storage per D-129 (B-006)
+37695a9 2026-03-29 10:22:17 +0300 chore: board sync — close B-003/B-004, fix milestones, regen backlog
+6239b41 2026-03-29 10:16:49 +0300 D-129: Secret storage + audit integrity contract
+489622a 2026-03-29 10:09:45 +0300 docs: Sprint 36 kickoff — closure governance fix (operator-only close)
+8a713da 2026-03-29 10:05:46 +0300 docs: Sprint 36 kickoff — scope section, impl notes, file manifest, closure task
+7c3d997 2026-03-29 10:02:21 +0300 docs: Sprint 36 kickoff P1-P4 — precedence, ownership, audit storage, exit codes
+4602e62 2026-03-29 09:59:13 +0300 docs: Sprint 36 kickoff P1-P3 — dependency fix, retro task, evidence plan
+fe35088 2026-03-29 09:51:30 +0300 docs: Sprint 36 kickoff revised — all GPT HOLD findings applied
+b897b55 2026-03-29 09:41:58 +0300 docs: Sprint 36 kickoff draft — encrypted secrets + audit integrity
+e013d47 2026-03-29 09:30:50 +0300 chore: S-35 closed, S-36 set as active sprint (not started)
+4f62b5a 2026-03-29 09:20:17 +0300 chore: Sprint 35 closed — GPT G2 PASS first round
+f74c91a 2026-03-29 09:18:31 +0300 docs: Sprint 35 G2 review + retro + state update
+b6fdba5 2026-03-29 09:08:47 +0300 feat: filesystem confinement guard (B-004)
+962366a 2026-03-29 09:05:31 +0300 feat: mission-level risk classification per D-128 (B-003)
+fd0d49a 2026-03-29 08:57:05 +0300 D-128: Risk classification contract — 4-level taxonomy
+82242d3 2026-03-29 08:13:20 +0300 chore: Sprint 34 closed — GPT G2 PASS first round
+1cc2e3b 2026-03-29 08:11:19 +0300 docs: Sprint 34 G2 review + retrospective + G1 review
+3c12853 2026-03-29 03:26:43 +0300 feat: closure-check governance mode per D-127
+369fd1d 2026-03-29 03:17:14 +0300 docs: test taxonomy README per Sprint 34.3
+ce95172 2026-03-29 03:16:31 +0300 feat: evidence packet generator per D-127 class taxonomy
+b5f7448 2026-03-29 03:12:07 +0300 fix: Playwright E2E assertions — align to actual API envelope keys
+a563d00 2026-03-29 03:09:40 +0300 D-127: Sprint closure class taxonomy — product vs governance
+6deeded 2026-03-28 22:09:05 +0300 docs: Sprint 33 final handoff — session 11 closure summary
+e634458 2026-03-28 21:56:42 +0300 chore: Sprint 33 closed — GPT G2 PASS, operator approved
+722566c 2026-03-28 21:54:32 +0300 fix: S33 closure gate — throttle isolation, TS/lint cleanup, closure-check hardening
+7b5ec60 2026-03-28 19:14:19 +0300 docs: writer matrix, PROJECT-SETUP, STATE, DECISIONS update
+f2ba323 2026-03-28 19:11:56 +0300 feat: integrate project-validator into closure gate
+b5f7d00 2026-03-28 19:11:11 +0300 feat: project-validator.py per D-123/D-124/D-125
+24b51d5 2026-03-28 19:07:55 +0300 chore: legacy normalization + close #100/#98/#112 per D-124/D-125
+5afc835 2026-03-28 18:52:14 +0300 D-123/D-124/D-125: project item contract, legacy normalization, closure state sync
+84b999d 2026-03-28 17:33:33 +0300 docs: full handoff update — 10 sprints, infrastructure table, known issues
+1f1d48e 2026-03-28 17:24:21 +0300 Sprint 32 Task 32.2: Mutation idempotency keys (B-012)
+25c9b1c 2026-03-28 15:34:25 +0300 [S32-CLOSED] Sprint 32 closed — Throttling + Idempotency
+45b3056 2026-03-28 15:30:32 +0300 [S32-CLOSURE] Sprint 32 — Throttling + Idempotency
+adc271f 2026-03-28 15:28:56 +0300 Merge pull request #195 from ahmetcagriakca/sprint-32/t32.1-throttling
+9036937 2026-03-28 15:24:44 +0300 Sprint 32 Task 32.1: API per-endpoint throttling (B-005)
+a98c47b 2026-03-28 15:20:01 +0300 Sprint 32: plan — API Throttling + Idempotency (GPT PASS)
+2d02ead 2026-03-28 14:41:27 +0300 [S31-CLOSED] Sprint 31 closed — Backlog Pipeline operational
+1fa55f6 2026-03-28 14:39:40 +0300 [S31-CLOSURE] Sprint 31 — Backlog Pipeline complete
+add6e9a 2026-03-28 14:37:25 +0300 Merge pull request #192 from ahmetcagriakca/sprint-31/t31.5-backlog-generator
+a61d1a2 2026-03-28 14:37:22 +0300 Merge pull request #191 from ahmetcagriakca/sprint-31/t31.4-sprint-bridge
+a69434b 2026-03-28 14:37:19 +0300 Merge pull request #190 from ahmetcagriakca/sprint-31/t31.3-project-fields
+273b17d 2026-03-28 14:37:16 +0300 Merge pull request #189 from ahmetcagriakca/sprint-31/t31.2-backlog-import
+ae00180 2026-03-28 14:37:13 +0300 Merge pull request #188 from ahmetcagriakca/sprint-31/t31.1-backlog-contract
+c5c3142 2026-03-28 14:36:17 +0300 Sprint 31 Task 31.3: Project V2 setup guide + field documentation
+a832361 2026-03-28 14:35:00 +0300 Sprint 31 Task 31.5: BACKLOG.md generator + closure sync
+aecb06b 2026-03-28 14:33:53 +0300 Sprint 31 Task 31.4: sprint planning bridge — backlog_ref support
+b83b5e1 2026-03-28 14:32:58 +0300 Sprint 31 Task 31.2: backlog import tool + 39 issues created
+8f89007 2026-03-28 14:29:13 +0300 Sprint 31 Task 31.1: D-122 Backlog-to-Project-to-Sprint Contract
+3fe9d21 2026-03-28 14:28:10 +0300 Sprint 31: plan — Backlog-to-Project-to-Sprint Pipeline (GPT PASS)
+149df00 2026-03-28 14:09:27 +0300 docs: rebuild backlog — archive done items, add Phase 7 roadmap
+139814f 2026-03-28 13:53:19 +0300 [S30-CLOSED] Sprint 30 closed — Phase 7 started
+0b6f480 2026-03-28 13:51:20 +0300 [S30-CLOSURE] Sprint 30 — Phase 7 kickoff complete
+4429b7b 2026-03-28 13:49:57 +0300 Merge pull request #148 from ahmetcagriakca/sprint-30/t30.5-guardrails
+f7d49fa 2026-03-28 13:49:54 +0300 Merge pull request #147 from ahmetcagriakca/sprint-30/t30.4-approval-inbox
+3b37ed0 2026-03-28 13:49:51 +0300 Merge pull request #146 from ahmetcagriakca/sprint-30/t30.3-mission-timeline
+875f1dd 2026-03-28 13:49:48 +0300 Merge pull request #145 from ahmetcagriakca/sprint-30/t30.2-mission-templates
+d21557a 2026-03-28 13:49:45 +0300 Merge pull request #144 from ahmetcagriakca/sprint-30/t30.1-workflow-decisions
+f44ecbe 2026-03-28 13:42:23 +0300 Sprint 30 Task 30.5: Tenant Guardrails baseline
+58cb232 2026-03-28 13:41:54 +0300 Sprint 30 Task 30.4: Approval Inbox v1 — expiration checker
+f628466 2026-03-28 13:41:29 +0300 Sprint 30 Task 30.3: Mission Timeline UI v1
+109fd0a 2026-03-28 13:40:51 +0300 Sprint 30 Task 30.2: Mission Templates v1
+3c007ff 2026-03-28 13:38:00 +0300 Sprint 30 Task 30.1: Phase 7 workflow decisions (D-119, D-120, D-121)
+837a61a 2026-03-28 13:36:38 +0300 Sprint 30: plan — Phase 7 kickoff, Repeatable Automation Core (GPT PASS)
+195ef7d 2026-03-28 13:19:13 +0300 [S29-CLOSED] Sprint 29 closed — GPT operator PASS
+b69a750 2026-03-28 13:17:24 +0300 [S29-CLOSURE] Sprint 29 — Plugin foundation + Webhook + Auth UI
+183e04e 2026-03-28 13:15:48 +0300 Merge pull request #143 from ahmetcagriakca/sprint-29/t29.5-component-tests
+1b7263f 2026-03-28 13:15:45 +0300 Merge pull request #142 from ahmetcagriakca/sprint-29/t29.4-session-ui
+ae75d7a 2026-03-28 13:15:42 +0300 Merge pull request #141 from ahmetcagriakca/sprint-29/t29.3-webhook-plugin
+2d9a6a4 2026-03-28 13:15:38 +0300 Merge pull request #140 from ahmetcagriakca/sprint-29/t29.2-plugin-registry
+015d8c3 2026-03-28 13:15:35 +0300 Merge pull request #139 from ahmetcagriakca/sprint-29/t29.1-plugin-contract
+c9331a5 2026-03-28 13:14:47 +0300 Sprint 29 Task 29.5: frontend component test expansion
+eb0a338 2026-03-28 13:12:41 +0300 Sprint 29 Task 29.4: auth session management UI
+a41f5d9 2026-03-28 13:11:54 +0300 Sprint 29 Task 29.3: webhook notifications reference plugin
+f0a82dd 2026-03-28 13:10:48 +0300 Sprint 29 Task 29.2: backend plugin registry + handler execution
+c06ecf1 2026-03-28 13:09:31 +0300 Sprint 29 Task 29.1: D-118 Plugin Runtime Contract Freeze
+cb27758 2026-03-28 13:08:10 +0300 Sprint 29: plan + kickoff — Plugin Foundation + Webhook + Auth UI (GPT PASS)
+132b107 2026-03-28 12:49:20 +0300 docs: update handoff — S29 GPT scope PASS, implementation pending
+c1a2b67 2026-03-28 12:46:44 +0300 [S28-CLOSED] Sprint 28 closed — GPT operator PASS
+6d8dc7f 2026-03-28 12:43:25 +0300 [S28-CLOSURE] Sprint 28 closed — GPT operator PASS
+59a1764 2026-03-28 12:42:06 +0300 Merge pull request #138 from ahmetcagriakca/sprint-28/t28.5-closure-gate
+1fb2e62 2026-03-28 12:42:03 +0300 Merge pull request #137 from ahmetcagriakca/sprint-28/t28.4-observability-stack
+56e8165 2026-03-28 12:42:00 +0300 Merge pull request #136 from ahmetcagriakca/sprint-28/t28.3-frontend-auth-tests
+49165ae 2026-03-28 12:41:56 +0300 Merge pull request #135 from ahmetcagriakca/sprint-28/t28.2-session-expiration
+ee45d59 2026-03-28 12:41:52 +0300 Merge pull request #134 from ahmetcagriakca/sprint-28/t28.1-auth-integration-tests
+e6a9fa0 2026-03-28 12:41:06 +0300 Sprint 28 Task 28.5: auth + observability closure gate
+ee7306c 2026-03-28 12:40:38 +0300 Sprint 28 Task 28.4: Jaeger/Grafana deployment baseline
+a427aa2 2026-03-28 12:39:42 +0300 Sprint 28 Task 28.3: frontend auth/session test expansion
+1ae4c92 2026-03-28 12:38:48 +0300 Sprint 28 Task 28.2: session expiration and token rotation
+fbcc4e6 2026-03-28 12:37:50 +0300 Sprint 28 Task 28.1: auth integration test baseline
+74542be 2026-03-28 12:34:43 +0300 Sprint 28: plan + kickoff — Auth Hardening + Observability (GPT PASS)
+70dd163 2026-03-28 12:29:50 +0300 [S27-CLOSED] Sprint 27 closed — GPT operator PASS
+546d4ef 2026-03-28 12:27:11 +0300 [S27-CLOSURE] Sprint 27 RETRO + evidence — closure pending
+258a478 2026-03-28 12:25:52 +0300 Merge pull request #133 from ahmetcagriakca/sprint-27/t27.5-docker-ci
+ba11f06 2026-03-28 12:25:49 +0300 Merge pull request #132 from ahmetcagriakca/sprint-27/t27.4-mock-provider
+533f5e0 2026-03-28 12:25:46 +0300 Merge pull request #131 from ahmetcagriakca/sprint-27/t27.3-frontend-auth
+71c0ebf 2026-03-28 12:25:43 +0300 Merge pull request #130 from ahmetcagriakca/sprint-27/t27.2-backend-auth
+1fea339 2026-03-28 12:25:40 +0300 Merge pull request #129 from ahmetcagriakca/sprint-27/t27.1-auth-freeze
+f634566 2026-03-28 12:24:52 +0300 Sprint 27 Task 27.3: frontend auth/session baseline
+d3412a8 2026-03-28 12:23:21 +0300 Sprint 27 Task 27.5: Docker build CI smoke gate
+aa43c2a 2026-03-28 12:22:44 +0300 Sprint 27 Task 27.4: mock LLM provider for deterministic E2E
+5e5a8ec 2026-03-28 12:22:01 +0300 Sprint 27 Task 27.2: backend multi-user auth baseline
+13de4ce 2026-03-28 12:14:32 +0300 Sprint 27 Task 27.1: multi-user auth freeze pack (D-117)
+63cb756 2026-03-28 12:12:22 +0300 Sprint 27: plan + kickoff — Identity Foundation (GPT PASS)
+23c1642 2026-03-28 11:36:11 +0300 [S26-CLOSED] Sprint 26 closed — GPT operator PASS
+e8434d7 2026-03-28 11:34:32 +0300 [S26-CLOSURE] Sprint 26 RETRO + evidence — closure pending
+ab507c3 2026-03-28 11:33:11 +0300 Merge pull request #128 from ahmetcagriakca/sprint-26/t26.5-component-tests
+b870954 2026-03-28 11:33:08 +0300 Merge pull request #127 from ahmetcagriakca/sprint-26/t26.4-live-mission-e2e
+04bd9ac 2026-03-28 11:33:05 +0300 Merge pull request #126 from ahmetcagriakca/sprint-26/t26.3-sdk-drift
+3e8c9a0 2026-03-28 11:32:18 +0300 Sprint 26 Task 26.5: frontend component test expansion
+321dc1f 2026-03-28 11:31:10 +0300 Sprint 26 Task 26.4: live mission E2E baseline
+75d711e 2026-03-28 11:30:33 +0300 Sprint 26 Task 26.3: SDK drift detection CI gate
+e11b4fd 2026-03-28 11:29:54 +0300 Merge pull request #125 from ahmetcagriakca/sprint-26/t26.2-docker-dev
+44645ce 2026-03-28 11:29:51 +0300 Merge pull request #124 from ahmetcagriakca/sprint-26/t26.1-restructure-plan
+491b1e0 2026-03-28 11:29:11 +0300 Sprint 26 Task 26.2: Docker dev environment baseline (D-116)
+5bd012f 2026-03-28 11:27:45 +0300 Sprint 26 Task 26.1: backend restructure freeze pack (D-115)
+43eddf3 2026-03-28 11:23:42 +0300 Sprint 26: plan + kickoff — Foundation Hardening (GPT PASS)
+c18c984 2026-03-28 11:01:40 +0300 [S25-CLOSED] Sprint 25 closed — GPT operator PASS
+4b44da9 2026-03-28 10:57:45 +0300 [S25-CLOSURE] Sprint 25 RETRO + evidence — closure pending
+65e0f84 2026-03-28 10:56:09 +0300 Merge pull request #123 from ahmetcagriakca/sprint-25/t25.3-component-tests
+d2142c0 2026-03-28 10:55:31 +0300 Sprint 25 Task 25.3: frontend component test baseline
+76e788e 2026-03-28 10:47:38 +0300 Merge pull request #122 from ahmetcagriakca/sprint-25/t25.2-openapi-sdk
+bc4c0ae 2026-03-28 10:47:35 +0300 Merge pull request #121 from ahmetcagriakca/sprint-25/t25.1-archive-execute
+6a52294 2026-03-28 10:46:50 +0300 Sprint 25 Task 25.2: OpenAPI to TypeScript SDK generation pipeline
+ffd0b81 2026-03-28 10:45:14 +0300 Sprint 25 Task 25.1: archive --execute on closed sprints
+4bfbe3f 2026-03-28 10:42:55 +0300 Sprint 25: plan + kickoff — Contract Execution & Frontend Reliability (GPT PASS)
+ee64f05 2026-03-28 10:38:08 +0300 [S24-CLOSED] Sprint 24 closed — GPT operator PASS
+e48409e 2026-03-28 10:36:25 +0300 Sprint 24: closure-check + NO EVIDENCE standard compliance
+fd43923 2026-03-28 10:33:53 +0300 Sprint 24: complete closure evidence packet
+f9282a3 2026-03-28 10:32:10 +0300 [S24-CLOSURE] Sprint 24 RETRO + evidence packet
+15f791c 2026-03-28 10:26:33 +0300 Merge pull request #120 from ahmetcagriakca/sprint-24/t24.2-playwright-ci
+d7a0abe 2026-03-28 10:24:04 +0300 fix: smoke tests use correct API path prefix /api/v1/
+c67d17f 2026-03-28 10:21:06 +0300 Merge pull request #119 from ahmetcagriakca/sprint-24/t24.1-benchmark-gate
+23bac74 2026-03-28 10:21:02 +0300 Merge pull request #118 from ahmetcagriakca/sprint-24/t24.4-token-docs
+4514bf5 2026-03-28 10:20:58 +0300 Merge pull request #117 from ahmetcagriakca/sprint-24/t24.3-dependabot-fix
+27d0ff2 2026-03-28 10:20:43 +0300 fix: Playwright CI — use npm install, fix directory paths
+f558f8c 2026-03-28 10:19:00 +0300 Sprint 24 Task 24.2: Playwright API smoke in GitHub Actions
+873173a 2026-03-28 10:17:52 +0300 Sprint 24 Task 24.1: benchmark regression gate
+16d143f 2026-03-28 10:10:17 +0300 Sprint 24 Task 24.4: PROJECT_TOKEN operational hardening
+4dfe463 2026-03-28 10:08:57 +0300 Sprint 24 Task 24.3: fix Dependabot moderate vulnerabilities
+7dc48ac 2026-03-28 09:57:27 +0300 Sprint 24: plan + kickoff — CI Gate Hardening (GPT PASS)
+4dc2122 2026-03-28 09:48:10 +0300 [S23-CLOSED] Sprint 23 closed — GPT operator approval
+5703fa8 2026-03-28 09:31:28 +0300 [S23-CLOSURE] Sprint 23 — GPT PASS, RETRO complete, closure pending
+5ef1c8b 2026-03-28 09:25:15 +0300 Merge pull request #110 from ahmetcagriakca/sprint-23/t23-live-test
+7ad7fdf 2026-03-28 09:24:12 +0300 Sprint 23: live Project V2 mutation test
+3852e2a 2026-03-28 09:19:26 +0300 Merge pull request #109 from ahmetcagriakca/sprint-23/t23.1-project-token
+269b8dd 2026-03-28 09:19:07 +0300 fix: use PROJECT_TOKEN for Project V2 write access
+cd40bd1 2026-03-28 09:16:47 +0300 Merge pull request #108 from ahmetcagriakca/sprint-23/t23.1-search-fix
+34ce0ae 2026-03-28 09:15:54 +0300 fix: deterministic issue resolution in status-sync
+2eb685f 2026-03-28 09:12:35 +0300 Merge pull request #106 from ahmetcagriakca/sprint-23/t23.1-hotfix
+3e2f7f7 2026-03-28 09:11:58 +0300 fix: add --repo flag to gh issue list in status-sync
+df00d13 2026-03-28 09:09:13 +0300 Merge pull request #104 from ahmetcagriakca/sprint-23/t23.3-stale-ref-remediation
+a44acc5 2026-03-28 09:09:10 +0300 Merge pull request #103 from ahmetcagriakca/sprint-23/t23.2-pr-validator-body
+c265fde 2026-03-28 09:09:07 +0300 Merge pull request #102 from ahmetcagriakca/sprint-23/t23.1-status-sync-mutation
+ae64374 2026-03-28 09:03:37 +0300 Sprint 23 Task 23.3: stale doc reference remediation
+8ced3fa 2026-03-28 09:00:04 +0300 Sprint 23 Task 23.2: pr-validator body required sections
+48f5a12 2026-03-28 08:58:36 +0300 Sprint 23 Task 23.1: status-sync full project-field mutation
+55ae33f 2026-03-28 08:38:09 +0300 Sprint 23: revised scope — Governance Debt Closure (GPT PASS)
+e6574f1 2026-03-28 07:29:19 +0300 Sprint 23: plan task breakdown, plan.yaml, kickoff, and doc sync
+67621e2 2026-03-28 03:00:12 +0300 docs(handoff): session 7 end — Sprint 19-22 closed
+4037248 2026-03-28 02:56:58 +0300 Merge pull request #97 from ahmetcagriakca/sprint-22/t22-state-fix
+e9db563 2026-03-28 02:56:51 +0300 fix: STATE.md table format for Sprint 22
+b668c00 2026-03-28 02:54:43 +0300 Merge pull request #96 from ahmetcagriakca/sprint-22/t22-closure-final
+c1e9f46 2026-03-28 02:54:35 +0300 [S22-CLOSURE] Sprint 22 closed — GPT PASS verdict
+bdc1d90 2026-03-28 02:50:49 +0300 Merge pull request #95 from ahmetcagriakca/sprint-22/t22-patches
+ff6208c 2026-03-28 02:50:42 +0300 [S22] patches P1-P4: scope reduction in task breakdown + state format fix
+c7d4086 2026-03-28 02:38:52 +0300 Merge pull request #94 from ahmetcagriakca/sprint-22/t22.G2-closure
+a6c38c4 2026-03-28 02:38:46 +0300 [S22-CLOSURE] Sprint 22 gates + retro + state (review_pending)
+4447421 2026-03-27 23:37:58 +0000 Merge pull request #93 from ahmetcagriakca/auto/s22-issues-json
+9ae3c41 2026-03-27 23:37:55 +0000 [S22] generate issues.json from plan.yaml
+56d2aae 2026-03-28 02:36:50 +0300 Merge pull request #84 from ahmetcagriakca/sprint-22/t22.3-playwright-e2e
+77f7bc1 2026-03-28 02:36:44 +0300 [S22-22.3] Playwright E2E baseline (config + smoke tests)
+2a1cdfd 2026-03-28 02:33:38 +0300 Merge pull request #83 from ahmetcagriakca/sprint-22/t22.2-stale-ref-tuning
+ce8a2c7 2026-03-28 02:33:32 +0300 Merge pull request #82 from ahmetcagriakca/sprint-22/t22.1-archive-execution
+cff7e1e 2026-03-28 02:33:05 +0300 [S22-22.2] stale ref checker tuning (173→4, exclude reviews + bare names)
+e846596 2026-03-28 02:26:19 +0300 [S22-22.1] plan.yaml + task breakdown + archive execution script
+6e2b681 2026-03-28 01:54:22 +0300 Merge pull request #81 from ahmetcagriakca/sprint-21/t21-closure-final
+86dc2e7 2026-03-28 01:54:15 +0300 [S21-CLOSURE] Sprint 21 closed — GPT PASS verdict
+d555e5c 2026-03-28 01:48:11 +0300 Merge pull request #80 from ahmetcagriakca/sprint-21/t21-patches-final
+60accd1 2026-03-28 01:48:04 +0300 [S21] patches: evidence inventory + retro update + PR ref fix + mirror sync
+188695f 2026-03-28 01:36:23 +0300 Merge pull request #79 from ahmetcagriakca/sprint-21/t21.4-evidence-complete
+7949916 2026-03-28 01:36:00 +0300 [S21-21.4] evidence: closure preflight SUCCESS + bounded final review
+821db49 2026-03-28 01:31:56 +0300 Merge pull request #78 from ahmetcagriakca/sprint-21/t21.4-fix-preflight
+14074b4 2026-03-28 01:31:49 +0300 [S21-21.4] fix: closure preflight python env bug + bounded 21.4 acceptance
+5d8fd68 2026-03-28 01:15:32 +0300 Merge pull request #77 from ahmetcagriakca/sprint-21/t21.G2-closure
+e422f1c 2026-03-28 01:15:08 +0300 [S21-CLOSURE] Sprint 21 gates + retro + state update (review_pending)
+2c74a9e 2026-03-27 22:13:49 +0000 Merge pull request #76 from ahmetcagriakca/auto/s21-issues-json
+e9f3db1 2026-03-27 22:13:47 +0000 [S21] generate issues.json from plan.yaml
+91b9d05 2026-03-28 01:12:07 +0300 Merge pull request #64 from ahmetcagriakca/sprint-21/t21.6-branch-cleanup
+a39c2f0 2026-03-28 01:12:02 +0300 Merge pull request #63 from ahmetcagriakca/sprint-21/t21.5-merged-state-check
+2d76be4 2026-03-28 01:11:56 +0300 Merge pull request #62 from ahmetcagriakca/sprint-21/t21.4-closure-preflight
+d29c815 2026-03-28 01:11:51 +0300 Merge pull request #61 from ahmetcagriakca/sprint-21/t21.3-archive-manifest
+cf95b36 2026-03-28 01:11:46 +0300 Merge pull request #60 from ahmetcagriakca/sprint-21/t21.2-stale-refs
+c422bd6 2026-03-28 01:11:40 +0300 Merge pull request #59 from ahmetcagriakca/sprint-21/t21.1-plan-schema
+2b1c923 2026-03-28 01:10:27 +0300 [S21-21.6] branch cleanup automation
+fc1ad73 2026-03-28 01:09:13 +0300 [S21-21.5] merged-state-only closure check
+d6ed765 2026-03-28 01:08:00 +0300 [S21-21.4] closure preflight workflow
+7bf0cc2 2026-03-28 01:06:51 +0300 [S21-21.3] archive manifest generator
+403adaa 2026-03-28 01:05:38 +0300 [S21-21.2] stale ref grep automation
+409cb49 2026-03-28 01:03:58 +0300 [S21-21.1] plan.yaml + task breakdown + review packet generator
+b949fa7 2026-03-28 00:59:49 +0300 docs(handoff): session 6 end — Sprint 19+20 closed
+96ed101 2026-03-28 00:58:34 +0300 Merge pull request #58 from ahmetcagriakca/sprint-20/t20-closure-final
+99000db 2026-03-28 00:50:10 +0300 [S20-CLOSURE] Sprint 20 closure — PASS verdict, evidence complete, state updated
+cc61e55 2026-03-28 00:47:16 +0300 Merge pull request #57 from ahmetcagriakca/sprint-20/t20-evidence-complete
+768ff13 2026-03-28 00:45:51 +0300 [S20] evidence: project board created, issues added, all runtime evidence captured
+765fcbd 2026-03-28 00:40:18 +0300 Merge pull request #56 from ahmetcagriakca/sprint-20/t20-evidence-complete
+38f84e4 2026-03-28 00:38:46 +0300 [S20] evidence: bootstrap + PR linkage executed, issues.json updated
+76465cb 2026-03-28 00:26:26 +0300 Merge pull request #55 from ahmetcagriakca/sprint-20/t20.G2-patches-p1p5
+6b0bbdb 2026-03-28 00:18:09 +0300 [S20-20.G2] fix: acceptance checklist bounded to match HOLD verdict
+a3af92c 2026-03-28 00:12:38 +0300 [S20-20.G2] fix: HOLD verdict, review_pending state, NO EVIDENCE markers
+20b32a5 2026-03-27 23:58:32 +0300 Merge pull request #53 from ahmetcagriakca/sprint-20/t20.4-fix-auto-close
+16f5fa1 2026-03-27 23:58:28 +0300 Merge pull request #52 from ahmetcagriakca/sprint-20/t20.G2-gates
+abba87a 2026-03-27 23:55:34 +0300 [S20-20.4] fix: auto-close issues + closing hint in issue body
+11028eb 2026-03-27 23:48:11 +0300 [S20-20.CLOSURE] Sprint 20 gates + retrospective + state update
+2f75466 2026-03-27 20:46:41 +0000 Merge pull request #51 from ahmetcagriakca/auto/s20-issues-json
+942f320 2026-03-27 20:46:37 +0000 [S20] generate issues.json from plan.yaml
+e3699da 2026-03-27 23:44:13 +0300 Merge pull request #38 from ahmetcagriakca/sprint-20/t20.7-pr-linkage
+4ca94cd 2026-03-27 23:43:34 +0300 Merge pull request #37 from ahmetcagriakca/sprint-20/t20.6-pr-validator
+4d57185 2026-03-27 23:43:21 +0300 Merge pull request #36 from ahmetcagriakca/sprint-20/t20.5-status-sync
+b9ab06f 2026-03-27 23:43:04 +0300 Merge pull request #35 from ahmetcagriakca/sprint-20/t20.4-project-auto-add
+615e1a4 2026-03-27 23:42:38 +0300 Merge pull request #34 from ahmetcagriakca/sprint-20/t20.3-issue-templates
+c65bfa0 2026-03-27 23:42:19 +0300 Merge pull request #33 from ahmetcagriakca/sprint-20/t20.2-labels-milestones
+060dbbc 2026-03-27 23:42:11 +0300 Merge pull request #32 from ahmetcagriakca/sprint-20/t20.1-plan-schema
+856e4fa 2026-03-27 23:38:00 +0300 [S20-20.7] issues.json PR linkage update script
+1e48d93 2026-03-27 23:37:02 +0300 [S20-20.6] PR title/body validator workflow
+3a6a5ef 2026-03-27 23:36:03 +0300 [S20-20.5] status sync workflow (PR → issue status)
+b1cc285 2026-03-27 23:34:59 +0300 [S20-20.4] project auto-add workflow
+9d18289 2026-03-27 23:34:00 +0300 [S20-20.3] issue form templates (sprint-task, bug-report, feature-request)
+e71360d 2026-03-27 23:32:34 +0300 [S20-20.2] labels + milestones bootstrap script
+02a92d4 2026-03-27 23:31:35 +0300 [S20-20.1] plan.yaml + task breakdown + project field schema
+9a7548c 2026-03-27 23:24:07 +0300 docs(handoff): session 5 end — Sprint 19 closed
+d90e1e4 2026-03-27 23:22:04 +0300 Merge pull request #31 from ahmetcagriakca/sprint-19/t19.CLOSURE-state-update
+a00f023 2026-03-27 23:21:26 +0300 [S19-19.CLOSURE] Sprint 19 closure — STATE.md + NEXT.md updated
+60acd83 2026-03-27 23:14:10 +0300 Merge pull request #30 from ahmetcagriakca/sprint-19/t19.G2-patches-p6p8
+039aa1f 2026-03-27 23:12:10 +0300 [S19-19.G2] patches P6-P8: bounded scope to prevent self-referential drift
+e949246 2026-03-27 23:06:15 +0300 Merge pull request #28 from ahmetcagriakca/sprint-19/t19.G2-patches
+0327912 2026-03-27 23:04:16 +0300 [S19-19.G2] patches P1-P5: align review/evidence with final merged state
+06645b0 2026-03-27 22:50:01 +0300 Merge pull request #27 from ahmetcagriakca/sprint-19/t19.G2-final-review
+bfd2418 2026-03-27 22:48:22 +0300 [S19-19.G2] final review + retrospective
+2d8aee8 2026-03-27 22:44:37 +0300 Merge pull request #26 from ahmetcagriakca/sprint-19/t19.7-governance
+0d3dace 2026-03-27 22:40:47 +0300 Merge pull request #25 from ahmetcagriakca/sprint-19/t19.6-protection-verify
+a7db3c6 2026-03-27 22:35:46 +0300 Merge pull request #24 from ahmetcagriakca/sprint-19/t19.5-branch-contract
+9fe1335 2026-03-27 22:11:11 +0300 [S19-19.7] governance rules document
+f263007 2026-03-27 22:10:20 +0300 [S19-19.6] main protection verification
+9ddb0c2 2026-03-27 22:09:13 +0300 [S19-19.5] branch naming contract + check script
+9fa103e 2026-03-27 19:04:16 +0000 Merge pull request #23 from ahmetcagriakca/auto/s19-issues-json
+16abada 2026-03-27 19:04:12 +0000 [S19] generate issues.json from plan.yaml
+6292c41 2026-03-27 22:01:28 +0300 Merge pull request #22 from ahmetcagriakca/sprint-19/t19.3-final-test
+64be629 2026-03-27 21:57:09 +0300 [S19-19.3] temp: remove issues.json for final workflow test
+5dac216 2026-03-27 21:56:18 +0300 Merge pull request #20 from ahmetcagriakca/auto/s19-issues-json
+a613884 2026-03-27 21:54:04 +0300 Merge pull request #21 from ahmetcagriakca/sprint-19/t19.3-fix-auto-merge
+d76c3a6 2026-03-27 21:51:08 +0300 [S19-19.3] fix: use --admin merge instead of --auto for free plan
+d816807 2026-03-27 18:48:19 +0000 [S19] generate issues.json from plan.yaml
+cf9d58c 2026-03-27 21:37:53 +0300 Merge pull request #19 from ahmetcagriakca/sprint-19/t19.3-remove-issues-json-for-test
+96cad41 2026-03-27 21:34:41 +0300 [S19-19.3] temp: remove issues.json for workflow test
+ecd3bef 2026-03-27 21:32:20 +0300 Merge pull request #18 from ahmetcagriakca/sprint-19/t19.3-fix-commit-step
+dd6c7ce 2026-03-27 21:29:15 +0300 [S19-19.3] fix: commit issues.json via PR instead of direct push
+f7e20d0 2026-03-27 21:25:14 +0300 Merge pull request #17 from ahmetcagriakca/sprint-19/t19.4-issues-json
+cb898b3 2026-03-27 21:22:31 +0300 [S19-19.4] issues.json mapping from workflow output
+7254613 2026-03-27 21:17:43 +0300 Merge pull request #4 from ahmetcagriakca/sprint-19/t19.3-fix-labels
+b185a81 2026-03-27 21:15:45 +0300 [S19-19.3] fix: ensure labels exist before issue creation
+c3181af 2026-03-27 21:10:35 +0300 Merge pull request #3 from ahmetcagriakca/sprint-19/t19.3-issue-workflow
+af22222 2026-03-27 21:08:46 +0300 Merge pull request #2 from ahmetcagriakca/sprint-19/t19.2-validator
+5175d58 2026-03-27 21:07:14 +0300 Merge pull request #1 from ahmetcagriakca/sprint-19/t19.1-plan-schema
+afaf02f 2026-03-27 21:00:55 +0300 [S19-19.3] issue-from-plan workflow
+b72a878 2026-03-27 21:00:07 +0300 [S19-19.2] plan-task breakdown validator
+01cd148 2026-03-27 20:58:43 +0300 [S19-19.1] plan.yaml schema freeze
+b8f1a0c 2026-03-27 20:46:28 +0300 docs(handoff): session 4 end — Sprint 17+18 closed
+0b3e118 2026-03-27 19:03:54 +0300 Sprint 18: closure_status=closed — operator sign-off
+46dfe39 2026-03-27 19:02:19 +0300 docs(review): S18 GPT verdict PASS — eligible for operator close
+3fc1ee3 2026-03-27 18:49:40 +0300 Sprint 18 Phase D: verify + fix stale references
+ca77347 2026-03-27 18:46:46 +0300 Sprint 18 Phase C: archive — move historical docs to docs/archive/
+337a1e6 2026-03-27 18:44:49 +0300 Sprint 18 Phase B: consolidate — GOVERNANCE.md, CLAUDE.md rewrite, simplify NEXT/BACKLOG/STATE
+ee89edf 2026-03-27 18:42:50 +0300 Sprint 18 Phase A: freeze D-111→D-114, kickoff doc
+703c644 2026-03-27 18:29:02 +0300 Sprint 17: closure_status=closed — operator sign-off
+69f879e 2026-03-27 18:28:16 +0300 docs(review): S17 GPT verdict PASS — eligible for operator close
+d97275f 2026-03-27 18:17:29 +0300 fix(sprint-17): apply GPT HOLD patches — benchmark summary, doc alignment, kickoff sync
+3a8d17e 2026-03-27 17:49:46 +0300 fix(ci): add missing deps to requirements.txt + regenerate package-lock.json
+480cd80 2026-03-27 17:39:15 +0300 Sprint 17: Phase 6 controlled start — CI fix, D-109/D-110, doc alignment
+38bad47 2026-03-27 17:19:04 +0300 docs(handoff): session 3 current.md + fixes
+6d3d00d 2026-03-27 17:05:01 +0300 fix(tools): dry-run fixes — policy fail-fast, arg parser, regex
+64f1188 2026-03-27 16:46:03 +0300 docs: freeze closure flow — closure_status=closed is operator-only
+2c58d57 2026-03-27 16:40:21 +0300 Repo-native workflow + upgraded tooling + sprint-policy.yml
+3c60a23 2026-03-27 16:31:13 +0300 Add sprint closure toolchain: sprint-finalize.sh, sprint-audit.py, state-sync.py
+d01a3aa 2026-03-27 16:04:09 +0300 Phase 5.5 closure report: Sprints 13-16 consolidated
+8848f15 2026-03-27 15:58:39 +0300 Sprint 16 closure: evidence audit verified + D-105→D-108 frozen + cleanup
+f743b84 2026-03-27 15:44:09 +0300 Sprint 14+15 post-closure cleanup + Sprint 15 closure confirmation
+801403b 2026-03-27 11:53:46 +0300 Session handoff 2026-03-27 + Sprint 14 cleanup handoff
+bb25b87 2026-03-27 11:38:57 +0300 Sprint 14A+14B closure: evidence bundles + missing docs + audit
+8b6d67f 2026-03-27 11:19:08 +0300 Sprint 13 post-closure cleanup + closure synchronization
+773aa3e 2026-03-27 11:11:43 +0300 Sprint 12 cleanup summary: precise wording for README exception
+3c8782e 2026-03-27 11:09:39 +0300 Fix Sprint 12 cleanup: revert README edit + rename phase report
+9e61777 2026-03-27 11:06:10 +0300 D-102 amendment: Sprint 13 scope reconciliation (frozen)
+758ae37 2026-03-27 10:47:27 +0300 Sprint 12 post-closure cleanup: phase closure moved, refs fixed
+4d2f588 2026-03-27 10:38:21 +0300 Sprint 13 evidence audit result: PASS with documented waivers
+b70a75c 2026-03-27 10:35:30 +0300 Sprint 13 closure: retroactive evidence bundle + gate waivers (Option B)
+a92e02a 2026-03-27 10:23:56 +0300 Sprint 12 cleanup: remove duplicates, archive non-canonical, fix misplaced
+78e053c 2026-03-27 10:20:47 +0300 Sprint 12 closure confirmed: operator + independent review PASS
+03612a6 2026-03-27 10:15:20 +0300 Sprint 12 evidence audit: all 22 files verified, PASS
+c5a0327 2026-03-27 09:38:09 +0300 Sprint 15+16 detailed docs: README, closure summary, task breakdown
+8e11b43 2026-03-27 09:34:49 +0300 Add Sprint 16 advance plan to docs
+c97263e 2026-03-27 09:34:33 +0300 Sprint 15+16 retros + STATE.md + NEXT.md update to current
+5cf382d 2026-03-27 09:28:31 +0300 Codebase cleanup: ruff fix (169 issues), test fix, OpenClaw → Vezir rebrand
+ffe0b9e 2026-03-27 09:09:46 +0300 Sprint 16 — Presentation Layer + CI/CD Foundation
+b686f76 2026-03-27 08:53:16 +0300 Housekeeping: capabilities.json refresh + D-102 doc consolidation
+bfbdca7 2026-03-27 08:47:08 +0300 Sprint 15 — Full Observability: OpenTelemetry Integration
+95e4fda 2026-03-26 19:27:12 +0300 Sprint 14B closure — frontend restructure + tooling complete
+1dd58e6 2026-03-26 19:25:31 +0300 Sprint 14B: structured logging + Lighthouse regression check
+e8b576a 2026-03-26 19:23:30 +0300 Sprint 14B: pre-commit hooks + CONTRIBUTING.md + dep audit clean
+fa0b186 2026-03-26 19:22:34 +0300 Sprint 14B: Frontend feature structure + @/ alias + barrel exports
+ad2b5da 2026-03-26 19:19:10 +0300 Sprint 14A closure — operator sign-off
+756677a 2026-03-26 19:17:37 +0300 Sprint 14A session report — 23/27 tasks, 353 tests
+75adea6 2026-03-26 19:16:53 +0300 Task 14.21: Math + Telegram → app/services/ shims
+5fa1d24 2026-03-26 19:16:16 +0300 Tasks 14.18-14.20+14.22: Backend app/ package + create_app() + pyproject.toml
+d317a98 2026-03-26 19:13:48 +0300 Sprint 14A mid-review report
+985b116 2026-03-26 19:12:52 +0300 Task 14.23: Quality tests — health contract, telegram bot, WMCP inventory
+93e6f57 2026-03-26 19:10:23 +0300 Task 14.17: Hardcoded credentials → env var with warning
+547ab2c 2026-03-26 19:06:30 +0300 Tasks 14.12+14.13: Console timeline + D-102 enforcement tests
+6080aa4 2026-03-26 19:03:27 +0300 Task 14.11: AgentRunner refactor — EventBus integration
+c26fd92 2026-03-26 18:57:48 +0300 Tasks 14.6-14.8+14.10: ApprovalGate, ToolExecutor, LLMExecutor, StageTransition
+78b22a4 2026-03-26 18:54:13 +0300 Tasks 14.3+14.9: BypassDetector, ReportCollector, AnomalyDetector, MetricsExporter
+63063f4 2026-03-26 18:52:28 +0300 Tasks 14.2+14.4+14.5: TokenLogger, ToolPermissions, BudgetEnforcer handlers
+183c111 2026-03-26 18:50:40 +0300 Task 14.1: AuditTrail handler — chain-hash immutable log
+0578f7c 2026-03-26 18:49:24 +0300 Task 14.0: EventBus core — Event, HandlerResult, catalog, correlation
+a83cd0e 2026-03-26 18:46:36 +0300 Sprint 13 closure — operator sign-off + Sprint 14A active
+68c8d2d 2026-03-26 18:44:28 +0300 Scope measurement + final cleanup: root stale files, OpenClaw refs
+b7c2032 2026-03-26 18:38:17 +0300 Closure script + Turkish cleanup in active docs
+abe37e2 2026-03-26 18:35:23 +0300 Sprint 14A kickoff docs aligned to SPRINT-14-ADVANCE-PLAN.md
+c5b59b7 2026-03-26 18:26:14 +0300 Cleanup: stale handoffs, legacy 8002 refs, .env.example, gitignore
+4328a62 2026-03-26 18:12:05 +0300 Sprint 13 scope regularization — docs aligned to actual implementation
+a1ad2b8 2026-03-26 18:09:17 +0300 Sprint 14 kickoff package — Structural Hardening (Phase 6A)
+bb27924 2026-03-26 18:02:35 +0300 Track 5: dev scripts, .editorconfig, ports.md + doc updates
+6a681fd 2026-03-26 17:57:14 +0300 Track 2: legacy dashboard removal (D-097) + stale docs archive
+a8e0b48 2026-03-26 17:48:09 +0300 Track 1: token report ID fix (13.1) + rework limiter D-103 (13.3)
+960686b 2026-03-26 17:34:16 +0300 D-102 L1/L2 — stage isolation + distance-based context tiers
+7d52aa7 2026-03-26 16:52:57 +0300 Sprint 12 closure — operator sign-off
+6e3f049 2026-03-26 16:37:53 +0300 Sprint 12 closure corrections + Lighthouse evidence
+2daba43 2026-03-26 12:46:36 +0300 Add session report — Sprint 12 handoff + Vezir rebrand
+3e08196 2026-03-26 12:39:49 +0300 Rename OpenClaw to Vezir in README
+84eef30 2026-03-26 12:38:39 +0300 Vezir rebrand — complete remaining references
+385ae44 2026-03-26 12:32:20 +0300 Vezir rebrand — full rename from OpenClaw to Vezir
+0b943e0 2026-03-26 12:22:09 +0300 D-102 completion + Telegram bot + math service + Vezir rebrand start
+6b4f80a 2026-03-26 10:15:35 +0300 Session handoff document — Sprint 12+ dashboard development
+b6b2cef 2026-03-26 10:14:33 +0300 Add tool call details, agent skills popup, stage control actions
+f2ed382 2026-03-26 09:48:25 +0300 Live stage tracking — save mission + summary after each stage start/complete
+cea43c9 2026-03-26 09:36:39 +0300 Fix str.get() crash in mission create + D-102 token budget enforcement
+d67bebf 2026-03-26 07:30:54 +0300 D-102: Token budget enforcement — truncate/block + observability + context isolation
+256a0e2 2026-03-26 07:19:26 +0300 Fix desktop sidebar — icon-only collapsed, full expanded with toggle
+9360391 2026-03-26 07:16:18 +0300 Sprint 12 session report — 21 commits, 49 files, full dashboard operasyonel
+c78af09 2026-03-26 07:07:42 +0300 Save prompts on failed stages too — full transparency on errors
+ae1a425 2026-03-26 07:02:45 +0300 Fix planning JSON parse failure + collapsible sidebar with icon mode
+4d7fc4f 2026-03-26 06:54:00 +0300 Mobile menu drops down from header instead of sliding from left
+1721998 2026-03-26 06:51:12 +0300 UI polish: icon-only New button, approval filter, mobile sidebar
+59ec08d 2026-03-26 06:44:32 +0300 Replace Refresh text buttons with icon buttons across all pages
+1f08d26 2026-03-26 06:41:18 +0300 Show agent prompts in stage detail + faster polling
+bb0036e 2026-03-26 06:15:55 +0300 Improve signal artifact TTL logging for debugging
+3ef39ab 2026-03-26 06:12:55 +0300 Fix retry/cancel resolving dashboard placeholder to controller state
+54f00e9 2026-03-26 06:09:26 +0300 Fix mission list duplicates — hide controller missions, resolve status
+b9e3690 2026-03-26 06:05:02 +0300 Fix dashboard-controller mission linking + show real mission results
+09097e0 2026-03-26 05:52:39 +0300 Add error log viewer to Health page with mission links
+0dff5ba 2026-03-26 05:45:58 +0300 User-friendly 409 error messages for all mutations
+6a915ab 2026-03-26 05:41:04 +0300 WMCP in health, telemetry enriched errors, mutation instant success
+523b149 2026-03-26 05:38:45 +0300 Health dashboard, telemetry fix, error enrichment, mutation fix
+0b0cb11 2026-03-26 05:32:19 +0300 Add pending signal artifacts panel with delete capability
+53560f6 2026-03-26 05:29:12 +0300 Fix retry blocked by stale signal artifacts — add 60s TTL
+97d92d1 2026-03-26 05:27:50 +0300 Fix retry 404, add error details, sorting, filter, unknown badge
+27b16b9 2026-03-26 05:21:47 +0300 Add error details, state transitions, and agent response to mission UI
+ccda964 2026-03-26 05:13:00 +0300 Add mission creation from dashboard UI
+1d157c3 2026-03-26 05:07:10 +0300 Fix: Vite proxy changeOrigin=true — resolve 403 Host header rejection
+36bbbb3 2026-03-26 05:02:57 +0300 Sprint 12: Phase 5D complete — Polish + Phase 5 Closure (15/15 scoreboard)
+ae2d12e 2026-03-26 02:44:35 +0300 Sprint 11: Session handoff document — Sprint 12 ready
+c21612e 2026-03-26 02:29:33 +0300 Sprint 11: closure_status=closed — operator sign-off
+c9eb04d 2026-03-26 02:27:38 +0300 Sprint 11: Retrospective in final review + copilot-instructions v3.1 (A-05 English-only docs, A-06 proactive review reports)
+6f7d7ae 2026-03-26 01:56:55 +0300 Sprint 11: Update final review report v2 — closure evidence complete
+dcd0ffc 2026-03-26 01:53:41 +0300 Sprint 11: Update commit log hash 99ebecc
+99ebecc 2026-03-26 01:53:20 +0300 Sprint 11 Closure: live-checks 10/10 + operator drill 5/5 + closure-check evidence regenerated
+c038842 2026-03-26 01:40:03 +0300 Sprint 11: GPT final review PASS — non-blocking fixes + retrospective + evidence
+e230792 2026-03-26 01:33:47 +0300 Sprint 11 Task 11.FINAL: GPT final review report prepared
+3a5ec00 2026-03-26 01:29:06 +0300 Sprint 11: Results section + closure evidence (implementation_status=done, closure_status=evidence_pending)
+04122a9 2026-03-26 01:23:40 +0300 Sprint 11 Task 11.11: Approval sunset warning D-092 — Telegram deprecation logging
+7054938 2026-03-26 01:22:18 +0300 Sprint 11 Task 11.7+11.8+11.9+11.10: ConfirmDialog, mutation buttons, useMutation hook, feedback (D-090, D-091)
+42c05f3 2026-03-26 01:15:44 +0300 Sprint 11 Task 11.MID: Apply 4 review patches — evidence hardening + follow-up tracking
+25da086 2026-03-26 01:08:03 +0300 Sprint 11 Task 11.MID: GPT mid-review report prepared
+e25053e 2026-03-26 01:00:07 +0300 Sprint 11 Task 11.5+11.6: Approve/Reject/Cancel/Retry endpoints + MutationResponse (D-096)
+9b245aa 2026-03-26 00:56:20 +0300 Sprint 11 Task 11.4: Atomic request artifact bridge (D-001, D-062, D-063)
+6013eb2 2026-03-26 00:55:45 +0300 Sprint 11 Task 11.2+11.3: CSRF middleware (D-089) + mutation audit logger
+947a396 2026-03-26 00:54:35 +0300 Sprint 11 Task 11.1: Contract-first mutation test suite (11 tests, all FAIL)
+16427bc 2026-03-26 00:51:08 +0300 Sprint 11 Task 11.0: DECISIONS.md debt burn-down D-081→D-096
+c9ccbb3 2026-03-26 00:21:23 +0300 Process hardening v3: gates, closure script, decision debt plan, Sprint 11 task b reakdown - Replace copilot-instructions with v3 (30 sections, process hardened) - Add PROCESS-GATES.md: 13 governance rules, status model, review gates - Add sprint-closure-check.sh: hard-fail evidence generator - Add SPRINT-12-CLOSURE-GATE.md: Phase 5 scoreboard (15 criteria) - Add DECISION-DEBT-BURNDOWN.md: D-081-D-096 Sprint 11, D-021-D-058 Sprint 12 - Create SPRINT-11-TASK-BREAKDOWN.md: 15 tasks, contract-first, review gates - Move stale docs to archive/stale/ - Update CLAUDE.md: v3 status model, process gates references - Create evidence/sprint-11/ directory
+7b73b21 2026-03-25 22:57:19 +0300 Sprint 10 retrospective: 8 process issues identified, 8 actions for Sprint 11-12
+954032a 2026-03-25 22:52:08 +0300 Sprint 10 closure pass: 6/6 items complete
+2763abf 2026-03-25 22:35:45 +0300 Sprint 10 (Phase 5B): SSE Live Updates - COMPLETE
+e3493f3 2026-03-25 20:50:59 +0300 copilot-instructions: full ruleset from Claude+GPT cross-review methodology (14 sections)
+3ad5593 2026-03-25 20:47:18 +0300 CLAUDE.md: add sprint-end git push rule to working rules
+3b51804 2026-03-25 20:45:33 +0300 Sprint 9 (Phase 5A-2): React Read-Only UI — COMPLETE
+d20b05a 2026-03-25 18:49:29 +0300 Sprint 8 closure assessment: fix 4 report contradictions, add evidence bundle
+92c2bdf 2026-03-25 16:56:08 +0300 Update Sprint 8 report: GPT review fixes, expanded checklist (24 items)
+46d9fa5 2026-03-25 16:49:55 +0300 Sprint 8 closure: docs consolidated, validation pass, STATE/NEXT updated
+aaad891 2026-03-25 16:37:23 +0300 Sprint 7-8 cross-review fixes: D-079, D-080, freeze addendum expansion
+ac0a290 2026-03-25 16:31:15 +0300 Sprint 8 (Phase 5A-1): Backend read model — FastAPI + normalizer + frozen schemas
+ea53ff1 2026-03-25 16:30:51 +0300 Sprint 7 (Phase 4.5-C): Operational tuning — 10/10 tasks, 129 tests
+212b121 2026-03-24 11:17:33 +0300 Add Phase 4.5-B report: E2E validation across all complexity levels
+386077c 2026-03-24 10:59:47 +0300 Phase 4.5-B: Fix working set oc_root bug + E2E validation (4/4 pass)
+9d846f9 2026-03-24 10:17:21 +0300 Phase 4.5-A: Telemetry tooling + prompt refinements + E2E test runner
+9c69a02 2026-03-24 10:11:29 +0300 Sprint 6D repo cleanup: archive historical docs, restructure tests, update architecture
+ce68bc2 2026-03-24 10:06:12 +0300 Sprint 6D: Final Seal — structured artifact extraction + strict approval enforcement
+bffc93f 2026-03-24 09:59:14 +0300 Add WSL + OpenClaw stability hardening documentation
+2acca28 2026-03-24 09:55:35 +0300 Phase 4 documentation update: all state files reflect 9-role governed agent system
+552a39d 2026-03-23 17:29:21 +0300 Add Phase 4 Sprint 6C report: closure hardening — typed artifacts + model wiring
+a6c6802 2026-03-23 17:27:05 +0300 Sprint 6C: typed artifact production + model wiring from role registry
+cde42a7 2026-03-23 16:52:54 +0300 Add Phase 4 Sprint 6 report: integration test suite (110/110 pass)
+ae0f980 2026-03-23 16:52:46 +0300 Sprint 5C: Controller integration — state machine, gates, recovery, approval store
+aa59ccc 2026-03-23 16:15:08 +0300 Add Phase 4 Sprint 5 report: quality gates + state machine + approval store
+27b8dc4 2026-03-23 16:12:38 +0300 Sprint 5: quality gates + feedback loops + state machine + approval store
+24ddc22 2026-03-23 16:05:42 +0300 Add Phase 4 Sprint 4 report: complexity router + discovery pipeline
+213c87e 2026-03-23 16:03:55 +0300 Sprint 4: complexity router + discovery schema + working set population
+f48bbee 2026-03-23 15:49:27 +0300 Add Phase 4 Sprint 3 report: role expansion — 2 specialist to 9 governed roles
+1350325 2026-03-23 15:46:57 +0300 Sprint 3 complete: 9 governed roles — prompts, templates, enforcement, tier matrix
+7849f7e 2026-03-23 15:41:05 +0300 Sprint 3: role registry — 9 canonical roles with tool policies and budgets
+eb10368 2026-03-23 15:39:19 +0300 Sprint 3: skill contract registry — 10 machine-readable contracts
+f489e18 2026-03-23 15:16:35 +0300 Add Phase 4 Sprint 2C report: integration completion
+9494cc8 2026-03-23 15:13:52 +0300 Sprint 2C: close integration gaps — assembler wired, telemetry complete
+0775805 2026-03-23 14:56:03 +0300 Add Phase 4 Sprint 1H+2 report: governance hardening + context assembler
+4734122 2026-03-23 14:53:41 +0300 Sprint 2: Context Assembler + Artifact Identity + Summary Cache + Expansion Broker
+7683e96 2026-03-23 14:50:48 +0300 Sprint 1H: governance hardening — fail-closed, startup gate, telemetry, path hardening
+38da004 2026-03-23 14:06:03 +0300 Add Phase 4 Sprint 0+1 report: tool governance + Working Set Enforcer
+5cb0e54 2026-03-23 14:03:36 +0300 Sprint 0+1: tool governance metadata + Working Set Enforcer
+e0468f2 2026-03-23 12:26:55 +0300 Add Phase 3-F completion report: multi-agent foundation
+32be28d 2026-03-23 12:21:53 +0300 Phase 3-F: multi-agent foundation — mission controller + analyst/executor specialists
+0798999 2026-03-23 12:01:28 +0300 Phase 3-E complete: multi-provider verified — GPT-4o, Claude, Ollama all working
+1352b2a 2026-03-23 11:46:12 +0300 Phase 3-E: multi-provider support — GPT-4o active, Claude + Ollama providers ready
+4ddfc81 2026-03-23 11:39:29 +0300 Add Phase 3-D report + full README rewrite reflecting current system state
+2a0c9b1 2026-03-23 11:32:28 +0300 Phase 3-D: full tool catalog (24 tools) + typed artifact system
+e0692ab 2026-03-23 11:26:11 +0300 Add Phase 3-C completion report: risk engine + Telegram approval service
+4b9aaa4 2026-03-23 11:20:52 +0300 Add Telegram reply peek to approval service — approve from Telegram without consuming messages
+7eaaa83 2026-03-23 11:09:46 +0300 Fix: remove duplicate PYTHONIOENCODING line in WSL wrapper
+a945b14 2026-03-23 11:00:29 +0300 Fix: switch approval service from getUpdates polling to file-based approval
+6ca3465 2026-03-23 10:57:39 +0300 Fix: update system prompt so GPT-4o calls tools directly without asking confirmation
+8036a32 2026-03-23 10:53:07 +0300 Phase 3-C: risk engine + Telegram approval service — high-risk tool calls require user approval
+6bf1330 2026-03-23 10:18:08 +0300 Fix: list_processes PowerShell escaping + WSL wrapper Windows path
+55bb446 2026-03-23 10:12:47 +0300 Add Phase 3-B completion report: core agent runner with GPT-4o + MCP
+76ce9d3 2026-03-23 10:08:49 +0300 Phase 3-B: core agent runner — GPT-4o + MCP tool calling end-to-end
+49d5963 2026-03-23 07:55:29 +0300 Add full session report: repo init through Phase 3-A architecture freeze
+f43e8e2 2026-03-23 07:50:31 +0300 Phase 3-A: Agent-MCP architecture design freeze — single agent now, multi-agent extensible
+2206d71 2026-03-23 06:38:13 +0300 Fix: replace literal emoji with ConvertFromUtf32 to avoid PowerShell BMP encoding error
+b505ae8 2026-03-23 06:31:56 +0300 Phase 1.7: proactive Telegram notifications — health alerts, startup reports, recovery notices
+3f2f749 2026-03-23 06:21:06 +0300 Phase 1.6: WSL guardian — active monitoring, auto-restart WSL + OpenClaw, Telegram alerts
+5647d30 2026-03-23 05:58:55 +0300 Add session report: repo reorganization + Phase 1.6 completion
+9e77226 2026-03-23 05:53:55 +0300 Phase 1.6: add health snapshot to startup preflight for immediate boot-time health data
+2c0346e 2026-03-23 05:48:57 +0300 Fix WSL health check: use direct echo test instead of UTF-16 list parsing
+0ea022d 2026-03-23 05:42:23 +0300 Phase 1.6: operational monitoring — health engine + web dashboard + telegram health
+1bdf347 2026-03-23 05:29:20 +0300 Initial commit: Phase 1.5 sealed runtime + bridge + telegram

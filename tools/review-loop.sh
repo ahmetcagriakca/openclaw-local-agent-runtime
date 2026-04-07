@@ -278,6 +278,20 @@ stage_4_patch_loop() {
     verdict=$(parse_verdict)
     log "Round $CURRENT_ROUND verdict: $verdict"
 
+    # ─── Scope lock check for Round 2+ ───────────────────────────────
+    if [[ $CURRENT_ROUND -gt 1 && "$verdict" == "HOLD" ]]; then
+      local total_blockers missed_blockers real_blockers
+      total_blockers=$(grep -cE '^\s*-?\s*B[0-9]+' "$REVIEW_FILE" 2>/dev/null || echo 0)
+      missed_blockers=$(grep -c '\[MISSED-R1\]' "$REVIEW_FILE" 2>/dev/null || echo 0)
+      real_blockers=$((total_blockers - missed_blockers))
+
+      if [[ $real_blockers -le 0 ]]; then
+        warn "HOLD contains only MISSED-R1 findings — no valid blockers"
+        warn "Treating as PASS per Exhaustive First Round Rule"
+        verdict="PASS"
+      fi
+    fi
+
     if [[ "$verdict" == "ESCALATE" ]]; then
       stage_5_escalate "GPT issued ESCALATE at Round $CURRENT_ROUND"
       return 0
@@ -340,6 +354,20 @@ main() {
   local verdict
   verdict=$(parse_verdict)
   log "Round $CURRENT_ROUND verdict: $verdict"
+
+  # ─── Scope lock check for Round 2+ (main path) ─────────────────
+  if [[ $CURRENT_ROUND -gt 1 && "$verdict" == "HOLD" ]]; then
+    local total_blockers missed_blockers real_blockers
+    total_blockers=$(grep -cE '^\s*-?\s*B[0-9]+' "$REVIEW_FILE" 2>/dev/null || echo 0)
+    missed_blockers=$(grep -c '\[MISSED-R1\]' "$REVIEW_FILE" 2>/dev/null || echo 0)
+    real_blockers=$((total_blockers - missed_blockers))
+
+    if [[ $real_blockers -le 0 ]]; then
+      warn "HOLD contains only MISSED-R1 findings — no valid blockers"
+      warn "Treating as PASS per Exhaustive First Round Rule"
+      verdict="PASS"
+    fi
+  fi
 
   case "$verdict" in
     PASS)

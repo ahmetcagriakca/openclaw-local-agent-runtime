@@ -2,6 +2,7 @@
  * FreshnessIndicator — freshness + source status.
  * Shows human-readable age, stale threshold warning, source list.
  */
+import { useCallback, useEffect, useRef } from 'react'
 import type { SourceInfo } from '../types/api'
 
 function formatAge(ms: number): string {
@@ -12,6 +13,24 @@ function formatAge(ms: number): string {
   if (m < 60) return `${m}m ago`
   const h = Math.round(m / 60)
   return `${h}h ago`
+}
+
+function PollAge({ lastFetchedAt }: { lastFetchedAt: Date | null }) {
+  const spanRef = useRef<HTMLSpanElement>(null)
+
+  const update = useCallback(() => {
+    if (!spanRef.current || !lastFetchedAt) return
+    spanRef.current.textContent = `Polled ${formatAge(Date.now() - lastFetchedAt.getTime())}`
+  }, [lastFetchedAt])
+
+  useEffect(() => {
+    update()
+    const id = setInterval(update, 5_000)
+    return () => clearInterval(id)
+  }, [update])
+
+  if (!lastFetchedAt) return null
+  return <span ref={spanRef} className="ml-auto text-gray-500" />
 }
 
 interface FreshnessIndicatorProps {
@@ -57,11 +76,7 @@ export function FreshnessIndicator({
         </span>
       )}
 
-      {lastFetchedAt && (
-        <span className="ml-auto text-gray-500">
-          Polled {formatAge(Date.now() - lastFetchedAt.getTime())}
-        </span>
-      )}
+      <PollAge lastFetchedAt={lastFetchedAt} />
     </div>
   )
 }

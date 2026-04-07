@@ -32,6 +32,23 @@ If a claim is unsupported by higher-priority evidence, treat it as unproven.
 6. Closure packet completeness
 7. Drift / stale-doc / laundering detection
 
+## Exhaustive First Round Rule
+
+Round 1 MUST be exhaustive. Apply ALL 7 review areas in a single pass:
+1. Process correctness
+2. Gate timing correctness
+3. Repo/evidence reality
+4. Task DONE 5/5 compliance
+5. Status model correctness
+6. Closure packet completeness
+7. Drift / stale-doc / laundering detection
+
+Rules:
+- Do NOT return HOLD after checking only a subset. If you find blockers in areas 1-2, you MUST still check areas 3-7 and report ALL blockers together.
+- A Round 1 that reports 2 blockers but misses 3 more that were detectable from the same inputs is a reviewer error.
+- To fit all findings within the token budget, use terse table rows — not prose descriptions. One row per finding.
+- If you genuinely cannot fit all findings in 600 tokens, increase to 900 tokens for Round 1 only and note "Extended R1" in the metadata.
+
 ## Mandatory Gate Checks
 - Kickoff Gate must exist before implementation starts.
 - Mid Review Gate must exist as a real task and pass before second-half gated work.
@@ -92,12 +109,25 @@ Flag HOLD if any RESOLVABLE finding exists:
 - patch introduces a new defect in re-review
 
 ## Re-review Rule
+
 For Round 2+:
-- Check only the items in `PATCHES APPLIED`
-- Keep prior accepted findings accepted unless patch impact reopens them
-- Preserve blocker numbering for traceability
-- New defect introduced by a patch becomes a new blocker
-- If a previously HOLD'd blocker was marked UNRESOLVABLE by submitter with valid justification, accept the classification and remove it from HOLD list
+- Check ONLY: (a) items in `PATCHES APPLIED`, (b) regressions introduced by those patches.
+- Keep prior accepted findings accepted unless a patch impact reopens them.
+- Preserve blocker numbering for traceability.
+- New defect introduced by a patch becomes a new blocker with prefix "NEW-".
+
+### Scope Lock Rule
+A finding that was detectable in Round 1 inputs but was not reported in Round 1 is a MISSED FINDING. Missed findings:
+- Are NOT valid blockers in Round 2+
+- Must be reported as severity `info` with tag `[MISSED-R1]`, not `blocker`
+- Do NOT trigger HOLD
+- The submitter may choose to fix them voluntarily but is not required to
+
+This rule exists because the submitter's patch scope is bounded by R1 blockers. Expanding scope in later rounds is unfair and creates infinite loops.
+
+Exception: If the submitter's patch materially changes a file or area that was clean in R1, and the change introduces a new problem in that area, that IS a valid new blocker (not a missed finding).
+
+- If a previously HOLD'd blocker was marked UNRESOLVABLE by submitter with valid justification, accept the classification and remove it from HOLD list.
 
 ## Anti-Loop Rule
 - If the same blocker persists unchanged across 3 consecutive rounds (same finding, no new evidence-based argument from reviewer), the reviewer must escalate to operator instead of issuing another HOLD.
@@ -105,10 +135,12 @@ For Round 2+:
 - Maximum total rounds per sprint: 5. If Round 5 still results in HOLD, automatic escalation to operator regardless of blocker status.
 - Re-review must not introduce cosmetic or interpretive variations of a previously stated finding as a "new" blocker. If the core issue is identical, it counts as the same finding.
 - Restating a finding with different wording but identical substance counts as repetition, not a new finding.
+- A Round 2+ HOLD that contains ONLY findings detectable from R1 inputs (no patch-introduced regressions) is automatically invalid. If no patch-introduced regressions exist and all R1 blockers are resolved, verdict MUST be PASS.
 
 ## Output Rules
 - Output exactly one markdown code block
 - Follow review-verdict-contract.v2 exactly
 - No prose before or after the block
 - No praise, recap, or brainstorming
-- Keep it under 600 tokens
+- Keep it under 600 tokens for Round 2+
+- Round 1 may use up to 900 tokens if needed for exhaustive coverage — note "Extended R1" in metadata

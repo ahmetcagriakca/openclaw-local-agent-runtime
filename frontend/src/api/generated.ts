@@ -2683,6 +2683,11 @@ export interface components {
              */
             complexity: string;
             /**
+             * Project Id
+             * @description Link mission to project on creation. Project must be draft or active.
+             */
+            project_id?: string | null;
+            /**
              * Timeout Seconds
              * @description Mission timeout in seconds (60-86400). Default: 3600.
              */
@@ -2717,6 +2722,8 @@ export interface components {
              * @default operator
              */
             owner: string;
+            /** Local Path */
+            local_path?: string | null;
         };
         /** CreateScheduleRequest */
         CreateScheduleRequest: {
@@ -3564,6 +3571,8 @@ export interface components {
             description?: string | null;
             /** Status */
             status?: string | null;
+            /** Local Path */
+            local_path?: string | null;
         };
         /** UpdateScheduleRequest */
         UpdateScheduleRequest: {

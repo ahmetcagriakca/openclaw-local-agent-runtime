@@ -125,6 +125,21 @@ finding:
 
 ---
 
+## Validation Method
+
+Each D-149 rule is verified by:
+
+| Rule | Verification |
+|---|---|
+| observe_only = no mutation | Audit session evidence contains zero POST/PATCH/PUT/DELETE to frontend; all interactions are read-only (screenshot + DOM read) |
+| 6 mandatory artifacts per session | `ls evidence/sprint-{N}/browser-audit/` must contain: browser-console.txt, browser-network.txt, browser-dom-notes.md, ux-friction-report.md, repro-steps.md, screenshot-evidence/ |
+| >= 5 verified findings | `grep -c "^### UX-" evidence/sprint-{N}/browser-audit/ux-friction-report.md` >= 5 |
+| >= 3 categories covered | `grep "Category:" ux-friction-report.md \| sort -u \| wc -l` >= 3 |
+| stuck_party on every finding | Every finding in ux-friction-report.md has a "Stuck party:" field with value user/agent/both/unclear |
+| No mutation outside staging | No browser tool calls with action=left_click on forms, no type actions into application inputs (observe_only mode) |
+
+---
+
 ## Rollback / Reversal
 
 - Browser analysis is additive — no existing system modified.

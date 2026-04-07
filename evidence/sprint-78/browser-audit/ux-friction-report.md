@@ -5,6 +5,8 @@
 **Target:** http://localhost:4000 (Backend API offline)
 **Pages audited:** /missions, /health, /approvals, /telemetry, /monitoring, /templates, /costs, /agents, /projects, /nonexistent-page
 
+**Screenshot note:** Screenshots captured via Claude in Chrome (session IDs: ss_6911kxpcc, ss_6703gb1l0, ss_5638mk39f, ss_5806l2qw2, ss_61954qke2, ss_4060ejms9, ss_5905dnunz, ss_7316n748d, ss_9619qm0x8, ss_6859w2o7j). These are embedded in the Claude Code conversation context and not exportable as standalone PNG files. Each finding references its session ID for traceability.
+
 ---
 
 ## Findings

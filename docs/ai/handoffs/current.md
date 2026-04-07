@@ -53,7 +53,7 @@ GPT reviewed S78-UX-ANALYSIS-REPORT.md and gave HOLD with 5 blockers:
 | S76 | — | PASS (R2) |
 | S77 | — | HOLD R1 → HOLD R2 → PASS R3 |
 | S78 | — | HOLD R1 → HOLD R2 → HOLD R3 → PASS R4 |
-| S78 UX Report | — | HOLD (5 blockers, 2 false positive, 3 valid) |
+| S78 UX Report | — | HOLD R1 → PASS R2 (B1-B5 cleared) |
 
 ## Phase 10 Status
 
@@ -80,11 +80,8 @@ GPT reviewed S78-UX-ANALYSIS-REPORT.md and gave HOLD with 5 blockers:
 | vite 6→8 + plugin-react 6 | Dependabot | Deferred |
 | B-148 PAT-backed Project V2 | S71 | Blocked by GITHUB_TOKEN limitation |
 | EventBus production wiring | D-147 | Future sprint — currently test-only |
-| UX findings remediation (UX-001→UX-007) | S78 D-149 audit | 7 findings open, 3 high severity |
-| UX report B3 screenshot PNGs | GPT UX review | Capture actual PNGs next session |
-| UX report B4 root cause verify | GPT UX review | Inspect frontend/src/api/client.ts |
-| UX report B5 remediation task map | GPT UX review | Finding→task/owner/component mapping |
+| UX findings remediation (UX-001→UX-007) | S78 D-149 audit | 7 findings open, 3 high. S79 remediation-ready (GPT PASS R2) |
 
 ## GPT Memo
 
-Session 53 (S78+UX review): Sprint 78 closed. D-149 frozen. PR #415 merged. GPT Sprint Review PASS R4. GPT UX Analysis Report cross-review: HOLD — B1/B2 false positive (D-149 exists, evidence artifacts exist), B3 valid (screenshot PNGs needed), B4 valid (root cause unverified), B5 valid (task map missing). S79 candidate: UX remediation (FE-ERR-01, FE-SSE-01, FE-NAV-01). 146+2 decisions. 2268 tests.
+Session 53 (S78+UX review): Sprint 78 closed. D-149 frozen. PR #415 merged. GPT Sprint Review PASS R4. GPT UX Analysis Report: HOLD R1 → PASS R2. B3 screenshots captured (Playwright PNG), B4 root cause confirmed (client.ts:46-52 double-read), B5 remediation-task-map.md created (FE-ERR-01, FE-SSE-01, FE-NAV-01). S79 candidate: UX remediation. 146+2 decisions. 2268 tests.

@@ -105,8 +105,5 @@ S78 closed: Router Bypass Fix + Browser Analysis Contract (D-149). PR #415 merge
 | PROJECT_TOKEN rotation/docs | S23 retro | AKCA-owned, non-blocking |
 | Docker prod image optimization | D-116 (S26) | Partial — docker-compose done, prod image remaining |
 | SSO/RBAC (full external auth) | D-104/D-108/D-117 | Partial — D-117 + backend isolation done. SSO + full RBAC remaining |
-| UX findings remediation (UX-001→UX-007) | S78 D-149 audit | 7 findings open (3 high, 4 medium) — S79 candidate |
-| UX report B3: screenshot PNGs | GPT UX review | Capture actual PNGs (Playwright or manual export) |
-| UX report B4: root cause verify | GPT UX review | Inspect frontend/src/api/client.ts for double-read bug |
-| UX report B5: remediation task map | GPT UX review | Finding→task/owner/component/sprint mapping |
+| UX findings remediation (UX-001→UX-007) | S78 D-149 audit | GPT PASS R2. 7 findings, 3 work packages ready (FE-ERR-01, FE-SSE-01, FE-NAV-01) |
 | D-150 Capability Routing Transition | S77 proposed | Needs operator review |

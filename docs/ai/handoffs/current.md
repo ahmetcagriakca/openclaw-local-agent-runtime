@@ -14,6 +14,7 @@ Session 55: B-148 blocker resolved, sprint roadmap S80-S84 created.
 - **project-auto-add.yml** updated to use PROJECT_TOKEN with fallback
 - **SECRETS-CONTRACT.md** updated (classic PAT details, fine-grained limitation note)
 - **STATE.md** synced to S79 closed (was stale at S78)
+- **Benchmark fix:** CSRF origin `localhost:3000` → `localhost:4000` — Benchmark workflow green after 4 sprints of failure
 - **Roadmap S80-S84** created — all carry-forward items mapped to sprints
 - S80: Housekeeping + Dependency Upgrades (eslint 10, vite 8, stale issues)
 - S81: EventBus Production Wiring (D-147)
@@ -45,7 +46,7 @@ Session 55: B-148 blocker resolved, sprint roadmap S80-S84 created.
 - **Last closed sprint:** 79
 - **Decisions:** 146 frozen + 2 superseded (D-001 → D-149)
 - **Tests:** 1877 backend + 247 frontend + 13 Playwright + 139 root = 2276 total
-- **CI:** Green on main
+- **CI:** All green (CI + Benchmark + Playwright + Push)
 - **Lint:** 0 errors
 - **Port map:** API :8003, Frontend :4000, WMCP :8001
 - **Security:** 0 CodeQL open, 2 dependabot (pre-existing)
@@ -94,4 +95,4 @@ Session 55: B-148 blocker resolved, sprint roadmap S80-S84 created.
 
 ## GPT Memo
 
-Session 55: B-148 resolved (classic PAT, PROJECT_TOKEN updated, project-auto-add.yml patched). STATE.md synced S79. Roadmap S80-S84 created: S80 housekeeping+deps, S81 EventBus wiring, S82 Docker prod, S83 D-150 routing, S84 SSO/RBAC. Next: S80 kickoff.
+Session 55: B-148 resolved (classic PAT, PROJECT_TOKEN updated, project-auto-add.yml patched). Benchmark CSRF fix (localhost:3000→4000, green after 4 sprints). STATE.md synced S79. Roadmap S80-S84 created: S80 housekeeping+deps, S81 EventBus wiring, S82 Docker prod, S83 D-150 routing, S84 SSO/RBAC. All CI green. Next: S80 kickoff.

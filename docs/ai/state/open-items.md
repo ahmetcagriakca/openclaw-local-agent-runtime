@@ -1,7 +1,7 @@
 # open-items.md — Active State Tracker
 
-**Last updated:** 2026-04-06
-**Updated by:** Claude Code (Session 49 — S73)
+**Last updated:** 2026-04-07
+**Updated by:** Claude Code (Session 55)
 
 ---
 
@@ -17,8 +17,8 @@
 
 | Item | Source | Status |
 |------|--------|--------|
-| PROJECT_TOKEN rotation/docs | S23 retro | AKCA-owned, non-blocking |
-| Docker dev environment | D-116 (S26) | Partially resolved: docker-compose operational (D-116, Jaeger included S28). Remaining: production image optimization |
+| PROJECT_TOKEN rotation/docs | S23 retro | Rotated 2026-04-07, classic PAT, expires Jul 06 2026 |
+| Docker dev environment | D-116 (S26) | Partially resolved: docker-compose operational (D-116, Jaeger included S28). Remaining: production image optimization → S82 |
 | ~~Alert "any" namespace scoping~~ | S16 P-16.2 | Done: S49 B-119 (#288) |
 | Multi-user auth | D-104/D-108/D-117 | Partially resolved: D-117 operational (S27), backend isolation (S40). Remaining: SSO, external auth, full RBAC |
 
@@ -92,18 +92,23 @@
 | Sprint 74 | Workspace + Artifacts (D-145, Phase 10 Faz 2A) | CLOSED (operator override) |
 | Sprint 75 | Rollup + SSE + Dashboard (D-145, Phase 10 Faz 2B) | CLOSED |
 | Sprint 76 | Governance Contract Hardening (Security + EventBus + Audit) | CLOSED |
+| Sprint 77 | Azure OpenAI Provider Foundation (D-148) | CLOSED |
 | Sprint 78 | Router Bypass Fix + Browser Analysis Contract (D-149) | CLOSED |
+| Sprint 79 | UX Remediation + Review Process Improvement | CLOSED |
 
 ## Next Sprint
 
-S78 closed: Router Bypass Fix + Browser Analysis Contract (D-149). PR #415 merged. S79 next: scope TBD (UX remediation candidate).
+S79 closed: UX Remediation + Review Process Improvement. PR #422 merged. S80 next: Housekeeping + Dependency Upgrades (plan.yaml ready).
 
 ### Carry-Forward
 | Item | Source | Status |
 |------|--------|--------|
 | S74+ impl/test separate commits | S73 retro | Required — prevents GPT review gate-timing loop |
-| PROJECT_TOKEN rotation/docs | S23 retro | AKCA-owned, non-blocking |
-| Docker prod image optimization | D-116 (S26) | Partial — docker-compose done, prod image remaining |
-| SSO/RBAC (full external auth) | D-104/D-108/D-117 | Partial — D-117 + backend isolation done. SSO + full RBAC remaining |
-| UX findings remediation (UX-001→UX-007) | S78 D-149 audit | GPT PASS R2. 7 findings, 3 work packages ready (FE-ERR-01, FE-SSE-01, FE-NAV-01) |
-| D-150 Capability Routing Transition | S77 proposed | Needs operator review |
+| PROJECT_TOKEN rotation/docs | S23 retro | Rotated 2026-04-07, classic PAT, expires Jul 06 2026 |
+| B-148 PAT-backed Project V2 | S71 | Resolved — classic PAT, secret updated 2026-04-07 |
+| Docker prod image optimization | D-116 (S26) | Partial — docker-compose done, prod image → S82 |
+| SSO/RBAC (full external auth) | D-104/D-108/D-117 | Partial — D-117 + backend isolation done → S84 |
+| ~~UX findings remediation~~ | S78 D-149 audit | Done: S79 (T-79.01, T-79.03, T-79.04, T-79.05) |
+| D-150 Capability Routing Transition | S77 proposed | Needs operator review → S83 |
+| EventBus production wiring | D-147 | Test-only → S81 |
+| eslint 9→10 + vite 6→8 | Dependabot | Deferred → S80 |

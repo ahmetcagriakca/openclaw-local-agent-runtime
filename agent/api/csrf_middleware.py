@@ -31,7 +31,7 @@ class CSRFMiddleware(BaseHTTPMiddleware):
     """
 
     async def dispatch(self, request: Request, call_next):
-        if request.method == "POST":
+        if request.method in ("POST", "PATCH", "PUT", "DELETE"):
             origin = request.headers.get("origin", "")
             if not origin or origin not in ALLOWED_ORIGINS:
                 logger.warning(

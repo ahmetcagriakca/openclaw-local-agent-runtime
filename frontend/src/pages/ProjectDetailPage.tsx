@@ -4,7 +4,7 @@
  */
 import { useCallback, useState } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
-import { getProject, getProjectRollup, getProjectArtifacts, createMission } from '../api/client'
+import { getProject, getProjectRollup, getProjectArtifacts, createMission, updateProject } from '../api/client'
 import { usePolling } from '../hooks/usePolling'
 
 const STATUS_COLORS: Record<string, string> = {
@@ -39,6 +39,12 @@ export function ProjectDetailPage() {
   const [missionComplexity, setMissionComplexity] = useState('medium')
   const [creating, setCreating] = useState(false)
   const [createError, setCreateError] = useState<string | null>(null)
+  const [editing, setEditing] = useState(false)
+  const [editName, setEditName] = useState('')
+  const [editDesc, setEditDesc] = useState('')
+  const [editPath, setEditPath] = useState('')
+  const [saving, setSaving] = useState(false)
+  const [editError, setEditError] = useState<string | null>(null)
 
   const projectFetcher = useCallback(() => getProject(id!), [id])
   const rollupFetcher = useCallback(() => getProjectRollup(id!), [id])
@@ -62,6 +68,37 @@ export function ProjectDetailPage() {
   const artifacts = artifactsData?.data ?? []
 
   const canCreateMission = project?.status === 'draft' || project?.status === 'active'
+  const canEdit = project?.status === 'draft' || project?.status === 'active' || project?.status === 'paused'
+
+  function startEditing() {
+    if (!project) return
+    setEditName(project.name)
+    setEditDesc(project.description || '')
+    setEditPath(project.local_path || '')
+    setEditError(null)
+    setEditing(true)
+  }
+
+  async function handleSaveEdit(e: React.FormEvent) {
+    e.preventDefault()
+    if (!id || !editName.trim()) return
+    setSaving(true)
+    setEditError(null)
+    try {
+      const updates: Record<string, string> = {}
+      if (editName.trim() !== project?.name) updates.name = editName.trim()
+      if (editDesc.trim() !== (project?.description || '')) updates.description = editDesc.trim()
+      if (editPath.trim() !== (project?.local_path || '')) updates.local_path = editPath.trim()
+      if (Object.keys(updates).length > 0) {
+        await updateProject(id, updates)
+      }
+      setEditing(false)
+    } catch (err) {
+      setEditError(err instanceof Error ? err.message : 'Save failed')
+    } finally {
+      setSaving(false)
+    }
+  }
 
   async function handleCreateMission(e: React.FormEvent) {
     e.preventDefault()
@@ -101,6 +138,14 @@ export function ProjectDetailPage() {
             )}
           </div>
           <div className="flex items-center gap-2">
+            {canEdit && (
+              <button
+                onClick={startEditing}
+                className="rounded bg-blue-600 px-3 py-1 text-xs font-medium text-white hover:bg-blue-500"
+              >
+                Edit
+              </button>
+            )}
             {canCreateMission && (
               <button
                 onClick={() => setShowMissionForm(!showMissionForm)}
@@ -128,6 +173,62 @@ export function ProjectDetailPage() {
           </div>
         )}
       </div>
+
+      {/* Edit Project Form */}
+      {editing && (
+        <div className="mb-6 rounded-lg border border-blue-800 bg-gray-900 p-4">
+          <h3 className="mb-3 text-sm font-medium text-blue-400">Edit Project</h3>
+          <form onSubmit={handleSaveEdit} className="space-y-3">
+            <div>
+              <label className="mb-1 block text-xs text-gray-400">Project Name</label>
+              <input
+                type="text"
+                value={editName}
+                onChange={(e) => setEditName(e.target.value)}
+                className="w-full rounded border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 focus:border-blue-500 focus:outline-none"
+                required
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-xs text-gray-400">Description</label>
+              <textarea
+                value={editDesc}
+                onChange={(e) => setEditDesc(e.target.value)}
+                className="w-full rounded border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 focus:border-blue-500 focus:outline-none"
+                rows={2}
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-xs text-gray-400">Local Path</label>
+              <input
+                type="text"
+                value={editPath}
+                onChange={(e) => setEditPath(e.target.value)}
+                placeholder="C:\Users\AKCA\my-project"
+                className="w-full rounded border border-gray-700 bg-gray-800 px-3 py-2 text-sm font-mono text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:outline-none"
+              />
+              <p className="mt-1 text-[10px] text-gray-500">Directory must exist on disk.</p>
+            </div>
+            {editError && <p className="text-xs text-red-400">{editError}</p>}
+            <div className="flex gap-2">
+              <button
+                type="submit"
+                disabled={saving || !editName.trim()}
+                className="rounded bg-blue-600 px-4 py-1.5 text-xs font-medium text-white hover:bg-blue-500 disabled:opacity-50"
+              >
+                {saving ? 'Saving...' : 'Save'}
+              </button>
+              <button
+                type="button"
+                onClick={() => setEditing(false)}
+                className="rounded bg-gray-700 px-4 py-1.5 text-xs text-gray-300 hover:bg-gray-600"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
 
       {/* Create Mission Form */}
       {showMissionForm && canCreateMission && (

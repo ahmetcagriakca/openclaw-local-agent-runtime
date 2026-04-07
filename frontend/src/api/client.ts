@@ -322,6 +322,31 @@ export function createProject(
   return apiPostJson<{ meta: unknown; data: unknown }>('/projects', body)
 }
 
+async function apiPatchJson<T>(path: string, body: unknown): Promise<T> {
+  const res = await fetch(`${BASE}${path}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Tab-Id': getTabId(),
+      'X-Session-Id': getSessionId(),
+    },
+    body: JSON.stringify(body),
+  })
+  if (!res.ok) {
+    let respBody: unknown
+    try { respBody = await res.json() } catch { respBody = await res.text() }
+    throw new ApiError(res.status, respBody)
+  }
+  return res.json() as Promise<T>
+}
+
+export function updateProject(
+  projectId: string,
+  updates: { name?: string; description?: string; status?: string; local_path?: string },
+): Promise<{ meta: unknown; data: unknown }> {
+  return apiPatchJson<{ meta: unknown; data: unknown }>(`/projects/${encodeURIComponent(projectId)}`, updates)
+}
+
 export function getProjects(params?: {
   status?: string
   search?: string

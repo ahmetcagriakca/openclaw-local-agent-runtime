@@ -55,6 +55,7 @@ class UpdateProjectRequest(BaseModel):
     name: Optional[str] = None
     description: Optional[str] = None
     status: Optional[str] = None
+    local_path: Optional[str] = None
 
 
 def _meta():
@@ -152,6 +153,13 @@ async def update_project(project_id: str, req: UpdateProjectRequest, _operator=D
         updates["name"] = req.name
     if req.description is not None:
         updates["description"] = req.description
+    if req.local_path is not None:
+        from pathlib import Path as PPath
+        resolved = PPath(req.local_path).resolve()
+        if not resolved.is_dir():
+            raise HTTPException(status_code=422, detail=f"Path does not exist: {req.local_path}")
+        updates["local_path"] = str(resolved)
+        updates["workspace_root"] = str(resolved)
 
     if updates:
         try:

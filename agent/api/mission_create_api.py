@@ -28,6 +28,9 @@ router = APIRouter(tags=["mission-create"])
 class CreateMissionRequest(BaseModel):
     goal: str = Field(..., min_length=1, max_length=2000)
     complexity: str = Field(default="medium")
+    project_id: str | None = Field(
+        default=None,
+        description="Link mission to project on creation. Project must be draft or active.")
     # B-014 Sprint 53: Configurable timeout (seconds)
     timeout_seconds: int | None = Field(
         default=None, ge=60, le=86400,
@@ -177,12 +180,24 @@ async def create_mission(body: CreateMissionRequest, request: Request, _operator
         "createdFrom": "dashboard",
         "userId": user_id,
     }
+    if body.project_id:
+        mission_data["project_id"] = body.project_id
     if timeout_config:
         mission_data["timeoutConfig"] = timeout_config
 
     mission_file = missions_dir / f"{mission_id}.json"
     atomic_write_json(mission_file, mission_data)
-    logger.info("Mission created: %s goal=%s", mission_id, body.goal[:80])
+    logger.info("Mission created: %s goal=%s project=%s", mission_id, body.goal[:80], body.project_id or "-")
+
+    # Auto-link mission to project if project_id provided
+    if body.project_id:
+        try:
+            from persistence.project_store import ProjectStore
+            ps = ProjectStore()
+            ps.link_mission(body.project_id, mission_id)
+            logger.info("Mission %s linked to project %s", mission_id, body.project_id)
+        except Exception as e:
+            logger.warning("Failed to link mission %s to project %s: %s", mission_id, body.project_id, e)
 
     # Emit SSE event for immediate UI update
     try:

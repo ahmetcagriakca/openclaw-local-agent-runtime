@@ -224,8 +224,29 @@ export async function deleteSignal(requestId: string): Promise<void> {
   }
 }
 
-export function createMission(goal: string, complexity?: string): Promise<CreateMissionResponse> {
-  return apiPostJson<CreateMissionResponse>('/missions', { goal, complexity: complexity ?? 'medium' })
+export function createMission(
+  goal: string,
+  complexity?: string,
+  projectId?: string,
+): Promise<CreateMissionResponse> {
+  const body: Record<string, unknown> = { goal, complexity: complexity ?? 'medium' }
+  if (projectId) body.project_id = projectId
+  return apiPostJson<CreateMissionResponse>('/missions', body)
+}
+
+export function linkMission(projectId: string, missionId: string): Promise<MutationResponse> {
+  return apiPost<MutationResponse>(`/projects/${encodeURIComponent(projectId)}/missions/${encodeURIComponent(missionId)}`)
+}
+
+export async function unlinkMission(projectId: string, missionId: string): Promise<void> {
+  const res = await fetch(`${BASE}/projects/${encodeURIComponent(projectId)}/missions/${encodeURIComponent(missionId)}`, {
+    method: 'DELETE',
+    headers: { 'X-Tab-Id': getTabId(), 'X-Session-Id': getSessionId() },
+  })
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}))
+    throw new ApiError(res.status, body)
+  }
 }
 
 // ── Templates (B-104) ──────────────────────────────────────────

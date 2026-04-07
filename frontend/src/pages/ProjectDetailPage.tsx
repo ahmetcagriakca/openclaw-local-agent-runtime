@@ -2,9 +2,9 @@
  * ProjectDetailPage — D-145 Faz 2B: Project detail view.
  * Shows project info, linked missions with status badges, published artifacts, rollup summary.
  */
-import { useCallback } from 'react'
-import { useParams, Link } from 'react-router-dom'
-import { getProject, getProjectRollup, getProjectArtifacts } from '../api/client'
+import { useCallback, useState } from 'react'
+import { useParams, Link, useNavigate } from 'react-router-dom'
+import { getProject, getProjectRollup, getProjectArtifacts, createMission } from '../api/client'
 import { usePolling } from '../hooks/usePolling'
 
 const STATUS_COLORS: Record<string, string> = {
@@ -33,6 +33,12 @@ function formatDate(iso: string | null | undefined): string {
 
 export function ProjectDetailPage() {
   const { id } = useParams<{ id: string }>()
+  const navigate = useNavigate()
+  const [showMissionForm, setShowMissionForm] = useState(false)
+  const [missionGoal, setMissionGoal] = useState('')
+  const [missionComplexity, setMissionComplexity] = useState('medium')
+  const [creating, setCreating] = useState(false)
+  const [createError, setCreateError] = useState<string | null>(null)
 
   const projectFetcher = useCallback(() => getProject(id!), [id])
   const rollupFetcher = useCallback(() => getProjectRollup(id!), [id])
@@ -55,6 +61,25 @@ export function ProjectDetailPage() {
   const rollup = rollupData?.data
   const artifacts = artifactsData?.data ?? []
 
+  const canCreateMission = project?.status === 'draft' || project?.status === 'active'
+
+  async function handleCreateMission(e: React.FormEvent) {
+    e.preventDefault()
+    if (!missionGoal.trim() || !id) return
+    setCreating(true)
+    setCreateError(null)
+    try {
+      const resp = await createMission(missionGoal.trim(), missionComplexity, id)
+      setMissionGoal('')
+      setShowMissionForm(false)
+      navigate(`/missions/${resp.missionId}`)
+    } catch (err) {
+      setCreateError(err instanceof Error ? err.message : 'Mission creation failed')
+    } finally {
+      setCreating(false)
+    }
+  }
+
   if (!project) {
     return <p className="text-sm text-gray-400">Project not found.</p>
   }
@@ -75,11 +100,21 @@ export function ProjectDetailPage() {
               <p className="mt-1 text-sm text-gray-400">{project.description}</p>
             )}
           </div>
-          <span
-            className={`rounded px-3 py-1 text-xs font-medium text-white ${STATUS_COLORS[project.status] ?? 'bg-gray-600'}`}
-          >
-            {project.status}
-          </span>
+          <div className="flex items-center gap-2">
+            {canCreateMission && (
+              <button
+                onClick={() => setShowMissionForm(!showMissionForm)}
+                className="rounded bg-green-600 px-3 py-1 text-xs font-medium text-white hover:bg-green-500"
+              >
+                + New Mission
+              </button>
+            )}
+            <span
+              className={`rounded px-3 py-1 text-xs font-medium text-white ${STATUS_COLORS[project.status] ?? 'bg-gray-600'}`}
+            >
+              {project.status}
+            </span>
+          </div>
         </div>
         <div className="mt-3 flex flex-wrap gap-4 text-xs text-gray-500">
           <span>Owner: {project.owner}</span>
@@ -88,6 +123,59 @@ export function ProjectDetailPage() {
           <span>ID: {project.project_id}</span>
         </div>
       </div>
+
+      {/* Create Mission Form */}
+      {showMissionForm && canCreateMission && (
+        <div className="mb-6 rounded-lg border border-green-800 bg-gray-900 p-4">
+          <h3 className="mb-3 text-sm font-medium text-green-400">Create Mission for {project.name}</h3>
+          <form onSubmit={handleCreateMission} className="space-y-3">
+            <div>
+              <label className="mb-1 block text-xs text-gray-400">Mission Goal</label>
+              <textarea
+                value={missionGoal}
+                onChange={(e) => setMissionGoal(e.target.value)}
+                placeholder="Describe what this mission should accomplish..."
+                className="w-full rounded border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:border-green-500 focus:outline-none"
+                rows={3}
+                maxLength={2000}
+                required
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-xs text-gray-400">Complexity</label>
+              <select
+                value={missionComplexity}
+                onChange={(e) => setMissionComplexity(e.target.value)}
+                className="rounded border border-gray-700 bg-gray-800 px-3 py-1.5 text-sm text-gray-100 focus:border-green-500 focus:outline-none"
+              >
+                <option value="trivial">Trivial</option>
+                <option value="simple">Simple</option>
+                <option value="medium">Medium</option>
+                <option value="complex">Complex</option>
+              </select>
+            </div>
+            {createError && (
+              <p className="text-xs text-red-400">{createError}</p>
+            )}
+            <div className="flex gap-2">
+              <button
+                type="submit"
+                disabled={creating || !missionGoal.trim()}
+                className="rounded bg-green-600 px-4 py-1.5 text-xs font-medium text-white hover:bg-green-500 disabled:opacity-50"
+              >
+                {creating ? 'Creating...' : 'Launch Mission'}
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowMissionForm(false)}
+                className="rounded bg-gray-700 px-4 py-1.5 text-xs text-gray-300 hover:bg-gray-600"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
 
       {/* Rollup Summary */}
       <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4">

@@ -7,7 +7,6 @@ import pytest
 from providers.azure_openai_provider import AzureOpenAIProvider
 from providers.base import AgentResponse, ProviderResponse, TaskRequest, ToolCall
 
-
 # --- Fixtures ---
 
 MOCK_ENDPOINT = "https://test.openai.azure.com"

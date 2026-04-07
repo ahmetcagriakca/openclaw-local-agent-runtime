@@ -54,9 +54,8 @@ from api.normalizer import MissionNormalizer
 srv.normalizer = MissionNormalizer(_missions_dir, _telemetry_path, _caps_path, _approvals_dir)
 srv.capability_checker = CapabilityChecker(str(_caps_path))
 
-from fastapi.testclient import TestClient
-
 from conftest import CSRF_ORIGIN
+from fastapi.testclient import TestClient
 
 # Patch keys module to load from our test config
 import auth.keys as keys_mod

@@ -64,7 +64,7 @@ class TestPlanMissionRoutingPolicy:
         )
 
         with patch.object(controller, "_select_agent_for_role",
-                          return_value="routed-agent") as mock_select, \
+                          return_value="routed-agent"), \
              patch("providers.factory.create_provider",
                    return_value=(mock_provider, {})) as mock_create:
 
@@ -116,7 +116,7 @@ class TestGenerateSummaryRoutingPolicy:
         mock_provider.chat.return_value = MagicMock(text="Done.")
 
         with patch.object(controller, "_select_agent_for_role",
-                          return_value="azure-general") as mock_select, \
+                          return_value="azure-general"), \
              patch("providers.factory.create_provider",
                    return_value=(mock_provider, {})) as mock_create:
 

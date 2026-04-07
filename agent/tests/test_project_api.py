@@ -3,7 +3,8 @@
 Task 73.10: 7 endpoints + error codes (409, 422, 404).
 """
 import pytest
-from conftest import AUTH_HEADERS, MUTATION_HEADERS as POST_HEADERS
+from conftest import AUTH_HEADERS
+from conftest import MUTATION_HEADERS as POST_HEADERS
 from fastapi.testclient import TestClient
 
 

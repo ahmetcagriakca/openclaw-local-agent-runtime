@@ -69,3 +69,6 @@ HOLD means blockers remain.
 13. Maximum 5 rounds per sprint. Round 5 HOLD triggers automatic operator escalation.
 14. If the same blocker text (same core finding) appears in 3 consecutive rounds without new evidence from the reviewer, verdict must be `ESCALATE` instead of `HOLD`.
 15. `ESCALATE` verdict uses the same template but replaces `## 2. Verdict` value with `ESCALATE — operator decision required` and `## 10. Next Step` with `Operator override review required. Reviewer cannot resolve this finding through further rounds.`
+16. Round 1 must report ALL blocking findings across all 7 review areas. Use terse table rows to fit within token budget. If 600 tokens is insufficient for exhaustive R1, use up to 900 tokens and note "Extended R1" in Section 1 metadata.
+17. A Round 2+ finding that was detectable in Round 1 scope (existed in R1 inputs, not introduced by a patch) is a MISSED FINDING — report as severity `info` with tag `[MISSED-R1]`, NOT as a blocker. Missed findings cannot trigger HOLD.
+18. A Round 2+ HOLD is valid ONLY if it contains at least one blocker that is either: (a) an R1 blocker still unresolved, or (b) a regression introduced by a patch. A HOLD with only missed findings is invalid.

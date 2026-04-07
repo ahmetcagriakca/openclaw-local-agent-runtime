@@ -5,7 +5,7 @@
 **Target:** http://localhost:4000 (Backend API offline)
 **Pages audited:** /missions, /health, /approvals, /telemetry, /monitoring, /templates, /costs, /agents, /projects, /nonexistent-page
 
-**Screenshot note:** Screenshots captured via Claude in Chrome (session IDs: ss_6911kxpcc, ss_6703gb1l0, ss_5638mk39f, ss_5806l2qw2, ss_61954qke2, ss_4060ejms9, ss_5905dnunz, ss_7316n748d, ss_9619qm0x8, ss_6859w2o7j). These are embedded in the Claude Code conversation context and not exportable as standalone PNG files. Each finding references its session ID for traceability.
+**Screenshot note:** Physical PNG screenshots captured via Playwright headless (1520x720 viewport) and stored in `screenshot-evidence/`. See `screenshot-index.md` for full index.
 
 ---
 
@@ -27,7 +27,7 @@
 - **Actual:** Shows `Failed to execute 'text' on 'Response': body stream already read` — an internal browser/fetch API error message that means nothing to a user.
 - **Console errors:** None visible (tracking started after page load)
 - **Network errors:** Connection refused to localhost:8003 (all API calls fail)
-- **Screenshot:** screenshot-evidence/UX-001-missions-error.png (ss_6911kxpcc)
+- **Screenshot:** screenshot-evidence/UX-001.png
 - **Owner:** TBD
 - **Status:** open
 - **Stuck party:** user — user sees cryptic error, cannot distinguish "API down" from "bug in frontend"
@@ -50,7 +50,7 @@
 - **Actual:** "Failed to load health" + "Failed to load capabilities" with no recovery action. User must manually refresh browser.
 - **Console errors:** none
 - **Network errors:** Connection refused
-- **Screenshot:** screenshot-evidence/UX-002-health-no-retry.png (ss_6703gb1l0)
+- **Screenshot:** screenshot-evidence/UX-002.png
 - **Owner:** TBD
 - **Status:** open
 - **Stuck party:** user — no recovery action available
@@ -73,7 +73,7 @@
 - **Actual:** Page shows "Agent Health" heading and "LLM PROVIDERS" label, then completely blank. No error message, no loading indicator, no retry. User cannot tell if data is loading, empty, or failed.
 - **Console errors:** none
 - **Network errors:** Connection refused
-- **Screenshot:** screenshot-evidence/UX-003-agents-silent-empty.png (ss_4060ejms9)
+- **Screenshot:** screenshot-evidence/UX-003.png
 - **Owner:** TBD
 - **Status:** open
 - **Stuck party:** user — indistinguishable from "no agents configured" vs "API unreachable"
@@ -96,7 +96,7 @@
 - **Actual:** Red error text `Error: Failed to execute 'text' on 'Response': body stream already read` AND gray `No projects found.` both visible. Count shows "Projects (0)" which implies successful fetch of zero items.
 - **Console errors:** none
 - **Network errors:** Connection refused
-- **Screenshot:** screenshot-evidence/UX-004-projects-contradictory.png (ss_5638mk39f)
+- **Screenshot:** screenshot-evidence/UX-004.png
 - **Owner:** TBD
 - **Status:** open
 - **Stuck party:** user — conflicting signals: "0 projects" suggests success, error text suggests failure
@@ -119,7 +119,7 @@
 - **Actual:** Three simultaneous states visible: (1) Red "Error: HTTP 500" banner, (2) "Loading summary..." text that never resolves, (3) "Missions (0)" / "No missions recorded yet" empty states, (4) "Live Events: Disconnected" with Connect button. The "HTTP 500" is odd since backend is down (should be connection refused, not 500).
 - **Console errors:** none
 - **Network errors:** Connection refused (the HTTP 500 text may be a catch-all)
-- **Screenshot:** screenshot-evidence/UX-005-monitoring-stuck.png (ss_5905dnunz)
+- **Screenshot:** screenshot-evidence/UX-005.png
 - **Owner:** TBD
 - **Status:** open
 - **Stuck party:** both — agent side (SSE disconnected, no data) + user side (cannot distinguish server error from unreachable)
@@ -142,7 +142,7 @@
 - **Actual:** Sidebar shows colorful emoji icons (target, heart, lock, chart, envelope, clipboard, coin, robot, folder). Hover shows highlight but no tooltip text. User must expand sidebar or guess which emoji maps to which page. Accessibility tree does have text labels (good for screen readers) but visual users get no hover hint.
 - **Console errors:** none
 - **Network errors:** none
-- **Screenshot:** screenshot-evidence/UX-006-sidebar-no-tooltip.png (ss_6859w2o7j)
+- **Screenshot:** screenshot-evidence/UX-006.png
 - **Owner:** TBD
 - **Status:** open
 - **Stuck party:** user — must memorize emoji-to-page mapping or always expand sidebar
@@ -165,7 +165,7 @@
 - **Actual:** Shows "Polling 30s" with a green/yellow dot, implying the system is actively and successfully polling. Some pages show "Reconnecting..." briefly but then settle to "Polling 30s". This gives false confidence that the system is operational.
 - **Console errors:** none
 - **Network errors:** SSE connection fails repeatedly
-- **Screenshot:** screenshot-evidence/UX-007-sse-misleading.png (ss_6911kxpcc)
+- **Screenshot:** screenshot-evidence/UX-007.png
 - **Owner:** TBD
 - **Status:** open
 - **Stuck party:** both — user thinks system is working (polling), agent cannot receive events

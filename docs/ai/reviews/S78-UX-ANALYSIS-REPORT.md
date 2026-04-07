@@ -179,20 +179,34 @@ The indicator implies: "System is actively and successfully polling for events e
 
 **5 different failure patterns across 9 pages.** There is no unified error handling strategy.
 
-### Root Cause Hypothesis
+### Root Cause — CONFIRMED
 
-The `body stream already read` error suggests the API client layer (likely in `frontend/src/api/client.ts` or similar) has a double-read bug in its error handler:
+**File:** `frontend/src/api/client.ts` lines 46-52 (`apiGet`), 134-140 (`apiPost`), 335-337 (`apiPatchJson`)
 
-```
-try {
-  const response = await fetch(url);
-  const data = await response.json(); // reads body
-} catch (e) {
-  const text = await response.text(); // ERROR: body already consumed
+The `body stream already read` error is a double-read bug in the API client error handler:
+
+```typescript
+// frontend/src/api/client.ts:44-56
+async function apiGet<T>(path: string): Promise<T> {
+  const res = await fetch(`${BASE}${path}`)
+  if (!res.ok) {
+    let body: unknown
+    try {
+      body = await res.json()   // line 49: consumes response body
+    } catch {
+      body = await res.text()   // line 51: body ALREADY consumed → TypeError
+    }
+    throw new ApiError(res.status, body)
+  }
+  return res.json() as Promise<T>
 }
 ```
 
-When the backend is unreachable, `fetch()` throws a `TypeError: Failed to fetch` (no response object). But if there's a response with an error status, the handler reads the body twice. This secondary error is what gets displayed to users.
+When backend is unreachable, Vite dev proxy returns 502/504 with HTML error page. `res.json()` fails (not valid JSON), then `res.text()` attempts second read on already-consumed ReadableStream. The resulting `TypeError: Failed to execute 'text' on 'Response': body stream already read` propagates to UI error banners.
+
+Same pattern in `apiPost` (line 134-140) and `apiPatchJson` (line 335-337).
+
+**Fix:** Use `res.clone()` before first read, or text-first approach: `const text = await res.text(); JSON.parse(text)`.
 
 ### Severity Distribution
 

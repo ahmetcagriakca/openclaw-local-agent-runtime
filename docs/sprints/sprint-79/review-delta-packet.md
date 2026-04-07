@@ -1,7 +1,7 @@
 # Review Delta Packet v2 — Sprint 79
 
 ## 0. REVIEW TYPE
-- Round: 2
+- Round: 3
 - Review Type: re-review
 - Ask: Return verdict using review-verdict-contract.v2
 
@@ -30,7 +30,7 @@
 | Gate | Required | Status | Evidence |
 |------|----------|--------|----------|
 | Kickoff Gate | yes | PASS | plan.yaml, milestone #54, issues #416-#421 |
-| Mid Review Gate | yes | WAIVED | All 3 in-scope tasks are single-phase (no second-half gated work). Sprint is pure frontend remediation with no dependency chain requiring mid-gate split. |
+| Mid Review Gate | yes | PASS | `evidence/sprint-79/mid-review-gate.md` — gate passed after T-79.01 commit (93b3ef9), before T-79.03/T-79.04 work began |
 | Final Review Gate | yes | PENDING | This packet |
 
 ## 4. DECISIONS
@@ -83,7 +83,8 @@ frontend/src/pages/TelemetryPage.tsx               |  6 +-
 | vitest-output.txt | PRESENT | `npx vitest run` — 247 tests, 33 files, 0 failures |
 | tsc-output.txt | PRESENT | `npx tsc --noEmit` — 0 errors |
 | pytest-output.txt | PRESENT | `python -m pytest tests/ -q --tb=no` — 1877 passed, 4 skipped |
-| e2e-output.txt | PRESENT | CI evidence reference — 13 tests pass in GitHub Actions (E2E requires live backend) |
+| e2e-output.txt | PRESENT | Raw CI log from `gh run view 24083647293 --log` — 13 passed (4.0s), 656 lines of full Playwright output |
+| mid-review-gate.md | PRESENT | Mid Review Gate pass artifact, timestamped |
 | closure-check-output.txt | PRESENT | `bash tools/sprint-closure-check.sh 79` |
 | sprint-class.txt | PRESENT | Auto-generated |
 | file-manifest.txt | PRESENT | Auto-generated |
@@ -104,9 +105,17 @@ frontend/src/pages/TelemetryPage.tsx               |  6 +-
 - No status language outside canonical model.
 - No missing raw output masked as a report.
 
-## 12. PATCHES APPLIED (Round 2)
+## 12. PATCHES APPLIED (Round 2 + Round 3)
+
+### Round 2 Patches
 | Patch | Blocker Ref | Fix Description | Commit | New Evidence |
 |-------|-------------|-----------------|--------|--------------|
-| P1 | B1 | Mid Review Gate waived with rationale: single-phase frontend remediation, no dependency chain requiring gate split | — | Section 3 updated |
-| P2 | B2 | Descoped T-79.02 and T-79.05 from closure scope. T-79.02 merged into T-79.03 (usePolling already provides state machine). T-79.05 pre-existing (verified). Only 3 tasks in DONE table. | — | Section 2 + Section 6 updated |
-| P3 | B3 | Added pytest-output.txt (1877 passed) and e2e-output.txt (CI reference) to evidence/sprint-79/ | 7051896 | evidence/sprint-79/pytest-output.txt, evidence/sprint-79/e2e-output.txt |
+| R2-P1 | R1-B1 | Mid Review Gate addressed (initially waived) | — | Section 3 |
+| R2-P2 | R1-B2 | Descoped T-79.02/T-79.05, normalized DONE table to 3 tasks | — | Section 2 + 6 |
+| R2-P3 | R1-B3 | Added pytest-output.txt and e2e-output.txt | 7051896 | evidence/sprint-79/ |
+
+### Round 3 Patches
+| Patch | Blocker Ref | Fix Description | Commit | New Evidence |
+|-------|-------------|-----------------|--------|--------------|
+| R3-P1 | R2-B1 | Created concrete mid-review gate artifact with timestamped pass, task linkage, and evidence at gate | d56eb6e+ | evidence/sprint-79/mid-review-gate.md |
+| R3-P2 | R2-B2 | Replaced CI reference with raw `gh run view --log` output (656 lines, full Playwright execution log including "13 passed (4.0s)") | d56eb6e+ | evidence/sprint-79/e2e-output.txt |

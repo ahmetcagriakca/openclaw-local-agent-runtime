@@ -8,7 +8,7 @@
 ---
 
 ```markdown
-# Sprint 79 Review — Round 1
+# Sprint 79 Review — Round 2
 
 ## 1. Sprint / Phase / Model Metadata
 - Sprint: 79
@@ -24,34 +24,30 @@ HOLD
 Not eligible for closure
 
 ## 4. Scope Reviewed
-- T-79.01 / #417 client.ts double-read fix
-- T-79.03 / #419 ApiErrorBanner + page wiring
-- T-79.04 / #420 SSE 3-state indicator
-- T-79.05 / #421 sidebar tooltip verification
-- Gate and evidence packet for Sprint 79 closure
+- T-79.01 (#417) client.ts double-read fix
+- T-79.03 (#419) ApiErrorBanner + page wiring
+- T-79.04 (#420) SSE 3-state indicator
+- Round-2 patches P1–P3
 
 ## 5. Accepted Findings
-- Canonical status fields are present (`implementation_status: done`, `closure_status: review_pending`).
-- Raw frontend evidence files are listed under `evidence/sprint-79/` for vitest and tsc.
+- P2 applied: closure scope narrowed to T-79.01/T-79.03/T-79.04 with T-79.02 and T-79.05 descoped in packet.
+- P3 applied: pytest-output.txt and e2e-output.txt now listed in sprint evidence manifest.
 
 ## 6. Blocking Findings
-- B1 — Mid Review Gate is marked `N/A` while required is `yes`; mandatory gate cannot be omitted by “single-phase sprint” claim. [evidence: Section 3 GATE STATUS contradiction]
-- B2 — Task DONE 5/5 is not satisfied for T-79.02 and T-79.05 due to `N/A` substitutions where all five DONE checks are required per task closure accounting. [evidence: Section 6 TASK DONE CHECK entries with N/A]
-- B3 — Evidence manifest is incomplete for declared test summary claims (pytest/e2e counts shown but raw outputs missing). [evidence: Section 7 includes backend/e2e totals; Section 8 marks `pytest-output.txt` and `e2e-output.txt` as NO EVIDENCE]
+- B1 — Mid Review Gate is marked “WAIVED” instead of existing as a real gate task with pass evidence; mandatory gate rule requires Mid Review Gate to exist and pass before second-half gated work, and waiver is not equivalent evidence. [evidence: Section 3 Gate Status shows “Mid Review Gate | yes | WAIVED” with no gate artifact/task ID]
+- B2 — e2e-output evidence is not raw command output; manifest states “CI evidence reference,” which is a report/reference, not required raw runtime output under sprint evidence rules. [evidence: Section 8 row `e2e-output.txt | PRESENT | CI evidence reference`]
 
 ## 7. Required Patch Set
-- P1 (B1) — Add a real Mid Review Gate task artifact for Sprint 79 with timestamped pass evidence before second-half gated work, or provide governance/decision artifact explicitly waiving Mid Review for this sprint class.
-- P2 (B2) — Normalize task accounting: either remove non-executed items from sprint closure scope or provide full 5/5 DONE evidence per listed task; do not use `N/A` in DONE compliance table for in-scope tasks.
-- P3 (B3) — Align evidence and claims: either (a) provide raw `pytest-output.txt` and `e2e-output.txt` under `evidence/sprint-79/`, or (b) remove backend/e2e execution claims from test summary and closure assertions.
+- P1 (B1) — Add a concrete Mid Review Gate artifact in sprint docs/evidence (gate task record, timestamped pass decision, and linkage to in-scope tasks) or reclassify with frozen governance/decision evidence that explicitly permits omission for single-phase work.
+- P2 (B2) — Replace CI reference with raw E2E execution output saved under `evidence/sprint-79/e2e-output.txt` (full command output/log), plus command provenance.
 
 ## 8. PASS Criteria
-- Mid Review Gate compliance is evidenced or formally waived by frozen governance/decision artifact.
-- Every in-scope task meets DONE 5/5 without `N/A` placeholders.
-- Test summary contains only suites with corresponding raw evidence files present.
+- Mid Review Gate compliance is evidenced by a real gate artifact or explicit frozen-rule exemption.
+- E2E evidence is raw output, not a CI summary/reference.
 
 ## 9. Final Judgment
-Closure is blocked until gate compliance, DONE accounting, and evidence-manifest consistency are corrected.
+Closure is blocked until gate compliance and raw E2E evidence requirements are satisfied.
 
 ## 10. Next Step
-Claude Code patch + rerun evidence + resubmit Round 2
+Claude Code patch + rerun evidence + resubmit Round 3
 ```

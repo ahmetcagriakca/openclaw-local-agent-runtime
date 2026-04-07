@@ -1,9 +1,9 @@
 # Current State
 
 **Last updated:** 2026-04-07
-**Active phase:** Phase 10 — Sprint 76 closed, Sprint 77 in progress
+**Active phase:** Phase 10 — Sprint 77 closed
 **Doc model:** This file is canonical for system state. Session context lives in `docs/ai/handoffs/current.md`.
-**Note:** All sprints through 53 closed. S54 deferred. S55-S76 closed. S77 in progress. All P1 backlog items complete (50/50). Phase 10 active (S73+). Phase 9 complete (S69-S72). Phase 8 complete (S60-S68). 145 frozen + 2 superseded decisions (D-001 → D-148, D-126 skipped, D-143 placeholder, D-082/D-098 superseded). Governance: 20-step closure checklist. Review pipeline: max 5 rounds + ESCALATE (D-146).
+**Note:** All sprints through 53 closed. S54 deferred. S55-S77 closed. All P1 backlog items complete (50/50). Phase 10 active (S73+). Phase 9 complete (S69-S72). Phase 8 complete (S60-S68). 145 frozen + 2 superseded decisions (D-001 → D-148, D-126 skipped, D-143 placeholder, D-082/D-098 superseded). Governance: 20-step closure checklist. Review pipeline: max 5 rounds + ESCALATE (D-146).
 **Persistence:** State is file-persisted (state.json, mission.json). Mission history via persistence layer (Sprint 16).
 **API:** Vezir API on 127.0.0.1:8003 (FastAPI + Uvicorn). Schemas FROZEN (D-067). SSE on /api/v1/events/stream. Dashboard API + Alert API + Telemetry Query API (Sprint 16).
 **Frontend:** React dashboard on localhost:3000 (Vite + Tailwind). SSE live updates + polling fallback + intervention buttons + monitoring dashboard. Node.js 20 required.
@@ -136,7 +136,7 @@
 | Sprint 74 | Workspace + Artifacts (D-145) — Phase 10 | Closed |
 | Sprint 75 | Rollup + SSE + Dashboard (D-145 Faz 2B) — Phase 10 | Closed |
 | Sprint 76 | Governance Contract Hardening — Phase 10 | Closed |
-| Sprint 77 | Azure OpenAI Provider Foundation (D-148) — Phase 10 | In Progress |
+| Sprint 77 | Azure OpenAI Provider Foundation (D-148) — Phase 10 | Closed |
 
 ## Test Evidence
 
@@ -184,6 +184,7 @@
 | Sprint 74 | 1712 tests, 0 fail | 217 tests, 0 TS errors | +51 backend (workspace 13, artifacts 18, WorkingSet 8, integration 7, events 3, count fix +2). 13 Playwright. 139 root. 2081 total |
 | Sprint 75 | 1748 tests, 0 fail | 239 tests, 0 TS errors | +36 backend (rollup 12, API 5, SSE 13, integration 6), +22 frontend (projects list 11, detail 11, count fix +1). 13 Playwright. 139 root. 2139 total |
 | Sprint 76 | 1777 tests, 0 fail | 239 tests, 0 TS errors | +29 backend (auth 14, policy 5, audit 10). 13 Playwright. 139 root. 2168 total |
+| Sprint 77 | 1866 tests, 0 fail | 239 tests, 0 TS errors | +89 backend (azure provider 39, routing 28, health 17, telemetry 5). 13 Playwright. 139 root. 2257 total |
 
 ## Architectural Decisions
 

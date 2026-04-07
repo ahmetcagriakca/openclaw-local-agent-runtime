@@ -67,7 +67,7 @@ tasks:
   - id: "T-77.07"
     title: "Review gate + closure"
     type: closure
-    status: in_progress
+    status: done
     depends_on: ["T-77.06"]
     evidence:
       - "evidence/sprint-77/review-summary.md"

@@ -33,7 +33,7 @@ Session 52: Sprint 77 — Azure OpenAI Provider Foundation (D-148).
 
 - **Phase:** 10 active — S76 closed, S77 in progress
 - **Last closed sprint:** 76
-- **Sprint 77 status:** implementation_status=done, review_status=R3_PASS, closure_status=open
+- **Sprint 77 status:** implementation_status=done, review_status=R3_PASS, closure_status=closed
 - **PR:** #410 (feat/s77-azure-provider-foundation) — 10 commits, GPT R3 PASS (targeted scope)
 - **Decisions:** 145 frozen + 2 superseded (D-001 → D-148, D-126 skipped, D-143 placeholder, D-082/D-098 superseded)
 - **Tests:** 1866 backend + 239 frontend + 13 Playwright + 139 root = 2257 total
@@ -60,7 +60,7 @@ Session 52: Sprint 77 — Azure OpenAI Provider Foundation (D-148).
 | S74 | Workspace + Artifacts (D-145, Faz 2A) | Closed |
 | S75 | Rollup + SSE + Dashboard (D-145, Faz 2B) | Closed |
 | S76 | Governance Contract Hardening | Closed |
-| S77 | Azure OpenAI Provider Foundation (D-148) | In Progress (impl done, review R2 pending) |
+| S77 | Azure OpenAI Provider Foundation (D-148) | Closed |
 
 ## GPT R2 Findings (2026-04-07)
 

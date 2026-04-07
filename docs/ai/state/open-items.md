@@ -95,7 +95,7 @@
 
 ## Next Sprint
 
-S77 next: scope TBD by operator.
+S77 in progress: Azure OpenAI Provider Foundation (D-148). Impl done, GPT R2 pending. PR #410.
 
 ### Carry-Forward
 | Item | Source | Status |

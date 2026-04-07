@@ -1,0 +1,4 @@
+{"timestamp":"2026-04-07T02:15:00Z","event":"provider_selection","selected_provider":"azure-general","reason":"primary provider (azure-first policy)","fallback_used":false,"task_type":"review"}
+{"timestamp":"2026-04-07T02:15:01Z","event":"provider_fallback","selected_provider":"gpt-general","reason":"fallback: gpt-general","fallback_used":true,"fallback_reason":"azure kill switch active (AZURE_ENABLED=false)","task_type":"implementation"}
+{"timestamp":"2026-04-07T02:15:02Z","event":"provider_fallback","selected_provider":"gpt-general","reason":"fallback: gpt-general","fallback_used":true,"fallback_reason":"primary 'azure-general' missing capabilities: ['code_interpreter']","task_type":"tool_call"}
+{"timestamp":"2026-04-07T02:15:03Z","event":"provider_selection","selected_provider":"claude-general","reason":"explicit preference: anthropic","fallback_used":false,"task_type":"analysis"}

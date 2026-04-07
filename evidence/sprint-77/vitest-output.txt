@@ -1,0 +1,9 @@
+
+ RUN  v4.1.2 C:/Users/AKCA/vezir/frontend
+
+
+ Test Files  32 passed (32)
+      Tests  239 passed (239)
+   Start at  02:21:20
+   Duration  11.14s (transform 5.11s, setup 9.06s, import 22.91s, tests 9.80s, environment 53.25s)
+

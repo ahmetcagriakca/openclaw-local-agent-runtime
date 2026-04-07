@@ -1,0 +1,40 @@
+=== S77 File Manifest — 2026-04-07 (Final) ===
+
+--- New Files ---
+agent/providers/azure_openai_provider.py    | Azure OpenAI adapter (Responses API)
+agent/providers/routing_policy.py           | ProviderRoutingPolicy (azure-first + fallback + capability)
+agent/providers/azure_health.py             | AzureHealthCheck + retirement guard
+agent/providers/provider_telemetry.py       | Provider selection telemetry
+agent/tests/test_azure_provider.py          | 39 tests (provider + canonical execute + factory)
+agent/tests/test_routing_policy.py          | 28 tests (routing + killswitch + fallback + capability)
+agent/tests/test_azure_health.py            | 17 tests (health + retirement)
+agent/tests/test_provider_telemetry.py      | 5 tests (telemetry events)
+docs/decisions/D-148-azure-primary-provider.md | Decision record (frozen)
+docs/sprints/sprint-77/plan.yaml            | Sprint plan
+docs/sprints/sprint-77/S77-azure-provider-foundation.md | Task breakdown
+evidence/sprint-77/azure-deployment-inventory.md | Deployment inventory
+evidence/sprint-77/azure-smoke-precheck.txt | Smoke test results
+evidence/sprint-77/sprint-class.txt         | Sprint class: product
+evidence/sprint-77/pytest-output.txt        | Full pytest output
+evidence/sprint-77/vitest-output.txt        | Full vitest output
+evidence/sprint-77/integration-smoke.txt    | Integration smoke results
+evidence/sprint-77/tsc-output.txt           | TypeScript check (0 errors)
+evidence/sprint-77/lint-output.txt          | Lint check
+evidence/sprint-77/grep-evidence.txt        | Azure grep evidence
+evidence/sprint-77/telemetry-sample.jsonl   | Provider selection telemetry samples
+evidence/sprint-77/review-summary.md        | GPT review summary (R1→R2→R3 PASS)
+evidence/sprint-77/file-manifest.txt        | This file
+
+--- Modified Files ---
+agent/providers/base.py                     | +TaskRequest, +ProviderResponse, +AgentProvider.execute()
+agent/providers/factory.py                  | +azure-openai branch in create_provider()
+agent/agent-config.json                     | +azure-general (default), defaultAgent changed
+agent/api/health_api.py                     | +Azure OpenAI in LLM providers health check
+agent/context/policy_telemetry.py           | +provider_selection, +provider_fallback event types
+agent/mission/controller.py                 | _select_agent_for_role() → ProviderRoutingPolicy + telemetry
+.env.example                                | +AZURE_OPENAI_* env vars
+docs/ai/DECISIONS.md                        | +D-148 entry + index
+docs/ai/STATE.md                            | S77 in progress, D-148, test counts
+docs/ai/NEXT.md                             | +S77 entry
+docs/ai/handoffs/current.md                 | Session 52, S77
+docs/ai/state/open-items.md                 | S77 reference

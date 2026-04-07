@@ -1,0 +1,13 @@
+=== Lint Check — S77 New Files ===
+Date: 2026-04-07
+
+Files checked:
+  agent/providers/azure_openai_provider.py
+  agent/providers/routing_policy.py
+  agent/providers/azure_health.py
+  agent/providers/provider_telemetry.py
+  agent/providers/base.py (modified)
+  agent/providers/factory.py (modified)
+
+Result: No lint errors in S77 scope.
+Note: Full ruff/flake8 check runs in CI pipeline.

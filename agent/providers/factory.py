@@ -46,7 +46,24 @@ def create_provider(agent_id: str = None):
     provider_type = agent_config.get("provider", "gpt")
     model = agent_config.get("model")
 
-    if provider_type == "gpt":
+    if provider_type == "azure-openai":
+        from .azure_openai_provider import AzureOpenAIProvider
+        api_key = os.environ.get(agent_config.get("apiKeyEnv", "AZURE_OPENAI_API_KEY"))
+        endpoint_env = agent_config.get("endpointEnv", "AZURE_OPENAI_ENDPOINT")
+        endpoint = os.environ.get(endpoint_env)
+        api_version = agent_config.get("apiVersion", "2025-04-01-preview")
+        timeout = agent_config.get("timeoutSeconds", 120)
+        retirement_date = agent_config.get("retirementDate")
+        return AzureOpenAIProvider(
+            endpoint=endpoint,
+            deployment=model,
+            api_key=api_key,
+            api_version=api_version,
+            retirement_date=retirement_date,
+            timeout=timeout,
+        ), agent_config
+
+    elif provider_type == "gpt":
         from .gpt_provider import GPTProvider
         api_key = os.environ.get(agent_config.get("apiKeyEnv", "OPENAI_API_KEY"))
         return GPTProvider(model=model, api_key=api_key), agent_config

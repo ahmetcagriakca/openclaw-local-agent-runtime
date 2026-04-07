@@ -1,0 +1,17 @@
+agent/providers/azure_openai_provider.py:        return f"azure-openai ({self.deployment})"
+agent/providers/base.py:    provider_preference: str | None = None  # azure / openai / anthropic / ollama
+agent/providers/factory.py:    if provider_type == "azure-openai":
+agent/providers/factory.py:        from .azure_openai_provider import AzureOpenAIProvider
+agent/providers/routing_policy.py:    - Kill switch: azure.enabled=false → skip Azure entirely
+agent/providers/routing_policy.py:    primary: str = "azure-general"
+agent/providers/routing_policy.py:        "azure-general": ["text_generation", "function_calling", "reasoning"],
+agent/providers/routing_policy.py:            provider_preference: Explicit provider override (azure/openai/anthropic/ollama)
+agent/providers/routing_policy.py:        if not self._is_azure_enabled():
+agent/providers/routing_policy.py:                agents, health, "azure kill switch active (AZURE_ENABLED=false)",
+agent/providers/routing_policy.py:                reason="primary provider (azure-first policy)",
+agent/providers/routing_policy.py:    def _is_azure_enabled(self) -> bool:
+agent/providers/routing_policy.py:            "azure": "azure-openai",
+Binary file agent/providers/__pycache__/azure_health.cpython-312.pyc matches
+Binary file agent/providers/__pycache__/azure_openai_provider.cpython-312.pyc matches
+Binary file agent/providers/__pycache__/factory.cpython-312.pyc matches
+Binary file agent/providers/__pycache__/routing_policy.cpython-312.pyc matches

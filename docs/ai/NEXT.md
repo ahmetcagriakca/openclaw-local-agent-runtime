@@ -1,7 +1,16 @@
 # Next Steps — Vezir Platform
 
-**Last updated:** 2026-04-06
-**Current:** Phase 10 active. Sprint 76 closed. S77 next.
+**Last updated:** 2026-04-07
+**Current:** Phase 10 active. Sprint 77 in progress.
+
+---
+
+## Sprint 77 — Azure OpenAI Provider Foundation (IN PROGRESS)
+
+**Model:** A (full closure) | **Class:** Product
+**Scope:** D-148 — Azure OpenAI primary provider, canonical TaskRequest/ProviderResponse contract, fallback chain, health + retirement guard, telemetry
+**Decision:** D-148 frozen
+**Tasks:** T-77.00 → T-77.07
 
 ---
 

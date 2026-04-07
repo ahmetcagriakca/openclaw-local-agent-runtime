@@ -8,7 +8,7 @@
 ---
 
 ```markdown
-# Sprint 79 Review — Round 5
+# Sprint 79 Review — Round 6
 
 ## 1. Sprint / Phase / Model Metadata
 - Sprint: 79
@@ -18,34 +18,31 @@
 - Date: 2026-04-07
 
 ## 2. Verdict
-HOLD
+ESCALATE — operator decision required
 
 ## 3. Closure Eligibility
 Not eligible for closure
 
 ## 4. Scope Reviewed
-- Round 5 patch delta: R5-P1 (lint fix evidence), R5-P2 (final checks evidence)
-- Prior blockers referenced in Round 4: lint pass requirement and gate timing provenance
+- Round 6 patch deltas: R6-P1 (Final Review Gate status update), R6-P2 (lint evidence manifest entry)
+- Prior unresolved process constraint: max rounds exceeded (D-146 / anti-loop cap)
 
 ## 5. Accepted Findings
-- Lint blocker addressed: `evidence/sprint-79/lint-output.txt` provided and claimed 0 errors (R5-P1).
-- Git ordering evidence artifact exists: `evidence/sprint-79/git-log-evidence.txt` (from prior round, still present).
+- Final Review Gate is now marked PASS in packet with referenced evidence files.
+- `lint-output.txt` is listed in evidence manifest with explicit source command.
 
 ## 6. Blocking Findings
-- B1 — Final Review Gate still marked `PENDING`; required final gate pass artifact is not provided as completed review artifact/evidence bundle sign-off. [evidence: Section 3 shows “Final Review Gate | yes | PENDING | This packet”]
-- B2 — Round 5 re-review packet does not provide raw command provenance for lint run in manifest table (lint artifact omitted from Section 8 manifest despite being cited in patches). [evidence: Section 8 lacks `lint-output.txt` entry while Section 12 claims it as new evidence]
+- B1 — Review round cap exceeded: packet is Round 6 while workflow max is 5 rounds; further HOLD/PASS cycle is out of allowed review process. [evidence: Section 0 states “Round: 6 (FINAL — D-146 max 5 rounds exceeded, ESCALATE if not PASS)”; governance rule max 5 rounds]
 
 ## 7. Required Patch Set
-- P1 (B1) — Add completed Final Review Gate artifact under `evidence/sprint-79/` with validator/check outputs and explicit PASS state; update gate table from `PENDING` to `PASS` with artifact path.
-- P2 (B2) — Add `lint-output.txt` to Section 8 Evidence Manifest with exact source command and ensure file exists at `evidence/sprint-79/lint-output.txt`.
+- None.
 
 ## 8. PASS Criteria
-- Final Review Gate is completed and evidenced as PASS with sprint-scoped artifact.
-- Evidence manifest fully enumerates all claimed raw outputs, including lint raw output with command provenance.
+- Operator override on round-limit breach and explicit acceptance/rejection of out-of-band Round 6 review.
 
 ## 9. Final Judgment
-Closure cannot proceed until final gate completion evidence and manifest consistency are corrected.
+Process limit breach is unresolvable by submitter in-repo, so operator escalation is required.
 
 ## 10. Next Step
-Claude Code patch + rerun evidence + resubmit Round 6
+Operator override review required. Reviewer cannot resolve this finding through further rounds.
 ```

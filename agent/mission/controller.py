@@ -1548,31 +1548,51 @@ Respond ONLY with a JSON object, no markdown:
     def _select_agent_for_role(self, role_name: str,
                                 mission_id: str = "",
                                 stage_id: str = "") -> str:
-        """D-043: Select provider/agent based on role registry.
+        """D-043 + D-148: Select provider/agent via ProviderRoutingPolicy.
 
-        Claude for high-leverage roles, GPT-4o for mechanical roles,
-        Ollama for compression. Falls back to gpt-general if provider
-        unavailable.
+        All agent calls enter ProviderRoutingPolicy (D-148).
+        Role registry provides provider_preference hint.
+        Routing policy applies: Azure-first, capability check, kill switch, fallback.
         """
         from context.policy_telemetry import emit_policy_event
         from mission.role_registry import get_role, resolve_role
+        from providers.factory import load_agent_config
+        from providers.provider_telemetry import emit_provider_selection
+        from providers.routing_policy import ProviderRoutingPolicy
 
         canonical = resolve_role(role_name)
         role_def = get_role(canonical)
 
-        if not role_def:
-            return "gpt-general"
+        # Map role's preferred model to provider type for routing hint
+        provider_preference = None
+        if role_def:
+            preferred = role_def.get("preferredModel", "gpt-4o")
+            pref_map = {
+                "claude-sonnet": "anthropic",
+                "claude-opus": "anthropic",
+                "gpt-4o": None,  # No preference → routing policy decides (Azure-first)
+                "ollama-local": "ollama",
+            }
+            provider_preference = pref_map.get(preferred)
 
-        preferred = role_def.get("preferredModel", "gpt-4o")
-        agent_name = self._MODEL_TO_AGENT.get(preferred, "gpt-general")
-
-        # Verify agent exists in config; fallback if not
-        fallback_used = False
+        # D-148: All calls go through ProviderRoutingPolicy
+        policy = ProviderRoutingPolicy()
         try:
-            from providers.factory import create_provider
-            create_provider(agent_name)
-        except Exception:
-            fallback_used = agent_name != "gpt-general"
+            agent_config = load_agent_config()
+            decision = policy.select(
+                agent_config,
+                provider_preference=provider_preference,
+            )
+            agent_name = decision.selected_provider
+
+            # Emit provider selection telemetry (D-148 rule #6)
+            emit_provider_selection(
+                decision,
+                task_type=canonical,
+                mission_id=mission_id,
+            )
+        except RuntimeError:
+            # No available provider — fallback to gpt-general
             agent_name = "gpt-general"
 
         if mission_id:
@@ -1580,9 +1600,9 @@ Respond ONLY with a JSON object, no markdown:
                 "mission_id": mission_id,
                 "stage_id": stage_id,
                 "role": canonical,
-                "preferred_model": preferred,
+                "preferred_model": role_def.get("preferredModel", "gpt-4o") if role_def else "gpt-4o",
                 "selected_agent": agent_name,
-                "fallback_used": fallback_used
+                "routing_policy": True,
             })
 
         return agent_name

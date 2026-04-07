@@ -6,7 +6,7 @@
 - **Phase:** S77
 - **Date:** 2026-04-07 (frozen)
 - **Owner:** AKCA
-- **Recommended by:** Claude (architecture analysis) + GPT (cross-review, PASS 2026-04-07)
+- **Recommended by:** Claude (architecture analysis) + GPT (cross-review)
 
 -----
 
@@ -53,7 +53,7 @@
 
 | # | Rule |
 |---|---|
-| 1 | No `messages`-style legacy adapter for Azure. Responses API only. |
+| 1 | Azure primary path is `execute(TaskRequest) -> ProviderResponse` via Responses API. Legacy `chat(messages)` compatibility shim is permitted as a temporary boundary adapter until all callers migrate to `execute()`. The shim MUST NOT be the primary interface — `execute()` is canonical. |
 | 2 | All provider calls go through one internal canonical request schema. |
 | 3 | Fallback remains enabled — no single-provider hard lock. |
 | 4 | Unsupported capability must fail-closed or reroute deterministically. |
@@ -241,8 +241,5 @@ AZURE_OPENAI_AUTH_MODE=api_key  # or entra_id
 
 | Date | Event |
 |---|---|
-| 2026-04-06 | Proposed by Claude + GPT cross-review |
-| 2026-04-07 | GPT review HOLD — 5 blocking findings (P1-P5) |
-| 2026-04-07 | Patches P1-P5 applied by Claude |
-| 2026-04-07 | GPT re-review PASS — no blockers |
-| 2026-04-07 | Frozen by operator |
+| 2026-04-06 | Proposed by Claude (architecture analysis) |
+| 2026-04-07 | Frozen by operator — sprint S77 kickoff |

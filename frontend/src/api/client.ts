@@ -307,6 +307,14 @@ export function getAgentPerformance(): Promise<AgentPerformanceResponse> {
 
 // ── Projects (D-144/D-145) ──────────────────────────────────────
 
+export function createProject(name: string, description?: string, owner?: string): Promise<{ meta: unknown; data: unknown }> {
+  return apiPostJson<{ meta: unknown; data: unknown }>('/projects', {
+    name,
+    description: description ?? '',
+    owner: owner ?? 'operator',
+  })
+}
+
 export function getProjects(params?: {
   status?: string
   search?: string

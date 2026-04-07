@@ -4,8 +4,8 @@
  * Filterable by status, sortable.
  */
 import { useState, useMemo, useCallback } from 'react'
-import { Link } from 'react-router-dom'
-import { getProjects } from '../api/client'
+import { Link, useNavigate } from 'react-router-dom'
+import { getProjects, createProject } from '../api/client'
 import { usePolling } from '../hooks/usePolling'
 import type { ProjectItem } from '../types/api'
 
@@ -38,9 +38,15 @@ function formatRelativeTime(iso: string): string {
 }
 
 export function ProjectsPage() {
+  const navigate = useNavigate()
   const [statusFilter, setStatusFilter] = useState('all')
   const [sort, setSort] = useState('updated_at_desc')
   const [search, setSearch] = useState('')
+  const [showCreateForm, setShowCreateForm] = useState(false)
+  const [newName, setNewName] = useState('')
+  const [newDesc, setNewDesc] = useState('')
+  const [creating, setCreating] = useState(false)
+  const [createError, setCreateError] = useState<string | null>(null)
 
   const fetcher = useCallback(() => {
     const params: { status?: string; sort?: string; search?: string } = { sort }
@@ -54,17 +60,95 @@ export function ProjectsPage() {
   const projects: ProjectItem[] = useMemo(() => data?.data ?? [], [data])
   const total = data?.total ?? 0
 
+  async function handleCreateProject(e: React.FormEvent) {
+    e.preventDefault()
+    if (!newName.trim()) return
+    setCreating(true)
+    setCreateError(null)
+    try {
+      const resp = await createProject(newName.trim(), newDesc.trim())
+      const projectId = (resp.data as { project_id?: string })?.project_id
+      setNewName('')
+      setNewDesc('')
+      setShowCreateForm(false)
+      if (projectId) {
+        navigate(`/projects/${projectId}`)
+      } else {
+        refresh()
+      }
+    } catch (err) {
+      setCreateError(err instanceof Error ? err.message : 'Project creation failed')
+    } finally {
+      setCreating(false)
+    }
+  }
+
   return (
     <div>
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <h2 className="text-lg font-semibold">Projects ({total})</h2>
-        <button
-          onClick={refresh}
-          className="rounded bg-gray-700 px-3 py-1.5 text-xs text-gray-200 hover:bg-gray-600"
-        >
-          Refresh
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={() => setShowCreateForm(!showCreateForm)}
+            className="rounded bg-green-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-green-500"
+          >
+            + New Project
+          </button>
+          <button
+            onClick={refresh}
+            className="rounded bg-gray-700 px-3 py-1.5 text-xs text-gray-200 hover:bg-gray-600"
+          >
+            Refresh
+          </button>
+        </div>
       </div>
+
+      {/* Create Project Form */}
+      {showCreateForm && (
+        <div className="mb-4 rounded-lg border border-green-800 bg-gray-900 p-4">
+          <h3 className="mb-3 text-sm font-medium text-green-400">Create New Project</h3>
+          <form onSubmit={handleCreateProject} className="space-y-3">
+            <div>
+              <label className="mb-1 block text-xs text-gray-400">Project Name</label>
+              <input
+                type="text"
+                value={newName}
+                onChange={(e) => setNewName(e.target.value)}
+                placeholder="Enter project name..."
+                className="w-full rounded border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:border-green-500 focus:outline-none"
+                required
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-xs text-gray-400">Description (optional)</label>
+              <textarea
+                value={newDesc}
+                onChange={(e) => setNewDesc(e.target.value)}
+                placeholder="Describe the project..."
+                className="w-full rounded border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:border-green-500 focus:outline-none"
+                rows={2}
+              />
+            </div>
+            {createError && <p className="text-xs text-red-400">{createError}</p>}
+            <div className="flex gap-2">
+              <button
+                type="submit"
+                disabled={creating || !newName.trim()}
+                className="rounded bg-green-600 px-4 py-1.5 text-xs font-medium text-white hover:bg-green-500 disabled:opacity-50"
+              >
+                {creating ? 'Creating...' : 'Create Project'}
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowCreateForm(false)}
+                className="rounded bg-gray-700 px-4 py-1.5 text-xs text-gray-300 hover:bg-gray-600"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
 
       {/* Filters */}
       <div className="mb-4 flex flex-wrap gap-3">

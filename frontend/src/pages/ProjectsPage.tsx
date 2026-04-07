@@ -45,6 +45,7 @@ export function ProjectsPage() {
   const [showCreateForm, setShowCreateForm] = useState(false)
   const [newName, setNewName] = useState('')
   const [newDesc, setNewDesc] = useState('')
+  const [newPath, setNewPath] = useState('')
   const [creating, setCreating] = useState(false)
   const [createError, setCreateError] = useState<string | null>(null)
 
@@ -66,10 +67,11 @@ export function ProjectsPage() {
     setCreating(true)
     setCreateError(null)
     try {
-      const resp = await createProject(newName.trim(), newDesc.trim())
+      const resp = await createProject(newName.trim(), newDesc.trim(), undefined, newPath.trim() || undefined)
       const projectId = (resp.data as { project_id?: string })?.project_id
       setNewName('')
       setNewDesc('')
+      setNewPath('')
       setShowCreateForm(false)
       if (projectId) {
         navigate(`/projects/${projectId}`)
@@ -128,6 +130,17 @@ export function ProjectsPage() {
                 className="w-full rounded border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:border-green-500 focus:outline-none"
                 rows={2}
               />
+            </div>
+            <div>
+              <label className="mb-1 block text-xs text-gray-400">Local Path (project working directory)</label>
+              <input
+                type="text"
+                value={newPath}
+                onChange={(e) => setNewPath(e.target.value)}
+                placeholder="C:\Users\AKCA\my-project"
+                className="w-full rounded border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-100 font-mono placeholder-gray-500 focus:border-green-500 focus:outline-none"
+              />
+              <p className="mt-1 text-[10px] text-gray-500">Workspace will use this directory. Leave empty for default.</p>
             </div>
             {createError && <p className="text-xs text-red-400">{createError}</p>}
             <div className="flex gap-2">

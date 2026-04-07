@@ -471,6 +471,7 @@ export interface ProjectItem {
   owner: string
   created_at: string
   updated_at: string
+  local_path?: string | null
   workspace_root?: string | null
   artifact_root?: string | null
   shared_root?: string | null

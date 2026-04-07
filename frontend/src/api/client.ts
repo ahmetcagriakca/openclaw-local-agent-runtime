@@ -307,12 +307,19 @@ export function getAgentPerformance(): Promise<AgentPerformanceResponse> {
 
 // ── Projects (D-144/D-145) ──────────────────────────────────────
 
-export function createProject(name: string, description?: string, owner?: string): Promise<{ meta: unknown; data: unknown }> {
-  return apiPostJson<{ meta: unknown; data: unknown }>('/projects', {
+export function createProject(
+  name: string,
+  description?: string,
+  owner?: string,
+  localPath?: string,
+): Promise<{ meta: unknown; data: unknown }> {
+  const body: Record<string, unknown> = {
     name,
     description: description ?? '',
     owner: owner ?? 'operator',
-  })
+  }
+  if (localPath) body.local_path = localPath
+  return apiPostJson<{ meta: unknown; data: unknown }>('/projects', body)
 }
 
 export function getProjects(params?: {

@@ -122,6 +122,11 @@ export function ProjectDetailPage() {
           <span>Updated: {formatDate(project.updated_at)}</span>
           <span>ID: {project.project_id}</span>
         </div>
+        {project.local_path && (
+          <div className="mt-2 rounded bg-gray-800 px-3 py-1.5 text-xs font-mono text-gray-300">
+            Path: {project.local_path}
+          </div>
+        )}
       </div>
 
       {/* Create Mission Form */}

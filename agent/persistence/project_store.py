@@ -150,8 +150,13 @@ class ProjectStore:
     # ── CRUD ─────────────────────────────────────────────────────
 
     def create(self, name: str, description: str = "",
-               owner: str = "operator") -> dict:
-        """Create a new project in draft status."""
+               owner: str = "operator",
+               local_path: str | None = None) -> dict:
+        """Create a new project in draft status.
+
+        If local_path is provided, workspace is auto-enabled pointing to that
+        directory. The path must exist on disk.
+        """
         now = datetime.now(timezone.utc).isoformat()
         project_id = generate_project_id()
         project = {
@@ -163,10 +168,20 @@ class ProjectStore:
             "created_at": now,
             "updated_at": now,
         }
+
+        if local_path:
+            resolved = Path(local_path).resolve()
+            if not resolved.is_dir():
+                raise ProjectStoreError(
+                    f"Local path does not exist or is not a directory: {local_path}"
+                )
+            project["local_path"] = str(resolved)
+            project["workspace_root"] = str(resolved)
+
         with self._lock:
             self._projects[project_id] = project
             self._save()
-        logger.info("Project created: %s (%s)", project_id, name)
+        logger.info("Project created: %s (%s) path=%s", project_id, name, local_path or "-")
         return dict(project)
 
     def get(self, project_id: str) -> dict | None:
@@ -443,8 +458,8 @@ class ProjectStore:
                 )
 
             if proj.get("workspace_root") is not None:
-                raise ProjectStoreError(
-                    f"Workspace already enabled for {project_id}")
+                # Already has workspace (e.g. from local_path at creation)
+                return dict(proj)
 
             # Resolve projects root
             if projects_root is None:

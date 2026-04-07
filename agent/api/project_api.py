@@ -48,6 +48,7 @@ class CreateProjectRequest(BaseModel):
     name: str
     description: str = ""
     owner: str = "operator"
+    local_path: Optional[str] = None
 
 
 class UpdateProjectRequest(BaseModel):
@@ -74,6 +75,7 @@ async def create_project(req: CreateProjectRequest, _operator=Depends(require_op
         name=req.name,
         description=req.description,
         owner=req.owner,
+        local_path=req.local_path,
     )
     return {"meta": _meta(), "data": project}
 

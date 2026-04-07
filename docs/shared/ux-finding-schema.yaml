@@ -1,0 +1,85 @@
+# UX Finding Schema — D-149 Browser Analysis Contract
+# Each finding in ux-friction-report.md follows this structure.
+
+finding:
+  id:
+    type: string
+    pattern: "UX-\\d{3}"
+    description: "Unique finding identifier, sequential per session"
+    example: "UX-001"
+
+  title:
+    type: string
+    description: "Short descriptive title of the finding"
+    example: "Mission list empty state shows no guidance"
+
+  category:
+    type: string
+    enum:
+      - onboarding_friction        # First-use experience barriers
+      - navigation_confusion       # Unclear routing, dead ends, missing breadcrumbs
+      - approval_flow_friction     # Approval create/decide/expire UX problems
+      - failure_visibility         # Error states hidden, silent failures
+      - empty_state_quality        # Empty/loading/error states missing or unhelpful
+      - latency_perception         # Slow responses without loading indicators
+      - data_quality_display       # Missing/unknown data shown as zero or blank
+      - agent_stuck_vs_user_stuck  # Distinguishing agent-side vs UI-side failure
+      - accessibility              # Keyboard nav, screen reader, contrast, focus
+
+  severity:
+    type: string
+    enum: [low, medium, high, critical]
+    description: |
+      low: cosmetic or minor polish
+      medium: usable but confusing or error-prone
+      high: blocks common workflow or causes data loss risk
+      critical: security issue or complete feature breakage
+
+  reproducibility:
+    type: string
+    enum: [always, intermittent, once]
+
+  page:
+    type: string
+    description: "URL path where finding occurs"
+    example: "/missions"
+
+  repro_steps:
+    type: array
+    items:
+      type: string
+    description: "Step-by-step reproduction instructions"
+
+  expected:
+    type: string
+    description: "What the user should see/experience"
+
+  actual:
+    type: string
+    description: "What actually happens"
+
+  console_errors:
+    type: string
+    description: "Relevant console errors, or 'none'"
+
+  network_errors:
+    type: string
+    description: "Relevant network errors (4xx/5xx), or 'none'"
+
+  screenshot:
+    type: string
+    description: "Path to screenshot file OR Claude in Chrome session ID (e.g., ss_6911kxpcc)"
+    example: "screenshot-evidence/UX-001.png OR ss_6911kxpcc"
+
+  owner:
+    type: string
+    description: "Who is responsible for remediation (TBD if unassigned)"
+
+  status:
+    type: string
+    enum: [open, in_progress, fixed, wont_fix, deferred]
+
+  stuck_party:
+    type: string
+    enum: [user, agent, both, unclear]
+    description: "D-149 requirement: distinguish agent-side vs UI-side issue"

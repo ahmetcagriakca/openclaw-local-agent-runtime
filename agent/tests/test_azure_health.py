@@ -2,10 +2,7 @@
 import datetime
 from unittest.mock import MagicMock, patch
 
-import pytest
-
 from providers.azure_health import AzureHealthCheck, AzureHealthStatus
-
 
 # --- Fixtures ---
 

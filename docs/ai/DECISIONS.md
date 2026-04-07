@@ -1,6 +1,6 @@
 # Architectural Decisions
 
-**Last updated:** 2026-04-07 (D-148)
+**Last updated:** 2026-04-07 (D-149)
 
 All decisions below are frozen unless marked otherwise.
 Reopening requires explicit phase gate approval + operator sign-off.
@@ -1355,11 +1355,18 @@ Formal record: `docs/decisions/D-147-eventbus-operational-status.md`.
 Azure OpenAI = default primary provider for agent calls. Existing OpenAI/Anthropic/Ollama = controlled fallback. Responses API contract mandatory. All providers normalized to single canonical internal request schema (TaskRequest/ProviderResponse). Retirement-aware deployment guard mandatory. Fallback deterministic (unsupported capability, unhealthy, budget exceed → reroute). Provider choice traceable in telemetry. Kill switch: `azure.enabled=false` → all traffic falls back. No Azure-specific branching outside provider layer.
 Formal record: `docs/decisions/D-148-azure-primary-provider.md`.
 
+### D-149: Browser Analysis — 3-Mode Observation Contract
+
+**Phase:** Sprint 78 (Phase 10) | **Status:** Frozen
+
+Browser-based analysis operates in 3 modes: observe_only (DOM/console/network capture, no mutation, no approval needed), guided_repro (replay specific flow, session-level approval), active_mutation (staging-only, per-mutation approval). v1 scope: observe_only only. Every session produces 6 mandatory evidence artifacts. Findings tagged with severity + reproducibility + owner + stuck_party (agent vs user). No mutation outside staging. 9-category task taxonomy. Success criteria: ≥5 verified findings across ≥3 categories.
+Formal record: `docs/decisions/D-149-browser-analysis-contract.md`.
+
 ---
 
-## Decision Index (D-001 → D-148)
+## Decision Index (D-001 → D-149)
 
-145 frozen + 2 superseded decisions. D-126 skipped, D-132 deferred, D-143 skipped, D-082/D-098 superseded.
+146 frozen + 2 superseded decisions. D-126 skipped, D-132 deferred, D-143 skipped, D-082/D-098 superseded.
 
 | ID | Title | Phase |
 |----|-------|-------|
@@ -1511,3 +1518,4 @@ Formal record: `docs/decisions/D-148-azure-primary-provider.md`.
 | D-146 | Review Max Round + Escalation Rule | Sprint 73 |
 | D-147 | EventBus Operational Status | Sprint 76 |
 | D-148 | Azure OpenAI Primary Provider Adoption | Sprint 77 |
+| D-149 | Browser Analysis — 3-Mode Observation Contract | Sprint 78 |

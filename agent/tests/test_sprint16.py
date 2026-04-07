@@ -16,6 +16,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from conftest import CSRF_ORIGIN
 from fastapi.testclient import TestClient
 
 # ══════════════════════════════════════════════════════════════
@@ -378,7 +379,8 @@ class TestAlertAPI(unittest.TestCase):
 
     def test_update_rule(self):
         r = self.client.put("/api/v1/alerts/rules/A-001",
-                            json={"threshold": 5, "enabled": False})
+                            json={"threshold": 5, "enabled": False},
+                            headers={"Origin": CSRF_ORIGIN})
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r.json()["rule"]["threshold"], 5)
         self.assertFalse(r.json()["rule"]["enabled"])
@@ -387,7 +389,7 @@ class TestAlertAPI(unittest.TestCase):
         r = self.client.post("/api/v1/alerts/rules", json={
             "id": "A-100", "name": "Custom", "condition": "any",
             "threshold": 1, "severity": "info",
-        }, headers={"Origin": "http://localhost:3000"})
+        }, headers={"Origin": CSRF_ORIGIN})
         self.assertEqual(r.status_code, 200)
 
     def test_active_alerts(self):

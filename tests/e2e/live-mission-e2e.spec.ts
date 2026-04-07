@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-const ORIGIN = 'http://localhost:3000';
+const ORIGIN = 'http://localhost:4000';
 const API_HEADERS = { 'Origin': ORIGIN, 'Host': 'localhost:8003' };
 
 test.describe('Live Mission E2E — Sprint 39', () => {

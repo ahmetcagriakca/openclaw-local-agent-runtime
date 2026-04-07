@@ -1,0 +1,25 @@
+# Browser Console Log — S78 Browser Audit
+# Date: 2026-04-07
+# Mode: observe_only
+# Target: http://localhost:4000 (Backend API offline)
+
+# Note: Console tracking started after page load on most pages.
+# No JS console errors captured during this session.
+# The "body stream already read" errors appear in the UI but are
+# caught by the frontend fetch error handler, not thrown to console.
+
+# Pages visited:
+# - /missions: No console errors
+# - /health: No console errors
+# - /approvals: No console errors
+# - /telemetry: No console errors
+# - /monitoring: No console errors
+# - /templates: No console errors
+# - /costs: No console errors
+# - /agents: No console errors
+# - /projects: No console errors
+# - /nonexistent-page: No console errors (404 page)
+
+# Observation: Frontend error handling catches all fetch failures
+# and displays them in UI error banners rather than logging to console.
+# This makes browser DevTools console less useful for debugging API issues.

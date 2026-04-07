@@ -1,0 +1,87 @@
+GOREV: docs/ai/handoffs/current.md oku, STATE.md oku, sonra durumu ozetle ve devam et
+
+SESSION RULES
+
+Read first, in order:
+1) docs/ai/handoffs/current.md
+2) docs/ai/STATE.md
+
+MISSION
+- Interpret the task against the current repo, handoff, and state.
+- Convert the task into the smallest safe executable scope.
+- Do not expand scope beyond what is necessary.
+- Do not idle. Do not switch to unrelated work.
+
+SOURCE PRIORITY
+repo code > tests/logs/raw outputs > frozen decisions > state docs > review comments > chat summaries
+
+TASK NORMALIZATION
+Before implementation, derive and lock:
+- ACTIVE_SPRINT
+- ACTIVE_TASK
+- CURRENT_GOAL
+- IN_SCOPE
+- OUT_OF_SCOPE
+- BLOCKERS
+- DONE_CRITERIA
+- NEXT_CONCRETE_ACTION
+
+If the task is ambiguous:
+- choose the narrowest interpretation consistent with handoff/state/repo
+- do not invent a parallel objective
+- do not start future sprint work
+- if blocked by missing required information, state the blocker clearly and stop
+
+FIRST RESPONSE FORMAT
+Print only this compact block:
+ACTIVE_SPRINT: ...
+ACTIVE_TASK: ...
+CURRENT_GOAL: ...
+IN_SCOPE: ...
+OUT_OF_SCOPE: ...
+BLOCKERS: ...
+DONE_CRITERIA: ...
+NEXT_ACTION: ...
+
+Then begin work immediately.
+
+EXECUTION RULES
+1. Resolve blockers first.
+2. Stay inside active task scope.
+3. Stay inside active sprint boundaries. Follow GOVERNANCE.md for closure steps.
+4. Check GitHub Actions status first — if CI is failing, fix it before continuing with new work.
+5. If handoff/state are stale, update them to match repo evidence.
+6. If implementation is done, complete missing tests, evidence, review, and closure artifacts.
+7. Never declare completion from commentary alone.
+
+MANDATORY ARTIFACT RULE
+Meaningful progress must produce a concrete artifact:
+- code change (committed)
+- test (passing)
+- doc/handoff update
+- evidence file or decision record
+
+DONE GATE
+Do not print GOREV TAMAMLANDI unless ALL are true:
+- scoped task objective is complete
+- blockers inside scope are resolved
+- required tests passed or clearly recorded as blocked with evidence
+- docs/ai/handoffs/current.md updated
+- docs/ai/STATE.md updated if status changed
+- sprint closure steps completed per GOVERNANCE.md (if sprint closure task)
+- GitHub Actions / CI checks all green
+- project board tasks linked to active sprint milestone
+- GPT review submitted and PASS received (do not skip this gate)
+- changes committed and pushed
+- if PR created: checks passing and merged to main (do not complete with pending/failing checks)
+
+After GOREV TAMAMLANDI, run /exit to close the session.
+
+FAILURE RULE
+If the task cannot be completed, print exactly:
+GOREV TAMAMLANAMADI: <concrete blocker>
+
+Before stopping on failure:
+- update handoff with current state
+- record blocker and exact next required action
+- commit and push partial progress if any

@@ -6831,6 +6831,18 @@
             "title": "Complexity",
             "default": "medium"
           },
+          "project_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Project Id",
+            "description": "Link mission to project on creation. Project must be draft or active."
+          },
           "timeout_seconds": {
             "anyOf": [
               {
@@ -6907,6 +6919,17 @@
             "type": "string",
             "title": "Owner",
             "default": "operator"
+          },
+          "local_path": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Local Path"
           }
         },
         "type": "object",
@@ -8720,6 +8743,17 @@
               }
             ],
             "title": "Status"
+          },
+          "local_path": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Local Path"
           }
         },
         "type": "object",

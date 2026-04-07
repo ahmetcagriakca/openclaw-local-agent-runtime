@@ -458,8 +458,9 @@ class ProjectStore:
                 )
 
             if proj.get("workspace_root") is not None:
-                # Already has workspace (e.g. from local_path at creation)
-                return dict(proj)
+                raise ProjectStoreError(
+                    f"Workspace already enabled for project {project_id}"
+                )
 
             # Resolve projects root
             if projects_root is None:

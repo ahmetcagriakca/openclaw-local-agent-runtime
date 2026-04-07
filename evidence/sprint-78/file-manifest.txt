@@ -1,0 +1,26 @@
+ agent/mission/controller.py                        |  15 +-
+ agent/persistence/project_store.py                 |   5 +-
+ agent/telegram_bot.py                              |   4 +-
+ agent/tests/conftest.py                            |   6 +
+ agent/tests/test_auth_integration.py               |  12 +-
+ agent/tests/test_backup.py                         |  13 +-
+ agent/tests/test_e2e.py                            |  24 +--
+ agent/tests/test_mutation_contracts.py             |  24 +--
+ agent/tests/test_project_api.py                    |  27 ++-
+ agent/tests/test_project_auth.py                   |   7 +-
+ agent/tests/test_router_bypass_fix.py              | 182 ++++++++++++++++++++
+ agent/tests/test_sprint16.py                       |   6 +-
+ docs/ai/DECISIONS.md                               |  14 +-
+ docs/ai/state/open-items.md                        |   2 +-
+ docs/api/openapi.json                              |  34 ++++
+ docs/decisions/D-149-browser-analysis-contract.md  | 164 ++++++++++++++++++
+ docs/shared/browser-audit-template.md              |  61 +++++++
+ docs/shared/ux-finding-schema.yaml                 |  85 ++++++++++
+ docs/sprints/sprint-78/plan.yaml                   |  36 ++++
+ .../sprint-78/browser-audit/browser-console.txt    |  25 +++
+ .../sprint-78/browser-audit/browser-dom-notes.md   |  66 ++++++++
+ .../sprint-78/browser-audit/browser-network.txt    |  32 ++++
+ evidence/sprint-78/browser-audit/repro-steps.md    |  71 ++++++++
+ .../sprint-78/browser-audit/ux-friction-report.md  | 186 +++++++++++++++++++++
+ frontend/src/api/generated.ts                      |   9 +
+ 25 files changed, 1044 insertions(+), 66 deletions(-)

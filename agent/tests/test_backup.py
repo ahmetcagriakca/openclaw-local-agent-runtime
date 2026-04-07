@@ -12,6 +12,8 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+from conftest import CSRF_ORIGIN, MUTATION_HEADERS
+
 # Add tools to path
 OC_ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(OC_ROOT / "tools"))
@@ -169,10 +171,7 @@ class TestBackupAPI(unittest.TestCase):
 
         from api.server import app
         cls.client = TestClient(app)
-        cls.auth = {
-            "Authorization": "Bearer vz_test_operator_key_001",
-            "Origin": "http://localhost:3000",
-        }
+        cls.auth = MUTATION_HEADERS
 
     def test_11_list_backups_shape(self):
         """GET /admin/backups returns expected shape."""
@@ -188,14 +187,14 @@ class TestBackupAPI(unittest.TestCase):
         """POST /admin/backup creates a backup when auth allows."""
         # When auth is disabled (no auth.json), mutations allowed without key
         # CSRF requires Origin header
-        headers = {"Origin": "http://localhost:3000"}
+        headers = {"Origin": CSRF_ORIGIN}
         resp = self.client.post("/api/v1/admin/backup", headers=headers)
         # Should succeed (200) or require auth (401/403)
         self.assertIn(resp.status_code, [200, 401, 403])
 
     def test_13_restore_requires_valid_backup(self):
         """POST /admin/restore rejects missing backup name."""
-        headers = {"Origin": "http://localhost:3000"}
+        headers = {"Origin": CSRF_ORIGIN}
         resp = self.client.post(
             "/api/v1/admin/restore?backup_name=nonexistent-backup",
             headers=headers,
@@ -205,7 +204,7 @@ class TestBackupAPI(unittest.TestCase):
 
     def test_14_restore_not_found(self):
         """POST /admin/restore returns 404 for missing backup."""
-        headers = {"Origin": "http://localhost:3000"}
+        headers = {"Origin": CSRF_ORIGIN}
         resp = self.client.post(
             "/api/v1/admin/restore?backup_name=nonexistent-backup",
             headers=headers,

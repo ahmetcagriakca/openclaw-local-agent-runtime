@@ -1,0 +1,32 @@
+# Browser Network Log — S78 Browser Audit
+# Date: 2026-04-07
+# Mode: observe_only
+# Target: http://localhost:4000 (Backend API offline on :8003)
+
+# Network tracking started after initial page load.
+# All API calls to localhost:8003 fail with connection refused.
+
+# Pattern observed:
+# - Frontend makes fetch() calls to http://localhost:8003/api/v1/*
+# - Backend is not running, so TCP connection refused
+# - Fetch API throws TypeError: Failed to fetch (or similar)
+# - Frontend catch block attempts to read response.text() on failed response
+# - This produces secondary error: "Failed to execute 'text' on 'Response': body stream already read"
+# - The secondary error is what gets displayed to the user
+
+# Affected endpoints (attempted by frontend):
+# GET /api/v1/missions          — /missions page
+# GET /api/v1/health            — /health page
+# GET /api/v1/capabilities      — /health page
+# GET /api/v1/approvals         — /approvals page
+# GET /api/v1/telemetry/events  — /telemetry page
+# GET /api/v1/dashboard/summary — /monitoring page
+# GET /api/v1/templates         — /templates page
+# GET /api/v1/cost/summary      — /costs page
+# GET /api/v1/agents/providers  — /agents page
+# GET /api/v1/projects          — /projects page
+# SSE /api/v1/events/stream     — all pages (header status)
+
+# No 4xx/5xx responses observed (connection never established).
+# The "HTTP 500" shown on /monitoring is a frontend-generated label,
+# not an actual server response.

@@ -44,7 +44,7 @@ cd agent && python -m api.server
 cd frontend && npm run dev
 ```
 
-The API runs on http://127.0.0.1:8003, UI on http://localhost:3000.
+The API runs on http://127.0.0.1:8003, UI on http://localhost:4000.
 
 ## Running Tests
 

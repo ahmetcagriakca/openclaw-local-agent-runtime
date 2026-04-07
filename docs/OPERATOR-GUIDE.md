@@ -16,7 +16,7 @@ Telegram → Vezir (WSL) → Agent Runner (Windows) → Mission Controller
 | 8001 | WMCP | Windows MCP Proxy |
 | 8002 | — | Removed (D-097, Sprint 13) |
 | 8003 | Mission Control API | FastAPI backend |
-| 3000 | Mission Control UI | React frontend (dev) |
+| 4000 | Mission Control UI | React frontend (dev) |
 
 ## 2. Starting the System
 
@@ -154,12 +154,12 @@ The API never directly calls services (D-001). It only writes signal artifacts.
 ### Localhost-Only Access (D-070)
 - API binds to `127.0.0.1` only — no external network access
 - Host header validation rejects non-localhost requests → 403
-- CORS allows only `http://localhost:3000` and `http://127.0.0.1:3000`
+- CORS allows only `http://localhost:4000` and `http://127.0.0.1:4000`
 
 ### CSRF Protection (D-089)
 - All POST requests require valid `Origin` header
 - Missing or invalid origin → 403 Forbidden
-- Origin must match `http://localhost:3000` or `http://127.0.0.1:3000`
+- Origin must match `http://localhost:4000` or `http://127.0.0.1:4000`
 
 ### SSE Abuse Prevention (D-087)
 - Maximum 10 concurrent SSE clients
@@ -199,7 +199,7 @@ Driven by `config/capabilities.json` (auto-generated).
 ### SSE Not Connecting
 1. Verify API is running: `curl http://localhost:8003/api/v1/health`
 2. Check browser console for CORS errors
-3. Frontend must be on `localhost:3000` (not 127.0.0.1)
+3. Frontend must be on `localhost:4000` (not 127.0.0.1)
 4. Max 10 SSE clients — close extra tabs
 
 ### Mutations Not Applying

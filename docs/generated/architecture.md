@@ -15,7 +15,7 @@ Ollama) and 24 MCP tools via a Windows bridge.
 
 ```
 +------------------+     +------------------+     +------------------+
-|  Vezir UI (3000) |<--->| Vezir API (8003) |<--->| Mission Controller|
+|  Vezir UI (4000) |<--->| Vezir API (8003) |<--->| Mission Controller|
 |  React + Vite    |     | FastAPI + Uvicorn |     | 9 roles, 3 gates |
 +------------------+     +------------------+     +------------------+
                               |                          |
@@ -42,7 +42,7 @@ Ollama) and 24 MCP tools via a Windows bridge.
 
 | Port | Service | Protocol |
 |------|---------|----------|
-| 3000 | Vezir UI (React + Vite + Tailwind) | HTTP |
+| 4000 | Vezir UI (React + Vite + Tailwind) | HTTP |
 | 8001 | WMCP (Windows MCP Proxy) | HTTP |
 | 8003 | Vezir API (FastAPI + Uvicorn) | HTTP/HTTPS |
 | 9000 | Math Service (example) | HTTP |

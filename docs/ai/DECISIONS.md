@@ -525,11 +525,11 @@ Current strict-ID approval service sunsets in Phase 5C. New approval flow: UI �
 
 ---
 
-### D-064: Port assignment — API 8003, React 3000
+### D-064: Port assignment — API 8003, React 4000
 
 **Phase:** 5A (Sprint 8) | **Status:** Frozen
 
-Mission Control API on port 8003, React dev server on 3000. Env override supported. No conflict with existing WMCP (8001) and legacy dashboard (8002).
+Mission Control API on port 8003, React dev server on 4000. Env override supported. No conflict with existing WMCP (8001) and legacy dashboard (8002).
 
 ---
 
@@ -824,7 +824,7 @@ Every mutation endpoint returns D-096 lifecycle: `{ requestId, lifecycleState, t
 
 **Phase:** 5D (Sprint 12) | **Status:** Frozen
 
-Mission Control (:8003 + :3000) fully replaces legacy health dashboard (:8002). Deprecation banner added to UI, startup log warning emitted. Code removal deferred to Sprint 13. **Trade-off:** Keeping code in Sprint 12 avoids regression risk during Phase 5 closure. Removal in Sprint 13 (stabilization sprint) is lower risk. **Validation:** Deprecation banner visible at localhost:8002, startup log contains warning, OPERATOR-GUIDE.md documents deprecation.
+Mission Control (:8003 + :4000) fully replaces legacy health dashboard (:8002). Deprecation banner added to UI, startup log warning emitted. Code removal deferred to Sprint 13. **Trade-off:** Keeping code in Sprint 12 avoids regression risk during Phase 5 closure. Removal in Sprint 13 (stabilization sprint) is lower risk. **Validation:** Deprecation banner visible at localhost:8002, startup log contains warning, OPERATOR-GUIDE.md documents deprecation.
 
 ---
 
@@ -858,7 +858,7 @@ OpenAPI spec generated from FastAPI built-in schema, exported to `docs/api/opena
 
 **Phase:** 5D (Sprint 12) | **Status:** Frozen | **Amends:** D-068
 
-SSE is a Mission Control frontend transport concern only. Does not amend or expand Bridge contract responsibilities. Bridge contract remains four operations (D-011). SSE streams served by Mission Control API (:8003) to React frontend (:3000). **Trade-off:** Clear ownership boundary. SSE complexity stays inside Mission Control. Bridge remains stateless single-invocation (D-018). **Validation:** `grep -r "SSE\|EventSource" bridge/` → 0 matches.
+SSE is a Mission Control frontend transport concern only. Does not amend or expand Bridge contract responsibilities. Bridge contract remains four operations (D-011). SSE streams served by Mission Control API (:8003) to React frontend (:4000). **Trade-off:** Clear ownership boundary. SSE complexity stays inside Mission Control. Bridge remains stateless single-invocation (D-018). **Validation:** `grep -r "SSE\|EventSource" bridge/` → 0 matches.
 
 ---
 
@@ -1426,7 +1426,7 @@ Formal record: `docs/decisions/D-148-azure-primary-provider.md`.
 | D-061 | FastAPI from day 1 | 5A-1 (Sprint 8) |
 | D-062 | Intervention via atomic file signal | 5C (Sprint 11) |
 | D-063 | Approval via service layer | 5C (Sprint 11) |
-| D-064 | Port assignment — API 8003, React 3000 | 5A (Sprint 8) |
+| D-064 | Port assignment — API 8003, React 4000 | 5A (Sprint 8) |
 | D-065 | Normalized API — MissionNormalizer | 5A-1 (Sprint 8) |
 | D-066 | Legacy dashboard lives until 5D | 5D (Sprint 12) |
 | D-067 | Schema frozen after 5A-1, additive-only | 5A-1 (Sprint 8) |

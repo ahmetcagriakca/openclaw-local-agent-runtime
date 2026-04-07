@@ -28,13 +28,22 @@ MISSIONS_DIR = os.path.join(
 
 
 class MissionController:
-    def __init__(self, planner_agent_id="gpt-general"):
+    def __init__(self, planner_agent_id=None):
         """
         planner_agent_id: which LLM to use for mission planning.
         The planner breaks user request into stages.
         Specialists execute each stage.
         """
-        self.planner_agent_id = planner_agent_id
+        # D-148: Use routing policy to select planner provider
+        if planner_agent_id is None:
+            from providers.factory import load_agent_config
+            from providers.routing_policy import ProviderRoutingPolicy
+            policy = ProviderRoutingPolicy()
+            config = load_agent_config()
+            decision = policy.select(config)
+            self.planner_agent_id = decision.selected_provider
+        else:
+            self.planner_agent_id = planner_agent_id
         os.makedirs(MISSIONS_DIR, exist_ok=True)
 
         # B-106: Resilience — DLQ + circuit breaker

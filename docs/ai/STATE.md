@@ -6,7 +6,7 @@
 **Note:** All sprints through 53 closed. S54 deferred. S55-S77 closed. All P1 backlog items complete (50/50). Phase 10 active (S73+). Phase 9 complete (S69-S72). Phase 8 complete (S60-S68). 145 frozen + 2 superseded decisions (D-001 → D-148, D-126 skipped, D-143 placeholder, D-082/D-098 superseded). Governance: 20-step closure checklist. Review pipeline: max 5 rounds + ESCALATE (D-146).
 **Persistence:** State is file-persisted (state.json, mission.json). Mission history via persistence layer (Sprint 16).
 **API:** Vezir API on 127.0.0.1:8003 (FastAPI + Uvicorn). Schemas FROZEN (D-067). SSE on /api/v1/events/stream. Dashboard API + Alert API + Telemetry Query API (Sprint 16).
-**Frontend:** React dashboard on localhost:3000 (Vite + Tailwind). SSE live updates + polling fallback + intervention buttons + monitoring dashboard. Node.js 20 required.
+**Frontend:** React dashboard on localhost:4000 (Vite + Tailwind). SSE live updates + polling fallback + intervention buttons + monitoring dashboard. Node.js 20 required.
 **Observability:** OpenTelemetry traces (28/28 events), 17 metrics, structured JSON logs with trace correlation (Sprint 15). Alert engine with 9 rules + Telegram notification (Sprint 16).
 **CI/CD:** GitHub Actions: ci.yml (test+lint), benchmark.yml (evidence-only, D-109), evidence.yml (manual evidence collection) (Sprint 16+17).
 
@@ -25,7 +25,7 @@
 | Telegram channel | Connected, real user validated | User ID `8654710624` |
 | WSL bridge wrappers | Operational | `/home/akca/bin/oc-bridge-*` |
 | System health engine | Operational | `bin\oc-system-health.ps1` |
-| Web dashboard | Removed (D-097, Sprint 13) | Was `bin\start-dashboard.ps1` on :8002. Replaced by Vezir UI on :3000 |
+| Web dashboard | Removed (D-097, Sprint 13) | Was `bin\start-dashboard.ps1` on :8002. Replaced by Vezir UI on :4000 |
 | WSL Guardian | Operational (L2 — VM-level monitor) | `bin\oc-wsl-guardian.ps1` |
 | Telegram notifications | Operational | `bin\oc-health-notify.ps1` |
 | Agent Runner | Operational (multi-agent missions + 3 providers + 24 tools) | `agent/oc-agent-runner.py` |
@@ -197,5 +197,5 @@
 | 8001 | WMCP (Windows MCP Proxy) | Active |
 | 8002 | — | Removed (D-097, Sprint 13) |
 | 8003 | Vezir API (FastAPI) | Active |
-| 3000 | Vezir UI (React) | Active |
+| 4000 | Vezir UI (React) | Active |
 | 9000 | Math Service (example) | Active |

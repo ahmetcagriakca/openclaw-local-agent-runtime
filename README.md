@@ -19,7 +19,7 @@ Governed multi-agent mission platform for Windows. Natural language goals become
 graph TB
     subgraph User["User Layer"]
         TG["Telegram Bot\nWSL gateway"]
-        UI["React Dashboard\n:3000 Vite SSE"]
+        UI["React Dashboard\n:4000 Vite SSE"]
     end
 
     subgraph API["API Layer :8003"]
@@ -109,7 +109,7 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File bin\start-wmcp-server.ps1
 # Start API server (:8003)
 bash scripts/dev-backend.sh
 
-# Start dashboard (:3000)
+# Start dashboard (:4000)
 bash scripts/dev-frontend.sh
 ```
 
@@ -170,7 +170,7 @@ docs/
 
 | Port | Service |
 |------|---------|
-| 3000 | React Dashboard |
+| 4000 | React Dashboard |
 | 8003 | Vezir API (FastAPI) |
 | 8001 | WMCP (Windows MCP Proxy) |
 

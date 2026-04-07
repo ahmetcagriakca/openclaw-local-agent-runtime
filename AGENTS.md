@@ -18,7 +18,7 @@ Windows 11 + WSL2 + Python 3.14 + PowerShell.
 | `agent/telegram_bot.py` | Telegram bot poller |
 | `agent/observability/` | OTel tracing + metrics + structured logging |
 | `agent/persistence/` | Mission/trace/metric stores (JSON file) |
-| `frontend/` | React dashboard on :3000 (Vite + Tailwind, Node.js 20) |
+| `frontend/` | React dashboard on :4000 (Vite + Tailwind, Node.js 20) |
 | `bridge/oc-bridge.ps1` | PowerShell bridge to Windows |
 | `config/capabilities.json` | Capability manifest (auto-generated) |
 
@@ -63,7 +63,7 @@ python tools/benchmark_api.py
 |------|---------|
 | 8001 | WMCP (Windows MCP Proxy) |
 | 8003 | Vezir API (FastAPI) |
-| 3000 | Vezir UI (React) |
+| 4000 | Vezir UI (React) |
 | 9000 | Math Service |
 
 ## Hard Rules

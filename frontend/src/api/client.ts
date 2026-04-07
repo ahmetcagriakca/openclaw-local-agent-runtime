@@ -44,11 +44,12 @@ class ApiError extends Error {
 async function apiGet<T>(path: string): Promise<T> {
   const res = await fetch(`${BASE}${path}`)
   if (!res.ok) {
-    let body: unknown
+    const text = await res.text()
+    let body: unknown = text
     try {
-      body = await res.json()
+      body = JSON.parse(text)
     } catch {
-      body = await res.text()
+      // keep as text
     }
     throw new ApiError(res.status, body)
   }
@@ -132,11 +133,12 @@ async function apiPost<T>(path: string): Promise<T> {
     },
   })
   if (!res.ok) {
-    let body: unknown
+    const text = await res.text()
+    let body: unknown = text
     try {
-      body = await res.json()
+      body = JSON.parse(text)
     } catch {
-      body = await res.text()
+      // keep as text
     }
     throw new ApiError(res.status, body)
   }
@@ -202,11 +204,12 @@ async function apiPostJson<T>(path: string, body: unknown): Promise<T> {
     body: JSON.stringify(body),
   })
   if (!res.ok) {
-    let respBody: unknown
+    const text = await res.text()
+    let respBody: unknown = text
     try {
-      respBody = await res.json()
+      respBody = JSON.parse(text)
     } catch {
-      respBody = await res.text()
+      // keep as text
     }
     throw new ApiError(res.status, respBody)
   }
@@ -333,8 +336,9 @@ async function apiPatchJson<T>(path: string, body: unknown): Promise<T> {
     body: JSON.stringify(body),
   })
   if (!res.ok) {
-    let respBody: unknown
-    try { respBody = await res.json() } catch { respBody = await res.text() }
+    const text = await res.text()
+    let respBody: unknown = text
+    try { respBody = JSON.parse(text) } catch { /* keep as text */ }
     throw new ApiError(res.status, respBody)
   }
   return res.json() as Promise<T>

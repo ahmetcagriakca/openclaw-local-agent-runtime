@@ -6,6 +6,7 @@ import { useSearchParams } from 'react-router-dom'
 import { getTelemetry } from '../api/client'
 import { usePolling } from '../hooks/usePolling'
 import { useSSEInvalidation } from '../hooks/SSEContext'
+import { ApiErrorBanner } from '../components/ApiErrorBanner'
 
 const EVENT_COLORS: Record<string, string> = {
   feedback_loop_rework: 'bg-orange-800 text-orange-200',
@@ -126,10 +127,7 @@ export function TelemetryPage() {
       )}
 
       {error && (
-        <div className="rounded border border-red-500/50 bg-red-950/30 p-4 text-red-300">
-          <p className="font-medium">Failed to load telemetry</p>
-          <p className="mt-1 text-sm">{error.message}</p>
-        </div>
+        <ApiErrorBanner error={error} onRetry={refresh} />
       )}
 
       {data && events.length === 0 && (

@@ -1,0 +1,47 @@
+sprint: 79
+title: "UX Remediation — Error States + SSE Health + Sidebar Tooltip"
+phase: 10
+model: A
+class: product
+mutation_budget: 12
+status:
+  implementation_status: not_started
+  closure_status: not_started
+
+tasks:
+  - id: "T-79.01"
+    title: "FE-ERR-01a: Fix client.ts double-read bug in apiGet/apiPost/apiPatchJson"
+    type: implementation
+    status: not_started
+    evidence:
+      - "evidence/sprint-79/client-fix-diff.txt"
+
+  - id: "T-79.02"
+    title: "FE-ERR-01b: Create useApiCall hook with loading/error/data/empty state machine"
+    type: implementation
+    status: not_started
+    depends_on: ["T-79.01"]
+    evidence:
+      - "evidence/sprint-79/useApiCall-tests.txt"
+
+  - id: "T-79.03"
+    title: "FE-ERR-01c: Create ApiErrorBanner component with Retry + wire into pages"
+    type: implementation
+    status: not_started
+    depends_on: ["T-79.02"]
+    evidence:
+      - "evidence/sprint-79/error-banner-tests.txt"
+
+  - id: "T-79.04"
+    title: "FE-SSE-01: SSE connection 3-state indicator (Connected/Reconnecting/Disconnected)"
+    type: implementation
+    status: not_started
+    evidence:
+      - "evidence/sprint-79/sse-status-tests.txt"
+
+  - id: "T-79.05"
+    title: "FE-NAV-01: Collapsed sidebar tooltip/accessibility"
+    type: implementation
+    status: not_started
+    evidence:
+      - "evidence/sprint-79/sidebar-tooltip-tests.txt"

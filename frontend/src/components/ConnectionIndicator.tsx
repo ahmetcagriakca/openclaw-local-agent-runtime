@@ -9,7 +9,7 @@ const STATUS_CONFIG: Record<SSEStatus, { color: string; pulse: boolean; label: s
   connecting: { color: 'bg-yellow-500', pulse: true, label: 'Connecting…' },
   connected: { color: 'bg-green-500', pulse: false, label: 'Live' },
   reconnecting: { color: 'bg-orange-500', pulse: true, label: 'Reconnecting…' },
-  polling: { color: 'bg-gray-500', pulse: false, label: 'Polling 30s' },
+  disconnected: { color: 'bg-red-500', pulse: false, label: 'Disconnected' },
 }
 
 export function ConnectionIndicator() {

@@ -5,7 +5,7 @@
  */
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-export type SSEStatus = 'connecting' | 'connected' | 'reconnecting' | 'polling'
+export type SSEStatus = 'connecting' | 'connected' | 'reconnecting' | 'disconnected'
 
 export interface UseSSEResult {
   status: SSEStatus
@@ -128,8 +128,8 @@ export function useSSE(options: UseSSEOptions): UseSSEResult {
       failCountRef.current++
 
       if (failCountRef.current >= MAX_RECONNECT_FAILURES) {
-        // Switch to polling fallback
-        setStatus('polling')
+        // Switch to polling fallback — show as disconnected since SSE failed
+        setStatus('disconnected')
         if (!pollingTimerRef.current) {
           pollingTimerRef.current = setInterval(() => {
             onEventRef.current('polling_tick', {})

@@ -8,6 +8,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { getProjects, createProject } from '../api/client'
 import { usePolling } from '../hooks/usePolling'
 import type { ProjectItem } from '../types/api'
+import { ApiErrorBanner } from '../components/ApiErrorBanner'
 
 const STATUS_COLORS: Record<string, string> = {
   draft: 'bg-gray-500',
@@ -201,7 +202,7 @@ export function ProjectsPage() {
       )}
 
       {error && (
-        <p className="text-sm text-red-400">Error: {error.message}</p>
+        <ApiErrorBanner error={error} onRetry={refresh} />
       )}
 
       {/* Project List */}

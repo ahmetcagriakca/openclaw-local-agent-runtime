@@ -11,6 +11,7 @@ import { useSSEInvalidation } from '../hooks/SSEContext'
 import { DataQualityBadge } from '../components/DataQualityBadge'
 import { FreshnessIndicator } from '../components/FreshnessIndicator'
 import { MissionStateBadge } from '../components/MissionStateBadge'
+import { ApiErrorBanner } from '../components/ApiErrorBanner'
 
 export function MissionListPage() {
   const { data, error, loading, refresh, lastFetchedAt } = usePolling(getMissions, 10_000)
@@ -174,16 +175,7 @@ export function MissionListPage() {
       )}
 
       {error && (
-        <div className="rounded border border-red-500/50 bg-red-950/30 p-4 text-red-300">
-          <p className="font-medium">Failed to load missions</p>
-          <p className="mt-1 text-sm">{error.message}</p>
-          <button
-            onClick={refresh}
-            className="mt-2 rounded bg-red-700 px-3 py-1 text-sm hover:bg-red-600"
-          >
-            Retry
-          </button>
-        </div>
+        <ApiErrorBanner error={error} onRetry={refresh} />
       )}
 
       {data && data.missions.length === 0 && !showCreate && (

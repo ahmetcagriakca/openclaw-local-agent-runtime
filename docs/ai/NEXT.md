@@ -1,7 +1,21 @@
 # Next Steps — Vezir Platform
 
 **Last updated:** 2026-04-08
-**Current:** Phase 10 active. Sprint 79 closed. S80 in progress.
+**Current:** Phase 10 active. Sprint 80 closed. S81 in progress.
+
+---
+
+## Sprint 81 — EventBus Production Wiring (IN PROGRESS)
+
+**Model:** A (full closure) | **Class:** Product
+**Scope:** D-147 amendment — wire EventBus to server.py lifespan, AuditTrailHandler + ProjectHandler, feature flag EVENTBUS_ENABLED
+**Decision:** D-147 amended
+**Issues:** #425 (parent), #426-#428 (tasks)
+**Milestone:** Sprint 81
+**Tests:** 1904 backend + 247 frontend + 13 Playwright + 139 root = 2303 total (+27 backend)
+**New files:** `test_eventbus_production.py`, `test_eventbus_integration.py`
+**Modified:** `api/server.py` (lifespan Step 8), `D-147-eventbus-operational-status.md`
+**Review:** Pending
 
 ---
 

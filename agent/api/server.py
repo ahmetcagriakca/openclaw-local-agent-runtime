@@ -159,9 +159,42 @@ async def lifespan(app: FastAPI):
     await sse_manager.start_watcher_bridge(event_queue)
     logger.info("MCC startup: SSE + FileWatcher ready")
 
+    # Step 8: EventBus production wiring (S81, D-147 upgrade)
+    event_bus = None
+    if os.environ.get("EVENTBUS_ENABLED", "true").lower() in ("1", "true", "yes"):
+        from events.bus import EventBus
+        from events.handlers.audit_trail import AuditTrailHandler
+        from events.handlers.project_handler import ProjectHandler
+
+        event_bus = EventBus()
+
+        # Global handler: audit trail (chain-hash, priority 0)
+        audit_handler = AuditTrailHandler()
+        event_bus.on_all(audit_handler, priority=0, name="audit_trail")
+
+        # Project handler: SSE broadcast + rollup invalidation
+        from events.catalog import EventType
+        project_handler = ProjectHandler(
+            sse_manager=sse_manager,
+            project_store=None,  # rollup invalidation skipped until store wired
+        )
+        for et in EventType.namespace("project"):
+            event_bus.on(et, project_handler, name="project_handler")
+
+        app.state.event_bus = event_bus
+        logger.info(
+            "MCC startup: EventBus ready (%d handlers)",
+            event_bus.handler_count)
+    else:
+        app.state.event_bus = None
+        logger.info("MCC startup: EventBus disabled (EVENTBUS_ENABLED=false)")
+
     yield
 
     # Shutdown
+    if event_bus is not None:
+        event_bus.clear()
+        logger.info("MCC shutdown: EventBus cleared")
     await scheduler.stop()
     await file_watcher.stop()
     await sse_manager.shutdown()

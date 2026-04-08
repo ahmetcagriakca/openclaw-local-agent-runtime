@@ -1,7 +1,7 @@
 # Current State
 
 **Last updated:** 2026-04-08
-**Active phase:** Phase 10 — Sprint 80 closed
+**Active phase:** Phase 10 — Sprint 81 active
 **Doc model:** This file is canonical for system state. Session context lives in `docs/ai/handoffs/current.md`.
 **Note:** All sprints through 53 closed. S54 deferred. S55-S80 closed. All P1 backlog items complete (50/50). Phase 10 active (S73+). Phase 9 complete (S69-S72). Phase 8 complete (S60-S68). 146 frozen + 2 superseded decisions (D-001 → D-149, D-126 skipped, D-143 placeholder, D-082/D-098 superseded). Governance: 20-step closure checklist. Review pipeline: max 5 rounds + ESCALATE (D-146).
 **Persistence:** State is file-persisted (state.json, mission.json). Mission history via persistence layer (Sprint 16).
@@ -30,7 +30,7 @@
 | Telegram notifications | Operational | `bin\oc-health-notify.ps1` |
 | Agent Runner | Operational (multi-agent missions + 3 providers + 24 tools) | `agent/oc-agent-runner.py` |
 | Mission Controller | Operational (9 governed roles, quality gates, state machine) | `agent/mission/controller.py` |
-| EventBus | Internal/test infrastructure (37 event types, not wired to startup — D-147) | `agent/events/bus.py` |
+| EventBus | Operational (37 event types, production-wired S81, feature flag EVENTBUS_ENABLED — D-147 amended) | `agent/events/bus.py` |
 | OTel TracingHandler | Operational (28/28 event coverage) | `agent/observability/tracing.py` |
 | OTel MetricsHandler | Operational (17 instruments) | `agent/observability/meters.py` |
 | StructuredLogHandler | Operational (JSON + trace context) | `agent/observability/structured_logging.py` |
@@ -59,7 +59,7 @@
 | Issue Automation | plan.yaml → issues + issues.json via workflow | `.github/workflows/issue-from-plan.yml` |
 | Project Store | Operational (CRUD, FSM, workspace, artifacts, D-144/D-145) | `agent/persistence/project_store.py` |
 | Project API | Operational (13 endpoints, D-144/D-145) | `agent/api/project_api.py` |
-| Project EventBus | Internal/test infrastructure (9 event types, audit+SSE handlers — D-147) | `agent/events/handlers/project_handler.py` |
+| Project EventBus | Operational (9 event types, audit+SSE handlers, production-wired S81) | `agent/events/handlers/project_handler.py` |
 
 ## Completed Phases
 
@@ -191,6 +191,7 @@
 | Sprint 78 | 1877 tests, 0 fail | 239 tests, 0 TS errors | +11 backend (routing bypass 7, CSRF centralization 4). 13 Playwright. 139 root. 2268 total |
 | Sprint 79 | 1877 tests, 0 fail | 247 tests, 0 TS errors | +8 frontend (ApiErrorBanner, ConnectionIndicator, client tests). 13 Playwright. 139 root. 2276 total |
 | Sprint 80 | 1877 tests, 0 fail | 247 tests, 0 TS errors | Housekeeping sprint — no new tests. eslint 10.2.0, vite 8.0.7. 2276 total |
+| Sprint 81 | 1904 tests, 0 fail | 247 tests, 0 TS errors | +27 backend (EventBus production 16, integration 11). 2303 total |
 
 ## Architectural Decisions
 

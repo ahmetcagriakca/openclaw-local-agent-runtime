@@ -1,4 +1,4 @@
-# Session Handoff — 2026-04-08 (Session 56 — S80 Housekeeping + Dependency Upgrades)
+# Session Handoff — 2026-04-08 (Session 57 — S81 EventBus Production Wiring)
 
 **Platform:** Vezir Platform
 **Operator:** Claude Code (Opus) — AKCA delegated
@@ -7,30 +7,29 @@
 
 ## Session Summary
 
-Session 56: S80 implementation — housekeeping, dependency upgrades, doc hygiene.
+Session 57: S81 implementation — EventBus production wiring (D-147 upgrade).
 
-### Session 56 Deliverables
-- **T-80.01:** 6 stale GitHub issues closed (#416, #418-#421, #358)
-- **T-80.02:** eslint 9→10 (10.2.0), 0 lint errors
-- **T-80.03:** vite 6→8 (8.0.7), plugin-react 4→6 (6.0.1), build OK, 247/247 frontend tests pass
-- **T-80.04:** Doc hygiene — NEXT.md carry-forward cleaned (10 retired items removed), GOVERNANCE.md B-148 note updated, open-items.md updated, BACKLOG.md regenerated
-- **T-80.05:** PROJECT_TOKEN verified — board mutations work (Status=Todo set). Sprint regex fix for `S80:` title format (was only matching `[S80]`). `.npmrc` added for eslint 10 peer dep compat in CI.
-- **PR #424** created, all CI checks green (frontend, backend, playwright, docker, CodeQL)
+### Session 57 Deliverables
+- **T-81.01:** EventBus wired to server.py lifespan (Step 8). AuditTrailHandler (global, priority 0) + ProjectHandler (project.* SSE). Feature flag `EVENTBUS_ENABLED` (default: true). Graceful shutdown.
+- **T-81.02:** 16 production handler validation tests (audit persistence, SSE broadcast, rollup invalidation, feature flag, handler counts)
+- **T-81.03:** 11 integration tests (full event flow, graceful degradation, event history)
+- **D-147:** Amended from "internal/test" to "operational" with production evidence
 
-### S80 — Housekeeping + Dependency Upgrades — CLOSED
+### S81 — EventBus Production Wiring (D-147) — IN PROGRESS
 
 **Implementation:** Done
-**Review:** GPT PASS (R4)
-**PR:** #424 merged to main
-**Issue:** #423 closed, Sprint 80 milestone closed
+**Review:** Pending GPT review
+**PR:** Pending
+**Issue:** #425 (parent), #426-#428 (tasks)
+**Milestone:** Sprint 81 (#56)
 
 ## Current State
 
-- **Phase:** 10 active — S80 closed
+- **Phase:** 10 active — S81 in progress
 - **Last closed sprint:** 80
-- **Decisions:** 146 frozen + 2 superseded (D-001 → D-149)
-- **Tests:** 1877 backend + 247 frontend + 13 Playwright + 139 root = 2276 total
-- **CI:** All green
+- **Decisions:** 146 frozen + 2 superseded (D-001 → D-149, D-147 amended S81)
+- **Tests:** 1904 backend + 247 frontend + 13 Playwright + 139 root = 2303 total
+- **CI:** All green (pre-S81 push)
 - **Lint:** 0 errors (eslint 10.2.0)
 - **Port map:** API :8003, Frontend :4000, WMCP :8001
 - **Security:** 0 CodeQL open, 2 dependabot (pre-existing)
@@ -46,6 +45,7 @@ Session 56: S80 implementation — housekeeping, dependency upgrades, doc hygien
 | S78 UX Report | — | PASS (R2) |
 | S79 | — | ESCALATE R6 → Operator override PASS |
 | S80 | — | PASS (R4) |
+| S81 | — | Pending |
 
 ## Phase 10 Status
 
@@ -59,7 +59,7 @@ Session 56: S80 implementation — housekeeping, dependency upgrades, doc hygien
 | S78 | Router Bypass Fix + Browser Analysis (D-149) | Closed |
 | S79 | UX Remediation + Review Process Improvement | Closed |
 | S80 | Housekeeping + Dependency Upgrades | Closed |
-| S81 | EventBus Production Wiring (D-147) | Planned |
+| S81 | EventBus Production Wiring (D-147) | In Progress |
 | S82 | Docker Production Image (D-116) | Planned |
 | S83 | D-150 Capability Routing Transition | Planned (needs operator review) |
 | S84 | SSO/RBAC Full External Auth | Planned |
@@ -72,9 +72,9 @@ Session 56: S80 implementation — housekeeping, dependency upgrades, doc hygien
 | Docker prod image optimization | D-116 | Partial — docker-compose done → S82 |
 | SSO/RBAC (full external auth) | D-104/D-108/D-117 | Partial — D-117 + isolation done → S84 |
 | D-150 Capability Routing Transition | Proposed | Needs operator review → S83 |
-| EventBus production wiring | D-147 | Test-only → S81 |
+| Controller → runner EventBus pass-through | D-147 S81 | Not wired — future sprint |
 | eslint react-hooks peer dep | S80 | .npmrc workaround — update when react-hooks supports eslint 10 |
 
 ## GPT Memo
 
-Session 56: S80 CLOSED. 6 stale issues closed. eslint 9→10 (10.2.0), vite 6→8 (8.0.7), plugin-react 4→6 (6.0.1). Doc hygiene: NEXT.md carry-forward cleaned, GOVERNANCE.md B-148 updated, BACKLOG.md regenerated. project-auto-add regex fix for S80: title format. .npmrc legacy-peer-deps for CI compat. PR #424 merged. GPT PASS R4. CLAUDE.md test count drift fixed (239→247). 1877+247+13+139=2276 tests. All CI green. Next: S81 EventBus Production Wiring.
+Session 57: S81 IN PROGRESS. EventBus wired to server.py lifespan (Step 8). AuditTrailHandler (global, chain-hash, priority 0) + ProjectHandler (9 project event types, SSE broadcast). Feature flag EVENTBUS_ENABLED defaults true. D-147 amended from "internal/test" to "operational". 27 new tests (16 production handler + 11 integration). 1904+247+13+139=2303 tests. All CI green pre-push. Issues #425-#428. Next: GPT review + PR + merge.

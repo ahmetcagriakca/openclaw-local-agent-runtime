@@ -1,7 +1,7 @@
 # open-items.md — Active State Tracker
 
 **Last updated:** 2026-04-08
-**Updated by:** Claude Code (Session 56 — S80)
+**Updated by:** Claude Code (Session 57 — S81)
 
 ---
 
@@ -96,9 +96,12 @@
 | Sprint 78 | Router Bypass Fix + Browser Analysis Contract (D-149) | CLOSED |
 | Sprint 79 | UX Remediation + Review Process Improvement | CLOSED |
 
+| Sprint 79 | UX Remediation + Review Process Improvement | CLOSED |
+| Sprint 80 | Housekeeping + Dependency Upgrades (eslint 10, vite 8) | CLOSED |
+
 ## Next Sprint
 
-S80: Housekeeping + Dependency Upgrades (eslint 10, vite 8, stale issues). plan.yaml ready. S79 closed (PR #422 merged).
+S81: EventBus Production Wiring (D-147). Implementation done. Issues #425-#428. PR pending.
 
 ### Carry-Forward
 | Item | Source | Status |
@@ -110,5 +113,6 @@ S80: Housekeeping + Dependency Upgrades (eslint 10, vite 8, stale issues). plan.
 | SSO/RBAC (full external auth) | D-104/D-108/D-117 | Partial — D-117 + backend isolation done → S84 |
 | ~~UX findings remediation~~ | S78 D-149 audit | Done: S79 (T-79.01, T-79.03, T-79.04, T-79.05) |
 | D-150 Capability Routing Transition | S77 proposed | Needs operator review → S83 |
-| EventBus production wiring | D-147 | Test-only → S81 |
-| eslint 9→10 + vite 6→8 | Dependabot | Deferred → S80 |
+| ~~EventBus production wiring~~ | D-147 | Done: S81 (lifespan wiring, feature flag, 27 tests) |
+| ~~eslint 9→10 + vite 6→8~~ | Dependabot | Done: S80 |
+| Controller→runner EventBus pass-through | D-147 S81 | Not wired — future sprint |

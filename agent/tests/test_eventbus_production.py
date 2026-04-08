@@ -78,6 +78,20 @@ class TestAuditTrailProduction:
         assert "truncated" in entry["data"]["big_field"]
 
 
+def _emit_with_loop(bus, event):
+    """Emit event inside an asyncio event loop so SSE broadcast works.
+
+    ProjectHandler.SSE broadcast uses asyncio.get_event_loop() internally.
+    Python 3.12+ requires an active loop for this to work.
+    """
+    import asyncio
+
+    async def _run():
+        bus.emit(event)
+
+    asyncio.run(_run())
+
+
 class TestProjectHandlerSSE:
     """Verify ProjectHandler broadcasts SSE events when wired to EventBus."""
 
@@ -100,7 +114,7 @@ class TestProjectHandlerSSE:
             },
             source="test",
         )
-        bus.emit(event)
+        _emit_with_loop(bus, event)
 
         # SSE broadcast should have been attempted
         sse_manager.broadcast.assert_called_once()
@@ -117,7 +131,7 @@ class TestProjectHandlerSSE:
         for et in EventType.namespace("project"):
             bus.on(et, handler, name="project_handler")
 
-        bus.emit(Event(
+        _emit_with_loop(bus, Event(
             type=EventType.PROJECT_CREATED,
             data={"project_id": "p-001", "name": "Test", "owner": "op"},
             source="test",
@@ -135,7 +149,7 @@ class TestProjectHandlerSSE:
         for et in EventType.namespace("project"):
             bus.on(et, handler, name="project_handler")
 
-        bus.emit(Event(
+        _emit_with_loop(bus, Event(
             type=EventType.PROJECT_ROLLUP_UPDATED,
             data={"project_id": "p-001", "total_missions": 5, "active_count": 2},
             source="test",
@@ -152,7 +166,7 @@ class TestProjectHandlerSSE:
         for et in EventType.namespace("project"):
             bus.on(et, handler, name="project_handler")
 
-        bus.emit(Event(
+        _emit_with_loop(bus, Event(
             type=EventType.PROJECT_ARTIFACT_PUBLISHED,
             data={"project_id": "p-001", "artifact_id": "a-1", "mission_id": "m-1"},
             source="test",

@@ -3,6 +3,7 @@
 End-to-end: lifespan wires EventBus → emit event → handlers fire.
 Also tests graceful degradation when EVENTBUS_ENABLED=false.
 """
+import asyncio
 import json
 import os
 import tempfile
@@ -14,6 +15,13 @@ from events.bus import Event, EventBus
 from events.catalog import EventType
 from events.handlers.audit_trail import AuditTrailHandler
 from events.handlers.project_handler import ProjectHandler
+
+
+def _emit_with_loop(bus, event):
+    """Emit event inside an asyncio event loop so SSE broadcast works."""
+    async def _run():
+        return bus.emit(event)
+    return asyncio.run(_run())
 
 
 def _create_production_bus(sse_manager=None, audit_dir=None):
@@ -77,7 +85,7 @@ class TestFullEventFlow:
             },
             source="integration",
         )
-        results = bus.emit(event)
+        results = _emit_with_loop(bus, event)
 
         # Both handlers ran
         assert len(results) == 2
@@ -131,7 +139,7 @@ class TestFullEventFlow:
         ]
 
         for e in events:
-            bus.emit(e)
+            _emit_with_loop(bus, e)
 
         # Verify audit chain integrity
         valid, count, err = audit.verify_chain()

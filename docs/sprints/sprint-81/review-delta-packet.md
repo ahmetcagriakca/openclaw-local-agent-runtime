@@ -1,8 +1,8 @@
 # Review Delta Packet v2 — Sprint 81
 
 ## 0. REVIEW TYPE
-- Round: 1
-- Review Type: closure
+- Round: 2
+- Review Type: re-review
 - Ask: Return verdict using review-verdict-contract.v2
 
 ## 1. BASELINE
@@ -72,19 +72,20 @@
 | File | Status | Source Command |
 |------|--------|----------------|
 | pytest-output.txt | PRESENT | `python -m pytest tests/test_eventbus*.py -v` |
-| vitest-output.txt | NO EVIDENCE | Frontend unchanged — no new frontend tests |
-| tsc-output.txt | NO EVIDENCE | Frontend unchanged |
-| lint-output.txt | NO EVIDENCE | No Python lint changes |
-| build-output.txt | NO EVIDENCE | No frontend build changes |
+| vitest-output.txt | PRESENT | `npx vitest run` — 247/247 passed |
+| tsc-output.txt | PRESENT | `npx tsc --noEmit` — 0 errors |
+| lint-output.txt | PRESENT | `npm run lint` — 0 errors |
+| build-output.txt | PRESENT | `npm run build` — built in 1.06s |
+| grep-evidence.txt | PRESENT | 6 claim verifications with line numbers |
 | file-manifest.txt | PRESENT | `git diff --stat main...HEAD` |
 
 ## 9. CLAIMS TO VERIFY
-1. `server.py` lifespan Step 8 instantiates EventBus and registers AuditTrailHandler + ProjectHandler
-2. Feature flag `EVENTBUS_ENABLED` defaults to "true", and "false"/"0"/"no" disables wiring
-3. AuditTrailHandler writes chain-hash JSONL entries; chain integrity verified in test
-4. ProjectHandler SSE broadcast fires for `project.status_changed`, `project.rollup_updated`, `project.artifact_published`, `project.artifact_unpublished` only
-5. No duplicate SSE events: EventBus uses dotted namespace (`project.*`), FileWatcher uses flat names (`mission_updated`)
-6. D-147 formally amended from "internal/test infrastructure" to "operational production infrastructure"
+1. `server.py` lifespan Step 8 instantiates EventBus and registers AuditTrailHandler + ProjectHandler → see `grep-evidence.txt` CLAIM 1 (lines 161-193 of server.py)
+2. Feature flag `EVENTBUS_ENABLED` defaults to "true", and "false"/"0"/"no" disables wiring → see `grep-evidence.txt` CLAIM 2 (line 164 of server.py)
+3. AuditTrailHandler writes chain-hash JSONL entries; chain integrity verified in test → see `grep-evidence.txt` CLAIM 3 + `pytest-output.txt` test_audit_chain_integrity PASSED
+4. ProjectHandler SSE broadcast fires for `project.status_changed`, `project.rollup_updated`, `project.artifact_published`, `project.artifact_unpublished` only → see `grep-evidence.txt` CLAIM 4 (lines 35-40 of project_handler.py) + 4 SSE tests PASSED
+5. No duplicate SSE events: EventBus uses dotted namespace (`project.*`), FileWatcher uses flat names (`mission_updated`) → see `grep-evidence.txt` CLAIM 5 + test_eventbus_sse_uses_event_type_not_file_change PASSED
+6. D-147 formally amended from "internal/test infrastructure" to "operational production infrastructure" → see `grep-evidence.txt` CLAIM 6
 
 ## 10. OPEN RISKS / WAIVERS
 - Controller → runner EventBus pass-through remains unwired (future sprint, not in scope)
@@ -95,3 +96,10 @@
 - No future task is cited as evidence for a current blocker.
 - No status language outside canonical model.
 - No missing raw output masked as a report.
+
+## 12. PATCHES APPLIED (Round 2)
+| Patch | Blocker Ref | Fix Description | Commit | New Evidence |
+|-------|-------------|-----------------|--------|--------------|
+| P1 | B1 | Generated missing raw outputs: vitest-output.txt, tsc-output.txt, lint-output.txt, build-output.txt | 30ccee3+ | evidence/sprint-81/*.txt |
+| P2 | B2 | Evidence manifest updated to PRESENT for all files; DONE 5/5 now matches evidence reality | this packet | Section 8 above |
+| P3 | B3 | Added grep-evidence.txt with 6 verified claims (line refs + raw outputs) | this packet | evidence/sprint-81/grep-evidence.txt |

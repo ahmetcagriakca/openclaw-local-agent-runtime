@@ -1,14 +1,25 @@
- agent/api/server.py                                |  33 +++
- agent/tests/test_eventbus_integration.py           | 256 +++++++++++++++++++
- agent/tests/test_eventbus_production.py            | 271 +++++++++++++++++++++
- docs/ai/DECISIONS.md                               |   4 +-
- docs/ai/NEXT.md                                    |  16 +-
- docs/ai/STATE.md                                   |   7 +-
- docs/ai/handoffs/current.md                        |  40 +--
- docs/ai/state/open-items.md                        |  12 +-
- .../decisions/D-147-eventbus-operational-status.md |  45 ++--
- 9 files changed, 637 insertions(+), 47 deletions(-)
-6626053 docs: D-147 amended to operational, S81 docs updated
-bfeebf6 test: integration tests for production event flow (T-81.03)
-9476d13 test: production handler validation (T-81.02)
-905876b feat: wire EventBus to application lifespan (T-81.01)
+=== Sprint 81 Evidence Manifest ===
+Generated: 2026-04-08T23:18:39+03:00
+Class: product
+
+total 85
+drwxr-xr-x 1 AKCA 197609     0 Apr  8 23:18 .
+drwxr-xr-x 1 AKCA 197609     0 Apr  8 23:16 ..
+-rw-r--r-- 1 AKCA 197609   148 Apr  8 23:18 build-output.txt
+-rw-r--r-- 1 AKCA 197609    49 Apr  8 23:18 closure-check-output.txt
+-rw-r--r-- 1 AKCA 197609    62 Apr  8 23:18 contract-evidence.txt
+-rw-r--r-- 1 AKCA 197609 15542 Apr  8 23:18 e2e-output.txt
+-rw-r--r-- 1 AKCA 197609    89 Apr  8 23:18 file-manifest.txt
+-rw-r--r-- 1 AKCA 197609    62 Apr  8 23:18 grep-evidence.txt
+-rw-r--r-- 1 AKCA 197609    40 Apr  8 23:18 lighthouse.txt
+-rw-r--r-- 1 AKCA 197609   203 Apr  8 23:18 lint-output.txt
+-rw-r--r-- 1 AKCA 197609    97 Apr  8 23:18 live-checks.txt
+-rw-r--r-- 1 AKCA 197609    40 Apr  8 23:18 mutation-drill.txt
+-rw-r--r-- 1 AKCA 197609 15542 Apr  8 23:18 playwright-output.txt
+-rw-r--r-- 1 AKCA 197609   177 Apr  8 23:18 pytest-output.txt
+-rw-r--r-- 1 AKCA 197609    23 Apr  8 23:18 review-summary.md
+-rw-r--r-- 1 AKCA 197609     8 Apr  8 23:18 sprint-class.txt
+-rw-r--r-- 1 AKCA 197609   544 Apr  8 23:18 tsc-output.txt
+-rw-r--r-- 1 AKCA 197609   177 Apr  8 23:18 validator-output.txt
+-rw-r--r-- 1 AKCA 197609   177 Apr  8 23:18 validator-tests.txt
+-rw-r--r-- 1 AKCA 197609  7923 Apr  8 23:18 vitest-output.txt

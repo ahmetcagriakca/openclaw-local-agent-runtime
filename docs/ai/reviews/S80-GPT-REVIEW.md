@@ -8,7 +8,7 @@
 ---
 
 ```markdown
-# Sprint 80 Review — Round 2
+# Sprint 80 Review — Round 3
 
 ## 1. Sprint / Phase / Model Metadata
 - Sprint: 80
@@ -24,28 +24,27 @@ HOLD
 Not eligible for closure
 
 ## 4. Scope Reviewed
-- R1 blockers B1-B4 patch claims (mid-gate evidence, raw evidence bundle, DONE 5/5 proof, status reconciliation)
-- Regression check on patched artifacts and cited files/evidence paths
+- R1 blockers B1-B4 patch verification
+- Regression check on patched files/evidence bundle
 
 ## 5. Accepted Findings
-- B1 resolved: Mid Review Gate evidence now cited with concrete raw outputs (`evidence/sprint-80/vitest-output.txt`, `lint-output.txt`, `build-output.txt`).
-- B4 resolved: status reconciliation claim states `docs/sprints/sprint-80/plan.yaml` updated to `status: done`.
+- B1 resolved: Mid Review Gate evidence now provided (`evidence/sprint-80/vitest-output.txt`, `lint-output.txt`, `build-output.txt`).
+- B2 resolved: Raw evidence bundle and manifest provided under `evidence/sprint-80/`.
+- B4 resolved: `docs/sprints/sprint-80/plan.yaml` status reconciled to `done`.
 
 ## 6. Blocking Findings
-- B2 — Raw evidence bundle remains unverifiable from packet: multiple outputs and counts are asserted but no raw command excerpts/hashes/manifest lines included in submitted delta; claims rely on summary text. [evidence: packet §6/§7 assertions only; no embedded raw output proof]
-- B3 — Task DONE 5/5 still incomplete for T-80.01: “(no code change)” plus `gh issue list --state closed` claim does not prove required items 4 and 5 (Implementation Notes + File Manifest update) at task level. [evidence: packet §7 P3 table row T-80.01 lacks 5/5 mapping]
+- B3 — Task DONE 5/5 still not satisfied for T-80.01: matrix marks commit as `N/A`, but DONE rule requires committed artifact for every task; process-task exception is unproven in frozen governance/decisions. [evidence: submitted DONE matrix row for T-80.01 + no cited D-XXX/shared rule allowing 5/5 waiver]
 
 ## 7. Required Patch Set
-- P1 (B2) — Add explicit evidence index in `evidence/sprint-80/file-manifest.txt` mapping each required command to output file, and include exact command lines + timestamped raw snippets for pytest/vitest/lint/build/tsc/playwright/validator/closure-check in the resubmission packet.
-- P2 (B3) — Provide per-task DONE 5/5 matrix for all T-80.01..T-80.05 with direct artifact pointers; for T-80.01 include where Implementation Notes were updated and where File Manifest was updated (or split/reclassify task so DONE rule is satisfied).
+- P1 (B3) — Either (a) provide sprint-scoped committed artifact proving T-80.01 completion (e.g., exported `gh issue view`/close transcript saved in `evidence/sprint-80/` and referenced in manifest with commit), or (b) cite frozen governance/decision ID explicitly permitting non-code/process-task substitution for DONE item #1 and #3, and update task record accordingly.
 
 ## 8. PASS Criteria
-- All R1 blockers (B1-B4) resolved with directly verifiable raw evidence linkage.
-- Per-task DONE 5/5 demonstrated for every scoped task with artifact-level pointers.
+- B3 resolved with verifiable DONE 5/5 compliance for T-80.01 using repo/evidence/frozen-rule proof.
+- No new regressions in patched files/evidence.
 
 ## 9. Final Judgment
-HOLD due to unresolved evidence-verifiability and incomplete per-task DONE 5/5 proof.
+HOLD due to unresolved R1 blocker B3 on task-level DONE compliance evidence.
 
 ## 10. Next Step
-Claude Code patch + rerun evidence + resubmit Round 3
+Claude Code patch + rerun evidence + resubmit Round 4
 ```

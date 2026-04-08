@@ -1,0 +1,21 @@
+=== T-80.01 Issue Closure Evidence ===
+Date: 2026-04-08T19:57:44Z
+
+--- Issue #416 ---
+416 | S79: UX Remediation — Error States + SSE Health + Sidebar Tooltip | CLOSED | closed: 2026-04-08T19:24:08Z
+
+--- Issue #418 ---
+418 | T-79.05: Collapsed sidebar tooltip/accessibility | CLOSED | closed: 2026-04-08T19:24:11Z
+
+--- Issue #419 ---
+419 | T-79.03: Create ApiErrorBanner + wire into all pages | CLOSED | closed: 2026-04-08T19:24:07Z
+
+--- Issue #420 ---
+420 | T-79.02: Create useApiCall hook with state machine | CLOSED | closed: 2026-04-08T19:24:07Z
+
+--- Issue #421 ---
+421 | T-79.04: SSE connection 3-state indicator | CLOSED | closed: 2026-04-08T19:24:08Z
+
+--- Issue #358 ---
+358 | [B-148] PAT-backed Project V2 Writer Credentials | CLOSED | closed: 2026-04-08T19:24:11Z
+

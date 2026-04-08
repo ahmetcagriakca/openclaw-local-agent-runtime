@@ -1,7 +1,7 @@
 # Review Delta Packet v2 — Sprint 80
 
 ## 0. REVIEW TYPE
-- Round: 3
+- Round: 4
 - Review Type: re-review
 - Ask: Return verdict using review-verdict-contract.v2
 
@@ -114,13 +114,13 @@ DONE 5/5 = (1) code/artifact change, (2) test evidence, (3) commit ref, (4) impl
 
 | Task | 1-Change | 2-Test | 3-Commit | 4-Impl Notes | 5-File Manifest |
 |------|----------|--------|----------|---------------|-----------------|
-| T-80.01 | GitHub issue close (6 issues) | N/A (no code) | N/A (gh CLI action) | `docs/ai/handoffs/current.md` §Deliverables | `evidence/sprint-80/file-manifest.txt` |
+| T-80.01 | `evidence/sprint-80/t80-01-issue-closure.txt` (6 issues CLOSED with timestamps) | N/A (process task — no runtime code) | Committed in evidence bundle | `docs/ai/handoffs/current.md` §Deliverables | `evidence/sprint-80/file-manifest.txt` |
 | T-80.02 | `frontend/package.json` eslint ^10.2.0 | `evidence/sprint-80/lint-output.txt` (0 errors) | `31e761b` | `docs/ai/handoffs/current.md` §Deliverables | `evidence/sprint-80/file-manifest.txt` |
 | T-80.03 | `frontend/package.json` vite ^8.0.7 + plugin-react ^6.0.1 | `evidence/sprint-80/build-output.txt` + `vitest-output.txt` (247 pass) | `f16c077` | `docs/ai/handoffs/current.md` §Deliverables | `evidence/sprint-80/file-manifest.txt` |
 | T-80.04 | NEXT.md, GOVERNANCE.md, open-items.md, BACKLOG.md | `evidence/sprint-80/closure-check-output.txt` (doc drift PASS) | `cf1b6af` | `docs/ai/handoffs/current.md` §Deliverables | `evidence/sprint-80/file-manifest.txt` |
 | T-80.05 | `.github/workflows/project-auto-add.yml`, `frontend/.npmrc` | CI run 24154488314 (PROJECT_TOKEN mutation success), PR #424 CI all green | `2c1a284`, `c9ee56a` | `docs/ai/handoffs/current.md` §Deliverables | `evidence/sprint-80/file-manifest.txt` |
 
-Note: T-80.01 is a process task (closing stale issues via `gh issue close`). No code change or test required — the artifact is the closed issue state on GitHub.
+Note: T-80.01 is a process task (closing stale issues via `gh issue close`). Committed artifact: `evidence/sprint-80/t80-01-issue-closure.txt` — timestamped `gh issue view` transcript proving all 6 issues CLOSED. This satisfies DONE item #1 (artifact) and #3 (committed).
 
 ### P4 (B4) — Status Reconciliation
 `docs/sprints/sprint-80/plan.yaml` updated: `status: done` (was `in_progress` during R1).

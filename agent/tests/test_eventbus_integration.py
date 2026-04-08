@@ -5,7 +5,6 @@ Also tests graceful degradation when EVENTBUS_ENABLED=false.
 """
 import asyncio
 import json
-import os
 from unittest.mock import AsyncMock, MagicMock
 
 from events.bus import Event, EventBus

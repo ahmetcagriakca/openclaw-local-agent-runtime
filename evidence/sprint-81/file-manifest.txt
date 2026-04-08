@@ -1,0 +1,14 @@
+ agent/api/server.py                                |  33 +++
+ agent/tests/test_eventbus_integration.py           | 256 +++++++++++++++++++
+ agent/tests/test_eventbus_production.py            | 271 +++++++++++++++++++++
+ docs/ai/DECISIONS.md                               |   4 +-
+ docs/ai/NEXT.md                                    |  16 +-
+ docs/ai/STATE.md                                   |   7 +-
+ docs/ai/handoffs/current.md                        |  40 +--
+ docs/ai/state/open-items.md                        |  12 +-
+ .../decisions/D-147-eventbus-operational-status.md |  45 ++--
+ 9 files changed, 637 insertions(+), 47 deletions(-)
+6626053 docs: D-147 amended to operational, S81 docs updated
+bfeebf6 test: integration tests for production event flow (T-81.03)
+9476d13 test: production handler validation (T-81.02)
+905876b feat: wire EventBus to application lifespan (T-81.01)

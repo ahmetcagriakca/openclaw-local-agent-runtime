@@ -1,0 +1,77 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.2, pytest-9.0.3, pluggy-1.6.0 -- /usr/bin/python3.12
+cachedir: .pytest_cache
+rootdir: /mnt/c/Users/AKCA/vezir/agent
+configfile: pyproject.toml
+collecting ... collected 57 items
+
+tests/test_eventbus_production.py::TestAuditTrailProduction::test_audit_handler_writes_event PASSED [  1%]
+tests/test_eventbus_production.py::TestAuditTrailProduction::test_audit_chain_integrity PASSED [  3%]
+tests/test_eventbus_production.py::TestAuditTrailProduction::test_audit_handler_sanitizes_large_data PASSED [  5%]
+tests/test_eventbus_production.py::TestProjectHandlerSSE::test_project_status_change_broadcasts_sse PASSED [  7%]
+tests/test_eventbus_production.py::TestProjectHandlerSSE::test_project_created_does_not_broadcast_sse PASSED [  8%]
+tests/test_eventbus_production.py::TestProjectHandlerSSE::test_rollup_updated_broadcasts_sse PASSED [ 10%]
+tests/test_eventbus_production.py::TestProjectHandlerSSE::test_artifact_published_broadcasts_sse PASSED [ 12%]
+tests/test_eventbus_production.py::TestProjectHandlerSSE::test_non_project_event_skipped PASSED [ 14%]
+tests/test_eventbus_production.py::TestProjectHandlerRollupInvalidation::test_mission_linked_invalidates_rollup PASSED [ 15%]
+tests/test_eventbus_production.py::TestProjectHandlerRollupInvalidation::test_no_invalidation_without_store PASSED [ 17%]
+tests/test_eventbus_production.py::TestNoDuplicateSSE::test_eventbus_sse_uses_event_type_not_file_change PASSED [ 19%]
+tests/test_eventbus_production.py::TestFeatureFlag::test_eventbus_enabled_by_default PASSED [ 21%]
+tests/test_eventbus_production.py::TestFeatureFlag::test_feature_flag_false_values PASSED [ 22%]
+tests/test_eventbus_production.py::TestFeatureFlag::test_feature_flag_true_values PASSED [ 24%]
+tests/test_eventbus_production.py::TestEventBusHandlerCounts::test_production_handler_count PASSED [ 26%]
+tests/test_eventbus_production.py::TestEventBusHandlerCounts::test_bus_clear_resets_all PASSED [ 28%]
+tests/test_eventbus_integration.py::TestFullEventFlow::test_project_created_audit_only PASSED [ 29%]
+tests/test_eventbus_integration.py::TestFullEventFlow::test_project_status_change_full_flow PASSED [ 31%]
+tests/test_eventbus_integration.py::TestFullEventFlow::test_mission_event_audit_only PASSED [ 33%]
+tests/test_eventbus_integration.py::TestFullEventFlow::test_multiple_events_sequential PASSED [ 35%]
+tests/test_eventbus_integration.py::TestFullEventFlow::test_correlation_id_preserved_in_audit PASSED [ 36%]
+tests/test_eventbus_integration.py::TestGracefulDegradation::test_disabled_bus_is_none PASSED [ 38%]
+tests/test_eventbus_integration.py::TestGracefulDegradation::test_app_state_none_is_safe PASSED [ 40%]
+tests/test_eventbus_integration.py::TestGracefulDegradation::test_handler_error_does_not_crash_bus PASSED [ 42%]
+tests/test_eventbus_integration.py::TestGracefulDegradation::test_project_handler_no_sse_manager PASSED [ 43%]
+tests/test_eventbus_integration.py::TestEventBusHistory::test_history_captures_events PASSED [ 45%]
+tests/test_eventbus_integration.py::TestEventBusHistory::test_history_filter_by_type PASSED [ 47%]
+tests/test_eventbus.py::TestEvent::test_frozen PASSED                    [ 49%]
+tests/test_eventbus.py::TestEvent::test_auto_correlation_id PASSED       [ 50%]
+tests/test_eventbus.py::TestEvent::test_auto_timestamp PASSED            [ 52%]
+tests/test_eventbus.py::TestEvent::test_child_shares_correlation PASSED  [ 54%]
+tests/test_eventbus.py::TestHandlerResult::test_proceed PASSED           [ 56%]
+tests/test_eventbus.py::TestHandlerResult::test_block PASSED             [ 57%]
+tests/test_eventbus.py::TestHandlerResult::test_skip PASSED              [ 59%]
+tests/test_eventbus.py::TestEventBus::test_emit_no_handlers PASSED       [ 61%]
+tests/test_eventbus.py::TestEventBus::test_handler_receives_event PASSED [ 63%]
+tests/test_eventbus.py::TestEventBus::test_handler_priority_order PASSED [ 64%]
+tests/test_eventbus.py::TestEventBus::test_halt_stops_propagation PASSED [ 66%]
+tests/test_eventbus.py::TestEventBus::test_global_handler_runs_for_all PASSED [ 68%]
+tests/test_eventbus.py::TestEventBus::test_global_runs_before_specific PASSED [ 70%]
+tests/test_eventbus.py::TestEventBus::test_handler_error_doesnt_crash_bus PASSED [ 71%]
+tests/test_eventbus.py::TestEventBus::test_history PASSED                [ 73%]
+tests/test_eventbus.py::TestEventBus::test_history_filter_by_type PASSED [ 75%]
+tests/test_eventbus.py::TestEventBus::test_history_filter_by_correlation PASSED [ 77%]
+tests/test_eventbus.py::TestEventBus::test_handler_count PASSED          [ 78%]
+tests/test_eventbus.py::TestEventBus::test_registered_types PASSED       [ 80%]
+tests/test_eventbus.py::TestEventBus::test_clear PASSED                  [ 82%]
+tests/test_eventbus.py::TestEventBus::test_was_halted_false PASSED       [ 84%]
+tests/test_eventbus.py::TestEventBus::test_was_halted_true PASSED        [ 85%]
+tests/test_eventbus.py::TestEventCatalog::test_has_33_types PASSED       [ 87%]
+tests/test_eventbus.py::TestEventCatalog::test_namespace_mission PASSED  [ 89%]
+tests/test_eventbus.py::TestEventCatalog::test_namespace_tool PASSED     [ 91%]
+tests/test_eventbus.py::TestEventCatalog::test_namespace_gate PASSED     [ 92%]
+tests/test_eventbus.py::TestEventCatalog::test_all_types_are_strings PASSED [ 94%]
+tests/test_eventbus.py::TestCorrelation::test_new_id_generated PASSED    [ 96%]
+tests/test_eventbus.py::TestCorrelation::test_set_id PASSED              [ 98%]
+tests/test_eventbus.py::TestCorrelation::test_new_overwrites_old PASSED  [100%]
+
+=============================== warnings summary ===============================
+../../../../../../home/user/.local/lib/python3.12/site-packages/_pytest/config/__init__.py:1434
+  /home/user/.local/lib/python3.12/site-packages/_pytest/config/__init__.py:1434: PytestConfigWarning: Unknown config option: timeout
+  
+    self._warn_or_fail_if_strict(f"Unknown config option: {key}\n")
+
+tests/test_eventbus_production.py::TestProjectHandlerSSE::test_project_status_change_broadcasts_sse
+  /mnt/c/Users/AKCA/vezir/agent/events/handlers/project_handler.py:132: DeprecationWarning: There is no current event loop
+    loop = asyncio.get_event_loop()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================== 57 passed, 2 warnings in 2.02s ========================

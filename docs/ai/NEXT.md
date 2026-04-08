@@ -1,7 +1,7 @@
 # Next Steps — Vezir Platform
 
-**Last updated:** 2026-04-07
-**Current:** Phase 10 active. Sprint 78 closed.
+**Last updated:** 2026-04-08
+**Current:** Phase 10 active. Sprint 79 closed. S80 in progress.
 
 ---
 
@@ -402,16 +402,11 @@
 
 | Item | Source | Status |
 |------|--------|--------|
-| PROJECT_TOKEN rotation | S23 retro | AKCA-owned |
-| Frontend Vitest component tests | S16 | Ongoing quality lane |
-| CONTEXT_ISOLATION feature flag | D-102 | Unassigned |
-| D-102 validation criteria 3-8 | D-102 | Unassigned |
-| Alert namespace scoping | S16 | Done (S49, B-119) |
-| Multi-user auth | D-104/D-108 | Unassigned |
-| Jaeger deployment | S16 | Unassigned |
-| UIOverview + WindowList tools | D-102 | Unassigned |
-| Docker dev environment | S14B | Unassigned |
-| Backend physical restructure | S14A/14B | Unassigned |
+| PROJECT_TOKEN rotation | S23 retro | Rotated 2026-04-07, expires Jul 06 2026 |
+| Docker prod image optimization | D-116 | Partial — docker-compose done → S82 |
+| SSO/RBAC (full external auth) | D-104/D-108/D-117 | Partial — D-117 + isolation done → S84 |
+| EventBus production wiring | D-147 | Test-only → S81 |
+| D-150 Capability Routing Transition | S77 proposed | Needs operator review → S83 |
 
 ## Decision Debt
 

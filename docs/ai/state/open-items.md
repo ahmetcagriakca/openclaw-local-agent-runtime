@@ -1,7 +1,7 @@
 # open-items.md — Active State Tracker
 
-**Last updated:** 2026-04-07
-**Updated by:** Claude Code (Session 55)
+**Last updated:** 2026-04-08
+**Updated by:** Claude Code (Session 56 — S80)
 
 ---
 
@@ -98,7 +98,7 @@
 
 ## Next Sprint
 
-S79 closed: UX Remediation + Review Process Improvement. PR #422 merged. S80 next: Housekeeping + Dependency Upgrades (plan.yaml ready).
+S80: Housekeeping + Dependency Upgrades (eslint 10, vite 8, stale issues). plan.yaml ready. S79 closed (PR #422 merged).
 
 ### Carry-Forward
 | Item | Source | Status |

@@ -1,7 +1,7 @@
 # Backlog -- Vezir Platform
 
 **Auto-generated from GitHub issues.** Do not edit directly.
-**Generated:** 2026-04-05 18:23 UTC
+**Generated:** 2026-04-08 19:31 UTC
 **Source:** `python tools/generate-backlog.py`
 
 ---
@@ -15,8 +15,15 @@
 | #323 | [B-135] Decision Drift Full Scan + Cleanup | Done |
 | #325 | [B-137] Controller Decomposition Boundary Freeze | Done |
 | #326 | [B-138] Budget Enforcement Ownership Design | Done |
-| #327 | [B-139] Controller Extraction â€” Phase 1 | Open |
-| #329 | [B-141] Mission Startup Recovery | Open |
+| #327 | [B-139] Controller Extraction â€” Phase 1 | Done |
+| #329 | [B-141] Mission Startup Recovery | Done |
+| #363 | [B-148] Project entity + persistence store | Done |
+| #364 | [B-149] Project CRUD + mission link/unlink API | Done |
+| #365 | [B-150] Project status FSM + delete/archive lifecycle | Done |
+| #367 | [B-152] Mission project_id field + backward compatibility | Done |
+| #368 | [B-153] Project workspace enable + directory structure | Done |
+| #369 | [B-154] WorkingSet project path injection | Done |
+| #370 | [B-155] Artifact publish/unpublish flow | Done |
 
 ### Product
 
@@ -39,7 +46,7 @@
 | #152 | [B-011] Transport encryption | Done |
 | #153 | [B-012] Full request idempotency | Done |
 | #324 | [B-136] Auth Session Quarantine + Actor Chain Verification | Done |
-| #330 | [B-142] Plugin Mutation Auth Boundary | Open |
+| #330 | [B-142] Plugin Mutation Auth Boundary | Done |
 
 ## P2 -- Medium Priority
 
@@ -54,15 +61,17 @@
 | #172 | [B-111] Mission replay / fixture runner | Done |
 | #173 | [B-112] Local dev sandbox / seeded demo | Done |
 | #174 | [B-113] Docs-as-product pack | Done |
-| #333 | [B-145] Enforcement Chain Documentation | Open |
-| #334 | [B-146] Mission Replay CLI Tool | Open |
+| #333 | [B-145] Enforcement Chain Documentation | Done |
+| #334 | [B-146] Mission Replay CLI Tool | Done |
 
 ### General
 
 | # | Item | State |
 |---|------|-------|
-| #331 | [B-143] Persistence Boundary ADR | Open |
-| #332 | [B-144] Tool Reversibility Metadata Extension | Open |
+| #331 | [B-143] Persistence Boundary ADR | Done |
+| #332 | [B-144] Tool Reversibility Metadata Extension | Done |
+| #358 | [B-148] PAT-backed Project V2 Writer Credentials | Done |
+| #366 | [B-151] Project EventBus events + audit handler | Done |
 
 ### Operations
 
@@ -82,6 +91,13 @@
 | #161 | [B-106] Retry/DLQ/replay/resume | Done |
 | #162 | [B-107] Policy engine | Done |
 | #163 | [B-108] Agent health / capability view | Done |
+| #371 | [B-156] Project rollup cache + SSE events | Done |
+
+### Product
+
+| # | Item | State |
+|---|------|-------|
+| #372 | [B-157] Project dashboard UI | Done |
 
 ## P3 -- Low Priority
 
@@ -105,7 +121,7 @@
 
 | # | Item | State |
 |---|------|-------|
-| #335 | [B-147] Patch/Review/Apply/Revert Contract Design | Open |
+| #335 | [B-147] Patch/Review/Apply/Revert Contract Design | Done |
 
 ### Operations
 
@@ -134,4 +150,4 @@
 
 ---
 
-**Total:** 62 items (9 open)
+**Total:** 73 items (0 open)

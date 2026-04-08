@@ -101,7 +101,7 @@
 
 ## Next Sprint
 
-S81: EventBus Production Wiring (D-147). Implementation done. Issues #425-#428. PR pending.
+S82: Docker Production Image (D-116). Next planned sprint.
 
 ### Carry-Forward
 | Item | Source | Status |

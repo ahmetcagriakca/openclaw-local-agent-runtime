@@ -15,18 +15,17 @@ Session 57: S81 implementation — EventBus production wiring (D-147 upgrade).
 - **T-81.03:** 11 integration tests (full event flow, graceful degradation, event history)
 - **D-147:** Amended from "internal/test" to "operational" with production evidence
 
-### S81 — EventBus Production Wiring (D-147) — IN PROGRESS
+### S81 — EventBus Production Wiring (D-147) — CLOSED
 
 **Implementation:** Done
-**Review:** Pending GPT review
-**PR:** Pending
-**Issue:** #425 (parent), #426-#428 (tasks)
-**Milestone:** Sprint 81 (#56)
+**Review:** GPT PASS (R2)
+**PR:** #429 merged to main
+**Issue:** #425 closed, Sprint 81 milestone closed
 
 ## Current State
 
-- **Phase:** 10 active — S81 in progress
-- **Last closed sprint:** 80
+- **Phase:** 10 active — S81 closed
+- **Last closed sprint:** 81
 - **Decisions:** 146 frozen + 2 superseded (D-001 → D-149, D-147 amended S81)
 - **Tests:** 1904 backend + 247 frontend + 13 Playwright + 139 root = 2303 total
 - **CI:** All green (pre-S81 push)
@@ -45,7 +44,7 @@ Session 57: S81 implementation — EventBus production wiring (D-147 upgrade).
 | S78 UX Report | — | PASS (R2) |
 | S79 | — | ESCALATE R6 → Operator override PASS |
 | S80 | — | PASS (R4) |
-| S81 | — | Pending |
+| S81 | — | PASS (R2) |
 
 ## Phase 10 Status
 
@@ -59,7 +58,7 @@ Session 57: S81 implementation — EventBus production wiring (D-147 upgrade).
 | S78 | Router Bypass Fix + Browser Analysis (D-149) | Closed |
 | S79 | UX Remediation + Review Process Improvement | Closed |
 | S80 | Housekeeping + Dependency Upgrades | Closed |
-| S81 | EventBus Production Wiring (D-147) | In Progress |
+| S81 | EventBus Production Wiring (D-147) | Closed |
 | S82 | Docker Production Image (D-116) | Planned |
 | S83 | D-150 Capability Routing Transition | Planned (needs operator review) |
 | S84 | SSO/RBAC Full External Auth | Planned |
@@ -77,4 +76,4 @@ Session 57: S81 implementation — EventBus production wiring (D-147 upgrade).
 
 ## GPT Memo
 
-Session 57: S81 IN PROGRESS. EventBus wired to server.py lifespan (Step 8). AuditTrailHandler (global, chain-hash, priority 0) + ProjectHandler (9 project event types, SSE broadcast). Feature flag EVENTBUS_ENABLED defaults true. D-147 amended from "internal/test" to "operational". 27 new tests (16 production handler + 11 integration). 1904+247+13+139=2303 tests. All CI green pre-push. Issues #425-#428. Next: GPT review + PR + merge.
+Session 57: S81 CLOSED. EventBus wired to server.py lifespan (Step 8). AuditTrailHandler (global, chain-hash, priority 0) + ProjectHandler (9 project event types, SSE broadcast). Feature flag EVENTBUS_ENABLED defaults true. D-147 amended from "internal/test" to "operational". 27 new tests (16 production handler + 11 integration). 1904+247+13+139=2303 tests. All CI green. GPT PASS R2. PR #429 merged. Issues #425-#428 closed. Sprint 81 milestone closed. Next: S82 Docker Production Image.

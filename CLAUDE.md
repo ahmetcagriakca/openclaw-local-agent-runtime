@@ -32,7 +32,7 @@ Windows 11 + WSL2 + Python 3.14 + PowerShell.
 |-----|---------|
 | `docs/ai/STATE.md` | Canonical system state |
 | `docs/ai/NEXT.md` | Roadmap + carry-forward |
-| `docs/ai/DECISIONS.md` | Frozen decisions (D-001→D-146, D-126 skipped, D-143 placeholder) |
+| `docs/ai/DECISIONS.md` | Frozen decisions (D-001→D-149, D-126 skipped, D-143 placeholder) |
 | `docs/ai/GOVERNANCE.md` | Sprint governance rules |
 | `docs/ai/BACKLOG.md` | Open backlog items |
 | `docs/ai/handoffs/current.md` | Session context (supplementary) |
@@ -45,14 +45,14 @@ Windows 11 + WSL2 + Python 3.14 + PowerShell.
 # Backend (1877 tests)
 cd agent && python -m pytest tests/ -v
 
-# Frontend (239 tests, requires Node.js 20)
+# Frontend (247 tests, requires Node.js 20)
 cd frontend && npx tsc --noEmit
 cd frontend && npx vitest run
 
 # Playwright E2E (13 tests)
 cd frontend && npx playwright test
 
-# Total: 1877 backend + 247 frontend + 13 Playwright = 2137 (D-131)
+# Total: 1877 backend + 247 frontend + 13 Playwright + 139 root = 2276 (D-131)
 
 # Preflight (all-in-one local CI)
 bash tools/preflight.sh

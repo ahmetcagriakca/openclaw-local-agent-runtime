@@ -3,7 +3,7 @@ title: "Housekeeping + Dependency Upgrades"
 model: A
 class: Governance + DevEx
 phase: 10
-status: in_progress
+status: done
 
 scope: |
   Close stale GitHub issues (S79 tasks + B-148), upgrade eslint 9→10 and vite 6→8,

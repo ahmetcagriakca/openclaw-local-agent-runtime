@@ -10,9 +10,7 @@ import asyncio
 import json
 import os
 import tempfile
-from unittest.mock import AsyncMock, MagicMock, patch
-
-import pytest
+from unittest.mock import AsyncMock, MagicMock
 
 from events.bus import Event, EventBus
 from events.catalog import EventType
@@ -84,8 +82,6 @@ def _emit_with_loop(bus, event):
     ProjectHandler.SSE broadcast uses asyncio.get_event_loop() internally.
     Python 3.12+ requires an active loop for this to work.
     """
-    import asyncio
-
     async def _run():
         bus.emit(event)
 

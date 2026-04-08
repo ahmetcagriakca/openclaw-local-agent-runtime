@@ -6,10 +6,7 @@ Also tests graceful degradation when EVENTBUS_ENABLED=false.
 import asyncio
 import json
 import os
-import tempfile
-from unittest.mock import AsyncMock, MagicMock, patch
-
-import pytest
+from unittest.mock import AsyncMock, MagicMock
 
 from events.bus import Event, EventBus
 from events.catalog import EventType
@@ -171,8 +168,7 @@ class TestGracefulDegradation:
 
     def test_disabled_bus_is_none(self):
         """When EVENTBUS_ENABLED=false, bus should be None (not instantiated)."""
-        enabled = os.environ.get("EVENTBUS_ENABLED", "true").lower()
-        # Simulate disabled
+        # Simulate disabled — "false" is not in the enabled set
         val = "false"
         assert val.lower() not in ("1", "true", "yes")
         # In server.py, event_bus = None when disabled

@@ -1343,9 +1343,9 @@ Formal record: `docs/decisions/D-146-review-max-round-escalation.md`.
 
 ### D-147: EventBus Operational Status
 
-**Phase:** Sprint 76 (Phase 10) | **Status:** Frozen
+**Phase:** Sprint 76 (Phase 10), amended Sprint 81 | **Status:** Frozen (amended)
 
-EventBus classified as internal test/development infrastructure, NOT a production control plane. Controller does not pass EventBus to runner. No startup wiring. Handler registration is test-only. OTel tracing/metrics operate independently. Future sprint may upgrade to production status with startup evidence.
+EventBus wired to production startup in S81. `EVENTBUS_ENABLED` feature flag (default: true). AuditTrailHandler (global, chain-hash audit log) + ProjectHandler (SSE broadcast for project events) registered at lifespan. Controller → runner pass-through remains unwired. OTel tracing/metrics still independent. 27 new tests.
 Formal record: `docs/decisions/D-147-eventbus-operational-status.md`.
 
 ### D-148: Azure OpenAI Primary Provider Adoption

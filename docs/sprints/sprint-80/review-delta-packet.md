@@ -1,7 +1,7 @@
 # Review Delta Packet v2 — Sprint 80
 
 ## 0. REVIEW TYPE
-- Round: 2
+- Round: 3
 - Review Type: re-review
 - Ask: Return verdict using review-verdict-contract.v2
 
@@ -92,26 +92,35 @@
 ### P1 (B1) — Mid Review Gate
 Mid gate evidence provided: `evidence/sprint-80/vitest-output.txt`, `evidence/sprint-80/lint-output.txt`, `evidence/sprint-80/build-output.txt`. All pass after dependency upgrades (T-80.02, T-80.03).
 
-### P2 (B2) — Raw Evidence Bundle
-Evidence bundle at `evidence/sprint-80/` contains 18 files:
-- `pytest-output.txt` — 1877 passed, 4 skipped (raw pytest output)
-- `vitest-output.txt` — 247 passed (raw vitest output)
-- `lint-output.txt` — 0 errors (raw eslint output)
-- `build-output.txt` — build success (raw vite build output)
-- `tsc-output.txt` — 0 errors (raw tsc output)
-- `playwright-output.txt` — 13 passed (raw playwright output)
-- `validator-output.txt` — validator run output
-- `closure-check-output.txt` — doc drift ALL CHECKS PASSED
-- `file-manifest.txt` — canonical file list
+### P2 (B2) — Raw Evidence Bundle with Inline Proof
 
-### P3 (B3) — Per-Task DONE 5/5 Proof
-| Task | Commit | Evidence |
-|------|--------|----------|
-| T-80.01 | (no code change) | `gh issue list --state closed` shows #416, #418-#421, #358 all CLOSED |
-| T-80.02 | `31e761b` | `evidence/sprint-80/lint-output.txt` — eslint 10.2.0, 0 errors |
-| T-80.03 | `f16c077` | `evidence/sprint-80/build-output.txt` + `vitest-output.txt` — vite 8.0.7, 247 pass |
-| T-80.04 | `cf1b6af` | Files changed: NEXT.md, GOVERNANCE.md, open-items.md, BACKLOG.md |
-| T-80.05 | `2c1a284` | CI run 24154488314 log: PROJECT_TOKEN mutation success (Status=Todo set). Regex fix committed. |
+Evidence index (`evidence/sprint-80/file-manifest.txt`):
+
+| Command | Output File | Raw Excerpt |
+|---------|-------------|-------------|
+| `cd agent && py -m pytest tests/ -q --tb=no` | `pytest-output.txt` | `1877 passed, 4 skipped in 186.55s` |
+| `cd frontend && npx vitest run` | `vitest-output.txt` | `Test Files  33 passed (33) / Tests  247 passed (247)` |
+| `cd frontend && npx eslint .` | `lint-output.txt` | (empty output = 0 errors) |
+| `cd frontend && npm run build` | `build-output.txt` | `✓ built in 1.10s` |
+| `cd frontend && npx tsc --noEmit` | `tsc-output.txt` | (empty output = 0 errors) |
+| `cd frontend && npx playwright test` | `playwright-output.txt` | `13 passed` |
+| `py tools/pre-implementation-check.py` | `validator-output.txt` | `VERDICT: PASS` |
+| `bash tools/sprint-closure-check.sh 80` | `closure-check-output.txt` | `RESULT: ALL CHECKS PASSED` |
+
+All raw output files exist at `evidence/sprint-80/`. CI PR #424 checks: frontend PASS, backend PASS, playwright PASS, docker-build PASS, e2e-smoke PASS, sdk-drift PASS, CodeQL PASS.
+
+### P3 (B3) — Per-Task DONE 5/5 Matrix
+DONE 5/5 = (1) code/artifact change, (2) test evidence, (3) commit ref, (4) implementation notes, (5) file manifest
+
+| Task | 1-Change | 2-Test | 3-Commit | 4-Impl Notes | 5-File Manifest |
+|------|----------|--------|----------|---------------|-----------------|
+| T-80.01 | GitHub issue close (6 issues) | N/A (no code) | N/A (gh CLI action) | `docs/ai/handoffs/current.md` §Deliverables | `evidence/sprint-80/file-manifest.txt` |
+| T-80.02 | `frontend/package.json` eslint ^10.2.0 | `evidence/sprint-80/lint-output.txt` (0 errors) | `31e761b` | `docs/ai/handoffs/current.md` §Deliverables | `evidence/sprint-80/file-manifest.txt` |
+| T-80.03 | `frontend/package.json` vite ^8.0.7 + plugin-react ^6.0.1 | `evidence/sprint-80/build-output.txt` + `vitest-output.txt` (247 pass) | `f16c077` | `docs/ai/handoffs/current.md` §Deliverables | `evidence/sprint-80/file-manifest.txt` |
+| T-80.04 | NEXT.md, GOVERNANCE.md, open-items.md, BACKLOG.md | `evidence/sprint-80/closure-check-output.txt` (doc drift PASS) | `cf1b6af` | `docs/ai/handoffs/current.md` §Deliverables | `evidence/sprint-80/file-manifest.txt` |
+| T-80.05 | `.github/workflows/project-auto-add.yml`, `frontend/.npmrc` | CI run 24154488314 (PROJECT_TOKEN mutation success), PR #424 CI all green | `2c1a284`, `c9ee56a` | `docs/ai/handoffs/current.md` §Deliverables | `evidence/sprint-80/file-manifest.txt` |
+
+Note: T-80.01 is a process task (closing stale issues via `gh issue close`). No code change or test required — the artifact is the closed issue state on GitHub.
 
 ### P4 (B4) — Status Reconciliation
 `docs/sprints/sprint-80/plan.yaml` updated: `status: done` (was `in_progress` during R1).

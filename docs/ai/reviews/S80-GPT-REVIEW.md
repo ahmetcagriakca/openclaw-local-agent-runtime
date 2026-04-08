@@ -8,7 +8,7 @@
 ---
 
 ```markdown
-# Sprint 80 Review — Round 1
+# Sprint 80 Review — Round 2
 
 ## 1. Sprint / Phase / Model Metadata
 - Sprint: 80
@@ -24,32 +24,28 @@ HOLD
 Not eligible for closure
 
 ## 4. Scope Reviewed
-- T-80.01..T-80.05 closure packet claims
-- Gate, status, DONE 5/5, and evidence bundle under `evidence/sprint-80/`
+- R1 blockers B1-B4 patch claims (mid-gate evidence, raw evidence bundle, DONE 5/5 proof, status reconciliation)
+- Regression check on patched artifacts and cited files/evidence paths
 
 ## 5. Accepted Findings
-- Canonical status fields provided: `implementation_status: done`, `closure_status: review_pending`.
-- Kickoff gate is claimed with concrete artifact path: `docs/sprints/sprint-80/plan.yaml`.
+- B1 resolved: Mid Review Gate evidence now cited with concrete raw outputs (`evidence/sprint-80/vitest-output.txt`, `lint-output.txt`, `build-output.txt`).
+- B4 resolved: status reconciliation claim states `docs/sprints/sprint-80/plan.yaml` updated to `status: done`.
 
 ## 6. Blocking Findings
-- B1 — Mid Review Gate marked `N/A` though mandatory gate policy requires a real Mid Review Gate task and pass before second-half gated work; no gate artifact provided. [evidence: Section 3 `Mid Review Gate | N/A`]
-- B2 — Final Review Gate prerequisites not evidenced with raw bundle; packet provides summary claims only (tests/CI) without raw command outputs under sprint evidence root. [evidence: `Evidence Root: evidence/sprint-80/ (no runtime evidence)` + Sections 6/CI are report-only]
-- B3 — Task DONE 5/5 unverifiable for tasks due to missing explicit per-task evidence-command outputs and missing explicit Implementation Notes/File Manifest proof in sprint evidence bundle. [evidence: packet lists changed files but no raw DONE 5/5 artifacts/manifest paths]
-- B4 — Process correctness conflict: `plan.yaml` listed as changed to `status: in_progress` while closure packet asserts implementation done/review pending. [evidence: Section 5 file change `docs/sprints/sprint-80/plan.yaml | status: in_progress` vs Section 1 statuses]
+- B2 — Raw evidence bundle remains unverifiable from packet: multiple outputs and counts are asserted but no raw command excerpts/hashes/manifest lines included in submitted delta; claims rely on summary text. [evidence: packet §6/§7 assertions only; no embedded raw output proof]
+- B3 — Task DONE 5/5 still incomplete for T-80.01: “(no code change)” plus `gh issue list --state closed` claim does not prove required items 4 and 5 (Implementation Notes + File Manifest update) at task level. [evidence: packet §7 P3 table row T-80.01 lacks 5/5 mapping]
 
 ## 7. Required Patch Set
-- P1 (B1) — Add and complete Mid Review Gate as a real sprint task artifact (with timestamped pass evidence) or provide frozen governance exception document path authorizing omission.
-- P2 (B2) — Populate `evidence/sprint-80/` with raw outputs: test command logs, CI raw links/exports, validator output, and final review artifact required by Final Review Gate.
-- P3 (B3) — Add explicit DONE 5/5 proof per task (code commit refs, passing test outputs, evidence command outputs, Implementation Notes update path, File Manifest update path).
-- P4 (B4) — Reconcile sprint status artifacts: update `docs/sprints/sprint-80/plan.yaml` and related state docs to canonical closure-ready state consistent with packet claims.
+- P1 (B2) — Add explicit evidence index in `evidence/sprint-80/file-manifest.txt` mapping each required command to output file, and include exact command lines + timestamped raw snippets for pytest/vitest/lint/build/tsc/playwright/validator/closure-check in the resubmission packet.
+- P2 (B3) — Provide per-task DONE 5/5 matrix for all T-80.01..T-80.05 with direct artifact pointers; for T-80.01 include where Implementation Notes were updated and where File Manifest was updated (or split/reclassify task so DONE rule is satisfied).
 
 ## 8. PASS Criteria
-- All blockers B1-B4 resolved with repo-visible artifacts and raw evidence under `evidence/sprint-80/`.
-- Final Review Gate evidence bundle complete and internally consistent with canonical status model.
+- All R1 blockers (B1-B4) resolved with directly verifiable raw evidence linkage.
+- Per-task DONE 5/5 demonstrated for every scoped task with artifact-level pointers.
 
 ## 9. Final Judgment
-HOLD until mandatory gate compliance, raw evidence completeness, DONE 5/5 proof, and status consistency are corrected.
+HOLD due to unresolved evidence-verifiability and incomplete per-task DONE 5/5 proof.
 
 ## 10. Next Step
-Claude Code patch + rerun evidence + resubmit Round 2
+Claude Code patch + rerun evidence + resubmit Round 3
 ```

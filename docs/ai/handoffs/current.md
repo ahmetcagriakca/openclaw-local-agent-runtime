@@ -1,4 +1,4 @@
-# Session Handoff — 2026-04-07 (Session 55 — B-148 Resolution + S80-S84 Roadmap)
+# Session Handoff — 2026-04-08 (Session 56 — S80 Housekeeping + Dependency Upgrades)
 
 **Platform:** Vezir Platform
 **Operator:** Claude Code (Opus) — AKCA delegated
@@ -7,47 +7,30 @@
 
 ## Session Summary
 
-Session 55: B-148 blocker resolved, sprint roadmap S80-S84 created.
+Session 56: S80 implementation — housekeeping, dependency upgrades, doc hygiene.
 
-### Session 55 Deliverables
-- **B-148 resolved:** Classic PAT created (`repo`+`project` scope, 90d, expires Jul 06 2026), PROJECT_TOKEN secret updated
-- **project-auto-add.yml** updated to use PROJECT_TOKEN with fallback
-- **SECRETS-CONTRACT.md** updated (classic PAT details, fine-grained limitation note)
-- **STATE.md** synced to S79 closed (was stale at S78)
-- **Benchmark fix:** CSRF origin `localhost:3000` → `localhost:4000` — Benchmark workflow green after 4 sprints of failure
-- **Roadmap S80-S84** created — all carry-forward items mapped to sprints
-- S80: Housekeeping + Dependency Upgrades (eslint 10, vite 8, stale issues)
-- S81: EventBus Production Wiring (D-147)
-- S82: Docker Production Image (D-116)
-- S83: D-150 Capability Routing Transition
-- S84: SSO/RBAC Full External Auth
+### Session 56 Deliverables
+- **T-80.01:** 6 stale GitHub issues closed (#416, #418-#421, #358)
+- **T-80.02:** eslint 9→10 (10.2.0), 0 lint errors
+- **T-80.03:** vite 6→8 (8.0.7), plugin-react 4→6 (6.0.1), build OK, 247/247 frontend tests pass
+- **T-80.04:** Doc hygiene — NEXT.md carry-forward cleaned (10 retired items removed), GOVERNANCE.md B-148 note updated, open-items.md updated, BACKLOG.md regenerated
+- **T-80.05:** PROJECT_TOKEN verified — board mutations work (Status=Todo set). Sprint regex fix for `S80:` title format (was only matching `[S80]`). `.npmrc` added for eslint 10 peer dep compat in CI.
+- **PR #424** created, all CI checks green (frontend, backend, playwright, docker, CodeQL)
 
-### S79 — UX Remediation + Exhaustive Review Rule — CLOSED
+### S80 — Housekeeping + Dependency Upgrades — IN PROGRESS
 
-**UX Implementation (D-149 findings):**
-- T-79.01: client.ts double-read bug fixed (text-first approach)
-- T-79.03: ApiErrorBanner with Retry on 5 pages (Missions, Health, AgentHealth, Projects, Telemetry)
-- T-79.04: SSE "disconnected" state (red indicator when backend unreachable)
-- T-79.05: Sidebar tooltip verified pre-existing (no change needed)
-- Bonus: 4 pre-existing React lint errors fixed (0 lint errors now)
-
-**Review Process Improvement:**
-- Exhaustive First Round Rule: R1 must check ALL 7 review areas in single pass
-- Scope Lock Rule: R2+ findings detectable in R1 are [MISSED-R1], not blockers
-- Script enforcement in review-loop.sh + blocker-resolution-check.sh
-- Verdict contract rules 16-18 added
-
-**GPT Review:** R1-R5 HOLD → R6 ESCALATE → Operator override PASS
-**PR:** #422 merged to main
+**Implementation:** Done
+**Review:** Pending GPT review
+**PR:** #424 — all checks passing
 
 ## Current State
 
-- **Phase:** 10 active — S79 closed
+- **Phase:** 10 active — S80 in progress
 - **Last closed sprint:** 79
 - **Decisions:** 146 frozen + 2 superseded (D-001 → D-149)
 - **Tests:** 1877 backend + 247 frontend + 13 Playwright + 139 root = 2276 total
-- **CI:** All green (CI + Benchmark + Playwright + Push)
-- **Lint:** 0 errors
+- **CI:** All green
+- **Lint:** 0 errors (eslint 10.2.0)
 - **Port map:** API :8003, Frontend :4000, WMCP :8001
 - **Security:** 0 CodeQL open, 2 dependabot (pre-existing)
 - **Blockers:** None
@@ -61,6 +44,7 @@ Session 55: B-148 blocker resolved, sprint roadmap S80-S84 created.
 | S78 | — | PASS (R4) |
 | S78 UX Report | — | PASS (R2) |
 | S79 | — | ESCALATE R6 → Operator override PASS |
+| S80 | — | Pending |
 
 ## Phase 10 Status
 
@@ -73,7 +57,7 @@ Session 55: B-148 blocker resolved, sprint roadmap S80-S84 created.
 | S77 | Azure OpenAI Provider Foundation (D-148) | Closed |
 | S78 | Router Bypass Fix + Browser Analysis (D-149) | Closed |
 | S79 | UX Remediation + Review Process Improvement | Closed |
-| S80 | Housekeeping + Dependency Upgrades | Planned |
+| S80 | Housekeeping + Dependency Upgrades | In Progress |
 | S81 | EventBus Production Wiring (D-147) | Planned |
 | S82 | Docker Production Image (D-116) | Planned |
 | S83 | D-150 Capability Routing Transition | Planned (needs operator review) |
@@ -84,15 +68,12 @@ Session 55: B-148 blocker resolved, sprint roadmap S80-S84 created.
 | Item | Source | Status |
 |------|--------|--------|
 | PROJECT_TOKEN rotation | S23 retro | Rotated 2026-04-07, classic PAT, expires Jul 06, 2026 |
-| Docker prod image optimization | D-116 | Partial — docker-compose done |
-| SSO/RBAC (full external auth) | D-104/D-108/D-117 | Partial — D-117 + isolation done |
-| D-021→D-058 extraction | S8 | AKCA-assigned decision debt |
-| D-150 Capability Routing Transition | Proposed | Needs operator review |
-| eslint 9→10 migration | Dependabot | Deferred |
-| vite 6→8 + plugin-react 6 | Dependabot | Deferred |
-| B-148 PAT-backed Project V2 | S71 | Resolved — classic PAT with `repo`+`project` scope, secret updated 2026-04-07 |
-| EventBus production wiring | D-147 | Future sprint — currently test-only |
+| Docker prod image optimization | D-116 | Partial — docker-compose done → S82 |
+| SSO/RBAC (full external auth) | D-104/D-108/D-117 | Partial — D-117 + isolation done → S84 |
+| D-150 Capability Routing Transition | Proposed | Needs operator review → S83 |
+| EventBus production wiring | D-147 | Test-only → S81 |
+| eslint react-hooks peer dep | S80 | .npmrc workaround — update when react-hooks supports eslint 10 |
 
 ## GPT Memo
 
-Session 55: B-148 resolved (classic PAT, PROJECT_TOKEN updated, project-auto-add.yml patched). Benchmark CSRF fix (localhost:3000→4000, green after 4 sprints). STATE.md synced S79. Roadmap S80-S84 created: S80 housekeeping+deps, S81 EventBus wiring, S82 Docker prod, S83 D-150 routing, S84 SSO/RBAC. All CI green. Next: S80 kickoff.
+Session 56: S80 implementation complete. 6 stale issues closed. eslint 9→10 (10.2.0), vite 6→8 (8.0.7), plugin-react 4→6 (6.0.1). Doc hygiene: NEXT.md carry-forward cleaned, GOVERNANCE.md B-148 updated, BACKLOG.md regenerated. project-auto-add regex fix for S80: title format. .npmrc legacy-peer-deps for CI compat. PR #424 all checks green. 1877+247+13+139=2276 tests. Awaiting GPT review.

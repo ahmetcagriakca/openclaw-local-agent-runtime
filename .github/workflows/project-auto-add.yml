@@ -158,7 +158,7 @@ jobs:
           SPRINT_NUM=$(echo "$ISSUE_TITLE" | python3 -c "
           import re, sys
           title = sys.stdin.read().strip()
-          m = re.search(r'\[S(\d+)', title)
+          m = re.search(r'(?:\[S|^S)(\d+)', title)
           print(m.group(1) if m else '')
           " 2>/dev/null || true)
 

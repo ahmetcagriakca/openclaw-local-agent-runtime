@@ -15,20 +15,20 @@ Session 60: S84 implementation — SSO/RBAC Full External Auth. OAuth2 provider 
 - **T-84.03:** Frontend auth flow: AuthContext supports OAuth+API key, LoginPage with SSO button, ProtectedRoute with role guard, SessionManager shows role/provider. 247 frontend tests pass, 0 TS errors.
 - **T-84.04:** Migration: .gitignore secrets, .env.example docs, backward compat verified. 13 compat tests.
 
-### S84 — SSO/RBAC Full External Auth — IMPL DONE
+### S84 — SSO/RBAC Full External Auth — CLOSED
 
 **Implementation:** Done
-**Review:** Pending GPT review
-**PR:** Pending
+**Review:** GPT PASS (R2)
+**PR:** #447 merged to main
 **Issue:** #442 (parent), #443-#446 (tasks)
 
 ## Current State
 
-- **Phase:** 10 active — S84 implementation done
-- **Last closed sprint:** 83
-- **Decisions:** 147 frozen + 2 superseded (D-001 → D-150)
+- **Phase:** 10 active — S84 closed
+- **Last closed sprint:** 84
+- **Decisions:** 147 frozen (1 amended) + 2 superseded (D-001 → D-150)
 - **Tests:** 2049 backend + 247 frontend + 13 Playwright + 188 root = 2497 total (+86 new backend)
-- **CI:** Pending (branch not pushed yet)
+- **CI:** All green (S84 merged)
 - **Lint:** 0 errors
 - **Port map:** API :8003, Frontend :4000, WMCP :8001
 - **Security:** 0 CodeQL open, 2 dependabot (pre-existing)
@@ -47,7 +47,7 @@ Session 60: S84 implementation — SSO/RBAC Full External Auth. OAuth2 provider 
 | S81 | — | PASS (R2) |
 | S82 | — | PASS (R2) |
 | S83 | — | PASS (R2) |
-| S84 | — | Pending |
+| S84 | — | PASS (R2) |
 
 ## Phase 10 Status
 
@@ -64,7 +64,7 @@ Session 60: S84 implementation — SSO/RBAC Full External Auth. OAuth2 provider 
 | S81 | EventBus Production Wiring (D-147) | Closed |
 | S82 | Docker Production Image (D-116) | Closed |
 | S83 | D-150 Capability Routing Transition | Closed |
-| S84 | SSO/RBAC Full External Auth | Impl Done |
+| S84 | SSO/RBAC Full External Auth | Closed |
 
 ## Carry-Forward
 
@@ -77,4 +77,4 @@ Session 60: S84 implementation — SSO/RBAC Full External Auth. OAuth2 provider 
 
 ## GPT Memo
 
-Session 60: S84 IMPL DONE. SSO/RBAC Full External Auth. OAuth2 provider: GitHub OAuth + generic OIDC, CSRF state tokens, config from VEZIR_OAUTH_* env vars or config/oauth.json. JWT tokens: access (1h) + refresh (7d), rotation, revocation, HS256. RBAC: 3 roles (admin > operator > viewer), 21 permissions, role mapping from config/role-mappings.json. Auth middleware upgraded: dual API key + JWT validation, AuthenticatedUser unified type, require_admin dependency added. Auth API: 6 endpoints (/config, /login, /callback, /refresh, /logout, /me). Frontend: AuthProvider unified OAuth+API key, LoginPage SSO button + API key form, ProtectedRoute with role guard, SessionManager with role/provider display. Backward compat: VEZIR_AUTH_BYPASS=1 still works, existing API keys valid, SSO_ENABLED=0 disables OAuth gracefully. 86 new tests (JWT 20, RBAC 18, OAuth 17, API 14, middleware 4, compat 13). 2049 backend + 247 frontend + 13 Playwright + 188 root = 2497 total. D-104/D-108 carry-forward resolved. Issues #442-#446. PR pending.
+Session 60: S84 CLOSED. SSO/RBAC Full External Auth. D-117 amended: OAuth2/OIDC + JWT + admin role added. OAuth2 provider: GitHub OAuth + generic OIDC, CSRF state tokens, config from VEZIR_OAUTH_* env vars or config/oauth.json. JWT tokens: access (1h) + refresh (7d), rotation, revocation, HS256. RBAC: 3 roles (admin > operator > viewer), 21 permissions, role mapping from config/role-mappings.json. Auth middleware upgraded: dual API key + JWT validation, AuthenticatedUser unified type, require_admin dependency added. Auth API: 6 endpoints (/config, /login, /callback, /refresh, /logout, /me). Frontend: AuthProvider unified OAuth+API key, LoginPage SSO button + API key form, ProtectedRoute with role guard, SessionManager with role/provider display. Backward compat: VEZIR_AUTH_BYPASS=1 still works, existing API keys valid, SSO_ENABLED=0 disables OAuth gracefully. 86 new tests (JWT 20, RBAC 18, OAuth 17, API 14, middleware 4, compat 13). 2049 backend + 247 frontend + 13 Playwright + 188 root = 2497 total. D-104/D-108 carry-forward resolved. GPT HOLD R1 → PASS R2. PR #447 merged. Issues #442-#446 closed. Sprint 84 milestone closed.

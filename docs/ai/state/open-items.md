@@ -20,7 +20,7 @@
 | PROJECT_TOKEN rotation/docs | S23 retro | Rotated 2026-04-07, classic PAT, expires Jul 06 2026 |
 | ~~Docker dev environment~~ | D-116 (S26) | Done: S82 — production Dockerfile, frontend container, prod compose, CI workflow, 49 tests |
 | ~~Alert "any" namespace scoping~~ | S16 P-16.2 | Done: S49 B-119 (#288) |
-| Multi-user auth | D-104/D-108/D-117 | Partially resolved: D-117 operational (S27), backend isolation (S40). Remaining: SSO, external auth, full RBAC |
+| ~~Multi-user auth~~ | D-104/D-108/D-117 | Done: S84 — OAuth2/OIDC + JWT + RBAC (admin/operator/viewer) + frontend auth guard. D-117 amended. |
 
 ### Retired (Sprint 48 T-1 Reconciliation)
 
@@ -102,10 +102,11 @@
 | Sprint 81 | EventBus Production Wiring (D-147) | CLOSED |
 | Sprint 82 | Docker Production Image (D-116) | CLOSED |
 | Sprint 83 | D-150 Capability Routing Transition | CLOSED |
+| Sprint 84 | SSO/RBAC Full External Auth (D-117 amended) | CLOSED |
 
 ## Next Sprint
 
-S84: SSO/RBAC Full External Auth. Planned.
+S85: TBD.
 
 ### Carry-Forward
 | Item | Source | Status |
@@ -114,7 +115,7 @@ S84: SSO/RBAC Full External Auth. Planned.
 | PROJECT_TOKEN rotation/docs | S23 retro | Rotated 2026-04-07, classic PAT, expires Jul 06 2026 |
 | B-148 PAT-backed Project V2 | S71 | Resolved — classic PAT, secret updated 2026-04-07 |
 | ~~Docker prod image optimization~~ | D-116 (S26) | Done: S82 (Dockerfile.prod, frontend/Dockerfile, docker-compose.prod.yml, CI workflow) |
-| SSO/RBAC (full external auth) | D-104/D-108/D-117 | Partial — D-117 + backend isolation done → S84 |
+| ~~SSO/RBAC (full external auth)~~ | D-104/D-108/D-117 | Done: S84 (D-117 amended, OAuth2+JWT+RBAC, 86 tests, PR #447 merged) |
 | ~~UX findings remediation~~ | S78 D-149 audit | Done: S79 (T-79.01, T-79.03, T-79.04, T-79.05) |
 | ~~D-150 Capability Routing Transition~~ | S77 proposed | Done: S83 (D-150 frozen, capability registry, controller migration, telemetry) |
 | ~~EventBus production wiring~~ | D-147 | Done: S81 (lifespan wiring, feature flag, 27 tests) |

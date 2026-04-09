@@ -1,4 +1,4 @@
-# Session Handoff — 2026-04-09 (Session 59 — S83 Capability Routing Transition)
+# Session Handoff — 2026-04-09 (Session 60 — S84 SSO/RBAC Full External Auth)
 
 **Platform:** Vezir Platform
 **Operator:** Claude Code (Opus) — AKCA delegated
@@ -7,28 +7,28 @@
 
 ## Session Summary
 
-Session 59: S83 implementation — D-150 Capability Routing Transition. Formalized D-150 ADR, built capability registry, migrated controller to capability-based routing, added telemetry + best-match fallback.
+Session 60: S84 implementation — SSO/RBAC Full External Auth. OAuth2 provider integration (GitHub + generic OIDC), JWT token management, RBAC with 3 roles (admin/operator/viewer), frontend auth flow with ProtectedRoute, backward-compatible migration.
 
-### Session 59 Deliverables
-- **T-83.01:** D-150 ADR frozen — capability routing transition contract with 5 rules
-- **T-83.02:** Capability registry (`agent/providers/capability_registry.py`): maps 11 roles + 4 skill overrides to required provider capabilities. 28 tests.
-- **T-83.03:** Controller migration: `_select_agent_for_role()` resolves capabilities from registry before routing. Skill passed from `_execute_stage`. 14 integration tests.
-- **T-83.04:** Telemetry + best-match fallback: RoutingDecision enriched with capability.required/matched/match_score. Fallback prefers best capability match score. 13 tests.
+### Session 60 Deliverables
+- **T-84.01:** OAuth2/OIDC provider abstraction: GitHub OAuth + generic provider, CSRF state tokens, config from env/file. 17 tests.
+- **T-84.02:** RBAC: 3 roles (admin, operator, viewer), permission matrix (21 permissions), role mapping from OAuth claims, middleware upgrade for JWT+API key dual auth. 18 RBAC tests + 4 middleware tests.
+- **T-84.03:** Frontend auth flow: AuthContext supports OAuth+API key, LoginPage with SSO button, ProtectedRoute with role guard, SessionManager shows role/provider. 247 frontend tests pass, 0 TS errors.
+- **T-84.04:** Migration: .gitignore secrets, .env.example docs, backward compat verified. 13 compat tests.
 
-### S83 — D-150 Capability Routing Transition — CLOSED
+### S84 — SSO/RBAC Full External Auth — IMPL DONE
 
 **Implementation:** Done
-**Review:** GPT PASS (R2)
-**PR:** #441 merged to main
-**Issue:** #436 (parent), #437-#440 (tasks)
+**Review:** Pending GPT review
+**PR:** Pending
+**Issue:** #442 (parent), #443-#446 (tasks)
 
 ## Current State
 
-- **Phase:** 10 active — S83 closed
+- **Phase:** 10 active — S84 implementation done
 - **Last closed sprint:** 83
 - **Decisions:** 147 frozen + 2 superseded (D-001 → D-150)
-- **Tests:** 1963 backend + 247 frontend + 13 Playwright + 188 root = 2411 total (+59 new backend)
-- **CI:** All green (S83 merged)
+- **Tests:** 2049 backend + 247 frontend + 13 Playwright + 188 root = 2497 total (+86 new backend)
+- **CI:** Pending (branch not pushed yet)
 - **Lint:** 0 errors
 - **Port map:** API :8003, Frontend :4000, WMCP :8001
 - **Security:** 0 CodeQL open, 2 dependabot (pre-existing)
@@ -47,6 +47,7 @@ Session 59: S83 implementation — D-150 Capability Routing Transition. Formaliz
 | S81 | — | PASS (R2) |
 | S82 | — | PASS (R2) |
 | S83 | — | PASS (R2) |
+| S84 | — | Pending |
 
 ## Phase 10 Status
 
@@ -63,17 +64,17 @@ Session 59: S83 implementation — D-150 Capability Routing Transition. Formaliz
 | S81 | EventBus Production Wiring (D-147) | Closed |
 | S82 | Docker Production Image (D-116) | Closed |
 | S83 | D-150 Capability Routing Transition | Closed |
-| S84 | SSO/RBAC Full External Auth | Planned |
+| S84 | SSO/RBAC Full External Auth | Impl Done |
 
 ## Carry-Forward
 
 | Item | Source | Status |
 |------|--------|--------|
 | PROJECT_TOKEN rotation | S23 retro | Rotated 2026-04-07, classic PAT, expires Jul 06, 2026 |
-| SSO/RBAC (full external auth) | D-104/D-108/D-117 | Partial — D-117 + isolation done → S84 |
+| ~~SSO/RBAC (full external auth)~~ | D-104/D-108/D-117 | Done: S84 — OAuth2 + JWT + RBAC + frontend auth |
 | Controller → runner EventBus pass-through | D-147 S81 | Not wired — future sprint |
 | eslint react-hooks peer dep | S80 | .npmrc workaround — update when react-hooks supports eslint 10 |
 
 ## GPT Memo
 
-Session 59: S83 CLOSED. D-150 Capability Routing Transition. ADR frozen: capability-based routing replaces provider-identity routing. capability_registry.py: 11 roles + 4 skill overrides → required capabilities. Controller _select_agent_for_role() now resolves capabilities before ProviderRoutingPolicy.select(). Best-match fallback: prefers provider with highest capability match score. RoutingDecision enriched with capability.required/matched/match_score telemetry. 59 new tests (28 registry + 14+4 integration + 13 telemetry). All existing 28 routing_policy tests pass unchanged. Total: 1963 backend + 247 frontend + 13 Playwright + 188 root = 2411 tests. D-150 frozen. GPT HOLD R1 → PASS R2. PR #441 merged. Issues #436-#440 closed. Sprint 83 milestone closed. Next: S84 SSO/RBAC Full External Auth.
+Session 60: S84 IMPL DONE. SSO/RBAC Full External Auth. OAuth2 provider: GitHub OAuth + generic OIDC, CSRF state tokens, config from VEZIR_OAUTH_* env vars or config/oauth.json. JWT tokens: access (1h) + refresh (7d), rotation, revocation, HS256. RBAC: 3 roles (admin > operator > viewer), 21 permissions, role mapping from config/role-mappings.json. Auth middleware upgraded: dual API key + JWT validation, AuthenticatedUser unified type, require_admin dependency added. Auth API: 6 endpoints (/config, /login, /callback, /refresh, /logout, /me). Frontend: AuthProvider unified OAuth+API key, LoginPage SSO button + API key form, ProtectedRoute with role guard, SessionManager with role/provider display. Backward compat: VEZIR_AUTH_BYPASS=1 still works, existing API keys valid, SSO_ENABLED=0 disables OAuth gracefully. 86 new tests (JWT 20, RBAC 18, OAuth 17, API 14, middleware 4, compat 13). 2049 backend + 247 frontend + 13 Playwright + 188 root = 2497 total. D-104/D-108 carry-forward resolved. Issues #442-#446. PR pending.

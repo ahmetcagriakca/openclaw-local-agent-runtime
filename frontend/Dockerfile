@@ -11,7 +11,7 @@ FROM node:20-alpine AS builder
 WORKDIR /build
 
 # Install dependencies first (layer caching)
-COPY frontend/package.json frontend/package-lock.json* ./
+COPY frontend/package.json frontend/package-lock.json* frontend/.npmrc ./
 RUN npm ci --ignore-scripts
 
 # Copy source and build

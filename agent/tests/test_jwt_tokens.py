@@ -1,6 +1,4 @@
 """Tests for JWT token management — S84."""
-import time
-
 import pytest
 
 import auth.jwt_tokens as jwt_mod

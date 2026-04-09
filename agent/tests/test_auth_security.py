@@ -14,7 +14,6 @@ Covers gaps not addressed by existing auth test files:
 - API key expiration enforcement
 """
 import os
-import time
 from datetime import datetime, timedelta, timezone
 from unittest.mock import patch
 
@@ -29,13 +28,12 @@ from conftest import CSRF_ORIGIN
 import api.server as srv
 import auth.jwt_tokens as jwt_mod
 import auth.keys as keys_mod
-from auth.middleware import AuthenticatedUser
 from auth.rbac import (
     ROLE_ADMIN,
-    ROLE_OPERATOR,
-    ROLE_VIEWER,
     ROLE_HIERARCHY,
+    ROLE_OPERATOR,
     ROLE_PERMISSIONS,
+    ROLE_VIEWER,
     Permission,
     has_minimum_role,
     has_permission,
@@ -348,8 +346,8 @@ class TestRoleResolution:
             assert role == ROLE_VIEWER
 
     def test_org_matching(self):
-        from auth.rbac import RoleMapping
         from auth import rbac
+        from auth.rbac import RoleMapping
         rbac._role_mappings = [
             RoleMapping(provider="github", match_field="org", match_value="acme-corp", role="admin"),
         ]
@@ -358,8 +356,8 @@ class TestRoleResolution:
         assert role == "admin"
 
     def test_org_no_match_falls_through(self):
-        from auth.rbac import RoleMapping
         from auth import rbac
+        from auth.rbac import RoleMapping
         rbac._role_mappings = [
             RoleMapping(provider="github", match_field="org", match_value="acme-corp", role="admin"),
         ]
@@ -369,8 +367,8 @@ class TestRoleResolution:
         assert role == ROLE_VIEWER
 
     def test_wildcard_provider_matching(self):
-        from auth.rbac import RoleMapping
         from auth import rbac
+        from auth.rbac import RoleMapping
         rbac._role_mappings = [
             RoleMapping(provider="*", match_field="email", match_value="admin@x.com", role="admin"),
         ]
@@ -379,8 +377,8 @@ class TestRoleResolution:
         assert role == "admin"
 
     def test_provider_mismatch_skips_mapping(self):
-        from auth.rbac import RoleMapping
         from auth import rbac
+        from auth.rbac import RoleMapping
         rbac._role_mappings = [
             RoleMapping(provider="github", match_field="username", match_value="alice", role="admin"),
         ]
@@ -404,9 +402,10 @@ class TestRequireAdmin:
         env = {k: v for k, v in os.environ.items() if k != "VEZIR_AUTH_BYPASS"}
         with patch.dict(os.environ, env, clear=True):
             with patch("auth.keys.validate_key", return_value=None):
-                from auth.middleware import require_admin
-                from fastapi import FastAPI, Depends
+                from fastapi import Depends, FastAPI
                 from fastapi.testclient import TestClient as TC
+
+                from auth.middleware import require_admin
 
                 app = FastAPI()
 
@@ -428,9 +427,10 @@ class TestRequireAdmin:
         env = {k: v for k, v in os.environ.items() if k != "VEZIR_AUTH_BYPASS"}
         with patch.dict(os.environ, env, clear=True):
             with patch("auth.keys.validate_key", return_value=None):
-                from auth.middleware import require_admin
-                from fastapi import FastAPI, Depends
+                from fastapi import Depends, FastAPI
                 from fastapi.testclient import TestClient as TC
+
+                from auth.middleware import require_admin
 
                 app = FastAPI()
 
@@ -452,9 +452,10 @@ class TestRequireAdmin:
         env = {k: v for k, v in os.environ.items() if k != "VEZIR_AUTH_BYPASS"}
         with patch.dict(os.environ, env, clear=True):
             with patch("auth.keys.validate_key", return_value=None):
-                from auth.middleware import require_admin
-                from fastapi import FastAPI, Depends
+                from fastapi import Depends, FastAPI
                 from fastapi.testclient import TestClient as TC
+
+                from auth.middleware import require_admin
 
                 app = FastAPI()
 
@@ -475,9 +476,10 @@ class TestRequireOperator:
     def test_no_auth_header_returns_401(self):
         env = {k: v for k, v in os.environ.items() if k != "VEZIR_AUTH_BYPASS"}
         with patch.dict(os.environ, env, clear=True):
-            from auth.middleware import require_operator
-            from fastapi import FastAPI, Depends
+            from fastapi import Depends, FastAPI
             from fastapi.testclient import TestClient as TC
+
+            from auth.middleware import require_operator
 
             app = FastAPI()
 
@@ -497,9 +499,10 @@ class TestRequireOperator:
         env = {k: v for k, v in os.environ.items() if k != "VEZIR_AUTH_BYPASS"}
         with patch.dict(os.environ, env, clear=True):
             with patch("auth.keys.validate_key", return_value=None):
-                from auth.middleware import require_operator
-                from fastapi import FastAPI, Depends
+                from fastapi import Depends, FastAPI
                 from fastapi.testclient import TestClient as TC
+
+                from auth.middleware import require_operator
 
                 app = FastAPI()
 

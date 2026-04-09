@@ -164,8 +164,10 @@ def main():
         except (ValueError, json.JSONDecodeError, TypeError):
             pass  # gh mock or API failure — skip orphan check
 
-    print(f"\nDone. Closed: {closed}, Already closed: {skipped}, No merge evidence: {no_merge_evidence}, Orphan warnings: {orphan_warnings}")
-    if no_merge_evidence > 0:
+    print(f"\nDone. Closed: {closed}, Already closed: {skipped}, No merge evidence: {no_merge_evidence}, Orphan closures: {orphan_warnings}")
+    if no_merge_evidence > 0 or orphan_warnings > 0:
+        if orphan_warnings > 0:
+            print(f"FAIL: {orphan_warnings} merged PR(s) did not close expected task issue (D-152)")
         sys.exit(1)
 
 

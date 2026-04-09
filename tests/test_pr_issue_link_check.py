@@ -303,3 +303,62 @@ class TestRepoAwareValidation:
         body = "just some text"
         errors = validate_linkage(title, body)
         assert any("Missing Task-Issue" in e for e in errors)
+
+
+class TestRepoAwareTaskIssue:
+    """Test repo-aware task issue enforcement (GPT HOLD R2 P1-P3)."""
+
+    def test_wrong_task_issue_fails(self):
+        """PR says Task-Issue #200 but repo truth says #100."""
+        title = "[S85-T1] Feature"
+        body = "- Task-Issue: #200\n- Closes: #200"
+        errors = validate_linkage(title, body, expected_task_issue=100)
+        assert any("Task-Issue mismatch" in e for e in errors)
+
+    def test_correct_task_issue_passes(self):
+        """PR says Task-Issue #100 and repo truth agrees."""
+        title = "[S85-T1] Feature"
+        body = "- Task-Issue: #100\n- Closes: #100"
+        errors = validate_linkage(title, body, expected_task_issue=100)
+        assert errors == []
+
+    def test_no_expected_task_issue_skips_check(self):
+        """Without repo truth for task issue, any value passes syntax."""
+        title = "[S85-T1] Feature"
+        body = "- Task-Issue: #999\n- Closes: #999"
+        errors = validate_linkage(title, body, expected_task_issue=None)
+        assert errors == []
+
+    def test_full_repo_aware_with_task_issue_pass(self):
+        """All repo-aware fields match including task issue."""
+        title = "[S85-T1] Feature"
+        body = (
+            "- Task-Issue: #100\n"
+            "- Parent-Issue: #99\n"
+            "- Sprint: 85\n"
+            "- Closes: #100\n"
+        )
+        errors = validate_linkage(
+            title, body,
+            expected_sprint=85, expected_parent=99,
+            expected_branch="feat/s85", actual_branch="feat/s85",
+            expected_task_issue=100,
+        )
+        assert errors == []
+
+    def test_full_repo_aware_task_issue_mismatch_fail(self):
+        """All fields match except task issue — must fail."""
+        title = "[S85-T1] Feature"
+        body = (
+            "- Task-Issue: #200\n"
+            "- Parent-Issue: #99\n"
+            "- Sprint: 85\n"
+            "- Closes: #200\n"
+        )
+        errors = validate_linkage(
+            title, body,
+            expected_sprint=85, expected_parent=99,
+            expected_branch="feat/s85", actual_branch="feat/s85",
+            expected_task_issue=100,
+        )
+        assert any("Task-Issue mismatch" in e for e in errors)

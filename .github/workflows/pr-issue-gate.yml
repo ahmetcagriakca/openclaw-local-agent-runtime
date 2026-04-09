@@ -47,6 +47,7 @@ jobs:
           expected_sprint = ""
           expected_parent = ""
           expected_branch = ""
+          expected_task_issue = ""
 
           for path in sorted(glob.glob("docs/sprints/sprint-*/issues.json"), reverse=True):
               try:
@@ -58,7 +59,10 @@ jobs:
                           expected_sprint = str(data.get("sprint", ""))
                           expected_parent = str(data.get("parent_issue", ""))
                           expected_branch = branch
-                          print(f"Resolved from {path}: sprint={expected_sprint}, parent=#{expected_parent}, branch={expected_branch}")
+                          task_issue = info.get("task_issue") or info.get("issue")
+                          if task_issue:
+                              expected_task_issue = str(task_issue)
+                          print(f"Resolved from {path}: sprint={expected_sprint}, parent=#{expected_parent}, branch={expected_branch}, task_issue=#{expected_task_issue}")
                           break
                   if expected_sprint:
                       break
@@ -78,6 +82,8 @@ jobs:
               args.extend(["--parent-issue", expected_parent])
           if expected_branch:
               args.extend(["--expected-branch", expected_branch])
+          if expected_task_issue:
+              args.extend(["--expected-task-issue", expected_task_issue])
 
           print(f"Running: {' '.join(args)}")
           result = subprocess.run(args)

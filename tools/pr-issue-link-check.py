@@ -68,6 +68,7 @@ def validate_linkage(
     expected_parent: int | None = None,
     expected_branch: str | None = None,
     actual_branch: str | None = None,
+    expected_task_issue: int | None = None,
 ) -> list[str]:
     """Validate PR linkage. Returns list of error messages (empty = PASS)."""
     errors = []
@@ -123,6 +124,15 @@ def validate_linkage(
                 f"expected '{expected_branch}'"
             )
 
+    # Task issue check (if expected task issue from repo truth)
+    if expected_task_issue is not None and parsed["task_issues"]:
+        pr_task_issue = parsed["task_issues"][0]
+        if pr_task_issue != expected_task_issue:
+            errors.append(
+                f"FAIL: Task-Issue mismatch — PR says #{pr_task_issue}, "
+                f"repo truth says #{expected_task_issue}"
+            )
+
     return errors
 
 
@@ -135,6 +145,7 @@ def main():
     parser.add_argument("--parent-issue", type=int, help="Expected parent issue")
     parser.add_argument("--expected-branch", help="Expected branch name")
     parser.add_argument("--actual-branch", help="Actual PR head branch")
+    parser.add_argument("--expected-task-issue", type=int, help="Expected task issue from repo truth")
     parser.add_argument("--json", action="store_true", help="JSON output")
     args = parser.parse_args()
 
@@ -150,6 +161,7 @@ def main():
         expected_parent=args.parent_issue,
         expected_branch=args.expected_branch,
         actual_branch=args.actual_branch,
+        expected_task_issue=args.expected_task_issue,
     )
 
     if args.json:

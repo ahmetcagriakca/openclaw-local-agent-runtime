@@ -7,11 +7,10 @@ Validates:
 - Event types: project.github_bound, synced, comment_published
 - API endpoint wiring
 """
+import inspect
 import unittest
 from datetime import datetime, timezone
 from pathlib import Path
-from unittest.mock import MagicMock, patch
-
 from auth.middleware import AuthenticatedUser
 from events.bus import Event
 from events.catalog import EventType
@@ -85,7 +84,6 @@ class TestIdentityContract(unittest.TestCase):
 
     def test_actor_identity_type_is_authenticated_user(self):
         """Ensure _actor_identity accepts AuthenticatedUser, not ApiKey."""
-        import inspect
         from api.project_api import _actor_identity
 
         sig = inspect.signature(_actor_identity)

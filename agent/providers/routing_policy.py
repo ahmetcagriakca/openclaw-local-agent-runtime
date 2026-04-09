@@ -14,6 +14,10 @@ class RoutingDecision:
     reason: str
     fallback_used: bool = False
     fallback_reason: str | None = None
+    # D-150: Capability resolution telemetry
+    required_capabilities: list[str] | None = None
+    matched_capabilities: list[str] | None = None
+    capability_match_score: float | None = None
 
 
 @dataclass
@@ -65,40 +69,50 @@ class ProviderRoutingPolicy:
         if provider_preference:
             matched = self._find_by_provider_type(agents, provider_preference)
             if matched and self._is_available(agents, matched, health):
-                return RoutingDecision(
+                decision = RoutingDecision(
                     selected_provider=matched,
                     reason=f"explicit preference: {provider_preference}",
                 )
+                self._attach_capability_telemetry(decision, required_capabilities)
+                return decision
             # Preference unavailable — fall through to primary
 
         # Rule 2: Kill switch check
         if not self._is_azure_enabled():
-            return self._select_fallback(
+            decision = self._select_fallback(
                 agents, health, "azure kill switch active (AZURE_ENABLED=false)",
                 required_capabilities=required_capabilities,
             )
+            self._attach_capability_telemetry(decision, required_capabilities)
+            return decision
 
         # Rule 3: Capability check on primary
         if required_capabilities and not self._has_capabilities(self.primary, required_capabilities):
-            return self._select_fallback(
+            decision = self._select_fallback(
                 agents, health,
                 f"primary '{self.primary}' missing capabilities: "
                 f"{self._missing_capabilities(self.primary, required_capabilities)}",
                 required_capabilities=required_capabilities,
             )
+            self._attach_capability_telemetry(decision, required_capabilities)
+            return decision
 
         # Rule 4: Primary available?
         if self.primary in agents and self._is_available(agents, self.primary, health):
-            return RoutingDecision(
+            decision = RoutingDecision(
                 selected_provider=self.primary,
                 reason="primary provider (azure-first policy)",
             )
+            self._attach_capability_telemetry(decision, required_capabilities)
+            return decision
 
         # Rule 5: Primary unavailable — fallback
-        return self._select_fallback(
+        decision = self._select_fallback(
             agents, health, f"primary '{self.primary}' unavailable",
             required_capabilities=required_capabilities,
         )
+        self._attach_capability_telemetry(decision, required_capabilities)
+        return decision
 
     def _is_azure_enabled(self) -> bool:
         """Check kill switch — env var AZURE_ENABLED=false disables Azure."""
@@ -144,27 +158,86 @@ class ProviderRoutingPolicy:
         self, agents: dict, health: dict, fallback_reason: str,
         required_capabilities: list[str] | None = None,
     ) -> RoutingDecision:
-        """Select first available and capable fallback provider."""
-        for agent_id in self.fallback_chain:
-            if agent_id not in agents or not self._is_available(agents, agent_id, health):
-                continue
-            if required_capabilities and not self._has_capabilities(agent_id, required_capabilities):
-                continue
-            logger.info(
-                "Routing fallback: %s → %s (reason: %s)",
-                self.primary,
-                agent_id,
-                fallback_reason,
-            )
-            return RoutingDecision(
-                selected_provider=agent_id,
-                reason=f"fallback: {agent_id}",
-                fallback_used=True,
-                fallback_reason=fallback_reason,
-            )
+        """Select best available and capable fallback provider.
+
+        D-150: When capabilities are required, prefer the fallback provider
+        with the best capability match score. Ties broken by chain order.
+        Without required capabilities, uses first-available (original behavior).
+        """
+        if required_capabilities:
+            # D-150: Best-match fallback — score by capability coverage
+            best_id = None
+            best_score = -1.0
+            for agent_id in self.fallback_chain:
+                if agent_id not in agents or not self._is_available(agents, agent_id, health):
+                    continue
+                if not self._has_capabilities(agent_id, required_capabilities):
+                    continue
+                score = self._capability_match_score(agent_id, required_capabilities)
+                if score > best_score:
+                    best_score = score
+                    best_id = agent_id
+            if best_id:
+                logger.info(
+                    "Routing fallback (capability match): %s → %s (score: %.2f, reason: %s)",
+                    self.primary, best_id, best_score, fallback_reason,
+                )
+                return RoutingDecision(
+                    selected_provider=best_id,
+                    reason=f"fallback: {best_id}",
+                    fallback_used=True,
+                    fallback_reason=fallback_reason,
+                )
+        else:
+            # No capabilities required — first-available (original behavior)
+            for agent_id in self.fallback_chain:
+                if agent_id not in agents or not self._is_available(agents, agent_id, health):
+                    continue
+                logger.info(
+                    "Routing fallback: %s → %s (reason: %s)",
+                    self.primary, agent_id, fallback_reason,
+                )
+                return RoutingDecision(
+                    selected_provider=agent_id,
+                    reason=f"fallback: {agent_id}",
+                    fallback_used=True,
+                    fallback_reason=fallback_reason,
+                )
 
         raise RuntimeError(
             f"No available provider. Primary: {self.primary}, "
             f"Fallback chain: {self.fallback_chain}. "
             f"Reason: {fallback_reason}"
         )
+
+    def _capability_match_score(self, agent_id: str, required: list[str]) -> float:
+        """D-150: Score how well a provider matches required capabilities.
+
+        Returns ratio of matched capabilities to total supported capabilities.
+        Lower is better (fewer unused capabilities = more focused match).
+        But since all required are already met, we use: required/supported.
+        Score 1.0 = perfect match (all supported are required).
+        """
+        supported = self.capability_manifest.get(agent_id)
+        if supported is None:
+            return 0.5  # Unknown providers get neutral score
+        if not supported:
+            return 0.0
+        matched = [cap for cap in required if cap in supported]
+        return len(matched) / len(supported)
+
+    def _attach_capability_telemetry(
+        self, decision: RoutingDecision, required_capabilities: list[str] | None
+    ) -> None:
+        """D-150: Attach capability resolution fields to RoutingDecision."""
+        if not required_capabilities:
+            return
+        decision.required_capabilities = required_capabilities
+        supported = self.capability_manifest.get(decision.selected_provider)
+        if supported is not None:
+            decision.matched_capabilities = [
+                cap for cap in required_capabilities if cap in supported
+            ]
+            decision.capability_match_score = (
+                len(decision.matched_capabilities) / len(supported) if supported else 0.0
+            )

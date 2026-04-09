@@ -1,7 +1,7 @@
 # open-items.md — Active State Tracker
 
-**Last updated:** 2026-04-08
-**Updated by:** Claude Code (Session 57 — S81)
+**Last updated:** 2026-04-09
+**Updated by:** Claude Code (Session 58 — S82)
 
 ---
 
@@ -18,7 +18,7 @@
 | Item | Source | Status |
 |------|--------|--------|
 | PROJECT_TOKEN rotation/docs | S23 retro | Rotated 2026-04-07, classic PAT, expires Jul 06 2026 |
-| Docker dev environment | D-116 (S26) | Partially resolved: docker-compose operational (D-116, Jaeger included S28). Remaining: production image optimization → S82 |
+| ~~Docker dev environment~~ | D-116 (S26) | Done: S82 — production Dockerfile, frontend container, prod compose, CI workflow, 49 tests |
 | ~~Alert "any" namespace scoping~~ | S16 P-16.2 | Done: S49 B-119 (#288) |
 | Multi-user auth | D-104/D-108/D-117 | Partially resolved: D-117 operational (S27), backend isolation (S40). Remaining: SSO, external auth, full RBAC |
 
@@ -101,7 +101,7 @@
 
 ## Next Sprint
 
-S82: Docker Production Image (D-116). Next planned sprint.
+S83: D-150 Capability Routing Transition. Next planned sprint (needs operator review).
 
 ### Carry-Forward
 | Item | Source | Status |
@@ -109,7 +109,7 @@ S82: Docker Production Image (D-116). Next planned sprint.
 | S74+ impl/test separate commits | S73 retro | Required — prevents GPT review gate-timing loop |
 | PROJECT_TOKEN rotation/docs | S23 retro | Rotated 2026-04-07, classic PAT, expires Jul 06 2026 |
 | B-148 PAT-backed Project V2 | S71 | Resolved — classic PAT, secret updated 2026-04-07 |
-| Docker prod image optimization | D-116 (S26) | Partial — docker-compose done, prod image → S82 |
+| ~~Docker prod image optimization~~ | D-116 (S26) | Done: S82 (Dockerfile.prod, frontend/Dockerfile, docker-compose.prod.yml, CI workflow) |
 | SSO/RBAC (full external auth) | D-104/D-108/D-117 | Partial — D-117 + backend isolation done → S84 |
 | ~~UX findings remediation~~ | S78 D-149 audit | Done: S79 (T-79.01, T-79.03, T-79.04, T-79.05) |
 | D-150 Capability Routing Transition | S77 proposed | Needs operator review → S83 |

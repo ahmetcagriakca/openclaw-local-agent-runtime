@@ -12,8 +12,7 @@ from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel, Field
 
-from auth.keys import ApiKey
-from auth.middleware import require_operator
+from auth.middleware import AuthenticatedUser, require_operator
 from events.bus import Event
 from events.catalog import EventType
 from persistence.project_store import (
@@ -89,24 +88,26 @@ def _default_actor_identity() -> dict:
     return {
         "user_id": "ahmetcagriakca",
         "username": "ahmetcagriakca",
-        "display_name": "Ahmet \u00c7a\u011fr\u0131 AKCA",
+        "display_name": "Ahmet Cagri AKCA",
         "provider": "github",
     }
 
 
-def _actor_identity(user: ApiKey | None) -> dict:
+def _actor_identity(user: AuthenticatedUser | None) -> dict:
     if user is None:
         return _default_actor_identity()
 
-    username = (user.user_id or user.name or "ahmetcagriakca").strip()
+    username = (user.username or user.user_id or "ahmetcagriakca").strip()
     if not username:
         username = "ahmetcagriakca"
+
+    display_name = (user.display_name or "").strip() or "Ahmet Cagri AKCA"
 
     return {
         "user_id": (user.user_id or username).strip() or "ahmetcagriakca",
         "username": username,
-        "display_name": "Ahmet \u00c7a\u011fr\u0131 AKCA",
-        "provider": "github",
+        "display_name": display_name,
+        "provider": (user.provider or "github").strip() or "github",
     }
 
 
@@ -454,7 +455,7 @@ async def bind_project_github(
     project_id: str,
     req: BindGitHubRequest,
     request: Request,
-    operator: ApiKey | None = Depends(require_operator),
+    operator: AuthenticatedUser | None = Depends(require_operator),
 ):
     """Bind a GitHub issue or PR thread to this project."""
     store = _get_store()
@@ -494,7 +495,7 @@ async def bind_project_github(
 async def sync_project_github(
     project_id: str,
     request: Request,
-    operator: ApiKey | None = Depends(require_operator),
+    operator: AuthenticatedUser | None = Depends(require_operator),
 ):
     """Sync GitHub thread activity into this project."""
     store = _get_store()
@@ -538,7 +539,7 @@ async def publish_project_github_comment(
     project_id: str,
     req: PublishGitHubCommentRequest,
     request: Request,
-    operator: ApiKey | None = Depends(require_operator),
+    operator: AuthenticatedUser | None = Depends(require_operator),
 ):
     """Publish a comment to the bound GitHub thread."""
     store = _get_store()

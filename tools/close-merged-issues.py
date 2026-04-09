@@ -72,11 +72,17 @@ def main():
     dry_run = "--dry-run" in sys.argv
 
     for task_id, info in data["tasks"].items():
-        issue_num = info.get("issue")
+        issue_num = info.get("task_issue") or info.get("issue")
         if not issue_num:
             continue
 
         branch_name = info.get("branch")
+
+        # D-152: Skip branch-exempt tasks that don't require a PR
+        if info.get("branch_exempt") and not info.get("pr_required", True):
+            print(f"  {task_id}: #{issue_num} EXEMPT (branch_exempt, no PR required)")
+            skipped += 1
+            continue
 
         # Merge evidence gate: verify branch is merged to main
         if branch_name:
@@ -135,8 +141,33 @@ def main():
     elif parent and no_merge_evidence > 0:
         print(f"  Parent #{parent} NOT CLOSED — {no_merge_evidence} task(s) lack merge evidence")
 
-    print(f"\nDone. Closed: {closed}, Already closed: {skipped}, No merge evidence: {no_merge_evidence}")
-    if no_merge_evidence > 0:
+    # D-152: Verify merged PRs closed expected task issues (orphan detection)
+    orphan_warnings = 0
+    for task_id, info in data["tasks"].items():
+        task_issue = info.get("task_issue") or info.get("issue")
+        branch_name_d152 = info.get("branch")
+        if not task_issue or not branch_name_d152:
+            continue
+        if info.get("branch_exempt") and not info.get("pr_required", True):
+            continue
+
+        # Check if branch has a merged PR with closing issues info
+        try:
+            out, rc = gh("pr", "list", "--state", "merged", "--head", branch_name_d152,
+                          "--json", "number,closingIssuesReferences", "--jq",
+                          '.[0].closingIssuesReferences | map(.number)')
+            if rc == 0 and out.strip():
+                closed_issues = json.loads(out)
+                if task_issue not in closed_issues:
+                    print(f"  WARNING: {task_id}: PR from '{branch_name_d152}' merged but did not close #{task_issue}")
+                    orphan_warnings += 1
+        except (ValueError, json.JSONDecodeError, TypeError):
+            pass  # gh mock or API failure — skip orphan check
+
+    print(f"\nDone. Closed: {closed}, Already closed: {skipped}, No merge evidence: {no_merge_evidence}, Orphan closures: {orphan_warnings}")
+    if no_merge_evidence > 0 or orphan_warnings > 0:
+        if orphan_warnings > 0:
+            print(f"FAIL: {orphan_warnings} merged PR(s) did not close expected task issue (D-152)")
         sys.exit(1)
 
 

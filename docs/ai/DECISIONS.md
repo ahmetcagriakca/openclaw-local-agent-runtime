@@ -1,6 +1,6 @@
 # Architectural Decisions
 
-**Last updated:** 2026-04-09 (D-150)
+**Last updated:** 2026-04-09 (D-152)
 
 All decisions below are frozen unless marked otherwise.
 Reopening requires explicit phase gate approval + operator sign-off.
@@ -1373,9 +1373,27 @@ Formal record: `docs/decisions/D-150-capability-routing-transition.md`.
 
 ---
 
-## Decision Index (D-001 → D-150)
+### D-151: Project-Scoped GitHub Communication Surface
 
-147 frozen + 2 superseded decisions. D-126 skipped, D-132 deferred, D-143 skipped, D-082/D-098 superseded.
+**Phase:** D-151 (standalone) | **Status:** Frozen
+
+GitHub is a project-scoped communication surface only; never an execution owner. Project API provides bind/sync/comment endpoints. EventBus + SSE remain canonical notification path. Identity contract: user_id=ahmetcagriakca frozen.
+Formal record: `docs/decisions/D-151-project-scoped-github-communication-surface.md`.
+
+---
+
+### D-152: Issue-First PR Link Gate
+
+**Phase:** D-152 (standalone) | **Status:** Frozen
+
+Every implementation PR must be linked to a task issue before it can pass CI. Fail-closed gate: missing/invalid linkage = FAIL. Exempt categories: docs/chore/ci/fix/bootstrap/merge/revert. Single task per PR. issues.json extended with linkage metadata.
+Formal record: `docs/decisions/D-152-issue-first-pr-link-gate.md`.
+
+---
+
+## Decision Index (D-001 → D-152)
+
+149 frozen + 2 superseded decisions. D-126 skipped, D-132 deferred, D-143 skipped, D-082/D-098 superseded.
 
 | ID | Title | Phase |
 |----|-------|-------|
@@ -1529,3 +1547,5 @@ Formal record: `docs/decisions/D-150-capability-routing-transition.md`.
 | D-148 | Azure OpenAI Primary Provider Adoption | Sprint 77 |
 | D-149 | Browser Analysis — 3-Mode Observation Contract | Sprint 78 |
 | D-150 | Capability Routing Transition | Sprint 83 |
+| D-151 | Project-Scoped GitHub Communication Surface | D-151 |
+| D-152 | Issue-First PR Link Gate | D-152 |

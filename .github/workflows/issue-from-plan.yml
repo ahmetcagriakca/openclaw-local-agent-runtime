@@ -220,8 +220,14 @@ jobs:
                   print(f"  Task {task_id} issue already exists: #{existing}")
                   issues_mapping["tasks"][task_id] = {
                       "issue": existing,
+                      "task_issue": existing,
+                      "parent_issue": parent_number,
                       "branch": branch_name,
-                      "pr": None
+                      "branch_exempt": branch_exempt,
+                      "pr": None,
+                      "pr_required": not branch_exempt,
+                      "allowed_pr_types": ["implementation"],
+                      "task_type": task_type,
                   }
                   continue
 
@@ -267,8 +273,14 @@ jobs:
                   print(f"  Created #{issue_num}: {child_title}")
                   issues_mapping["tasks"][task_id] = {
                       "issue": issue_num,
+                      "task_issue": issue_num,
+                      "parent_issue": parent_number,
                       "branch": branch_name,
-                      "pr": None
+                      "branch_exempt": branch_exempt,
+                      "pr": None,
+                      "pr_required": not branch_exempt,
+                      "allowed_pr_types": ["implementation"],
+                      "task_type": task_type,
                   }
                   # Update issue body with closing hint (now we know the issue number)
                   if branch_name and not branch_exempt:
@@ -279,8 +291,14 @@ jobs:
                   print(f"  FAIL: Could not create issue for {task_id}")
                   issues_mapping["tasks"][task_id] = {
                       "issue": None,
+                      "task_issue": None,
+                      "parent_issue": parent_number,
                       "branch": branch_name,
-                      "pr": None
+                      "branch_exempt": branch_exempt,
+                      "pr": None,
+                      "pr_required": not branch_exempt,
+                      "allowed_pr_types": ["implementation"],
+                      "task_type": task_type,
                   }
 
           # --- Write issues.json ---

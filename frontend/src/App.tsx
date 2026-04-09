@@ -1,10 +1,14 @@
 /**
  * App — router + layout + per-panel error boundaries (D-084) + SSE provider (Sprint 10).
+ * S84: AuthProvider + ProtectedRoute + OAuth callback route.
  */
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { Layout } from './components/Layout'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { SSEProvider } from './hooks/SSEContext'
+import { AuthProvider, useAuth } from './auth/AuthContext'
+import { ProtectedRoute } from './auth/ProtectedRoute'
+import { LoginPage } from './auth/LoginPage'
 import { MissionListPage } from './pages/MissionListPage'
 import { MissionDetailPage } from './pages/MissionDetailPage'
 import { HealthPage } from './pages/HealthPage'
@@ -18,103 +22,166 @@ import { ProjectsPage } from './pages/ProjectsPage'
 import { ProjectDetailPage } from './pages/ProjectDetailPage'
 import { NotFoundPage } from './pages/NotFoundPage'
 
-export default function App() {
+function AppRoutes() {
+  const { isAuthenticated } = useAuth()
+
   return (
-    <SSEProvider>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<Navigate to="/missions" replace />} />
-          <Route
-            path="/missions"
-            element={
+    <Routes>
+      {/* Public routes */}
+      <Route
+        path="/login"
+        element={isAuthenticated ? <Navigate to="/missions" replace /> : <LoginPage />}
+      />
+      <Route
+        path="/auth/callback"
+        element={isAuthenticated ? <Navigate to="/missions" replace /> : <LoginPage />}
+      />
+
+      {/* Protected routes */}
+      <Route path="/" element={<Navigate to="/missions" replace />} />
+      <Route
+        path="/missions"
+        element={
+          <ProtectedRoute>
+            <Layout>
               <ErrorBoundary fallbackLabel="Missions panel error">
                 <MissionListPage />
               </ErrorBoundary>
-            }
-          />
-          <Route
-            path="/missions/:id"
-            element={
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/missions/:id"
+        element={
+          <ProtectedRoute>
+            <Layout>
               <ErrorBoundary fallbackLabel="Mission detail panel error">
                 <MissionDetailPage />
               </ErrorBoundary>
-            }
-          />
-          <Route
-            path="/health"
-            element={
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/health"
+        element={
+          <ProtectedRoute>
+            <Layout>
               <ErrorBoundary fallbackLabel="Health panel error">
                 <HealthPage />
               </ErrorBoundary>
-            }
-          />
-          <Route
-            path="/approvals"
-            element={
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/approvals"
+        element={
+          <ProtectedRoute>
+            <Layout>
               <ErrorBoundary fallbackLabel="Approvals panel error">
                 <ApprovalsPage />
               </ErrorBoundary>
-            }
-          />
-          <Route
-            path="/telemetry"
-            element={
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/telemetry"
+        element={
+          <ProtectedRoute>
+            <Layout>
               <ErrorBoundary fallbackLabel="Telemetry panel error">
                 <TelemetryPage />
               </ErrorBoundary>
-            }
-          />
-          <Route
-            path="/monitoring"
-            element={
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/monitoring"
+        element={
+          <ProtectedRoute>
+            <Layout>
               <ErrorBoundary fallbackLabel="Monitoring panel error">
                 <MonitoringPage />
               </ErrorBoundary>
-            }
-          />
-          <Route
-            path="/templates"
-            element={
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/templates"
+        element={
+          <ProtectedRoute>
+            <Layout>
               <ErrorBoundary fallbackLabel="Templates panel error">
                 <TemplatesPage />
               </ErrorBoundary>
-            }
-          />
-          <Route
-            path="/costs"
-            element={
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/costs"
+        element={
+          <ProtectedRoute>
+            <Layout>
               <ErrorBoundary fallbackLabel="Cost dashboard panel error">
                 <CostDashboardPage />
               </ErrorBoundary>
-            }
-          />
-          <Route
-            path="/agents"
-            element={
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/agents"
+        element={
+          <ProtectedRoute>
+            <Layout>
               <ErrorBoundary fallbackLabel="Agent health panel error">
                 <AgentHealthPage />
               </ErrorBoundary>
-            }
-          />
-          <Route
-            path="/projects"
-            element={
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/projects"
+        element={
+          <ProtectedRoute>
+            <Layout>
               <ErrorBoundary fallbackLabel="Projects panel error">
                 <ProjectsPage />
               </ErrorBoundary>
-            }
-          />
-          <Route
-            path="/projects/:id"
-            element={
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/projects/:id"
+        element={
+          <ProtectedRoute>
+            <Layout>
               <ErrorBoundary fallbackLabel="Project detail panel error">
                 <ProjectDetailPage />
               </ErrorBoundary>
-            }
-          />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-      </Layout>
-    </SSEProvider>
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route path="*" element={<NotFoundPage />} />
+    </Routes>
+  )
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <SSEProvider>
+        <AppRoutes />
+      </SSEProvider>
+    </AuthProvider>
   )
 }

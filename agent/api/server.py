@@ -316,7 +316,9 @@ from api.telemetry_query_api import router as telemetry_query_router
 from api.templates_api import router as templates_router
 from api.tenant_api import router as tenant_router
 from api.wmcp_credential_api import router as wmcp_credential_router
+from api.auth_api import router as auth_router
 
+app.include_router(auth_router)  # No prefix — auth_api already has /api/v1/auth
 app.include_router(mission_router, prefix="/api/v1")
 app.include_router(approval_router, prefix="/api/v1")
 app.include_router(telemetry_router, prefix="/api/v1")

@@ -1,0 +1,296 @@
+
+Running 13 tests using 3 workers
+
+  ✘   1 [api-smoke] › tests\e2e\live-mission-e2e.spec.ts:7:7 › Live Mission E2E — Sprint 39 › mission create → list → detail lifecycle (34ms)
+  ✘   2 [api-smoke] › tests\e2e\mission-flow.spec.ts:4:7 › Live Mission E2E Flow › mission lifecycle: list → create → detail → stages (30ms)
+  ✘   3 [api-smoke] › tests\e2e\smoke.spec.ts:4:7 › Vezir API Smoke Tests › health endpoint returns 200 (32ms)
+  ✘   4 [api-smoke] › tests\e2e\live-mission-e2e.spec.ts:34:7 › Live Mission E2E — Sprint 39 › approval list returns valid structure with enriched fields (33ms)
+  ✘   5 [api-smoke] › tests\e2e\mission-flow.spec.ts:42:7 › Live Mission E2E Flow › API meta envelope has required fields (31ms)
+  ✘   6 [api-smoke] › tests\e2e\smoke.spec.ts:9:7 › Vezir API Smoke Tests › capabilities endpoint returns 200 (31ms)
+  ✘   7 [api-smoke] › tests\e2e\live-mission-e2e.spec.ts:45:7 › Live Mission E2E — Sprint 39 › schedule CRUD lifecycle (31ms)
+  ✘   8 [api-smoke] › tests\e2e\mission-flow.spec.ts:50:7 › Live Mission E2E Flow › host security rejects invalid origin (36ms)
+  ✘   9 [api-smoke] › tests\e2e\smoke.spec.ts:14:7 › Vezir API Smoke Tests › docs endpoint available (38ms)
+  ✘  10 [api-smoke] › tests\e2e\live-mission-e2e.spec.ts:102:7 › Live Mission E2E — Sprint 39 › presets list returns published templates (28ms)
+  ✘  11 [api-smoke] › tests\e2e\smoke.spec.ts:19:7 › Vezir API Smoke Tests › missions endpoint returns 200 (32ms)
+  ✘  12 [api-smoke] › tests\e2e\live-mission-e2e.spec.ts:119:7 › Live Mission E2E — Sprint 39 › SSE endpoint is reachable (34ms)
+  ✘  13 [api-smoke] › tests\e2e\live-mission-e2e.spec.ts:136:7 › Live Mission E2E — Sprint 39 › host security rejects invalid host (31ms)
+
+
+  1) [api-smoke] › tests\e2e\live-mission-e2e.spec.ts:7:7 › Live Mission E2E — Sprint 39 › mission create → list → detail lifecycle 
+
+    Error: apiRequestContext.post: connect ECONNREFUSED 127.0.0.1:8003
+    Call log:
+    [2m  - → POST http://127.0.0.1:8003/api/v1/missions[22m
+    [2m    - user-agent: Playwright/1.58.2 (x64; windows 10.0) node/24.14[22m
+    [2m    - accept: */*[22m
+    [2m    - accept-encoding: gzip,deflate,br[22m
+    [2m    - Origin: http://localhost:4000[22m
+    [2m    - Host: localhost:8003[22m
+    [2m    - Content-Type: application/json[22m
+    [2m    - content-length: 75[22m
+
+
+       7 |   test('mission create → list → detail lifecycle', async ({ request }) => {
+       8 |     // Step 1: Create mission
+    >  9 |     const createRes = await request.post('/api/v1/missions', {
+         |                                     ^
+      10 |       headers: { ...API_HEADERS, 'Content-Type': 'application/json' },
+      11 |       data: { goal: 'E2E test mission — verify lifecycle path', complexity: 'medium' },
+      12 |     });
+        at C:\Users\AKCA\vezir\tests\e2e\live-mission-e2e.spec.ts:9:37
+
+  2) [api-smoke] › tests\e2e\live-mission-e2e.spec.ts:34:7 › Live Mission E2E — Sprint 39 › approval list returns valid structure with enriched fields 
+
+    Error: apiRequestContext.get: connect ECONNREFUSED 127.0.0.1:8003
+    Call log:
+    [2m  - → GET http://127.0.0.1:8003/api/v1/approvals[22m
+    [2m    - user-agent: Playwright/1.58.2 (x64; windows 10.0) node/24.14[22m
+    [2m    - accept: */*[22m
+    [2m    - accept-encoding: gzip,deflate,br[22m
+    [2m    - Origin: http://localhost:4000[22m
+    [2m    - Host: localhost:8003[22m
+
+
+      33 |
+      34 |   test('approval list returns valid structure with enriched fields', async ({ request }) => {
+    > 35 |     const res = await request.get('/api/v1/approvals', {
+         |                               ^
+      36 |       headers: API_HEADERS,
+      37 |     });
+      38 |     expect(res.status()).toBe(200);
+        at C:\Users\AKCA\vezir\tests\e2e\live-mission-e2e.spec.ts:35:31
+
+  3) [api-smoke] › tests\e2e\live-mission-e2e.spec.ts:45:7 › Live Mission E2E — Sprint 39 › schedule CRUD lifecycle 
+
+    Error: apiRequestContext.post: connect ECONNREFUSED 127.0.0.1:8003
+    Call log:
+    [2m  - → POST http://127.0.0.1:8003/api/v1/schedules[22m
+    [2m    - user-agent: Playwright/1.58.2 (x64; windows 10.0) node/24.14[22m
+    [2m    - accept: */*[22m
+    [2m    - accept-encoding: gzip,deflate,br[22m
+    [2m    - Origin: http://localhost:4000[22m
+    [2m    - Content-Type: application/json[22m
+    [2m    - content-length: 102[22m
+
+
+      45 |   test('schedule CRUD lifecycle', async ({ request }) => {
+      46 |     // Create
+    > 47 |     const createRes = await request.post('/api/v1/schedules', {
+         |                                     ^
+      48 |       headers: { 'Origin': ORIGIN, 'Content-Type': 'application/json' },
+      49 |       data: {
+      50 |         name: 'E2E Test Schedule',
+        at C:\Users\AKCA\vezir\tests\e2e\live-mission-e2e.spec.ts:47:37
+
+  4) [api-smoke] › tests\e2e\live-mission-e2e.spec.ts:102:7 › Live Mission E2E — Sprint 39 › presets list returns published templates 
+
+    Error: apiRequestContext.get: connect ECONNREFUSED 127.0.0.1:8003
+    Call log:
+    [2m  - → GET http://127.0.0.1:8003/api/v1/templates/presets[22m
+    [2m    - user-agent: Playwright/1.58.2 (x64; windows 10.0) node/24.14[22m
+    [2m    - accept: */*[22m
+    [2m    - accept-encoding: gzip,deflate,br[22m
+    [2m    - Origin: http://localhost:4000[22m
+
+
+      101 |
+      102 |   test('presets list returns published templates', async ({ request }) => {
+    > 103 |     const res = await request.get('/api/v1/templates/presets', {
+          |                               ^
+      104 |       headers: { 'Origin': ORIGIN },
+      105 |     });
+      106 |     expect(res.status()).toBe(200);
+        at C:\Users\AKCA\vezir\tests\e2e\live-mission-e2e.spec.ts:103:31
+
+  5) [api-smoke] › tests\e2e\live-mission-e2e.spec.ts:119:7 › Live Mission E2E — Sprint 39 › SSE endpoint is reachable 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+    Expected substring: [32m"Timeout"[39m
+    Received string:    [31m"apiRequestContext.get: connect ECONNREFUSED 127.0.0.1:8003[39m
+    [31mCall log:[39m
+    [31m[2m  - → GET http://127.0.0.1:8003/api/v1/events/stream[22m[39m
+    [31m[2m    - user-agent: Playwright/1.58.2 (x64; windows 10.0) node/24.14[22m[39m
+    [31m[2m    - accept: */*[22m[39m
+    [31m[2m    - accept-encoding: gzip,deflate,br[22m[39m
+    [31m[2m    - Origin: http://localhost:4000[22m[39m
+    [31m[2m    - Host: localhost:8003[22m[39m
+    [31m"[39m
+
+      130 |       // Timeout is expected for SSE streams — endpoint is reachable
+      131 |       const msg = e instanceof Error ? e.message : String(e);
+    > 132 |       expect(msg).toContain('Timeout');
+          |                   ^
+      133 |     }
+      134 |   });
+      135 |
+        at C:\Users\AKCA\vezir\tests\e2e\live-mission-e2e.spec.ts:132:19
+
+  6) [api-smoke] › tests\e2e\live-mission-e2e.spec.ts:136:7 › Live Mission E2E — Sprint 39 › host security rejects invalid host 
+
+    Error: apiRequestContext.get: connect ECONNREFUSED 127.0.0.1:8003
+    Call log:
+    [2m  - → GET http://127.0.0.1:8003/api/v1/health[22m
+    [2m    - user-agent: Playwright/1.58.2 (x64; windows 10.0) node/24.14[22m
+    [2m    - accept: */*[22m
+    [2m    - accept-encoding: gzip,deflate,br[22m
+    [2m    - Host: evil.com[22m
+
+
+      135 |
+      136 |   test('host security rejects invalid host', async ({ request }) => {
+    > 137 |     const res = await request.get('/api/v1/health', {
+          |                               ^
+      138 |       headers: { 'Host': 'evil.com' },
+      139 |     });
+      140 |     expect(res.status()).toBe(403);
+        at C:\Users\AKCA\vezir\tests\e2e\live-mission-e2e.spec.ts:137:31
+
+  7) [api-smoke] › tests\e2e\mission-flow.spec.ts:4:7 › Live Mission E2E Flow › mission lifecycle: list → create → detail → stages 
+
+    Error: apiRequestContext.get: connect ECONNREFUSED 127.0.0.1:8003
+    Call log:
+    [2m  - → GET http://127.0.0.1:8003/api/v1/missions[22m
+    [2m    - user-agent: Playwright/1.58.2 (x64; windows 10.0) node/24.14[22m
+    [2m    - accept: */*[22m
+    [2m    - accept-encoding: gzip,deflate,br[22m
+
+
+      4 |   test('mission lifecycle: list → create → detail → stages', async ({ request }) => {
+      5 |     // Step 1: List missions (should return 200 even if empty)
+    > 6 |     const listResponse = await request.get('/api/v1/missions');
+        |                                        ^
+      7 |     expect(listResponse.status()).toBe(200);
+      8 |     const listBody = await listResponse.json();
+      9 |     expect(listBody).toHaveProperty('missions');
+        at C:\Users\AKCA\vezir\tests\e2e\mission-flow.spec.ts:6:40
+
+  8) [api-smoke] › tests\e2e\mission-flow.spec.ts:42:7 › Live Mission E2E Flow › API meta envelope has required fields 
+
+    Error: apiRequestContext.get: connect ECONNREFUSED 127.0.0.1:8003
+    Call log:
+    [2m  - → GET http://127.0.0.1:8003/api/v1/missions[22m
+    [2m    - user-agent: Playwright/1.58.2 (x64; windows 10.0) node/24.14[22m
+    [2m    - accept: */*[22m
+    [2m    - accept-encoding: gzip,deflate,br[22m
+
+
+      41 |
+      42 |   test('API meta envelope has required fields', async ({ request }) => {
+    > 43 |     const response = await request.get('/api/v1/missions');
+         |                                    ^
+      44 |     const body = await response.json();
+      45 |
+      46 |     expect(body.meta).toHaveProperty('generatedAt');
+        at C:\Users\AKCA\vezir\tests\e2e\mission-flow.spec.ts:43:36
+
+  9) [api-smoke] › tests\e2e\mission-flow.spec.ts:50:7 › Live Mission E2E Flow › host security rejects invalid origin 
+
+    Error: apiRequestContext.post: connect ECONNREFUSED 127.0.0.1:8003
+    Call log:
+    [2m  - → POST http://127.0.0.1:8003/api/v1/approvals/test/approve[22m
+    [2m    - user-agent: Playwright/1.58.2 (x64; windows 10.0) node/24.14[22m
+    [2m    - accept: */*[22m
+    [2m    - accept-encoding: gzip,deflate,br[22m
+    [2m    - Origin: http://evil.com[22m
+
+
+      49 |
+      50 |   test('host security rejects invalid origin', async ({ request }) => {
+    > 51 |     const response = await request.post('/api/v1/approvals/test/approve', {
+         |                                    ^
+      52 |       headers: { 'Origin': 'http://evil.com' },
+      53 |     });
+      54 |     expect(response.status()).toBe(403);
+        at C:\Users\AKCA\vezir\tests\e2e\mission-flow.spec.ts:51:36
+
+  10) [api-smoke] › tests\e2e\smoke.spec.ts:4:7 › Vezir API Smoke Tests › health endpoint returns 200 
+
+    Error: apiRequestContext.get: connect ECONNREFUSED 127.0.0.1:8003
+    Call log:
+    [2m  - → GET http://127.0.0.1:8003/api/v1/health[22m
+    [2m    - user-agent: Playwright/1.58.2 (x64; windows 10.0) node/24.14[22m
+    [2m    - accept: */*[22m
+    [2m    - accept-encoding: gzip,deflate,br[22m
+
+
+      3 | test.describe('Vezir API Smoke Tests', () => {
+      4 |   test('health endpoint returns 200', async ({ request }) => {
+    > 5 |     const response = await request.get('/api/v1/health');
+        |                                    ^
+      6 |     expect(response.status()).toBe(200);
+      7 |   });
+      8 |
+        at C:\Users\AKCA\vezir\tests\e2e\smoke.spec.ts:5:36
+
+  11) [api-smoke] › tests\e2e\smoke.spec.ts:9:7 › Vezir API Smoke Tests › capabilities endpoint returns 200 
+
+    Error: apiRequestContext.get: connect ECONNREFUSED 127.0.0.1:8003
+    Call log:
+    [2m  - → GET http://127.0.0.1:8003/api/v1/capabilities[22m
+    [2m    - user-agent: Playwright/1.58.2 (x64; windows 10.0) node/24.14[22m
+    [2m    - accept: */*[22m
+    [2m    - accept-encoding: gzip,deflate,br[22m
+
+
+       8 |
+       9 |   test('capabilities endpoint returns 200', async ({ request }) => {
+    > 10 |     const response = await request.get('/api/v1/capabilities');
+         |                                    ^
+      11 |     expect(response.status()).toBe(200);
+      12 |   });
+      13 |
+        at C:\Users\AKCA\vezir\tests\e2e\smoke.spec.ts:10:36
+
+  12) [api-smoke] › tests\e2e\smoke.spec.ts:14:7 › Vezir API Smoke Tests › docs endpoint available ─
+
+    Error: apiRequestContext.get: connect ECONNREFUSED 127.0.0.1:8003
+    Call log:
+    [2m  - → GET http://127.0.0.1:8003/docs[22m
+    [2m    - user-agent: Playwright/1.58.2 (x64; windows 10.0) node/24.14[22m
+    [2m    - accept: */*[22m
+    [2m    - accept-encoding: gzip,deflate,br[22m
+
+
+      13 |
+      14 |   test('docs endpoint available', async ({ request }) => {
+    > 15 |     const response = await request.get('/docs');
+         |                                    ^
+      16 |     expect(response.status()).toBe(200);
+      17 |   });
+      18 |
+        at C:\Users\AKCA\vezir\tests\e2e\smoke.spec.ts:15:36
+
+  13) [api-smoke] › tests\e2e\smoke.spec.ts:19:7 › Vezir API Smoke Tests › missions endpoint returns 200 
+
+    Error: apiRequestContext.get: connect ECONNREFUSED 127.0.0.1:8003
+    Call log:
+    [2m  - → GET http://127.0.0.1:8003/api/v1/missions[22m
+    [2m    - user-agent: Playwright/1.58.2 (x64; windows 10.0) node/24.14[22m
+    [2m    - accept: */*[22m
+    [2m    - accept-encoding: gzip,deflate,br[22m
+
+
+      18 |
+      19 |   test('missions endpoint returns 200', async ({ request }) => {
+    > 20 |     const response = await request.get('/api/v1/missions');
+         |                                    ^
+      21 |     expect(response.status()).toBe(200);
+      22 |   });
+      23 | });
+        at C:\Users\AKCA\vezir\tests\e2e\smoke.spec.ts:20:36
+
+  13 failed
+    [api-smoke] › tests\e2e\live-mission-e2e.spec.ts:7:7 › Live Mission E2E — Sprint 39 › mission create → list → detail lifecycle 
+    [api-smoke] › tests\e2e\live-mission-e2e.spec.ts:34:7 › Live Mission E2E — Sprint 39 › approval list returns valid structure with enriched fields 
+    [api-smoke] › tests\e2e\live-mission-e2e.spec.ts:45:7 › Live Mission E2E — Sprint 39 › schedule CRUD lifecycle 
+    [api-smoke] › tests\e2e\live-mission-e2e.spec.ts:102:7 › Live Mission E2E — Sprint 39 › presets list returns published templates 
+    [api-smoke] › tests\e2e\live-mission-e2e.spec.ts:119:7 › Live Mission E2E — Sprint 39 › SSE endpoint is reachable 
+    [api-smoke] › tests\e2e\live-mission-e2e.spec.ts:136:7 › Live Mission E2E — Sprint 39 › host security rejects invalid host 
+    [api-smoke] › tests\e2e\mission-flow.spec.ts:4:7 › Live Mission E2E Flow › mission lifecycle: list → create → detail → stages 
+    [api-smoke] › tests\e2e\mission-flow.spec.ts:42:7 › Live Mission E2E Flow › API meta envelope has required fields 
+    [api-smoke] › tests\e2e\mission-flow.spec.ts:50:7 › Live Mission E2E Flow › host security rejects invalid origin 
+    [api-smoke] › tests\e2e\smoke.spec.ts:4:7 › Vezir API Smoke Tests › health endpoint returns 200 
+    [api-smoke] › tests\e2e\smoke.spec.ts:9:7 › Vezir API Smoke Tests › capabilities endpoint returns 200 
+    [api-smoke] › tests\e2e\smoke.spec.ts:14:7 › Vezir API Smoke Tests › docs endpoint available ───
+    [api-smoke] › tests\e2e\smoke.spec.ts:19:7 › Vezir API Smoke Tests › missions endpoint returns 200 

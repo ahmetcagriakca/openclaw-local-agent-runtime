@@ -30,5 +30,12 @@ def emit_provider_selection(
         details["task_type"] = task_type
     if mission_id:
         details["mission_id"] = mission_id
+    # D-150: Capability resolution telemetry
+    if decision.required_capabilities:
+        details["capability.required"] = decision.required_capabilities
+    if decision.matched_capabilities:
+        details["capability.matched"] = decision.matched_capabilities
+    if decision.capability_match_score is not None:
+        details["capability.match_score"] = decision.capability_match_score
 
     emit_policy_event(event_type, details)

@@ -3,7 +3,7 @@ title: "D-150 Capability Routing Transition"
 model: A
 class: Architecture
 phase: 10
-status: not_started
+status: impl_done
 prerequisite: "Operator review of D-150 proposal required before kickoff"
 
 scope: |

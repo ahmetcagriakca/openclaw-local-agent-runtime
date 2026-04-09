@@ -1,7 +1,7 @@
 # open-items.md — Active State Tracker
 
 **Last updated:** 2026-04-09
-**Updated by:** Claude Code (Session 58 — S82)
+**Updated by:** Claude Code (Session 59 — S83)
 
 ---
 
@@ -99,9 +99,13 @@
 | Sprint 79 | UX Remediation + Review Process Improvement | CLOSED |
 | Sprint 80 | Housekeeping + Dependency Upgrades (eslint 10, vite 8) | CLOSED |
 
+| Sprint 81 | EventBus Production Wiring (D-147) | CLOSED |
+| Sprint 82 | Docker Production Image (D-116) | CLOSED |
+| Sprint 83 | D-150 Capability Routing Transition | IMPL DONE |
+
 ## Next Sprint
 
-S83: D-150 Capability Routing Transition. Next planned sprint (needs operator review).
+S84: SSO/RBAC Full External Auth. Planned.
 
 ### Carry-Forward
 | Item | Source | Status |
@@ -112,7 +116,7 @@ S83: D-150 Capability Routing Transition. Next planned sprint (needs operator re
 | ~~Docker prod image optimization~~ | D-116 (S26) | Done: S82 (Dockerfile.prod, frontend/Dockerfile, docker-compose.prod.yml, CI workflow) |
 | SSO/RBAC (full external auth) | D-104/D-108/D-117 | Partial — D-117 + backend isolation done → S84 |
 | ~~UX findings remediation~~ | S78 D-149 audit | Done: S79 (T-79.01, T-79.03, T-79.04, T-79.05) |
-| D-150 Capability Routing Transition | S77 proposed | Needs operator review → S83 |
+| ~~D-150 Capability Routing Transition~~ | S77 proposed | Done: S83 (D-150 frozen, capability registry, controller migration, telemetry) |
 | ~~EventBus production wiring~~ | D-147 | Done: S81 (lifespan wiring, feature flag, 27 tests) |
 | ~~eslint 9→10 + vite 6→8~~ | Dependabot | Done: S80 |
 | Controller→runner EventBus pass-through | D-147 S81 | Not wired — future sprint |

@@ -1,4 +1,4 @@
-# Session Handoff — 2026-04-09 (Session 58 — S82 Docker Production Image)
+# Session Handoff — 2026-04-09 (Session 59 — S83 Capability Routing Transition)
 
 **Platform:** Vezir Platform
 **Operator:** Claude Code (Opus) — AKCA delegated
@@ -7,28 +7,28 @@
 
 ## Session Summary
 
-Session 58: S82 implementation — Docker production image optimization (D-116 carry-forward completion).
+Session 59: S83 implementation — D-150 Capability Routing Transition. Formalized D-150 ADR, built capability registry, migrated controller to capability-based routing, added telemetry + best-match fallback.
 
-### Session 58 Deliverables
-- **T-82.01:** Multi-stage production Dockerfile (Dockerfile.prod): builder→runtime, Python 3.12-slim, non-root user (vezir:1000), optimized layers, .dockerignore
-- **T-82.02:** Frontend production container (frontend/Dockerfile): node:20-alpine build → nginx:1.27-alpine runtime, SPA fallback, API proxy with SSE support, gzip
-- **T-82.03:** Production compose override (docker-compose.prod.yml): resource limits, read_only containers, no-new-privileges security, frontend service on :4000
-- **T-82.04:** CI workflow (docker-build.yml): API + frontend image builds, size checks, smoke test, compose validation. 49 config validation tests.
+### Session 59 Deliverables
+- **T-83.01:** D-150 ADR frozen — capability routing transition contract with 5 rules
+- **T-83.02:** Capability registry (`agent/providers/capability_registry.py`): maps 11 roles + 4 skill overrides to required provider capabilities. 28 tests.
+- **T-83.03:** Controller migration: `_select_agent_for_role()` resolves capabilities from registry before routing. Skill passed from `_execute_stage`. 14 integration tests.
+- **T-83.04:** Telemetry + best-match fallback: RoutingDecision enriched with capability.required/matched/match_score. Fallback prefers best capability match score. 13 tests.
 
-### S82 — Docker Production Image (D-116) — CLOSED
+### S83 — D-150 Capability Routing Transition — IMPL DONE
 
 **Implementation:** Done
-**Review:** GPT PASS (R2)
-**PR:** #435 merged to main
-**Issue:** #430 (parent), #431-#434 (tasks)
+**Review:** Pending GPT review
+**PR:** Not yet created
+**Issue:** #436 (parent), #437-#440 (tasks)
 
 ## Current State
 
-- **Phase:** 10 active — S82 closed
+- **Phase:** 10 active — S83 impl done
 - **Last closed sprint:** 82
-- **Decisions:** 146 frozen + 2 superseded (D-001 → D-149)
-- **Tests:** 1904 backend + 247 frontend + 13 Playwright + 188 root = 2352 total (+49 root new)
-- **CI:** All green (S82 merged)
+- **Decisions:** 147 frozen + 2 superseded (D-001 → D-150)
+- **Tests:** 1904 backend + 247 frontend + 13 Playwright + 188 root = 2352 total (+ 55 new backend)
+- **CI:** Pending (PR not yet pushed)
 - **Lint:** 0 errors
 - **Port map:** API :8003, Frontend :4000, WMCP :8001
 - **Security:** 0 CodeQL open, 2 dependabot (pre-existing)
@@ -46,6 +46,7 @@ Session 58: S82 implementation — Docker production image optimization (D-116 c
 | S80 | — | PASS (R4) |
 | S81 | — | PASS (R2) |
 | S82 | — | PASS (R2) |
+| S83 | — | Pending |
 
 ## Phase 10 Status
 
@@ -61,7 +62,7 @@ Session 58: S82 implementation — Docker production image optimization (D-116 c
 | S80 | Housekeeping + Dependency Upgrades | Closed |
 | S81 | EventBus Production Wiring (D-147) | Closed |
 | S82 | Docker Production Image (D-116) | Closed |
-| S83 | D-150 Capability Routing Transition | Planned (needs operator review) |
+| S83 | D-150 Capability Routing Transition | Impl Done |
 | S84 | SSO/RBAC Full External Auth | Planned |
 
 ## Carry-Forward
@@ -69,12 +70,10 @@ Session 58: S82 implementation — Docker production image optimization (D-116 c
 | Item | Source | Status |
 |------|--------|--------|
 | PROJECT_TOKEN rotation | S23 retro | Rotated 2026-04-07, classic PAT, expires Jul 06, 2026 |
-| ~~Docker prod image optimization~~ | D-116 | Done: S82 (Dockerfile.prod, frontend container, prod compose, CI workflow) |
 | SSO/RBAC (full external auth) | D-104/D-108/D-117 | Partial — D-117 + isolation done → S84 |
-| D-150 Capability Routing Transition | Proposed | Needs operator review → S83 |
 | Controller → runner EventBus pass-through | D-147 S81 | Not wired — future sprint |
 | eslint react-hooks peer dep | S80 | .npmrc workaround — update when react-hooks supports eslint 10 |
 
 ## GPT Memo
 
-Session 58: S82 CLOSED. Docker production image optimization (D-116 carry-forward). Dockerfile.prod: 2-stage (builder→runtime), Python 3.12-slim, non-root user, 166MB. Frontend container: node:20-alpine→nginx:1.27-alpine, 46MB, SPA fallback, API proxy with SSE. docker-compose.prod.yml: resource limits, read_only, no-new-privileges. docker-build.yml CI workflow: build+size+smoke. 49 new config validation tests. Total: 1904+247+13+188=2352 tests. All CI green. GPT HOLD R1 → PASS R2. PR #435 merged. Issues #430-#434 closed. Sprint 82 milestone closed. D-116 carry-forward resolved. Next: S83 D-150 Capability Routing Transition.
+Session 59: S83 IMPL DONE. D-150 Capability Routing Transition. ADR frozen: capability-based routing replaces provider-identity routing. capability_registry.py: 11 roles + 4 skill overrides → required capabilities. Controller _select_agent_for_role() now resolves capabilities before ProviderRoutingPolicy.select(). Best-match fallback: prefers provider with highest capability match score. RoutingDecision enriched with capability.required/matched/match_score telemetry. 55 new tests (28 registry + 14 integration + 13 telemetry). All existing 28 routing_policy tests pass unchanged. Total: 1904+55=1959 backend + 247 frontend + 13 Playwright + 188 root = 2407 tests. D-150 frozen. Issues #436-#440 on Sprint 83 milestone. Next: GPT review → PR → merge → closure.

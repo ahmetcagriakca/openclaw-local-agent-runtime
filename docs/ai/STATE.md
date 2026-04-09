@@ -1,9 +1,9 @@
 # Current State
 
 **Last updated:** 2026-04-09
-**Active phase:** Phase 10 — Sprint 82 closed
+**Active phase:** Phase 10 — Sprint 83 impl done
 **Doc model:** This file is canonical for system state. Session context lives in `docs/ai/handoffs/current.md`.
-**Note:** All sprints through 53 closed. S54 deferred. S55-S82 closed. All P1 backlog items complete (50/50). Phase 10 active (S73+). Phase 9 complete (S69-S72). Phase 8 complete (S60-S68). 146 frozen + 2 superseded decisions (D-001 → D-149, D-126 skipped, D-143 placeholder, D-082/D-098 superseded). Governance: 20-step closure checklist. Review pipeline: max 5 rounds + ESCALATE (D-146).
+**Note:** All sprints through 53 closed. S54 deferred. S55-S82 closed. S83 impl done. All P1 backlog items complete (50/50). Phase 10 active (S73+). Phase 9 complete (S69-S72). Phase 8 complete (S60-S68). 147 frozen + 2 superseded decisions (D-001 → D-150, D-126 skipped, D-143 placeholder, D-082/D-098 superseded). Governance: 20-step closure checklist. Review pipeline: max 5 rounds + ESCALATE (D-146).
 **Persistence:** State is file-persisted (state.json, mission.json). Mission history via persistence layer (Sprint 16).
 **API:** Vezir API on 127.0.0.1:8003 (FastAPI + Uvicorn). Schemas FROZEN (D-067). SSE on /api/v1/events/stream. Dashboard API + Alert API + Telemetry Query API (Sprint 16).
 **Frontend:** React dashboard on localhost:4000 (Vite + Tailwind). SSE live updates + polling fallback + intervention buttons + monitoring dashboard. Node.js 20 required.
@@ -31,6 +31,7 @@
 | Agent Runner | Operational (multi-agent missions + 3 providers + 24 tools) | `agent/oc-agent-runner.py` |
 | Mission Controller | Operational (9 governed roles, quality gates, state machine) | `agent/mission/controller.py` |
 | EventBus | Operational (37 event types, production-wired S81, feature flag EVENTBUS_ENABLED — D-147 amended) | `agent/events/bus.py` |
+| Capability Registry | Operational (D-150, 11 roles + 4 skill overrides, capability-based routing) | `agent/providers/capability_registry.py` |
 | OTel TracingHandler | Operational (28/28 event coverage) | `agent/observability/tracing.py` |
 | OTel MetricsHandler | Operational (17 instruments) | `agent/observability/meters.py` |
 | StructuredLogHandler | Operational (JSON + trace context) | `agent/observability/structured_logging.py` |
@@ -142,6 +143,7 @@
 | Sprint 80 | Housekeeping + Dependency Upgrades — Phase 10 | Closed |
 | Sprint 81 | EventBus Production Wiring (D-147) — Phase 10 | Closed |
 | Sprint 82 | Docker Production Image (D-116) — Phase 10 | Closed |
+| Sprint 83 | D-150 Capability Routing Transition — Phase 10 | Impl Done |
 
 ## Test Evidence
 
@@ -195,10 +197,11 @@
 | Sprint 80 | 1877 tests, 0 fail | 247 tests, 0 TS errors | Housekeeping sprint — no new tests. eslint 10.2.0, vite 8.0.7. 2276 total |
 | Sprint 81 | 1904 tests, 0 fail | 247 tests, 0 TS errors | +27 backend (EventBus production 16, integration 11). 2303 total |
 | Sprint 82 | 1904 tests, 0 fail | 247 tests, 0 TS errors | +49 root (Docker config validation). 188 root total. 2352 total |
+| Sprint 83 | 1959 tests, 0 fail | 247 tests, 0 TS errors | +55 backend (capability registry 28, routing integration 14, telemetry 13). 188 root total. 2407 total |
 
 ## Architectural Decisions
 
-146 frozen + 2 superseded decisions (D-001 through D-149, D-126 skipped, D-143 placeholder, D-082/D-098 superseded S62). See `docs/ai/DECISIONS.md`. Recent: D-144 project aggregate contract, D-145 workspace/artifact boundary, D-146 review max round + escalation, D-147 EventBus operational status (S76), D-148 Azure OpenAI primary provider adoption (S77), D-149 Browser Analysis 3-Mode Observation Contract (S78). Governance: 20-step closure checklist.
+147 frozen + 2 superseded decisions (D-001 through D-150, D-126 skipped, D-143 placeholder, D-082/D-098 superseded S62). See `docs/ai/DECISIONS.md`. Recent: D-144 project aggregate contract, D-145 workspace/artifact boundary, D-146 review max round + escalation, D-147 EventBus operational status (S76), D-148 Azure OpenAI primary provider adoption (S77), D-149 Browser Analysis 3-Mode Observation Contract (S78), D-150 Capability Routing Transition (S83). Governance: 20-step closure checklist.
 
 ## Port Map
 

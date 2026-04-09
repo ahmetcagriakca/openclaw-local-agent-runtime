@@ -231,3 +231,75 @@ class TestClosesMatchesTaskIssue:
         body = "- Task-Issue: #100\n- Closes: #200"
         errors = validate_linkage(title, body)
         assert any("not in Closes" in e for e in errors)
+
+
+class TestRepoAwareValidation:
+    """Test repo-aware validation with expected values from issues.json."""
+
+    def test_full_repo_aware_pass(self):
+        """Simulate repo-aware call with all expected values matching."""
+        title = "[S85-T1] Feature"
+        body = (
+            "- Task-Issue: #100\n"
+            "- Parent-Issue: #99\n"
+            "- Sprint: 85\n"
+            "- Closes: #100\n"
+        )
+        errors = validate_linkage(
+            title, body,
+            expected_sprint=85,
+            expected_parent=99,
+            expected_branch="feat/s85-feature",
+            actual_branch="feat/s85-feature",
+        )
+        assert errors == []
+
+    def test_repo_aware_sprint_mismatch_fail(self):
+        """Repo truth says sprint 85, PR says 84."""
+        title = "[S85-T1] Feature"
+        body = "- Task-Issue: #100\n- Sprint: 84\n- Closes: #100"
+        errors = validate_linkage(title, body, expected_sprint=85)
+        assert any("Sprint mismatch" in e for e in errors)
+
+    def test_repo_aware_parent_mismatch_fail(self):
+        """Repo truth says parent #99, PR says #50."""
+        title = "[S85-T1] Feature"
+        body = "- Task-Issue: #100\n- Parent-Issue: #50\n- Closes: #100"
+        errors = validate_linkage(title, body, expected_parent=99)
+        assert any("Parent-Issue mismatch" in e for e in errors)
+
+    def test_repo_aware_branch_mismatch_fail(self):
+        """Repo truth says branch feat/x, actual is feat/y."""
+        title = "[S85-T1] Feature"
+        body = "- Task-Issue: #100\n- Closes: #100"
+        errors = validate_linkage(
+            title, body,
+            expected_branch="feat/s85-feature",
+            actual_branch="feat/other-branch",
+        )
+        assert any("Branch mismatch" in e for e in errors)
+
+    def test_exempt_bypasses_repo_aware(self):
+        """Exempt PRs skip repo-aware checks too."""
+        errors = validate_linkage(
+            "docs: update README", "",
+            expected_sprint=85,
+            expected_parent=99,
+            expected_branch="docs/update",
+            actual_branch="wrong-branch",
+        )
+        assert errors == []
+
+    def test_no_expected_values_still_validates_body(self):
+        """Without repo truth, still validates PR body syntax."""
+        title = "[S85-T1] Feature"
+        body = "- Task-Issue: #100\n- Closes: #100"
+        errors = validate_linkage(title, body)
+        assert errors == []
+
+    def test_no_expected_values_catches_missing_issue(self):
+        """Without repo truth, still catches missing task issue."""
+        title = "[S85-T1] Feature"
+        body = "just some text"
+        errors = validate_linkage(title, body)
+        assert any("Missing Task-Issue" in e for e in errors)

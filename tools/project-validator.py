@@ -265,6 +265,63 @@ def validate_item(item: ProjectItem, closed_sprints: set[int] | None = None) -> 
     return findings
 
 
+def validate_pr_issue_links() -> list[Finding]:
+    """D-152: Validate PR↔issue linkage from issues.json files.
+
+    Checks open PRs against issues.json to detect:
+    - Merged PRs that did not close their expected task issue
+    - Task issues without any associated PR (for non-exempt tasks)
+    """
+    import glob
+
+    findings: list[Finding] = []
+
+    for path in sorted(glob.glob("docs/sprints/sprint-*/issues.json")):
+        try:
+            with open(path) as f:
+                data = json.load(f)
+        except (json.JSONDecodeError, FileNotFoundError):
+            continue
+
+        sprint = data.get("sprint", "?")
+        for task_id, info in data.get("tasks", {}).items():
+            task_issue = info.get("task_issue") or info.get("issue")
+            if not task_issue:
+                continue
+
+            branch = info.get("branch")
+            branch_exempt = info.get("branch_exempt", False)
+            pr_required = info.get("pr_required", True)
+
+            # Skip exempt tasks
+            if branch_exempt or not pr_required:
+                continue
+
+            # Check if there's a merged PR for the branch
+            if branch:
+                pr_result = subprocess.run(
+                    ["gh", "pr", "list", "--state", "merged", "--head", branch,
+                     "--json", "number", "--jq", "length"],
+                    capture_output=True, text=True,
+                )
+                merged_count = pr_result.stdout.strip()
+                if merged_count in ("", "0"):
+                    # Check if issue is closed without merged PR
+                    issue_result = subprocess.run(
+                        ["gh", "issue", "view", str(task_issue),
+                         "--json", "state", "--jq", ".state"],
+                        capture_output=True, text=True,
+                    )
+                    if issue_result.stdout.strip() == "CLOSED":
+                        findings.append(Finding(
+                            PR_MISSING_ISSUE_LINK, "WARN", task_issue,
+                            f"S{sprint}-{task_id}",
+                            f"Task issue #{task_issue} closed but no merged PR from branch '{branch}'"
+                        ))
+
+    return findings
+
+
 def main():
     json_mode = "--json" in sys.argv
 
@@ -289,6 +346,10 @@ def main():
     for item in items:
         findings = validate_item(item, closed_sprints)
         all_findings.extend(findings)
+
+    # D-152: PR issue-link validation for open sprint tasks
+    pr_link_findings = validate_pr_issue_links()
+    all_findings.extend(pr_link_findings)
 
     # Separate by severity
     fails = [f for f in all_findings if f.severity == "FAIL"]

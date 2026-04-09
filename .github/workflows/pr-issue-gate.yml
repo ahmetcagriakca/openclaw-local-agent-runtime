@@ -7,6 +7,7 @@ on:
 permissions:
   pull-requests: read
   issues: read
+  contents: read
 
 jobs:
   pr-issue-link:
@@ -18,10 +19,12 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Install dependencies
+        run: pip install pyyaml
+
       - name: Validate PR issue linkage
         env:
           PR_TITLE: ${{ github.event.pull_request.title }}
-          PR_BODY: ${{ github.event.pull_request.body }}
           PR_BRANCH: ${{ github.event.pull_request.head.ref }}
         run: |
           # Write PR body to file to avoid shell quoting issues
@@ -29,7 +32,54 @@ jobs:
           ${{ github.event.pull_request.body }}
           ENDOFBODY
 
-          python tools/pr-issue-link-check.py \
-            --pr-title "$PR_TITLE" \
-            --pr-body-file /tmp/pr_body.txt \
-            --actual-branch "$PR_BRANCH"
+          # Derive expected linkage from repo truth (issues.json)
+          python3 << 'RESOLVE_SCRIPT'
+          import glob
+          import json
+          import os
+          import subprocess
+          import sys
+
+          pr_title = os.environ.get("PR_TITLE", "")
+          pr_branch = os.environ.get("PR_BRANCH", "")
+
+          # Find the most recent issues.json that references this branch
+          expected_sprint = ""
+          expected_parent = ""
+          expected_branch = ""
+
+          for path in sorted(glob.glob("docs/sprints/sprint-*/issues.json"), reverse=True):
+              try:
+                  with open(path) as f:
+                      data = json.load(f)
+                  for task_id, info in data.get("tasks", {}).items():
+                      branch = info.get("branch", "")
+                      if branch and branch == pr_branch:
+                          expected_sprint = str(data.get("sprint", ""))
+                          expected_parent = str(data.get("parent_issue", ""))
+                          expected_branch = branch
+                          print(f"Resolved from {path}: sprint={expected_sprint}, parent=#{expected_parent}, branch={expected_branch}")
+                          break
+                  if expected_sprint:
+                      break
+              except (json.JSONDecodeError, FileNotFoundError):
+                  continue
+
+          # Build validator args
+          args = [
+              sys.executable, "tools/pr-issue-link-check.py",
+              "--pr-title", pr_title,
+              "--pr-body-file", "/tmp/pr_body.txt",
+              "--actual-branch", pr_branch,
+          ]
+          if expected_sprint:
+              args.extend(["--sprint", expected_sprint])
+          if expected_parent:
+              args.extend(["--parent-issue", expected_parent])
+          if expected_branch:
+              args.extend(["--expected-branch", expected_branch])
+
+          print(f"Running: {' '.join(args)}")
+          result = subprocess.run(args)
+          sys.exit(result.returncode)
+          RESOLVE_SCRIPT

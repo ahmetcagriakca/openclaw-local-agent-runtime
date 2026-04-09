@@ -95,8 +95,6 @@
 | Sprint 77 | Azure OpenAI Provider Foundation (D-148) | CLOSED |
 | Sprint 78 | Router Bypass Fix + Browser Analysis Contract (D-149) | CLOSED |
 | Sprint 79 | UX Remediation + Review Process Improvement | CLOSED |
-
-| Sprint 79 | UX Remediation + Review Process Improvement | CLOSED |
 | Sprint 80 | Housekeeping + Dependency Upgrades (eslint 10, vite 8) | CLOSED |
 
 | Sprint 81 | EventBus Production Wiring (D-147) | CLOSED |
@@ -106,18 +104,13 @@
 
 ## Next Sprint
 
-S85: TBD.
+S85: TBD — Technical debt quick-win sprint recommended (see `docs/ai/TECHNICAL-DEBT-REPORT.md`).
 
 ### Carry-Forward
 | Item | Source | Status |
 |------|--------|--------|
 | S74+ impl/test separate commits | S73 retro | Required — prevents GPT review gate-timing loop |
 | PROJECT_TOKEN rotation/docs | S23 retro | Rotated 2026-04-07, classic PAT, expires Jul 06 2026 |
-| B-148 PAT-backed Project V2 | S71 | Resolved — classic PAT, secret updated 2026-04-07 |
-| ~~Docker prod image optimization~~ | D-116 (S26) | Done: S82 (Dockerfile.prod, frontend/Dockerfile, docker-compose.prod.yml, CI workflow) |
-| ~~SSO/RBAC (full external auth)~~ | D-104/D-108/D-117 | Done: S84 (D-117 amended, OAuth2+JWT+RBAC, 86 tests, PR #447 merged) |
-| ~~UX findings remediation~~ | S78 D-149 audit | Done: S79 (T-79.01, T-79.03, T-79.04, T-79.05) |
-| ~~D-150 Capability Routing Transition~~ | S77 proposed | Done: S83 (D-150 frozen, capability registry, controller migration, telemetry) |
-| ~~EventBus production wiring~~ | D-147 | Done: S81 (lifespan wiring, feature flag, 27 tests) |
-| ~~eslint 9→10 + vite 6→8~~ | Dependabot | Done: S80 |
 | Controller→runner EventBus pass-through | D-147 S81 | Not wired — future sprint |
+| eslint react-hooks peer dep | S80 | .npmrc workaround — update when react-hooks supports eslint 10 |
+| Technical debt backlog (46 items) | Session 61 | Documented in TECHNICAL-DEBT-REPORT.md, 14 HIGH / 21 MEDIUM / 11 LOW |

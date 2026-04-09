@@ -1,7 +1,7 @@
 # Next Steps — Vezir Platform
 
-**Last updated:** 2026-04-08
-**Current:** Phase 10 active. Sprint 81 closed.
+**Last updated:** 2026-04-09
+**Current:** Phase 10 active. Sprint 84 closed. Technical debt audit complete (46 findings).
 
 ---
 
@@ -417,10 +417,12 @@
 | Item | Source | Status |
 |------|--------|--------|
 | PROJECT_TOKEN rotation | S23 retro | Rotated 2026-04-07, expires Jul 06 2026 |
-| Docker prod image optimization | D-116 | Partial — docker-compose done → S82 |
-| SSO/RBAC (full external auth) | D-104/D-108/D-117 | Partial — D-117 + isolation done → S84 |
-| EventBus production wiring | D-147 | Test-only → S81 |
-| D-150 Capability Routing Transition | S77 proposed | Needs operator review → S83 |
+| ~~Docker prod image optimization~~ | D-116 | Done: S82 |
+| ~~SSO/RBAC (full external auth)~~ | D-104/D-108/D-117 | Done: S84 |
+| ~~EventBus production wiring~~ | D-147 | Done: S81 |
+| ~~D-150 Capability Routing Transition~~ | S77 proposed | Done: S83 |
+| Controller→runner EventBus pass-through | D-147 S81 | Not wired — future sprint |
+| Technical debt backlog (46 items) | Session 61 | docs/ai/TECHNICAL-DEBT-REPORT.md |
 
 ## Decision Debt
 

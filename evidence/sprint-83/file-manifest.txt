@@ -1,0 +1,15 @@
+ agent/mission/controller.py                        |  21 +-
+ agent/providers/capability_registry.py             |  73 +++++++
+ agent/providers/provider_telemetry.py              |   7 +
+ agent/providers/routing_policy.py                  | 119 ++++++++---
+ agent/tests/test_capability_registry.py            | 125 ++++++++++++
+ agent/tests/test_capability_routing.py             | 225 +++++++++++++++++++++
+ agent/tests/test_capability_telemetry.py           | 174 ++++++++++++++++
+ config/capabilities.json                           |  18 +-
+ docs/ai/DECISIONS.md                               |  16 +-
+ docs/ai/STATE.md                                   |   9 +-
+ docs/ai/handoffs/current.md                        |  37 ++--
+ docs/ai/state/open-items.md                        |  10 +-
+ .../D-150-capability-routing-transition.md         |  39 ++++
+ docs/sprints/sprint-83/plan.yaml                   |   2 +-
+ 14 files changed, 810 insertions(+), 65 deletions(-)

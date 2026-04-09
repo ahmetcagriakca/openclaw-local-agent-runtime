@@ -1,0 +1,13 @@
+
+> vezir-platform@1.0.0 build
+> tsc -b && vite build
+
+[36mvite v8.0.7 [32mbuilding client environment for production...[36m[39m
+[2Ktransforming...✓ 51 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.75 kB │ gzip:  0.47 kB
+dist/assets/index-PapMacfF.css   29.68 kB │ gzip:  6.21 kB
+dist/assets/index-D4_BVWXQ.js   293.51 kB │ gzip: 79.70 kB
+
+[32m✓ built in 876ms[39m

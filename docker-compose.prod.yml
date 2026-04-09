@@ -1,0 +1,71 @@
+# ============================================================
+# Vezir Platform — Production Docker Compose Override
+# ============================================================
+# Usage:
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+#
+# Overrides dev compose with production settings:
+#   - Production Dockerfile (multi-stage, non-root)
+#   - Frontend container (nginx)
+#   - Resource limits
+#   - Security hardening
+# ============================================================
+
+services:
+  vezir-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    environment:
+      - PYTHONDONTWRITEBYTECODE=1
+      - PYTHONUNBUFFERED=1
+      - EVENTBUS_ENABLED=true
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: "1.0"
+        reservations:
+          memory: 256M
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+
+  vezir-frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    ports:
+      - "4000:4000"
+    depends_on:
+      vezir-api:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+          cpus: "0.5"
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /var/cache/nginx
+      - /var/run
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+
+  jaeger:
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: "0.5"
+
+  grafana:
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: "0.5"

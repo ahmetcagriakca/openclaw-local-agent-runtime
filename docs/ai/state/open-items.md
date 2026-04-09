@@ -1,7 +1,7 @@
 # open-items.md — Active State Tracker
 
-**Last updated:** 2026-04-08
-**Updated by:** Claude Code (Session 56 — S80)
+**Last updated:** 2026-04-09
+**Updated by:** Claude Code (Session 59 — S83)
 
 ---
 
@@ -18,9 +18,9 @@
 | Item | Source | Status |
 |------|--------|--------|
 | PROJECT_TOKEN rotation/docs | S23 retro | Rotated 2026-04-07, classic PAT, expires Jul 06 2026 |
-| Docker dev environment | D-116 (S26) | Partially resolved: docker-compose operational (D-116, Jaeger included S28). Remaining: production image optimization → S82 |
+| ~~Docker dev environment~~ | D-116 (S26) | Done: S82 — production Dockerfile, frontend container, prod compose, CI workflow, 49 tests |
 | ~~Alert "any" namespace scoping~~ | S16 P-16.2 | Done: S49 B-119 (#288) |
-| Multi-user auth | D-104/D-108/D-117 | Partially resolved: D-117 operational (S27), backend isolation (S40). Remaining: SSO, external auth, full RBAC |
+| ~~Multi-user auth~~ | D-104/D-108/D-117 | Done: S84 — OAuth2/OIDC + JWT + RBAC (admin/operator/viewer) + frontend auth guard. D-117 amended. |
 
 ### Retired (Sprint 48 T-1 Reconciliation)
 
@@ -95,20 +95,22 @@
 | Sprint 77 | Azure OpenAI Provider Foundation (D-148) | CLOSED |
 | Sprint 78 | Router Bypass Fix + Browser Analysis Contract (D-149) | CLOSED |
 | Sprint 79 | UX Remediation + Review Process Improvement | CLOSED |
+| Sprint 80 | Housekeeping + Dependency Upgrades (eslint 10, vite 8) | CLOSED |
+
+| Sprint 81 | EventBus Production Wiring (D-147) | CLOSED |
+| Sprint 82 | Docker Production Image (D-116) | CLOSED |
+| Sprint 83 | D-150 Capability Routing Transition | CLOSED |
+| Sprint 84 | SSO/RBAC Full External Auth (D-117 amended) | CLOSED |
 
 ## Next Sprint
 
-S80: Housekeeping + Dependency Upgrades (eslint 10, vite 8, stale issues). plan.yaml ready. S79 closed (PR #422 merged).
+S85: TBD — Technical debt quick-win sprint recommended (see `docs/ai/TECHNICAL-DEBT-REPORT.md`).
 
 ### Carry-Forward
 | Item | Source | Status |
 |------|--------|--------|
 | S74+ impl/test separate commits | S73 retro | Required — prevents GPT review gate-timing loop |
 | PROJECT_TOKEN rotation/docs | S23 retro | Rotated 2026-04-07, classic PAT, expires Jul 06 2026 |
-| B-148 PAT-backed Project V2 | S71 | Resolved — classic PAT, secret updated 2026-04-07 |
-| Docker prod image optimization | D-116 (S26) | Partial — docker-compose done, prod image → S82 |
-| SSO/RBAC (full external auth) | D-104/D-108/D-117 | Partial — D-117 + backend isolation done → S84 |
-| ~~UX findings remediation~~ | S78 D-149 audit | Done: S79 (T-79.01, T-79.03, T-79.04, T-79.05) |
-| D-150 Capability Routing Transition | S77 proposed | Needs operator review → S83 |
-| EventBus production wiring | D-147 | Test-only → S81 |
-| eslint 9→10 + vite 6→8 | Dependabot | Deferred → S80 |
+| Controller→runner EventBus pass-through | D-147 S81 | Not wired — future sprint |
+| eslint react-hooks peer dep | S80 | .npmrc workaround — update when react-hooks supports eslint 10 |
+| Technical debt backlog (46 items) | Session 61 | Documented in TECHNICAL-DEBT-REPORT.md, 14 HIGH / 21 MEDIUM / 11 LOW |

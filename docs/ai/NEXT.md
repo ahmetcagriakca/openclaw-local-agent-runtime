@@ -1,7 +1,21 @@
 # Next Steps — Vezir Platform
 
-**Last updated:** 2026-04-08
-**Current:** Phase 10 active. Sprint 79 closed. S80 in progress.
+**Last updated:** 2026-04-09
+**Current:** Phase 10 active. Sprint 84 closed. Technical debt audit complete (46 findings).
+
+---
+
+## Sprint 81 — EventBus Production Wiring (CLOSED)
+
+**Model:** A (full closure) | **Class:** Product
+**Scope:** D-147 amendment — wire EventBus to server.py lifespan, AuditTrailHandler + ProjectHandler, feature flag EVENTBUS_ENABLED
+**Decision:** D-147 amended
+**Issues:** #425 (parent), #426-#428 (tasks)
+**Milestone:** Sprint 81
+**Tests:** 1904 backend + 247 frontend + 13 Playwright + 139 root = 2303 total (+27 backend)
+**New files:** `test_eventbus_production.py`, `test_eventbus_integration.py`
+**Modified:** `api/server.py` (lifespan Step 8), `D-147-eventbus-operational-status.md`
+**Review:** GPT HOLD R1 → PASS R2
 
 ---
 
@@ -403,10 +417,12 @@
 | Item | Source | Status |
 |------|--------|--------|
 | PROJECT_TOKEN rotation | S23 retro | Rotated 2026-04-07, expires Jul 06 2026 |
-| Docker prod image optimization | D-116 | Partial — docker-compose done → S82 |
-| SSO/RBAC (full external auth) | D-104/D-108/D-117 | Partial — D-117 + isolation done → S84 |
-| EventBus production wiring | D-147 | Test-only → S81 |
-| D-150 Capability Routing Transition | S77 proposed | Needs operator review → S83 |
+| ~~Docker prod image optimization~~ | D-116 | Done: S82 |
+| ~~SSO/RBAC (full external auth)~~ | D-104/D-108/D-117 | Done: S84 |
+| ~~EventBus production wiring~~ | D-147 | Done: S81 |
+| ~~D-150 Capability Routing Transition~~ | S77 proposed | Done: S83 |
+| Controller→runner EventBus pass-through | D-147 S81 | Not wired — future sprint |
+| Technical debt backlog (46 items) | Session 61 | docs/ai/TECHNICAL-DEBT-REPORT.md |
 
 ## Decision Debt
 

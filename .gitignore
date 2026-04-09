@@ -10,6 +10,9 @@ queue/
 # Secrets / credentials
 bridge/allowlist.json
 config/.env
+config/.jwt_secret
+config/oauth.json
+config/auth.json
 *.env
 *.env.*
 .openclaw/

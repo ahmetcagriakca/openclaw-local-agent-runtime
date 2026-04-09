@@ -1,9 +1,9 @@
 # Current State
 
-**Last updated:** 2026-04-08
-**Active phase:** Phase 10 — Sprint 80 in progress (S79 closed)
+**Last updated:** 2026-04-09
+**Active phase:** Phase 10 — Sprint 84 closed
 **Doc model:** This file is canonical for system state. Session context lives in `docs/ai/handoffs/current.md`.
-**Note:** All sprints through 53 closed. S54 deferred. S55-S79 closed. All P1 backlog items complete (50/50). Phase 10 active (S73+). Phase 9 complete (S69-S72). Phase 8 complete (S60-S68). 146 frozen + 2 superseded decisions (D-001 → D-149, D-126 skipped, D-143 placeholder, D-082/D-098 superseded). Governance: 20-step closure checklist. Review pipeline: max 5 rounds + ESCALATE (D-146).
+**Note:** All sprints through 53 closed. S54 deferred. S55-S84 closed. All P1 backlog items complete (50/50). Phase 10 active (S73+). Phase 9 complete (S69-S72). Phase 8 complete (S60-S68). 147 frozen (1 amended) + 2 superseded decisions (D-001 → D-150, D-126 skipped, D-143 placeholder, D-082/D-098 superseded). Governance: 20-step closure checklist. Review pipeline: max 5 rounds + ESCALATE (D-146).
 **Persistence:** State is file-persisted (state.json, mission.json). Mission history via persistence layer (Sprint 16).
 **API:** Vezir API on 127.0.0.1:8003 (FastAPI + Uvicorn). Schemas FROZEN (D-067). SSE on /api/v1/events/stream. Dashboard API + Alert API + Telemetry Query API (Sprint 16).
 **Frontend:** React dashboard on localhost:4000 (Vite + Tailwind). SSE live updates + polling fallback + intervention buttons + monitoring dashboard. Node.js 20 required.
@@ -30,7 +30,8 @@
 | Telegram notifications | Operational | `bin\oc-health-notify.ps1` |
 | Agent Runner | Operational (multi-agent missions + 3 providers + 24 tools) | `agent/oc-agent-runner.py` |
 | Mission Controller | Operational (9 governed roles, quality gates, state machine) | `agent/mission/controller.py` |
-| EventBus | Internal/test infrastructure (37 event types, not wired to startup — D-147) | `agent/events/bus.py` |
+| EventBus | Operational (37 event types, production-wired S81, feature flag EVENTBUS_ENABLED — D-147 amended) | `agent/events/bus.py` |
+| Capability Registry | Operational (D-150, 11 roles + 4 skill overrides, capability-based routing) | `agent/providers/capability_registry.py` |
 | OTel TracingHandler | Operational (28/28 event coverage) | `agent/observability/tracing.py` |
 | OTel MetricsHandler | Operational (17 instruments) | `agent/observability/meters.py` |
 | StructuredLogHandler | Operational (JSON + trace context) | `agent/observability/structured_logging.py` |
@@ -59,7 +60,7 @@
 | Issue Automation | plan.yaml → issues + issues.json via workflow | `.github/workflows/issue-from-plan.yml` |
 | Project Store | Operational (CRUD, FSM, workspace, artifacts, D-144/D-145) | `agent/persistence/project_store.py` |
 | Project API | Operational (13 endpoints, D-144/D-145) | `agent/api/project_api.py` |
-| Project EventBus | Internal/test infrastructure (9 event types, audit+SSE handlers — D-147) | `agent/events/handlers/project_handler.py` |
+| Project EventBus | Operational (9 event types, audit+SSE handlers, production-wired S81) | `agent/events/handlers/project_handler.py` |
 
 ## Completed Phases
 
@@ -139,6 +140,11 @@
 | Sprint 77 | Azure OpenAI Provider Foundation (D-148) — Phase 10 | Closed |
 | Sprint 78 | Router Bypass Fix + Browser Analysis Contract (D-149) — Phase 10 | Closed |
 | Sprint 79 | UX Remediation + Review Process Improvement — Phase 10 | Closed |
+| Sprint 80 | Housekeeping + Dependency Upgrades — Phase 10 | Closed |
+| Sprint 81 | EventBus Production Wiring (D-147) — Phase 10 | Closed |
+| Sprint 82 | Docker Production Image (D-116) — Phase 10 | Closed |
+| Sprint 83 | D-150 Capability Routing Transition — Phase 10 | Closed |
+| Sprint 84 | SSO/RBAC Full External Auth (D-117 amended) — Phase 10 | Closed |
 
 ## Test Evidence
 
@@ -189,10 +195,15 @@
 | Sprint 77 | 1866 tests, 0 fail | 239 tests, 0 TS errors | +89 backend (azure provider 39, routing 28, health 17, telemetry 5). 13 Playwright. 139 root. 2257 total |
 | Sprint 78 | 1877 tests, 0 fail | 239 tests, 0 TS errors | +11 backend (routing bypass 7, CSRF centralization 4). 13 Playwright. 139 root. 2268 total |
 | Sprint 79 | 1877 tests, 0 fail | 247 tests, 0 TS errors | +8 frontend (ApiErrorBanner, ConnectionIndicator, client tests). 13 Playwright. 139 root. 2276 total |
+| Sprint 80 | 1877 tests, 0 fail | 247 tests, 0 TS errors | Housekeeping sprint — no new tests. eslint 10.2.0, vite 8.0.7. 2276 total |
+| Sprint 81 | 1904 tests, 0 fail | 247 tests, 0 TS errors | +27 backend (EventBus production 16, integration 11). 2303 total |
+| Sprint 82 | 1904 tests, 0 fail | 247 tests, 0 TS errors | +49 root (Docker config validation). 188 root total. 2352 total |
+| Sprint 83 | 1963 tests, 0 fail | 247 tests, 0 TS errors | +59 backend (capability registry 28, routing integration 14+4, telemetry 13). 188 root total. 2411 total |
+| Sprint 84 | 2049 tests, 0 fail | 247 tests, 0 TS errors | +86 backend (JWT 20, RBAC 18, OAuth 17, auth API 14, middleware 4, compat 13). 188 root total. 2497 total |
 
 ## Architectural Decisions
 
-146 frozen + 2 superseded decisions (D-001 through D-149, D-126 skipped, D-143 placeholder, D-082/D-098 superseded S62). See `docs/ai/DECISIONS.md`. Recent: D-144 project aggregate contract, D-145 workspace/artifact boundary, D-146 review max round + escalation, D-147 EventBus operational status (S76), D-148 Azure OpenAI primary provider adoption (S77), D-149 Browser Analysis 3-Mode Observation Contract (S78). Governance: 20-step closure checklist.
+147 frozen (1 amended) + 2 superseded decisions (D-001 through D-150, D-126 skipped, D-143 placeholder, D-082/D-098 superseded S62). See `docs/ai/DECISIONS.md`. Recent: D-144 project aggregate contract, D-145 workspace/artifact boundary, D-146 review max round + escalation, D-147 EventBus operational status (S76), D-148 Azure OpenAI primary provider adoption (S77), D-149 Browser Analysis 3-Mode Observation Contract (S78), D-150 Capability Routing Transition (S83), D-117 amended S84 (SSO/RBAC extension). Governance: 20-step closure checklist.
 
 ## Port Map
 

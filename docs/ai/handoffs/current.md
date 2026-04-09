@@ -1,4 +1,4 @@
-# Session Handoff — 2026-04-08 (Session 56 — S80 Housekeeping + Dependency Upgrades)
+# Session Handoff — 2026-04-09 (Session 61 — Technical Debt Audit)
 
 **Platform:** Vezir Platform
 **Operator:** Claude Code (Opus) — AKCA delegated
@@ -7,33 +7,47 @@
 
 ## Session Summary
 
-Session 56: S80 implementation — housekeeping, dependency upgrades, doc hygiene.
+Session 61: Full codebase technical debt audit. 4 parallel analysis agents (backend, frontend, infra, architecture) + manual verification. Produced comprehensive debt report with 46 findings.
 
-### Session 56 Deliverables
-- **T-80.01:** 6 stale GitHub issues closed (#416, #418-#421, #358)
-- **T-80.02:** eslint 9→10 (10.2.0), 0 lint errors
-- **T-80.03:** vite 6→8 (8.0.7), plugin-react 4→6 (6.0.1), build OK, 247/247 frontend tests pass
-- **T-80.04:** Doc hygiene — NEXT.md carry-forward cleaned (10 retired items removed), GOVERNANCE.md B-148 note updated, open-items.md updated, BACKLOG.md regenerated
-- **T-80.05:** PROJECT_TOKEN verified — board mutations work (Status=Todo set). Sprint regex fix for `S80:` title format (was only matching `[S80]`). `.npmrc` added for eslint 10 peer dep compat in CI.
-- **PR #424** created, all CI checks green (frontend, backend, playwright, docker, CodeQL)
+### Session 61 Deliverables
+- **Technical Debt Report:** `docs/ai/TECHNICAL-DEBT-REPORT.md` — 46 findings (14 HIGH, 21 MEDIUM, 11 LOW)
+- **No code changes** — audit-only session
 
-### S80 — Housekeeping + Dependency Upgrades — IN PROGRESS
+### Key Findings (HIGH severity)
 
-**Implementation:** Done
-**Review:** Pending GPT review
-**PR:** #424 — all checks passing
+| # | Finding | Category |
+|---|---------|----------|
+| 1 | controller.py god object (2224 LOC, 50+ methods, 39+ lazy imports) | Backend |
+| 2 | normalizer.py exception swallowing (19+ bare except + pass) | Backend |
+| 3 | Test coverage gap: 166 modules, 106 test files (64%) | Backend |
+| 4 | CORS/Origin config duplicated in 3 places + inconsistency | Infra |
+| 5 | Docker Python 3.12 vs local 3.14 version mismatch | Infra |
+| 6 | CI dependency cache missing (pip + npm) | Infra |
+| 7 | Dev Dockerfile running as root (no USER directive) | Infra |
+| 8 | requirements.txt no upper bounds on deps | Infra |
+| 9 | 15+ API files use global singleton pattern (no DI) | Architecture |
+| 10 | 4 different validation patterns — security inconsistency | Architecture |
+| 11 | VEZIR_AUTH_BYPASS=1 with no startup audit warning | Architecture |
+| 12 | Controller imports from API layer (reverse dependency) | Architecture |
+| 13 | 36 API routers / ~123 endpoints in monolithic app | Architecture |
+| 14 | generated.ts 8326 lines in single file | Frontend |
+
+### S85 Scope Recommendation (Quick Win Sprint)
+
+8 quick-win items covering most HIGH findings: normalizer fix, CORS centralization, Docker upgrade, CI cache, Dockerfile USER, requirements upper bounds, stale doc fix, validation centralization.
 
 ## Current State
 
-- **Phase:** 10 active — S80 in progress
-- **Last closed sprint:** 79
-- **Decisions:** 146 frozen + 2 superseded (D-001 → D-149)
-- **Tests:** 1877 backend + 247 frontend + 13 Playwright + 139 root = 2276 total
-- **CI:** All green
-- **Lint:** 0 errors (eslint 10.2.0)
+- **Phase:** 10 active — S84 closed
+- **Last closed sprint:** 84
+- **Decisions:** 147 frozen (1 amended) + 2 superseded (D-001 → D-150)
+- **Tests:** 2049 backend + 247 frontend + 13 Playwright + 188 root = 2497 total
+- **CI:** All green (S84 merged)
+- **Lint:** 0 errors
 - **Port map:** API :8003, Frontend :4000, WMCP :8001
 - **Security:** 0 CodeQL open, 2 dependabot (pre-existing)
 - **Blockers:** None
+- **Technical Debt:** 46 items documented (14 HIGH, 21 MEDIUM, 11 LOW)
 
 ## Review History
 
@@ -44,7 +58,11 @@ Session 56: S80 implementation — housekeeping, dependency upgrades, doc hygien
 | S78 | — | PASS (R4) |
 | S78 UX Report | — | PASS (R2) |
 | S79 | — | ESCALATE R6 → Operator override PASS |
-| S80 | — | Pending |
+| S80 | — | PASS (R4) |
+| S81 | — | PASS (R2) |
+| S82 | — | PASS (R2) |
+| S83 | — | PASS (R2) |
+| S84 | — | PASS (R2) |
 
 ## Phase 10 Status
 
@@ -57,23 +75,21 @@ Session 56: S80 implementation — housekeeping, dependency upgrades, doc hygien
 | S77 | Azure OpenAI Provider Foundation (D-148) | Closed |
 | S78 | Router Bypass Fix + Browser Analysis (D-149) | Closed |
 | S79 | UX Remediation + Review Process Improvement | Closed |
-| S80 | Housekeeping + Dependency Upgrades | In Progress |
-| S81 | EventBus Production Wiring (D-147) | Planned |
-| S82 | Docker Production Image (D-116) | Planned |
-| S83 | D-150 Capability Routing Transition | Planned (needs operator review) |
-| S84 | SSO/RBAC Full External Auth | Planned |
+| S80 | Housekeeping + Dependency Upgrades | Closed |
+| S81 | EventBus Production Wiring (D-147) | Closed |
+| S82 | Docker Production Image (D-116) | Closed |
+| S83 | D-150 Capability Routing Transition | Closed |
+| S84 | SSO/RBAC Full External Auth | Closed |
 
 ## Carry-Forward
 
 | Item | Source | Status |
 |------|--------|--------|
 | PROJECT_TOKEN rotation | S23 retro | Rotated 2026-04-07, classic PAT, expires Jul 06, 2026 |
-| Docker prod image optimization | D-116 | Partial — docker-compose done → S82 |
-| SSO/RBAC (full external auth) | D-104/D-108/D-117 | Partial — D-117 + isolation done → S84 |
-| D-150 Capability Routing Transition | Proposed | Needs operator review → S83 |
-| EventBus production wiring | D-147 | Test-only → S81 |
+| Controller → runner EventBus pass-through | D-147 S81 | Not wired — future sprint |
 | eslint react-hooks peer dep | S80 | .npmrc workaround — update when react-hooks supports eslint 10 |
+| Technical debt backlog | Session 61 | 46 items in TECHNICAL-DEBT-REPORT.md — S85 scope TBD |
 
 ## GPT Memo
 
-Session 56: S80 implementation complete. 6 stale issues closed. eslint 9→10 (10.2.0), vite 6→8 (8.0.7), plugin-react 4→6 (6.0.1). Doc hygiene: NEXT.md carry-forward cleaned, GOVERNANCE.md B-148 updated, BACKLOG.md regenerated. project-auto-add regex fix for S80: title format. .npmrc legacy-peer-deps for CI compat. PR #424 all checks green. 1877+247+13+139=2276 tests. Awaiting GPT review.
+Session 61: Technical debt audit (no sprint). Full codebase analysis with 4 parallel agents (backend, frontend, infra, architecture). Report: docs/ai/TECHNICAL-DEBT-REPORT.md. 46 findings: 14 HIGH, 21 MEDIUM, 11 LOW. Top HIGH items: controller.py 2224 LOC god object, normalizer.py 19+ swallowed exceptions, 64% test file coverage (106/166), CORS/origin duplicated in 3 places, Docker Python 3.12 vs 3.14, CI no cache, dev Dockerfile root, requirements.txt no upper bounds, 15+ global singletons (no DI), 4 validation patterns, auth bypass no audit, controller→API reverse dependency, 36 API routers monolithic, generated.ts 8326 LOC. S85 recommended: quick-win sprint (normalizer fix, CORS central, Docker upgrade, CI cache, Dockerfile USER, requirements bounds, stale docs, validation central). No code changes this session — audit only.

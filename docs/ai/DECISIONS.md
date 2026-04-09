@@ -1,6 +1,6 @@
 # Architectural Decisions
 
-**Last updated:** 2026-04-07 (D-149)
+**Last updated:** 2026-04-09 (D-150)
 
 All decisions below are frozen unless marked otherwise.
 Reopening requires explicit phase gate approval + operator sign-off.
@@ -1343,9 +1343,9 @@ Formal record: `docs/decisions/D-146-review-max-round-escalation.md`.
 
 ### D-147: EventBus Operational Status
 
-**Phase:** Sprint 76 (Phase 10) | **Status:** Frozen
+**Phase:** Sprint 76 (Phase 10), amended Sprint 81 | **Status:** Frozen (amended)
 
-EventBus classified as internal test/development infrastructure, NOT a production control plane. Controller does not pass EventBus to runner. No startup wiring. Handler registration is test-only. OTel tracing/metrics operate independently. Future sprint may upgrade to production status with startup evidence.
+EventBus wired to production startup in S81. `EVENTBUS_ENABLED` feature flag (default: true). AuditTrailHandler (global, chain-hash audit log) + ProjectHandler (SSE broadcast for project events) registered at lifespan. Controller → runner pass-through remains unwired. OTel tracing/metrics still independent. 27 new tests.
 Formal record: `docs/decisions/D-147-eventbus-operational-status.md`.
 
 ### D-148: Azure OpenAI Primary Provider Adoption
@@ -1364,9 +1364,18 @@ Formal record: `docs/decisions/D-149-browser-analysis-contract.md`.
 
 ---
 
-## Decision Index (D-001 → D-149)
+### D-150: Capability Routing Transition
 
-146 frozen + 2 superseded decisions. D-126 skipped, D-132 deferred, D-143 skipped, D-082/D-098 superseded.
+**Phase:** Sprint 83 (Phase 10) | **Status:** Frozen
+
+Transition from provider-identity routing to capability-based routing. Capability registry maps task types (role + skill) to required provider capabilities. Controller resolves capabilities from registry before calling ProviderRoutingPolicy.select(). Backward compatible: unknown role/skill pairs get empty capabilities (= existing Azure-first). Telemetry emits capability resolution attributes. Fallback prefers best capability match.
+Formal record: `docs/decisions/D-150-capability-routing-transition.md`.
+
+---
+
+## Decision Index (D-001 → D-150)
+
+147 frozen + 2 superseded decisions. D-126 skipped, D-132 deferred, D-143 skipped, D-082/D-098 superseded.
 
 | ID | Title | Phase |
 |----|-------|-------|
@@ -1519,3 +1528,4 @@ Formal record: `docs/decisions/D-149-browser-analysis-contract.md`.
 | D-147 | EventBus Operational Status | Sprint 76 |
 | D-148 | Azure OpenAI Primary Provider Adoption | Sprint 77 |
 | D-149 | Browser Analysis — 3-Mode Observation Contract | Sprint 78 |
+| D-150 | Capability Routing Transition | Sprint 83 |

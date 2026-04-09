@@ -11,6 +11,17 @@ vi.stubGlobal('sessionStorage', {
   removeItem: (key: string) => { delete mockStorage[key] },
 })
 
+// Mock fetch for auth config endpoint
+vi.stubGlobal('fetch', vi.fn().mockImplementation((url: string) => {
+  if (url === '/api/v1/auth/config') {
+    return Promise.resolve({
+      ok: true,
+      json: () => Promise.resolve({ sso_enabled: false, provider: null, login_url: null }),
+    })
+  }
+  return Promise.resolve({ ok: false, json: () => Promise.resolve({}) })
+}))
+
 function renderLogin() {
   return render(
     <AuthProvider>
@@ -28,12 +39,12 @@ describe('LoginPage', () => {
     renderLogin()
     expect(screen.getByText('Vezir Platform')).toBeTruthy()
     expect(screen.getByLabelText('API Key')).toBeTruthy()
-    expect(screen.getByText('Login')).toBeTruthy()
+    expect(screen.getByText('Login with API Key')).toBeTruthy()
   })
 
   test('shows error for empty key', () => {
     renderLogin()
-    fireEvent.click(screen.getByText('Login'))
+    fireEvent.click(screen.getByText('Login with API Key'))
     expect(screen.getByText('API key is required')).toBeTruthy()
   })
 
@@ -41,7 +52,7 @@ describe('LoginPage', () => {
     renderLogin()
     const input = screen.getByLabelText('API Key')
     fireEvent.change(input, { target: { value: 'invalid_key' } })
-    fireEvent.click(screen.getByText('Login'))
+    fireEvent.click(screen.getByText('Login with API Key'))
     expect(screen.getByText(/Invalid key format/)).toBeTruthy()
   })
 
@@ -49,7 +60,7 @@ describe('LoginPage', () => {
     renderLogin()
     const input = screen.getByLabelText('API Key')
     fireEvent.change(input, { target: { value: 'vz_test_key_001' } })
-    fireEvent.click(screen.getByText('Login'))
+    fireEvent.click(screen.getByText('Login with API Key'))
     // No error shown means accepted
     expect(screen.queryByText('API key is required')).toBeNull()
     expect(screen.queryByText(/Invalid key format/)).toBeNull()
@@ -59,7 +70,7 @@ describe('LoginPage', () => {
     renderLogin()
     const input = screen.getByLabelText('API Key')
     fireEvent.change(input, { target: { value: 'vz_test_key_001' } })
-    fireEvent.click(screen.getByText('Login'))
+    fireEvent.click(screen.getByText('Login with API Key'))
     expect(mockStorage['vezir_auth']).toContain('vz_test_key_001')
   })
 

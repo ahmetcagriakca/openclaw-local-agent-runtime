@@ -1069,9 +1069,10 @@ Respond ONLY with a JSON object, no markdown:
                     context += f"- [{art_type}]: {json.dumps(art_data)[:200]}\n"
 
         full_instruction = instruction + context
-        # 6C-2: Agent selection from role registry
+        # 6C-2 + D-150: Agent selection via capability routing
         agent_id = self._select_agent_for_role(specialist, mission_id,
-                                                stage.get("id", ""))
+                                                stage.get("id", ""),
+                                                skill=stage.get("skill"))
         # 7.4: Track which agent/model was used for this stage
         stage["agent_used"] = agent_id
 
@@ -1559,15 +1560,17 @@ Respond ONLY with a JSON object, no markdown:
 
     def _select_agent_for_role(self, role_name: str,
                                 mission_id: str = "",
-                                stage_id: str = "") -> str:
-        """D-043 + D-148: Select provider/agent via ProviderRoutingPolicy.
+                                stage_id: str = "",
+                                skill: str | None = None) -> str:
+        """D-043 + D-148 + D-150: Select provider via capability-based routing.
 
+        D-150: Resolve required capabilities from registry before routing.
         All agent calls enter ProviderRoutingPolicy (D-148).
-        Role registry provides provider_preference hint.
         Routing policy applies: Azure-first, capability check, kill switch, fallback.
         """
         from context.policy_telemetry import emit_policy_event
         from mission.role_registry import get_role, resolve_role
+        from providers.capability_registry import resolve_capabilities
         from providers.factory import load_agent_config
         from providers.provider_telemetry import emit_provider_selection
         from providers.routing_policy import ProviderRoutingPolicy
@@ -1575,18 +1578,22 @@ Respond ONLY with a JSON object, no markdown:
         canonical = resolve_role(role_name)
         role_def = get_role(canonical)
 
+        # D-150 R1: Resolve required capabilities from registry
+        required_capabilities = resolve_capabilities(canonical, skill=skill)
+
         # D-148: Role preferredModel is informational only.
         # Routing policy decides provider (Azure-first).
         # No provider_preference override — all roles go through Azure-first routing.
         provider_preference = None
 
-        # D-148: All calls go through ProviderRoutingPolicy
+        # D-148 + D-150: Route through ProviderRoutingPolicy with capabilities
         policy = ProviderRoutingPolicy()
         try:
             agent_config = load_agent_config()
             decision = policy.select(
                 agent_config,
                 provider_preference=provider_preference,
+                required_capabilities=required_capabilities or None,
             )
             agent_name = decision.selected_provider
 
@@ -1608,6 +1615,8 @@ Respond ONLY with a JSON object, no markdown:
                 "preferred_model": role_def.get("preferredModel", "gpt-4o") if role_def else "gpt-4o",
                 "selected_agent": agent_name,
                 "routing_policy": True,
+                "required_capabilities": required_capabilities,
+                "capability_source": "registry",
             })
 
         return agent_name

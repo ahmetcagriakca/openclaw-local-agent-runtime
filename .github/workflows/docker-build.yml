@@ -1,0 +1,92 @@
+name: Docker Build
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'Dockerfile*'
+      - 'docker-compose*.yml'
+      - 'agent/**'
+      - 'config/**'
+      - 'frontend/**'
+      - '.dockerignore'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'Dockerfile*'
+      - 'docker-compose*.yml'
+      - 'agent/**'
+      - 'config/**'
+      - 'frontend/**'
+      - '.dockerignore'
+
+permissions:
+  contents: read
+
+jobs:
+  build-api:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Build API production image
+        run: docker build -f Dockerfile.prod -t vezir-api:test .
+
+      - name: Check image size
+        run: |
+          SIZE=$(docker image inspect vezir-api:test --format='{{.Size}}')
+          SIZE_MB=$((SIZE / 1024 / 1024))
+          echo "Image size: ${SIZE_MB}MB"
+          if [ "$SIZE_MB" -gt 300 ]; then
+            echo "::error::Image size ${SIZE_MB}MB exceeds 300MB limit"
+            exit 1
+          fi
+          echo "size_mb=${SIZE_MB}" >> "$GITHUB_OUTPUT"
+
+      - name: Smoke test — container starts and health responds
+        run: |
+          docker run -d --name vezir-test -p 8003:8003 vezir-api:test
+          echo "Waiting for container to start..."
+          for i in $(seq 1 30); do
+            if docker exec vezir-test python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8003/api/v1/health')" 2>/dev/null; then
+              echo "Health check passed on attempt $i"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "::error::Health check failed after 60s"
+          docker logs vezir-test
+          exit 1
+
+      - name: Cleanup
+        if: always()
+        run: docker rm -f vezir-test 2>/dev/null || true
+
+  build-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Build frontend production image
+        run: docker build -f frontend/Dockerfile -t vezir-frontend:test .
+
+      - name: Check image size
+        run: |
+          SIZE=$(docker image inspect vezir-frontend:test --format='{{.Size}}')
+          SIZE_MB=$((SIZE / 1024 / 1024))
+          echo "Image size: ${SIZE_MB}MB"
+          if [ "$SIZE_MB" -gt 100 ]; then
+            echo "::error::Frontend image size ${SIZE_MB}MB exceeds 100MB limit"
+            exit 1
+          fi
+
+  compose-validation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Validate docker-compose files
+        run: |
+          docker compose -f docker-compose.yml config --quiet
+          docker compose -f docker-compose.yml -f docker-compose.prod.yml config --quiet
+          echo "Both compose files are valid"

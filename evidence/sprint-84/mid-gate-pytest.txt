@@ -1,0 +1,85 @@
+============================= test session starts =============================
+platform win32 -- Python 3.14.3, pytest-7.4.4, pluggy-1.6.0 -- C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\AKCA\vezir\agent
+configfile: pyproject.toml
+plugins: anyio-4.12.1, cov-4.1.0, mock-3.12.0, timeout-2.4.0
+timeout: 30.0s
+timeout method: thread
+timeout func_only: False
+collecting ... collected 51 items
+
+tests/test_jwt_tokens.py::TestCreateAccessToken::test_creates_valid_token PASSED [  1%]
+tests/test_jwt_tokens.py::TestCreateAccessToken::test_decode_roundtrip PASSED [  3%]
+tests/test_jwt_tokens.py::TestCreateAccessToken::test_custom_expiry PASSED [  5%]
+tests/test_jwt_tokens.py::TestCreateRefreshToken::test_creates_refresh_token PASSED [  7%]
+tests/test_jwt_tokens.py::TestCreateRefreshToken::test_refresh_token_different_from_access PASSED [  9%]
+tests/test_jwt_tokens.py::TestDecodeToken::test_invalid_token_returns_none PASSED [ 11%]
+tests/test_jwt_tokens.py::TestDecodeToken::test_wrong_secret_returns_none PASSED [ 13%]
+tests/test_jwt_tokens.py::TestDecodeToken::test_expired_token_returns_none PASSED [ 15%]
+tests/test_jwt_tokens.py::TestTokenRevocation::test_revoke_token PASSED  [ 17%]
+tests/test_jwt_tokens.py::TestTokenRevocation::test_is_revoked PASSED    [ 19%]
+tests/test_jwt_tokens.py::TestRefreshAccessToken::test_refresh_returns_new_pair PASSED [ 21%]
+tests/test_jwt_tokens.py::TestRefreshAccessToken::test_refresh_with_access_token_fails PASSED [ 23%]
+tests/test_jwt_tokens.py::TestRefreshAccessToken::test_refresh_preserves_identity PASSED [ 25%]
+tests/test_jwt_tokens.py::TestTokenPayload::test_defaults PASSED         [ 27%]
+tests/test_jwt_tokens.py::TestTokenPayload::test_from_claims PASSED      [ 29%]
+tests/test_rbac.py::TestPermissions::test_viewer_has_read_permissions PASSED [ 31%]
+tests/test_rbac.py::TestPermissions::test_viewer_lacks_mutation_permissions PASSED [ 33%]
+tests/test_rbac.py::TestPermissions::test_operator_has_mutation_permissions PASSED [ 35%]
+tests/test_rbac.py::TestPermissions::test_operator_lacks_admin_permissions PASSED [ 37%]
+tests/test_rbac.py::TestPermissions::test_admin_has_all_permissions PASSED [ 39%]
+tests/test_rbac.py::TestPermissions::test_unknown_role_has_no_permissions PASSED [ 41%]
+tests/test_rbac.py::TestRoleHierarchy::test_admin_meets_all PASSED       [ 43%]
+tests/test_rbac.py::TestRoleHierarchy::test_operator_meets_operator_and_viewer PASSED [ 45%]
+tests/test_rbac.py::TestRoleHierarchy::test_viewer_meets_only_viewer PASSED [ 47%]
+tests/test_rbac.py::TestRoleHierarchy::test_unknown_role_meets_nothing PASSED [ 49%]
+tests/test_rbac.py::TestResolveRole::test_default_is_viewer PASSED       [ 50%]
+tests/test_rbac.py::TestResolveRole::test_env_default_role PASSED        [ 52%]
+tests/test_rbac.py::TestResolveRole::test_invalid_env_default_falls_to_viewer PASSED [ 54%]
+tests/test_rbac.py::TestResolveRole::test_username_mapping PASSED        [ 56%]
+tests/test_rbac.py::TestResolveRole::test_email_mapping PASSED           [ 58%]
+tests/test_rbac.py::TestResolveRole::test_org_mapping PASSED             [ 60%]
+tests/test_rbac.py::TestResolveRole::test_provider_specific_mapping PASSED [ 62%]
+tests/test_rbac.py::TestResolveRole::test_load_from_file PASSED          [ 64%]
+tests/test_rbac.py::TestValidRoles::test_all_roles_in_hierarchy PASSED   [ 66%]
+tests/test_rbac.py::TestValidRoles::test_all_roles_have_permissions PASSED [ 68%]
+tests/test_oauth_provider.py::TestOAuthConfig::test_no_config_returns_none PASSED [ 70%]
+tests/test_oauth_provider.py::TestOAuthConfig::test_env_config_github PASSED [ 72%]
+tests/test_oauth_provider.py::TestOAuthConfig::test_env_config_generic PASSED [ 74%]
+tests/test_oauth_provider.py::TestIsSsoEnabled::test_disabled_by_env PASSED [ 76%]
+tests/test_oauth_provider.py::TestIsSsoEnabled::test_enabled_when_configured PASSED [ 78%]
+tests/test_oauth_provider.py::TestGitHubOAuthProvider::test_get_authorize_url PASSED [ 80%]
+tests/test_oauth_provider.py::TestGenericOAuthProvider::test_get_authorize_url PASSED [ 82%]
+tests/test_oauth_provider.py::TestStateManagement::test_generate_and_validate PASSED [ 84%]
+tests/test_oauth_provider.py::TestStateManagement::test_state_consumed_on_validate PASSED [ 86%]
+tests/test_oauth_provider.py::TestStateManagement::test_unknown_state_fails PASSED [ 88%]
+tests/test_oauth_provider.py::TestStateManagement::test_expired_state_fails PASSED [ 90%]
+tests/test_oauth_provider.py::TestStateManagement::test_prune_old_states PASSED [ 92%]
+tests/test_oauth_provider.py::TestGetOAuthProvider::test_github_provider PASSED [ 94%]
+tests/test_oauth_provider.py::TestGetOAuthProvider::test_generic_provider PASSED [ 96%]
+tests/test_oauth_provider.py::TestGetOAuthProvider::test_reload_clears_cache PASSED [ 98%]
+tests/test_oauth_provider.py::TestOAuthUser::test_dataclass_fields PASSED [100%]
+
+============================== warnings summary ===============================
+tests/test_jwt_tokens.py: 11 warnings
+  C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\jwt\api_jwt.py:147: InsecureKeyLengthWarning: The HMAC key is 25 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.
+    return self._jws.encode(
+
+tests/test_jwt_tokens.py::TestCreateAccessToken::test_decode_roundtrip
+tests/test_jwt_tokens.py::TestCreateAccessToken::test_custom_expiry
+tests/test_jwt_tokens.py::TestCreateRefreshToken::test_creates_refresh_token
+tests/test_jwt_tokens.py::TestDecodeToken::test_expired_token_returns_none
+tests/test_jwt_tokens.py::TestTokenRevocation::test_revoke_token
+tests/test_jwt_tokens.py::TestRefreshAccessToken::test_refresh_returns_new_pair
+tests/test_jwt_tokens.py::TestRefreshAccessToken::test_refresh_with_access_token_fails
+tests/test_jwt_tokens.py::TestRefreshAccessToken::test_refresh_preserves_identity
+  C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\jwt\api_jwt.py:365: InsecureKeyLengthWarning: The HMAC key is 25 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.
+    decoded = self.decode_complete(
+
+tests/test_jwt_tokens.py::TestDecodeToken::test_wrong_secret_returns_none
+  C:\Users\AKCA\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\jwt\api_jwt.py:365: InsecureKeyLengthWarning: The HMAC key is 16 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.
+    decoded = self.decode_complete(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================= 51 passed, 20 warnings in 0.36s =======================

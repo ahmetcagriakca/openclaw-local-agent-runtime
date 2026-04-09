@@ -2,14 +2,26 @@ import { describe, test, expect, vi } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { SessionManager } from '../components/SessionManager'
 
-// Mock the AuthContext
+// Mock the AuthContext — S84 unified auth state
 const mockLogout = vi.fn()
 const mockAuth = {
   isAuthenticated: true,
-  userName: 'admin',
+  user: {
+    user_id: 'u1',
+    username: 'admin',
+    email: 'admin@vezir.dev',
+    display_name: 'Admin User',
+    role: 'operator',
+    provider: 'apikey',
+  },
+  authMode: 'apikey' as 'none' | 'apikey' | 'oauth',
+  accessToken: 'test-token',
+  refreshToken: null,
   apiKey: 'test-key',
+  userName: 'admin',
   logout: mockLogout,
   login: vi.fn(),
+  loginWithOAuth: vi.fn(),
   getAuthHeaders: vi.fn(),
 }
 
@@ -19,47 +31,49 @@ vi.mock('../auth/AuthContext', () => ({
 
 describe('SessionManager', () => {
   test('renders not-authenticated state when not logged in', () => {
+    const originalAuth = mockAuth.isAuthenticated
+    const originalUser = mockAuth.user
     mockAuth.isAuthenticated = false
+    mockAuth.user = null as unknown as typeof mockAuth.user
     render(<SessionManager />)
     expect(screen.getByText('Not authenticated')).toBeTruthy()
-    mockAuth.isAuthenticated = true
+    mockAuth.isAuthenticated = originalAuth
+    mockAuth.user = originalUser
   })
 
   test('renders session info when authenticated', () => {
     render(<SessionManager />)
     expect(screen.getByText('Session')).toBeTruthy()
-    expect(screen.getByText('admin')).toBeTruthy()
+    expect(screen.getByText('Admin User')).toBeTruthy()
   })
 
-  test('shows Active badge when session is not expired', () => {
-    const future = new Date(Date.now() + 86400000).toISOString() // +1 day
-    render(<SessionManager expiresAt={future} />)
+  test('shows Active badge', () => {
+    render(<SessionManager />)
     expect(screen.getByText('Active')).toBeTruthy()
   })
 
-  test('shows Expired badge when session is expired', () => {
-    const past = new Date(Date.now() - 86400000).toISOString() // -1 day
-    render(<SessionManager expiresAt={past} />)
-    // "Expired" appears twice: in the badge and in the expiry text
-    const expired = screen.getAllByText('Expired')
-    expect(expired.length).toBe(2)
+  test('shows role badge', () => {
+    render(<SessionManager />)
+    expect(screen.getByText('operator')).toBeTruthy()
   })
 
-  test('shows Never for expiration when expiresAt is null', () => {
-    render(<SessionManager expiresAt={null} />)
-    expect(screen.getByText('Never')).toBeTruthy()
+  test('shows auth mode for API key', () => {
+    render(<SessionManager />)
+    expect(screen.getByText('API Key')).toBeTruthy()
   })
 
-  test('shows remaining days for future expiration', () => {
-    const future = new Date(Date.now() + 3 * 86400000).toISOString() // +3 days
-    const { container } = render(<SessionManager expiresAt={future} />)
-    expect(container.textContent).toMatch(/\dd remaining/)
+  test('shows auth mode for OAuth', () => {
+    const original = { ...mockAuth }
+    mockAuth.authMode = 'oauth' as const
+    mockAuth.user = { ...mockAuth.user, provider: 'github' }
+    render(<SessionManager />)
+    expect(screen.getByText('SSO (github)')).toBeTruthy()
+    Object.assign(mockAuth, original)
   })
 
-  test('shows remaining hours for same-day expiration', () => {
-    const future = new Date(Date.now() + 5 * 3600000).toISOString() // +5 hours
-    const { container } = render(<SessionManager expiresAt={future} />)
-    expect(container.textContent).toMatch(/\dh remaining/)
+  test('shows email when available', () => {
+    render(<SessionManager />)
+    expect(screen.getByText('admin@vezir.dev')).toBeTruthy()
   })
 
   test('calls logout when Logout button clicked', () => {
@@ -68,11 +82,11 @@ describe('SessionManager', () => {
     expect(mockLogout).toHaveBeenCalledOnce()
   })
 
-  test('shows Unknown for userName when userName is null', () => {
-    const originalName = mockAuth.userName
-    mockAuth.userName = null as unknown as string
+  test('shows username when display_name is empty', () => {
+    const original = mockAuth.user
+    mockAuth.user = { ...mockAuth.user, display_name: '' }
     render(<SessionManager />)
-    expect(screen.getByText('Unknown')).toBeTruthy()
-    mockAuth.userName = originalName
+    expect(screen.getByText('admin')).toBeTruthy()
+    mockAuth.user = original
   })
 })

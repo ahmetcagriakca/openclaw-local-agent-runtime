@@ -1,0 +1,73 @@
+=== CLAIM 1: server.py lifespan Step 8 instantiates EventBus ===
+162:    # Step 8: EventBus production wiring (S81, D-147 upgrade)
+163:    event_bus = None
+165:        from events.bus import EventBus
+169:        event_bus = EventBus()
+173:        event_bus.on_all(audit_handler, priority=0, name="audit_trail")
+182:            event_bus.on(et, project_handler, name="project_handler")
+184:        app.state.event_bus = event_bus
+186:            "MCC startup: EventBus ready (%d handlers)",
+187:            event_bus.handler_count)
+189:        app.state.event_bus = None
+190:        logger.info("MCC startup: EventBus disabled (EVENTBUS_ENABLED=false)")
+195:    if event_bus is not None:
+196:        event_bus.clear()
+197:        logger.info("MCC shutdown: EventBus cleared")
+
+=== CLAIM 2: EVENTBUS_ENABLED defaults to true ===
+164:    if os.environ.get("EVENTBUS_ENABLED", "true").lower() in ("1", "true", "yes"):
+190:        logger.info("MCC startup: EventBus disabled (EVENTBUS_ENABLED=false)")
+
+=== CLAIM 3: AuditTrailHandler chain-hash ===
+1:"""AuditTrail handler — chain-hash immutable event log.
+4:Never halts. Writes to append-only JSONL with chain hash for tamper
+25:    """Immutable chain-hash audit log. Global handler, priority 0."""
+31:        self._prev_hash = "genesis"
+42:                            self._prev_hash = entry.get("hash", self._prev_hash)
+48:        """Log event with chain hash. Never halts."""
+56:            "prev_hash": self._prev_hash,
+59:        # Chain hash: SHA256(prev_hash + json(entry without hash))
+61:        entry["hash"] = hashlib.sha256(
+62:            (self._prev_hash + entry_json).encode()
+65:        self._prev_hash = entry["hash"]
+77:        """Verify the chain hash integrity.
+84:        prev_hash = "genesis"
+98:                if entry.get("prev_hash") != prev_hash:
+100:                        f"Line {line_num}: prev_hash mismatch "
+101:                        f"(expected {prev_hash}, got {entry.get('prev_hash')})")
+104:                expected_hash = hashlib.sha256(
+105:                    (prev_hash + entry_json).encode()
+113:                prev_hash = stored_hash
+
+=== CLAIM 4: SSE_BROADCAST_EVENTS set ===
+35:SSE_BROADCAST_EVENTS = frozenset({
+129:        if event.type in SSE_BROADCAST_EVENTS and self._sse_manager is not None:
+
+=== CLAIM 5: EventBus vs FileWatcher namespace separation ===
+EventBus project events (dotted):
+48:    PROJECT_CREATED = "project.created"
+49:    PROJECT_STATUS_CHANGED = "project.status_changed"
+50:    PROJECT_MISSION_LINKED = "project.mission_linked"
+51:    PROJECT_MISSION_UNLINKED = "project.mission_unlinked"
+52:    PROJECT_DELETED = "project.deleted"
+55:    PROJECT_WORKSPACE_ENABLED = "project.workspace_enabled"
+56:    PROJECT_ARTIFACT_PUBLISHED = "project.artifact_published"
+57:    PROJECT_ARTIFACT_UNPUBLISHED = "project.artifact_unpublished"
+60:    PROJECT_ROLLUP_UPDATED = "project.rollup_updated"
+FileWatcher events (flat):
+25:    event_type: str
+123:    def _check_single_file(self, path: Path, event_type: str):
+130:            debounce_s = DEBOUNCE_TELEMETRY_S if event_type == "telemetry_new" else DEBOUNCE_DEFAULT_S
+132:                WatchEvent(event_type=event_type, data={"updatedAt": self._iso_now()}),
+133:                debounce_key=f"file:{event_type}",
+148:                WatchEvent(event_type="approval_changed", data={"updatedAt": self._iso_now()}),
+171:                    event_type="mission_list_changed",
+188:                        event_type="mission_updated",
+248:            logger.warning("Event queue full, dropping: %s", event.event_type)
+
+=== CLAIM 6: D-147 amendment ===
+3:**Status:** frozen (amended S81)
+5:**Date:** 2026-04-06 (original), 2026-04-08 (amended)
+9:EventBus is classified as **operational production infrastructure** with feature-flag control.
+11:## Amendment (S81)
+24:3. ~~No EventBus instantiation in `api/server.py` or any startup path~~ → Fixed S81

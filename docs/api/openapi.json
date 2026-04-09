@@ -6618,6 +6618,205 @@
           }
         }
       }
+    },
+    "/api/v1/projects/{project_id}/github": {
+      "get": {
+        "tags": [
+          "projects"
+        ],
+        "summary": "Get Project Github",
+        "description": "Get GitHub binding, activity, and last sync time for a project.",
+        "operationId": "get_project_github_api_v1_projects__project_id__github_get",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project_id}/github/bind": {
+      "post": {
+        "tags": [
+          "projects"
+        ],
+        "summary": "Bind Project Github",
+        "description": "Bind a GitHub issue or PR thread to this project.",
+        "operationId": "bind_project_github_api_v1_projects__project_id__github_bind_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BindGitHubRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project_id}/github/sync": {
+      "post": {
+        "tags": [
+          "projects"
+        ],
+        "summary": "Sync Project Github",
+        "description": "Sync GitHub thread activity into this project.",
+        "operationId": "sync_project_github_api_v1_projects__project_id__github_sync_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project_id}/github/comment": {
+      "post": {
+        "tags": [
+          "projects"
+        ],
+        "summary": "Publish Project Github Comment",
+        "description": "Publish a comment to the bound GitHub thread.",
+        "operationId": "publish_project_github_comment_api_v1_projects__project_id__github_comment_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PublishGitHubCommentRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -6938,6 +7137,41 @@
           "sso_enabled"
         ],
         "title": "AuthConfigResponse"
+      },
+      "BindGitHubRequest": {
+        "properties": {
+          "repo_full_name": {
+            "type": "string",
+            "title": "Repo Full Name"
+          },
+          "issue_number": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Issue Number"
+          },
+          "pr_number": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pr Number"
+          }
+        },
+        "type": "object",
+        "required": [
+          "repo_full_name"
+        ],
+        "title": "BindGitHubRequest"
       },
       "CallbackRequest": {
         "properties": {
@@ -8278,6 +8512,21 @@
           "artifact_id"
         ],
         "title": "PublishArtifactRequest"
+      },
+      "PublishGitHubCommentRequest": {
+        "properties": {
+          "body": {
+            "type": "string",
+            "maxLength": 65536,
+            "minLength": 1,
+            "title": "Body"
+          }
+        },
+        "type": "object",
+        "required": [
+          "body"
+        ],
+        "title": "PublishGitHubCommentRequest"
       },
       "QuotaCheckRequest": {
         "properties": {

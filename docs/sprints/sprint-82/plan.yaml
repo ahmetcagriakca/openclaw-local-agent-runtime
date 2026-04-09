@@ -3,39 +3,54 @@ title: "Docker Production Image Optimization (D-116)"
 model: A
 class: DevEx + Operations
 phase: 10
-status: not_started
+status: in_progress
 
 scope: |
   Complete Docker production image optimization (D-116).
   docker-compose already operational. Remaining: multi-stage
-  production Dockerfile, image size reduction, CI build workflow.
+  production Dockerfile, frontend container, .dockerignore,
+  production compose profile, CI build verification.
 
 tasks:
   - id: T-82.01
     title: "Multi-stage production Dockerfile"
     description: |
-      Create optimized multi-stage Dockerfile:
-      Stage 1: build (dependencies + compile)
-      Stage 2: runtime (minimal base, copy only needed files)
+      Create optimized multi-stage Dockerfile for API:
+      Stage 1: build (dependencies install)
+      Stage 2: runtime (slim base, non-root user, copy only needed files)
+      Add .dockerignore for build context optimization.
       Target: <200MB image size.
     evidence: "docker build succeeds, image size < 200MB"
 
   - id: T-82.02
-    title: "Docker compose production profile"
+    title: "Frontend production container"
     description: |
-      Add 'production' profile to docker-compose.yml.
-      Separate dev (with Jaeger, hot-reload) from prod (optimized, no dev tools).
-    evidence: "docker compose --profile production up works"
+      Multi-stage Dockerfile for frontend:
+      Stage 1: node build (npm ci + vite build)
+      Stage 2: nginx serving static assets
+      Integrate into docker-compose.
+    evidence: "frontend container serves on port 4000, static build works"
 
   - id: T-82.03
-    title: "CI workflow for Docker build"
+    title: "Docker compose production profile"
     description: |
-      Add docker-build.yml workflow: build + push on main merge.
-      Verify image starts and passes health check.
+      Add docker-compose.prod.yml override for production.
+      Includes: api, frontend, jaeger, grafana.
+      Resource limits, restart policies, security hardening.
+    evidence: "docker compose -f docker-compose.yml -f docker-compose.prod.yml up works"
+
+  - id: T-82.04
+    title: "Docker build smoke tests + CI workflow"
+    description: |
+      Add docker-build.yml workflow: build + verify on PR/main merge.
+      Smoke test script verifying health endpoint.
+      Evidence collection for closure.
     evidence: "CI workflow green, health endpoint responds"
 
 done_criteria:
-  - Production Dockerfile < 200MB
-  - Docker compose production profile works
-  - CI builds Docker image on merge
+  - Production Dockerfile multi-stage, <200MB
+  - Frontend container with nginx
+  - Production compose profile operational
+  - CI builds Docker image
   - D-116 carry-forward marked complete
+  - All existing tests still pass (2303+)

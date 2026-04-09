@@ -1,0 +1,49 @@
+# Version control
+.git
+.gitignore
+
+# Documentation
+docs/
+*.md
+LICENSE
+
+# Tests
+agent/tests/
+tests/
+frontend/src/**/*.test.*
+frontend/src/**/*.spec.*
+
+# Development files
+.env
+.env.*
+*.pyc
+__pycache__
+.pytest_cache
+.ruff_cache
+.mypy_cache
+node_modules
+.vscode
+.idea
+
+# CI/CD
+.github/
+
+# Build artifacts
+dist/
+build/
+*.egg-info
+
+# Evidence and archives
+evidence/
+vezir-archive/
+
+# Docker files (avoid recursive)
+docker-compose*.yml
+Dockerfile*
+
+# Tools (dev-only)
+tools/
+bridge/
+
+# Frontend source (only needed in frontend build stage)
+# Note: frontend/ is included via specific COPY in Dockerfile

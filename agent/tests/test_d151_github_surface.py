@@ -11,6 +11,7 @@ import inspect
 import unittest
 from datetime import datetime, timezone
 from pathlib import Path
+
 from auth.middleware import AuthenticatedUser
 from events.bus import Event
 from events.catalog import EventType

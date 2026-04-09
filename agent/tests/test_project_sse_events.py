@@ -24,7 +24,7 @@ class TestSSEBroadcastEvents:
         assert EventType.PROJECT_ARTIFACT_UNPUBLISHED in SSE_BROADCAST_EVENTS
 
     def test_sse_broadcast_events_count(self):
-        assert len(SSE_BROADCAST_EVENTS) == 4
+        assert len(SSE_BROADCAST_EVENTS) == 7  # 4 original + 3 GitHub (D-151)
 
     def test_sse_broadcast_events_are_subset_of_project_events(self):
         assert SSE_BROADCAST_EVENTS.issubset(PROJECT_EVENT_TYPES)
@@ -110,4 +110,4 @@ class TestProjectHandlerRollupEvent:
         assert EventType.PROJECT_ROLLUP_UPDATED in PROJECT_EVENT_TYPES
 
     def test_project_event_types_count(self):
-        assert len(PROJECT_EVENT_TYPES) == 9
+        assert len(PROJECT_EVENT_TYPES) == 12  # 9 original + 3 GitHub (D-151)

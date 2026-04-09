@@ -68,6 +68,8 @@ ARTIFACT_MUTABLE_STATUSES = {ProjectStatus.DRAFT, ProjectStatus.ACTIVE}
 # D-144 §3: Mission quiescent states
 MISSION_QUIESCENT_STATUSES = {"completed", "failed", "timed_out"}
 
+MAX_GITHUB_ACTIVITY_ITEMS = 200
+
 
 class ProjectStoreError(Exception):
     """Base error for project store operations."""
@@ -106,6 +108,17 @@ class ProjectLifecycleError(ProjectStoreError):
 def generate_project_id() -> str:
     """Generate project ID with proj_ prefix per D-144 §2."""
     return f"proj_{uuid.uuid4().hex[:12]}"
+
+
+def _now_iso() -> str:
+    return datetime.now(timezone.utc).isoformat()
+
+
+def _normalize_repo_full_name(repo_full_name: str) -> str:
+    repo = (repo_full_name or "").strip().strip("/")
+    if repo.count("/") != 1:
+        raise ProjectStoreError(f"Invalid repo_full_name: {repo_full_name}")
+    return repo
 
 
 class ProjectStore:
@@ -411,6 +424,95 @@ class ProjectStore:
             "quiescent_count": quiescent_count,
             "last_activity": last_activity or None,
         }
+
+    # ── GitHub surface (D-151) ─────────────────────────────────
+
+    def get_github(self, project_id: str) -> dict:
+        with self._lock:
+            proj = self._projects.get(project_id)
+            if proj is None:
+                raise ProjectStoreError(f"Project not found: {project_id}")
+            return {
+                "binding": dict(proj.get("github")) if proj.get("github") else None,
+                "activity": [dict(item) for item in proj.get("github_activity", [])],
+                "last_sync_at": proj.get("github_last_sync_at"),
+            }
+
+    def bind_github(
+        self,
+        project_id: str,
+        repo_full_name: str,
+        *,
+        issue_number: int | None = None,
+        pr_number: int | None = None,
+        bound_by: dict | None = None,
+    ) -> dict:
+        repo = _normalize_repo_full_name(repo_full_name)
+        if issue_number is None and pr_number is None:
+            raise ProjectStoreError("GitHub binding requires issue_number or pr_number")
+        if issue_number is not None and pr_number is not None:
+            raise ProjectStoreError("GitHub binding accepts only one of issue_number or pr_number")
+
+        with self._lock:
+            proj = self._projects.get(project_id)
+            if proj is None:
+                raise ProjectStoreError(f"Project not found: {project_id}")
+
+            binding = {
+                "provider": "github",
+                "repo_full_name": repo,
+                "issue_number": issue_number,
+                "pr_number": pr_number,
+                "thread_number": issue_number if issue_number is not None else pr_number,
+                "bound_at": _now_iso(),
+                "updated_at": _now_iso(),
+                "bound_by": dict(bound_by or {}),
+            }
+            proj["github"] = binding
+            proj["updated_at"] = binding["updated_at"]
+            self._save()
+            return dict(binding)
+
+    def sync_github_activity(self, project_id: str, sync_result: dict) -> dict:
+        repo = _normalize_repo_full_name(sync_result.get("repo_full_name", ""))
+        activity = sync_result.get("activity") or []
+        if not isinstance(activity, list):
+            raise ProjectStoreError("GitHub sync result has invalid activity payload")
+
+        with self._lock:
+            proj = self._projects.get(project_id)
+            if proj is None:
+                raise ProjectStoreError(f"Project not found: {project_id}")
+
+            binding = proj.get("github")
+            if not binding:
+                raise ProjectStoreError(f"Project {project_id} has no GitHub binding")
+            if binding.get("repo_full_name") != repo:
+                raise ProjectStoreError("GitHub sync repo does not match project binding")
+
+            proj["github_activity"] = activity[-MAX_GITHUB_ACTIVITY_ITEMS:]
+            proj["github_last_sync_at"] = sync_result.get("fetched_at") or _now_iso()
+            binding["updated_at"] = proj["github_last_sync_at"]
+            proj["updated_at"] = proj["github_last_sync_at"]
+            self._save()
+            return {
+                "binding": dict(binding),
+                "activity": [dict(item) for item in proj["github_activity"]],
+                "last_sync_at": proj["github_last_sync_at"],
+            }
+
+    def append_github_activity(self, project_id: str, activity_entry: dict) -> dict:
+        with self._lock:
+            proj = self._projects.get(project_id)
+            if proj is None:
+                raise ProjectStoreError(f"Project not found: {project_id}")
+            items = list(proj.get("github_activity", []))
+            items.append(dict(activity_entry))
+            proj["github_activity"] = items[-MAX_GITHUB_ACTIVITY_ITEMS:]
+            proj["github_last_sync_at"] = activity_entry.get("created_at") or _now_iso()
+            proj["updated_at"] = _now_iso()
+            self._save()
+            return dict(activity_entry)
 
     # ── Internal ─────────────────────────────────────────────────
 

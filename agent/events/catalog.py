@@ -1,6 +1,6 @@
 """Event Catalog — D-102 event type definitions.
 
-28 event types across 7 namespaces. Each event type has a fixed
+31 event types across 8 namespaces. Each event type has a fixed
 string identifier used for handler registration and history queries.
 """
 
@@ -56,6 +56,11 @@ class EventType:
     PROJECT_ARTIFACT_PUBLISHED = "project.artifact_published"
     PROJECT_ARTIFACT_UNPUBLISHED = "project.artifact_unpublished"
 
+    # ── Project GitHub surface (D-151) ───────────────────────────
+    PROJECT_GITHUB_BOUND = "project.github_bound"
+    PROJECT_GITHUB_SYNCED = "project.github_synced"
+    PROJECT_GITHUB_COMMENT_PUBLISHED = "project.github_comment_published"
+
     # ── Project SSE (D-145 Faz 2B) ───────────────────────────────
     PROJECT_ROLLUP_UPDATED = "project.rollup_updated"
 
@@ -67,7 +72,7 @@ class EventType:
 
     @classmethod
     def all_types(cls) -> list[str]:
-        """Return all 28 event type strings."""
+        """Return all 31 event type strings."""
         return [
             v for k, v in vars(cls).items()
             if isinstance(v, str) and not k.startswith("_")

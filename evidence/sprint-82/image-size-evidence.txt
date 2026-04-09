@@ -1,0 +1,21 @@
+# Docker Image Size Evidence — Sprint 82
+
+## Source: CI Run #24174198528, step "Check image size"
+
+### API Image (vezir-api:test)
+Raw CI log:
+  build-api  Check image size  Image size: 166MB
+  → 166MB < 300MB limit → PASS
+  → 166MB < 200MB target (plan.yaml) → PASS
+
+### Frontend Image (vezir-frontend:test)
+Raw CI log:
+  build-frontend  Check image size  Image size: 46MB
+  → 46MB < 100MB limit → PASS
+
+## Size check commands (from docker-build.yml)
+```bash
+SIZE=$(docker image inspect vezir-api:test --format='{{.Size}}')
+SIZE_MB=$((SIZE / 1024 / 1024))
+echo "Image size: ${SIZE_MB}MB"
+```

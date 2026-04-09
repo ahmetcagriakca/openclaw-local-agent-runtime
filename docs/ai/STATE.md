@@ -1,9 +1,9 @@
 # Current State
 
-**Last updated:** 2026-04-08
-**Active phase:** Phase 10 — Sprint 81 closed
+**Last updated:** 2026-04-09
+**Active phase:** Phase 10 — Sprint 82 implementation done
 **Doc model:** This file is canonical for system state. Session context lives in `docs/ai/handoffs/current.md`.
-**Note:** All sprints through 53 closed. S54 deferred. S55-S80 closed. All P1 backlog items complete (50/50). Phase 10 active (S73+). Phase 9 complete (S69-S72). Phase 8 complete (S60-S68). 146 frozen + 2 superseded decisions (D-001 → D-149, D-126 skipped, D-143 placeholder, D-082/D-098 superseded). Governance: 20-step closure checklist. Review pipeline: max 5 rounds + ESCALATE (D-146).
+**Note:** All sprints through 53 closed. S54 deferred. S55-S81 closed. All P1 backlog items complete (50/50). Phase 10 active (S73+). Phase 9 complete (S69-S72). Phase 8 complete (S60-S68). 146 frozen + 2 superseded decisions (D-001 → D-149, D-126 skipped, D-143 placeholder, D-082/D-098 superseded). Governance: 20-step closure checklist. Review pipeline: max 5 rounds + ESCALATE (D-146).
 **Persistence:** State is file-persisted (state.json, mission.json). Mission history via persistence layer (Sprint 16).
 **API:** Vezir API on 127.0.0.1:8003 (FastAPI + Uvicorn). Schemas FROZEN (D-067). SSE on /api/v1/events/stream. Dashboard API + Alert API + Telemetry Query API (Sprint 16).
 **Frontend:** React dashboard on localhost:4000 (Vite + Tailwind). SSE live updates + polling fallback + intervention buttons + monitoring dashboard. Node.js 20 required.
@@ -140,6 +140,8 @@
 | Sprint 78 | Router Bypass Fix + Browser Analysis Contract (D-149) — Phase 10 | Closed |
 | Sprint 79 | UX Remediation + Review Process Improvement — Phase 10 | Closed |
 | Sprint 80 | Housekeeping + Dependency Upgrades — Phase 10 | Closed |
+| Sprint 81 | EventBus Production Wiring (D-147) — Phase 10 | Closed |
+| Sprint 82 | Docker Production Image (D-116) — Phase 10 | Impl Done |
 
 ## Test Evidence
 
@@ -192,6 +194,7 @@
 | Sprint 79 | 1877 tests, 0 fail | 247 tests, 0 TS errors | +8 frontend (ApiErrorBanner, ConnectionIndicator, client tests). 13 Playwright. 139 root. 2276 total |
 | Sprint 80 | 1877 tests, 0 fail | 247 tests, 0 TS errors | Housekeeping sprint — no new tests. eslint 10.2.0, vite 8.0.7. 2276 total |
 | Sprint 81 | 1904 tests, 0 fail | 247 tests, 0 TS errors | +27 backend (EventBus production 16, integration 11). 2303 total |
+| Sprint 82 | 1904 tests, 0 fail | 247 tests, 0 TS errors | +49 root (Docker config validation). 188 root total. 2352 total |
 
 ## Architectural Decisions
 

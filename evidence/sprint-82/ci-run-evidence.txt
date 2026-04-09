@@ -1,0 +1,36 @@
+# CI Run Evidence — Sprint 82
+
+## Docker Build (success) — Run #24174198528
+URL: https://github.com/ahmetcagriakca/vezir/actions/runs/24174198528
+Branch: s82-docker-production-image
+Commit: cc129e1
+
+### build-api
+- Build: docker build -f Dockerfile.prod -t vezir-api:test . → SUCCESS
+- Image size: 166MB (limit: 300MB) → PASS
+- Smoke test: Health check passed on attempt 2 → PASS
+- Cleanup: container removed
+
+### build-frontend
+- Build: docker build -f frontend/Dockerfile -t vezir-frontend:test . → SUCCESS
+- Image size: 46MB (limit: 100MB) → PASS
+
+### compose-validation
+- docker compose -f docker-compose.yml config --quiet → PASS
+- docker compose -f docker-compose.yml -f docker-compose.prod.yml config --quiet → PASS
+- Warning: 'version' attribute obsolete (removed in fix commit)
+
+## CI (success) — Run #24174362830
+URL: https://github.com/ahmetcagriakca/vezir/actions/runs/24174362830
+- Backend tests: PASS
+- Frontend tests: PASS
+- TSC: PASS
+- Lint: PASS
+
+## Playwright E2E (success) — Run #24174362826
+URL: https://github.com/ahmetcagriakca/vezir/actions/runs/24174362826
+- 13 tests: PASS
+
+## PR Validator (success) — Run #24174198475
+URL: https://github.com/ahmetcagriakca/vezir/actions/runs/24174198475
+- Title/body validation: PASS

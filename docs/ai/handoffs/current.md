@@ -15,34 +15,21 @@ Session 62: Authentication module security audit — 45 new security tests added
 - All 101 auth tests passing (45 new + 56 existing)
 - No password reset feature exists — system is OAuth2-only (GitHub provider)
 
-### Previous Session (61)
-
-### Deliverable 1: Technical Debt Audit
-- **Report:** `docs/ai/TECHNICAL-DEBT-REPORT.md` — 46 findings (14 HIGH, 21 MEDIUM, 11 LOW)
-- S85 recommended as quick-win sprint
-
-### Deliverable 2: D-151 Project-Scoped GitHub Communication Surface — MERGED
-- **PR:** #448 merged. **Issue:** #449 auto-closed.
-- GPT review: HOLD R1 → PASS R2
-- 4 endpoints, 46 tests, auth fix (ApiKey → AuthenticatedUser)
-
-### Deliverable 3: D-152 Issue-First PR Link Gate — MERGED
-- **PR:** #450 merged. **Issue:** #451 auto-closed.
-- GPT review: HOLD R1 → HOLD R2 → PASS R3
-- Decision frozen. PR template + fail-closed validator + repo-aware workflow
-- 44 tests, end-to-end enforcement: issues.json → CI gate → closure fail-closed
-- Artifacts: decision doc, PR template, validator, workflow, issue-from-plan extension, close-merged-issues orphan detection, project-validator integration, audit report
+### Previous Session (61) Deliverables
+- Tech debt audit: 46 findings (TECHNICAL-DEBT-REPORT.md)
+- D-151 merged (PR #448, #449 closed)
+- D-152 merged (PR #450, #451 closed)
 
 ## Current State
 
 - **Phase:** 10 active — S84 closed
 - **Last closed sprint:** 84
 - **Decisions:** 149 frozen (1 amended) + 2 superseded (D-001 → D-152)
-- **Tests (main):** 2049+46 backend + 247 frontend + 13 Playwright + 188+44 root = 2587 total
+- **Tests (main):** 2094 backend + 247 frontend + 13 Playwright + 232 root = 2586 total (+45 auth security)
 - **CI:** All green
 - **Lint:** 0 errors
 - **Port map:** API :8003, Frontend :4000, WMCP :8001
-- **Security:** 0 CodeQL open, 2 dependabot (pre-existing)
+- **Security:** 0 CodeQL open, 2 dependabot (pre-existing). Auth security audit: 45 tests pass.
 - **Blockers:** None
 - **Technical Debt:** 46 items (TECHNICAL-DEBT-REPORT.md)
 
@@ -66,4 +53,4 @@ Session 62: Authentication module security audit — 45 new security tests added
 
 ## GPT Memo
 
-Session 61 final: Three deliverables all merged. (1) Tech debt audit: 46 findings (14H/21M/11L), S85 recommended. (2) D-151 merged (PR #448, #449 closed): GitHub project communication surface, 4 endpoints, 46 tests, auth fix. GPT HOLD R1 → PASS R2. (3) D-152 merged (PR #450, #451 closed): issue-first PR link gate, 44 tests, end-to-end enforcement (issues.json → CI gate → closure). GPT HOLD R1 → HOLD R2 → PASS R3. Decisions: 149 frozen (D-001→D-152). Tests: ~2587 total. Follow-up: GPT requested deterministic repo startup contract as separate issue.
+Session 62: Auth security audit. 45 new security tests (test_auth_security.py) across 13 classes: JWT expiry/secret/revocation/type-confusion/replay, RBAC permission matrix/hierarchy/resolution, admin/operator enforcement, OAuth logout idempotency, API key expiration, token payload integrity. All 101 auth tests pass (45 new + 56 existing). No password reset feature — system is OAuth2-only. Previous session (61): debt audit (46 findings), D-151 merged (#448/#449), D-152 merged (#450/#451). Decisions: 149 frozen. Tests: ~2586 total.

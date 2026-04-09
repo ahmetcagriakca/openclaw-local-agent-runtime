@@ -114,4 +114,4 @@ S85: TBD — Technical debt quick-win sprint recommended (see `docs/ai/TECHNICAL
 | Controller→runner EventBus pass-through | D-147 S81 | Not wired — future sprint |
 | eslint react-hooks peer dep | S80 | .npmrc workaround — update when react-hooks supports eslint 10 |
 | Technical debt backlog (46 items) | Session 61 | Documented in TECHNICAL-DEBT-REPORT.md, 14 HIGH / 21 MEDIUM / 11 LOW |
-| PR #448 D-151 GitHub surface | Session 61 | DRAFT — wiring done, CI pending, needs review + merge |
+| PR #448 D-151 GitHub surface (#449) | Session 61 | DRAFT — GPT HOLD R1 patches applied (auth fix + 46 tests), re-review pending |

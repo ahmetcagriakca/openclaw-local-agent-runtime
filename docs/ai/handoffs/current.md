@@ -7,40 +7,49 @@
 
 ## Session Summary
 
-Session 61: Two deliverables — (1) full codebase technical debt audit, (2) D-151 tracked-file wiring on PR #448.
+Session 61: Three deliverables — (1) full codebase technical debt audit, (2) D-151 tracked-file wiring, (3) D-151 GPT review HOLD fixes.
 
 ### Deliverable 1: Technical Debt Audit
 - **Report:** `docs/ai/TECHNICAL-DEBT-REPORT.md` — 46 findings (14 HIGH, 21 MEDIUM, 11 LOW)
 - 4 parallel analysis agents (backend, frontend, infra, architecture) + manual verification
-- No code changes — audit only
 
 ### Deliverable 2: D-151 Project-Scoped GitHub Communication Surface
 - **PR:** #448 (`feature/d151-project-github-surface-patch-v2`) — DRAFT
+- **Issue:** #449
 - **Foundation (GPT):** D-151 decision doc, `github_project_service.py`, apply pack
-- **Wiring (Claude):** 4 tracked files patched per apply pack:
-  - `agent/events/catalog.py` — +3 event types (project.github_bound/synced/comment_published)
-  - `agent/events/handlers/project_handler.py` — audit log + SSE broadcast for GitHub events
-  - `agent/persistence/project_store.py` — bind_github, sync_github_activity, append_github_activity, get_github
-  - `agent/api/project_api.py` — 4 new endpoints (GET/bind/sync/comment)
+- **Wiring (Claude):** 4 tracked files patched:
+  - `catalog.py` — +3 event types (project.github_bound/synced/comment_published)
+  - `project_handler.py` — audit log + SSE broadcast for GitHub events (12 total)
+  - `project_store.py` — bind_github, sync_github_activity, append_github_activity, get_github
+  - `project_api.py` — 4 new endpoints (GET/bind/sync/comment)
 - **Identity contract:** user_id=ahmetcagriakca (frozen per D-151)
-- **Validation:** 1877 passed, 0 failed. Compile clean. Forbidden value clean.
-- **Conflict resolution:** Merged main into branch, regenerated OpenAPI (156 endpoints) + TS types
-- **CI:** sdk-drift fixed. Awaiting final green.
-- **Note:** Branch based on S80 — uses `ApiKey` not `AuthenticatedUser` (S84 feature). Will need adaptation on merge or rebase.
+
+### Deliverable 3: GPT Review HOLD Fixes
+- **P1 fixed:** PR summary truthfulness — endpoint-tested vs live smoke clearly separated
+- **P2 fixed:** 19 endpoint-level API tests added (`test_d151_github_api.py`)
+  - GET /github: 3 tests (empty, 404, bound state)
+  - POST /bind: 6 tests (issue, PR, 422 validation, 404, persist)
+  - POST /sync: 4 tests (409, 404, 200 mock, 502 error)
+  - POST /comment: 6 tests (409, 404, 422, 201 mock, 502, activity)
+- **P3 fixed:** Runtime evidence block — BLOCKED status documented with exact reason
+- **Workflow fix:** Issue #449 created, PR #448 linked with `Closes #449`
+- **Auth fix:** ApiKey → AuthenticatedUser in all D-151 endpoint signatures
+- **Tests:** 27 unit/contract + 19 endpoint = 46 new D-151 tests. Full suite: 2091 passed, 0 failed.
+- **CI:** sdk-drift fixed, ruff lint fixed (3 rounds). Awaiting final green on latest push.
 
 ## Current State
 
 - **Phase:** 10 active — S84 closed
 - **Last closed sprint:** 84
 - **Decisions:** 147 frozen (1 amended) + 2 superseded (D-001 → D-150) + D-151 in PR
-- **Tests:** 2049 backend + 247 frontend + 13 Playwright + 188 root = 2497 total (main)
-- **CI:** All green on main. PR #448 awaiting CI re-run after conflict resolution.
+- **Tests:** 2049 backend + 247 frontend + 13 Playwright + 188 root = 2497 total (main). PR branch: 2091 backend passed.
+- **CI:** All green on main. PR #448 awaiting CI on latest push (`fa7daa5`).
 - **Lint:** 0 errors
 - **Port map:** API :8003, Frontend :4000, WMCP :8001
 - **Security:** 0 CodeQL open, 2 dependabot (pre-existing)
-- **Blockers:** None
+- **Blockers:** None on main. PR #448 GPT review: HOLD R1 — patches applied, re-review needed.
 - **Technical Debt:** 46 items documented (14 HIGH, 21 MEDIUM, 11 LOW)
-- **Open PR:** #448 D-151 GitHub surface (DRAFT)
+- **Open PR:** #448 D-151 GitHub surface (DRAFT, linked to #449)
 
 ## Review History
 
@@ -56,6 +65,7 @@ Session 61: Two deliverables — (1) full codebase technical debt audit, (2) D-1
 | S82 | — | PASS (R2) |
 | S83 | — | PASS (R2) |
 | S84 | — | PASS (R2) |
+| D-151 PR #448 | — | HOLD R1 — P1/P2/P3 patched, re-review pending |
 
 ## Phase 10 Status
 
@@ -82,8 +92,8 @@ Session 61: Two deliverables — (1) full codebase technical debt audit, (2) D-1
 | Controller → runner EventBus pass-through | D-147 S81 | Not wired — future sprint |
 | eslint react-hooks peer dep | S80 | .npmrc workaround — update when react-hooks supports eslint 10 |
 | Technical debt backlog | Session 61 | 46 items in TECHNICAL-DEBT-REPORT.md — S85 scope TBD |
-| PR #448 D-151 GitHub surface | Session 61 | DRAFT — needs CI green + review + merge |
+| PR #448 D-151 GitHub surface | Session 61 | DRAFT — GPT HOLD R1 patches applied, re-review pending, CI pending |
 
 ## GPT Memo
 
-Session 61: Two deliverables. (1) Technical debt audit: docs/ai/TECHNICAL-DEBT-REPORT.md, 46 findings (14H/21M/11L). Top items: controller.py 2224 LOC god object, normalizer.py 19+ swallowed exceptions, 64% test file coverage, CORS duplicate, Docker Python 3.12 vs 3.14, CI no cache, dev Dockerfile root, requirements.txt no upper bounds, 15+ global singletons, 4 validation patterns. S85 recommended: quick-win sprint. (2) D-151 tracked-file wiring on PR #448: 4 files patched (catalog.py +3 events, project_handler.py audit+SSE, project_store.py GitHub persistence, project_api.py +4 endpoints). Identity: ahmetcagriakca frozen. Tests: 1877 passed. Conflicts with main resolved (openapi.json, generated.ts, capabilities.json). SDK-drift fixed. Branch S80-based, uses ApiKey not AuthenticatedUser.
+Session 61: Three deliverables. (1) Tech debt audit: docs/ai/TECHNICAL-DEBT-REPORT.md, 46 findings (14H/21M/11L). S85 recommended as quick-win sprint. (2) D-151 tracked-file wiring on PR #448 (issue #449): 4 files patched (catalog +3 events, handler audit+SSE, store GitHub persistence, API +4 endpoints). Identity: ahmetcagriakca frozen. (3) GPT review HOLD R1 fix: auth contract ApiKey→AuthenticatedUser, 19 endpoint-level API tests (test_d151_github_api.py), PR summary truthfulness fix, runtime evidence BLOCKED documented, issue #449 created and linked. Total new D-151 tests: 46 (27 unit/contract + 19 endpoint). Full suite: 2091 passed. Live GitHub API smoke deferred (no server + token). CI: sdk-drift fixed, ruff lint fixed (3 rounds). Awaiting GPT re-review R2.

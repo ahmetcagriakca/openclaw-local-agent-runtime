@@ -197,7 +197,7 @@
 | Sprint 80 | 1877 tests, 0 fail | 247 tests, 0 TS errors | Housekeeping sprint — no new tests. eslint 10.2.0, vite 8.0.7. 2276 total |
 | Sprint 81 | 1904 tests, 0 fail | 247 tests, 0 TS errors | +27 backend (EventBus production 16, integration 11). 2303 total |
 | Sprint 82 | 1904 tests, 0 fail | 247 tests, 0 TS errors | +49 root (Docker config validation). 188 root total. 2352 total |
-| Sprint 83 | 1959 tests, 0 fail | 247 tests, 0 TS errors | +55 backend (capability registry 28, routing integration 14, telemetry 13). 188 root total. 2407 total |
+| Sprint 83 | 1963 tests, 0 fail | 247 tests, 0 TS errors | +59 backend (capability registry 28, routing integration 14+4, telemetry 13). 188 root total. 2411 total |
 
 ## Architectural Decisions
 

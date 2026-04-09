@@ -27,7 +27,7 @@ Session 59: S83 implementation — D-150 Capability Routing Transition. Formaliz
 - **Phase:** 10 active — S83 impl done
 - **Last closed sprint:** 82
 - **Decisions:** 147 frozen + 2 superseded (D-001 → D-150)
-- **Tests:** 1904 backend + 247 frontend + 13 Playwright + 188 root = 2352 total (+ 55 new backend)
+- **Tests:** 1963 backend + 247 frontend + 13 Playwright + 188 root = 2411 total (+59 new backend)
 - **CI:** Pending (PR not yet pushed)
 - **Lint:** 0 errors
 - **Port map:** API :8003, Frontend :4000, WMCP :8001

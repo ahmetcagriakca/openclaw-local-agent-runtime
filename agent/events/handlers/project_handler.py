@@ -2,7 +2,7 @@
 
 D-144 §9: Audit logging for project events.
 D-145 Faz 2B: SSE broadcast for project events + rollup invalidation.
-Handles 9 project event types. Logs to structured logger.
+Handles 12 project event types. Logs to structured logger.
 Does not halt event propagation.
 """
 from __future__ import annotations
@@ -29,6 +29,9 @@ PROJECT_EVENT_TYPES = frozenset({
     EventType.PROJECT_ARTIFACT_PUBLISHED,
     EventType.PROJECT_ARTIFACT_UNPUBLISHED,
     EventType.PROJECT_ROLLUP_UPDATED,
+    EventType.PROJECT_GITHUB_BOUND,
+    EventType.PROJECT_GITHUB_SYNCED,
+    EventType.PROJECT_GITHUB_COMMENT_PUBLISHED,
 })
 
 # Events that should trigger SSE broadcast
@@ -37,6 +40,9 @@ SSE_BROADCAST_EVENTS = frozenset({
     EventType.PROJECT_ROLLUP_UPDATED,
     EventType.PROJECT_ARTIFACT_PUBLISHED,
     EventType.PROJECT_ARTIFACT_UNPUBLISHED,
+    EventType.PROJECT_GITHUB_BOUND,
+    EventType.PROJECT_GITHUB_SYNCED,
+    EventType.PROJECT_GITHUB_COMMENT_PUBLISHED,
 })
 
 # Events that should invalidate rollup cache
@@ -112,6 +118,31 @@ class ProjectHandler:
             logger.info(
                 "[PROJECT] Artifact unpublished: %s artifact=%s",
                 project_id, data.get("artifact_id"))
+
+        elif event.type == EventType.PROJECT_GITHUB_BOUND:
+            logger.info(
+                "[PROJECT] GitHub bound: %s repo=%s thread=%s actor=%s",
+                project_id,
+                data.get("repo_full_name"),
+                data.get("thread_number"),
+                data.get("actor"))
+
+        elif event.type == EventType.PROJECT_GITHUB_SYNCED:
+            logger.info(
+                "[PROJECT] GitHub synced: %s repo=%s thread=%s items=%s",
+                project_id,
+                data.get("repo_full_name"),
+                data.get("thread_number"),
+                data.get("activity_count"))
+
+        elif event.type == EventType.PROJECT_GITHUB_COMMENT_PUBLISHED:
+            logger.info(
+                "[PROJECT] GitHub comment published: %s repo=%s thread=%s comment_id=%s actor=%s",
+                project_id,
+                data.get("repo_full_name"),
+                data.get("thread_number"),
+                data.get("comment_id"),
+                data.get("actor"))
 
         elif event.type == EventType.PROJECT_ROLLUP_UPDATED:
             logger.info(

@@ -39,8 +39,7 @@ class AuthenticatedUser:
         )
 
     @staticmethod
-    def from_jwt(payload: "TokenPayload") -> "AuthenticatedUser":
-        from auth.jwt_tokens import TokenPayload  # noqa: F811
+    def from_jwt(payload: object) -> "AuthenticatedUser":
         return AuthenticatedUser(
             user_id=payload.sub,
             username=payload.username,

@@ -25,7 +25,7 @@ class TestOAuthConfig:
                     del os.environ[k]
             oauth._config = None
             # If config file doesn't exist and no env vars, returns None
-            config = oauth._load_config()
+            oauth._load_config()
             # May or may not be None depending on whether config/oauth.json exists
             # but should not raise
 

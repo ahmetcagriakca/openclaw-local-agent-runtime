@@ -14,13 +14,14 @@ from fastapi.testclient import TestClient
 
 os.environ.setdefault("VEZIR_AUTH_BYPASS", "1")
 
+from conftest import CSRF_ORIGIN
+
 import api.server as srv
 import auth.jwt_tokens as jwt_mod
 import auth.keys as keys_mod
 import auth.oauth_provider as oauth
 from auth.middleware import AuthenticatedUser
 from auth.rbac import has_minimum_role
-from conftest import CSRF_ORIGIN
 
 client = TestClient(srv.app)
 ORIGIN = {"Origin": CSRF_ORIGIN}

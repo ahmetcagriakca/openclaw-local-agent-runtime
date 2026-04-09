@@ -56,6 +56,11 @@ All checked before code is written:
   - Parent + task issues exist with correct milestone
   - Governed state docs consistent (state-sync --check)
   - Project V2 board items detected (canonical field auto-init via PROJECT_TOKEN — B-148 resolved)
+- [ ] PR link gate (D-152): Implementation PRs must have `Task-Issue: #<id>` and `Closes: #<id>` in body
+  - Fail-closed: missing/invalid linkage blocks merge
+  - Exempt: docs/chore/ci/fix/bootstrap/merge/revert prefixes
+  - Validator: `python tools/pr-issue-link-check.py`
+  - Workflow: `.github/workflows/pr-issue-gate.yml`
 
 ---
 

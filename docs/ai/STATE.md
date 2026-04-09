@@ -203,7 +203,7 @@
 
 ## Architectural Decisions
 
-147 frozen (1 amended) + 2 superseded decisions (D-001 through D-150, D-126 skipped, D-143 placeholder, D-082/D-098 superseded S62). See `docs/ai/DECISIONS.md`. Recent: D-144 project aggregate contract, D-145 workspace/artifact boundary, D-146 review max round + escalation, D-147 EventBus operational status (S76), D-148 Azure OpenAI primary provider adoption (S77), D-149 Browser Analysis 3-Mode Observation Contract (S78), D-150 Capability Routing Transition (S83), D-117 amended S84 (SSO/RBAC extension). Governance: 20-step closure checklist.
+149 frozen (1 amended) + 2 superseded decisions (D-001 through D-152, D-126 skipped, D-143 placeholder, D-082/D-098 superseded S62). See `docs/ai/DECISIONS.md`. Recent: D-150 Capability Routing Transition (S83), D-117 amended S84 (SSO/RBAC extension), D-151 Project-Scoped GitHub Communication Surface, D-152 Issue-First PR Link Gate. Governance: 20-step closure checklist + PR link gate (D-152).
 
 ## Port Map
 

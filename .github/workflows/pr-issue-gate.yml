@@ -1,0 +1,35 @@
+name: PR Issue Link Gate (D-152)
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  pull-requests: read
+  issues: read
+
+jobs:
+  pr-issue-link:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Validate PR issue linkage
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+          PR_BRANCH: ${{ github.event.pull_request.head.ref }}
+        run: |
+          # Write PR body to file to avoid shell quoting issues
+          cat > /tmp/pr_body.txt << 'ENDOFBODY'
+          ${{ github.event.pull_request.body }}
+          ENDOFBODY
+
+          python tools/pr-issue-link-check.py \
+            --pr-title "$PR_TITLE" \
+            --pr-body-file /tmp/pr_body.txt \
+            --actual-branch "$PR_BRANCH"

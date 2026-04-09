@@ -72,11 +72,17 @@ def main():
     dry_run = "--dry-run" in sys.argv
 
     for task_id, info in data["tasks"].items():
-        issue_num = info.get("issue")
+        issue_num = info.get("task_issue") or info.get("issue")
         if not issue_num:
             continue
 
         branch_name = info.get("branch")
+
+        # D-152: Skip branch-exempt tasks that don't require a PR
+        if info.get("branch_exempt") and not info.get("pr_required", True):
+            print(f"  {task_id}: #{issue_num} EXEMPT (branch_exempt, no PR required)")
+            skipped += 1
+            continue
 
         # Merge evidence gate: verify branch is merged to main
         if branch_name:

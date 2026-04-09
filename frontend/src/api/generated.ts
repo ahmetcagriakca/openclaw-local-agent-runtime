@@ -4,6 +4,126 @@
  */
 
 export interface paths {
+    "/api/v1/auth/config": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Auth Config
+         * @description Get auth configuration — tells frontend if SSO is available.
+         */
+        get: operations["get_auth_config_api_v1_auth_config_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/login": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Initiate Login
+         * @description Initiate OAuth login — returns redirect URL.
+         */
+        get: operations["initiate_login_api_v1_auth_login_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/callback": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Oauth Callback
+         * @description Handle OAuth callback — exchange code for JWT tokens.
+         */
+        post: operations["oauth_callback_api_v1_auth_callback_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/refresh": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Refresh Tokens
+         * @description Refresh JWT tokens using a refresh token.
+         */
+        post: operations["refresh_tokens_api_v1_auth_refresh_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/logout": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Logout
+         * @description Logout — revoke refresh token.
+         */
+        post: operations["logout_api_v1_auth_logout_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Current User Info
+         * @description Get current authenticated user info from JWT.
+         */
+        get: operations["get_current_user_info_api_v1_auth_me_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/missions": {
         parameters: {
             query?: never;
@@ -2625,6 +2745,22 @@ export interface components {
             /** Approvals */
             approvals?: components["schemas"]["ApprovalEntry"][];
         };
+        /** AuthConfigResponse */
+        AuthConfigResponse: {
+            /** Sso Enabled */
+            sso_enabled: boolean;
+            /** Provider */
+            provider?: string | null;
+            /** Login Url */
+            login_url?: string | null;
+        };
+        /** CallbackRequest */
+        CallbackRequest: {
+            /** Code */
+            code: string;
+            /** State */
+            state: string;
+        };
         /**
          * CapabilitiesResponse
          * @description Wrapper for capabilities.
@@ -2935,6 +3071,16 @@ export interface components {
             /** Message */
             message: string;
         };
+        /** LoginResponse */
+        LoginResponse: {
+            /** Redirect Url */
+            redirect_url: string;
+        };
+        /** LogoutRequest */
+        LogoutRequest: {
+            /** Refresh Token */
+            refresh_token?: string | null;
+        };
         /** LogsResponse */
         LogsResponse: {
             /** Errors */
@@ -3213,6 +3359,11 @@ export interface components {
             metric: string;
             /** Current Value */
             current_value: number;
+        };
+        /** RefreshRequest */
+        RefreshRequest: {
+            /** Refresh Token */
+            refresh_token: string;
         };
         /**
          * ResponseMeta
@@ -3524,6 +3675,21 @@ export interface components {
                 [key: string]: unknown;
             } | null;
         };
+        /** TokenResponse */
+        TokenResponse: {
+            /** Access Token */
+            access_token: string;
+            /** Refresh Token */
+            refresh_token: string;
+            /**
+             * Token Type
+             * @default bearer
+             */
+            token_type: string;
+            /** Expires In */
+            expires_in: number;
+            user: components["schemas"]["UserInfo"];
+        };
         /**
          * ToolCallDetail
          * @description Single tool call within a stage.
@@ -3602,6 +3768,26 @@ export interface components {
             /** Status */
             status?: string | null;
         };
+        /** UserInfo */
+        UserInfo: {
+            /** User Id */
+            user_id: string;
+            /** Username */
+            username: string;
+            /** Email */
+            email: string;
+            /** Display Name */
+            display_name: string;
+            /** Role */
+            role: string;
+            /** Provider */
+            provider: string;
+            /**
+             * Avatar Url
+             * @default
+             */
+            avatar_url: string;
+        };
         /** ValidationError */
         ValidationError: {
             /** Location */
@@ -3624,6 +3810,167 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    get_auth_config_api_v1_auth_config_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuthConfigResponse"];
+                };
+            };
+        };
+    };
+    initiate_login_api_v1_auth_login_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LoginResponse"];
+                };
+            };
+        };
+    };
+    oauth_callback_api_v1_auth_callback_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CallbackRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TokenResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    refresh_tokens_api_v1_auth_refresh_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RefreshRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TokenResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    logout_api_v1_auth_logout_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LogoutRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_current_user_info_api_v1_auth_me_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserInfo"];
+                };
+            };
+        };
+    };
     list_missions_api_v1_missions_get: {
         parameters: {
             query?: never;

@@ -1,15 +1,25 @@
- agent/mission/controller.py                        |  21 +-
- agent/providers/capability_registry.py             |  73 +++++++
- agent/providers/provider_telemetry.py              |   7 +
- agent/providers/routing_policy.py                  | 119 ++++++++---
- agent/tests/test_capability_registry.py            | 125 ++++++++++++
- agent/tests/test_capability_routing.py             | 225 +++++++++++++++++++++
- agent/tests/test_capability_telemetry.py           | 174 ++++++++++++++++
- config/capabilities.json                           |  18 +-
- docs/ai/DECISIONS.md                               |  16 +-
- docs/ai/STATE.md                                   |   9 +-
- docs/ai/handoffs/current.md                        |  37 ++--
- docs/ai/state/open-items.md                        |  10 +-
- .../D-150-capability-routing-transition.md         |  39 ++++
- docs/sprints/sprint-83/plan.yaml                   |   2 +-
- 14 files changed, 810 insertions(+), 65 deletions(-)
+=== Sprint 83 Evidence Manifest ===
+Generated: 2026-04-09T09:07:41+03:00
+Class: product
+
+total 108
+drwxr-xr-x 1 AKCA 197609     0 Apr  9 09:07 .
+drwxr-xr-x 1 AKCA 197609     0 Apr  9 09:05 ..
+-rw-r--r-- 1 AKCA 197609   436 Apr  9 09:07 build-output.txt
+-rw-r--r-- 1 AKCA 197609    49 Apr  9 09:07 closure-check-output.txt
+-rw-r--r-- 1 AKCA 197609    62 Apr  9 09:07 contract-evidence.txt
+-rw-r--r-- 1 AKCA 197609 15542 Apr  9 09:07 e2e-output.txt
+-rw-r--r-- 1 AKCA 197609    89 Apr  9 09:07 file-manifest.txt
+-rw-r--r-- 1 AKCA 197609    62 Apr  9 09:07 grep-evidence.txt
+-rw-r--r-- 1 AKCA 197609    40 Apr  9 09:07 lighthouse.txt
+-rw-r--r-- 1 AKCA 197609   106 Apr  9 09:07 lint-output.txt
+-rw-r--r-- 1 AKCA 197609    97 Apr  9 09:07 live-checks.txt
+-rw-r--r-- 1 AKCA 197609    40 Apr  9 09:07 mutation-drill.txt
+-rw-r--r-- 1 AKCA 197609 15542 Apr  9 09:07 playwright-output.txt
+-rw-r--r-- 1 AKCA 197609   177 Apr  9 09:06 pytest-output.txt
+-rw-r--r-- 1 AKCA 197609    23 Apr  9 09:07 review-summary.md
+-rw-r--r-- 1 AKCA 197609     8 Apr  9 09:06 sprint-class.txt
+-rw-r--r-- 1 AKCA 197609     0 Apr  9 09:07 tsc-output.txt
+-rw-r--r-- 1 AKCA 197609   177 Apr  9 09:06 validator-output.txt
+-rw-r--r-- 1 AKCA 197609   177 Apr  9 09:06 validator-tests.txt
+-rw-r--r-- 1 AKCA 197609 31828 Apr  9 09:07 vitest-output.txt

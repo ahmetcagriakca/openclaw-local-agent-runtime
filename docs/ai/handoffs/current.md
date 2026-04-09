@@ -15,20 +15,20 @@ Session 59: S83 implementation — D-150 Capability Routing Transition. Formaliz
 - **T-83.03:** Controller migration: `_select_agent_for_role()` resolves capabilities from registry before routing. Skill passed from `_execute_stage`. 14 integration tests.
 - **T-83.04:** Telemetry + best-match fallback: RoutingDecision enriched with capability.required/matched/match_score. Fallback prefers best capability match score. 13 tests.
 
-### S83 — D-150 Capability Routing Transition — IMPL DONE
+### S83 — D-150 Capability Routing Transition — CLOSED
 
 **Implementation:** Done
-**Review:** Pending GPT review
-**PR:** Not yet created
+**Review:** GPT PASS (R2)
+**PR:** #441 merged to main
 **Issue:** #436 (parent), #437-#440 (tasks)
 
 ## Current State
 
-- **Phase:** 10 active — S83 impl done
-- **Last closed sprint:** 82
+- **Phase:** 10 active — S83 closed
+- **Last closed sprint:** 83
 - **Decisions:** 147 frozen + 2 superseded (D-001 → D-150)
 - **Tests:** 1963 backend + 247 frontend + 13 Playwright + 188 root = 2411 total (+59 new backend)
-- **CI:** Pending (PR not yet pushed)
+- **CI:** All green (S83 merged)
 - **Lint:** 0 errors
 - **Port map:** API :8003, Frontend :4000, WMCP :8001
 - **Security:** 0 CodeQL open, 2 dependabot (pre-existing)
@@ -46,7 +46,7 @@ Session 59: S83 implementation — D-150 Capability Routing Transition. Formaliz
 | S80 | — | PASS (R4) |
 | S81 | — | PASS (R2) |
 | S82 | — | PASS (R2) |
-| S83 | — | Pending |
+| S83 | — | PASS (R2) |
 
 ## Phase 10 Status
 
@@ -62,7 +62,7 @@ Session 59: S83 implementation — D-150 Capability Routing Transition. Formaliz
 | S80 | Housekeeping + Dependency Upgrades | Closed |
 | S81 | EventBus Production Wiring (D-147) | Closed |
 | S82 | Docker Production Image (D-116) | Closed |
-| S83 | D-150 Capability Routing Transition | Impl Done |
+| S83 | D-150 Capability Routing Transition | Closed |
 | S84 | SSO/RBAC Full External Auth | Planned |
 
 ## Carry-Forward
@@ -76,4 +76,4 @@ Session 59: S83 implementation — D-150 Capability Routing Transition. Formaliz
 
 ## GPT Memo
 
-Session 59: S83 IMPL DONE. D-150 Capability Routing Transition. ADR frozen: capability-based routing replaces provider-identity routing. capability_registry.py: 11 roles + 4 skill overrides → required capabilities. Controller _select_agent_for_role() now resolves capabilities before ProviderRoutingPolicy.select(). Best-match fallback: prefers provider with highest capability match score. RoutingDecision enriched with capability.required/matched/match_score telemetry. 55 new tests (28 registry + 14 integration + 13 telemetry). All existing 28 routing_policy tests pass unchanged. Total: 1904+55=1959 backend + 247 frontend + 13 Playwright + 188 root = 2407 tests. D-150 frozen. Issues #436-#440 on Sprint 83 milestone. Next: GPT review → PR → merge → closure.
+Session 59: S83 CLOSED. D-150 Capability Routing Transition. ADR frozen: capability-based routing replaces provider-identity routing. capability_registry.py: 11 roles + 4 skill overrides → required capabilities. Controller _select_agent_for_role() now resolves capabilities before ProviderRoutingPolicy.select(). Best-match fallback: prefers provider with highest capability match score. RoutingDecision enriched with capability.required/matched/match_score telemetry. 59 new tests (28 registry + 14+4 integration + 13 telemetry). All existing 28 routing_policy tests pass unchanged. Total: 1963 backend + 247 frontend + 13 Playwright + 188 root = 2411 tests. D-150 frozen. GPT HOLD R1 → PASS R2. PR #441 merged. Issues #436-#440 closed. Sprint 83 milestone closed. Next: S84 SSO/RBAC Full External Auth.

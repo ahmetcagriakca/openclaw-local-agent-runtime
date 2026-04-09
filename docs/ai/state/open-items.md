@@ -101,7 +101,7 @@
 
 | Sprint 81 | EventBus Production Wiring (D-147) | CLOSED |
 | Sprint 82 | Docker Production Image (D-116) | CLOSED |
-| Sprint 83 | D-150 Capability Routing Transition | IMPL DONE |
+| Sprint 83 | D-150 Capability Routing Transition | CLOSED |
 
 ## Next Sprint
 

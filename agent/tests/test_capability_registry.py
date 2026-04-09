@@ -2,7 +2,6 @@
 import pytest
 
 from providers.capability_registry import (
-    CODE_INTERPRETER,
     FUNCTION_CALLING,
     LONG_CONTEXT,
     REASONING,

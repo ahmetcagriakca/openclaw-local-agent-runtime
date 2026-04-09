@@ -2,7 +2,6 @@
 from providers.capability_registry import resolve_capabilities
 from providers.routing_policy import ProviderRoutingPolicy
 
-
 AGENT_CONFIG = {
     "defaultAgent": "azure-general",
     "agents": {

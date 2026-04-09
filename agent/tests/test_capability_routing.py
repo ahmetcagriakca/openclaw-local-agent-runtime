@@ -1,5 +1,5 @@
 """Tests for D-150 capability routing integration (controller + registry + policy)."""
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 import pytest
 
@@ -10,7 +10,7 @@ from providers.capability_registry import (
     TEXT_GENERATION,
     resolve_capabilities,
 )
-from providers.routing_policy import ProviderRoutingPolicy, RoutingDecision
+from providers.routing_policy import ProviderRoutingPolicy
 
 
 AGENT_CONFIG = {

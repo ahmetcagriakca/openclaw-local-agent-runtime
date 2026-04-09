@@ -1,8 +1,6 @@
 """Tests for D-150 capability telemetry and best-match fallback."""
-import pytest
-
 from providers.capability_registry import resolve_capabilities
-from providers.routing_policy import ProviderRoutingPolicy, RoutingDecision
+from providers.routing_policy import ProviderRoutingPolicy
 
 
 AGENT_CONFIG = {

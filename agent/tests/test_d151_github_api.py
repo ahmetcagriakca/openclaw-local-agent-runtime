@@ -8,7 +8,6 @@ Exercises request/response behavior for:
 
 Uses FastAPI TestClient with VEZIR_AUTH_BYPASS=1 (conftest).
 """
-import unittest
 from unittest.mock import MagicMock, patch
 
 import pytest
